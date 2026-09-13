@@ -1,0 +1,10 @@
+{
+  "commit": "1b763f20e4d1df560d15aab2a61291fe0c50fae3",
+  "files": [
+    "preprocessing/Extract_from_train_data.py",
+    "preprocessing/Run_preprocessing.py",
+    "LocalTemplate/template_extractor.py",
+    "scripts/Decode_predictions.py",
+    "models/LocalTransform_sep.pth"
+  ]
+}

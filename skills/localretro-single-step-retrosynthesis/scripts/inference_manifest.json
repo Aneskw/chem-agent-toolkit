@@ -1,0 +1,18 @@
+{
+  "commit": "eba83e72efabeb854fec86c865e8743c295a8a1e",
+  "files": {
+    "Retrosynthesis.py": "8596feffa61cdd611087cc50707d39212b3b7351b01eb6f5a02eafe09232db1b",
+    "scripts/utils.py": "7e04d9377ea8125f1bf3b5cda7c9fa4b57af675f56ad988fcce21ea6f21e4996",
+    "scripts/dataset.py": "73e1a65360bb86d1405a5373dbfad3e5b7cf4fa6c35dac7f3683c23caeaef7bd",
+    "scripts/models.py": "34564c1558cee344ceb9ed553915f28798183085e2d6faf4ce209264da1fe7ba",
+    "scripts/model_utils.py": "adb163236798cf0944e1005f26476ed55056dfeb8dbccb9436c638d70f99ba9c",
+    "scripts/get_edit.py": "f0332165eb8b1afe7ecddd82458e10a095e8702f629477023f70e803d71d20e2",
+    "LocalTemplate/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "LocalTemplate/template_decoder.py": "7fa2a97eb3b22f4ba283e5407cf185e6f0877ae1d5699bfef92bfbd9a3e485b4",
+    "data/configs/default_config.json": "211ca091749057f87ccfa4b928da273ae210ece6205058fd35bbd1e9b2bb1115",
+    "data/USPTO_50K/atom_templates.csv": "8562a95d3048a34eeefd13e9995efb286db144a0e3d1f7ef9fadb7772e6f40e6",
+    "data/USPTO_50K/bond_templates.csv": "41ba44f3a0cbb9b7ef3e1f06aa21ff7f0cf961a3be2cee64c5913e771749630e",
+    "data/USPTO_50K/template_infos.csv": "8eb8fc6602ce6dbd6e21e38198c91d0ee3f3e15f2964e1455be7489fba73090e",
+    "models/LocalRetro_USPTO_50K.pth": "7222daea795d23d1c56850857de85b0d2e7250ef52b9ffaf4958bf9f19be28d1"
+  }
+}

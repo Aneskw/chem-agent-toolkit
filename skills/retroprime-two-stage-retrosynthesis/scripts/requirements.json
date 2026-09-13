@@ -1,0 +1,12 @@
+{
+  "commit": "a765b670b72fbfd512d0d437da8f27a95f9f0554",
+  "files": [
+    "run_example.sh",
+    "retroprime/transformer_model/translate.py",
+    "retroprime/transformer_model/script/smi_tokenizer.py",
+    "retroprime/transformer_model/script/evaluate.py",
+    "retroprime/transformer_model/script/mix_c2c_top3_after_rerank.py",
+    "retroprime/transformer_model/experiments/checkpoints/USPTO-50K_pos_pred/USPTO-50K_pos_pred_model.pt",
+    "retroprime/transformer_model/experiments/checkpoints/USPTO-50K_S2R/USPTO-50K_S2R_model.pt"
+  ]
+}

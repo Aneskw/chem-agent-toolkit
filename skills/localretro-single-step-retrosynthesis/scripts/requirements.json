@@ -1,0 +1,17 @@
+{
+  "commit": "eba83e72efabeb854fec86c865e8743c295a8a1e",
+  "files": [
+    "Retrosynthesis.py",
+    "scripts/utils.py",
+    "scripts/dataset.py",
+    "scripts/models.py",
+    "scripts/model_utils.py",
+    "scripts/get_edit.py",
+    "LocalTemplate/template_decoder.py",
+    "data/configs/default_config.json",
+    "data/USPTO_50K/atom_templates.csv",
+    "data/USPTO_50K/bond_templates.csv",
+    "data/USPTO_50K/template_infos.csv",
+    "models/LocalRetro_USPTO_50K.pth"
+  ]
+}

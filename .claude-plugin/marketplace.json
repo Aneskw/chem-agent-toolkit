@@ -1,0 +1,8 @@
+{
+  "name": "chem-agent-toolkit",
+  "owner": { "name": "Aneskw" },
+  "metadata": {
+    "description": "Reusable agent skills for chemistry workflows"
+  },
+  "plugins": []
+}
