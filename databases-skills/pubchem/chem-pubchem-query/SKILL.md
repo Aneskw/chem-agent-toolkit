@@ -2,7 +2,6 @@
 name: chem-pubchem-query
 description: Query PubChem compound records by name or identifier and return a small, reproducible JSON record. Use for retrieving public compound identity and basic properties; do not use as a substitute for experimental measurements.
 license: MIT
-compatibility: Requires Python 3 and network access to the PubChem PUG REST API.
 allowed-tools: Bash(python3:*)
 ---
 

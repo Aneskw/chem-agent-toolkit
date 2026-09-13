@@ -1,0 +1,2 @@
+top_k: 10
+device: cpu

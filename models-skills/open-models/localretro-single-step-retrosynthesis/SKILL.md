@@ -2,7 +2,6 @@
 name: localretro-single-step-retrosynthesis
 description: "使用 LocalRetro 将单个目标产物 SMILES 转为带模型分数的单步逆合成反应物候选。适用于候选生成；不提供多步路线或实验条件。"
 license: "CC-BY-NC-SA-4.0 (upstream README; see reference)"
-compatibility: "macOS arm64; Python 3.11; CPU; requirements-localretro-lock.txt; pinned weights and templates"
 allowed-tools: Read, Bash, Write
 ---
 

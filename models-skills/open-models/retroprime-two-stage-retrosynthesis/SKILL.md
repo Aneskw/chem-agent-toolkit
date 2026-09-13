@@ -2,7 +2,6 @@
 name: retroprime-two-stage-retrosynthesis
 description: "当需要用 RetroPrime 从一个产物经两阶段预测生成反应物候选时使用。CPU 兼容包装器已通过两个真实样例和三个负例测试。"
 license: "MIT (upstream code; weights subject to source terms)"
-compatibility: "macOS arm64; Python 3.11; PyTorch 2.2.2; torchtext 0.3.1; CPU; two pinned checkpoints"
 allowed-tools: Read, Bash, Write
 ---
 

@@ -3,7 +3,6 @@ name: retroxpert-evaluate-bond-disconnection
 description: >
   检查 RetroXpert EGAT 断键评估的资源条件，并在具备权重及数据后安排评估。当前资源阻塞，不可提供真实断键准确率。
 license: MIT (upstream code)
-compatibility: Python 3 for resource preflight; EGAT inference environment unverified; typed checkpoint and processed data required
 allowed-tools: Read, Bash, Write
 ---
 

@@ -1,0 +1,2 @@
+timeout_seconds: 20
+user_agent: chem-pubchem-query/0.1

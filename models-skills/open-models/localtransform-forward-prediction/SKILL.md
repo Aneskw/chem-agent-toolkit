@@ -2,7 +2,6 @@
 name: localtransform-forward-prediction
 description: "用于检查 LocalTransform 正向预测工作是否具备打包条件；当前固定版本缺少关键文件，不可用于执行预测。"
 license: "Unknown; upstream licensing requires clarification"
-compatibility: "Python 3 for preflight; inference environment unverified; missing scripts and model assets"
 allowed-tools: Read, Bash, Write
 ---
 

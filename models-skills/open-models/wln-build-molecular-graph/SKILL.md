@@ -3,7 +3,6 @@ name: wln-build-molecular-graph
 description: >
   将 SMILES 转为 WLN 原子/键特征和邻接数组。用于 WLN 图预处理、检查图表示；不运行完整反应预测模型。
 license: MIT (upstream code)
-compatibility: Python 3.11; RDKit and NumPy; reviewed Python 2 compatibility conversion
 allowed-tools: Read, Bash, Write
 ---
 
