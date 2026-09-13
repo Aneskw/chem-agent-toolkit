@@ -1,0 +1,17 @@
+{
+  "test": "caffeine",
+  "status": "passed",
+  "expected": "PubChem compound properties returned as JSON",
+  "observed": {
+    "ok": true,
+    "cid": 2519,
+    "molecular_formula": "C8H10N4O2",
+    "molecular_weight": "194.19"
+  },
+  "negative_test": {
+    "input": "definitely-not-a-real-compound-xyz",
+    "status": "passed",
+    "expected": "ok=false with a lookup error",
+    "observed": "HTTP 404 PUGREST.NotFound"
+  }
+}
