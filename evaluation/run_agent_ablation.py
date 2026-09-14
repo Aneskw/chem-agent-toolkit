@@ -27,7 +27,10 @@ def main():
             env["SKILL_PATH"] = str(skill_path) if condition == "with-skill" and skill_path else ""
             start = time.monotonic()
             completed = subprocess.run(shlex.split(args.agent_cmd), env=env, capture_output=True, text=True)
-            rows.append({"task_id": task["id"], "condition": condition, "model": env.get("OPENAI_MODEL", env.get("MODEL", "unspecified")),
+            provider = env.get("LLM_PROVIDER", "openai")
+            model = (env.get("ANTHROPIC_MODEL") if provider.lower() == "anthropic"
+                     else env.get("OPENAI_MODEL", env.get("MODEL", "unspecified")))
+            rows.append({"task_id": task["id"], "condition": condition, "provider": provider, "model": model,
                          "ok": completed.returncode == 0, "output": completed.stdout,
                          "stderr": completed.stderr, "exit_code": completed.returncode,
                          "retries": 0, "elapsed_seconds": round(time.monotonic() - start, 3)})
