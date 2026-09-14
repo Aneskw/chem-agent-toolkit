@@ -43,4 +43,4 @@ For the OpenAI Responses API adapter, use `evaluation/openai_agent.py`; it defau
 OPENAI_API_KEY=... python3 evaluation/run_agent_ablation.py --agent-cmd 'python3 evaluation/openai_agent.py' --output evaluation/results/openai_gpt5nano.jsonl
 ```
 
-For a cluster-hosted Qwen endpoint, use `OPENAI_BASE_URL=http://HOST:8000/v1` and set `OPENAI_MODEL` to the served model name. The adapter sends the same prompts and the same two conditions, so the comparison protocol remains unchanged.
+For a cluster-hosted Qwen endpoint, use `OPENAI_BASE_URL=http://HOST:8000/v1` and set `OPENAI_MODEL` to the served model name. The adapter automatically uses `/chat/completions` for non-OpenAI endpoints, so the comparison protocol remains unchanged.
