@@ -1,0 +1,6 @@
+[
+  {"id": "rdkit-ethanol", "skill": "rdkit", "input": "CCO", "expected": {"molecular_weight": 46.069, "tpsa": 20.23}},
+  {"id": "rdkit-invalid", "skill": "rdkit", "input": "not-a-smiles", "expected_error": true},
+  {"id": "pubchem-caffeine", "skill": "pubchem", "input": "caffeine", "expected": {"cid": 2519, "molecular_formula": "C8H10N4O2"}},
+  {"id": "pubchem-invalid", "skill": "pubchem", "input": "definitely-not-a-real-compound-xyz", "expected_error": true}
+]
