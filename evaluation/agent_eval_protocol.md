@@ -28,3 +28,11 @@ Report every metric per skill and per condition. Use paired differences (with-sk
 ## Interpretation
 
 The current repository can run the RDKit and PubChem task groups. The five model skills need their pinned resources before they can enter this agent-level experiment. A higher score with skill supports improved procedural guidance; it does not prove improved model chemistry knowledge.
+
+## Runner
+
+`run_agent_ablation.py` supplies each agent attempt with `TASK_ID`, `TASK_PROMPT`, and (only in the with-skill condition) `SKILL_PATH`. The command must read those environment variables and write its answer to stdout. For example:
+
+```bash
+python3 evaluation/run_agent_ablation.py --agent-cmd 'python3 my_agent.py' --output evaluation/results/agent_runs.jsonl
+```
