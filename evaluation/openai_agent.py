@@ -2,6 +2,7 @@
 """Small Responses API adapter for run_agent_ablation.py (stdlib only)."""
 import json
 import os
+import ssl
 import urllib.request
 from pathlib import Path
 
@@ -29,7 +30,8 @@ def main():
         headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(request, timeout=90) as response:
+    context = ssl.create_default_context(cafile=os.environ.get("SSL_CERT_FILE", "/etc/ssl/cert.pem"))
+    with urllib.request.urlopen(request, timeout=90, context=context) as response:
         payload = json.load(response)
     text = payload.get("output_text")
     if text is None and style == "chat":
