@@ -36,3 +36,9 @@ The current repository can run the RDKit and PubChem task groups. The five model
 ```bash
 python3 evaluation/run_agent_ablation.py --agent-cmd 'python3 my_agent.py' --output evaluation/results/agent_runs.jsonl
 ```
+
+For the OpenAI Responses API adapter, use `evaluation/openai_agent.py`; it defaults to `gpt-5-nano` and reads `OPENAI_API_KEY` from the environment:
+
+```bash
+OPENAI_API_KEY=... python3 evaluation/run_agent_ablation.py --agent-cmd 'python3 evaluation/openai_agent.py' --output evaluation/results/openai_gpt5nano.jsonl
+```
