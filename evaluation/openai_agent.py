@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Small Responses API adapter for run_agent_ablation.py (stdlib only)."""
+"""Small stdlib-only adapter for OpenAI-compatible and Anthropic APIs."""
 import json
 import os
 import ssl
@@ -9,26 +9,38 @@ from pathlib import Path
 
 
 def main():
-    key = os.environ.get("OPENAI_API_KEY")
+    provider = os.environ.get("LLM_PROVIDER", "openai").lower()
+    if provider == "anthropic":
+        key = os.environ.get("ANTHROPIC_API_KEY")
+    else:
+        key = os.environ.get("OPENAI_API_KEY")
     if not key:
-        raise SystemExit("OPENAI_API_KEY is not set")
+        raise SystemExit(("ANTHROPIC_API_KEY" if provider == "anthropic" else "OPENAI_API_KEY") + " is not set")
     prompt = os.environ["TASK_PROMPT"]
     skill_path = os.environ.get("SKILL_PATH", "")
     if skill_path:
         prompt += "\n\nRead and follow this skill document:\n" + Path(skill_path).read_text(encoding="utf-8")
-    base_url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-    style = os.environ.get("OPENAI_API_STYLE", "responses" if "api.openai.com" in base_url else "chat")
-    if style == "chat":
-        body = {"model": os.environ.get("OPENAI_MODEL", "Qwen/Qwen3-8B"),
-                "messages": [{"role": "user", "content": prompt}], "max_tokens": 1200}
-        endpoint = base_url + "/chat/completions"
+    if provider == "anthropic":
+        base_url = os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com/v1").rstrip("/")
+        body = {"model": os.environ.get("ANTHROPIC_MODEL", "claude-opus-5"),
+                "max_tokens": 1200, "messages": [{"role": "user", "content": prompt}]}
+        endpoint = base_url + "/messages"
+        headers = {"x-api-key": key, "anthropic-version": "2023-06-01", "Content-Type": "application/json"}
     else:
-        body = {"model": os.environ.get("OPENAI_MODEL", "gpt-5-nano"), "input": prompt, "max_output_tokens": 1200}
-        endpoint = base_url + "/responses"
+        base_url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
+        style = os.environ.get("OPENAI_API_STYLE", "responses" if "api.openai.com" in base_url else "chat")
+        if style == "chat":
+            body = {"model": os.environ.get("OPENAI_MODEL", "Qwen/Qwen3-8B"),
+                    "messages": [{"role": "user", "content": prompt}], "max_tokens": 1200}
+            endpoint = base_url + "/chat/completions"
+        else:
+            body = {"model": os.environ.get("OPENAI_MODEL", "gpt-5-nano"), "input": prompt, "max_output_tokens": 1200}
+            endpoint = base_url + "/responses"
+        headers = {"Authorization": "Bearer " + key, "Content-Type": "application/json"}
     request = urllib.request.Request(
         endpoint,
         data=json.dumps(body).encode(),
-        headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"},
+        headers=headers,
         method="POST",
     )
     context = ssl.create_default_context(cafile=os.environ.get("SSL_CERT_FILE", "/etc/ssl/cert.pem"))
@@ -56,8 +68,12 @@ def main():
         print(json.dumps({"ok": False, "error": "network", "message": str(exc.reason)},
                          ensure_ascii=False))
         raise SystemExit(2)
-    text = payload.get("output_text")
-    if text is None and style == "chat":
+    if provider == "anthropic":
+        text = "".join(part.get("text", "") for part in payload.get("content", [])
+                        if part.get("type") == "text")
+    else:
+        text = payload.get("output_text")
+    if provider != "anthropic" and text is None and style == "chat":
         text = payload.get("choices", [{}])[0].get("message", {}).get("content", "")
     if text is None:
         text = "".join(part.get("text", "") for item in payload.get("output", []) for part in item.get("content", []))

@@ -44,3 +44,14 @@ OPENAI_API_KEY=... python3 evaluation/run_agent_ablation.py --agent-cmd 'python3
 ```
 
 For a cluster-hosted Qwen endpoint, use `OPENAI_BASE_URL=http://HOST:8000/v1` and set `OPENAI_MODEL` to the served model name. The adapter automatically uses `/chat/completions` for non-OpenAI endpoints, so the comparison protocol remains unchanged.
+
+For Anthropic's native Messages API, set these variables locally (never commit the key):
+
+```bash
+export LLM_PROVIDER=anthropic
+export ANTHROPIC_API_KEY='...'
+export ANTHROPIC_MODEL='claude-opus-5'
+python3 evaluation/run_agent_ablation.py \
+  --agent-cmd 'python3 evaluation/openai_agent.py' \
+  --output evaluation/results/claude_opus5.jsonl
+```
