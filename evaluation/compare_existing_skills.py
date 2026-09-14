@@ -82,9 +82,15 @@ def main():
             skill_result, code, skill_ok = {"ok": False, "error": type(exc).__name__}, 2, False
         rows.append({"id": task["id"], "skill": task["skill"], "baseline_pass": baseline_ok, "skill_pass": skill_ok,
                      "execution_success": code == 0 if not task.get("expected_error") else code != 0,
-                     "baseline": baseline, "skill": skill_result})
+                     "baseline": baseline, "skill_output": skill_result})
+    per_skill = {}
+    for row in rows:
+        group = per_skill.setdefault(row["skill"], {"tasks": 0, "baseline_pass": 0, "skill_pass": 0})
+        group["tasks"] += 1
+        group["baseline_pass"] += int(row["baseline_pass"])
+        group["skill_pass"] += int(row["skill_pass"])
     summary = {"tasks": len(rows), "baseline_pass": sum(r["baseline_pass"] for r in rows),
-               "skill_pass": sum(r["skill_pass"] for r in rows), "rows": rows}
+               "skill_pass": sum(r["skill_pass"] for r in rows), "per_skill": per_skill, "rows": rows}
     out = Path(args.output); out.parent.mkdir(parents=True, exist_ok=True); out.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")
     print(json.dumps({k: summary[k] for k in ("tasks", "baseline_pass", "skill_pass")}, ensure_ascii=False))
     return 0 if summary["skill_pass"] == summary["tasks"] else 1

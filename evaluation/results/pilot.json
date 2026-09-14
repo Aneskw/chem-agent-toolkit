@@ -2,10 +2,31 @@
   "tasks": 4,
   "baseline_pass": 4,
   "skill_pass": 4,
+  "per_skill": {
+    "rdkit": {
+      "tasks": 2,
+      "baseline_pass": 2,
+      "skill_pass": 2
+    },
+    "pubchem": {
+      "tasks": 2,
+      "baseline_pass": 2,
+      "skill_pass": 2
+    }
+  },
   "rows": [
     {
       "id": "rdkit-ethanol",
-      "skill": {
+      "skill": "rdkit",
+      "baseline_pass": true,
+      "skill_pass": true,
+      "execution_success": true,
+      "baseline": {
+        "ok": true,
+        "molecular_weight": 46.069,
+        "tpsa": 20.23
+      },
+      "skill_output": {
         "ok": true,
         "input": "CCO",
         "canonical_smiles": "CCO",
@@ -17,33 +38,35 @@
           "h_bond_acceptors": 1,
           "rotatable_bonds": 0
         }
-      },
-      "baseline_pass": true,
-      "skill_pass": true,
-      "execution_success": true,
-      "baseline": {
-        "ok": true,
-        "molecular_weight": 46.069,
-        "tpsa": 20.23
       }
     },
     {
       "id": "rdkit-invalid",
-      "skill": {
-        "ok": false,
-        "input": "not-a-smiles",
-        "error": "Invalid or empty SMILES"
-      },
+      "skill": "rdkit",
       "baseline_pass": true,
       "skill_pass": true,
       "execution_success": true,
       "baseline": {
         "ok": false
+      },
+      "skill_output": {
+        "ok": false,
+        "input": "not-a-smiles",
+        "error": "Invalid or empty SMILES"
       }
     },
     {
       "id": "pubchem-caffeine",
-      "skill": {
+      "skill": "pubchem",
+      "baseline_pass": true,
+      "skill_pass": true,
+      "execution_success": true,
+      "baseline": {
+        "ok": true,
+        "cid": 2519,
+        "molecular_formula": "C8H10N4O2"
+      },
+      "skill_output": {
         "ok": true,
         "input": "caffeine",
         "cid": 2519,
@@ -53,29 +76,22 @@
           "molecular_weight": "194.19"
         },
         "source_url": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/caffeine/property/CanonicalSMILES,MolecularFormula,MolecularWeight/JSON"
-      },
-      "baseline_pass": true,
-      "skill_pass": true,
-      "execution_success": true,
-      "baseline": {
-        "ok": true,
-        "cid": 2519,
-        "molecular_formula": "C8H10N4O2"
       }
     },
     {
       "id": "pubchem-invalid",
-      "skill": {
-        "ok": false,
-        "input": "definitely-not-a-real-compound-xyz",
-        "error": "HTTPError: HTTP Error 404: PUGREST.NotFound"
-      },
+      "skill": "pubchem",
       "baseline_pass": true,
       "skill_pass": true,
       "execution_success": true,
       "baseline": {
         "ok": false,
         "error": "HTTPError"
+      },
+      "skill_output": {
+        "ok": false,
+        "input": "definitely-not-a-real-compound-xyz",
+        "error": "HTTPError: HTTP Error 404: PUGREST.NotFound"
       }
     }
   ]
