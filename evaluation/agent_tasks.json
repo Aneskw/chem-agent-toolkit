@@ -1,0 +1,6 @@
+[
+  {"id": "rdkit-01", "skill": "chem-rdkit-descriptors", "request": "计算乙醇 SMILES CCO 的分子量、LogP 和 TPSA，输出 JSON。", "must_include": ["molecular_weight", "logp", "tpsa"]},
+  {"id": "rdkit-02", "skill": "chem-rdkit-descriptors", "request": "读取这三条 SMILES：CCO、c1ccccc1O、not-a-smiles；逐条计算描述符，并明确标记非法输入。", "must_include": ["ok", "error"]},
+  {"id": "pubchem-01", "skill": "chem-pubchem-query", "request": "查询 PubChem 中 caffeine，返回 CID、分子式和分子量，并保留来源 URL。", "must_include": ["cid", "molecular_formula", "source_url"]},
+  {"id": "pubchem-02", "skill": "chem-pubchem-query", "request": "查询一个不存在的化合物 definitely-not-a-real-compound-xyz；不要编造结果，返回结构化错误。", "must_include": ["ok", "error"]}
+]

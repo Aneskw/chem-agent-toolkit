@@ -28,3 +28,5 @@ python3 evaluation/compare_existing_skills.py --output evaluation/results/pilot.
 ```
 
 PubChem cases require network access. The task definitions and expected values are in `tasks.json`.
+
+The separate LLM ablation protocol is in [`agent_eval_protocol.md`](agent_eval_protocol.md), with concrete prompts in [`agent_tasks.json`](agent_tasks.json).
