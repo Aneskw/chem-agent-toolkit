@@ -15,8 +15,9 @@ def main():
     if skill_path:
         prompt += "\n\nRead and follow this skill document:\n" + Path(skill_path).read_text(encoding="utf-8")
     body = {"model": os.environ.get("OPENAI_MODEL", "gpt-5-nano"), "input": prompt, "max_output_tokens": 1200}
+    base_url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
     request = urllib.request.Request(
-        "https://api.openai.com/v1/responses",
+        base_url + "/responses",
         data=json.dumps(body).encode(),
         headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"},
         method="POST",

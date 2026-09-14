@@ -37,8 +37,10 @@ The current repository can run the RDKit and PubChem task groups. The five model
 python3 evaluation/run_agent_ablation.py --agent-cmd 'python3 my_agent.py' --output evaluation/results/agent_runs.jsonl
 ```
 
-For the OpenAI Responses API adapter, use `evaluation/openai_agent.py`; it defaults to `gpt-5-nano` and reads `OPENAI_API_KEY` from the environment:
+For the OpenAI Responses API adapter, use `evaluation/openai_agent.py`; it defaults to `gpt-5-nano` and reads `OPENAI_API_KEY` from the environment. Set `OPENAI_BASE_URL` when using an OpenAI-compatible server such as vLLM:
 
 ```bash
 OPENAI_API_KEY=... python3 evaluation/run_agent_ablation.py --agent-cmd 'python3 evaluation/openai_agent.py' --output evaluation/results/openai_gpt5nano.jsonl
 ```
+
+For a cluster-hosted Qwen endpoint, use `OPENAI_BASE_URL=http://HOST:8000/v1` and set `OPENAI_MODEL` to the served model name. The adapter sends the same prompts and the same two conditions, so the comparison protocol remains unchanged.
