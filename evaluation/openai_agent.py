@@ -3,6 +3,7 @@
 import json
 import os
 import ssl
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -31,8 +32,30 @@ def main():
         method="POST",
     )
     context = ssl.create_default_context(cafile=os.environ.get("SSL_CERT_FILE", "/etc/ssl/cert.pem"))
-    with urllib.request.urlopen(request, timeout=90, context=context) as response:
-        payload = json.load(response)
+    try:
+        with urllib.request.urlopen(request, timeout=90, context=context) as response:
+            payload = json.load(response)
+    except urllib.error.HTTPError as exc:
+        # Keep ablation logs useful without recording the request or API key.
+        message = f"HTTP {exc.code}"
+        error_code = None
+        try:
+            detail = json.loads(exc.read().decode("utf-8", "replace"))
+            error = detail.get("error", detail)
+            if isinstance(error, dict):
+                message = error.get("message") or message
+                error_code = error.get("code") or error.get("type")
+        except Exception:
+            pass
+        print(json.dumps({"ok": False, "status": exc.code, "code": error_code,
+                          "message": message,
+                          "retry_after": exc.headers.get("Retry-After")},
+                         ensure_ascii=False))
+        raise SystemExit(2)
+    except urllib.error.URLError as exc:
+        print(json.dumps({"ok": False, "error": "network", "message": str(exc.reason)},
+                         ensure_ascii=False))
+        raise SystemExit(2)
     text = payload.get("output_text")
     if text is None and style == "chat":
         text = payload.get("choices", [{}])[0].get("message", {}).get("content", "")

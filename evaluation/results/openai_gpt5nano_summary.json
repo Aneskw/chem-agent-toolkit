@@ -1,0 +1,17 @@
+{
+  "file": "evaluation/results/openai_gpt5nano.jsonl",
+  "attempts": 8,
+  "successful": 0,
+  "failed": 8,
+  "conditions": {
+    "no-skill": 4,
+    "with-skill": 4
+  },
+  "model": [
+    "gpt-5-nano"
+  ],
+  "provider_statuses": [
+    "429"
+  ],
+  "interpretation": "provider_blocked_before_generation; skill_effect_not_estimable"
+}
