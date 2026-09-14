@@ -1,0 +1,17 @@
+{
+  "environment": "work/localretro/venv/bin/python3",
+  "rdkit_version": "2024.09.6",
+  "positive": {
+    "input": "CCO",
+    "status": "passed",
+    "molecular_weight": 46.069,
+    "logp": -0.0014,
+    "tpsa": 20.23
+  },
+  "batch": {
+    "inputs": 3,
+    "valid": 2,
+    "invalid": 1,
+    "status": "passed"
+  }
+}
