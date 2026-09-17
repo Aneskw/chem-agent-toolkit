@@ -14,7 +14,7 @@
 
 ```bash
 pip install -r requirements.txt     # 依赖（numpy/scipy/scikit-learn；matplotlib 可选）
-python tests/test_edbo_core.py      # 10 项单元测试（含 Branin 收敛基准、诊断降级）
+python tests/test_edbo_core.py      # 12 项单元测试（含 Branin 收敛基准、诊断降级、边界标记、批多样性）
 python tests/test_cli.py            # 2 项 CLI 端到端测试
 python scripts/benchmark.py --quick # 可选：环境自检 + 参数敏感性基准
 ```

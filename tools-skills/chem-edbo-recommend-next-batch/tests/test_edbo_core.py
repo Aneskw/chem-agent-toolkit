@@ -139,8 +139,9 @@ def test_recommendation_schema_and_dedup():
     seen = set()
     for r in recs:
         for k in ("rank", "conditions", "predicted_mean", "predicted_std",
-                  "expected_improvement", "confidence"):
+                  "expected_improvement", "confidence", "boundary_hit"):
             assert k in r
+        assert isinstance(r["boundary_hit"], list)
         assert r["predicted_std"] >= 0 and r["expected_improvement"] >= 0
         # 推荐点必须落在空间内
         x = space.encode(r["conditions"])
@@ -151,6 +152,8 @@ def test_recommendation_schema_and_dedup():
         seen.add(key)
         assert not np.all(np.isclose(bo.X_obs, x, atol=1e-9), axis=1).any(), "推荐与已观测重复"
     assert "log_marginal_likelihood" in result["diagnostics"]
+    assert "suggestions" in result["diagnostics"]
+    assert result["schema_version"] == "1.1"
     print("✓ test_recommendation_schema_and_dedup")
 
 
@@ -200,6 +203,39 @@ def test_full_enumeration_space():
     assert len(recs) == 2
     assert all(r["conditions"]["A"] in ("a1", "a2", "a3") for r in recs)
     print("✓ test_full_enumeration_space")
+
+
+def test_boundary_hits():
+    space = make_space()
+    # 命中下边界 / 上边界（相对间距 <1%）
+    assert "temperature" in space.boundary_hits(
+        {"ligand": "L1", "base": "A", "temperature": 40.0, "concentration": 0.15})
+    assert "temperature" in space.boundary_hits(
+        {"ligand": "L1", "base": "A", "temperature": 120.0, "concentration": 0.15})
+    assert "concentration" in space.boundary_hits(
+        {"ligand": "L1", "base": "A", "temperature": 80.0, "concentration": 0.052})
+    # 中间值不命中
+    assert space.boundary_hits(
+        {"ligand": "L1", "base": "A", "temperature": 80.0, "concentration": 0.15}) == []
+    print("✓ test_boundary_hits")
+
+
+def test_local_penalty():
+    from edbo_core import BayesianOptimizer as BO
+
+    rng = np.random.default_rng(0)
+    X = rng.uniform(0, 1, (100, 3))
+    picked = [X[7]]
+    p = BO.local_penalty(X, picked, radius=0.25)
+    assert np.all((p >= 0) & (p <= 1))
+    assert p[7] < 1e-6, "选中点处惩罚应≈0"
+    near = np.argmax(np.sum((X - picked[0]) ** 2, axis=1))
+    d_near, d_far = np.linalg.norm(X[5] - picked[0]), np.linalg.norm(X[near] - picked[0])
+    assert d_far > d_near
+    # 半径≤0 或 picked 为空时不惩罚
+    assert np.all(BO.local_penalty(X, picked, 0.0) == 1.0)
+    assert np.all(BO.local_penalty(X, [], 0.25) == 1.0)
+    print("✓ test_local_penalty")
 
 
 def test_diagnostics_degradation():

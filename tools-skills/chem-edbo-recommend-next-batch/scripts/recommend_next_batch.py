@@ -74,6 +74,17 @@ def build_report(result: dict, args) -> str:
     L.append("- 高 EI = 预测均值高与不确定性大的平衡点，是最值得优先尝试的条件。")
     L.append("- 置信度 low 的点位于模型覆盖稀疏区域，探索风险与机会并存；high 的点接近已充分探索区域。")
     L.append("- 推荐整批并行执行，实测产率后并入数据文件，再次调用本 skill 迭代（闭环优化）。")
+    hits = [(r["rank"], "、".join(r.get("boundary_hit") or []))
+            for r in result["recommendations"] if r.get("boundary_hit")]
+    if hits:
+        L.append("\n### 边界提示\n")
+        for rank, names in hits:
+            L.append(f"- ⚠ 第 {rank} 条推荐命中变量边界（{names}）：真实最优可能在声明范围之外，"
+                     f"建议扩宽该描述符范围或人工复核。")
+    if result["diagnostics"].get("suggestions"):
+        L.append("\n### 模型建议\n")
+        for s in result["diagnostics"]["suggestions"]:
+            L.append(f"- 💡 {s}")
     if result["diagnostics"].get("warnings"):
         L.append("\n### 诊断告警\n")
         for w in result["diagnostics"]["warnings"]:
@@ -103,6 +114,12 @@ def print_summary(result: dict) -> None:
             print(f"  #{r['rank']:d}  {cond}  |  预测 {r['predicted_mean']:.2f} ± "
                   f"{r['predicted_std']:.2f}  |  EI={r['expected_improvement']:.2f}  |  "
                   f"{r['confidence']}")
+    for r in result["recommendations"]:
+        if r.get("boundary_hit"):
+            print(f"  [边界提示] #{r['rank']} 命中变量边界（{'、'.join(r['boundary_hit'])}）："
+                  f"真实最优可能在范围之外", file=sys.stderr)
+    for s in result["diagnostics"].get("suggestions", []):
+        print(f"  [建议] {s}", file=sys.stderr)
     for w in result["diagnostics"].get("warnings", []):
         print(f"  [警告] {w}", file=sys.stderr)
 
@@ -121,6 +138,10 @@ def main(argv=None) -> int:
     ap.add_argument("--candidates", type=int, default=10000, help="候选点数量")
     ap.add_argument("--gp-restarts", type=int, default=5, help="GP 超参数优化重启次数")
     ap.add_argument("--kappa", type=float, default=2.0, help="UCB 的探索系数 κ")
+    ap.add_argument("--batch-strategy", default="diverse", choices=["diverse", "greedy"],
+                    help="批选择策略：diverse=局部惩罚增强批内多样性（默认）；greedy=纯贪心（旧行为）")
+    ap.add_argument("--diversity-radius", type=float, default=0.25,
+                    help="局部惩罚半径（仅 batch-strategy=diverse 时生效；0=关闭惩罚）")
     ap.add_argument("--seed", type=int, default=42, help="随机种子（复现性）")
     ap.add_argument("--output", default=None, help="输出 JSON 路径（默认 recommendations_<空间名>.json）")
     ap.add_argument("--report", default=None, help="可选：输出 Markdown 报告路径")
@@ -147,6 +168,8 @@ def main(argv=None) -> int:
             gp_restarts=args.gp_restarts,
             kappa=args.kappa,
             seed=args.seed,
+            batch_strategy=args.batch_strategy,
+            diversity_radius=args.diversity_radius,
         )
         bo.fit(observations)
         result = bo.recommend_json()

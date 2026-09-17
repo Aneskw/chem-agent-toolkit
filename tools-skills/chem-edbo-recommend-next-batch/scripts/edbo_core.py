@@ -38,7 +38,7 @@ __all__ = [
     "OUTPUT_VERSION",
 ]
 
-OUTPUT_VERSION = "1.0"
+OUTPUT_VERSION = "1.1"
 _EPS = 1e-12
 
 
@@ -195,6 +195,16 @@ class ReactionSpace:
             out[name] = opts[int(np.argmax(x[start:end]))]
         return out
 
+    def boundary_hits(self, conditions: dict) -> list:
+        """返回命中边界的连续描述符名（值距 min/max 的相对间距 <1% 视为命中）。"""
+        hits = []
+        for name, (idx, lo, hi) in self.cont_blocks.items():
+            v = float(conditions[name])
+            span = hi - lo
+            if (v - lo) / span < 0.01 or (hi - v) / span < 0.01:
+                hits.append(name)
+        return hits
+
     def encode_labels(self) -> list:
         """编码向量每一维的人类可读标签（用于诊断输出）。"""
         labels = []
@@ -294,6 +304,8 @@ class BayesianOptimizer:
         gp_restarts: int = 5,
         kappa: float = 2.0,
         seed: Optional[int] = 42,
+        batch_strategy: str = "diverse",
+        diversity_radius: float = 0.25,
     ):
         self.space = space
         self.batch_size = int(batch_size)
@@ -305,6 +317,11 @@ class BayesianOptimizer:
         self.n_candidates = int(n_candidates)
         self.gp_restarts = int(gp_restarts)
         self.kappa = float(kappa)
+        self.batch_strategy = batch_strategy
+        if self.batch_strategy not in ("diverse", "greedy"):
+            raise ValueError(f"batch_strategy 只能是 diverse 或 greedy，收到: {batch_strategy!r}")
+        # greedy = 纯贪心（旧行为）；diverse = 局部惩罚增强批内多样性
+        self.diversity_radius = float(diversity_radius) if self.batch_strategy == "diverse" else 0.0
         self.seed = seed if seed is not None else 42
         self.rng = np.random.default_rng(self.seed)
 
@@ -431,6 +448,19 @@ class BayesianOptimizer:
         return mu_raw, sigma_raw, acq
 
     # ---------------- 推荐 ----------------
+    @staticmethod
+    def local_penalty(X: np.ndarray, picked: list, radius: float) -> np.ndarray:
+        """局部惩罚因子（González et al., AISTATS 2016 的工程近似）：
+        ∏_{x*∈picked} (1 − exp(−‖x−x*‖²/(2·radius²)))。选中点处为 0，远处趋近 1。
+        radius ≤ 0 或 picked 为空时不惩罚（返回全 1）。"""
+        if radius <= 0 or not picked:
+            return np.ones(len(X))
+        p = np.ones(len(X))
+        for x in picked:
+            d2 = np.sum((X - x) ** 2, axis=1)
+            p *= 1.0 - np.exp(-d2 / (2.0 * radius**2))
+        return p
+
     def _exclude_observed(self, pool: np.ndarray) -> np.ndarray:
         if self.X_obs is None or len(self.X_obs) == 0:
             return pool
@@ -485,11 +515,15 @@ class BayesianOptimizer:
         self._fit_surrogate(X_train, y_train)
 
         recs = []
+        picked = []  # 批内已选点（局部惩罚用）
         for rank in range(1, min(self.batch_size, len(pool)) + 1):
             mu_raw, sigma_raw, acq = self.evaluate(pool)
-            i = int(np.argmax(acq))
+            # 批内多样性：对已选点邻域做局部惩罚后再取 argmax（EI 报告值仍为未惩罚的原始值）
+            penalized = acq * self.local_penalty(pool, picked, self.diversity_radius)
+            i = int(np.argmax(penalized))
             x = pool[i]
             recs.append(self._make_rec(rank, x, float(mu_raw[i]), float(sigma_raw[i]), float(acq[i])))
+            picked.append(x)
             # Kriging-believer：把预测均值当作幻想观测，重新拟合后继续选下一个
             X_train = np.vstack([X_train, x])
             y_train = np.append(y_train, (mu_raw[i] - self.mu_y) / self.sd_y)
@@ -506,14 +540,16 @@ class BayesianOptimizer:
     def _cold_start_recs(self, pool: np.ndarray) -> list:
         recs = []
         for rank, x in enumerate(self._cold_start_batch(pool), start=1):
+            cond = self.space.decode(x)
             recs.append(
                 {
                     "rank": rank,
-                    "conditions": self.space.decode(x),
+                    "conditions": cond,
                     "predicted_mean": None,
                     "predicted_std": None,
                     "expected_improvement": None,
                     "confidence": "n/a（冷启动，无模型）",
+                    "boundary_hit": self.space.boundary_hits(cond),
                 }
             )
         return recs
@@ -525,13 +561,15 @@ class BayesianOptimizer:
             conf = "medium"
         else:
             conf = "low"
+        cond = self.space.decode(x)
         return {
             "rank": rank,
-            "conditions": self.space.decode(x),
+            "conditions": cond,
             "predicted_mean": mu,
             "predicted_std": sigma,
             "expected_improvement": float(acq),
             "confidence": conf,
+            "boundary_hit": self.space.boundary_hits(cond),
         }
 
     # ---------------- 输出 ----------------
@@ -594,6 +632,24 @@ class BayesianOptimizer:
             "UCB": f"Upper Confidence Bound (κ={self.kappa})",
             "GREEDY": "Greedy (预测均值最大)",
         }[self.acquisition]
+        batch_name = (
+            f"{self.batch_strategy} + Kriging-believer（局部惩罚半径 r={self.diversity_radius:g}）"
+            if self.diversity_radius > 0
+            else "greedy + Kriging-believer（顺序批 EI）"
+        )
+        # 数据驱动的使用建议（供 Agent 与用户参考）
+        sugg = []
+        if self.status == "cold_start":
+            sugg.append("冷启动：当前为空间填充推荐；积累 ≥5 条观测后可正常建模。")
+        elif len(self.y_obs) < 10:
+            sugg.append(
+                f"观测仅 {len(self.y_obs)} 条（<10）：探索不足，可考虑 --acquisition UCB 或减小 --batch-size。"
+            )
+        if any(r.get("boundary_hit") for r in recs):
+            sugg.append(
+                "部分推荐命中变量边界：真实最优可能在声明范围之外，建议扩宽该描述符范围或人工复核。"
+            )
+        diag["suggestions"] = sugg
         return {
             "skill": "chem-edbo-recommend-next-batch",
             "schema_version": OUTPUT_VERSION,
@@ -601,7 +657,7 @@ class BayesianOptimizer:
             "model": {
                 "surrogate": "Gaussian Process (Matérn-5/2, ARD)",
                 "acquisition": acq_name,
-                "batch_strategy": "greedy + Kriging-believer（顺序批 EI）",
+                "batch_strategy": batch_name,
                 "seed": self.seed,
             },
             "space": {

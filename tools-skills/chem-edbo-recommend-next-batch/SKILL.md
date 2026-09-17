@@ -34,17 +34,20 @@ allowed-tools: Bash, Read, Write, Glob, WebFetch, WebSearch
 - GP + EI 在 EDBO 论文中的系统基准：Pd 催化直接芳基化基准集（12 配体 × 4 碱 × 4 溶剂 × 3 温度 × 3 浓度
   = 1728 组合），贝叶斯优化在平均效率与一致性上**优于 50 位人类化学专家**（第 3 批起超越，且总能达到 >99% 产率）；
 - 真实案例：Mitsunobu 反应 40 次实验内 99% 产率（18 万组合空间）；脱氧氟化反应 15 次实验内 35% → 69%；
-- 算法核心（Matérn-5/2 核 GP、EI 公式、[0,1] 归一化、one-hot 类别编码、贪心批选择）为
-  scripts/edbo_core.py 的标准实现，已通过本 skill 自带 12 项测试（完整证据见 results/RESULTS.md）：
-  Branin 基准 22 次评估收敛到全局最优邻域（5.01 → 0.41，全局最优 0.40，多种子 5/6 收敛）、
-  模拟闭环 2 轮产率 74.2 → 94.2、参数网格 6/6 收敛（单组 <2s）；
+- 算法核心（Matérn-5/2 核 GP、EI 公式、[0,1] 归一化、one-hot 类别编码、批选择）为
+  scripts/edbo_core.py 的标准实现，已通过本 skill 自带 14 项测试（完整证据见 results/RESULTS.md）：
+  Branin 基准 22 次评估收敛到全局最优邻域（5.01 → 0.43，全局最优 0.40，多种子 6/6 收敛）、
+  模拟闭环 3 轮达到真实最优产率水平（74.2 → 88.4）、参数网格 6/6 收敛（单组 <2s）；
+  另经 agent 级 A/B 对照实验验证（results/ab-test/，2 轮闭环最终最优 92.9 vs 无 skill 基线 92.2）；
 - 执行时必须保持：EI 符号公式、类别/连续编码方式、重复条件去重、批内不重复推荐。
 
 **2. 中可信度（Need verification）—— 实现细节与原文有工程取舍，使用前应验证**
 - 超参数估计：EDBO 论文对每个描述符集合用多目标自优化确定 GP 先验；本实现改用
   ML-II 边际似然 + 多重启（n_restarts）估计核超参数，效果接近但非原文设置；
 - 批选择策略：EDBO 采用联合 EI（含随机采样批优化），本实现用**贪心 + Kriging-believer 幻想更新**
-  近似顺序批 EI，批内多样性可能略低（缓解：增大 --candidates 或减小 batch-size）；
+  近似顺序批 EI，并以**局部惩罚**（默认开启，`--batch-strategy diverse`）增强批内多样性
+  ——该机制为工程近似（González et al. 2016 的简化），缓解效果经 A/B 对照实验验证
+  （另：增大 candidates 被证实对聚集无效）；
 - 描述符集合：论文最优为 DFT 描述符（>1000 维）与 Mordred 指纹（>1800 维），本 skill 仅支持
   **类别 one-hot + 连续数值**这一最通用的工程形态；分子描述符可另行计算后作为连续描述符输入；
 - 冷启动阈值（<2 条返回空间填充）与置信度分档（0.5σ/1.5σ）为本 skill 自定义经验规则。
@@ -109,9 +112,11 @@ L1,Cs2CO3,DMA,90,0.1,42.3
 ```bash
 python <skill>/scripts/recommend_next_batch.py \
     --space <空间.json> --data <数据.csv> \
-    --batch-size 5 --acquisition EI --seed 42 \
+    --batch-size 5 --acquisition EI --batch-strategy diverse --seed 42 \
     --output recommendations.json --report report.md --plot rec.png
 ```
+常用参数：`--acquisition EI|UCB|GREEDY`（默认 EI）；`--batch-strategy diverse|greedy`
+（默认 diverse，批内局部惩罚防聚集）；`--batch-size`；`--candidates`；`--seed`。
 程序化调用（Python）：
 
 ```python
@@ -127,7 +132,7 @@ result = bo.recommend_json()   # 见下方输出 schema
 ```json
 {
   "skill": "chem-edbo-recommend-next-batch",
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "ok",                      // ok | low_data | cold_start
   "model": {"surrogate": "...", "acquisition": "Expected Improvement", "batch_strategy": "...", "seed": 42},
   "objective": {"name": "yield", "direction": "maximize"},
@@ -140,16 +145,21 @@ result = bo.recommend_json()   # 见下方输出 schema
       "predicted_mean": 73.97,          // GP 预测均值（原始量纲）
       "predicted_std": 2.83,            // 预测标准差（不确定性）
       "expected_improvement": 1.02,     // EI 采集函数值
-      "confidence": "high"              // high | medium | low（相对观测值波动）
+      "confidence": "high",             // high | medium | low（相对观测值波动）
+      "boundary_hit": ["temperature"]   // 命中声明范围的边界（可能表示最优在范围外）
     }
   ],
   "diagnostics": {"log_marginal_likelihood": -12.3, "kernel_constant": 0.9,
-                  "length_scales": {"ligand[L1]": 1.2, ...}, "warnings": []},
+                  "length_scales": {"ligand[L1]": 1.2, ...},
+                  "suggestions": ["观测仅 8 条（<10）：可考虑 --acquisition UCB ..."],
+                  "warnings": []},
   "citation": ["Shields et al., Nature 2021, ...", "Garrido Torres et al., JACS 2022, ..."],
   "note": "推荐值为模型预测而非实验事实；实验前请结合安全性与可操作性人工复核。"
 }
 ```
 - 冷启动（观测 <2 条）时 `status=cold_start`，`predicted_mean` 等为 `null`，推荐为空间填充点；
+- `boundary_hit` 标记该推荐命中连续变量边界；`diagnostics.suggestions` 为数据驱动的使用建议；
+- Agent 调整推荐时须按「修改留痕」规则附加 `agent_adjustments` 字段（见 Procedure Guidance 第 7 条）。
 - 同时可输出 Markdown 报告（含解读要点、通用安全提示、引用）与 PNG 图
   （1–2 个连续描述符时绘采集函数曲面，否则绘预测均值 ± 标准差柱状图）。
 
@@ -170,9 +180,22 @@ result = bo.recommend_json()   # 见下方输出 schema
 5. **执行实验**：按推荐条件开展实验，记录真实目标值。
 6. **迭代**：把新实验结果**追加**进数据 CSV，再次运行本 skill → 直到产率收敛或满足目标。
    每轮均重新拟合 GP，历史数据始终参与建模。
-7. **（可选）LLM 的使用边界**：核心推荐永远来自 scripts 的数值计算；LLM 只可：
+7. **LLM 的使用边界与"修改留痕"规则**：核心推荐永远来自 scripts 的数值计算；LLM 只可：
    ①把非结构化实验记录解析成 CSV；②把 JSON 结果改写成自然语言解释；③补充反应安全知识提示。
-   **禁止**让 LLM 修改或替代数值推荐结果。
+   关于调整推荐（三段式）：
+   - **数值由脚本产出**：LLM 不得凭空生成或替换数值推荐；
+   - **调整需留痕**：Agent 可出于安全风险、实验可行性、边界外推三类理由删除或调整推荐点，
+     但必须：保留原始推荐、逐条列明理由、在输出中标记 `agent_adjustments` 字段
+     （格式：`[{index: 序号, action: "remove"|"replace", reason: "理由"}]`）；
+   - **安全否决权优先**：发现危险条件（高活试剂、超温超压、不相容组合）时**必须**剔除，
+     不允许以"不修改数值"为由保留。
+
+### 成本分级（何时做多少验证）
+
+- **日常/迭代场景（默认）**：一条命令 + 默认参数，直接采纳输出；不要做多种子/多参数扫描。
+- **高风险决策场景**（放大实验、昂贵试剂、即将定案）：才值得做额外验证——换 `--seed` 复核一次，
+  或 `python scripts/benchmark.py --quick` 确认环境；不需要全参数网格。
+- 依据：A/B 对照实验中，额外扫描没有改变最终结果，只增加了约 1/3 的 token 成本。
 
 ### 常见任务示例
 
@@ -191,8 +214,12 @@ result = bo.recommend_json()   # 见下方输出 schema
 - 中文列名/中文 Excel 导出乱码 → 支持 utf-8 / gbk 自动识别；另存 CSV 时选 UTF-8 最稳。
 
 **算法行为**
-- 推荐批内点聚集（多样性低）→ Kriging-believer 贪心的已知局限：增大 `--candidates`、
-  减小 `--batch-size`，或分多轮单点推荐；也可改用 `--acquisition UCB` 增加探索；
+- 推荐批内点聚集（多样性低）→ 默认已启用局部惩罚批策略（`--batch-strategy diverse`，半径
+  `--diversity-radius` 默认 0.25）；仍聚集时按序尝试：① 改用 `--acquisition UCB` 增加探索；
+  ② 减小 `--batch-size`；③ 分多轮单点推荐。（注：增大 `--candidates` 已被对照实验证实
+  **不能**缓解聚集，仅提高候选分辨率）；
+- 推荐命中变量边界 → JSON 中该条带 `boundary_hit` 字段、报告与诊断含提示：真实最优可能在
+  声明范围之外，建议扩宽该描述符范围或人工复核；
 - 预测均值超过物理界限（如 103%）→ GP 无界外推的正常现象，不裁剪以保持模型诚实，人工按 100% 理解；
 - 收敛停滞（EI 连续多轮极小）→ 可能已达局部最优：扩大空间范围、加入新描述符，或补充随机实验重启探索；
 - 数据噪声大 → 产率测量尽量用内标/GC 定量；GP 对噪声稳健但收敛变慢；
