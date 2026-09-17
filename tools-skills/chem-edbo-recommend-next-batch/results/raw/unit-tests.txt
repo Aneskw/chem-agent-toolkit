@@ -1,0 +1,13 @@
+    Branin: 初始最优 5.01 → 3 轮 BO 后 0.41（全局最优 0.40）
+✓ test_branin_optimization
+✓ test_cold_start
+✓ test_determinism
+✓ test_diagnostics_degradation
+✓ test_ei_formula
+✓ test_encode_decode_roundtrip
+✓ test_full_enumeration_space
+✓ test_minimize_direction
+✓ test_recommendation_schema_and_dedup
+✓ test_validation_errors
+
+全部通过（共 10 个测试）

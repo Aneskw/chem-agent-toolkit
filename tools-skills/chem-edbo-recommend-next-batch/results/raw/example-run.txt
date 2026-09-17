@@ -1,0 +1,10 @@
+输出 JSON: results\raw\example-recommendation.json
+输出报告: results/raw/example-report.md
+输出图: results/raw/example-plot.png
+[chem-edbo-recommend-next-batch] 已观测 20 条 | 当前最优 yield = 74.20 | 状态: ok
+Top 5 推荐（Expected Improvement）：
+  #1  temperature=40.05 concentration=0.1813 ligand=L8 base=K3PO4 solvent=DMF  |  预测 73.97 ± 2.83  |  EI=1.02  |  high
+  #2  temperature=41.3 concentration=0.2304 ligand=L8 base=KOAc solvent=NMP  |  预测 61.45 ± 8.02  |  EI=0.19  |  medium
+  #3  temperature=118.2 concentration=0.2092 ligand=L8 base=K3PO4 solvent=DMF  |  预测 72.71 ± 1.68  |  EI=0.17  |  high
+  #4  temperature=66.37 concentration=0.2811 ligand=L8 base=K3PO4 solvent=dioxane  |  预测 74.24 ± 0.28  |  EI=0.13  |  high
+  #5  temperature=64.39 concentration=0.207 ligand=L8 base=K3PO4 solvent=NMP  |  预测 74.25 ± 0.21  |  EI=0.11  |  high

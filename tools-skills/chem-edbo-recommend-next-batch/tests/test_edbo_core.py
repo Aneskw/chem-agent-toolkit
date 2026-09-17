@@ -202,6 +202,29 @@ def test_full_enumeration_space():
     print("✓ test_full_enumeration_space")
 
 
+def test_diagnostics_degradation():
+    """跨 sklearn 版本核结构差异时，诊断字段应降级为 None/空，不拖垮推荐结果。"""
+    space = make_space()
+    bo = BayesianOptimizer(space, batch_size=2, seed=0)
+    bo.fit(make_observations(6, seed=4))
+    bo.recommend()  # 正常路径先跑一遍
+
+    class StubGP:  # 模拟结构异常的核对象
+        kernel_ = object()
+
+        def log_marginal_likelihood(self):
+            raise AttributeError("broken in hypothetical sklearn version")
+
+    bo.gp = StubGP()
+    bo.lml = None  # 清除缓存值，强制走 self.gp.log_marginal_likelihood() 的异常降级路径
+    diag = bo._kernel_diagnostics()
+    assert set(diag) >= {"log_marginal_likelihood", "kernel_constant", "length_scales"}
+    assert diag["log_marginal_likelihood"] is None
+    assert diag["kernel_constant"] is None
+    assert diag["length_scales"] == {}
+    print("✓ test_diagnostics_degradation")
+
+
 def test_branin_optimization():
     """Branin 函数（2D 连续，minimize，全局最优 0.3979）：BO 应显著优于随机初始。"""
 

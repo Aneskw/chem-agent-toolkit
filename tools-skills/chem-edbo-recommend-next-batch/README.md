@@ -8,12 +8,15 @@
 - 文献依据：[references/edbo-literature.md](references/edbo-literature.md)｜[references/implementation-mapping.md](references/implementation-mapping.md)
 - 演示数据：[examples/](examples/)
 - 测试：[tests/](tests/)
+- 测试与验证结果（12/12 通过 + 数值证据 + 缺陷记录）：[results/RESULTS.md](results/RESULTS.md)
 
 快速验证：
 
 ```bash
-python tests/test_edbo_core.py      # 9 项单元测试（含 Branin 收敛基准）
+pip install -r requirements.txt     # 依赖（numpy/scipy/scikit-learn；matplotlib 可选）
+python tests/test_edbo_core.py      # 10 项单元测试（含 Branin 收敛基准、诊断降级）
 python tests/test_cli.py            # 2 项 CLI 端到端测试
+python scripts/benchmark.py --quick # 可选：环境自检 + 参数敏感性基准
 ```
 
 方法依据：Shields et al., "Bayesian reaction optimization as a tool for chemical synthesis",

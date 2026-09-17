@@ -535,18 +535,60 @@ class BayesianOptimizer:
         }
 
     # ---------------- 输出 ----------------
+    @staticmethod
+    def _find_kernel_attr(kernel, attr: str, depth: int = 6):
+        """在核对象树中递归查找属性（防 sklearn 跨版本核结构差异）。"""
+        if depth <= 0 or kernel is None:
+            return None
+        try:
+            if hasattr(kernel, attr):
+                return getattr(kernel, attr)
+        except Exception:
+            return None
+        for child in ("k1", "k2"):
+            try:
+                found = BayesianOptimizer._find_kernel_attr(
+                    getattr(kernel, child, None), attr, depth - 1)
+                if found is not None:
+                    return found
+            except Exception:
+                continue
+        return None
+
+    def _kernel_diagnostics(self) -> dict:
+        """防御式提取 GP 诊断信息：任何字段失败均降级为 None/空，绝不拖垮推荐结果。"""
+        diag = {"log_marginal_likelihood": None, "kernel_constant": None, "length_scales": {}}
+        if self.gp is None:
+            return diag
+        try:
+            lml = self.lml
+            if lml is None:
+                lml = float(self.gp.log_marginal_likelihood())
+            diag["log_marginal_likelihood"] = float(lml)
+        except Exception:
+            pass
+        try:
+            ck = self._find_kernel_attr(self.gp.kernel_, "constant_value")
+            diag["kernel_constant"] = float(ck)
+        except Exception:
+            pass
+        try:
+            ls = self._find_kernel_attr(self.gp.kernel_, "length_scale")
+            if ls is not None:
+                diag["length_scales"] = {
+                    lbl: float(v)
+                    for lbl, v in zip(self.space.encode_labels(), np.atleast_1d(ls))
+                }
+        except Exception:
+            pass
+        return diag
+
     def recommend_json(self) -> dict:
         """完整输出 JSON（供 Agent 解析与存档）。"""
         recs = self.recommend()
         sign = 1.0 if self.space.objective.get("direction", "maximize") == "maximize" else -1.0
         diag = {"warnings": list(self.warnings)}
-        if self.gp is not None:
-            diag["log_marginal_likelihood"] = self.lml
-            diag["kernel_constant"] = float(self.gp.kernel_.k1.constant_value)
-            ls = self.gp.kernel_.k2.length_scale
-            diag["length_scales"] = {
-                lbl: float(v) for lbl, v in zip(self.space.encode_labels(), np.atleast_1d(ls))
-            }
+        diag.update(self._kernel_diagnostics())
         acq_name = {
             "EI": "Expected Improvement",
             "UCB": f"Upper Confidence Bound (κ={self.kappa})",

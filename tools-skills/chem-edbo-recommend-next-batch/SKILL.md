@@ -3,10 +3,9 @@ name: chem-edbo-recommend-next-batch
 description: >
     Function: 基于 EDBO 贝叶斯反应优化，给定化学反应空间与已有实验产率数据，推荐下一批最值得做的实验条件。
     Invoke for: "推荐下一批最值得做的实验/反应条件"、"优化反应产率该做哪些实验"、
-    "下一批实验设计/实验规划"、"EDBO 贝叶斯优化推荐实验"、"Bayesian reaction optimization
-    next batch recommendation"、"给定产率数据建议下一轮筛选条件"...
+    "下一批实验设计/实验规划"、"EDBO 贝叶斯优化推荐实验"、"Bayesian reaction optimization next batch recommendation"、"给定产率数据建议下一轮筛选条件"...
 license: MIT
-compatibility: Python ≥ 3.9；依赖 numpy / scipy / scikit-learn
+compatibility: Python ≥ 3.9；依赖 numpy≥1.20 / scipy≥1.7 / scikit-learn≥1.0.
 allowed-tools: Bash, Read, Write, Glob, WebFetch, WebSearch
 ---
 
@@ -36,8 +35,9 @@ allowed-tools: Bash, Read, Write, Glob, WebFetch, WebSearch
   = 1728 组合），贝叶斯优化在平均效率与一致性上**优于 50 位人类化学专家**（第 3 批起超越，且总能达到 >99% 产率）；
 - 真实案例：Mitsunobu 反应 40 次实验内 99% 产率（18 万组合空间）；脱氧氟化反应 15 次实验内 35% → 69%；
 - 算法核心（Matérn-5/2 核 GP、EI 公式、[0,1] 归一化、one-hot 类别编码、贪心批选择）为
-  scripts/edbo_core.py 的标准实现，已通过本 skill 自带 11 项测试：Branin 基准 22 次评估收敛到
-  全局最优邻域（5.01 → 0.41，全局最优 0.40）、模拟闭环 2 轮产率 74.2 → 94.2；
+  scripts/edbo_core.py 的标准实现，已通过本 skill 自带 12 项测试（完整证据见 results/RESULTS.md）：
+  Branin 基准 22 次评估收敛到全局最优邻域（5.01 → 0.41，全局最优 0.40，多种子 5/6 收敛）、
+  模拟闭环 2 轮产率 74.2 → 94.2、参数网格 6/6 收敛（单组 <2s）；
 - 执行时必须保持：EI 符号公式、类别/连续编码方式、重复条件去重、批内不重复推荐。
 
 **2. 中可信度（Need verification）—— 实现细节与原文有工程取舍，使用前应验证**
@@ -199,10 +199,13 @@ result = bo.recommend_json()   # 见下方输出 schema
 - 高维空间（>20 编码维）→ GP 拟合慢、效果差：减少变量或改用分子描述符降维后再输入本 skill。
 
 **环境与依赖**
-- `ModuleNotFoundError: sklearn` → `pip install numpy scipy scikit-learn`（matplotlib 仅 --plot 需要）；
+- `ModuleNotFoundError: sklearn` → `pip install -r requirements.txt`（matplotlib 仅 --plot 需要，未装也能跑推荐）；
+- 换新机器/新环境 → 先跑 `python scripts/benchmark.py`（--quick 更快）做依赖版本自检 + 参数敏感性基准，
+  参考值见脚本头部注释；全部组合不收敛或单组 >60s 提示环境异常；
 - 绘图报错不影响推荐结果（CLI 会警告并继续）；服务器无显示器时脚本自动用 Agg 后端；
 - 中文 Windows 控制台乱码 → 脚本已自动切换 UTF-8 输出；若仍乱码用 `python -X utf8 ...`；
-- 运行耗时：编码维度 ~25、候选 1 万、批 5 时典型 <1 分钟；增大 `--candidates`/`--gp-restarts` 可换更稳的结果。
+- 运行耗时：编码维度 ~25、候选 1 万、批 5 时典型 <1 分钟；增大 `--candidates`/`--gp-restarts` 可换更稳的结果；
+- 跨 sklearn 版本的核对象结构差异已做防御处理：最坏情况仅省略 diagnostics 字段，推荐结果不受影响。
 
 **安全边界（重要）**
 - 本 skill 输出的是统计推荐，**不是**安全或可行性审批：新溶剂/试剂组合、高温高压条件、放大实验前必须由实验人员完成风险评估；涉及危险试剂（如 NaN₃、HF、强氧化剂）时不建议直接上模型推荐条件。
