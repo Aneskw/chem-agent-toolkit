@@ -1,3 +1,3 @@
 # REINVENT skill
 
-REINVENT4 配置和资源预检。
+REINVENT4 configuration and resource preflight.

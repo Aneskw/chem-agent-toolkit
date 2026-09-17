@@ -1,3 +1,3 @@
 # Open Babel skills
 
-包含 `chem-openbabel-convert`，负责结构文件格式转换。
+Contains `chem-openbabel-convert` for molecular structure file conversion.

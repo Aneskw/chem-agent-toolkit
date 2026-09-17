@@ -1,3 +1,3 @@
 # USPTO-50K dataset skills
 
-包含 `chem-uspto50k-split`，验证本地数据划分和重叠。数据本身不随仓库分发。
+Contains `chem-uspto50k-split` for validating local split files and overlap. The dataset itself is not distributed with this repository.

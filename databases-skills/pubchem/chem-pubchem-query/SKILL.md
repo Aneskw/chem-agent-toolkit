@@ -1,6 +1,6 @@
 ---
 name: chem-pubchem-query
-description: Query PubChem compound records by name or identifier and return a small, reproducible JSON record. Use for retrieving public compound identity and basic properties; do not use as a substitute for experimental measurements.
+description: "Invoke for: Query PubChem compound records by name or identifier and return a small, reproducible JSON record. Use for retrieving public compound identity and basic properties; do not use as a substitute for experimental measurements."
 license: MIT
 allowed-tools: Bash(python3:*)
 ---

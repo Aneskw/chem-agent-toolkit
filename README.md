@@ -1,45 +1,46 @@
 # Chem Agent Toolkit
 
-面向化学科研 agent 的可复用技能仓库雏形。
+A reusable skill repository for chemistry research agents.
 
-## 当前状态
+## Current status
 
-仓库先提供统一目录、安装入口和已有技能样例。尚未生成的技能不会提前创建；空的分类目录只保留目录说明。
+The repository provides a unified directory layout, flat installation entry points, and executable or preflight-tested chemistry skills. A skill's runtime status and acceptance scope are documented in its own `SKILL.md` and reports.
 
-## 技能目录
+## Skill catalog
 
-| 技能 | 类别 | 状态 |
+| Skill | Category | Status |
 | --- | --- | --- |
-| `localretro-single-step-retrosynthesis` | models-skills/open-models | verified（限定样例） |
-| `retroprime-two-stage-retrosynthesis` | models-skills/open-models | verified（限定样例） |
-| `wln-build-molecular-graph` | models-skills/open-models | verified（图构建子技能） |
+| `localretro-single-step-retrosynthesis` | models-skills/open-models | verified for smoke examples |
+| `retroprime-two-stage-retrosynthesis` | models-skills/open-models | verified for smoke examples |
+| `wln-build-molecular-graph` | models-skills/open-models | verified preprocessing subskill |
 | `retroxpert-evaluate-bond-disconnection` | models-skills/open-models | blocked_resources |
 | `localtransform-forward-prediction` | models-skills/open-models | blocked_resources |
-| `chem-openbabel-convert` | tools-skills/openbabel | interface + preflight |
+| `chem-openbabel-convert` | tools-skills/openbabel | interface and preflight |
 | `chem-openmm-md` | tools-skills/openmm | preflight; dependency required |
 | `chem-chembl-activity` | databases-skills/chembl | executable query; network required |
 | `chem-uspto50k-split` | databases-skills/uspto50k | executable validator; data required |
 | `chem-reinvent` | models-skills/open-models | preflight; upstream install required |
 | `chem-genmol` | models-skills/open-models | preflight; checkpoint required |
 | `chem-diffdock-nim` | models-skills/nim | preflight; endpoint and files required |
+| `chem-edbo-recommend-next-batch` | tools-skills | executable Bayesian optimization |
 
-## 使用
+## Use
 
-将需要的技能目录复制到 agent 的 skill 目录，阅读其中的 `SKILL.md`，再按“使用步骤”执行。技能的运行状态和验收范围以各自文档及 `reports/` 记录为准。
+Copy or symlink the desired skill directory into an agent's skill directory, read its `SKILL.md`, and follow its procedure. Treat `verified` as a claim about the documented execution scope, not as a claim about chemical accuracy or experimental success.
 
-## 目录约定
+## Directory conventions
 
-- `skills/`：扁平 CLI/agent 安装入口；指向分类目录中的已生成技能。
-- `databases-skills/`：数据库与数据集技能分类，包含 PubChem、ChEMBL 和 USPTO-50K 校验。
-- `tools-skills/`：工具库技能分类，包含 RDKit、Open Babel 和 OpenMM 预检。
-- `models-skills/`：模型技能分类；包含五个反应模型、REINVENT、GenMol 和 DiffDock NIM 预检。
-- `workflows/`：组合工作流，当前为空。
-- `.claude-plugin/`：插件市场元数据。
+- `skills/`: flat CLI/agent installation entry points pointing to generated skills.
+- `databases-skills/`: database and dataset skills for PubChem, ChEMBL, and USPTO-50K validation.
+- `tools-skills/`: toolkit skills for RDKit, Open Babel, OpenMM, and EDBO optimization.
+- `models-skills/`: model skills for the five reaction models, REINVENT, GenMol, and DiffDock NIM.
+- `workflows/`: future composition-level workflows.
+- `.claude-plugin/`: plugin marketplace metadata.
 
-## 证据与方法
+## Evidence and method
 
-原始论文、仓库快照、运行日志和格式说明保存在项目的开发归档中；技能文档中的 `reference` 指向固定来源。`verified` 只表示文档声明范围内的可运行性，不代表化学准确率或实验成功率。
+Paper snapshots, repository evidence, run logs, and format notes are kept in the project archive. Each skill's `reference` section points to a pinned source. A verified status means only that the stated execution checks passed.
 
-## 关于“9/10 个候选”
+## Candidate counts
 
-这里的 9 和 10 是一次模型推理返回的候选反应物数量，不是“9 个技能通过、10 个技能候选”。例如 LocalRetro 请求 `top_k=10` 时，模型先生成编辑候选，包装器再删除非法、重复和占位结果，所以最终可能返回 9 个或 10 个有效候选；数量少于 `top_k` 不代表模型失败，也不代表化学反应一定可行。
+Numbers such as 9/10 are counts of valid reactant candidates returned by one model inference, not counts of skills or successful experiments. A request for `top_k=10` can yield fewer valid candidates after invalid, duplicate, and placeholder outputs are removed.

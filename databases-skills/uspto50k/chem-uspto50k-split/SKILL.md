@@ -1,30 +1,31 @@
 ---
 name: chem-uspto50k-split
-description: Validate local USPTO-50K reaction split files and report schema, row counts, and overlap before model training or evaluation.
+description: >-
+  Invoke for: validating local USPTO-50K-style train, validation, and test reaction splits before retrosynthesis training or evaluation. Do not download or redistribute the dataset.
 license: Dataset terms vary by source
 allowed-tools: Bash(python3:*)
 ---
 
 # USPTO-50K split validation
 
-Use for checking a local, preprocessed USPTO-50K-style dataset before retrosynthesis experiments. This is a data-quality skill, not a downloader and not a license determination. The dataset is not bundled in this repository.
+Validate local `train.csv`, `valid.csv`, and `test.csv` files for required reaction columns, empty rows, and cross-split overlap. Record the source, preprocessing commit, atom-mapping policy, and split convention.
 
-## reference
+## Reference
 
 Project evidence identifies `USPTO50K` as a dataset option with train/valid/test files and model-specific preprocessing. Keep the exact source, preprocessing commit, split convention, and any atom-mapping policy in the run record.
 
-## 输入&输出
+## Input and output
 
-输入、输出和错误语义以脚本的 JSON 记录为准。`ok: false` 时不得把部分结果当作成功；模型或数据库结果不等于实验验证。
+The script emits machine-readable JSON. If `ok: false`, do not treat partial fields as a successful scientific result; database and model outputs are not experimental validation.
 
-## 使用步骤
+## Procedure
 
-1. 先读 `references/api.md`，确认接口、版本和输入约束。
-2. 运行 `scripts/validate_split.py` 或上游 CLI，保存 stdout、stderr 和退出码。
-3. 对照 `examples/` 检查字段；缺少依赖、权重或数据时标记为 `blocked_resources`。
+1. Read `references/api.md` for the interface, version, and input constraints.
+2. Run the packaged script or upstream CLI and preserve stdout, stderr, and exit code.
+3. Compare fields with `examples/`; mark missing dependencies, data, weights, or endpoints as `blocked_resources`.
 
-## 失败与恢复
+## Failure and recovery
 
-- 输入不完整或格式错误：修正输入并保留原始请求。
-- 依赖、网络、权重或数据缺失：报告具体缺口，恢复环境后再运行，不伪造结果。
-- 相同错误连续出现时停止重试并保留日志。
+- Correct incomplete or malformed input while retaining the original request.
+- Report missing dependencies, network access, weights, or data explicitly; never fabricate output.
+- Stop repeated retries when the same error recurs.

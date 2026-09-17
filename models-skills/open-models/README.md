@@ -1,3 +1,3 @@
 # Open models
 
-本地开源化学模型技能的分类目录。当前五个反应模型技能已放在本目录；根目录 `skills/` 保留对应的扁平安装入口（符号链接）。
+Category directory for local open-source chemistry model skills. The five reaction model skills, REINVENT, and GenMol are here; the root `skills/` directory keeps flat installation entry points as symlinks.

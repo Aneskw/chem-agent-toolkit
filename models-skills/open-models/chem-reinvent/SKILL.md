@@ -1,32 +1,33 @@
 ---
 name: chem-reinvent
-description: Use the REINVENT4 molecular design CLI for configured de novo generation or optimization while preserving the configuration and generated SMILES for audit.
+description: >-
+  Invoke for: running or preflighting REINVENT4 configuration-driven molecular design tasks, including de novo generation, scaffold hopping, R-group replacement, linker design, and optimization. Do not claim generated molecules are synthesizable.
 license: Apache-2.0
 allowed-tools: Bash(reinvent:*)
 ---
 
-# REINVENT4 molecule generation
+# REINVENT4 molecular design
 
-Use when a user has a REINVENT4 installation and a TOML configuration for de novo design, scaffold hopping, R-group replacement, linker design, or optimization. This package provides a preflight wrapper only; it does not download checkpoints or claim generated molecules are synthesizable.
+Use a pinned REINVENT4 checkout, TOML configuration, scoring components, seed, and output directory. The packaged script checks the CLI and configuration path; it does not download checkpoints.
 
-## reference
+## Reference
 
 Repository: https://github.com/MolecularAI/REINVENT4
 
 The upstream CLI is configuration-driven. Pin the repository revision, configuration file, scoring components, random seed, and output directory.
 
-## 输入&输出
+## Input and output
 
-输入、输出和错误语义以脚本的 JSON 记录为准。`ok: false` 时不得把部分结果当作成功；模型或数据库结果不等于实验验证。
+The script emits machine-readable JSON. If `ok: false`, do not treat partial fields as a successful scientific result; database and model outputs are not experimental validation.
 
-## 使用步骤
+## Procedure
 
-1. 先读 `references/api.md`，确认接口、版本和输入约束。
-2. 运行 `scripts/preflight.py` 或上游 CLI，保存 stdout、stderr 和退出码。
-3. 对照 `examples/` 检查字段；缺少依赖、权重或数据时标记为 `blocked_resources`。
+1. Read `references/api.md` for the interface, version, and input constraints.
+2. Run the packaged script or upstream CLI and preserve stdout, stderr, and exit code.
+3. Compare fields with `examples/`; mark missing dependencies, data, weights, or endpoints as `blocked_resources`.
 
-## 失败与恢复
+## Failure and recovery
 
-- 输入不完整或格式错误：修正输入并保留原始请求。
-- 依赖、网络、权重或数据缺失：报告具体缺口，恢复环境后再运行，不伪造结果。
-- 相同错误连续出现时停止重试并保留日志。
+- Correct incomplete or malformed input while retaining the original request.
+- Report missing dependencies, network access, weights, or data explicitly; never fabricate output.
+- Stop repeated retries when the same error recurs.

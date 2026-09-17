@@ -1,6 +1,6 @@
 ---
 name: chem-rdkit-descriptors
-description: Calculate standard RDKit molecular descriptors from one or more SMILES strings. Use for reproducible structure-property features; do not interpret descriptors as measured activity or toxicity.
+description: "Invoke for: Calculate standard RDKit molecular descriptors from one or more SMILES strings. Use for reproducible structure-property features; do not interpret descriptors as measured activity or toxicity."
 license: BSD-3-Clause
 allowed-tools: Bash(python3:*)
 ---

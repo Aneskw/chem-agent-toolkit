@@ -1,3 +1,3 @@
 # NIM model skills
 
-包含 DiffDock NIM 请求预检。
+Contains the DiffDock NIM request preflight.
