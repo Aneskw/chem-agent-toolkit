@@ -1,0 +1,3 @@
+tool: openbabel
+input_format: smi
+output_format: sdf

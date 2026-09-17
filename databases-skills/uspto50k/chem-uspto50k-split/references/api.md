@@ -1,0 +1,1 @@
+Project evidence identifies `USPTO50K` as a dataset option with train/valid/test files and model-specific preprocessing. Keep the exact source, preprocessing commit, split convention, and any atom-mapping policy in the run record.

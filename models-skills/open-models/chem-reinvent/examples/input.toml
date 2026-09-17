@@ -1,0 +1,3 @@
+[run]
+seed = 7
+output_dir = "runs/example"

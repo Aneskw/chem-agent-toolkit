@@ -1,0 +1,3 @@
+tool: openmm
+mode: preflight
+platform: CPU

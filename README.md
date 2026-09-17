@@ -15,6 +15,13 @@
 | `wln-build-molecular-graph` | models-skills/open-models | verified（图构建子技能） |
 | `retroxpert-evaluate-bond-disconnection` | models-skills/open-models | blocked_resources |
 | `localtransform-forward-prediction` | models-skills/open-models | blocked_resources |
+| `chem-openbabel-convert` | tools-skills/openbabel | interface + preflight |
+| `chem-openmm-md` | tools-skills/openmm | preflight; dependency required |
+| `chem-chembl-activity` | databases-skills/chembl | executable query; network required |
+| `chem-uspto50k-split` | databases-skills/uspto50k | executable validator; data required |
+| `chem-reinvent` | models-skills/open-models | preflight; upstream install required |
+| `chem-genmol` | models-skills/open-models | preflight; checkpoint required |
+| `chem-diffdock-nim` | models-skills/nim | preflight; endpoint and files required |
 
 ## 使用
 
@@ -23,9 +30,9 @@
 ## 目录约定
 
 - `skills/`：扁平 CLI/agent 安装入口；指向分类目录中的已生成技能。
-- `databases-skills/`：数据库技能分类，当前为空；未来放 PubChem、ChEMBL、Identifier Resolver。
-- `tools-skills/`：工具库技能分类，当前为空；未来放 RDKit、Open Babel、OpenMM、PySCF 等。
-- `models-skills/`：模型技能分类；现有五个反应模型技能归入 `open-models/`。
+- `databases-skills/`：数据库与数据集技能分类，包含 PubChem、ChEMBL 和 USPTO-50K 校验。
+- `tools-skills/`：工具库技能分类，包含 RDKit、Open Babel 和 OpenMM 预检。
+- `models-skills/`：模型技能分类；包含五个反应模型、REINVENT、GenMol 和 DiffDock NIM 预检。
 - `workflows/`：组合工作流，当前为空。
 - `.claude-plugin/`：插件市场元数据。
 
