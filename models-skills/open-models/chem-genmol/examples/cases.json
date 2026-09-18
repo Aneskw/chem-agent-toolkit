@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "skill_id": "chem-genmol",
+  "scope": "GenMol SAFE 分子生成请求的输入记录和资源预检；当前仓库没有本地 checkpoint，因此不声称模型生成成功",
+  "cases": [
+    {
+      "id": "positive-01-fragment-generation-request",
+      "kind": "positive_request",
+      "input": {"safe_input": "[*:1]CC[*:2]", "num_samples": 4, "seed": 7},
+      "expected": {"status": "blocked_resources", "checks": ["SAFE input, sample count and seed are preserved", "repo and checkpoint preflight runs before generation", "missing checkpoint is reported", "no fabricated molecule strings are returned"]},
+      "fixture_output": "output.json"
+    },
+    {
+      "id": "positive-02-linker-generation-request",
+      "kind": "positive_request",
+      "input": {"safe_input": "[*:1]c1ccccc1[*:2]", "num_samples": 2, "seed": 1},
+      "expected": {"status": "blocked_resources", "checks": ["request is recorded exactly", "generation is not attempted without pinned resources"]},
+      "fixture_output": "output.json"
+    },
+    {
+      "id": "negative-01-missing-safe-input",
+      "kind": "negative_request",
+      "input": {"num_samples": 4, "seed": 7},
+      "expected": {"status": "rejected_before_generation", "checks": ["safe_input is required", "no molecules are returned"]}
+    },
+    {
+      "id": "negative-02-invalid-sample-count",
+      "kind": "negative_request",
+      "input": {"safe_input": "[*:1]CC[*:2]", "num_samples": 0, "seed": 7},
+      "expected": {"status": "rejected_before_generation", "checks": ["num_samples must be positive", "no molecules are returned"]}
+    }
+  ],
+  "reference": "../references/api.md",
+  "resource_preflight": "../scripts/preflight.py"
+}
