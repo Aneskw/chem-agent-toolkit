@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "skill_id": "localtransform-forward-prediction",
+  "scope": "当前固定仓库只能验收资源预检；不能把阻塞状态当作模型预测",
+  "cases": [
+    {
+      "id": "positive-01-resource-preflight",
+      "kind": "positive",
+      "input": {"repo_root": "evidence/LocalTransform", "operation": "resource_preflight"},
+      "expected": {"status": "blocked_resources", "checks": ["reports every missing required path", "does not execute an unverified model"]}
+    },
+    {
+      "id": "negative-01-predict-without-assets",
+      "kind": "negative",
+      "input": {"repo_root": "evidence/LocalTransform", "operation": "forward_reaction_prediction", "reactants": "CCO"},
+      "expected": {"status": "blocked_resources", "error_contains": "missing"}
+    }
+  ],
+  "reference": "../SKILL.md"
+}

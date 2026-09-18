@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "skill_id": "retroprime-two-stage-retrosynthesis",
+  "scope": "固定 CPU 两阶段冒烟案例；不是预测准确率或实验成功率评测",
+  "cases": [
+    {
+      "id": "positive-01-acetanilide",
+      "kind": "positive",
+      "input": {"product": "CC(=O)Nc1ccccc1", "top_k": 10},
+      "expected": {"ok": true, "candidate_count": 5, "first_reactants_smiles": "CC(=O)OC(C)=O.Nc1ccccc1", "checks": ["candidate_count > 0", "ranks are consecutive", "all five stages are present"]}
+    },
+    {
+      "id": "positive-02-methyl-benzoate",
+      "kind": "positive",
+      "input": {"product": "COC(=O)c1ccccc1", "top_k": 10},
+      "expected": {"ok": true, "candidate_count": 10, "first_reactants_smiles": "CO.O=C(O)c1ccccc1", "checks": ["candidate_count == 10", "all five stages are present"]}
+    },
+    {
+      "id": "negative-01-invalid-smiles",
+      "kind": "negative",
+      "input": {"product": "C1CC", "top_k": 10},
+      "expected": {"ok": false, "error": "Invalid product SMILES"}
+    },
+    {
+      "id": "negative-02-invalid-top-k",
+      "kind": "negative",
+      "input": {"product": "CCO", "top_k": 0},
+      "expected": {"ok": false, "error_contains": "top_k"}
+    },
+    {
+      "id": "negative-03-single-atom",
+      "kind": "negative",
+      "input": {"product": "C", "top_k": 10},
+      "expected": {"ok": false, "error_contains": "one connected product"}
+    }
+  ],
+  "reference": "../SKILL.md"
+}

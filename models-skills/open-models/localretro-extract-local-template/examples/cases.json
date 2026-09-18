@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "skill_id": "localretro-extract-local-template",
+  "scope": "固定 CPU 冒烟案例；不是模板库覆盖率或合成可行性评测",
+  "cases": [
+    {
+      "id": "positive-01-oxidation",
+      "kind": "positive",
+      "input": {"reaction": "[CH3:1][CH2:2][OH:3]>>[CH3:1][CH:2]=[O:3]"},
+      "expected": {"ok": true, "checks": ["result.reaction_smarts exists", "RDKit can parse reaction_smarts", "settings.retro == true", "settings.use_stereo == false"]}
+    },
+    {
+      "id": "positive-02-substitution",
+      "kind": "positive",
+      "input": {"reaction": "[CH3:1][Br:2].[OH-:3]>>[CH3:1][OH:3]"},
+      "expected": {"ok": true, "checks": ["result.reaction_smarts == '[O:1]-[C:2]>>[O:1].Br-[C:2]'", "result.edits exists"]}
+    },
+    {
+      "id": "negative-01-unmapped",
+      "kind": "negative",
+      "input": {"reaction": "CCO>>CC=O"},
+      "expected": {"ok": false, "error_contains": "map"}
+    },
+    {
+      "id": "negative-02-invalid",
+      "kind": "negative",
+      "input": {"reaction": ""},
+      "expected": {"ok": false, "error_contains": "reaction"}
+    }
+  ],
+  "reference": "../SKILL.md"
+}

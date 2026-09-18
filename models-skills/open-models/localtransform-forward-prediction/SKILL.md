@@ -32,6 +32,10 @@ Run the repository preflight from the ChemSkillNet root:
 python3 skills/localtransform-forward-prediction/scripts/preflight.py evidence/LocalTransform
 ```
 
+## Fixed cases
+
+Use [examples/cases.json](examples/cases.json) for one valid preflight request and one unsupported prediction request. With the current incomplete snapshot, the expected result is `blocked_resources`; the skill must not substitute another model or fabricate a product.
+
 ## Failure and recovery
 
 Record missing decoders, weights, or preprocessing data as `blocked_resources`. Once complete resources are obtained, pin the source and license, implement an adapter, and run acceptance tests. Never use another model's output under the LocalTransform name.

@@ -32,6 +32,10 @@ Input: one SMILES through `--smiles`. Output JSON contains `ok`, `input_smiles`,
 
 Check exit code 0, `ok: true`, array dimensions, and adjacency consistency before passing the graph downstream.
 
+## Fixed cases
+
+Use [examples/cases.json](examples/cases.json) for three positive and one negative case. Expected checks cover ethanol, benzene, batch masks, feature shapes, neighbor counts, adjacency consistency, and explicit invalid-SMILES rejection.
+
 ## Failure and recovery
 
 Invalid SMILES returns exit code 2 and `ok: false`. Restore RDKit/NumPy if dependencies are missing. Use the tested compatibility copy rather than modifying the evidence source. Stop on repeated or uncovered exceptions and preserve the input.

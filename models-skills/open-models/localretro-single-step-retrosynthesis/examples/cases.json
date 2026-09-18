@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "skill_id": "localretro-single-step-retrosynthesis",
+  "scope": "固定 CPU 冒烟案例；不是预测准确率或实验成功率评测",
+  "cases": [
+    {
+      "id": "positive-01-official-notebook",
+      "kind": "positive",
+      "input": {"product": "Nc1cccc2c1CN(C1CCC(=O)NC1=O)C2=O", "top_k": 10},
+      "expected": {"ok": true, "product_smiles": "Nc1cccc2c1CN(C1CCC(=O)NC1=O)C2=O", "candidate_count": 10, "checks": ["candidate_count == len(candidates)", "all candidate reactants_smiles parse", "ranks are 1..10"]}
+    },
+    {
+      "id": "positive-02-acetanilide",
+      "kind": "positive",
+      "input": {"product": "CC(=O)Nc1ccccc1", "top_k": 10},
+      "expected": {"ok": true, "candidate_count": 9, "first_reactants_smiles": "CC(=O)OC(C)=O.Nc1ccccc1", "checks": ["candidate_count > 0", "candidate_count <= top_k", "candidates are deduplicated"]}
+    },
+    {
+      "id": "negative-01-invalid-smiles",
+      "kind": "negative",
+      "input": {"product": "C1CC", "top_k": 10},
+      "expected": {"ok": false, "error": "Invalid product SMILES"}
+    },
+    {
+      "id": "negative-02-invalid-top-k",
+      "kind": "negative",
+      "input": {"product": "CCO", "top_k": 0},
+      "expected": {"ok": false, "error_contains": "top_k"}
+    },
+    {
+      "id": "negative-03-single-atom",
+      "kind": "negative",
+      "input": {"product": "C", "top_k": 10},
+      "expected": {"ok": false, "error_contains": "one connected product"}
+    }
+  ],
+  "reference": "../SKILL.md"
+}

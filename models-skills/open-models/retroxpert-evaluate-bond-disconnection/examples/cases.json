@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "skill_id": "retroxpert-evaluate-bond-disconnection",
+  "scope": "当前固定仓库只能验收资源预检；没有断键准确率结果",
+  "cases": [
+    {
+      "id": "positive-01-resource-preflight",
+      "kind": "positive",
+      "input": {"repo_root": "evidence/RetroXpert", "operation": "resource_preflight"},
+      "expected": {"status": "blocked_resources", "missing_path": "checkpoints/USPTO50K_typed_checkpoint.pt", "checks": ["does not execute inference without checkpoint"]}
+    },
+    {
+      "id": "negative-01-predict-without-checkpoint",
+      "kind": "negative",
+      "input": {"repo_root": "evidence/RetroXpert", "operation": "bond_disconnection_evaluation"},
+      "expected": {"status": "blocked_resources", "error_contains": "checkpoint"}
+    }
+  ],
+  "reference": "../SKILL.md"
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "skill_id": "wln-build-molecular-graph",
+  "scope": "分子图预处理案例；不代表完整 WLN 反应预测",
+  "cases": [
+    {
+      "id": "positive-01-ethanol",
+      "kind": "positive",
+      "input": {"smiles": "CCO"},
+      "expected": {"ok": true, "atom_shape": [3, 82], "bond_shape": [2, 6], "neighbor_counts": [1, 2, 1], "checks": ["finite features", "adjacency matches RDKit neighbors"]}
+    },
+    {
+      "id": "positive-02-benzene",
+      "kind": "positive",
+      "input": {"smiles": "c1ccccc1"},
+      "expected": {"ok": true, "atom_shape": [6, 82], "bond_shape": [6, 6], "checks": ["finite features", "neighbor counts are all 2"]}
+    },
+    {
+      "id": "negative-01-invalid-smiles",
+      "kind": "negative",
+      "input": {"smiles": "C1CC"},
+      "expected": {"ok": false, "error_contains": "Invalid"}
+    },
+    {
+      "id": "positive-03-batch-mask",
+      "kind": "positive",
+      "input": {"smiles_list": ["CCO", "c1ccccc1"]},
+      "expected": {"ok": true, "mask_row_sums": [3, 6], "checks": ["padding mask separates the two molecules"]}
+    }
+  ],
+  "reference": "../SKILL.md"
+}

@@ -33,6 +33,10 @@ Output: JSON containing the normalized product, deduplicated reactants, intermed
 2. Run `./run_retroprime.sh --product "CC(=O)Nc1ccccc1" --top-k 10`, or call `scripts/predict_retroprime.py --source-root PATH_TO_RETROPRIME`.
 3. Check the exit code and `ok` field; retain stderr and optional intermediate files in a new output directory.
 
+## Fixed cases
+
+Use [examples/cases.json](examples/cases.json) for two positive and three negative cases. Expected checks cover the complete five-stage chain, candidate count, consecutive ranks, representative first candidate, and explicit rejection of invalid inputs.
+
 ## Failure and recovery
 
 Reject invalid, disconnected, bondless, or out-of-range inputs. Restore missing or mismatched resources instead of bypassing hashes. If either stage fails, preserve the log and stop repeated retries. An empty candidate list does not prove that the target is unsynthesizable.

@@ -33,6 +33,10 @@ Output: JSON containing `product_smiles`, `candidates`, `candidate_count`, model
 2. From the repository root run `./run_localretro.sh --product "CC(=O)Nc1ccccc1" --top-k 10`, or call `scripts/predict_localretro.py` with `--source-root`.
 3. Check the exit code and parse stdout JSON. Preserve stderr and the run record.
 
+## Fixed cases
+
+Use [examples/cases.json](examples/cases.json) for two positive and three negative cases. Expected checks cover valid JSON, non-empty deduplicated candidates, legal SMILES, rank continuity, and explicit rejection of invalid inputs; model scores are not experimental probabilities.
+
 ## Failure and recovery
 
 Reject invalid, disconnected, bondless, or out-of-range inputs. A missing or hash-mismatched resource is `blocked_resources`; restore the matching resource instead of bypassing the check. If no valid candidates remain, report that outcome without claiming the target is unsynthesizable. Retry only after the input or environment changes.
