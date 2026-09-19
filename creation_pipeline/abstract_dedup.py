@@ -164,7 +164,7 @@ def render(cluster: dict, members: list[dict], unresolved: list[str]) -> str:
              f"(supported by {', '.join(r['supported_by'])})." for r in cluster["decision_rules"]]
     limits = cluster["limits"] + unresolved
     return (
-        "---\n" + f"name: {cluster['name']}\n" + "description: >-\n"
+        "---\n" + f"name: {cluster['name']}\n" + "description: >\n"
         + f"  {summary} Invoke for: choosing a paper-backed procedure when task evidence or constraints change; do not treat this draft as experimentally validated.\n"
         + "license: undetermined\ncompatibility: Research draft; inspect source-specific dependencies and data before use\n"
         + "allowed-tools: Read\n---\n\n"

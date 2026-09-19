@@ -52,6 +52,24 @@ quote. After correcting a mechanical issue, rerun with a fresh ID and
 `--response-file runs/<old-run>/responses/<paper-id>.json --skip-collect` to
 avoid another model call. A replay is not an independent extraction.
 
+The intended multi-source entry point is `batch_pipeline.py`. Put many local
+paper, database, tool, or model documents in one manifest; each job is
+processed independently and each successful result is published under
+`skills/generated/<run-id>/`:
+
+```bash
+.venv-eval/bin/python creation_pipeline/batch_pipeline.py \
+  --manifest /path/to/batch-manifest.json \
+  --model gpt-6-astra \
+  --rounds 1 \
+  --push
+```
+
+Use `--rounds 2` or more to make independent extraction passes per source.
+Different passes can produce different candidates, so the batch report keeps
+every run separate. This stage deliberately does not deduplicate, execute, or
+claim agent usefulness. See [examples/batch-manifest.example.json](examples/batch-manifest.example.json).
+
 ## Other papers and database/tool/model documentation
 
 The catalog collector above is specific to the supplied CSVs and five

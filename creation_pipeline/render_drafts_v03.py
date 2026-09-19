@@ -26,7 +26,7 @@ def render(candidate: dict, bundle: dict, check: dict) -> str:
     return (
         "---\n"
         f"name: {name}\n"
-        "description: >-\n"
+        "description: >\n"
         f"  {candidate['description']} Invoke for: {candidate['operation']} Do not use as evidence of successful execution.\n"
         "license: undetermined\n"
         "compatibility: Unverified draft; inspect requirements and source license before use\n"
