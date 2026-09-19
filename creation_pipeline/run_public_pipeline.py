@@ -15,6 +15,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model", default="gpt-6-astra")
     parser.add_argument("--max-jobs", type=int, default=20)
+    parser.add_argument("--target-candidates", type=int, default=20)
     parser.add_argument("--rounds", type=int, default=1)
     parser.add_argument("--push", action="store_true")
     parser.add_argument("--skip-acquire", action="store_true")
@@ -29,7 +30,8 @@ def main() -> int:
     cmd = [sys.executable, str(HERE / "batch_pipeline.py"),
            "--manifest", str(HERE / "acquired_manifest.json"),
            "--model", args.model, "--max-jobs", str(args.max_jobs),
-           "--rounds", str(args.rounds), "--prefix", prefix]
+           "--rounds", str(args.rounds), "--target-candidates", str(args.target_candidates),
+           "--prefix", prefix]
     if args.push:
         cmd.append("--push")
     return subprocess.run(cmd, check=False).returncode
