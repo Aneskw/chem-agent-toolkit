@@ -42,6 +42,8 @@ def main() -> int:
     parser.add_argument("--model", default="gpt-6-astra")
     parser.add_argument("--rounds", type=int, default=1, help="Independent passes per source")
     parser.add_argument("--max-jobs", type=int, default=None, help="Process at most this many manifest jobs")
+    parser.add_argument("--target-candidates", type=int, default=None,
+                        help="Stop after at least this many candidate skills are created")
     parser.add_argument("--prefix", default=None)
     parser.add_argument("--push", action="store_true", help="Commit and push generated candidates")
     args = parser.parse_args()
@@ -49,6 +51,8 @@ def main() -> int:
         parser.error("--rounds must be between 1 and 20")
     if args.max_jobs is not None and not 1 <= args.max_jobs <= 100:
         parser.error("--max-jobs must be between 1 and 100")
+    if args.target_candidates is not None and not 1 <= args.target_candidates <= 500:
+        parser.error("--target-candidates must be between 1 and 500")
     manifest = args.manifest.resolve()
     data = json.loads(manifest.read_text(encoding="utf-8"))
     jobs = data.get("jobs")
@@ -98,8 +102,17 @@ def main() -> int:
                         published.append(str((ROOT / "skills" / "generated" / run_id).relative_to(ROOT)))
                 else:
                     record["publish_status"] = "not_published"
+                if args.target_candidates is not None and sum(
+                    int(x.get("candidate_count") or 0) for x in run_records
+                ) >= args.target_candidates:
+                    break
+            if args.target_candidates is not None and sum(
+                int(x.get("candidate_count") or 0) for x in run_records
+            ) >= args.target_candidates:
+                break
     report = {"batch_id": prefix, "model": args.model, "rounds": args.rounds,
-              "manifest": str(manifest), "deduplication": "not_run",
+              "manifest": str(manifest), "target_candidates": args.target_candidates,
+              "deduplication": "not_run",
               "execution_validation": "not_run", "agent_effect_validation": "not_run",
               "runs": run_records, "published_paths": published}
     report_path = HERE / "results" / f"{prefix}-batch.json"
