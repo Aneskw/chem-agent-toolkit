@@ -41,11 +41,14 @@ def main() -> int:
     parser.add_argument("--manifest", type=Path, required=True, help="JSON manifest with jobs[]")
     parser.add_argument("--model", default="gpt-6-astra")
     parser.add_argument("--rounds", type=int, default=1, help="Independent passes per source")
+    parser.add_argument("--max-jobs", type=int, default=None, help="Process at most this many manifest jobs")
     parser.add_argument("--prefix", default=None)
     parser.add_argument("--push", action="store_true", help="Commit and push generated candidates")
     args = parser.parse_args()
     if args.rounds < 1 or args.rounds > 20:
         parser.error("--rounds must be between 1 and 20")
+    if args.max_jobs is not None and not 1 <= args.max_jobs <= 100:
+        parser.error("--max-jobs must be between 1 and 100")
     manifest = args.manifest.resolve()
     data = json.loads(manifest.read_text(encoding="utf-8"))
     jobs = data.get("jobs")
@@ -54,6 +57,8 @@ def main() -> int:
     if len(jobs) > 100:
         parser.error("maximum 100 jobs per batch")
     jobs = [absolute_job(job, manifest.parent) for job in jobs]
+    if args.max_jobs is not None:
+        jobs = jobs[:args.max_jobs]
     ids = [job["paper_id"] for job in jobs]
     if len(ids) != len(set(ids)):
         parser.error("jobs must have unique paper_id values")

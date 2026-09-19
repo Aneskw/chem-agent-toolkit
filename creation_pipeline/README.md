@@ -188,3 +188,29 @@ evaluation, LocalRetro template-library preflight, and RetroPrime inference
 preflight. Their tests establish only the documented deterministic or
 file-checking scope. They have not established a change in agent decision
 behavior or reaction-prediction accuracy.
+# Public-catalog acquisition and batch extraction
+
+`acquire_catalog_sources.py` scans every row in `papers.jsonl`, follows public
+open-access locations (arXiv, PMLR, publisher OA pages, OpenAlex and
+Unpaywall), and writes a local `acquisition_report.json` plus an
+`acquired_manifest.json`. A row is marked `source_missing` when no public
+full-text file can be downloaded; the pipeline never invents article content.
+
+Raw downloads live under `creation_pipeline/acquired/` and are ignored by git.
+The report and manifest are committed so the run is reproducible without
+putting article PDFs in the repository.
+
+After acquisition, run up to 20 source jobs with:
+
+```bash
+.venv-eval/bin/python creation_pipeline/batch_pipeline.py \
+  --manifest creation_pipeline/acquired_manifest.json \
+  --model gpt-6-astra --max-jobs 20 \
+  --prefix public20-$(date +%Y%m%d-%H%M%S) --push
+```
+
+`--max-jobs 20` means twenty papers are attempted; the resulting batch report
+records the actual candidate count. It may be smaller than 20 because a paper
+can yield zero candidates or because the model service fails. Each generated
+candidate is source-validated and citation-checked; execution and agent-effect
+validation remain separate stages.

@@ -1,0 +1,408 @@
+{
+  "max_context_chars": 120000,
+  "jobs": [
+    {
+      "paper_id": "EVX236A9",
+      "source_type": "paper",
+      "title": "Predicting Retrosynthetic Reactions Using Self-Corrected Transformer Neural Networks",
+      "sources": [
+        {
+          "path": "acquired/EVX236A9/paper.html",
+          "role": "paper",
+          "url": "http://hdl.handle.net/10072/393279",
+          "sha256": "6758556a903ee3be3f6d8cdb2897b33cff72f20644fa4a6b0e6a251914fa7f7e"
+        }
+      ]
+    },
+    {
+      "paper_id": "74LHJIVM",
+      "source_type": "paper",
+      "title": "RetroXpert: Decompose Retrosynthesis Prediction like a Chemist",
+      "sources": [
+        {
+          "path": "acquired/74LHJIVM/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2011.02893.pdf",
+          "sha256": "370efa2febec1d019342f681faf4cd5d1a7fbd77375e1c8058737807d4b81846"
+        }
+      ]
+    },
+    {
+      "paper_id": "H9EHIF3J",
+      "source_type": "paper",
+      "title": "Retroformer: Pushing the Limits of End-to-end Retrosynthesis Transformer",
+      "sources": [
+        {
+          "path": "acquired/H9EHIF3J/paper.html",
+          "role": "paper",
+          "url": "https://proceedings.mlr.press/v162/wan22a.html",
+          "sha256": "f28318f2e826a6f6140e47e2e69ce69802036b45f46d2850a241bf6de76374e1"
+        }
+      ]
+    },
+    {
+      "paper_id": "CABX3BR4",
+      "source_type": "paper",
+      "title": "State-of-the-art augmented NLP transformer models for direct and single-step retrosynthesis",
+      "sources": [
+        {
+          "path": "acquired/CABX3BR4/paper.pdf",
+          "role": "paper",
+          "url": "https://www.nature.com/articles/s41467-020-19266-y.pdf",
+          "sha256": "1f073de5ac5ce97182dd8eac2aa73960b25e29a3f4a3e86c9626a575eac0f8d8"
+        }
+      ]
+    },
+    {
+      "paper_id": "P2R8K7X3",
+      "source_type": "paper",
+      "title": "A Graph to Graphs Framework for Retrosynthesis Prediction",
+      "sources": [
+        {
+          "path": "acquired/P2R8K7X3/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2003.12725.pdf",
+          "sha256": "d06c825be76b51dd24c8a6d1b8c0a8a01731bb0b82796bdc952eca0bdd39a2ad"
+        }
+      ]
+    },
+    {
+      "paper_id": "RM7L9XDU",
+      "source_type": "paper",
+      "title": "Predicting retrosynthetic pathways using transformer-based models and a hyper-graph exploration strategy",
+      "sources": [
+        {
+          "path": "acquired/RM7L9XDU/paper.html",
+          "role": "paper",
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/8152799",
+          "sha256": "6c3a25da99a3dafd9a0412f47fe10703873b6bdaf40cc3ef6984d29647cf4c3b"
+        }
+      ]
+    },
+    {
+      "paper_id": "DMXL3WVG",
+      "source_type": "paper",
+      "title": "GTA: Graph Truncated Attention for Retrosynthesis",
+      "sources": [
+        {
+          "path": "acquired/DMXL3WVG/paper.html",
+          "role": "paper",
+          "url": "https://doi.org/10.1609/aaai.v35i1.16131",
+          "sha256": "0aa55d63047f12ea9a01caa26c9f3866616c84d771b9772596ee42cf51886372"
+        }
+      ]
+    },
+    {
+      "paper_id": "LJMZ9IL6",
+      "source_type": "paper",
+      "title": "\"Found in Translation\": Predicting Outcomes of Complex Organic Chemistry Reactions using Neural Sequence-to-Sequence Models",
+      "sources": [
+        {
+          "path": "acquired/LJMZ9IL6/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/1711.04810.pdf",
+          "sha256": "6dfa50a0a880e1f699335c8d5b14500ad56904a852091bb9bea607d10f39e0f4"
+        }
+      ]
+    },
+    {
+      "paper_id": "52TVS7QP",
+      "source_type": "paper",
+      "title": "FusionRetro: Molecule Representation Fusion via In-Context Learning for Retrosynthetic Planning",
+      "sources": [
+        {
+          "path": "acquired/52TVS7QP/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2209.15315.pdf",
+          "sha256": "ae04ba2f59f117fbde91c670778970757b3485a48ef21e88941648ba16489204"
+        }
+      ]
+    },
+    {
+      "paper_id": "29BYRNCZ",
+      "source_type": "paper",
+      "title": "Retrosynthesis Prediction with Conditional Graph Logic Network",
+      "sources": [
+        {
+          "path": "acquired/29BYRNCZ/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2001.01408.pdf",
+          "sha256": "79e0d76657f2a638375ef01308796a6089759aceae85a9314f2bb9f6ea79aeac"
+        }
+      ]
+    },
+    {
+      "paper_id": "2GFR874J",
+      "source_type": "paper",
+      "title": "Deep Retrosynthetic Reaction Prediction using Local Reactivity and Global Attention",
+      "sources": [
+        {
+          "path": "acquired/2GFR874J/paper.html",
+          "role": "paper",
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/8549044",
+          "sha256": "4ac9a219825c0b6bbd389e639bc8f3eab08f5316253e2e21dbcc8b5499a3c6f2"
+        }
+      ]
+    },
+    {
+      "paper_id": "KNGUQJ73",
+      "source_type": "paper",
+      "title": "Retro*: Learning Retrosynthetic Planning with Neural Guided A* Search",
+      "sources": [
+        {
+          "path": "acquired/KNGUQJ73/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2006.15820.pdf",
+          "sha256": "2a568276845af24022d74062b460debb9852d48e3af254bb7862dc0a118e45f9"
+        }
+      ]
+    },
+    {
+      "paper_id": "BTJ7PAYZ",
+      "source_type": "paper",
+      "title": "SemiRetro: Semi-template framework boosts deep retrosynthesis prediction",
+      "sources": [
+        {
+          "path": "acquired/BTJ7PAYZ/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2202.08205.pdf",
+          "sha256": "82f45d345e57976e82046ceebc6c35a5e48e96bb2e40b1248aeade653532e49e"
+        }
+      ]
+    },
+    {
+      "paper_id": "C5HMZZWJ",
+      "source_type": "paper",
+      "title": "UAlign: Pushing the Limit of Template-free Retrosynthesis Prediction with Unsupervised SMILES Alignment",
+      "sources": [
+        {
+          "path": "acquired/C5HMZZWJ/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2404.00044.pdf",
+          "sha256": "1a3523f5d40fefa8784166d82adfb9c7ee695a3b20e5af5de5a10677f6dc302d"
+        }
+      ]
+    },
+    {
+      "paper_id": "SJW9P6LU",
+      "source_type": "paper",
+      "title": "Automated reaction database and reaction network analysis: extraction of reaction templates using cheminformatics",
+      "sources": [
+        {
+          "path": "acquired/SJW9P6LU/paper.pdf",
+          "role": "paper",
+          "url": "https://jcheminf.biomedcentral.com/counter/pdf/10.1186/s13321-018-0269-8",
+          "sha256": "7d43815aee008713d0f180c1e677a21073012fdcf3b9c2468a689f0bdf206d39"
+        }
+      ]
+    },
+    {
+      "paper_id": "V6R5QSYU",
+      "source_type": "paper",
+      "title": "Extraction of organic chemistry grammar from unsupervised learning of chemical reactions",
+      "sources": [
+        {
+          "path": "acquired/V6R5QSYU/paper.html",
+          "role": "paper",
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/8026122",
+          "sha256": "f05cef91c48accd3abdb19c8659ce442644abe637c55c72a26ee9ae66bdcb121"
+        }
+      ]
+    },
+    {
+      "paper_id": "FDYPZYCV",
+      "source_type": "paper",
+      "title": "T-Rex: Text-assisted Retrosynthesis Prediction",
+      "sources": [
+        {
+          "path": "acquired/FDYPZYCV/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2401.14637.pdf",
+          "sha256": "b28abbb0326507ff1baac30e021d5c41c36d09438669bc0f402c577f09e98efa"
+        }
+      ]
+    },
+    {
+      "paper_id": "L4DYAUVP",
+      "source_type": "paper",
+      "title": "RetroOOD: Understanding Out-of-Distribution Generalization in Retrosynthesis Prediction",
+      "sources": [
+        {
+          "path": "acquired/L4DYAUVP/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2312.10900.pdf",
+          "sha256": "bd57f5714e3d794c156021515905b82f05fa64d238ef20659f7b624b0deca884"
+        }
+      ]
+    },
+    {
+      "paper_id": "H3WHHCTG",
+      "source_type": "paper",
+      "title": "Chemistry-informed molecular graph as reaction descriptor for machine-learned retrosynthesis planning",
+      "sources": [
+        {
+          "path": "acquired/H3WHHCTG/paper.html",
+          "role": "paper",
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/9564830",
+          "sha256": "65415f3a0480b57d1e2e2586ec98e14277852b1e6e27b2b11377147a93c1f555"
+        }
+      ]
+    },
+    {
+      "paper_id": "ZIHHA28M",
+      "source_type": "paper",
+      "title": "Retrosynthesis Prediction with Local Template Retrieval",
+      "sources": [
+        {
+          "path": "acquired/ZIHHA28M/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2306.04123.pdf",
+          "sha256": "c82572223e5c16b3245ee49955016f8c341cadd37ae9272e48239d43745e7425"
+        }
+      ]
+    },
+    {
+      "paper_id": "7YL28TR5",
+      "source_type": "paper",
+      "title": "Retrosynthesis prediction with an iterative string editing model",
+      "sources": [
+        {
+          "path": "acquired/7YL28TR5/paper.pdf",
+          "role": "paper",
+          "url": "https://www.nature.com/articles/s41467-024-50617-1.pdf",
+          "sha256": "e4ec4aef83460487b6166d493efac923692e2dbf013a685966cc86cd7a67fb4a"
+        }
+      ]
+    },
+    {
+      "paper_id": "WUJUHU7F",
+      "source_type": "paper",
+      "title": "Syntax-Guided Procedural Synthesis of Molecules",
+      "sources": [
+        {
+          "path": "acquired/WUJUHU7F/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2409.05873.pdf",
+          "sha256": "6d02c31ab5c9303626742b8957fbac351afbb2b7bfc808faf644bad37a3c7b13"
+        }
+      ]
+    },
+    {
+      "paper_id": "Z3W4BK3K",
+      "source_type": "paper",
+      "title": "Retrosynthetic planning with experience-guided Monte Carlo tree search",
+      "sources": [
+        {
+          "path": "acquired/Z3W4BK3K/paper.pdf",
+          "role": "paper",
+          "url": "https://www.nature.com/articles/s42004-023-00911-8.pdf",
+          "sha256": "a8695033ce441badf047c23dad0fec3fd1cdc882f0a12fae57ceeb1367b302ab"
+        }
+      ]
+    },
+    {
+      "paper_id": "ZCMNWV6R",
+      "source_type": "paper",
+      "title": "Efficient retrosynthetic planning with MCTS exploration enhanced A* search | Communications Chemistry",
+      "sources": [
+        {
+          "path": "acquired/ZCMNWV6R/paper.pdf",
+          "role": "paper",
+          "url": "https://www.nature.com/articles/s42004-024-01133-2.pdf",
+          "sha256": "1d216332f251ec92560d4f3c141b98564f53a2a042a9120d5d745503ea1993ca"
+        }
+      ]
+    },
+    {
+      "paper_id": "X6UFMAW8",
+      "source_type": "paper",
+      "title": "Planning chemical syntheses with deep neural networks and symbolic AI",
+      "sources": [
+        {
+          "path": "acquired/X6UFMAW8/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/1708.04202",
+          "sha256": "070e75c6eee4e76f1c793b62c8e4b4c8fddca76b4787be0b020dc81d7fcabe4a"
+        }
+      ]
+    },
+    {
+      "paper_id": "BAW3TIAH",
+      "source_type": "paper",
+      "title": "Chimera: Accurate retrosynthesis prediction by ensembling models with diverse inductive biases",
+      "sources": [
+        {
+          "path": "acquired/BAW3TIAH/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2412.05269.pdf",
+          "sha256": "8f972e5ee5eb0e84ff4455524e95894e12216a73418e1a73c64148fd6610a4e5"
+        }
+      ]
+    },
+    {
+      "paper_id": "YXTSBPES",
+      "source_type": "paper",
+      "title": "RSGPT: a generative transformer model for retrosynthesis planning pre-trained on ten billion datapoints",
+      "sources": [
+        {
+          "path": "acquired/YXTSBPES/paper.pdf",
+          "role": "paper",
+          "url": "https://www.nature.com/articles/s41467-025-62308-6.pdf",
+          "sha256": "e02fc0d7283de95a3e34fa0b6b717cb1a584baa21c19197f9fe3a2be55635030"
+        }
+      ]
+    },
+    {
+      "paper_id": "K7ZGXDS6",
+      "source_type": "paper",
+      "title": "Reasoning-Driven Retrosynthesis Prediction with Large Language Models via Reinforcement Learning",
+      "sources": [
+        {
+          "path": "acquired/K7ZGXDS6/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2507.17448.pdf",
+          "sha256": "969d1069e17245e7ed942e72c9ceeb2e2c7da44d71d847f4b958f6c4f4ddfc8d"
+        }
+      ]
+    },
+    {
+      "paper_id": "U5RSQN4E",
+      "source_type": "paper",
+      "title": "Large language models to accelerate organic chemistry synthesis",
+      "sources": [
+        {
+          "path": "acquired/U5RSQN4E/paper.html",
+          "role": "paper",
+          "url": "https://www.nature.com/articles/s42256-025-01066-y.pdf",
+          "sha256": "7333323d220669fc188c20729eef7163e621f21c597b3f906d3dc43e54fe4ee3"
+        }
+      ]
+    },
+    {
+      "paper_id": "64T7R8Q4",
+      "source_type": "paper",
+      "title": "Retrosynthetic crosstalk between single-step reaction and multi-step planning",
+      "sources": [
+        {
+          "path": "acquired/64T7R8Q4/paper.pdf",
+          "role": "paper",
+          "url": "https://jcheminf.biomedcentral.com/counter/pdf/10.1186/s13321-025-01088-z",
+          "sha256": "4213c84315619c2b7a771f25af39cb363d9a08475cfb2d72750b2445a556c686"
+        }
+      ]
+    },
+    {
+      "paper_id": "MMMCU9EX",
+      "source_type": "paper",
+      "title": "RetroGFN: Diverse and Feasible Retrosynthesis using GFlowNets",
+      "sources": [
+        {
+          "path": "acquired/MMMCU9EX/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/2406.18739.pdf",
+          "sha256": "b69241afcf120b3d301811f3ca769a161dc09375e4e3d5876b564ead8691d52b"
+        }
+      ]
+    }
+  ]
+}
