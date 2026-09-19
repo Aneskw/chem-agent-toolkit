@@ -40,11 +40,53 @@ a new `--run-id`. Do not treat the replay as a fresh independent extraction.
 The runner automatically prepares the source bundle, calls the model, checks
 source quotes and line spans, renders v0.3 drafts, and validates their format.
 `results/<run-id>.json` records stage, status and source/response hashes.
-By default, a run without paper full text stops as `paper_text_missing` before
+By default, a run without primary full text stops as `primary_text_missing` before
 the model call. `--allow-repo-only` is available for explicitly labeled
 repository hints; these are not paper-derived skill candidates. PDF sources
 require `pypdf`; use the project `.venv-eval/bin/python` or another Python
 environment with that dependency.
+
+If citation checking fails, the original model JSON remains in
+`runs/<run-id>/responses/`. Inspect the mismatch rather than inventing a
+quote. After correcting a mechanical issue, rerun with a fresh ID and
+`--response-file runs/<old-run>/responses/<paper-id>.json --skip-collect` to
+avoid another model call. A replay is not an independent extraction.
+
+## Other papers and database/tool/model documentation
+
+The catalog collector above is specific to the supplied CSVs and five
+reviewed repository mappings. The extraction core also accepts a local JSON
+source manifest without a catalog ID or repository. Copy
+`examples/database-source.example.json` to a working directory, replace its
+placeholder path, URL and SHA-256, and place the downloaded document at the
+path relative to the manifest. Run:
+
+```bash
+.venv-eval/bin/python creation_pipeline/run_pipeline.py \
+  --config /path/to/source-manifest.json \
+  --run-id my-source-01
+```
+
+The legacy field `paper_id` is a safe **job identifier** in this manifest;
+it does not imply a paper. `source_type` may be `paper`, `database`, `tool`, or
+`model`. Give the primary document respectively the role `paper`,
+`database_doc`, `tool_doc`, or `model_doc`. Additional implementation files
+can use `repo_code`/`repo_doc` when `repo_root` and preferably a pinned
+`repo_manifest` are supplied. The core reads local PDF, JATS XML, HTML,
+Markdown, text, code and notebook files. It checks quoted line spans against
+the actual extracted text and enforces a declared SHA-256. A missing primary
+document stops the run unless `--allow-repo-only` explicitly requests
+secondary hints. The document's `url` records provenance; it does **not**
+fetch that URL. Automated discovery, licensing review and downloading for
+arbitrary sites are not implemented. Database documentation can support
+conditional procedures, but a single API invocation remains a `tool_usage`
+hint rather than a procedural skill. Every candidate needs semantic review.
+The extractor scans the selected source text, not a hard-coded paragraph or
+line number. It currently makes one model pass with a context budget and at
+most four candidates per job. Check `omitted_source_sections` and
+`source_text_complete` in the result; a long or poorly selected source is
+**not** an exhaustive mining run. Automatic section-by-section traversal and
+cross-chunk consolidation remain future work.
 
 ## Abstraction and deduplication
 

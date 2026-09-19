@@ -59,25 +59,29 @@ def read_documents(path):
     return [(None,text)]
 
 def make_bundle(job,base,max_chars=80000):
-    root=(base/job['repo_root']).resolve()
-    if not root.is_dir():raise ValueError('Repository path does not exist')
+    root=(base/job.get('repo_root','.')).resolve()
+    if not root.is_dir():raise ValueError('Source root does not exist')
     if job.get('repo_manifest'):
         meta=json.loads((base/job['repo_manifest']).read_text())
         files=[x['path'] for x in meta['tree'] if x['type']=='blob']
         commit=meta['commit'];repo_url='https://github.com/'+meta['repo']
-    else:
+    elif job.get('repo_root'):
         files=[]
         for current,dirs,names in os.walk(root):
             dirs[:]=[d for d in dirs if d not in ['.git','.venv','venv','node_modules','__pycache__']]
             files.extend((Path(current)/name).relative_to(root).as_posix() for name in names)
             if len(files)>10000:raise ValueError('Repository inventory too large; provide a manifest')
         commit=job.get('commit','unversioned');repo_url=job.get('repo_url','')
+    else:
+        files=[];commit=job.get('commit','not_applicable');repo_url=''
     sources=[];used=0;omitted=[]
     for index,item in enumerate(job['sources']):
-        if item['role'] not in ['paper','repo_doc','repo_code','metadata']:raise ValueError('Unknown source role')
+        if item['role'] not in ['paper','repo_doc','repo_code','database_doc','tool_doc','model_doc','metadata']:raise ValueError('Unknown source role')
         path=(base/item['path']).resolve()
         if path.stat().st_size>50_000_000:raise ValueError('Source exceeds 50 MB limit')
         data_hash=hashlib.sha256(path.read_bytes()).hexdigest()
+        if item.get('sha256') and item['sha256']!=data_hash:
+            raise ValueError('Source differs from declared SHA-256: '+item['path'])
         if job.get('repo_manifest') and item['role'] in ['repo_doc','repo_code']:
             try:relative=path.relative_to(root).as_posix()
             except ValueError:raise ValueError('Repository source must be inside repo_root')
@@ -96,7 +100,12 @@ def make_bundle(job,base,max_chars=80000):
                     'url':item.get('url',''),'lines':lines}
             sources.append(source)
     if not sources:raise ValueError('No usable sources within context budget')
-    bundle={'version':1,'paper_id':job['paper_id'],'title':job['title'],'repo_root':str(root),'repo_url':repo_url,
+    source_type=job.get('source_type','paper')
+    if source_type not in ['paper','database','tool','model']:raise ValueError('Unknown source_type')
+    primary_role={'paper':'paper','database':'database_doc','tool':'tool_doc','model':'model_doc'}[source_type]
+    bundle={'version':1,'paper_id':job['paper_id'],'source_type':source_type,'primary_role':primary_role,'title':job['title'],'repo_root':str(root),'repo_url':repo_url,
             'commit':commit,'repo_files':sorted(files),'sources':sources,'omitted':omitted,
-            'coverage':{'paper_text_supplied':any(s['role']=='paper' for s in sources),'selected_source_files':len(sources),'text_characters':used}}
+            'coverage':{'paper_text_supplied':any(s['role']=='paper' for s in sources),
+                        'primary_text_supplied':any(s['role']==primary_role for s in sources),
+                        'selected_source_files':len(sources),'text_characters':used}}
     return bundle

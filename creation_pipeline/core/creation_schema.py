@@ -47,7 +47,8 @@ def validate(response,bundle):
     results=[]
     for candidate in response['candidates']:
         claims=candidate['inputs']+candidate['outputs']+candidate['steps']+[r['reason'] for r in candidate['requirements']]
-        paper_cited=False
+        primary_cited=False
+        primary_role=bundle.get('primary_role','paper')
         for claim in claims:
             for citation in claim['citations']:
                 source=sources.get(citation['source_id'])
@@ -57,9 +58,9 @@ def validate(response,bundle):
                 if end-start>25: raise ValueError('Citation range too broad; use at most 26 lines')
                 excerpt='\n'.join(source['lines'][start-1:end])
                 if citation['quote'] not in excerpt: raise ValueError('Citation quote not found in referenced lines')
-                if source['role']=='paper' and claim in candidate['steps']:paper_cited=True
-        if candidate['kind']=='method_procedure' and not paper_cited:
-            raise ValueError('method_procedure needs a citation to supplied paper text, not metadata or README alone')
+                if source['role']==primary_role and claim in candidate['steps']:primary_cited=True
+        if candidate['kind']=='method_procedure' and not primary_cited:
+            raise ValueError(f'method_procedure needs a step citation to supplied {primary_role}, not metadata or README alone')
         missing=[];external=[]
         for requirement in candidate['requirements']:
             raw_path=requirement['path']

@@ -23,23 +23,37 @@ def call(*args: str) -> None:
 
 def main() -> int:
     p = argparse.ArgumentParser()
-    p.add_argument("--paper-id", required=True)
+    p.add_argument("--paper-id", help="ID from the literature catalog, or job ID in --config")
+    p.add_argument("--config", type=Path, help="Local source manifest; accepts paper, database, tool or model documentation")
     p.add_argument("--model", default="gpt-6-astra")
     p.add_argument("--run-id", default=None)
     p.add_argument("--response-file", type=Path, help="Replay a saved model JSON for deterministic testing")
     p.add_argument("--skip-collect", action="store_true", help="Use already collected, locked local sources")
     p.add_argument("--allow-repo-only", action="store_true", help="Create repository hints, never paper-derived skill drafts")
     args = p.parse_args()
+    if args.config:
+        config = args.config.resolve()
+        settings = json.loads(config.read_text(encoding="utf-8"))
+        jobs = settings.get("jobs", [])
+        if len(jobs) != 1:
+            p.error("--config currently requires exactly one job")
+        job_id = jobs[0]["paper_id"]
+        if args.paper_id and args.paper_id != job_id:
+            p.error("--paper-id must match the job ID in --config")
+        args.paper_id = job_id
+    elif not args.paper_id:
+        p.error("provide --paper-id or --config")
     run_id = args.run_id or f"{args.paper_id}-{datetime.now():%Y%m%d-%H%M%S}"
     run = HERE / "runs" / run_id
     if run.exists():
         p.error(f"run already exists: {run}")
     status = {"run_id": run_id, "paper_id": args.paper_id, "stage": "started", "status": "running"}
     try:
-        if not args.skip_collect:
+        if not args.skip_collect and not args.config:
             call(str(HERE / "collect.py"), "--paper-id", args.paper_id)
         status["stage"] = "source_collected"
-        config = HERE / "cache" / args.paper_id / "config.json"
+        if not args.config:
+            config = HERE / "cache" / args.paper_id / "config.json"
         if not config.is_file():
             raise FileNotFoundError(f"Missing collected source config: {config}")
         call(str(HERE / "core" / "creation.py"), "prepare", "--config", str(config), "--out", str(run))
@@ -47,10 +61,13 @@ def main() -> int:
         if prepared["jobs"][0]["status"] != "prepared":
             raise ValueError(prepared["jobs"][0].get("error", "source preparation failed"))
         bundle = json.loads((run / "jobs" / args.paper_id / "bundle.json").read_text())
-        paper_present = bundle["coverage"]["paper_text_supplied"]
-        status["source_scope"] = "paper_and_repository" if paper_present else "repository_only"
-        if not paper_present and not args.allow_repo_only:
-            raise MissingPaperText("No paper full text in the source bundle; repository-only material is not a paper-derived skill")
+        status["omitted_source_sections"] = len(bundle.get("omitted", []))
+        status["source_text_complete"] = not bundle.get("omitted")
+        primary_present = bundle["coverage"].get("primary_text_supplied", bundle["coverage"]["paper_text_supplied"])
+        source_type = bundle.get("source_type", "paper")
+        status["source_scope"] = source_type + ("_primary_text" if primary_present else "_secondary_only")
+        if not primary_present and not args.allow_repo_only:
+            raise MissingPaperText(f"No {bundle.get('primary_role', 'paper')} text in the source bundle; secondary material alone is insufficient")
         status["stage"] = "bundle_prepared"
         response_dir = run / "responses"
         response_dir.mkdir()
@@ -86,7 +103,7 @@ def main() -> int:
                 call(str(HERE / "validate_skill_format.py"), str(folder))
         if job["status"] == "no_supported_skill":
             outcome = "no_supported_skill"
-        elif not paper_present:
+        elif not primary_present:
             outcome = "repo_only_hints_created"
         elif kind_counts["method_procedure"]:
             outcome = "method_drafts_created"
@@ -100,7 +117,7 @@ def main() -> int:
                        "response_sha256": job.get("response_sha256"),
                        "run_dir": str(run.relative_to(HERE.parent))})
     except MissingPaperText as exc:
-        status.update(status="paper_text_missing", error=str(exc))
+        status.update(status="primary_text_missing", error=str(exc))
     except (OSError, ValueError, subprocess.CalledProcessError) as exc:
         status.update(status="failed", error=f"{type(exc).__name__}: {exc}")
     run.mkdir(parents=True, exist_ok=True)

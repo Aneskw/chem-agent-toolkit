@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Correct only uniquely identifiable, off-by-one citation spans."""
+"""Correct nearby citation spans only when source words match exactly."""
 from __future__ import annotations
 
 import argparse
@@ -8,8 +8,8 @@ import re
 from pathlib import Path
 
 
-def pdf_whitespace_match(quote: str, excerpt: str) -> str | None:
-    """Return exact source bytes for a quote differing only in PDF whitespace."""
+def whitespace_match(quote: str, excerpt: str) -> str | None:
+    """Return exact source text for a quote differing only in whitespace."""
     tokens = list(re.finditer(r"\S+", excerpt))
     compact = []
     positions = []
@@ -47,10 +47,10 @@ def repair(response: dict, bundle: dict) -> tuple[dict, list[dict]]:
                         excerpt = "\n".join(lines[start - 1:end])
                         if citation["quote"] in excerpt:
                             matches.append((start, end, citation["quote"], "line_span"))
-                        elif source.get("page") is not None:
-                            exact_quote = pdf_whitespace_match(citation["quote"], excerpt)
+                        elif source["role"] in {"paper", "repo_doc", "database_doc", "tool_doc", "model_doc"}:
+                            exact_quote = whitespace_match(citation["quote"], excerpt)
                             if exact_quote:
-                                matches.append((start, end, exact_quote, "pdf_whitespace"))
+                                matches.append((start, end, exact_quote, "whitespace_only"))
                 minimal = sorted(matches, key=lambda span: (span[1] - span[0], abs(span[0] - old[0]) + abs(span[1] - old[1])))
                 if not minimal:
                     raise ValueError(f"Quote not found near {citation['source_id']}:{old}")
