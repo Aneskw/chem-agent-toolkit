@@ -1,9 +1,0 @@
-# chem-edbo-recommend-next-batch 依赖
-# 安装：pip install -r requirements.txt
-# 核心数值库（必需，无网络/无 LLM 依赖）：
-numpy>=1.20
-scipy>=1.7
-scikit-learn>=1.0
-
-# 可选：仅生成 --plot 图时需要；缺失不影响推荐结果
-# matplotlib>=3.5
