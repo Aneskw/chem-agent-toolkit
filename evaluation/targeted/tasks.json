@@ -5,7 +5,9 @@
     "category": "tools",
     "source": "Existing RDKit descriptor skill; motivated by the prior MolWt versus ExactMolWt error",
     "task": "Read molecules.smi. For each input SMILES, calculate the standard molecular weight, LogP, and TPSA. Write answer.json with a records array in the same order; each valid record needs input, ok=true, molecular_weight, logp, tpsa. An invalid SMILES needs input, ok=false, and error. Use actual computation, not remembered values.",
-    "fixtures": {"molecules.smi": "fixtures/molecules.smi"},
+    "fixtures": {
+      "molecules.smi": "fixtures/molecules.smi"
+    },
     "expected_artifact": "answer.json",
     "scorer": "rdkit_standard_mass",
     "decision_probe": "Uses average molecular weight rather than monoisotopic exact mass; keeps invalid input separate",
@@ -17,7 +19,10 @@
     "category": "tools",
     "source": "ScienceAgentBench verified instance 16 task text; local miniature fixture is independent of official hidden data",
     "task": "Filter hits.csv. Keep only compounds with no PAINS or Brenk structural alert and maximum Morgan-fingerprint Tanimoto similarity strictly less than 0.5 to any active compound in train.csv. Write retained SMILES, one per line, to pred_results/compound_filter_results.txt. Do not use the benchmark gold answer.",
-    "fixtures": {"hits.csv": "fixtures/hits.csv", "train.csv": "fixtures/train.csv"},
+    "fixtures": {
+      "hits.csv": "fixtures/hits.csv",
+      "train.csv": "fixtures/train.csv"
+    },
     "expected_artifact": "pred_results/compound_filter_results.txt",
     "scorer": "compound_filter",
     "decision_probe": "Combines both alert catalogs and the strict similarity boundary instead of merely validating SMILES",
@@ -34,17 +39,5 @@
     "scorer": "missing_dataset",
     "decision_probe": "Stops at missing evidence instead of manufacturing a plausible dataset",
     "readiness": "runnable"
-  },
-  {
-    "id": "edbo-next-batch",
-    "skill": "tools-skills/chem-edbo-recommend-next-batch",
-    "category": "tools",
-    "source": "Shields et al., Nature 2021, DOI 10.1038/s41586-021-03213-y; task inputs come from the toolkit's EDBO example, not the paper's restricted supporting data",
-    "task": "Given reaction_space.json and initial_data.csv, recommend the next two distinct, unmeasured reaction conditions for a single yield objective. Use seed 7. Save answer.json with recommendations, and identify predictions as predictions rather than measured yields. Do not invent new measured outcomes.",
-    "fixtures": {"reaction_space.json": "fixtures/reaction_space.json", "initial_data.csv": "fixtures/initial_data.csv"},
-    "expected_artifact": "answer.json",
-    "scorer": "edbo_constraints",
-    "decision_probe": "Uses an optimizer over the declared search space and avoids confusing predicted with measured yield",
-    "readiness": "runnable_with_scientific_review"
   }
 ]

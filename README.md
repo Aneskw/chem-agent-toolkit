@@ -22,7 +22,6 @@ The repository provides a unified directory layout, flat installation entry poin
 | `chem-reinvent` | models-skills/open-models | preflight; upstream install required |
 | `chem-genmol` | models-skills/open-models | preflight; checkpoint required |
 | `chem-diffdock-nim` | models-skills/nim | preflight; endpoint and files required |
-| `chem-edbo-recommend-next-batch` | tools-skills | executable Bayesian optimization |
 | `chem-reaction-atommap-audit` | tools-skills/rdkit | tested mapped-input structural check |
 | `chem-retro-candidate-evaluation` | tools-skills/rdkit | tested exact-match and optional round-trip scorer |
 | `localretro-template-library-preflight` | models-skills/open-models | tested resource and training-schema preflight |
@@ -36,7 +35,7 @@ Copy or symlink the desired skill directory into an agent's skill directory, rea
 
 - `skills/`: flat CLI/agent installation entry points pointing to generated skills.
 - `databases-skills/`: database and dataset skills for PubChem, ChEMBL, and USPTO-50K validation.
-- `tools-skills/`: toolkit skills for RDKit, Open Babel, OpenMM, and EDBO optimization.
+- `tools-skills/`: toolkit skills for RDKit, Open Babel, and OpenMM.
 - `models-skills/`: model skills for the five reaction models, REINVENT, GenMol, and DiffDock NIM.
 - `workflows/`: future composition-level workflows.
 - `.claude-plugin/`: plugin marketplace metadata.

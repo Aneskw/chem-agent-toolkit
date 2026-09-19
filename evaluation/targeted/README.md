@@ -1,13 +1,11 @@
 # Targeted evaluation of existing chemistry skills
 
-The current pilot contains four executable tasks: standard RDKit molecular
+The current pilot contains three executable tasks: standard RDKit molecular
 weight (distinguishing average from exact mass), PAINS/Brenk plus novelty
-filtering, refusal to invent a missing USPTO-50K split, and next-batch reaction
-optimization. The filtering task is adapted from the public instruction of
-ScienceAgentBench verified instance 16; its local data are held out from the
-skill package. The optimization task follows the operation in Shields et al.
-(Nature 2021, DOI 10.1038/s41586-021-03213-y), using toolkit demonstration
-data rather than implying access to that paper's experimental measurements.
+filtering, and refusal to invent a missing USPTO-50K split. The filtering task
+is adapted from the public instruction of ScienceAgentBench verified instance
+16; its local data are held out from the skill package. The former EDBO task
+was removed after the upstream repository deleted that skill package.
 
 ## Three conditions
 
@@ -56,7 +54,6 @@ model accuracy tasks.
 | RDKit descriptors | Average MW vs exact mass; invalid SMILES | Executable pilot |
 | RDKit compound filter | PAINS + Brenk + strict Tanimoto threshold | Executable pilot |
 | USPTO-50K split | Missing dataset must not be manufactured | Executable pilot |
-| EDBO recommendation | Novel, in-bounds conditions; predicted vs measured yield | Executable pilot |
 | PubChem, ChEMBL | Identifier/units/provenance; use recorded API fixtures to avoid network drift | Fixture adapter needed |
 | Open Babel, OpenMM | Conversion validity or energy-minimization evidence | Environment snapshot needed |
 | LocalRetro, RetroPrime, LocalTransform, RetroXpert, WLN | Checkpoints, pinned datasets and upstream code; positive inference plus resource triage | Pinned resources needed |
