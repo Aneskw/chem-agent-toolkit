@@ -33,7 +33,7 @@ def render(candidate: dict, bundle: dict, check: dict) -> str:
         "allowed-tools: Read\n"
         "---\n\n"
         f"# {name.replace('-', ' ').title()}\n\n"
-        f"This cited draft describes {candidate['operation']} Applicable only when the listed inputs and resources exist; it is not a verified executable package.\n\n"
+        f"This cited draft describes {candidate['operation']} Applicable only when the listed inputs and resources exist. It is a `source_validated_candidate`, not an execution-validated package.\n\n"
         "## Credibility\n\n"
         f"**Low confidence (Highly flexible)**. State: `{state}`. Source-line citations were checked, but semantic completeness, dependencies and execution have not been verified.\n\n"
         "## Reference\n\n" + "\n".join(source_lines) + "\n\n"
