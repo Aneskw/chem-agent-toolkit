@@ -1,0 +1,8 @@
+{
+  "run_id": "retroprime-paper-gate-check",
+  "paper_id": "VQ33W3ED",
+  "stage": "source_collected",
+  "status": "paper_text_missing",
+  "source_scope": "repository_only",
+  "error": "No paper full text in the source bundle; repository-only material is not a paper-derived skill"
+}

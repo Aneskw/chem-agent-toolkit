@@ -21,6 +21,7 @@ Return exactly one JSON object matching the supplied schema. Do not return execu
 Each input, output, step and requirement needs precise citations: source_id, original 1-based start/end lines, and an exact short quote from those lines.
 Do not invent API names, paths, defaults, dependency versions or execution results. Omit unsupported details and list unknowns.
 Distinguish tool_usage (repository usage) from method_procedure (a procedure actually supported by paper text). Abstracts/metadata are not full paper evidence.
+For method_procedure, seek a conditional decision policy: what task or evidence triggers it, what branch to take, when to stop or verify, and which repository implementation operationalizes it. Cite both paper and repository material where available. A single CLI invocation, input schema, file check, or score computation is tool_usage, not a research-level skill.
 The repo_files list is the inventory at the recorded snapshot. Report missing referenced files as requirements anyway so the program can flag them.
 Identify at most 4 useful capabilities per paper. Do not inflate counts with duplicate descriptions. A candidate is a DRAFT; never claim a successful execution.
 If no well-supported procedure can be extracted, return candidates=[] with no_skill_reason. Cite short quotes (8-240 characters) and narrow line spans.

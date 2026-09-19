@@ -13,6 +13,61 @@
       "sha256": "cdf84359b36219f049918fc0fa2dbe8c42d24fa1e79e11f0c83f4d7222b15787",
       "bytes": 8269,
       "license": "see upstream repository LICENSE"
+    },
+    {
+      "role": "repo",
+      "path": "canonicalize_products.py",
+      "url": "https://raw.githubusercontent.com/uta-smile/RetroXpert/321cc3daf2f3a7ac9ab5b37dde5b666b338e1ed5/canonicalize_products.py",
+      "sha256": "373bd900b27fe2c4531727673da33d9627ba797baeb903e14fbdf29af28a0c3f",
+      "bytes": 1916,
+      "license": "see upstream repository LICENSE"
+    },
+    {
+      "role": "repo",
+      "path": "preprocessing.py",
+      "url": "https://raw.githubusercontent.com/uta-smile/RetroXpert/321cc3daf2f3a7ac9ab5b37dde5b666b338e1ed5/preprocessing.py",
+      "sha256": "ab2fa18cf673f55b8596ab447a43df7e5f4378bfe24faffc0fa47f8c7df10084",
+      "bytes": 12192,
+      "license": "see upstream repository LICENSE"
+    },
+    {
+      "role": "repo",
+      "path": "train.py",
+      "url": "https://raw.githubusercontent.com/uta-smile/RetroXpert/321cc3daf2f3a7ac9ab5b37dde5b666b338e1ed5/train.py",
+      "sha256": "1738a27f9683d24e7ce37e1ac80a85b3f59c27c7cf57966961f0dded05357d87",
+      "bytes": 14608,
+      "license": "see upstream repository LICENSE"
+    },
+    {
+      "role": "repo",
+      "path": "prepare_data.py",
+      "url": "https://raw.githubusercontent.com/uta-smile/RetroXpert/321cc3daf2f3a7ac9ab5b37dde5b666b338e1ed5/prepare_data.py",
+      "sha256": "bfb26534f79bea34e1d1a0ac47d93941d8adfc55a5747624f8d3c57e957ae56d",
+      "bytes": 3455,
+      "license": "see upstream repository LICENSE"
+    },
+    {
+      "role": "repo",
+      "path": "prepare_test_prediction.py",
+      "url": "https://raw.githubusercontent.com/uta-smile/RetroXpert/321cc3daf2f3a7ac9ab5b37dde5b666b338e1ed5/prepare_test_prediction.py",
+      "sha256": "6bd69b153c8c2571d1302ffbb789ae469b8ba37d57fb1831dd12dabb10867ebc",
+      "bytes": 5675,
+      "license": "see upstream repository LICENSE"
+    },
+    {
+      "role": "repo",
+      "path": "prepare_train_error_aug.py",
+      "url": "https://raw.githubusercontent.com/uta-smile/RetroXpert/321cc3daf2f3a7ac9ab5b37dde5b666b338e1ed5/prepare_train_error_aug.py",
+      "sha256": "67aa724b7ac9725e82b185ccae64e329db795f975bdb06c4fa286140998b2708",
+      "bytes": 6846,
+      "license": "see upstream repository LICENSE"
+    },
+    {
+      "role": "paper",
+      "url": "https://arxiv.org/pdf/2011.02893v1",
+      "sha256": "370efa2febec1d019342f681faf4cd5d1a7fbd77375e1c8058737807d4b81846",
+      "bytes": 3807502,
+      "license": "arXiv non-exclusive distribution license; local processing only"
     }
   ],
   "repository_tree_sha256": "87949b445bf85ec14a713ab10f7701e3dffccf6fa1fa845e9fd8f53b0790c36e",

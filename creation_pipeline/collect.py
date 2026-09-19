@@ -15,7 +15,7 @@ HERE = Path(__file__).resolve().parent
 
 def fetch(url: str, limit: int = 5_000_000) -> bytes:
     host = urllib.parse.urlsplit(url).hostname
-    if host not in {"raw.githubusercontent.com", "www.ebi.ac.uk", "api.github.com"}:
+    if host not in {"raw.githubusercontent.com", "www.ebi.ac.uk", "api.github.com", "arxiv.org"}:
         raise ValueError(f"Unexpected source host: {host}")
     cafile = "/etc/ssl/cert.pem" if Path("/etc/ssl/cert.pem").is_file() else None
     request = urllib.request.Request(url, headers={"User-Agent": "chem-agent-toolkit/creation-pipeline"})
@@ -67,14 +67,17 @@ def collect(paper_id: str, cache: Path, catalog: Path, repo_map: Path, locks: Pa
                         "role": "repo_doc" if part.suffix == ".md" else "repo_code", "url": url})
     paper_url = repo.get("paper_url")
     if paper_url:
-        dest = root / "paper.xml"
+        suffix = ".pdf" if "/pdf/" in urllib.parse.urlsplit(paper_url).path else ".xml"
+        dest = root / f"paper{suffix}"
         if not dest.is_file():
             dest.write_bytes(fetch(paper_url))
         data = dest.read_bytes()
+        if suffix == ".pdf" and not data.startswith(b"%PDF-"):
+            raise ValueError("Expected a PDF article, received different content")
         entries.append({"role": "paper", "url": paper_url, "sha256": hashlib.sha256(data).hexdigest(),
                         "bytes": len(data), "license": repo.get("paper_license", "verify before redistribution")})
-        sources.insert(0, {"path": "paper.xml", "role": "paper", "url": paper_url})
-    config = {"base": ".", "max_context_chars": 80000, "jobs": [{
+        sources.insert(0, {"path": dest.name, "role": "paper", "url": paper_url})
+    config = {"base": ".", "max_context_chars": repo.get("max_context_chars", 80000), "jobs": [{
         "paper_id": paper_id, "title": paper["title"], "repo_root": "repo",
         "repo_manifest": "repo.json", "repo_url": f"https://github.com/{repo['repo']}",
         "commit": repo["commit"], "sources": sources,
@@ -88,7 +91,11 @@ def collect(paper_id: str, cache: Path, catalog: Path, repo_map: Path, locks: Pa
     lock_path = locks / f"{paper_id}.json"
     if lock_path.is_file():
         old = json.loads(lock_path.read_text(encoding="utf-8"))
-        if old.get("source_files") != lock["source_files"] or old.get("commit") != lock["commit"]:
+        old_files = old.get("source_files", [])
+        new_files = lock["source_files"]
+        additive_only = (all(item in new_files for item in old_files)
+                         and old.get("repository_tree_sha256") == lock["repository_tree_sha256"])
+        if not additive_only or old.get("commit") != lock["commit"]:
             raise ValueError("Source bytes or pinned commit changed since the previous lock; review before updating")
     lock_path.write_text(json.dumps(lock, indent=2, ensure_ascii=False) + "\n")
     return {"paper_id": paper_id, "sources": len(entries), "paper_fulltext": bool(paper_url),

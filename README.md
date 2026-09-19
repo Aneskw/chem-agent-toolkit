@@ -1,14 +1,19 @@
 # Chem Agent Toolkit
 
-A reusable skill repository for chemistry research agents.
+A repository of chemistry agent resources and research-stage procedural skill candidates.
 
 ## Current status
 
-The repository provides a unified directory layout, flat installation entry points, and executable or preflight-tested chemistry skills. A skill's runtime status and acceptance scope are documented in its own `SKILL.md` and reports.
+The repository provides a unified directory layout and runnable database, tool,
+and model packages. These packages are **atomic resources**, even when their
+installation entry file is called `SKILL.md`. Passing a script or preflight
+test does not establish that its instructions change an agent's choices. A
+research-level chemical skill must encode decisions extracted from a paper and
+its implementation, then show a useful effect in matched agent tasks.
 
-## Skill catalog
+## Atomic resource catalog
 
-| Skill | Category | Status |
+| Package | Category | Resource test status |
 | --- | --- | --- |
 | `localretro-single-step-retrosynthesis` | models-skills/open-models | verified for smoke examples |
 | `retroprime-two-stage-retrosynthesis` | models-skills/open-models | verified for smoke examples |
@@ -29,11 +34,15 @@ The repository provides a unified directory layout, flat installation entry poin
 
 ## Use
 
-Copy or symlink the desired skill directory into an agent's skill directory, read its `SKILL.md`, and follow its procedure. Treat `verified` as a claim about the documented execution scope, not as a claim about chemical accuracy or experimental success.
+Copy or symlink a resource directory into an agent's installation directory
+when a task needs it. The `verified` labels below refer only to documented
+execution checks. No package in this table has yet demonstrated a causal
+improvement in agent task quality or token use.
 
 ## Directory conventions
 
-- `skills/`: flat CLI/agent installation entry points pointing to generated skills.
+- `skills/`: flat legacy CLI/agent installation entries for resource packages;
+  directory membership is not a research acceptance decision.
 - `databases-skills/`: database and dataset skills for PubChem, ChEMBL, and USPTO-50K validation.
 - `tools-skills/`: toolkit skills for RDKit, Open Babel, and OpenMM.
 - `models-skills/`: model skills for the five reaction models, REINVENT, GenMol, and DiffDock NIM.
@@ -43,7 +52,7 @@ Copy or symlink the desired skill directory into an agent's skill directory, rea
 ## Evidence and method
 
 The [creation pipeline](creation_pipeline/README.md) normalizes the two supplied
-literature exports, locks source versions, and extracts cited draft skills using
+literature exports, locks source versions, and extracts cited candidates using
 the locally authenticated Codex CLI. The [targeted evaluation](evaluation/targeted/README.md)
 separates raw-tool, tools-only, and complete-skill effects with held-out tasks.
 

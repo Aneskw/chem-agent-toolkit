@@ -1,0 +1,43 @@
+{
+  "run_id": "retroxpert-paper-code-full",
+  "paper_id": "74LHJIVM",
+  "stage": "drafts_rendered",
+  "status": "method_drafts_created",
+  "source_scope": "paper_and_repository",
+  "model_origin": "codex_cli",
+  "candidate_kinds": {
+    "method_procedure": 2,
+    "tool_usage": 1
+  },
+  "candidate_count": 3,
+  "checks": [
+    {
+      "name": "auxiliary-guided-reaction-center-identification",
+      "state": "blocked_resources",
+      "missing_repo_files": [
+        "data/USPTO50K/test"
+      ],
+      "external_assets_unverified": [],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    },
+    {
+      "name": "train-reactant-generation-to-correct-synthon-errors",
+      "state": "blocked_resources",
+      "missing_repo_files": [
+        "data/USPTO50K/train"
+      ],
+      "external_assets_unverified": [],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    },
+    {
+      "name": "canonicalize-and-remap-reaction-csv",
+      "state": "draft_unexecuted",
+      "missing_repo_files": [],
+      "external_assets_unverified": [],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    }
+  ],
+  "source_bundle_sha256": "3439ba38b3b2e20f6a3fc854d9bf3dc675c33703e6b653b4106f257697c6f354",
+  "response_sha256": "3a49e734814ee19bf8497e98fd38ab9685014a4f4781b0e5bfae398144188210",
+  "run_dir": "creation_pipeline/runs/retroxpert-paper-code-full"
+}

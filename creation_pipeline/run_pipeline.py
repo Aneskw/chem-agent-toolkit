@@ -13,6 +13,10 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 
 
+class MissingPaperText(Exception):
+    pass
+
+
 def call(*args: str) -> None:
     subprocess.run([sys.executable, *args], check=True)
 
@@ -24,6 +28,7 @@ def main() -> int:
     p.add_argument("--run-id", default=None)
     p.add_argument("--response-file", type=Path, help="Replay a saved model JSON for deterministic testing")
     p.add_argument("--skip-collect", action="store_true", help="Use already collected, locked local sources")
+    p.add_argument("--allow-repo-only", action="store_true", help="Create repository hints, never paper-derived skill drafts")
     args = p.parse_args()
     run_id = args.run_id or f"{args.paper_id}-{datetime.now():%Y%m%d-%H%M%S}"
     run = HERE / "runs" / run_id
@@ -41,6 +46,11 @@ def main() -> int:
         prepared = json.loads((run / "prepared.json").read_text())
         if prepared["jobs"][0]["status"] != "prepared":
             raise ValueError(prepared["jobs"][0].get("error", "source preparation failed"))
+        bundle = json.loads((run / "jobs" / args.paper_id / "bundle.json").read_text())
+        paper_present = bundle["coverage"]["paper_text_supplied"]
+        status["source_scope"] = "paper_and_repository" if paper_present else "repository_only"
+        if not paper_present and not args.allow_repo_only:
+            raise MissingPaperText("No paper full text in the source bundle; repository-only material is not a paper-derived skill")
         status["stage"] = "bundle_prepared"
         response_dir = run / "responses"
         response_dir.mkdir()
@@ -64,6 +74,9 @@ def main() -> int:
         job = extraction["jobs"][0]
         if job["status"] not in {"drafts_created", "no_supported_skill"}:
             raise ValueError(job.get("error", "citation audit failed"))
+        response_data = json.loads((run / "import_results" / args.paper_id / "validated.json").read_text())
+        kind_counts = {kind: sum(item["kind"] == kind for item in response_data["candidates"])
+                       for kind in ("method_procedure", "tool_usage")}
         status["stage"] = "citations_validated"
         if job["status"] == "drafts_created":
             drafts = run / "drafts-v03"
@@ -71,13 +84,23 @@ def main() -> int:
                  "--paper-id", args.paper_id, "--out", str(drafts))
             for folder in drafts.iterdir():
                 call(str(HERE / "validate_skill_format.py"), str(folder))
+        if job["status"] == "no_supported_skill":
+            outcome = "no_supported_skill"
+        elif not paper_present:
+            outcome = "repo_only_hints_created"
+        elif kind_counts["method_procedure"]:
+            outcome = "method_drafts_created"
+        else:
+            outcome = "atomic_resource_hints_only"
         status.update({"stage": "drafts_rendered" if job["status"] == "drafts_created" else "no_supported_skill",
-                       "status": "cited_drafts_created" if job["status"] == "drafts_created" else "no_supported_skill",
+                       "status": outcome, "candidate_kinds": kind_counts,
                        "candidate_count": job.get("candidate_count", 0),
                        "checks": job.get("checks", []),
                        "source_bundle_sha256": job.get("bundle_sha256"),
                        "response_sha256": job.get("response_sha256"),
                        "run_dir": str(run.relative_to(HERE.parent))})
+    except MissingPaperText as exc:
+        status.update(status="paper_text_missing", error=str(exc))
     except (OSError, ValueError, subprocess.CalledProcessError) as exc:
         status.update(status="failed", error=f"{type(exc).__name__}: {exc}")
     run.mkdir(parents=True, exist_ok=True)
@@ -86,7 +109,8 @@ def main() -> int:
     results.mkdir(exist_ok=True)
     (results / f"{run_id}.json").write_text(json.dumps(status, indent=2, ensure_ascii=False) + "\n")
     print(json.dumps(status, ensure_ascii=False))
-    return 0 if status["status"] in {"cited_drafts_created", "no_supported_skill"} else 1
+    return 0 if status["status"] in {"method_drafts_created", "atomic_resource_hints_only",
+                                      "repo_only_hints_created", "no_supported_skill"} else 1
 
 
 if __name__ == "__main__":

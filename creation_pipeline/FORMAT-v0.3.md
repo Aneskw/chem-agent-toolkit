@@ -43,3 +43,25 @@ Creation states are separate from confidence: `source_collected`,
 `blocked_resources`. A `cited_draft` is not an executable Skill. A new Skill
 must pass source citation, deduplication, package structure and task tests
 before entering the flat `skills/` installation directory.
+
+## Research admission gate
+
+The YAML shape is necessary but insufficient. Treat a database query, wrapper,
+scorer or missing-resource preflight as an **atomic resource package**, even if
+its entry file is named `SKILL.md`. Promote a candidate to a research-level
+chemical skill only after all of these are recorded:
+
+1. A paper in the supplied literature tables provides a cited chemical method
+   or evaluation rationale, and a pinned implementation or data source shows
+   how it is operationalized. Repository README text alone is not paper evidence.
+2. The procedure contains at least one explicit branch that changes what the
+   agent does depending on task goal, evidence, uncertainty, or failure. It
+   cannot be only a command invocation, input schema or checklist.
+3. Its relation to existing packages is reviewed: reuse atomic resources,
+   split unrelated operations and merge duplicate decision policies.
+4. In matched held-out tasks, compare no guidance, raw tools, and full skill
+   guidance. Predeclare quality, fabrication and token measures. A pass on a
+   packaged script alone is not evidence of a skill effect.
+
+Until step 4, label the document `procedural_skill_candidate`; do not count it
+as a validated skill or claim that it improves agent reasoning.
