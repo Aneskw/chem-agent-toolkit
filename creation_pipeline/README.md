@@ -70,6 +70,23 @@ Different passes can produce different candidates, so the batch report keeps
 every run separate. This stage deliberately does not deduplicate, execute, or
 claim agent usefulness. See [examples/batch-manifest.example.json](examples/batch-manifest.example.json).
 
+For the two supplied CSV catalogs, use `mine_available.py` so article IDs do
+not need to be selected manually. It reads `papers.jsonl` and the pinned
+source locks, selects every entry currently in `paper_and_repository` state,
+and skips repository-only and metadata-only records:
+
+```bash
+.venv-eval/bin/python creation_pipeline/mine_available.py \
+  --model gpt-6-astra \
+  --rounds 1 \
+  --push
+```
+
+Use `--dry-run` first to print the counts and selected IDs. At the current
+snapshot this selects 2 of 52 records; 3 are repository-only and 47 have only
+metadata. It will expand automatically as full texts and pinned repositories
+are added to the catalog.
+
 ## Other papers and database/tool/model documentation
 
 The catalog collector above is specific to the supplied CSVs and five
