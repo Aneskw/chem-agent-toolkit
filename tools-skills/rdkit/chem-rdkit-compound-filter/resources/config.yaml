@@ -1,0 +1,5 @@
+smiles_column: SMILES
+activity_column: ACTIVITY
+similarity_threshold: 0.5
+radius: 2
+fp_size: 2048

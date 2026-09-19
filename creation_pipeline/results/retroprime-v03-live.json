@@ -1,0 +1,8 @@
+{
+  "run_id": "retroprime-v03-live",
+  "paper_id": "VQ33W3ED",
+  "stage": "model_response_received",
+  "status": "failed",
+  "model_origin": "codex_cli",
+  "error": "ValueError: Unsafe resource path"
+}

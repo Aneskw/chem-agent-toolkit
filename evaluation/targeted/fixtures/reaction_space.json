@@ -1,0 +1,65 @@
+{
+  "name": "Pd 催化直接芳基化（模拟演示）",
+  "objective": {
+    "name": "yield",
+    "direction": "maximize",
+    "bounds": [
+      0,
+      100
+    ]
+  },
+  "descriptors": [
+    {
+      "name": "ligand",
+      "type": "categorical",
+      "options": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7",
+        "L8",
+        "L9",
+        "L10",
+        "L11",
+        "L12"
+      ]
+    },
+    {
+      "name": "base",
+      "type": "categorical",
+      "options": [
+        "Cs2CO3",
+        "K2CO3",
+        "K3PO4",
+        "KOAc"
+      ]
+    },
+    {
+      "name": "solvent",
+      "type": "categorical",
+      "options": [
+        "DMA",
+        "NMP",
+        "DMF",
+        "dioxane"
+      ]
+    },
+    {
+      "name": "temperature",
+      "type": "continuous",
+      "min": 40.0,
+      "max": 120.0,
+      "unit": "°C"
+    },
+    {
+      "name": "concentration",
+      "type": "continuous",
+      "min": 0.05,
+      "max": 0.3,
+      "unit": "M"
+    }
+  ]
+}

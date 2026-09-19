@@ -1,0 +1,29 @@
+{
+  "paper_id": "VQ33W3ED",
+  "title": "RetroPrime: A Diverse, plausible and Transformer-based method for Single-Step retrosynthesis predictions",
+  "doi": "10.1016/j.cej.2021.129845",
+  "paper_url": "https://linkinghub.elsevier.com/retrieve/pii/S1385894721014303",
+  "repository": "wangxr0526/RetroPrime",
+  "commit": "a765b670b72fbfd512d0d437da8f27a95f9f0554",
+  "source_files": [
+    {
+      "role": "repo",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/wangxr0526/RetroPrime/a765b670b72fbfd512d0d437da8f27a95f9f0554/README.md",
+      "sha256": "1a16418c873edb4a36584cf2a90352da53ca44504848abcaf986e432840582c9",
+      "bytes": 9173,
+      "license": "see upstream repository LICENSE"
+    },
+    {
+      "role": "repo",
+      "path": "run_example.sh",
+      "url": "https://raw.githubusercontent.com/wangxr0526/RetroPrime/a765b670b72fbfd512d0d437da8f27a95f9f0554/run_example.sh",
+      "sha256": "1ce43453fc5207f027f6b733022c4ecad4742f24e8d9b963ace014eb35ba255a",
+      "bytes": 2219,
+      "license": "see upstream repository LICENSE"
+    }
+  ],
+  "repository_tree_sha256": "e19542949e5b4566b8ccb43b729a2c22cc057fbd60da4531adb938dc18594ede",
+  "repository_file_count": 243,
+  "raw_files_committed": false
+}

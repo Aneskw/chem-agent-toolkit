@@ -1,0 +1,21 @@
+{
+  "paper_id": "74LHJIVM",
+  "title": "RetroXpert: Decompose Retrosynthesis Prediction like a Chemist",
+  "doi": "",
+  "paper_url": "http://arxiv.org/abs/2011.02893",
+  "repository": "uta-smile/RetroXpert",
+  "commit": "321cc3daf2f3a7ac9ab5b37dde5b666b338e1ed5",
+  "source_files": [
+    {
+      "role": "repo",
+      "path": "readme.md",
+      "url": "https://raw.githubusercontent.com/uta-smile/RetroXpert/321cc3daf2f3a7ac9ab5b37dde5b666b338e1ed5/readme.md",
+      "sha256": "cdf84359b36219f049918fc0fa2dbe8c42d24fa1e79e11f0c83f4d7222b15787",
+      "bytes": 8269,
+      "license": "see upstream repository LICENSE"
+    }
+  ],
+  "repository_tree_sha256": "87949b445bf85ec14a713ab10f7701e3dffccf6fa1fa845e9fd8f53b0790c36e",
+  "repository_file_count": 320,
+  "raw_files_committed": false
+}

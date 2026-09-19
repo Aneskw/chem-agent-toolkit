@@ -23,6 +23,10 @@ The repository provides a unified directory layout, flat installation entry poin
 | `chem-genmol` | models-skills/open-models | preflight; checkpoint required |
 | `chem-diffdock-nim` | models-skills/nim | preflight; endpoint and files required |
 | `chem-edbo-recommend-next-batch` | tools-skills | executable Bayesian optimization |
+| `chem-reaction-atommap-audit` | tools-skills/rdkit | tested mapped-input structural check |
+| `chem-retro-candidate-evaluation` | tools-skills/rdkit | tested exact-match and optional round-trip scorer |
+| `localretro-template-library-preflight` | models-skills/open-models | tested resource and training-schema preflight |
+| `retroprime-inference-preflight` | models-skills/open-models | tested script, weight and input preflight |
 
 ## Use
 
@@ -38,6 +42,11 @@ Copy or symlink the desired skill directory into an agent's skill directory, rea
 - `.claude-plugin/`: plugin marketplace metadata.
 
 ## Evidence and method
+
+The [creation pipeline](creation_pipeline/README.md) normalizes the two supplied
+literature exports, locks source versions, and extracts cited draft skills using
+the locally authenticated Codex CLI. The [targeted evaluation](evaluation/targeted/README.md)
+separates raw-tool, tools-only, and complete-skill effects with held-out tasks.
 
 Paper snapshots, repository evidence, run logs, and format notes are kept in the project archive. Each skill's `reference` section points to a pinned source. A verified status means only that the stated execution checks passed.
 

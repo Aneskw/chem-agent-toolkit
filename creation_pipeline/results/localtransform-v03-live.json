@@ -1,0 +1,44 @@
+{
+  "run_id": "localtransform-v03-live",
+  "paper_id": "X4QW3UVV",
+  "stage": "drafts_rendered",
+  "status": "cited_drafts_created",
+  "model_origin": "codex_cli",
+  "candidate_count": 3,
+  "checks": [
+    {
+      "name": "prepare-uspto-local-reaction-templates",
+      "state": "blocked_resources",
+      "missing_repo_files": [
+        "preprocessing/Extract_from_train_data.py",
+        "preprocessing/Run_preprocessing.py"
+      ],
+      "external_assets_unverified": [
+        "https://github.com/wengong-jin/nips17-rexgen/blob/master/USPTO/"
+      ],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    },
+    {
+      "name": "train-localtransform",
+      "state": "blocked_resources",
+      "missing_repo_files": [
+        "scripts/model.py"
+      ],
+      "external_assets_unverified": [],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    },
+    {
+      "name": "evaluate-and-decode-localtransform-predictions",
+      "state": "blocked_resources",
+      "missing_repo_files": [
+        "scripts/Decode_predictions.py",
+        "scripts/Calculate_topk_accuracy.py"
+      ],
+      "external_assets_unverified": [],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    }
+  ],
+  "source_bundle_sha256": "7ebe3ee9c42a8d46d732f7645d156cd0f9eb24cb0f86bc696274f55bec774022",
+  "response_sha256": "5a79616ef96b4830654860d191f761a872de1c0cc11379c41f508ae7c25b8921",
+  "run_dir": "creation_pipeline/runs/localtransform-v03-live"
+}

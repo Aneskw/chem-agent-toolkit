@@ -1,0 +1,5 @@
+SMILES,LIBRARY
+CCO,demo
+c1ccccc1,demo
+O=[N+]([O-])c1ccccc1,demo
+not-a-smiles,demo

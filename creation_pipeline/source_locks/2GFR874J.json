@@ -1,0 +1,44 @@
+{
+  "paper_id": "2GFR874J",
+  "title": "Deep Retrosynthetic Reaction Prediction using Local Reactivity and Global Attention",
+  "doi": "10.1021/jacsau.1c00246",
+  "paper_url": "https://doi.org/10.1021/jacsau.1c00246",
+  "repository": "kaist-amsg/LocalRetro",
+  "commit": "eba83e72efabeb854fec86c865e8743c295a8a1e",
+  "source_files": [
+    {
+      "role": "repo",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/kaist-amsg/LocalRetro/eba83e72efabeb854fec86c865e8743c295a8a1e/README.md",
+      "sha256": "f8d7644b3d864f1af6bafa4c7107468e9c1051254af11909a1c365d2caba3190",
+      "bytes": 5113,
+      "license": "see upstream repository LICENSE"
+    },
+    {
+      "role": "repo",
+      "path": "LocalTemplate/template_extractor.py",
+      "url": "https://raw.githubusercontent.com/kaist-amsg/LocalRetro/eba83e72efabeb854fec86c865e8743c295a8a1e/LocalTemplate/template_extractor.py",
+      "sha256": "31749a76084707bed5f6a363fdd83d4f8032126888560fb3b31cf31e267d66ee",
+      "bytes": 26839,
+      "license": "see upstream repository LICENSE"
+    },
+    {
+      "role": "repo",
+      "path": "preprocessing/Extract_from_train_data.py",
+      "url": "https://raw.githubusercontent.com/kaist-amsg/LocalRetro/eba83e72efabeb854fec86c865e8743c295a8a1e/preprocessing/Extract_from_train_data.py",
+      "sha256": "7c476b821247f22026875560f81e970df9df8461c541f0d53118b074b3b5c58b",
+      "bytes": 7284,
+      "license": "see upstream repository LICENSE"
+    },
+    {
+      "role": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC8549044/fullTextXML",
+      "sha256": "0bb218ba3f78a0ee0bafe9ab9b8ab2523147819a3deee7a9a6991cfa4e34bcb5",
+      "bytes": 91240,
+      "license": "CC BY-NC-ND 4.0; local processing only"
+    }
+  ],
+  "repository_tree_sha256": "71e53c7a802257af2260045fc2fdc2be44461710f99a69305a9ce0854e776605",
+  "repository_file_count": 40,
+  "raw_files_committed": false
+}

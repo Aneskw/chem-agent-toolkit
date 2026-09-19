@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+.pytest_cache/
+*.pyc
+.venv-eval/
+evaluation/public_benchmarks/cache/
+evaluation/public_benchmarks/runs/
+creation_pipeline/cache/
+creation_pipeline/runs/
+evaluation/targeted/results/

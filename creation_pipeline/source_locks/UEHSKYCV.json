@@ -1,0 +1,21 @@
+{
+  "paper_id": "UEHSKYCV",
+  "title": "Predicting Organic Reaction Outcomes with Weisfeiler-Lehman Network",
+  "doi": "",
+  "paper_url": "https://papers.nips.cc/paper_files/paper/2017/hash/ced556cd9f9c0c8315cfbe0744a3baf0-Abstract.html",
+  "repository": "wengong-jin/nips17-rexgen",
+  "commit": "fb7dea369b0721b88cd0133a7d66348d244f65d3",
+  "source_files": [
+    {
+      "role": "repo",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/wengong-jin/nips17-rexgen/fb7dea369b0721b88cd0133a7d66348d244f65d3/README.md",
+      "sha256": "c5f19b4eb9fe2fb51315b6c1c8f47628a9631dca12c96c1450a5e41d67c655a5",
+      "bytes": 2717,
+      "license": "see upstream repository LICENSE"
+    }
+  ],
+  "repository_tree_sha256": "4be113b57e759d1a79036f47249c6467249a6b013bf58b67c7b6e0d4d4e8f5e6",
+  "repository_file_count": 139,
+  "raw_files_committed": false
+}

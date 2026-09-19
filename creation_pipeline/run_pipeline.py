@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""Source lock -> model extraction -> citation audit -> v0.3 draft pipeline."""
+from __future__ import annotations
+
+import argparse
+import json
+import shutil
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+
+
+def call(*args: str) -> None:
+    subprocess.run([sys.executable, *args], check=True)
+
+
+def main() -> int:
+    p = argparse.ArgumentParser()
+    p.add_argument("--paper-id", required=True)
+    p.add_argument("--model", default="gpt-6-astra")
+    p.add_argument("--run-id", default=None)
+    p.add_argument("--response-file", type=Path, help="Replay a saved model JSON for deterministic testing")
+    p.add_argument("--skip-collect", action="store_true", help="Use already collected, locked local sources")
+    args = p.parse_args()
+    run_id = args.run_id or f"{args.paper_id}-{datetime.now():%Y%m%d-%H%M%S}"
+    run = HERE / "runs" / run_id
+    if run.exists():
+        p.error(f"run already exists: {run}")
+    status = {"run_id": run_id, "paper_id": args.paper_id, "stage": "started", "status": "running"}
+    try:
+        if not args.skip_collect:
+            call(str(HERE / "collect.py"), "--paper-id", args.paper_id)
+        status["stage"] = "source_collected"
+        config = HERE / "cache" / args.paper_id / "config.json"
+        if not config.is_file():
+            raise FileNotFoundError(f"Missing collected source config: {config}")
+        call(str(HERE / "core" / "creation.py"), "prepare", "--config", str(config), "--out", str(run))
+        prepared = json.loads((run / "prepared.json").read_text())
+        if prepared["jobs"][0]["status"] != "prepared":
+            raise ValueError(prepared["jobs"][0].get("error", "source preparation failed"))
+        status["stage"] = "bundle_prepared"
+        response_dir = run / "responses"
+        response_dir.mkdir()
+        response = response_dir / f"{args.paper_id}.json"
+        if args.response_file:
+            shutil.copyfile(args.response_file, response)
+            status["model_origin"] = "saved_response_replay"
+        else:
+            call(str(HERE / "codex_extract.py"), "--run", str(run),
+                 "--paper-id", args.paper_id, "--model", args.model)
+            status["model_origin"] = "codex_cli"
+        status["stage"] = "model_response_received"
+        repaired_dir = run / "checked_responses"
+        repaired_dir.mkdir()
+        call(str(HERE / "repair_citation_spans.py"), "--response", str(response),
+             "--bundle", str(run / "jobs" / args.paper_id / "bundle.json"),
+             "--output", str(repaired_dir / f"{args.paper_id}.json"))
+        call(str(HERE / "core" / "creation.py"), "import-response", "--run", str(run),
+             "--responses", str(repaired_dir), "--origin", "codex_current_task")
+        extraction = json.loads((run / "import_results" / "summary.json").read_text())
+        job = extraction["jobs"][0]
+        if job["status"] not in {"drafts_created", "no_supported_skill"}:
+            raise ValueError(job.get("error", "citation audit failed"))
+        status["stage"] = "citations_validated"
+        if job["status"] == "drafts_created":
+            drafts = run / "drafts-v03"
+            call(str(HERE / "render_drafts_v03.py"), "--run", str(run),
+                 "--paper-id", args.paper_id, "--out", str(drafts))
+            for folder in drafts.iterdir():
+                call(str(HERE / "validate_skill_format.py"), str(folder))
+        status.update({"stage": "drafts_rendered" if job["status"] == "drafts_created" else "no_supported_skill",
+                       "status": "cited_drafts_created" if job["status"] == "drafts_created" else "no_supported_skill",
+                       "candidate_count": job.get("candidate_count", 0),
+                       "checks": job.get("checks", []),
+                       "source_bundle_sha256": job.get("bundle_sha256"),
+                       "response_sha256": job.get("response_sha256"),
+                       "run_dir": str(run.relative_to(HERE.parent))})
+    except (OSError, ValueError, subprocess.CalledProcessError) as exc:
+        status.update(status="failed", error=f"{type(exc).__name__}: {exc}")
+    run.mkdir(parents=True, exist_ok=True)
+    (run / "pipeline_status.json").write_text(json.dumps(status, indent=2, ensure_ascii=False) + "\n")
+    results = HERE / "results"
+    results.mkdir(exist_ok=True)
+    (results / f"{run_id}.json").write_text(json.dumps(status, indent=2, ensure_ascii=False) + "\n")
+    print(json.dumps(status, ensure_ascii=False))
+    return 0 if status["status"] in {"cited_drafts_created", "no_supported_skill"} else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

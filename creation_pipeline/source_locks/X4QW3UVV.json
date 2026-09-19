@@ -1,0 +1,21 @@
+{
+  "paper_id": "X4QW3UVV",
+  "title": "A generalized-template-based graph neural network for accurate organic reactivity prediction",
+  "doi": "10.1038/s42256-022-00526-z",
+  "paper_url": "https://www-nature-com.remotexs.ntu.edu.sg/articles/s42256-022-00526-z",
+  "repository": "kaist-amsg/LocalTransform",
+  "commit": "1b763f20e4d1df560d15aab2a61291fe0c50fae3",
+  "source_files": [
+    {
+      "role": "repo",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/kaist-amsg/LocalTransform/1b763f20e4d1df560d15aab2a61291fe0c50fae3/README.md",
+      "sha256": "51bad01f9d9f7b9cdcea66c125ccb3ce783a6c1c1bddf1f273698f7b791bff24",
+      "bytes": 4575,
+      "license": "see upstream repository LICENSE"
+    }
+  ],
+  "repository_tree_sha256": "a9c027f1ad63c15a98dea2287b633ecec9f525c54fb20178176f0a6beb5b2698",
+  "repository_file_count": 13,
+  "raw_files_committed": false
+}
