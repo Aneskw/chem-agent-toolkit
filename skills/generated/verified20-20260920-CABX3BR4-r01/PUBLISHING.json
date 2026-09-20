@@ -1,0 +1,12 @@
+{
+  "run_id": "verified20-20260920-CABX3BR4-r01",
+  "paper_id": "CABX3BR4",
+  "model_origin": "codex_cli",
+  "source_scope": "paper_primary_text",
+  "source_text_complete": true,
+  "candidate_count": 3,
+  "publication_state": "source_validated_candidate",
+  "execution_validated": false,
+  "agent_effect_validated": false,
+  "note": "Published automatically after source citation, schema, and format checks; no execution or agent utility test was run."
+}

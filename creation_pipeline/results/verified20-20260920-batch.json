@@ -1,0 +1,225 @@
+{
+  "batch_id": "verified20-20260920",
+  "model": "gpt-6-astra",
+  "rounds": 1,
+  "manifest": "/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/verified_pdf_manifest.json",
+  "target_candidates": 20,
+  "deduplication": "not_run",
+  "execution_validation": "not_run",
+  "agent_effect_validation": "not_run",
+  "runs": [
+    {
+      "run_id": "verified20-20260920-74LHJIVM-r01",
+      "paper_id": "74LHJIVM",
+      "source_type": "paper",
+      "status": "method_drafts_created",
+      "candidate_count": 2,
+      "error": null,
+      "publish_status": "published_locally"
+    },
+    {
+      "run_id": "verified20-20260920-CABX3BR4-r01",
+      "paper_id": "CABX3BR4",
+      "source_type": "paper",
+      "status": "method_drafts_created",
+      "candidate_count": 3,
+      "error": null,
+      "publish_status": "published_locally"
+    },
+    {
+      "run_id": "verified20-20260920-P2R8K7X3-r01",
+      "paper_id": "P2R8K7X3",
+      "source_type": "paper",
+      "status": "method_drafts_created",
+      "candidate_count": 3,
+      "error": null,
+      "publish_status": "published_locally"
+    },
+    {
+      "run_id": "verified20-20260920-LJMZ9IL6-r01",
+      "paper_id": "LJMZ9IL6",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "ValueError: Unsafe resource path",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-52TVS7QP-r01",
+      "paper_id": "52TVS7QP",
+      "source_type": "paper",
+      "status": "method_drafts_created",
+      "candidate_count": 3,
+      "error": null,
+      "publish_status": "published_locally"
+    },
+    {
+      "run_id": "verified20-20260920-29BYRNCZ-r01",
+      "paper_id": "29BYRNCZ",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-29BYRNCZ-r01', '--paper-id', '29BYRNCZ', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-KNGUQJ73-r01",
+      "paper_id": "KNGUQJ73",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-KNGUQJ73-r01', '--paper-id', 'KNGUQJ73', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-BTJ7PAYZ-r01",
+      "paper_id": "BTJ7PAYZ",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-BTJ7PAYZ-r01', '--paper-id', 'BTJ7PAYZ', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-C5HMZZWJ-r01",
+      "paper_id": "C5HMZZWJ",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-C5HMZZWJ-r01', '--paper-id', 'C5HMZZWJ', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-SJW9P6LU-r01",
+      "paper_id": "SJW9P6LU",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-SJW9P6LU-r01', '--paper-id', 'SJW9P6LU', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-FDYPZYCV-r01",
+      "paper_id": "FDYPZYCV",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-FDYPZYCV-r01', '--paper-id', 'FDYPZYCV', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-L4DYAUVP-r01",
+      "paper_id": "L4DYAUVP",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-L4DYAUVP-r01', '--paper-id', 'L4DYAUVP', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-ZIHHA28M-r01",
+      "paper_id": "ZIHHA28M",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-ZIHHA28M-r01', '--paper-id', 'ZIHHA28M', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-7YL28TR5-r01",
+      "paper_id": "7YL28TR5",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-7YL28TR5-r01', '--paper-id', '7YL28TR5', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-WUJUHU7F-r01",
+      "paper_id": "WUJUHU7F",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-WUJUHU7F-r01', '--paper-id', 'WUJUHU7F', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-Z3W4BK3K-r01",
+      "paper_id": "Z3W4BK3K",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-Z3W4BK3K-r01', '--paper-id', 'Z3W4BK3K', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-ZCMNWV6R-r01",
+      "paper_id": "ZCMNWV6R",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-ZCMNWV6R-r01', '--paper-id', 'ZCMNWV6R', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-X6UFMAW8-r01",
+      "paper_id": "X6UFMAW8",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-X6UFMAW8-r01', '--paper-id', 'X6UFMAW8', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-BAW3TIAH-r01",
+      "paper_id": "BAW3TIAH",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-BAW3TIAH-r01', '--paper-id', 'BAW3TIAH', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-YXTSBPES-r01",
+      "paper_id": "YXTSBPES",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-YXTSBPES-r01', '--paper-id', 'YXTSBPES', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-K7ZGXDS6-r01",
+      "paper_id": "K7ZGXDS6",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-K7ZGXDS6-r01', '--paper-id', 'K7ZGXDS6', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-64T7R8Q4-r01",
+      "paper_id": "64T7R8Q4",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-64T7R8Q4-r01', '--paper-id', '64T7R8Q4', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified20-20260920-MMMCU9EX-r01",
+      "paper_id": "MMMCU9EX",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "CalledProcessError: Command '['/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/.venv-eval/bin/python', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/codex_extract.py', '--run', '/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/runs/verified20-20260920-MMMCU9EX-r01', '--paper-id', 'MMMCU9EX', '--model', 'gpt-6-astra']' returned non-zero exit status 2.",
+      "publish_status": "not_published"
+    }
+  ],
+  "published_paths": [
+    "skills/generated/verified20-20260920-74LHJIVM-r01",
+    "skills/generated/verified20-20260920-CABX3BR4-r01",
+    "skills/generated/verified20-20260920-P2R8K7X3-r01",
+    "skills/generated/verified20-20260920-52TVS7QP-r01"
+  ]
+}
