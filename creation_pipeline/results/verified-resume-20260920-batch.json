@@ -1,0 +1,45 @@
+{
+  "batch_id": "verified-resume-20260920",
+  "model": "gpt-6-astra",
+  "rounds": 1,
+  "status": "finished",
+  "manifest": "/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/creation_pipeline/verified_pdf_manifest.json",
+  "target_candidates": 3,
+  "deduplication": "not_run",
+  "execution_validation": "not_run",
+  "agent_effect_validation": "not_run",
+  "runs": [
+    {
+      "run_id": "verified-resume-20260920-29BYRNCZ-r01",
+      "paper_id": "29BYRNCZ",
+      "source_type": "paper",
+      "status": "method_drafts_created",
+      "candidate_count": 2,
+      "error": null,
+      "publish_status": "published_locally"
+    },
+    {
+      "run_id": "verified-resume-20260920-KNGUQJ73-r01",
+      "paper_id": "KNGUQJ73",
+      "source_type": "paper",
+      "status": "failed",
+      "candidate_count": 0,
+      "error": "ValueError: Unsafe resource path",
+      "publish_status": "not_published"
+    },
+    {
+      "run_id": "verified-resume-20260920-BTJ7PAYZ-r01",
+      "paper_id": "BTJ7PAYZ",
+      "source_type": "paper",
+      "status": "method_drafts_created",
+      "candidate_count": 2,
+      "error": null,
+      "publish_status": "published_locally"
+    }
+  ],
+  "published_paths": [
+    "skills/generated/verified-resume-20260920-29BYRNCZ-r01",
+    "skills/generated/verified-resume-20260920-BTJ7PAYZ-r01"
+  ],
+  "published_candidates": 4
+}
