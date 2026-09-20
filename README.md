@@ -51,10 +51,12 @@ improvement in agent task quality or token use.
 
 ## Evidence and method
 
-The [creation pipeline](creation_pipeline/README.md) normalizes the two supplied
-literature exports, locks source versions, and extracts cited candidates using
-the locally authenticated Codex CLI. The [targeted evaluation](evaluation/targeted/README.md)
-separates raw-tool, tools-only, and complete-skill effects with held-out tasks.
+The [creation pipeline](creation_pipeline/README.md) accepts general paper PDFs
+and pinned Git repositories, then extracts cited decision candidates with the
+locally authenticated Codex CLI. The
+[three-arm protocol](evaluation/decision_gain/PROTOCOL.md) compares no skill,
+the complete source text, and generated skills on paired held-out decisions.
+Its `plan` command validates the design without making model calls.
 
 Paper snapshots, repository evidence, run logs, and format notes are kept in the project archive. Each skill's `reference` section points to a pinned source. A verified status means only that the stated execution checks passed.
 

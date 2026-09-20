@@ -20,6 +20,24 @@ SCHEMA=obj({'schema_version':{'type':'integer','enum':[1]},'paper_id':TEXT,
     'candidates':{'type':'array','maxItems':4,'items':CANDIDATE},
     'no_skill_reason':{'type':'string','maxLength':3000}})
 
+# Version 1 remains replayable. Version 2 makes the behavior change explicit;
+# a citation match is still not a semantic review or an agent-utility result.
+DECISION=obj({
+    'when':TEXT, 'requires':TEXT, 'choose':TEXT, 'avoid':TEXT,
+    'because':TEXT, 'check':TEXT, 'stop_or_fallback':TEXT, 'scope':TEXT,
+    'support':{'type':'string','enum':['direct','inferred']},
+    'citations':{'type':'array','minItems':1,'maxItems':8,'items':CITATION}})
+CANDIDATE_V2=obj({**CANDIDATE['properties'],
+    'decisions':{'type':'array','maxItems':8,'items':DECISION}})
+SCHEMA_V2=obj({**SCHEMA['properties'],
+    'schema_version':{'type':'integer','enum':[2]},
+    'candidates':{'type':'array','maxItems':4,'items':CANDIDATE_V2}})
+
+def schema_for(version):
+    if version == 1:return SCHEMA
+    if version == 2:return SCHEMA_V2
+    raise ValueError('Unsupported extraction schema version')
+
 def check(value,schema,path='$'):
     kind=schema['type'];expected={'object':dict,'array':list,'string':str,'integer':int}[kind]
     if type(value) is not expected: raise ValueError(f'{path}: expected {kind}')
@@ -38,7 +56,7 @@ def check(value,schema,path='$'):
     elif kind=='integer' and value<schema.get('minimum',value): raise ValueError(path+': integer below minimum')
 
 def validate(response,bundle):
-    check(response,SCHEMA)
+    check(response,schema_for(response.get('schema_version')))
     if response['paper_id']!=bundle['paper_id']: raise ValueError('paper_id does not match source bundle')
     if not response['candidates'] and not response['no_skill_reason'].strip(): raise ValueError('No candidates requires a reason')
     names=[c['name'] for c in response['candidates']]
@@ -46,9 +64,19 @@ def validate(response,bundle):
     sources={s['id']:s for s in bundle['sources']}
     results=[]
     for candidate in response['candidates']:
-        claims=candidate['inputs']+candidate['outputs']+candidate['steps']+[r['reason'] for r in candidate['requirements']]
-        primary_cited=False
+        decisions=candidate.get('decisions',[])
+        if response['schema_version']==2:
+            if candidate['kind']=='method_procedure' and not decisions:
+                raise ValueError('A method procedure must change at least one decision')
+            if candidate['kind']=='tool_usage' and decisions:
+                raise ValueError('Atomic tool operations must not claim method decision rules')
+        claims=candidate['inputs']+candidate['outputs']+candidate['steps']+[r['reason'] for r in candidate['requirements']]+decisions
+        authoritative_cited=False
         primary_role=bundle.get('primary_role','paper')
+        # The source document and code pinned by the intake are both primary
+        # evidence for an executable method. Repository prose alone is not:
+        # it may explain intent, but it cannot establish implementation.
+        authoritative_roles={primary_role,'repo_code'}
         for claim in claims:
             for citation in claim['citations']:
                 source=sources.get(citation['source_id'])
@@ -58,9 +86,13 @@ def validate(response,bundle):
                 if end-start>25: raise ValueError('Citation range too broad; use at most 26 lines')
                 excerpt='\n'.join(source['lines'][start-1:end])
                 if citation['quote'] not in excerpt: raise ValueError('Citation quote not found in referenced lines')
-                if source['role']==primary_role and claim in candidate['steps']:primary_cited=True
-        if candidate['kind']=='method_procedure' and not primary_cited:
-            raise ValueError(f'method_procedure needs a step citation to supplied {primary_role}, not metadata or README alone')
+                if source['role'] in authoritative_roles and claim in candidate['steps']:
+                    authoritative_cited=True
+        for rule in decisions:
+            if not any(sources[c['source_id']]['role'] in authoritative_roles for c in rule['citations']):
+                raise ValueError('Each decision rule needs source-document or pinned-code evidence, not a README-only rationale')
+        if candidate['kind']=='method_procedure' and not authoritative_cited:
+            raise ValueError(f'method_procedure needs a step citation to supplied {primary_role} or pinned code, not metadata or README alone')
         missing=[];external=[]
         for requirement in candidate['requirements']:
             raw_path=requirement['path']

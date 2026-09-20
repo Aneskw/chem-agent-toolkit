@@ -11,7 +11,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from creation_schema import SCHEMA, validate
+from creation_schema import SCHEMA, schema_for, validate
 from creation_sources import make_bundle
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -21,7 +21,7 @@ Return exactly one JSON object matching the supplied schema. Do not return execu
 Write the skill name, descriptions, procedural claims and unknowns in English. Keep citation quotes in their original source language.
 Each input, output, step and requirement needs precise citations: source_id, original 1-based start/end lines, and an exact short quote from those lines.
 Do not invent API names, paths, defaults, dependency versions or execution results. Omit unsupported details and list unknowns.
-Distinguish tool_usage (single API call, command or resource operation) from method_procedure (a conditional decision policy supported by the source_type's primary_role text). Abstracts/metadata are not primary evidence.
+Distinguish tool_usage (single API call, command or resource operation) from method_procedure (a conditional decision policy supported by the source document or implementation at the pinned repository commit). Abstracts, metadata, and repository prose without source-document or code support are not primary evidence.
 For method_procedure, seek what task or evidence triggers it, what branch to take, when to stop or verify, and which implementation operationalizes it if supplied. Cite the primary documentation and implementation where available. A single CLI invocation, input schema, file check, or score computation is tool_usage, not a procedural skill.
 The repo_files list is the inventory at the recorded snapshot. Report missing referenced files as requirements anyway so the program can flag them.
 Identify at most 4 useful capabilities per paper. Do not inflate counts with duplicate descriptions. A candidate is a DRAFT; never claim a successful execution.
@@ -34,15 +34,38 @@ def dump(path,data):
 
 def digest(data):return hashlib.sha256(data).hexdigest()
 
-def messages(bundle):
+DECISION_POLICY='''
+Extract a small number of transferable decision policies, not paper summaries.
+For each method candidate supply decisions[]: when (observable trigger), requires
+(information needed to choose), choose (next action), avoid (tempting wrong turn),
+because (source-supported mechanism), check (observable success/failure),
+stop_or_fallback, scope (including exclusions), support (direct or inferred), citations.
+Use one rule when one is enough. Do not pad rules to fill fields; return no candidate
+when no useful bounded policy is supported. Tool usages have decisions=[].
+Prefer chemistry-specific failure modes, representation invariants, method selection,
+search/pruning choices and diagnostic recovery. An algorithm's training architecture
+is not automatically advice for solving a molecule-level task. Explain the actual
+task where the rule changes the next action. Do not claim a trained model's numerical
+capability can be transferred into prose. Preserve substrate, data split, mapping,
+stereo, score direction, and resource assumptions only when relevant and supported.
+Every rule needs source-document or pinned-code evidence. Distinguish literal source procedure (direct)
+from reasoned adaptation (inferred). Do not put your own generalization in a direct
+rule. Missing evidence and contradictions remain unknowns. Never invent negative
+experimental results. No generic instruction such as 'verify everything'.
+Do not read benchmark tasks or infer gold answers; extraction sees sources only.
+'''
+
+def messages(bundle,version=1):
     data={k:v for k,v in bundle.items() if k not in ['repo_root','sources']}
     data['sources']=[{'id':s['id'],'role':s['role'],'page':s['page'],'url':s['url'],
                       'numbered_text':'\n'.join(f'{i}: {line}' for i,line in enumerate(s['lines'],1))} for s in bundle['sources']]
-    return [{'role':'system','content':SYSTEM},
-            {'role':'user','content':json.dumps({'output_schema':SCHEMA,'source_bundle':data},ensure_ascii=False)}]
+    return [{'role':'system','content':SYSTEM+(DECISION_POLICY if version==2 else '')},
+            {'role':'user','content':json.dumps({'output_schema':schema_for(version),'source_bundle':data},ensure_ascii=False)}]
 
 def prepare(config,output):
     settings=json.loads(config.read_text())
+    version=settings.get('schema_version',1)
+    schema=schema_for(version)
     base=(config.parent/settings.get('base','.')).resolve()
     output.mkdir(parents=True,exist_ok=False)
     jobs=[]
@@ -54,13 +77,13 @@ def prepare(config,output):
         try:
             bundle=make_bundle(job,base,settings.get('max_context_chars',80000))
             dump(directory/'bundle.json',bundle)
-            dump(directory/'messages.json',messages(bundle))
+            dump(directory/'messages.json',messages(bundle,version))
             jobs.append({'paper_id':job_id,'status':'prepared','bundle_sha256':digest((directory/'bundle.json').read_bytes()),
                          'messages_sha256':digest((directory/'messages.json').read_bytes()),'coverage':bundle['coverage']})
         except (OSError,ValueError) as error:
             jobs.append({'paper_id':job_id,'status':'source_error','error':str(error)})
     dump(output/'prepared.json',{'jobs':jobs,'config_sha256':digest(config.read_bytes())})
-    dump(output/'response.schema.json',SCHEMA)
+    dump(output/'response.schema.json',schema)
     print(json.dumps({'prepared':sum(j['status']=='prepared' for j in jobs),'total':len(jobs),'run':str(output)},ensure_ascii=False))
 
 def validate_endpoint(base_url):
@@ -211,7 +234,10 @@ def execute(run,provider_config=None,replay_dir=None,max_repairs=1,response_orig
                     model_responses+=1
                 (target/f'response-{attempt}.txt').write_text(raw,encoding='utf-8')
                 try:
-                    response=parse_response(raw);checks=validate(response,bundle)
+                    response=parse_response(raw)
+                    expected=json.loads((run/'response.schema.json').read_text())['properties']['schema_version']['enum']
+                    if response.get('schema_version') not in expected:raise ValueError('Response schema version differs from prepared extraction')
+                    checks=validate(response,bundle)
                 except ValueError as error:
                     dump(target/f'validation-{attempt}.json',{'ok':False,'error':str(error),'usage':usage})
                     if replay_dir or attempt>max_repairs:raise

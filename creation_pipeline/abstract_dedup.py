@@ -188,7 +188,7 @@ def render(cluster: dict, members: list[dict], unresolved: list[str]) -> str:
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--source", action="append", required=True, help="PAPER_ID=RUN_ID; repeat for multiple papers")
-    p.add_argument("--model", default="gpt-6-astra")
+    p.add_argument("--model", default="gpt-5.6-sol")
     p.add_argument("--run-id", required=True)
     p.add_argument("--response-file", type=Path, help="Replay a saved abstraction response")
     args = p.parse_args()

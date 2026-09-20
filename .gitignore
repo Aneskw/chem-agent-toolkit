@@ -10,3 +10,5 @@ creation_pipeline/runs/
 creation_pipeline/acquired/
 creation_pipeline/intakes/
 evaluation/targeted/results/
+evaluation/decision_gain/results/
+evaluation/decision_gain/materials.json

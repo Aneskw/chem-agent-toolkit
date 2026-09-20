@@ -18,7 +18,7 @@ GOOD = {"method_drafts_created", "atomic_resource_hints_only", "repo_only_hints_
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", default="gpt-6-astra")
+    parser.add_argument("--model", default="gpt-5.6-sol")
     parser.add_argument("--rounds", type=int, default=1)
     parser.add_argument("--prefix", default=None)
     parser.add_argument("--push", action="store_true")

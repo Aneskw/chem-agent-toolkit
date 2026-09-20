@@ -9,6 +9,7 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+from decision_library import build_library
 
 HERE = Path(__file__).resolve().parent
 
@@ -25,11 +26,12 @@ def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--paper-id", help="ID from the literature catalog, or job ID in --config")
     p.add_argument("--config", type=Path, help="Local source manifest; accepts paper, database, tool or model documentation")
-    p.add_argument("--model", default="gpt-6-astra")
+    p.add_argument("--model", default="gpt-5.6-sol")
     p.add_argument("--run-id", default=None)
     p.add_argument("--response-file", type=Path, help="Replay a saved model JSON for deterministic testing")
     p.add_argument("--skip-collect", action="store_true", help="Use already collected, locked local sources")
     p.add_argument("--allow-repo-only", action="store_true", help="Create repository hints, never paper-derived skill drafts")
+    p.add_argument('--legacy-extraction',action='store_true',help='Use the old steps-only schema for comparisons')
     p.add_argument("--draft-eval-tasks", action="store_true",
                    help="also propose two positive and two negative decision-task drafts per method skill; human review still required")
     args = p.parse_args()
@@ -46,6 +48,8 @@ def main() -> int:
     elif not args.paper_id:
         p.error("provide --paper-id or --config")
     run_id = args.run_id or f"{args.paper_id}-{datetime.now():%Y%m%d-%H%M%S}"
+    import re
+    if not re.fullmatch(r'[A-Za-z0-9_-]{1,100}',run_id):p.error('Unsafe run ID')
     run = HERE / "runs" / run_id
     if run.exists():
         p.error(f"run already exists: {run}")
@@ -58,6 +62,16 @@ def main() -> int:
             config = HERE / "cache" / args.paper_id / "config.json"
         if not config.is_file():
             raise FileNotFoundError(f"Missing collected source config: {config}")
+        settings=json.loads(config.read_text())
+        settings['base']=str((config.parent/settings.get('base','.')).resolve())
+        version=(json.loads(args.response_file.read_text()).get('schema_version',1) if args.response_file
+                 else 1 if args.legacy_extraction else 2)
+        settings['schema_version']=version
+        effective=HERE/'runs'/'.configs'/f'{run_id}.json'
+        effective.parent.mkdir(parents=True,exist_ok=True)
+        effective.write_text(json.dumps(settings,indent=2)+'\n')
+        config=effective
+        status['extraction_schema_version']=version
         call(str(HERE / "core" / "creation.py"), "prepare", "--config", str(config), "--out", str(run))
         prepared = json.loads((run / "prepared.json").read_text())
         if prepared["jobs"][0]["status"] != "prepared":
@@ -97,6 +111,11 @@ def main() -> int:
         kind_counts = {kind: sum(item["kind"] == kind for item in response_data["candidates"])
                        for kind in ("method_procedure", "tool_usage")}
         status["stage"] = "citations_validated"
+        if response_data.get('schema_version')==2:
+            library=build_library([response_data])
+            (run/'decision_library.json').write_text(json.dumps(library,indent=2)+'\n')
+            status['decision_rules']=library['unique_rules']
+            status['utility']='not_evaluated'
         if job["status"] == "drafts_created":
             drafts = run / "drafts-v03"
             call(str(HERE / "render_drafts_v03.py"), "--run", str(run),

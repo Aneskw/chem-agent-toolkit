@@ -13,7 +13,7 @@ HERE = Path(__file__).resolve().parent
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", default="gpt-6-astra")
+    parser.add_argument("--model", default="gpt-5.6-sol")
     parser.add_argument("--max-jobs", type=int, default=None)
     source = parser.add_mutually_exclusive_group()
     source.add_argument("--input", action="append", help="Local document/directory or public URL; repeatable")

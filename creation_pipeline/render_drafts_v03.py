@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from decision_library import render_rules
 
 
 def references(claims: list[dict]) -> str:
@@ -17,8 +18,17 @@ def references(claims: list[dict]) -> str:
 
 def render(candidate: dict, bundle: dict, check: dict) -> str:
     name = candidate["name"]
-    source_lines = [f"- {source['role']}: {source['url'] or source['path']} (source {source['id']}; SHA-256 {source['sha256']})"
-                    for source in bundle["sources"]]
+    description=' '.join(candidate['description'].split())
+    operation=' '.join(candidate['operation'].split())
+    claims=candidate['inputs']+candidate['outputs']+candidate['steps']+candidate.get('decisions',[])
+    claims += [item['reason'] for item in candidate['requirements']]
+    cited={c['source_id'] for claim in claims for c in claim['citations']}
+    grouped={}
+    for source in bundle['sources']:
+        if source['id'] in cited:
+            key=(source['role'],source['url'] or source['path'])
+            grouped.setdefault(key,[]).append(source['id'])
+    source_lines=[f"- {role}: {url} (sources {', '.join(ids)})." for (role,url),ids in grouped.items()]
     requirements = [f"- {item['kind']}: {item['path']} — {item['reason']['text']}"
                     for item in candidate["requirements"]]
     unknowns = [f"- {item}" for item in candidate["unknowns"]]
@@ -27,19 +37,23 @@ def render(candidate: dict, bundle: dict, check: dict) -> str:
         "---\n"
         f"name: {name}\n"
         "description: >\n"
-        f"  {candidate['description']} Invoke for: {candidate['operation']} Do not use as evidence of successful execution.\n"
+        f"  {description} Invoke for: {operation} Do not use as evidence of successful execution.\n"
         "license: undetermined\n"
-        "compatibility: Unverified draft; inspect requirements and source license before use\n"
+        "compatibility: Decision guidance; external model and data requirements below are not bundled\n"
         "allowed-tools: Read\n"
         "---\n\n"
         f"# {name.replace('-', ' ').title()}\n\n"
-        f"This cited draft describes {candidate['operation']} Applicable only when the listed inputs and resources exist. It is a `source_validated_candidate`, not an execution-validated package.\n\n"
+        f"This cited draft describes {operation} Applicable when the listed inputs and rule preconditions hold. "
+        "Do not apply outside the stated scope, use unavailable model predictions, or infer experimental feasibility from a model score. "
+        "It is a `source_validated_candidate`, not an execution-validated package.\n\n"
         "## Credibility\n\n"
         f"**Low confidence (Highly flexible)**. State: `{state}`. Source-line citations were checked, but semantic completeness, dependencies and execution have not been verified.\n\n"
-        "## Reference\n\n" + "\n".join(source_lines) + "\n\n"
+        "## Reference\n\nUse the cited primary text to check scientific scope; use pinned code to check implementation behavior. "
+        "README statements alone do not establish chemistry or execution. Inspect [the evidence index](references/evidence.json) "
+        "for each rule's quotes, source hashes and declared assumptions.\n\n" + "\n".join(source_lines) + "\n\n"
         "## Input & Output\n\nInputs:\n\n" + references(candidate["inputs"]) +
         "\n\nOutputs:\n\n" + references(candidate["outputs"]) + "\n\n"
-        "## Procedure Guidance\n\n" + references(candidate["steps"]) + "\n\n"
+        "## Procedure Guidance\n\n" + (render_rules(candidate)+'\n\n' if candidate.get('decisions') else '') + references(candidate["steps"]) + "\n\n"
         "## Matters & Troubleshooting\n\nResources:\n\n" + ("\n".join(requirements) or "- None identified.") +
         "\n\nUnknowns and limits:\n\n" + ("\n".join(unknowns) or "- No explicit unknowns recorded.") + "\n"
     )
@@ -62,6 +76,9 @@ def main() -> int:
         path = args.out / candidate["name"]
         path.mkdir(exist_ok=False)
         (path / "SKILL.md").write_text(render(candidate, bundle, check), encoding="utf-8")
+        refs=path/'references';refs.mkdir()
+        (refs/'evidence.json').write_text(json.dumps({'candidate':candidate,'audit':check,
+            'sources':[{k:v for k,v in s.items() if k!='lines'} for s in bundle['sources']]},indent=2)+'\n')
     print(json.dumps({"paper_id": args.paper_id, "drafts": len(response["candidates"]), "out": str(args.out)}))
     return 0
 

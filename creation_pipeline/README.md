@@ -2,15 +2,70 @@
 
 本目录从论文、数据库文档、工具文档和模型文档中抽取**带来源引用的方法候选**。单次工具调用会作为资源提示单独记录。模型生成 Skill 草稿，不等于代码可运行，也不等于该 Skill 能改善 agent 的化学任务表现。文档格式见 [FORMAT-v0.3.md](FORMAT-v0.3.md)。
 
-想亲自跑一遍“非 LocalRetro 论文 → 决策规则草稿 → 该用／不该用任务 → 有／无 Skill 对照”，请从[复现指南](../evaluation/method_decisions/RUN_THIS.md)开始。这里的任务生成和对照结果保存在 evaluation/method_decisions/。
+完整流程是“PDF + 固定版本代码 → 决策规则草稿 → 保守去重 → 三臂效果评测”。
+通用的无 Skill／原始来源／生成 Skill 对比见
+[三臂评测协议](../evaluation/decision_gain/PROTOCOL.md)。旧的双臂案例只作为历史负结果保留。
 
 ## 快速开始
+
+### 化学决策规则抽取（当前默认）
+
+默认模型为 `gpt-5.6-sol`，使用本机已登录的 Codex。新运行使用 schema v2：
+每条规则包含触发条件、所需信息、应选动作、应避免动作、依据、验证、停止或恢复、
+适用范围和精确来源。先抽取，再让模型对原始来源复核；两次调用都在临时目录中
+完成且不得使用工具。复核仍是模型审查，不等同于独立化学家审查。
+
+任意 PDF / Git 仓库无需加入 `repo_map.json`：
+
+```bash
+python3 creation_pipeline/pair_sources.py \
+  --pdf /path/to/paper.pdf --repo /path/to/git-checkout \
+  --ref COMMIT --paper-id new-paper --out creation_pipeline/intakes/new-paper
+python3 creation_pipeline/run_pipeline.py \
+  --config creation_pipeline/intakes/new-paper/config.json \
+  --model gpt-5.6-sol --run-id new-paper-v2
+```
+
+`--pdf` 也可传公开下载网址，`--repo` 可传 HTTPS/SSH Git URL。读取选定 commit 的
+Git 对象，不把工作区未提交修改当成该版本。默认按文件名选择最多 16 个代码/文档
+文件，并在 `source_pair.json` 列出未读文件；重要入口可重复传 `--file` 精确指定。
+真正的 PDF 全文是必需输入，不能把 CSV、摘要或 HTML 改后缀伪装成论文。
+图片、扫描页和化学结构图需要另外核读/OCR；当前文字抽取不理解这些图形。
+
+旧响应仍按其 schema 版本回放；`--legacy-extraction` 用于新的旧流程对照。
+schema v2 的 `decisions[]` 属于方法层；数据库、工具、模型分类仍保持原子资源目录
+约定。不会把一个命令包装成化学思维 skill。
+
+所有生成草稿遵循 [FORMAT-v0.3.md](FORMAT-v0.3.md)：五个 frontmatter 字段、标题及
+正反适用条件，随后依次为 Credibility、Reference、Input & Output、Procedure Guidance、
+Matters & Troubleshooting。来源许可未核实时保留 `undetermined`；不会自动声称 MIT。
+source-checked 草稿默认 low confidence，agent 效果另行记录。
+
+每次 v2 运行保存 `decision_library.json`。跨运行简单去重与抽象：
+
+```bash
+python3 creation_pipeline/decision_library.py \
+  --run creation_pipeline/runs/first --run creation_pipeline/runs/second \
+  --out creation_pipeline/results/combined-decision-library.json
+```
+
+只合并条件、动作、机制及适用边界都完全相同的规则（仅规范化空白），保留所有原文
+引用和来源哈希。相似动作但不同范围的候选保留为变体；不会把相反分数方向、立体化学
+记号或不同实现自动合并。抽象是复用有边界的条件策略，不是再生成一个更宽泛的口号。
+
+效果验证见 [decision_gain/PROTOCOL.md](../evaluation/decision_gain/PROTOCOL.md)：
+由看不到待测 Skill 的独立评审者基于来源出题，并冻结任务、答案和判分器；同一模型分别
+运行无 Skill / 原始来源 / 生成 Skill 三组。`plan` 可在不调用模型的情况下验证材料绑定、
+盲化锁、三臂调度和 prompt 哈希；`run` 才执行正式对比。结果保留每次原始回答和 token
+数，并报告配对差值及不确定性。任务成功率不提高时不授予效果验证状态。本仓库没有把
+离线流程测试表述成真实 Skill 有效性结果。旧版负结果见
+[method_decisions/RESULTS.md](../evaluation/method_decisions/RESULTS.md)。
 
 以下命令均在仓库根目录运行。可把 python3 换成项目的 .venv-eval/bin/python。处理 PDF 需要 pypdf；调用模型需要本机已经登录的 codex 命令行工具。本流程使用 Codex 登录状态，不读取 OPENAI_API_KEY。
 
 ~~~bash
 python3 creation_pipeline/collect.py --paper-id 2GFR874J
-python3 creation_pipeline/run_pipeline.py --paper-id 2GFR874J --model gpt-6-astra
+python3 creation_pipeline/run_pipeline.py --paper-id 2GFR874J --model gpt-5.6-sol
 ~~~
 
 第一条命令联网收集来源。第二条命令准备来源文本、调用模型、核对引用原文及行号、生成 v0.3 草稿并检查格式。结果写入 creation_pipeline/results/<run-id>.json，包含阶段、状态及来源／响应哈希。这里的 LocalRetro 只是原有单篇命令示例；非 LocalRetro 的完整案例见上面的复现指南。
@@ -50,7 +105,7 @@ LocalRetro 全文按 CC BY-NC-ND 4.0 许可仅在本机处理；RetroXpert 的 a
 ~~~bash
 .venv-eval/bin/python creation_pipeline/batch_pipeline.py \
   --manifest /path/to/batch-manifest.json \
-  --model gpt-6-astra \
+  --model gpt-5.6-sol \
   --rounds 1 \
   --push
 ~~~
@@ -61,7 +116,7 @@ LocalRetro 全文按 CC BY-NC-ND 4.0 许可仅在本机处理；RetroXpert 的 a
 
 ~~~bash
 .venv-eval/bin/python creation_pipeline/mine_available.py \
-  --model gpt-6-astra \
+  --model gpt-5.6-sol \
   --rounds 1 \
   --push
 ~~~
@@ -77,7 +132,7 @@ acquire_catalog_sources.py 扫描 papers.jsonl，尝试 arXiv、PMLR、开放出
 ~~~bash
 .venv-eval/bin/python creation_pipeline/batch_pipeline.py \
   --manifest creation_pipeline/acquired_manifest.json \
-  --model gpt-6-astra --max-jobs 20 \
+  --model gpt-5.6-sol --max-jobs 20 \
   --prefix public20-$(date +%Y%m%d-%H%M%S) --push
 ~~~
 
@@ -107,12 +162,12 @@ run_public_pipeline.py 可接受本地文档、目录、公开 URL、混合 JSON
 # 本地论文目录
 .venv-eval/bin/python creation_pipeline/run_public_pipeline.py \
   --input /absolute/path/to/papers --source-type paper \
-  --target-candidates 20 --model gpt-6-astra --push
+  --target-candidates 20 --model gpt-5.6-sol --push
 
 # 数据库文档网址，不是直接连接数据库
 .venv-eval/bin/python creation_pipeline/run_public_pipeline.py \
   --input https://example.org/database/api-documentation \
-  --source-type database --target-candidates 2 --model gpt-6-astra
+  --source-type database --target-candidates 2 --model gpt-5.6-sol
 
 # 混合来源清单
 .venv-eval/bin/python creation_pipeline/run_public_pipeline.py \

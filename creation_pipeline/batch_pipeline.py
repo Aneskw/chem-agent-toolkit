@@ -39,7 +39,7 @@ def absolute_job(job: dict, manifest_dir: Path) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, required=True, help="JSON manifest with jobs[]")
-    parser.add_argument("--model", default="gpt-6-astra")
+    parser.add_argument("--model", default="gpt-5.6-sol")
     parser.add_argument("--rounds", type=int, default=1, help="Independent passes per source")
     parser.add_argument("--max-jobs", type=int, default=None, help="Process at most this many manifest jobs")
     parser.add_argument("--start-index", type=int, default=0, help="Zero-based manifest offset for resuming a batch")

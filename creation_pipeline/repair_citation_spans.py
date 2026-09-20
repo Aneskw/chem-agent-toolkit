@@ -34,6 +34,7 @@ def repair(response: dict, bundle: dict) -> tuple[dict, list[dict]]:
     for candidate in response["candidates"]:
         claims = candidate["inputs"] + candidate["outputs"] + candidate["steps"]
         claims += [item["reason"] for item in candidate["requirements"]]
+        claims += candidate.get('decisions',[])
         for claim in claims:
             for citation in claim["citations"]:
                 source = sources[citation["source_id"]]
@@ -53,7 +54,18 @@ def repair(response: dict, bundle: dict) -> tuple[dict, list[dict]]:
                                 matches.append((start, end, exact_quote, "whitespace_only"))
                 minimal = sorted(matches, key=lambda span: (span[1] - span[0], abs(span[0] - old[0]) + abs(span[1] - old[1])))
                 if not minimal:
-                    raise ValueError(f"Quote not found near {citation['source_id']}:{old}")
+                    # A model may report a shifted line or collapse layout whitespace.
+                    # Relocate only a UNIQUE verbatim token sequence in this same
+                    # source, restoring the actual bytes rather than editing evidence.
+                    text='\n'.join(lines)
+                    pattern=r'\s+'.join(re.escape(word) for word in citation['quote'].split())
+                    matches=list(re.finditer(pattern,text)) if pattern else []
+                    if len(matches)!=1:raise ValueError(f"Quote missing or ambiguous in {citation['source_id']}:{old}: {citation['quote']!r}")
+                    match=matches[0];exact=text[match.start():match.end()]
+                    start=text[:match.start()].count('\n')+1
+                    end=text[:match.end()].count('\n')+1
+                    if end-start>25 or not 8<=len(exact)<=240:raise ValueError('Relocated quote exceeds citation limits')
+                    minimal=[(start,end,exact,'unique_source_whitespace_match')]
                 best = minimal[0]
                 if len(minimal) > 1 and minimal[1][1] - minimal[1][0] == best[1] - best[0]:
                     raise ValueError(f"Ambiguous citation span near {citation['source_id']}:{old}")
