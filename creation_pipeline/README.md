@@ -1,8 +1,7 @@
 # 论文到 Skill 的创建流程
 
-本目录从论文、数据库文档、工具文档和模型文档中抽取**带来源引用的方法候选**。单次工具调用会作为资源提示单独记录。模型生成 Skill 草稿，不等于代码可运行，也不等于该 Skill 能改善 agent 的化学任务表现。文档格式见 [FORMAT-v0.3.md](FORMAT-v0.3.md)。
+本目录从论文、数据库文档、工具文档和模型文档中抽取**带来源引用的方法候选**。单次工具调用会作为资源提示单独记录。文档格式见 [FORMAT-v0.3.md](FORMAT-v0.3.md)。
 
-想亲自跑一遍“非 LocalRetro 论文 → 决策规则草稿 → 该用／不该用任务 → 有／无 Skill 对照”，请从[复现指南](../evaluation/method_decisions/RUN_THIS.md)开始。这里的任务生成和对照结果保存在 evaluation/method_decisions/。
 
 ## 快速开始
 
