@@ -214,3 +214,72 @@ records the actual candidate count. It may be smaller than 20 because a paper
 can yield zero candidates or because the model service fails. Each generated
 candidate is source-validated and citation-checked; execution and agent-effect
 validation remain separate stages.
+
+## General paper and database ingestion
+
+The entry point is no longer restricted to the 52-paper catalog or named
+repositories. Supply a document, directory, public URL, or mixed JSON catalog:
+
+```bash
+# All supported documents in a local paper directory
+.venv-eval/bin/python creation_pipeline/run_public_pipeline.py \
+  --input /absolute/path/to/papers --source-type paper \
+  --target-candidates 20 --model gpt-6-astra --push
+
+# Database documentation URL (not a raw database connection)
+.venv-eval/bin/python creation_pipeline/run_public_pipeline.py \
+  --input https://example.org/database/api-documentation \
+  --source-type database --target-candidates 2 --model gpt-6-astra
+
+# Heterogeneous sources and multiple supporting documents per resource
+.venv-eval/bin/python creation_pipeline/run_public_pipeline.py \
+  --catalog /absolute/path/to/sources.json --target-candidates 20 --push
+```
+
+Example `sources.json` (paths resolve relative to this file):
+
+```json
+{
+  "items": [
+    {"id": "paper-a", "source_type": "paper", "title": "A new paper",
+     "sources": [{"path": "paper.pdf"}, {"path": "supplement.md"}]},
+    {"id": "database-b", "source_type": "database", "title": "A new database",
+     "sources": [{"url": "https://example.org/api-docs"},
+                 {"path": "schema.sqlite"},
+                 {"path": "data-dictionary.md"}]}
+  ]
+}
+```
+
+To acquire and inspect sources without calling a model:
+
+```bash
+.venv-eval/bin/python creation_pipeline/ingest_sources.py \
+  --catalog /absolute/path/to/sources.json \
+  --out creation_pipeline/intakes/my-sources
+```
+
+Supported inputs: text PDFs, JATS XML, HTML, Markdown, plain text, DOCX,
+notebooks, JSON/JSONL, YAML/OpenAPI, SQL, CSV/TSV and local SQLite schemas.
+SQLite access is read-only and exports schema only, not table records.
+CSV/TSV rows default to metadata: provide documentation to support a procedure.
+Remote input follows explicit PDF links on paper landing pages; a detected
+abstract/access-challenge page is rejected. HTML screening is heuristic and
+still needs source review. This is not an unrestricted website crawler.
+
+Long documents are normalized into bounded segments with original file hashes,
+pages, URLs and a segment inventory in `ingestion_report.json`. Every primary
+text segment is queued rather than silently skipped due to context length.
+Segments are extracted independently; cross-segment synthesis is not claimed.
+Failures remain recorded per input while other inputs continue.
+
+The pipeline does not promise useful skills from every paper or database.
+Scanned PDFs require OCR; authenticated/private databases require the user to
+export authorized documentation/schema; a method absent from the supplied
+material produces no supported skill. Source citations and package format are
+checked; execution and agent-utility experiments are separate.
+
+On macOS the model subprocess now inherits explicit proxy environment variables,
+or uses the enabled system HTTPS proxy when none is set. This fixes the observed
+case where the app connected but CLI sampling timed out. It never changes the
+system's proxy configuration.

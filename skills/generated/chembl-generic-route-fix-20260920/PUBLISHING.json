@@ -1,0 +1,12 @@
+{
+  "run_id": "chembl-generic-route-fix-20260920",
+  "paper_id": "source-001-part001",
+  "model_origin": "saved_response_replay",
+  "source_scope": "database_primary_text",
+  "source_text_complete": true,
+  "candidate_count": 4,
+  "publication_state": "source_validated_candidate",
+  "execution_validated": false,
+  "agent_effect_validated": false,
+  "note": "Published automatically after source citation, schema, and format checks; no execution or agent utility test was run."
+}

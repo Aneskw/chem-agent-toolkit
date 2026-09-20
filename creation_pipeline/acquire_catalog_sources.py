@@ -9,6 +9,8 @@ import re
 import ssl
 import urllib.parse
 import urllib.request
+from ingest_sources import download
+from core.creation_sources import read_documents
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "acquired"
@@ -65,8 +67,11 @@ def candidates(row: dict) -> list[tuple[str, str]]:
         # a publisher landing page.  The mailto parameter keeps the request in
         # their polite pool and avoids treating a transient rate limit as a
         # permanent missing source.
-        output.append((f"https://api.openalex.org/works/https://doi.org/{encoded}?mailto=chem.skillnet@example.org", "openalex_record"))
-        output.append((f"https://api.unpaywall.org/v2/{encoded}?email=chem.skillnet@example.org", "unpaywall_record"))
+        output.append((f"https://api.openalex.org/works/https://doi.org/{encoded}", "openalex_record"))
+        import os
+        if os.environ.get('CHEMSKILL_CONTACT_EMAIL'):
+            email=urllib.parse.quote(os.environ['CHEMSKILL_CONTACT_EMAIL'],safe='')
+            output.append((f"https://api.unpaywall.org/v2/{encoded}?email={email}", "unpaywall_record"))
         output.append((f"https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:{encoded}&format=json", "europepmc_search"))
         if "onlinelibrary.wiley.com" in url:
             output.append((url.replace("/abs/", "/pdf/") if "/abs/" in url else url.replace("/abstract/", "/pdf/"), "wiley_pdf"))
@@ -122,11 +127,25 @@ def main() -> int:
         target = OUT / paper_id
         target.mkdir(parents=True, exist_ok=True)
         queue = candidates(row)
+        # Reuse previously discovered public URLs; recheck content rather than
+        # equating an HTTP 200 landing page with a full article.
+        previous=HERE/'acquisition_report.json'
+        if previous.exists():
+            prior=next((p for p in json.loads(previous.read_text()).get('papers',[]) if p['paper_id']==paper_id),{})
+            if prior.get('acquired'):queue.insert(0,(prior['acquired']['url'],'previous_public_url'))
         acquired = None
         attempted = []
         while queue and acquired is None:
             url, kind = queue.pop(0)
             try:
+                if kind not in {'openalex_record','europepmc_search','unpaywall_record'}:
+                    destination,final_url,digest=download(url,target,'paper')
+                    docs=read_documents(destination)
+                    if sum(len(t) for _,t in docs)<1000:raise ValueError('Insufficient article text')
+                    acquired={'url':final_url,'kind':kind,'path':str(destination.relative_to(HERE)),
+                              'sha256':digest,'bytes':destination.stat().st_size}
+                    attempted.append({'url':url,'kind':kind,'status':'acquired'})
+                    continue
                 data, content_type = get(url)
                 if kind == "openalex_record":
                     queue[0:0] = openalex_links(data)

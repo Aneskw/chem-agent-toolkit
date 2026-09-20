@@ -64,10 +64,25 @@ def validate(response,bundle):
         missing=[];external=[]
         for requirement in candidate['requirements']:
             raw_path=requirement['path']
+            if (requirement['kind']=='external_asset' and bundle.get('source_type')=='database'
+                    and raw_path.startswith('/') and not raw_path.startswith('//')):
+                # API route templates such as /molecule/:id are identifiers in
+                # database documentation, never local files to open/execute.
+                if '..' in PurePosixPath(urlsplit(raw_path).path).parts or '\\' in raw_path:
+                    raise ValueError('Unsafe API route template')
+                external.append(raw_path)
+                continue
             if requirement['kind']=='external_asset' and raw_path.startswith('https://'):
                 parsed=urlsplit(raw_path)
                 if not parsed.hostname or parsed.username or parsed.password or '..' in PurePosixPath(parsed.path).parts:
                     raise ValueError('Unsafe external resource URL')
+                external.append(raw_path)
+                continue
+            if requirement['kind']=='external_asset' and ': ' in raw_path:
+                # A cited publication/resource label is descriptive metadata,
+                # not a filesystem path. Preserve it without dereferencing it.
+                if raw_path.startswith(('/', '\\')) or re.match(r'^[A-Za-z]:',raw_path) or '://' in raw_path:
+                    raise ValueError('Unsafe external resource identifier')
                 external.append(raw_path)
                 continue
             path=PurePosixPath(raw_path)

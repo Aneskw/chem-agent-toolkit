@@ -1,30 +1,30 @@
 {
   "total": 52,
-  "acquired": 31,
-  "source_missing": 21,
+  "acquired": 33,
+  "source_missing": 19,
   "papers": [
     {
       "paper_id": "3MEL5L54",
       "title": "Bayesian reaction optimization as a tool for chemical synthesis",
       "source_url": "https://www-nature-com.remotexs.ntu.edu.sg/articles/s41586-021-03213-y",
-      "status": "source_missing",
-      "acquired": null,
+      "status": "acquired",
+      "acquired": {
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-021-03213-y/MediaObjects/41586_2021_3213_MOESM1_ESM.pdf",
+        "kind": "openalex_landing_page_url",
+        "path": "acquired/3MEL5L54/4baad2ca8692b0f1.pdf",
+        "sha256": "4baad2ca8692b0f13f519f048bb3c66e2b03e32e6fd147823f7297320fdffcc0",
+        "bytes": 9436682
+      },
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1038%2Fs41586-021-03213-y?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1038%2Fs41586-021-03213-y",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1038%2Fs41586-021-03213-y?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
           "status": "metadata"
         },
         {
-          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1038%2Fs41586-021-03213-y&format=json",
-          "kind": "europepmc_search",
-          "status": "metadata"
+          "url": "https://doi.org/10.1038/s41586-021-03213-y",
+          "kind": "openalex_landing_page_url",
+          "status": "acquired"
         }
       ]
     },
@@ -32,24 +32,24 @@
       "paper_id": "X4QW3UVV",
       "title": "A generalized-template-based graph neural network for accurate organic reactivity prediction",
       "source_url": "https://www-nature-com.remotexs.ntu.edu.sg/articles/s42256-022-00526-z",
-      "status": "source_missing",
-      "acquired": null,
+      "status": "acquired",
+      "acquired": {
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs42256-022-00526-z/MediaObjects/42256_2022_526_MOESM1_ESM.pdf",
+        "kind": "openalex_landing_page_url",
+        "path": "acquired/X4QW3UVV/6c9081f778838327.pdf",
+        "sha256": "6c9081f778838327306d6436f5cd8439ae009aebb99e1fe6b42e52ce1e0bdd12",
+        "bytes": 1838398
+      },
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1038%2Fs42256-022-00526-z?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1038%2Fs42256-022-00526-z",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1038%2Fs42256-022-00526-z?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
           "status": "metadata"
         },
         {
-          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1038%2Fs42256-022-00526-z&format=json",
-          "kind": "europepmc_search",
-          "status": "metadata"
+          "url": "https://doi.org/10.1038/s42256-022-00526-z",
+          "kind": "openalex_landing_page_url",
+          "status": "acquired"
         }
       ]
     },
@@ -72,30 +72,42 @@
       "paper_id": "EVX236A9",
       "title": "Predicting Retrosynthetic Reactions Using Self-Corrected Transformer Neural Networks",
       "source_url": "https://doi.org/10.1021/acs.jcim.9b00949",
-      "status": "acquired",
-      "acquired": {
-        "url": "http://hdl.handle.net/10072/393279",
-        "kind": "unpaywall_url",
-        "path": "acquired/EVX236A9/paper.html",
-        "sha256": "6758556a903ee3be3f6d8cdb2897b33cff72f20644fa4a6b0e6a251914fa7f7e",
-        "bytes": 509861
-      },
+      "status": "source_missing",
+      "acquired": null,
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1021%2Facs.jcim.9b00949?mailto=chem.skillnet@example.org",
-          "kind": "openalex_record",
+          "url": "http://hdl.handle.net/10072/393279",
+          "kind": "previous_public_url",
           "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
+          "error": "Landing/abstract page: supply the full PDF or article body"
         },
         {
-          "url": "https://api.unpaywall.org/v2/10.1021%2Facs.jcim.9b00949?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1021%2Facs.jcim.9b00949",
+          "kind": "openalex_record",
           "status": "metadata"
         },
         {
+          "url": "https://doi.org/10.1021/acs.jcim.9b00949",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/31825611",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
+        },
+        {
           "url": "http://hdl.handle.net/10072/393279",
-          "kind": "unpaywall_url",
-          "status": "acquired"
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "Landing/abstract page: supply the full PDF or article body"
+        },
+        {
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1021%2Facs.jcim.9b00949&format=json",
+          "kind": "europepmc_search",
+          "status": "metadata"
         }
       ]
     },
@@ -105,16 +117,16 @@
       "source_url": "http://arxiv.org/abs/2011.02893",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2011.02893.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/74LHJIVM/paper.pdf",
+        "url": "https://arxiv.org/pdf/2011.02893",
+        "kind": "previous_public_url",
+        "path": "acquired/74LHJIVM/370efa2febec1d01.pdf",
         "sha256": "370efa2febec1d019342f681faf4cd5d1a7fbd77375e1c8058737807d4b81846",
         "bytes": 3807502
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2011.02893.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -127,15 +139,27 @@
       "acquired": null,
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1016%2Fj.cej.2021.129845?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1016%2Fj.cej.2021.129845",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
+          "status": "metadata"
         },
         {
-          "url": "https://api.unpaywall.org/v2/10.1016%2Fj.cej.2021.129845?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
+          "url": "https://doi.org/10.1016/j.cej.2021.129845",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "Landing/abstract page: supply the full PDF or article body"
+        },
+        {
+          "url": "http://ir.lzu.edu.cn/handle/262010/452439",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 502: Bad Gateway"
+        },
+        {
+          "url": "http://ir.lzu.edu.cn/handle/262010/470006",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 502: Bad Gateway"
         },
         {
           "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1016%2Fj.cej.2021.129845&format=json",
@@ -150,16 +174,16 @@
       "source_url": "https://proceedings.mlr.press/v162/wan22a.html",
       "status": "acquired",
       "acquired": {
-        "url": "https://proceedings.mlr.press/v162/wan22a.html",
-        "kind": "pmlr_html",
-        "path": "acquired/H9EHIF3J/paper.html",
-        "sha256": "f28318f2e826a6f6140e47e2e69ce69802036b45f46d2850a241bf6de76374e1",
-        "bytes": 15320
+        "url": "https://proceedings.mlr.press/v162/wan22a/wan22a.pdf",
+        "kind": "previous_public_url",
+        "path": "acquired/H9EHIF3J/1c353380b883803c.pdf",
+        "sha256": "1c353380b883803c52f0e26cfc8b8c64daeeb8cd9dac90dde2fb00ab2b83db41",
+        "bytes": 5555125
       },
       "attempts": [
         {
           "url": "https://proceedings.mlr.press/v162/wan22a.html",
-          "kind": "pmlr_html",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -172,15 +196,21 @@
       "acquired": null,
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1021%2Facs.jcim.2c00321?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1021%2Facs.jcim.2c00321",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
+          "status": "metadata"
         },
         {
-          "url": "https://api.unpaywall.org/v2/10.1021%2Facs.jcim.2c00321?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
+          "url": "https://doi.org/10.1021/acs.jcim.2c00321",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35881916",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
         },
         {
           "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1021%2Facs.jcim.2c00321&format=json",
@@ -195,16 +225,16 @@
       "source_url": "https://www.nature.com/articles/s41467-020-19266-y",
       "status": "acquired",
       "acquired": {
-        "url": "https://www.nature.com/articles/s41467-020-19266-y.pdf",
-        "kind": "nature_pdf",
-        "path": "acquired/CABX3BR4/paper.pdf",
+        "url": "https://www.nature.com/articles/s41467-020-19266-y.pdf?error=cookies_not_supported&code=14cf15cd-f47b-4b20-9e01-291e70a091d3",
+        "kind": "previous_public_url",
+        "path": "acquired/CABX3BR4/1f073de5ac5ce971.pdf",
         "sha256": "1f073de5ac5ce97182dd8eac2aa73960b25e29a3f4a3e86c9626a575eac0f8d8",
         "bytes": 861735
       },
       "attempts": [
         {
           "url": "https://www.nature.com/articles/s41467-020-19266-y.pdf",
-          "kind": "nature_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -217,15 +247,27 @@
       "acquired": null,
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1002%2Fanie.201506101?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1002%2Fanie.201506101",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
+          "status": "metadata"
         },
         {
-          "url": "https://api.unpaywall.org/v2/10.1002%2Fanie.201506101?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
+          "url": "https://doi.org/10.1002/anie.201506101",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27062365",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
+        },
+        {
+          "url": "https://scholarworks.unist.ac.kr/handle/201301/19407",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "Landing/abstract page: supply the full PDF or article body"
         },
         {
           "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1002%2Fanie.201506101&format=json",
@@ -254,16 +296,16 @@
       "source_url": "http://arxiv.org/abs/2003.12725",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2003.12725.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/P2R8K7X3/paper.pdf",
+        "url": "https://arxiv.org/pdf/2003.12725",
+        "kind": "previous_public_url",
+        "path": "acquired/P2R8K7X3/d06c825be76b51dd.pdf",
         "sha256": "d06c825be76b51dd24c8a6d1b8c0a8a01731bb0b82796bdc952eca0bdd39a2ad",
         "bytes": 612897
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2003.12725.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -274,51 +316,16 @@
       "source_url": "http://xlink.rsc.org/?DOI=C9SC05704H",
       "status": "acquired",
       "acquired": {
-        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/8152799",
-        "kind": "unpaywall_url",
-        "path": "acquired/RM7L9XDU/paper.html",
-        "sha256": "6c3a25da99a3dafd9a0412f47fe10703873b6bdaf40cc3ef6984d29647cf4c3b",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8152799/",
+        "kind": "previous_public_url",
+        "path": "acquired/RM7L9XDU/45f95b33119e6bb8.html",
+        "sha256": "45f95b33119e6bb86bd2a02df6578c7444cbc554b38e7749e617322a9e1103d0",
         "bytes": 197367
       },
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1039%2Fc9sc05704h?mailto=chem.skillnet@example.org",
-          "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1039%2Fc9sc05704h?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
-        },
-        {
-          "url": "https://pubs.rsc.org/en/content/articlepdf/2020/sc/c9sc05704h",
-          "kind": "unpaywall_url_for_pdf",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "https://pubs.rsc.org/en/content/articlepdf/2020/sc/c9sc05704h",
-          "kind": "unpaywall_url",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "https://pubs.rsc.org/en/content/articlepdf/2020/sc/c9sc05704h",
-          "kind": "unpaywall_url_for_pdf",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "https://pubs.rsc.org/en/content/articlepdf/2020/sc/c9sc05704h",
-          "kind": "unpaywall_url",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
           "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/8152799",
-          "kind": "unpaywall_url",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -329,27 +336,16 @@
       "source_url": "https://ojs.aaai.org/index.php/AAAI/article/view/16131",
       "status": "acquired",
       "acquired": {
-        "url": "https://doi.org/10.1609/aaai.v35i1.16131",
-        "kind": "unpaywall_url",
-        "path": "acquired/DMXL3WVG/paper.html",
-        "sha256": "0aa55d63047f12ea9a01caa26c9f3866616c84d771b9772596ee42cf51886372",
-        "bytes": 4991
+        "url": "https://ojs.aaai.org/index.php/AAAI/article/download/16131/15938",
+        "kind": "previous_public_url",
+        "path": "acquired/DMXL3WVG/30b763691a94b4f9.pdf",
+        "sha256": "30b763691a94b4f95444b7d387313084a5ab2dc4596ae511daefab1d0be1d8d4",
+        "bytes": 368358
       },
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1609%2Faaai.v35i1.16131?mailto=chem.skillnet@example.org",
-          "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1609%2Faaai.v35i1.16131?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
-        },
-        {
           "url": "https://doi.org/10.1609/aaai.v35i1.16131",
-          "kind": "unpaywall_url",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -360,16 +356,16 @@
       "source_url": "http://arxiv.org/abs/1711.04810",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/1711.04810.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/LJMZ9IL6/paper.pdf",
+        "url": "https://arxiv.org/pdf/1711.04810",
+        "kind": "previous_public_url",
+        "path": "acquired/LJMZ9IL6/6dfa50a0a880e1f6.pdf",
         "sha256": "6dfa50a0a880e1f699335c8d5b14500ad56904a852091bb9bea607d10f39e0f4",
         "bytes": 838019
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/1711.04810.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -380,16 +376,16 @@
       "source_url": "http://arxiv.org/abs/2209.15315",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2209.15315.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/52TVS7QP/paper.pdf",
+        "url": "https://arxiv.org/pdf/2209.15315",
+        "kind": "previous_public_url",
+        "path": "acquired/52TVS7QP/ae04ba2f59f117fb.pdf",
         "sha256": "ae04ba2f59f117fbde91c670778970757b3485a48ef21e88941648ba16489204",
         "bytes": 914726
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2209.15315.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -402,15 +398,21 @@
       "acquired": null,
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1021%2Facs.jcim.0c01074?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1021%2Facs.jcim.0c01074",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
+          "status": "metadata"
         },
         {
-          "url": "https://api.unpaywall.org/v2/10.1021%2Facs.jcim.0c01074?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
+          "url": "https://doi.org/10.1021/acs.jcim.0c01074",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33410697",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
         },
         {
           "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1021%2Facs.jcim.0c01074&format=json",
@@ -423,24 +425,24 @@
       "paper_id": "DZT4L37P",
       "title": "BiG2S: A dual task graph-to-sequence model for the end-to-end template-free reaction prediction",
       "source_url": "https://doi.org/10.1007/s10489-023-05048-8",
-      "status": "source_missing",
-      "acquired": null,
+      "status": "acquired",
+      "acquired": {
+        "url": "https://link.springer.com/content/pdf/10.1007/s10489-023-05048-8.pdf?error=cookies_not_supported&code=49329f13-d7c9-4bac-b8ef-e665d17cbad8",
+        "kind": "openalex_landing_page_url",
+        "path": "acquired/DZT4L37P/49a3cb1932fe43ee.pdf",
+        "sha256": "49a3cb1932fe43eec2fd7f6dc796bbbcc4c68ed83a2d785e9bd9e5f8a6b87f8a",
+        "bytes": 1989460
+      },
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1007%2Fs10489-023-05048-8?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1007%2Fs10489-023-05048-8",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1007%2Fs10489-023-05048-8?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
           "status": "metadata"
         },
         {
-          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1007%2Fs10489-023-05048-8&format=json",
-          "kind": "europepmc_search",
-          "status": "metadata"
+          "url": "https://doi.org/10.1007/s10489-023-05048-8",
+          "kind": "openalex_landing_page_url",
+          "status": "acquired"
         }
       ]
     },
@@ -452,37 +454,19 @@
       "acquired": null,
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1145%2F3583780.3614865?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1145%2F3583780.3614865",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1145%2F3583780.3614865?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
           "status": "metadata"
         },
         {
           "url": "https://dl.acm.org/doi/pdf/10.1145/3583780.3614865",
-          "kind": "unpaywall_url_for_pdf",
+          "kind": "openalex_pdf_url",
           "status": "error",
           "error": "HTTP Error 403: Forbidden"
         },
         {
-          "url": "https://dl.acm.org/doi/pdf/10.1145/3583780.3614865",
-          "kind": "unpaywall_url",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "https://dl.acm.org/doi/pdf/10.1145/3583780.3614865",
-          "kind": "unpaywall_url_for_pdf",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "https://dl.acm.org/doi/pdf/10.1145/3583780.3614865",
-          "kind": "unpaywall_url",
+          "url": "https://doi.org/10.1145/3583780.3614865",
+          "kind": "openalex_landing_page_url",
           "status": "error",
           "error": "HTTP Error 403: Forbidden"
         },
@@ -499,16 +483,16 @@
       "source_url": "http://arxiv.org/abs/2001.01408",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2001.01408.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/29BYRNCZ/paper.pdf",
+        "url": "https://arxiv.org/pdf/2001.01408",
+        "kind": "previous_public_url",
+        "path": "acquired/29BYRNCZ/79e0d76657f2a638.pdf",
         "sha256": "79e0d76657f2a638375ef01308796a6089759aceae85a9314f2bb9f6ea79aeac",
         "bytes": 1845812
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2001.01408.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -519,45 +503,16 @@
       "source_url": "https://doi.org/10.1021/jacsau.1c00246",
       "status": "acquired",
       "acquired": {
-        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/8549044",
-        "kind": "unpaywall_url",
-        "path": "acquired/2GFR874J/paper.html",
-        "sha256": "4ac9a219825c0b6bbd389e639bc8f3eab08f5316253e2e21dbcc8b5499a3c6f2",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8549044/",
+        "kind": "previous_public_url",
+        "path": "acquired/2GFR874J/376758c849d27f93.html",
+        "sha256": "376758c849d27f9316a9a955ff86351d515fcd7c65e74be52e27d90c88e32bf1",
         "bytes": 179970
       },
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1021%2Fjacsau.1c00246?mailto=chem.skillnet@example.org",
-          "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1021%2Fjacsau.1c00246?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
-        },
-        {
-          "url": "https://doi.org/10.1021/jacsau.1c00246",
-          "kind": "unpaywall_url",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "https://doi.org/10.1021/jacsau.1c00246",
-          "kind": "unpaywall_url",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "http://europepmc.org/pmc/articles/PMC8549044",
-          "kind": "unpaywall_url",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
           "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/8549044",
-          "kind": "unpaywall_url",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -568,16 +523,16 @@
       "source_url": "http://arxiv.org/abs/2006.15820",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2006.15820.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/KNGUQJ73/paper.pdf",
+        "url": "https://arxiv.org/pdf/2006.15820",
+        "kind": "previous_public_url",
+        "path": "acquired/KNGUQJ73/2a568276845af240.pdf",
         "sha256": "2a568276845af24022d74062b460debb9852d48e3af254bb7862dc0a118e45f9",
         "bytes": 1607885
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2006.15820.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -588,16 +543,16 @@
       "source_url": "http://arxiv.org/abs/2202.08205",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2202.08205.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/BTJ7PAYZ/paper.pdf",
+        "url": "https://arxiv.org/pdf/2202.08205",
+        "kind": "previous_public_url",
+        "path": "acquired/BTJ7PAYZ/82f45d345e57976e.pdf",
         "sha256": "82f45d345e57976e82046ceebc6c35a5e48e96bb2e40b1248aeade653532e49e",
         "bytes": 2894397
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2202.08205.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -608,16 +563,16 @@
       "source_url": "http://arxiv.org/abs/2404.00044",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2404.00044.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/C5HMZZWJ/paper.pdf",
+        "url": "https://arxiv.org/pdf/2404.00044",
+        "kind": "previous_public_url",
+        "path": "acquired/C5HMZZWJ/1a3523f5d40fefa8.pdf",
         "sha256": "1a3523f5d40fefa8784166d82adfb9c7ee695a3b20e5af5de5a10677f6dc302d",
         "bytes": 2441220
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2404.00044.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -628,33 +583,16 @@
       "source_url": "https://jcheminf.biomedcentral.com/articles/10.1186/s13321-018-0269-8",
       "status": "acquired",
       "acquired": {
-        "url": "https://jcheminf.biomedcentral.com/counter/pdf/10.1186/s13321-018-0269-8",
-        "kind": "unpaywall_url_for_pdf",
-        "path": "acquired/SJW9P6LU/paper.pdf",
+        "url": "https://link.springer.com/content/pdf/10.1186/s13321-018-0269-8.pdf?error=cookies_not_supported&code=34ba3386-082f-42a5-a44e-a4689b643270",
+        "kind": "previous_public_url",
+        "path": "acquired/SJW9P6LU/7d43815aee008713.pdf",
         "sha256": "7d43815aee008713d0f180c1e677a21073012fdcf3b9c2468a689f0bdf206d39",
         "bytes": 2453200
       },
       "attempts": [
         {
-          "url": "https://jcheminf.biomedcentral.com/articles/10.1186/s13321-018-0269-8.pdf",
-          "kind": "bmc_pdf",
-          "status": "error",
-          "error": "HTTP Error 404: Not Found"
-        },
-        {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1186%2Fs13321-018-0269-8?mailto=chem.skillnet@example.org",
-          "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1186%2Fs13321-018-0269-8?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
-        },
-        {
           "url": "https://jcheminf.biomedcentral.com/counter/pdf/10.1186/s13321-018-0269-8",
-          "kind": "unpaywall_url_for_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -665,51 +603,45 @@
       "source_url": "https://www.science.org/doi/10.1126/sciadv.abe4166",
       "status": "acquired",
       "acquired": {
-        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/8026122",
-        "kind": "unpaywall_url",
-        "path": "acquired/V6R5QSYU/paper.html",
-        "sha256": "f05cef91c48accd3abdb19c8659ce442644abe637c55c72a26ee9ae66bdcb121",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8026122/",
+        "kind": "openalex_landing_page_url",
+        "path": "acquired/V6R5QSYU/5d2edd9ec7ebb624.html",
+        "sha256": "5d2edd9ec7ebb62478bbf36a8629bb0959ac5090392b888e03ab5f677267d458",
         "bytes": 193855
       },
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1126%2Fsciadv.abe4166?mailto=chem.skillnet@example.org",
-          "kind": "openalex_record",
+          "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/8026122",
+          "kind": "previous_public_url",
           "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
+          "error": "Landing/abstract page: supply the full PDF or article body"
         },
         {
-          "url": "https://api.unpaywall.org/v2/10.1126%2Fsciadv.abe4166?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1126%2Fsciadv.abe4166",
+          "kind": "openalex_record",
           "status": "metadata"
         },
         {
           "url": "https://www.science.org/doi/pdf/10.1126/sciadv.abe4166?download=true",
-          "kind": "unpaywall_url_for_pdf",
+          "kind": "openalex_pdf_url",
           "status": "error",
           "error": "HTTP Error 403: Forbidden"
         },
         {
-          "url": "https://www.science.org/doi/pdf/10.1126/sciadv.abe4166?download=true",
-          "kind": "unpaywall_url",
+          "url": "https://doi.org/10.1126/sciadv.abe4166",
+          "kind": "openalex_landing_page_url",
           "status": "error",
           "error": "HTTP Error 403: Forbidden"
         },
         {
-          "url": "https://www.science.org/doi/pdf/10.1126/sciadv.abe4166?download=true",
-          "kind": "unpaywall_url_for_pdf",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "https://www.science.org/doi/pdf/10.1126/sciadv.abe4166?download=true",
-          "kind": "unpaywall_url",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33827815",
+          "kind": "openalex_landing_page_url",
           "status": "error",
           "error": "HTTP Error 403: Forbidden"
         },
         {
           "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/8026122",
-          "kind": "unpaywall_url",
+          "kind": "openalex_landing_page_url",
           "status": "acquired"
         }
       ]
@@ -720,16 +652,16 @@
       "source_url": "http://arxiv.org/abs/2401.14637",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2401.14637.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/FDYPZYCV/paper.pdf",
+        "url": "https://arxiv.org/pdf/2401.14637",
+        "kind": "previous_public_url",
+        "path": "acquired/FDYPZYCV/b28abbb0326507ff.pdf",
         "sha256": "b28abbb0326507ff1baac30e021d5c41c36d09438669bc0f402c577f09e98efa",
         "bytes": 7751623
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2401.14637.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -740,16 +672,16 @@
       "source_url": "http://arxiv.org/abs/2312.10900",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2312.10900.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/L4DYAUVP/paper.pdf",
+        "url": "https://arxiv.org/pdf/2312.10900",
+        "kind": "previous_public_url",
+        "path": "acquired/L4DYAUVP/bd57f5714e3d794c.pdf",
         "sha256": "bd57f5714e3d794c156021515905b82f05fa64d238ef20659f7b624b0deca884",
         "bytes": 4184287
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2312.10900.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -762,15 +694,21 @@
       "acquired": null,
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1093%2Fbib%2Fbbab391?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1093%2Fbib%2Fbbab391",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
+          "status": "metadata"
         },
         {
-          "url": "https://api.unpaywall.org/v2/10.1093%2Fbib%2Fbbab391?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
+          "url": "https://doi.org/10.1093/bib/bbab391",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34571535",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
         },
         {
           "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1093%2Fbib%2Fbbab391&format=json",
@@ -800,39 +738,16 @@
       "source_url": "https://www.pnas.org/doi/epdf/10.1073/pnas.2212711119",
       "status": "acquired",
       "acquired": {
-        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/9564830",
-        "kind": "unpaywall_url",
-        "path": "acquired/H3WHHCTG/paper.html",
-        "sha256": "65415f3a0480b57d1e2e2586ec98e14277852b1e6e27b2b11377147a93c1f555",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9564830/",
+        "kind": "previous_public_url",
+        "path": "acquired/H3WHHCTG/2740db17c463ebed.html",
+        "sha256": "2740db17c463ebed49a4f6bb2ae2dffa978a8120ef5dec9c4176c30de0d407e0",
         "bytes": 173785
       },
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1073%2Fpnas.2212711119?mailto=chem.skillnet@example.org",
-          "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1073%2Fpnas.2212711119?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
-        },
-        {
-          "url": "https://doi.org/10.1073/pnas.2212711119",
-          "kind": "unpaywall_url",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "https://doi.org/10.1073/pnas.2212711119",
-          "kind": "unpaywall_url",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
           "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/9564830",
-          "kind": "unpaywall_url",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -843,16 +758,16 @@
       "source_url": "http://arxiv.org/abs/2306.04123",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2306.04123.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/ZIHHA28M/paper.pdf",
+        "url": "https://arxiv.org/pdf/2306.04123",
+        "kind": "previous_public_url",
+        "path": "acquired/ZIHHA28M/c82572223e5c16b3.pdf",
         "sha256": "c82572223e5c16b3245ee49955016f8c341cadd37ae9272e48239d43745e7425",
         "bytes": 1742564
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2306.04123.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -863,16 +778,16 @@
       "source_url": "https://www.nature.com/articles/s41467-024-50617-1",
       "status": "acquired",
       "acquired": {
-        "url": "https://www.nature.com/articles/s41467-024-50617-1.pdf",
-        "kind": "nature_pdf",
-        "path": "acquired/7YL28TR5/paper.pdf",
+        "url": "https://www.nature.com/articles/s41467-024-50617-1.pdf?error=cookies_not_supported&code=bb7980a3-22be-48d2-ae7a-399a06084b5b",
+        "kind": "previous_public_url",
+        "path": "acquired/7YL28TR5/e4ec4aef83460487.pdf",
         "sha256": "e4ec4aef83460487b6166d493efac923692e2dbf013a685966cc86cd7a67fb4a",
         "bytes": 1964987
       },
       "attempts": [
         {
           "url": "https://www.nature.com/articles/s41467-024-50617-1.pdf",
-          "kind": "nature_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -883,16 +798,16 @@
       "source_url": "http://arxiv.org/abs/2409.05873",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2409.05873.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/WUJUHU7F/paper.pdf",
+        "url": "https://arxiv.org/pdf/2409.05873",
+        "kind": "previous_public_url",
+        "path": "acquired/WUJUHU7F/6d02c31ab5c93036.pdf",
         "sha256": "6d02c31ab5c9303626742b8957fbac351afbb2b7bfc808faf644bad37a3c7b13",
         "bytes": 8585358
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2409.05873.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -905,39 +820,33 @@
       "acquired": null,
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1002%2Faic.18234?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1002%2Faic.18234",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1002%2Faic.18234?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
           "status": "metadata"
         },
         {
           "url": "https://doi.org/10.1002/aic.18234",
-          "kind": "unpaywall_url",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "https://doi.org/10.1002/aic.18234",
-          "kind": "unpaywall_url",
+          "kind": "openalex_landing_page_url",
           "status": "error",
           "error": "HTTP Error 403: Forbidden"
         },
         {
           "url": "https://dspace.mit.edu/bitstream/1721.1/158182/2/AIChE%20Journal%20-%202023%20-%20Levin%20-%20Computer%e2%80%90aided%20evaluation%20and%20exploration%20of%20chemical%20spaces%20constrained%20by%20reaction.pdf",
-          "kind": "unpaywall_url_for_pdf",
+          "kind": "openalex_pdf_url",
           "status": "error",
           "error": "HTTP Error 405: Not Allowed"
         },
         {
-          "url": "https://dspace.mit.edu/bitstream/1721.1/158182/2/AIChE%20Journal%20-%202023%20-%20Levin%20-%20Computer%e2%80%90aided%20evaluation%20and%20exploration%20of%20chemical%20spaces%20constrained%20by%20reaction.pdf",
-          "kind": "unpaywall_url",
+          "url": "https://hdl.handle.net/1721.1/158182",
+          "kind": "openalex_landing_page_url",
           "status": "error",
-          "error": "HTTP Error 405: Not Allowed"
+          "error": "Landing/abstract page: supply the full PDF or article body"
+        },
+        {
+          "url": "https://oak.novartis.com/50627/",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "Landing/abstract page: supply the full PDF or article body"
         },
         {
           "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1002%2Faic.18234&format=json",
@@ -996,16 +905,16 @@
       "source_url": "https://www.nature.com/articles/s42004-023-00911-8",
       "status": "acquired",
       "acquired": {
-        "url": "https://www.nature.com/articles/s42004-023-00911-8.pdf",
-        "kind": "nature_pdf",
-        "path": "acquired/Z3W4BK3K/paper.pdf",
+        "url": "https://www.nature.com/articles/s42004-023-00911-8.pdf?error=cookies_not_supported&code=2cd4d493-b7f8-4c3e-9069-47f56256eaf6",
+        "kind": "previous_public_url",
+        "path": "acquired/Z3W4BK3K/a8695033ce441bad.pdf",
         "sha256": "a8695033ce441badf047c23dad0fec3fd1cdc882f0a12fae57ceeb1367b302ab",
         "bytes": 1230727
       },
       "attempts": [
         {
           "url": "https://www.nature.com/articles/s42004-023-00911-8.pdf",
-          "kind": "nature_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -1018,15 +927,21 @@
       "acquired": null,
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1002%2Fchem.201605499?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1002%2Fchem.201605499",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
+          "status": "metadata"
         },
         {
-          "url": "https://api.unpaywall.org/v2/10.1002%2Fchem.201605499?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
+          "url": "https://doi.org/10.1002/chem.201605499",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28134452",
+          "kind": "openalex_landing_page_url",
+          "status": "error",
+          "error": "HTTP Error 403: Forbidden"
         },
         {
           "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1002%2Fchem.201605499&format=json",
@@ -1049,39 +964,27 @@
       "acquired": null,
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1016%2Fj.chempr.2018.02.024?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.1016%2Fj.chempr.2018.02.024",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1016%2Fj.chempr.2018.02.024?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
           "status": "metadata"
         },
         {
           "url": "http://www.cell.com/article/S2451929418300858/pdf",
-          "kind": "unpaywall_url_for_pdf",
+          "kind": "openalex_pdf_url",
           "status": "error",
           "error": "HTTP Error 403: Forbidden"
         },
         {
-          "url": "http://www.cell.com/article/S2451929418300858/pdf",
-          "kind": "unpaywall_url",
+          "url": "https://doi.org/10.1016/j.chempr.2018.02.024",
+          "kind": "openalex_landing_page_url",
           "status": "error",
-          "error": "HTTP Error 403: Forbidden"
+          "error": "Landing/abstract page: supply the full PDF or article body"
         },
         {
-          "url": "http://www.cell.com/article/S2451929418300858/pdf",
-          "kind": "unpaywall_url_for_pdf",
+          "url": "https://scholarworks.unist.ac.kr/handle/201301/25673",
+          "kind": "openalex_landing_page_url",
           "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "http://www.cell.com/article/S2451929418300858/pdf",
-          "kind": "unpaywall_url",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
+          "error": "Landing/abstract page: supply the full PDF or article body"
         },
         {
           "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:10.1016%2Fj.chempr.2018.02.024&format=json",
@@ -1096,16 +999,16 @@
       "source_url": "https://www.nature.com/articles/s42004-024-01133-2",
       "status": "acquired",
       "acquired": {
-        "url": "https://www.nature.com/articles/s42004-024-01133-2.pdf",
-        "kind": "nature_pdf",
-        "path": "acquired/ZCMNWV6R/paper.pdf",
+        "url": "https://www.nature.com/articles/s42004-024-01133-2.pdf?error=cookies_not_supported&code=391b3c24-1ce7-4993-8116-74f8e5ae99ca",
+        "kind": "previous_public_url",
+        "path": "acquired/ZCMNWV6R/1d216332f251ec92.pdf",
         "sha256": "1d216332f251ec92560d4f3c141b98564f53a2a042a9120d5d745503ea1993ca",
         "bytes": 1902151
       },
       "attempts": [
         {
           "url": "https://www.nature.com/articles/s42004-024-01133-2.pdf",
-          "kind": "nature_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -1117,26 +1020,15 @@
       "status": "acquired",
       "acquired": {
         "url": "https://arxiv.org/pdf/1708.04202",
-        "kind": "unpaywall_url_for_pdf",
-        "path": "acquired/X6UFMAW8/paper.pdf",
+        "kind": "previous_public_url",
+        "path": "acquired/X6UFMAW8/070e75c6eee4e76f.pdf",
         "sha256": "070e75c6eee4e76f1c793b62c8e4b4c8fddca76b4787be0b020dc81d7fcabe4a",
         "bytes": 469146
       },
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1038%2Fnature25978?mailto=chem.skillnet@example.org",
-          "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1038%2Fnature25978?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
-        },
-        {
           "url": "https://arxiv.org/pdf/1708.04202",
-          "kind": "unpaywall_url_for_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -1155,16 +1047,16 @@
       "source_url": "http://arxiv.org/abs/2412.05269",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2412.05269.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/BAW3TIAH/paper.pdf",
+        "url": "https://arxiv.org/pdf/2412.05269",
+        "kind": "previous_public_url",
+        "path": "acquired/BAW3TIAH/8f972e5ee5eb0e84.pdf",
         "sha256": "8f972e5ee5eb0e84ff4455524e95894e12216a73418e1a73c64148fd6610a4e5",
         "bytes": 1605785
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2412.05269.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -1183,25 +1075,13 @@
           "error": "HTTP Error 403: Forbidden"
         },
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.26434%2Fchemrxiv-2024-gqp7b?mailto=chem.skillnet@example.org",
+          "url": "https://api.openalex.org/works/https://doi.org/10.26434%2Fchemrxiv-2024-gqp7b",
           "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.26434%2Fchemrxiv-2024-gqp7b?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
           "status": "metadata"
         },
         {
           "url": "https://doi.org/10.26434/chemrxiv-2024-gqp7b",
-          "kind": "unpaywall_url",
-          "status": "error",
-          "error": "HTTP Error 403: Forbidden"
-        },
-        {
-          "url": "https://doi.org/10.26434/chemrxiv-2024-gqp7b",
-          "kind": "unpaywall_url",
+          "kind": "openalex_landing_page_url",
           "status": "error",
           "error": "HTTP Error 403: Forbidden"
         },
@@ -1218,16 +1098,16 @@
       "source_url": "https://www.nature.com/articles/s41467-025-62308-6",
       "status": "acquired",
       "acquired": {
-        "url": "https://www.nature.com/articles/s41467-025-62308-6.pdf",
-        "kind": "nature_pdf",
-        "path": "acquired/YXTSBPES/paper.pdf",
+        "url": "https://www.nature.com/articles/s41467-025-62308-6.pdf?error=cookies_not_supported&code=4b70eb41-c30d-4c70-b318-a7acc4c7ce5f",
+        "kind": "previous_public_url",
+        "path": "acquired/YXTSBPES/e02fc0d7283de95a.pdf",
         "sha256": "e02fc0d7283de95a3e34fa0b6b717cb1a584baa21c19197f9fe3a2be55635030",
         "bytes": 1812210
       },
       "attempts": [
         {
           "url": "https://www.nature.com/articles/s41467-025-62308-6.pdf",
-          "kind": "nature_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -1238,16 +1118,16 @@
       "source_url": "http://arxiv.org/abs/2507.17448",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2507.17448.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/K7ZGXDS6/paper.pdf",
+        "url": "https://arxiv.org/pdf/2507.17448",
+        "kind": "previous_public_url",
+        "path": "acquired/K7ZGXDS6/969d1069e17245e7.pdf",
         "sha256": "969d1069e17245e7ed942e72c9ceeb2e2c7da44d71d847f4b958f6c4f4ddfc8d",
         "bytes": 2220038
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2507.17448.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -1258,16 +1138,16 @@
       "source_url": "https://www.nature.com/articles/s42256-025-01066-y",
       "status": "acquired",
       "acquired": {
-        "url": "https://www.nature.com/articles/s42256-025-01066-y.pdf",
-        "kind": "nature_pdf",
-        "path": "acquired/U5RSQN4E/paper.html",
-        "sha256": "7333323d220669fc188c20729eef7163e621f21c597b3f906d3dc43e54fe4ee3",
-        "bytes": 414215
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs42256-025-01066-y/MediaObjects/42256_2025_1066_MOESM1_ESM.pdf",
+        "kind": "previous_public_url",
+        "path": "acquired/U5RSQN4E/b3c185122bf87a1f.pdf",
+        "sha256": "b3c185122bf87a1fad068066ffd8354d824c310f6ee5c11ee6a376e934bcd574",
+        "bytes": 13779834
       },
       "attempts": [
         {
           "url": "https://www.nature.com/articles/s42256-025-01066-y.pdf",
-          "kind": "nature_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -1278,27 +1158,16 @@
       "source_url": "https://doi.org/10.1186/s13321-025-01088-z",
       "status": "acquired",
       "acquired": {
-        "url": "https://jcheminf.biomedcentral.com/counter/pdf/10.1186/s13321-025-01088-z",
-        "kind": "unpaywall_url_for_pdf",
-        "path": "acquired/64T7R8Q4/paper.pdf",
+        "url": "https://link.springer.com/content/pdf/10.1186/s13321-025-01088-z.pdf?error=cookies_not_supported&code=a7538d5e-0637-4880-a01e-2dfde1d899e0",
+        "kind": "previous_public_url",
+        "path": "acquired/64T7R8Q4/4213c84315619c2b.pdf",
         "sha256": "4213c84315619c2b7a771f25af39cb363d9a08475cfb2d72750b2445a556c686",
         "bytes": 7851751
       },
       "attempts": [
         {
-          "url": "https://api.openalex.org/works/https://doi.org/10.1186%2Fs13321-025-01088-z?mailto=chem.skillnet@example.org",
-          "kind": "openalex_record",
-          "status": "error",
-          "error": "HTTP Error 429: Too Many Requests"
-        },
-        {
-          "url": "https://api.unpaywall.org/v2/10.1186%2Fs13321-025-01088-z?email=chem.skillnet@example.org",
-          "kind": "unpaywall_record",
-          "status": "metadata"
-        },
-        {
           "url": "https://jcheminf.biomedcentral.com/counter/pdf/10.1186/s13321-025-01088-z",
-          "kind": "unpaywall_url_for_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]
@@ -1309,16 +1178,16 @@
       "source_url": "http://arxiv.org/abs/2406.18739",
       "status": "acquired",
       "acquired": {
-        "url": "https://arxiv.org/pdf/2406.18739.pdf",
-        "kind": "arxiv_pdf",
-        "path": "acquired/MMMCU9EX/paper.pdf",
+        "url": "https://arxiv.org/pdf/2406.18739",
+        "kind": "previous_public_url",
+        "path": "acquired/MMMCU9EX/b69241afcf120b3d.pdf",
         "sha256": "b69241afcf120b3d301811f3ca769a161dc09375e4e3d5876b564ead8691d52b",
         "bytes": 1147591
       },
       "attempts": [
         {
           "url": "https://arxiv.org/pdf/2406.18739.pdf",
-          "kind": "arxiv_pdf",
+          "kind": "previous_public_url",
           "status": "acquired"
         }
       ]

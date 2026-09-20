@@ -7,6 +7,7 @@ import hashlib
 import json
 import subprocess
 from pathlib import Path
+from network_env import model_environment
 
 
 def main() -> int:
@@ -33,7 +34,7 @@ def main() -> int:
            "--output-last-message", str(output), "-"]
     try:
         proc = subprocess.run(cmd, input=prompt, text=True, capture_output=True,
-                              cwd=job, timeout=args.timeout)
+                              cwd=job, timeout=args.timeout, env=model_environment())
     except subprocess.TimeoutExpired:
         print(json.dumps({"status": "timeout", "paper_id": args.paper_id}))
         return 2

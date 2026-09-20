@@ -14,24 +14,44 @@ HERE = Path(__file__).resolve().parent
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model", default="gpt-6-astra")
-    parser.add_argument("--max-jobs", type=int, default=20)
+    parser.add_argument("--max-jobs", type=int, default=None)
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument("--input", action="append", help="Local document/directory or public URL; repeatable")
+    source.add_argument("--catalog", type=Path, help="Generic JSON items[]/jobs[]; no fixed paper IDs required")
+    parser.add_argument("--source-type", choices=['paper','database','tool','model'], default='paper')
     parser.add_argument("--target-candidates", type=int, default=20)
     parser.add_argument("--rounds", type=int, default=1)
     parser.add_argument("--push", action="store_true")
     parser.add_argument("--skip-acquire", action="store_true")
     args = parser.parse_args()
-    if not args.skip_acquire:
+    prefix = f"public-{datetime.now():%Y%m%d-%H%M%S}"
+    manifest = HERE / 'acquired_manifest.json'
+    if args.input or args.catalog:
+        out=HERE / 'intakes' / prefix
+        command=[sys.executable,str(HERE/'ingest_sources.py'),'--out',str(out),'--source-type',args.source_type]
+        if args.catalog:command += ['--catalog',str(args.catalog.resolve())]
+        for value in args.input or []:command += ['--input',value]
+        result=subprocess.run(command,check=False)
+        if result.returncode:return result.returncode
+        manifest=out/'manifest.json'
+    elif not args.skip_acquire:
         acquire = subprocess.run([sys.executable, str(HERE / "acquire_catalog_sources.py")], check=False)
         if acquire.returncode:
             return acquire.returncode
-    if not (HERE / "acquired_manifest.json").is_file():
+    if not manifest.is_file():
         parser.error("acquired_manifest.json is missing; run acquisition first")
-    prefix = f"public-{datetime.now():%Y%m%d-%H%M%S}"
+    if not (args.input or args.catalog):
+        out=HERE/'intakes'/prefix
+        result=subprocess.run([sys.executable,str(HERE/'ingest_sources.py'),
+                               '--catalog',str(manifest),'--out',str(out)],check=False)
+        if result.returncode:return result.returncode
+        manifest=out/'manifest.json'
     cmd = [sys.executable, str(HERE / "batch_pipeline.py"),
-           "--manifest", str(HERE / "acquired_manifest.json"),
-           "--model", args.model, "--max-jobs", str(args.max_jobs),
+           "--manifest", str(manifest),
+           "--model", args.model,
            "--rounds", str(args.rounds), "--target-candidates", str(args.target_candidates),
            "--prefix", prefix]
+    if args.max_jobs is not None:cmd += ['--max-jobs',str(args.max_jobs)]
     if args.push:
         cmd.append("--push")
     return subprocess.run(cmd, check=False).returncode

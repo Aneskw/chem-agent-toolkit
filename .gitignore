@@ -8,4 +8,5 @@ evaluation/public_benchmarks/runs/
 creation_pipeline/cache/
 creation_pipeline/runs/
 creation_pipeline/acquired/
+creation_pipeline/intakes/
 evaluation/targeted/results/

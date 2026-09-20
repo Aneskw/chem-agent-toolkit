@@ -1,0 +1,9 @@
+{
+  "input_articles": 33,
+  "prepared_articles": 33,
+  "prepared_jobs": 41,
+  "omitted_segments": 0,
+  "pipeline_checks": "13 unit tests passed; all acquired papers prepared",
+  "execution_validation": "not_run",
+  "agent_effect_validation": "not_run"
+}

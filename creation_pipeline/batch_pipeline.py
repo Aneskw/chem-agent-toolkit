@@ -42,6 +42,7 @@ def main() -> int:
     parser.add_argument("--model", default="gpt-6-astra")
     parser.add_argument("--rounds", type=int, default=1, help="Independent passes per source")
     parser.add_argument("--max-jobs", type=int, default=None, help="Process at most this many manifest jobs")
+    parser.add_argument("--start-index", type=int, default=0, help="Zero-based manifest offset for resuming a batch")
     parser.add_argument("--target-candidates", type=int, default=None,
                         help="Stop after at least this many candidate skills are created")
     parser.add_argument("--prefix", default=None)
@@ -49,8 +50,10 @@ def main() -> int:
     args = parser.parse_args()
     if args.rounds < 1 or args.rounds > 20:
         parser.error("--rounds must be between 1 and 20")
-    if args.max_jobs is not None and not 1 <= args.max_jobs <= 100:
-        parser.error("--max-jobs must be between 1 and 100")
+    if args.max_jobs is not None and args.max_jobs < 1:
+        parser.error("--max-jobs must be positive")
+    if args.start_index < 0:
+        parser.error("--start-index must be non-negative")
     if args.target_candidates is not None and not 1 <= args.target_candidates <= 500:
         parser.error("--target-candidates must be between 1 and 500")
     manifest = args.manifest.resolve()
@@ -58,9 +61,8 @@ def main() -> int:
     jobs = data.get("jobs")
     if not isinstance(jobs, list) or not jobs:
         parser.error("manifest must contain a non-empty jobs[] list")
-    if len(jobs) > 100:
-        parser.error("maximum 100 jobs per batch")
-    jobs = [absolute_job(job, manifest.parent) for job in jobs]
+    jobs = [absolute_job(job, (manifest.parent / data.get('base','.')).resolve()) for job in jobs]
+    jobs = jobs[args.start_index:]
     if args.max_jobs is not None:
         jobs = jobs[:args.max_jobs]
     ids = [job["paper_id"] for job in jobs]
@@ -69,6 +71,20 @@ def main() -> int:
     prefix = safe(args.prefix or f"batch-{datetime.now():%Y%m%d-%H%M%S}")
     run_records = []
     published = []
+    def published_count():
+        return sum(int(r.get('candidate_count') or 0) for r in run_records
+                   if r.get('publish_status')=='published_locally')
+    report_path = HERE / 'results' / f'{prefix}-batch.json'
+    report_path.parent.mkdir(exist_ok=True)
+    def checkpoint(state):
+        report={'batch_id':prefix,'model':args.model,'rounds':args.rounds,'status':state,
+                'manifest':str(manifest),'target_candidates':args.target_candidates,
+                'deduplication':'not_run','execution_validation':'not_run',
+                'agent_effect_validation':'not_run','runs':run_records,'published_paths':published,
+                'published_candidates':sum(int(r.get('candidate_count') or 0) for r in run_records
+                                           if r.get('publish_status')=='published_locally')}
+        report_path.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    checkpoint('running')
     with tempfile.TemporaryDirectory(prefix="chemskillnet-batch-") as temp_name:
         temp_dir = Path(temp_name)
         for job in jobs:
@@ -102,21 +118,17 @@ def main() -> int:
                         published.append(str((ROOT / "skills" / "generated" / run_id).relative_to(ROOT)))
                 else:
                     record["publish_status"] = "not_published"
-                if args.target_candidates is not None and sum(
-                    int(x.get("candidate_count") or 0) for x in run_records
-                ) >= args.target_candidates:
+                checkpoint('running')
+                if args.target_candidates is not None and published_count() >= args.target_candidates:
                     break
-            if args.target_candidates is not None and sum(
-                int(x.get("candidate_count") or 0) for x in run_records
-            ) >= args.target_candidates:
+            if args.target_candidates is not None and published_count() >= args.target_candidates:
                 break
     report = {"batch_id": prefix, "model": args.model, "rounds": args.rounds,
               "manifest": str(manifest), "target_candidates": args.target_candidates,
               "deduplication": "not_run",
               "execution_validation": "not_run", "agent_effect_validation": "not_run",
               "runs": run_records, "published_paths": published}
-    report_path = HERE / "results" / f"{prefix}-batch.json"
-    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+    checkpoint('finished')
     if args.push and published:
         subprocess.run(["git", "add", *published], cwd=ROOT, check=True)
         subprocess.run(["git", "add", str(report_path.relative_to(ROOT))], cwd=ROOT, check=True)
@@ -124,7 +136,7 @@ def main() -> int:
         subprocess.run(["git", "push", "origin", "main"], cwd=ROOT, check=True)
     print(json.dumps({"status": "batch_finished", "report": str(report_path),
                       "published": len(published), "pushed": bool(args.push and published)}, ensure_ascii=False))
-    return 0
+    return 0 if args.target_candidates is None or published_count() >= args.target_candidates else 2
 
 
 if __name__ == "__main__":
