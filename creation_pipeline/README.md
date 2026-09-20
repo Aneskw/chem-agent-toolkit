@@ -8,6 +8,58 @@
 
 ## 快速开始
 
+### 通用使用指南：从一篇文章开始
+
+下面的流程适用于任意“论文 PDF + Git 代码库”，不依赖 CSV 中的固定论文，也不要求修改 repo_map.json。所有命令都在仓库根目录执行。
+
+1. 准备输入。论文必须是可提取正文的真实 PDF；代码库必须能解析到一个固定 commit。仓库可以是本地 checkout，也可以是公开 HTTPS/SSH 地址。
+
+~~~bash
+python3 creation_pipeline/pair_sources.py --pdf /absolute/path/to/paper.pdf --repo /absolute/path/to/git-repository --ref COMMIT_SHA --paper-id my-paper --out creation_pipeline/intakes/my-paper
+~~~
+
+也可以直接使用公共来源：
+
+~~~bash
+python3 creation_pipeline/pair_sources.py --pdf https://example.org/paper.pdf --repo https://github.com/ORG/REPO.git --ref COMMIT_SHA --paper-id my-paper --out creation_pipeline/intakes/my-paper
+~~~
+
+paper-id 只能包含字母、数字、下划线和短横线。正式复现建议使用完整 commit SHA。脚本会把 PDF、选定代码、commit 和文件哈希写入 intake 目录，不读取仓库未提交的工作区修改。
+
+默认选择最多 16 个与预测、搜索、训练、预处理和测试相关的代码/文档文件。若方法依赖特定入口，可以重复指定 file：
+
+~~~bash
+python3 creation_pipeline/pair_sources.py --pdf /absolute/path/to/paper.pdf --repo /absolute/path/to/git-repository --ref COMMIT_SHA --paper-id my-paper --file README.md --file src/preprocess.py --file src/predict.py --out creation_pipeline/intakes/my-paper
+~~~
+
+2. 抽取决策型 Skill。
+
+~~~bash
+python3 creation_pipeline/run_pipeline.py --config creation_pipeline/intakes/my-paper/config.json --model gpt-5.6-sol --run-id my-paper-v2
+~~~
+
+这一步准备来源 bundle，抽取带引文的决策规则，复核原始来源，校验引文，并生成 v0.3 草稿。模型使用本机已登录的 Codex CLI；每次抽取至少需要两次无工具模型调用，引用修复可能再调用有限次数。
+
+3. 查看输出并检查格式。
+
+~~~bash
+cat creation_pipeline/runs/my-paper-v2/pipeline_status.json
+find creation_pipeline/runs/my-paper-v2/drafts-v03 -name SKILL.md -print
+python3 creation_pipeline/validate_skill_format.py creation_pipeline/runs/my-paper-v2/drafts-v03/*
+~~~
+
+主要输出是 runs/my-paper-v2/pipeline_status.json（状态和失败原因）、runs/my-paper-v2/decision_library.json（决策规则去重）、drafts-v03/*/SKILL.md（Skill 草稿）和每个 Skill 的 references/evidence.json（引文及来源哈希）。
+
+4. 多篇来源的简单去重。
+
+~~~bash
+python3 creation_pipeline/decision_library.py --run creation_pipeline/runs/paper-a-v2 --run creation_pipeline/runs/paper-b-v2 --out creation_pipeline/results/combined-decision-library.json
+~~~
+
+只有触发条件、动作、机制、适用范围等字段完全一致的规则才会合并；范围不同或动作相近的规则会保留为变体，交给人工审核。
+
+常见状态：method_drafts_created 表示生成了决策型草稿；atomic_resource_hints_only 表示只有工具提示；primary_text_missing 表示缺少论文正文；failed 时查看 pipeline_status.json 的 error 字段。扫描 PDF 需要先 OCR；创建流程本身不会宣称 Skill 已经改善 agent。
+
 ### 化学决策规则抽取（当前默认）
 
 默认模型为 `gpt-5.6-sol`，使用本机已登录的 Codex。新运行使用 schema v2：
