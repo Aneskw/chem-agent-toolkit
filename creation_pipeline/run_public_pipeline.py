@@ -18,6 +18,7 @@ def main() -> int:
     source = parser.add_mutually_exclusive_group()
     source.add_argument("--input", action="append", help="Local document/directory or public URL; repeatable")
     source.add_argument("--catalog", type=Path, help="Generic JSON items[]/jobs[]; no fixed paper IDs required")
+    source.add_argument("--table", type=Path, help="CSV/TSV/XLSX table with papers or resources")
     parser.add_argument("--source-type", choices=['paper','database','tool','model'], default='paper')
     parser.add_argument("--target-candidates", type=int, default=20)
     parser.add_argument("--rounds", type=int, default=1)
@@ -26,6 +27,13 @@ def main() -> int:
     args = parser.parse_args()
     prefix = f"public-{datetime.now():%Y%m%d-%H%M%S}"
     manifest = HERE / 'acquired_manifest.json'
+    if args.table:
+        table_catalog=HERE/'intakes'/prefix/'table-catalog.json'
+        table_catalog.parent.mkdir(parents=True,exist_ok=True)
+        result=subprocess.run([sys.executable,str(HERE/'table_to_catalog.py'),
+                               '--input',str(args.table.resolve()),'--output',str(table_catalog)],check=False)
+        if result.returncode:return result.returncode
+        args.catalog=table_catalog
     if args.input or args.catalog:
         out=HERE / 'intakes' / prefix
         command=[sys.executable,str(HERE/'ingest_sources.py'),'--out',str(out),'--source-type',args.source_type]

@@ -234,6 +234,10 @@ repositories. Supply a document, directory, public URL, or mixed JSON catalog:
 # Heterogeneous sources and multiple supporting documents per resource
 .venv-eval/bin/python creation_pipeline/run_public_pipeline.py \
   --catalog /absolute/path/to/sources.json --target-candidates 20 --push
+
+# Infer paper/DOI/PDF/repository columns from CSV, TSV, or XLSX
+.venv-eval/bin/python creation_pipeline/run_public_pipeline.py \
+  --table /absolute/path/to/papers.xlsx --target-candidates 20 --push
 ```
 
 Example `sources.json` (paths resolve relative to this file):
@@ -272,6 +276,12 @@ pages, URLs and a segment inventory in `ingestion_report.json`. Every primary
 text segment is queued rather than silently skipped due to context length.
 Segments are extracted independently; cross-segment synthesis is not claimed.
 Failures remain recorded per input while other inputs continue.
+
+Tables are converted by `table_to_catalog.py`. It recognizes common aliases
+such as `title`, `paper`, `doi`, `url`, `pdf`, `github`, `repository`, `type`
+and `category`, reports ambiguous mappings, and leaves rows without a public
+source in the conversion report. The mapping is heuristic and must be
+reviewed when a table uses project-specific column names.
 
 The pipeline does not promise useful skills from every paper or database.
 Scanned PDFs require OCR; authenticated/private databases require the user to
