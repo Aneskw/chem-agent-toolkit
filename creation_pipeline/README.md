@@ -24,7 +24,7 @@ python3 creation_pipeline/pair_sources.py --pdf /absolute/path/to/paper.pdf --re
 python3 creation_pipeline/pair_sources.py --pdf https://example.org/paper.pdf --repo https://github.com/ORG/REPO.git --ref COMMIT_SHA --paper-id my-paper --out creation_pipeline/intakes/my-paper
 ~~~
 
-paper-id 只能包含字母、数字、下划线和短横线。正式复现建议使用完整 commit SHA。脚本会把 PDF、选定代码、commit 和文件哈希写入 intake 目录，不读取仓库未提交的工作区修改。
+paper-id 只能包含字母、数字、下划线和短横线。正式复现建议使用完整 commit SHA。脚本会把 PDF、选定代码、commit 和文件哈希写入 intake 目录，不读取仓库未提交的工作区修改。远程仓库默认允许 900 秒下载，并使用 blob 过滤减少传输；网络很慢时可增加 clone-timeout，例如追加 --clone-timeout 1800。若下载中断，换一个新的 --out 目录重试，或先手动 clone 后把本地路径传给 --repo。
 
 默认选择最多 16 个与预测、搜索、训练、预处理和测试相关的代码/文档文件。若方法依赖特定入口，可以重复指定 file：
 

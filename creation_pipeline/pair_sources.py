@@ -6,6 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import shutil
 import subprocess
 
 from ingest_sources import download
@@ -13,7 +14,7 @@ from core.creation_sources import read_documents
 
 
 def git(repo, *args):
-    return subprocess.check_output(['git', '-C', str(repo), *args], timeout=120)
+    return subprocess.check_output(['git', '-C', str(repo), *args], timeout=300)
 
 
 def priority(path):
@@ -22,9 +23,11 @@ def priority(path):
             low.endswith('.py'))
 
 
-def pair(pdf, repo, out, ref='HEAD', files=None, max_files=16, paper_id='paper', title=None):
+def pair(pdf, repo, out, ref='HEAD', files=None, max_files=16, paper_id='paper',
+         title=None, clone_timeout=900):
     if not re.fullmatch(r'[A-Za-z0-9_-]{1,55}',paper_id):raise ValueError('Unsafe paper ID')
     if not 1<=max_files<=100:raise ValueError('max_files must be between 1 and 100')
+    if clone_timeout<30:raise ValueError('clone_timeout must be at least 30 seconds')
     out=Path(out).resolve()
     out.mkdir(parents=True,exist_ok=False)
     pdf_url=pdf if str(pdf).startswith(('https://','http://')) else ''
@@ -41,7 +44,17 @@ def pair(pdf, repo, out, ref='HEAD', files=None, max_files=16, paper_id='paper',
         if not (str(repo).startswith('https://') or str(repo).startswith('git@')):
             raise ValueError('Repository must be a local Git checkout or HTTPS/SSH Git URL')
         source_repo=out/'checkout'
-        subprocess.run(['git','clone','--no-checkout','--',str(repo),str(source_repo)],check=True,timeout=180)
+        clone_command=['git','clone','--no-checkout','--filter=blob:none','--no-tags',
+                       '--',str(repo),str(source_repo)]
+        try:
+            subprocess.run(clone_command,check=True,timeout=clone_timeout)
+        except (subprocess.CalledProcessError,subprocess.TimeoutExpired,OSError) as error:
+            # The output directory was created by this invocation, so its
+            # partial checkout is disposable and must not poison a retry.
+            shutil.rmtree(source_repo,ignore_errors=True)
+            raise RuntimeError(
+                f'Git clone failed or timed out after {clone_timeout}s for {repo}; '
+                'retry with --clone-timeout or provide a local checkout') from error
     # Read the chosen Git objects, never mutable working-tree bytes or scripts.
     commit=git(source_repo,'rev-parse','--verify',ref+'^{commit}').decode().strip()
     entries=[]
@@ -100,7 +113,9 @@ def main():
     p.add_argument('--out',type=Path,required=True);p.add_argument('--ref',default='HEAD')
     p.add_argument('--file',action='append');p.add_argument('--max-files',type=int,default=16)
     p.add_argument('--paper-id',default='paper');p.add_argument('--title')
+    p.add_argument('--clone-timeout',type=int,default=900,
+                   help='Seconds allowed for a remote Git clone (default: 900)')
     a=p.parse_args()
-    print(pair(a.pdf,a.repo,a.out,a.ref,a.file,a.max_files,a.paper_id,a.title))
+    print(pair(a.pdf,a.repo,a.out,a.ref,a.file,a.max_files,a.paper_id,a.title,a.clone_timeout))
 
 if __name__=='__main__':main()
