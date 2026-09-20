@@ -30,6 +30,8 @@ def main() -> int:
     p.add_argument("--response-file", type=Path, help="Replay a saved model JSON for deterministic testing")
     p.add_argument("--skip-collect", action="store_true", help="Use already collected, locked local sources")
     p.add_argument("--allow-repo-only", action="store_true", help="Create repository hints, never paper-derived skill drafts")
+    p.add_argument("--draft-eval-tasks", action="store_true",
+                   help="also propose two positive and two negative decision-task drafts per method skill; human review still required")
     args = p.parse_args()
     if args.config:
         config = args.config.resolve()
@@ -101,6 +103,17 @@ def main() -> int:
                  "--paper-id", args.paper_id, "--out", str(drafts))
             for folder in drafts.iterdir():
                 call(str(HERE / "validate_skill_format.py"), str(folder))
+            if args.draft_eval_tasks:
+                task_drafts = run / "evaluation_task_drafts"
+                task_drafts.mkdir()
+                method_names = [c["name"] for c in response_data["candidates"]
+                                if c["kind"] == "method_procedure"]
+                for name in method_names:
+                    call(str(HERE.parent / "evaluation" / "method_decisions" / "draft_tasks.py"),
+                         "--skill", str(drafts / name / "SKILL.md"),
+                         "--output", str(task_drafts / f"{name}.json"), "--model", args.model)
+                status["evaluation_task_drafts"] = len(method_names)
+                status["evaluation_task_drafts_state"] = "draft_requires_review"
         if job["status"] == "no_supported_skill":
             outcome = "no_supported_skill"
         elif not primary_present:

@@ -1,0 +1,10 @@
+{
+  "status": "draft_requires_review",
+  "skill": "/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/skills/generated/verified20-LJMZ9IL6-resource-label-fix/predict-reaction-products-with-confidence-abstention/SKILL.md",
+  "output": "/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/evaluation/method_decisions/results/auto_task_draft.json",
+  "cases": 4,
+  "balance": {
+    "apply": 2,
+    "do_not_apply": 2
+  }
+}

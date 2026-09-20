@@ -1,0 +1,385 @@
+{
+  "schema_version": 1,
+  "paper_id": "LJMZ9IL6",
+  "candidates": [
+    {
+      "name": "prepare-single-product-reaction-sequences",
+      "description": "Draft procedure for filtering atom-mapped reaction data, splitting related reactions together, and constructing source and target sequences with separate reactant and reagent tokenization.",
+      "kind": "method_procedure",
+      "operation": "Prepare single-product reaction examples for sequence-to-sequence learning, branching on canonicalizability, product count, atom contribution, and membership in the common-reagent vocabulary.",
+      "inputs": [
+        {
+          "text": "Atom-mapped reaction SMILES containing reactant, reagent, and product groups.",
+          "citations": [
+            {
+              "source_id": "s1p3",
+              "start": 42,
+              "end": 43,
+              "quote": "Such reaction strings are composed of three groups of molecules: the reactants, the reagents, and\n the products, which are separated by a ‘>’ sign."
+            },
+            {
+              "source_id": "s1p4",
+              "start": 40,
+              "end": 40,
+              "quote": "To prepare the reactions, we ﬁrst used the atom mappings to separate reagents from reactants."
+            }
+          ]
+        },
+        {
+          "text": "The set of 76 common reagents used to define the reagent vocabulary.",
+          "citations": [
+            {
+              "source_id": "s1p5",
+              "start": 3,
+              "end": 4,
+              "quote": "we employed a reagent-wise tokenization\nusing a set of the 76 most common reagents"
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "text": "Space-separated source sequences representing reactants followed by common reagents, paired with tokenized single-product targets.",
+          "citations": [
+            {
+              "source_id": "s1p5",
+              "start": 9,
+              "end": 10,
+              "quote": "tokenized “reactants > common reagents” and the target sequence of a tokenized “product”. The\ntokens were separated by space characters."
+            }
+          ]
+        },
+        {
+          "text": "Training, validation, and test partitions in an 18:1:1 ratio, keeping reactions with the same reactants in one partition.",
+          "citations": [
+            {
+              "source_id": "s1p4",
+              "start": 3,
+              "end": 4,
+              "quote": "randomly split into training, validation and test sets (18:1:1)3. Reactions with the same reactants, but\ndifferent reagents and products were kept in the same set."
+            }
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "text": "Compare reaction strings without atom mapping to remove duplicates; discard reactions whose SMILES cannot be canonicalized with RDKit, and retain only single-product reactions.",
+          "citations": [
+            {
+              "source_id": "s1p3",
+              "start": 47,
+              "end": 49,
+              "quote": "removed 720,768 duplicates by comparing reaction strings without atom mapping and an additional\n780 reactions, because the SMILES string could not be canonicalized with RDKit"
+            },
+            {
+              "source_id": "s1p3",
+              "start": 49,
+              "end": 50,
+              "quote": "We took only single\nproduct reactions, corresponding to 92% of the dataset, to have distinct prediction targets."
+            }
+          ]
+        },
+        {
+          "text": "Randomly partition the retained examples in an 18:1:1 ratio, assigning reactions with identical reactants but different reagents or products to the same partition.",
+          "citations": [
+            {
+              "source_id": "s1p4",
+              "start": 3,
+              "end": 4,
+              "quote": "randomly split into training, validation and test sets (18:1:1)3. Reactions with the same reactants, but\ndifferent reagents and products were kept in the same set."
+            }
+          ]
+        },
+        {
+          "text": "Use atom mappings to classify an input molecule as a reactant if it contributes atoms to the product; otherwise classify it as a reagent.",
+          "citations": [
+            {
+              "source_id": "s1p4",
+              "start": 41,
+              "end": 42,
+              "quote": "molecules with atoms appearing in the product were classiﬁed as reactants and the others without\natoms in the product as reagents."
+            }
+          ]
+        },
+        {
+          "text": "Remove hydrogen atoms and atom mappings, canonicalize the molecules, and tokenize reactants and products atom-wise using the paper's regular expression.",
+          "citations": [
+            {
+              "source_id": "s1p4",
+              "start": 42,
+              "end": 44,
+              "quote": "Then, we removed the hydrogen atoms and the atom mappings\nfrom the reaction string, and canonicalized the molecules. Afterwards, we tokenized reactants and\nproducts atom-wise using the following regular expression:"
+            },
+            {
+              "source_id": "s1p5",
+              "start": 1,
+              "end": 2,
+              "quote": "token_regex = \"(\\[[^\\]]+]|Br?|Cl?|N|O|S|P|F|I|b|c|n|o|s|p|\\(|\\)|\n\\.|=|#|-|\\+|\\\\\\\\|\\/|:|~|@|\\?|>|\\*|\\$|\\%[0-9]{2}|[0-9])\"."
+            }
+          ]
+        },
+        {
+          "text": "For reagents in the common-reagent set, append distinct reagent tokens after the first '>' in occurrence order. Remove reagents outside that set.",
+          "citations": [
+            {
+              "source_id": "s1p5",
+              "start": 5,
+              "end": 6,
+              "quote": "this set were added as distinct tokens after the ﬁrst ‘>’ sign, ordered by occurrence. Other reagents,\nwhich were not in the set, were neglected and removed completely from the reaction string."
+            }
+          ]
+        },
+        {
+          "text": "Construct source and target sequences with spaces between tokens and point tokens between individual molecules; apply the same preprocessing to every dataset.",
+          "citations": [
+            {
+              "source_id": "s1p4",
+              "start": 17,
+              "end": 18,
+              "quote": "The tokens are separated by a\nspace and individual molecules by a point token."
+            },
+            {
+              "source_id": "s1p5",
+              "start": 9,
+              "end": 11,
+              "quote": "tokenized “reactants > common reagents” and the target sequence of a tokenized “product”. The\ntokens were separated by space characters. The preprocessing steps together with examples are\nsummarized in Table 2."
+            },
+            {
+              "source_id": "s1p5",
+              "start": 11,
+              "end": 11,
+              "quote": "The same preprocessing steps were applied to all datasets."
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "path": "https://zenodo.org/record/1004356#.Wd3LDY6l2EI",
+          "kind": "external_asset",
+          "reason": {
+            "text": "RDKit is the cited tool for canonicalization; the bibliography identifies the referenced release.",
+            "citations": [
+              {
+                "source_id": "s1p3",
+                "start": 48,
+                "end": 48,
+                "quote": "the SMILES string could not be canonicalized with RDKit [27]"
+              },
+              {
+                "source_id": "s1p10",
+                "start": 26,
+                "end": 27,
+                "quote": "[27] Landrum, G. et al. Rdkit/Rdkit: 2017_09_1 (Q3 2017) Release (2017). URL https://zenodo.org/\nrecord/1004356#.Wd3LDY6l2EI."
+              }
+            ]
+          }
+        },
+        {
+          "path": "Schneider, Stieﬂ, and Landrum (2016), What’s What: The (Nearly) Deﬁnitive Guide to Reaction Role Assignment",
+          "kind": "external_asset",
+          "reason": {
+            "text": "The common-reagent set is attributed to this analysis, but its membership is not supplied.",
+            "citations": [
+              {
+                "source_id": "s1p5",
+                "start": 4,
+                "end": 4,
+                "quote": "using a set of the 76 most common reagents, according to the analysis in [25]."
+              },
+              {
+                "source_id": "s1p10",
+                "start": 22,
+                "end": 23,
+                "quote": "[25] Schneider, N., Stieﬂ, N. & Landrum, G. A. What’s What: The (Nearly) Deﬁnitive Guide to Reaction Role\nAssignment. J. Chem. Inf. Model. 56, 2336–2346 (2016)."
+              }
+            ]
+          }
+        }
+      ],
+      "unknowns": [
+        "The full 76-reagent vocabulary and its exact token mapping are not supplied.",
+        "No preprocessing implementation, RDKit API calls, or canonicalization options are supplied.",
+        "The random seed and grouped partitioning algorithm are unspecified.",
+        "Handling of absent or erroneous atom mappings is unspecified."
+      ]
+    },
+    {
+      "name": "predict-reaction-products-with-confidence-abstention",
+      "description": "Draft procedure for decoding reaction products, canonicalizing predictions, and abstaining when the top prediction has insufficient probability.",
+      "kind": "method_procedure",
+      "operation": "Use beam-search sequence prediction and a confidence threshold to return a product or an unknown outcome, then assess exact-match accuracy and coverage.",
+      "inputs": [
+        {
+          "text": "Tokenized reactant and common-reagent source sequences and a trained reaction sequence-to-sequence model.",
+          "citations": [
+            {
+              "source_id": "s1p5",
+              "start": 9,
+              "end": 9,
+              "quote": "tokenized “reactants > common reagents” and the target sequence of a tokenized “product”."
+            },
+            {
+              "source_id": "s1p7",
+              "start": 4,
+              "end": 6,
+              "quote": "After the hyperparameter optimization, we continued to train our best model on the\n395,496 reactions in Jin’s USPTO train set and tested the fully trained model on Jin’s USPTO test\nset."
+            }
+          ]
+        },
+        {
+          "text": "A confidence threshold on top-1 beam-search probability; 0.83 is the paper's example threshold.",
+          "citations": [
+            {
+              "source_id": "s1p8",
+              "start": 5,
+              "end": 7,
+              "quote": "A clear difference can be observed and used to deﬁne a threshold under which we\ndetermine that the network does not know what to predict."
+            },
+            {
+              "source_id": "s1p8",
+              "start": 7,
+              "end": 7,
+              "quote": "For example, for a conﬁdence threshold of 0.83 the"
+            }
+          ]
+        },
+        {
+          "text": "Ground-truth product sequences for evaluation.",
+          "citations": [
+            {
+              "source_id": "s1p7",
+              "start": 10,
+              "end": 12,
+              "quote": "we use full-sequence accuracy, the strictest criteria possible, as our evaluation\nmetric by which a test prediction is considered correct only if all tokens are identical to the ground\ntruth."
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "text": "A canonicalized predicted product for accepted predictions, or an unknown outcome when confidence falls below the threshold.",
+          "citations": [
+            {
+              "source_id": "s1p7",
+              "start": 21,
+              "end": 21,
+              "quote": "The ﬁnal step was to canonicalize the network output."
+            },
+            {
+              "source_id": "s1p8",
+              "start": 5,
+              "end": 6,
+              "quote": "A clear difference can be observed and used to deﬁne a threshold under which we\ndetermine that the network does not know what to predict."
+            }
+          ]
+        },
+        {
+          "text": "Top-1 accuracy and prediction coverage as functions of the confidence threshold.",
+          "citations": [
+            {
+              "source_id": "s1p8",
+              "start": 6,
+              "end": 7,
+              "quote": "Figure 1b shows the top-1 accuracy and\ncoverage depending on the conﬁdence threshold."
+            }
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "text": "Decode using beam width 10 without a length penalty, retaining the 10 most probable sequences at each time step.",
+          "citations": [
+            {
+              "source_id": "s1p7",
+              "start": 17,
+              "end": 18,
+              "quote": "we used a beam width of 10 without length penalty for the inference. Therefore the 10 most\nprobable sequences were kept at every time step."
+            }
+          ]
+        },
+        {
+          "text": "Use the top-1 beam-search probability as the confidence signal and canonicalize the network output.",
+          "citations": [
+            {
+              "source_id": "s1p7",
+              "start": 19,
+              "end": 21,
+              "quote": "We used the top-1 probabilities to analyze the prediction\nconﬁdence of the network.\nThe ﬁnal step was to canonicalize the network output."
+            }
+          ]
+        },
+        {
+          "text": "If the top-1 probability is below the selected threshold, classify the outcome as unknown; otherwise retain the prediction. Examine the resulting tradeoff between accuracy and coverage.",
+          "citations": [
+            {
+              "source_id": "s1p8",
+              "start": 5,
+              "end": 7,
+              "quote": "A clear difference can be observed and used to deﬁne a threshold under which we\ndetermine that the network does not know what to predict. Figure 1b shows the top-1 accuracy and\ncoverage depending on the conﬁdence threshold."
+            }
+          ]
+        },
+        {
+          "text": "Evaluate correctness by full-sequence equality after canonicalization so a correct molecule in noncanonical token order can still count as correct.",
+          "citations": [
+            {
+              "source_id": "s1p7",
+              "start": 10,
+              "end": 12,
+              "quote": "we use full-sequence accuracy, the strictest criteria possible, as our evaluation\nmetric by which a test prediction is considered correct only if all tokens are identical to the ground\ntruth."
+            },
+            {
+              "source_id": "s1p7",
+              "start": 22,
+              "end": 23,
+              "quote": "Thus, molecules that were correctly predicted, but whose\ntokens were not enumerated in the canonical order, were still counted as correct."
+            }
+          ]
+        },
+        {
+          "text": "For a full-test-set comparison against models covering multiple-product reactions, count those unsupported reactions as false predictions.",
+          "citations": [
+            {
+              "source_id": "s1p7",
+              "start": 34,
+              "end": 36,
+              "quote": "To make a fair comparison, we count\nall the multiple product reactions in the test set as false predictions for our model because we trained\nonly on the single product reactions."
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "path": "https://github.com/tensorflow/nmt",
+          "kind": "external_asset",
+          "reason": {
+            "text": "The paper identifies this implementation as the model's starting point, adapted with unspecified minor modifications.",
+            "citations": [
+              {
+                "source_id": "s1p5",
+                "start": 13,
+                "end": 14,
+                "quote": "To map the sequence of the reactants/reagents to the sequence of the products, we adapted an existing\nimplementation [28] with minor modiﬁcations."
+              },
+              {
+                "source_id": "s1p10",
+                "start": 28,
+                "end": 29,
+                "quote": "[28] Zhao, R., Luong, T. & Brevdo, E. Neural Machine Translation (seq2seq) Tutorial (2017). URL https:\n//github.com/tensorflow/nmt."
+              }
+            ]
+          }
+        }
+      ],
+      "unknowns": [
+        "Trained checkpoints and the modified model implementation are not supplied.",
+        "No automatic threshold-selection procedure or independent confidence-calibration protocol is supplied.",
+        "The example threshold's accuracy and coverage are dataset-specific reported results, not guarantees for new data.",
+        "The treatment of invalid SMILES during output canonicalization is unspecified.",
+        "Beam termination rules and handling of duplicate canonicalized predictions are unspecified."
+      ]
+    }
+  ],
+  "no_skill_reason": ""
+}

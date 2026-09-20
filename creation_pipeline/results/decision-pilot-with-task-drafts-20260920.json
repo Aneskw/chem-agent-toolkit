@@ -1,0 +1,41 @@
+{
+  "run_id": "decision-pilot-with-task-drafts-20260920",
+  "paper_id": "LJMZ9IL6",
+  "stage": "drafts_rendered",
+  "status": "method_drafts_created",
+  "omitted_source_sections": 0,
+  "source_text_complete": true,
+  "source_scope": "paper_primary_text",
+  "model_origin": "saved_response_replay",
+  "evaluation_task_drafts": 2,
+  "evaluation_task_drafts_state": "draft_requires_review",
+  "candidate_kinds": {
+    "method_procedure": 2,
+    "tool_usage": 0
+  },
+  "candidate_count": 2,
+  "checks": [
+    {
+      "name": "prepare-single-product-reaction-sequences",
+      "state": "draft_unexecuted",
+      "missing_repo_files": [],
+      "external_assets_unverified": [
+        "https://zenodo.org/record/1004356#.Wd3LDY6l2EI",
+        "Schneider, Stieﬂ, and Landrum (2016), What’s What: The (Nearly) Deﬁnitive Guide to Reaction Role Assignment"
+      ],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    },
+    {
+      "name": "predict-reaction-products-with-confidence-abstention",
+      "state": "draft_unexecuted",
+      "missing_repo_files": [],
+      "external_assets_unverified": [
+        "https://github.com/tensorflow/nmt"
+      ],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    }
+  ],
+  "source_bundle_sha256": "4f23b98c126cfab281fa686626fa9c93162d2178cb3f05570b01d354e0e457e1",
+  "response_sha256": "e3ab63a1c1f99ec97b548bc74d8f1a22fd023c376944d54bed4412e124930bba",
+  "run_dir": "creation_pipeline/runs/decision-pilot-with-task-drafts-20260920"
+}

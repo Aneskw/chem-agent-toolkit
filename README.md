@@ -58,6 +58,21 @@ separates raw-tool, tools-only, and complete-skill effects with held-out tasks.
 
 Paper snapshots, repository evidence, run logs, and format notes are kept in the project archive. Each skill's `reference` section points to a pinned source. A verified status means only that the stated execution checks passed.
 
+## Paper decision-rule case study
+
+The [non-LocalRetro case study](evaluation/method_decisions/RUN_THIS.md) shows
+the complete research workflow on paper `LJMZ9IL6`: locked PDF source →
+source-cited method draft → positive/negative task proposals → human-reviewed
+answers → paired no-skill/with-skill agent runs. Run the commands in that guide
+to reproduce the case locally. The source PDF is downloaded and hash-checked;
+the saved model response fixture is included for deterministic replay.
+
+`creation_pipeline/run_pipeline.py --draft-eval-tasks` adds optional automatic
+task **proposals** for each method candidate. Review their chemistry, novelty,
+applicability and gold answers before scoring. The [case study results](evaluation/method_decisions/RESULTS.md)
+show that the selected confidence/abstention candidate did **not** improve the
+agent in this small pilot; successful extraction is not evidence of agent value.
+
 ## Candidate counts
 
 Numbers such as 9/10 are counts of valid reactant candidates returned by one model inference, not counts of skills or successful experiments. A request for `top_k=10` can yield fewer valid candidates after invalid, duplicate, and placeholder outputs are removed.

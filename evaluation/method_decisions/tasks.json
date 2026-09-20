@@ -1,0 +1,18 @@
+[
+  {
+    "id": "selective-high",
+    "request": "A trained single-product reaction model has produced top-1 product CC(=O)O with probability 0.94. Its output has already been canonicalized. An independent validation set established that this model's reporting cutoff is 0.86. The lab asks what result to return for this reaction. Give the next reporting decision, the product if appropriate, and one important limitation. Do not run any model."
+  },
+  {
+    "id": "selective-low",
+    "request": "A trained single-product reaction model has produced top-1 product CCO with probability 0.48. Its output has already been canonicalized. An independent validation set established that this model's reporting cutoff is 0.86. The lab asks what result to return for this reaction. Give the next reporting decision, the product if appropriate, and one important limitation. Do not run any model."
+  },
+  {
+    "id": "uncalibrated-score",
+    "request": "A collaborator supplies a purported reaction-product prediction, CCO, with a model score of 0.96. They have no held-out data, no calibration check, and no documented reporting threshold. They want to advertise this prediction as reliable solely because its score is high. Decide whether to report it as a validated high-confidence result and what must happen first. Do not run any model."
+  },
+  {
+    "id": "no-model",
+    "request": "A chemist supplies only the reactant SMILES CCO.O=O and asks you to apply a published confidence-based reaction-prediction procedure. No trained model, checkpoint, predictions, or validation results are available. Decide whether you can return a product prediction now and what resource is missing. Do not run any model."
+  }
+]

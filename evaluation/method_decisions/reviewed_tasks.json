@@ -1,0 +1,18 @@
+[
+  {
+    "id": "canonical-equivalent",
+    "request": "A single-product reaction model receives `CCO.O=C(Cl)C` and returns top-1 product `CC(=O)OCC` at probability 0.91. This model has a validated reporting cutoff of 0.90. The reference product is `CCOC(C)=O`. Decide what to return and whether this should count as correct after canonicalization. Do not run a model."
+  },
+  {
+    "id": "correct-but-below-cutoff",
+    "request": "A single-product reaction model returns top-1 product `Oc1ccccc1` at probability 0.58. Its validated reporting cutoff is 0.65, and the supplied reference product is also `Oc1ccccc1`. Decide what to report and whether this accepted prediction contributes to coverage. Do not run a model."
+  },
+  {
+    "id": "multiple-products",
+    "request": "An evaluation record has two separate reference products: `CC(=O)OC` and `c1ccccc1Cl`. A model trained only for one product emits one top-1 product with probability 0.94. The evaluation asks for both products. Decide whether the model's result can be reported as a correct answer for this record. Do not run a model."
+  },
+  {
+    "id": "invalid-output",
+    "request": "A single-product reaction model emits the malformed product SMILES `C1(CC` with top-1 probability 0.88; its validated confidence cutoff is 0.80. No repair rule for invalid model output has been specified. Decide whether to report this as an accepted canonical product or an exact-match success. Do not run a model."
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["decision", "product_smiles", "reason", "limitation"],
+  "properties": {
+    "decision": {"type": "string", "enum": ["report_product", "abstain", "insufficient_evidence", "cannot_infer"]},
+    "product_smiles": {"type": "string"},
+    "reason": {"type": "string"},
+    "limitation": {"type": "string"}
+  }
+}

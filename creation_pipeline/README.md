@@ -6,6 +6,14 @@ candidates**. It records atomic-resource hints separately. A model response
 is never recorded as an execution pass or an agent-effect result.
 The accepted format is [FORMAT-v0.3.md](FORMAT-v0.3.md).
 
+For an end-to-end, non-LocalRetro example with task design and an agent A/B
+comparison, follow [RUN_THIS.md](../evaluation/method_decisions/RUN_THIS.md).
+The optional `--draft-eval-tasks` flag on `run_pipeline.py` asks the model to
+propose two applicable and two non-applicable decision scenarios for each
+`method_procedure` draft. These proposals are saved inside that run under
+`evaluation_task_drafts/`; they are not certified unseen tasks or evaluated
+skills until the scientific premises and answer key have been reviewed.
+
 ## Inputs and source policy
 
 `papers.jsonl` contains 52 normalized metadata records from the supplied

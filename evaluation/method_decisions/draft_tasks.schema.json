@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["skill_name", "cases"],
+  "properties": {
+    "skill_name": {"type": "string"},
+    "cases": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "applicability", "request", "expected_behavior", "source_rule", "unseen_basis"],
+        "properties": {
+          "id": {"type": "string"},
+          "applicability": {"type": "string", "enum": ["apply", "do_not_apply"]},
+          "request": {"type": "string"},
+          "expected_behavior": {"type": "string"},
+          "source_rule": {"type": "string"},
+          "unseen_basis": {"type": "string"}
+        }
+      }
+    }
+  }
+}

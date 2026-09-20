@@ -1,0 +1,61 @@
+{
+  "model": "gpt-5.6-luna",
+  "skill": "/Users/xllin/Documents/Codex/2026-09-06/w/outputs/chem-agent-toolkit/skills/generated/verified20-LJMZ9IL6-resource-label-fix/predict-reaction-products-with-confidence-abstention/SKILL.md",
+  "tasks": 4,
+  "attempts": 8,
+  "paired": {
+    "selective-high": {
+      "with-skill": {
+        "ok": true,
+        "complete": true,
+        "output_tokens": 153
+      },
+      "no-skill": {
+        "ok": true,
+        "complete": true,
+        "output_tokens": 122
+      }
+    },
+    "selective-low": {
+      "with-skill": {
+        "ok": true,
+        "complete": true,
+        "output_tokens": 116
+      },
+      "no-skill": {
+        "ok": true,
+        "complete": true,
+        "output_tokens": 106
+      }
+    },
+    "uncalibrated-score": {
+      "no-skill": {
+        "ok": true,
+        "complete": false,
+        "output_tokens": 146
+      },
+      "with-skill": {
+        "ok": true,
+        "complete": false,
+        "output_tokens": 181
+      }
+    },
+    "no-model": {
+      "with-skill": {
+        "ok": true,
+        "complete": false,
+        "output_tokens": 157
+      },
+      "no-skill": {
+        "ok": true,
+        "complete": false,
+        "output_tokens": 137
+      }
+    }
+  },
+  "complete": {
+    "no-skill": 2,
+    "with-skill": 2
+  },
+  "note": "Decision-only synthetic pilot; not chemistry prediction accuracy or formal efficacy proof."
+}

@@ -1,0 +1,6 @@
+{
+  "selective-high": {"expected_decision": "report_product", "expected_product": "CC(=O)O", "applicability": "apply", "reason": "0.94 >= independently validated 0.86"},
+  "selective-low": {"expected_decision": "abstain", "expected_product": "", "applicability": "apply", "reason": "0.48 < independently validated 0.86"},
+  "uncalibrated-score": {"expected_decision": "insufficient_evidence", "expected_product": "", "applicability": "do_not_claim_reliability", "reason": "High raw score is not calibrated confidence; threshold needs independent validation"},
+  "no-model": {"expected_decision": "cannot_infer", "expected_product": "", "applicability": "not_applicable", "reason": "No trained model or prediction is supplied"}
+}

@@ -1,0 +1,6 @@
+{
+  "canonical-equivalent": {"expected_decision": "report_product", "accepted_decisions": ["report_product"], "expected_product": "CCOC(C)=O", "applicability": "apply", "reason": "Above validated cutoff; both valid SMILES canonicalize to CCOC(C)=O"},
+  "correct-but-below-cutoff": {"expected_decision": "abstain", "accepted_decisions": ["abstain"], "expected_product": "", "applicability": "apply", "reason": "Below validated cutoff even though reference match is supplied"},
+  "multiple-products": {"expected_decision": "insufficient_evidence", "accepted_decisions": ["insufficient_evidence", "cannot_infer", "abstain"], "expected_product": "", "applicability": "do_not_apply", "reason": "One-product model cannot claim both-product correctness"},
+  "invalid-output": {"expected_decision": "insufficient_evidence", "accepted_decisions": ["insufficient_evidence", "cannot_infer", "abstain"], "expected_product": "", "applicability": "do_not_apply", "reason": "Malformed SMILES has no valid canonical product"}
+}
