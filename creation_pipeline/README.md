@@ -1,333 +1,203 @@
-# Paper-to-skill creation pipeline
+# 论文到 Skill 的创建流程
 
-This pipeline starts from the two supplied literature exports, then turns
-selected paper full texts and pinned repositories into **cited procedural
-candidates**. It records atomic-resource hints separately. A model response
-is never recorded as an execution pass or an agent-effect result.
-The accepted format is [FORMAT-v0.3.md](FORMAT-v0.3.md).
+本目录从论文、数据库文档、工具文档和模型文档中抽取**带来源引用的方法候选**。单次工具调用会作为资源提示单独记录。模型生成 Skill 草稿，不等于代码可运行，也不等于该 Skill 能改善 agent 的化学任务表现。文档格式见 [FORMAT-v0.3.md](FORMAT-v0.3.md)。
 
-For an end-to-end, non-LocalRetro example with task design and an agent A/B
-comparison, follow [RUN_THIS.md](../evaluation/method_decisions/RUN_THIS.md).
-The optional `--draft-eval-tasks` flag on `run_pipeline.py` asks the model to
-propose two applicable and two non-applicable decision scenarios for each
-`method_procedure` draft. These proposals are saved inside that run under
-`evaluation_task_drafts/`; they are not certified unseen tasks or evaluated
-skills until the scientific premises and answer key have been reviewed.
+想亲自跑一遍“非 LocalRetro 论文 → 决策规则草稿 → 该用／不该用任务 → 有／无 Skill 对照”，请从[复现指南](../evaluation/method_decisions/RUN_THIS.md)开始。这里的任务生成和对照结果保存在 evaluation/method_decisions/。
 
-## Inputs and source policy
+## 快速开始
 
-`papers.jsonl` contains 52 normalized metadata records from the supplied
-`Fwd Prediction.csv` and `Retrosynthesis.csv`. `papers.summary.json` records
-input hashes. Local attachment paths, notes and abstracts from the exports are
-excluded. `repo_map.json` selects five initial reaction-model repositories;
-`source_locks/` stores the exact commits and hashes of selected source files.
-Raw fetched sources and model runs live in ignored `cache/` and `runs/`.
-The LocalRetro article full text is used locally under CC BY-NC-ND 4.0; the
-RetroXpert arXiv PDF is also processed locally. Neither is redistributed here.
+以下命令均在仓库根目录运行。可把 python3 换成项目的 .venv-eval/bin/python。处理 PDF 需要 pypdf；调用模型需要本机已经登录的 codex 命令行工具。本流程使用 Codex 登录状态，不读取 OPENAI_API_KEY。
 
-Run `python3 creation_pipeline/source_coverage.py` for a paper-by-paper audit.
-At this snapshot, 2 of 52 table entries have both local paper full text and
-pinned repository evidence (LocalRetro and RetroXpert), 3 have repository
-evidence only, and 47 have metadata only. The latter groups are collection
-work, not extracted paper skills.
-
-## One-paper run
-
-From the repository root:
-
-```bash
+~~~bash
 python3 creation_pipeline/collect.py --paper-id 2GFR874J
 python3 creation_pipeline/run_pipeline.py --paper-id 2GFR874J --model gpt-6-astra
-```
+~~~
 
-The first command requires internet access. The second uses the locally signed
-in `codex` CLI, so it needs a model that the current Codex account can invoke;
-it does not use `OPENAI_API_KEY`. For a deterministic replay without a model
-call, supply `--response-file /path/to/saved-response.json --skip-collect` and
-a new `--run-id`. Do not treat the replay as a fresh independent extraction.
-The runner automatically prepares the source bundle, calls the model, checks
-source quotes and line spans, renders v0.3 drafts, and validates their format.
-`results/<run-id>.json` records stage, status and source/response hashes.
-By default, a run without primary full text stops as `primary_text_missing` before
-the model call. `--allow-repo-only` is available for explicitly labeled
-repository hints; these are not paper-derived skill candidates. PDF sources
-require `pypdf`; use the project `.venv-eval/bin/python` or another Python
-environment with that dependency.
+第一条命令联网收集来源。第二条命令准备来源文本、调用模型、核对引用原文及行号、生成 v0.3 草稿并检查格式。结果写入 creation_pipeline/results/<run-id>.json，包含阶段、状态及来源／响应哈希。这里的 LocalRetro 只是原有单篇命令示例；非 LocalRetro 的完整案例见上面的复现指南。
 
-If citation checking fails, the original model JSON remains in
-`runs/<run-id>/responses/`. Inspect the mismatch rather than inventing a
-quote. After correcting a mechanical issue, rerun with a fresh ID and
-`--response-file runs/<old-run>/responses/<paper-id>.json --skip-collect` to
-avoid another model call. A replay is not an independent extraction.
+给 run_pipeline.py 加上 --draft-eval-tasks，可以让模型为每个 method_procedure 候选**起草**两道“该用”和两道“不该用”的任务，保存在该次运行的 evaluation_task_drafts/。它不会自动证明题目真正未见过，也不会自动确认答案。正式测试前应审核化学前提、适用范围、与来源的重合及标准答案。实际运行记录见 [decision-pilot-with-task-drafts-20260920.json](results/decision-pilot-with-task-drafts-20260920.json)。
 
-The intended multi-source entry point is `batch_pipeline.py`. Put many local
-paper, database, tool, or model documents in one manifest; each job is
-processed independently and each successful result is published under
-`skills/generated/<run-id>/`:
+### 重放已有模型响应
 
-```bash
+机械错误修复后，可用保存的响应重复引用与格式检查，避免再调用模型。每次使用新的运行 ID：
+
+~~~bash
+python3 creation_pipeline/run_pipeline.py \
+  --paper-id 2GFR874J \
+  --response-file /path/to/saved-response.json \
+  --skip-collect \
+  --run-id my-replay-01
+~~~
+
+**重放不是新的独立抽取。**若引用检查失败，原始模型 JSON 会留在 runs/<run-id>/responses/。应检查原文与行号的差异，不要编造引文。默认情况下，缺少主要来源全文的任务会在模型调用前以 primary_text_missing 停止。显式使用 --allow-repo-only 时，只能生成标明来源范围的仓库提示，不能称为论文来源的 Skill。检查结果里的 omitted_source_sections 和 source_text_complete，确认是否有来源段落未进入本次抽取。
+
+## 输入与来源锁定
+
+papers.jsonl 由用户提供的 Fwd Prediction.csv 和 Retrosynthesis.csv 整理出 52 条文献元数据；papers.summary.json 记录输入哈希。原表中的本地附件路径、笔记和摘要没有直接并入公开目录。repo_map.json 为最初五个反应模型选择仓库，source_locks/ 记录选定文件的提交版本和哈希。下载的原文、缓存及模型运行目录分别放在被 Git 忽略的 acquired/、cache/、runs/。
+
+最早针对五个已映射仓库的覆盖统计为：52 条中 2 条同时有论文全文和固定版本仓库证据（LocalRetro、RetroXpert），3 条只有仓库证据，47 条只有元数据。这个**早期统计**不能代表后来公共来源获取阶段的覆盖率。逐篇检查使用：
+
+~~~bash
+python3 creation_pipeline/source_coverage.py
+~~~
+
+LocalRetro 全文按 CC BY-NC-ND 4.0 许可仅在本机处理；RetroXpert 的 arXiv PDF 也在本机处理，均未随仓库重新分发。
+
+## 批量处理
+
+把多篇论文或数据库、工具、模型文档放进同一个来源清单；每项独立处理，成功的草稿可发布到 skills/generated/<run-id>/：
+
+~~~bash
 .venv-eval/bin/python creation_pipeline/batch_pipeline.py \
   --manifest /path/to/batch-manifest.json \
   --model gpt-6-astra \
   --rounds 1 \
   --push
-```
+~~~
 
-Use `--rounds 2` or more to make independent extraction passes per source.
-Different passes can produce different candidates, so the batch report keeps
-every run separate. This stage deliberately does not deduplicate, execute, or
-claim agent usefulness. See [examples/batch-manifest.example.json](examples/batch-manifest.example.json).
+示例见 [batch-manifest.example.json](examples/batch-manifest.example.json)。--rounds 2 表示对每个来源做两次独立抽取；不同轮次可能产生不同候选，因此报告分开保存。本阶段不会自动去重、执行候选，或宣称它们对 agent 有用。
 
-For the two supplied CSV catalogs, use `mine_available.py` so article IDs do
-not need to be selected manually. It reads `papers.jsonl` and the pinned
-source locks, selects every entry currently in `paper_and_repository` state,
-and skips repository-only and metadata-only records:
+对两张 CSV 文献表，不必逐个指定论文 ID。mine_available.py 读取 papers.jsonl 和来源锁定记录，只处理当前处于 paper_and_repository 状态的条目，跳过只有仓库或元数据的条目：
 
-```bash
+~~~bash
 .venv-eval/bin/python creation_pipeline/mine_available.py \
   --model gpt-6-astra \
   --rounds 1 \
   --push
-```
+~~~
 
-Use `--dry-run` first to print the counts and selected IDs. At the current
-snapshot this selects 2 of 52 records; 3 are repository-only and 47 have only
-metadata. It will expand automatically as full texts and pinned repositories
-are added to the catalog.
+建议先加 --dry-run 查看数量和论文 ID。早期快照中选中 52 条里的 2 条；随着全文和固定版本代码进入目录，数量会增加。
 
-## Other papers and database/tool/model documentation
+### 获取公开论文
 
-The catalog collector above is specific to the supplied CSVs and five
-reviewed repository mappings. The extraction core also accepts a local JSON
-source manifest without a catalog ID or repository. Copy
-`examples/database-source.example.json` to a working directory, replace its
-placeholder path, URL and SHA-256, and place the downloaded document at the
-path relative to the manifest. Run:
+acquire_catalog_sources.py 扫描 papers.jsonl，尝试 arXiv、PMLR、开放出版页面、OpenAlex、Unpaywall 等公开来源，生成 acquisition_report.json 与 acquired_manifest.json。无法取得公开全文的记录标为 source_missing，不会虚构论文内容。原始下载文件保存在被 Git 忽略的 creation_pipeline/acquired/；报告和清单可提交，以便重新取得和核对来源。
 
-```bash
-.venv-eval/bin/python creation_pipeline/run_pipeline.py \
-  --config /path/to/source-manifest.json \
-  --run-id my-source-01
-```
+取得来源后，可以这样尝试最多 20 篇：
 
-The legacy field `paper_id` is a safe **job identifier** in this manifest;
-it does not imply a paper. `source_type` may be `paper`, `database`, `tool`, or
-`model`. Give the primary document respectively the role `paper`,
-`database_doc`, `tool_doc`, or `model_doc`. Additional implementation files
-can use `repo_code`/`repo_doc` when `repo_root` and preferably a pinned
-`repo_manifest` are supplied. The core reads local PDF, JATS XML, HTML,
-Markdown, text, code and notebook files. It checks quoted line spans against
-the actual extracted text and enforces a declared SHA-256. A missing primary
-document stops the run unless `--allow-repo-only` explicitly requests
-secondary hints. The document's `url` records provenance; it does **not**
-fetch that URL. Automated discovery, licensing review and downloading for
-arbitrary sites are not implemented. Database documentation can support
-conditional procedures, but a single API invocation remains a `tool_usage`
-hint rather than a procedural skill. Every candidate needs semantic review.
-The extractor scans the selected source text, not a hard-coded paragraph or
-line number. It currently makes one model pass with a context budget and at
-most four candidates per job. Check `omitted_source_sections` and
-`source_text_complete` in the result; a long or poorly selected source is
-**not** an exhaustive mining run. Automatic section-by-section traversal and
-cross-chunk consolidation remain future work.
-
-## Abstraction and deduplication
-
-After paper-backed runs, group their `method_procedure` candidates across
-papers and compare them with the existing resource catalog:
-
-```bash
-.venv-eval/bin/python creation_pipeline/abstract_dedup.py \
-  --source 2GFR874J=localretro-v03-replay \
-  --source 74LHJIVM=retroxpert-paper-code-full \
-  --run-id localretro-retroxpert-code-v2
-```
-
-The stage proposes a task-level capability, conditional decision rules, and a
-deduplication action for every candidate. It also records overlap with existing
-packages. Each candidate must appear in exactly one group. It renders v0.3
-`procedural_skill_candidate` documents locally and writes a compact review
-report in `results/`. Semantic merging is **never automatic**: the report's
-`human_review_required` state must be resolved before publication or installation.
-This stage does not run agent tasks or claim that a proposed skill is useful.
-The selected LocalRetro/RetroXpert draft documents and overlap notes are
-archived in `candidates/localretro-retroxpert-code-v2/` for review; they are
-not linked from the flat installation directory.
-
-## Status and promotion
-
-`source_collected` means source bytes were locked. `cited_draft` means the
-response schema and cited text locations passed mechanical checks; it does not
-mean the procedure is correct. `package_valid` adds a usable script/interface.
-`execution_passed` requires an actual positive and negative test in the stated
-environment. `heldout_passed` requires independent task evaluation.
-`blocked_resources` records missing data, weights or endpoints. Only reviewed,
-tested packages are linked from `skills/`.
-
-LocalRetro's replay in `results/localretro-v03-replay.json` produced three
-cited candidates. One is blocked by absent training data, one overlaps the
-existing LocalRetro inference skill, and one needs a forward model for a
-round-trip check. They are **not** counted as three working skills.
-RetroPrime's earlier model response was replayed after an external-URL validation fix
-(`results/retroprime-v03-replay.json`) and produced two cited candidates: a
-weight-blocked inference procedure overlapping the existing RetroPrime skill,
-and an unexecuted two-stage training procedure. These are repository-derived
-tool-usage drafts; RetroPrime paper full text has not been ingested.
-LocalTransform's earlier live run in `results/localtransform-v03-live.json` produced
-three citation-checked drafts. All three are blocked because the pinned
-repository tree lacks the referenced preprocessing, training or decoding
-scripts; no LocalTransform execution pass is claimed. Its paper full text has
-not been ingested either.
-RetroXpert's first paper-plus-code model response had two PDF whitespace/line
-span citation discrepancies. `repair_citation_spans.py` accepted only quotes
-that matched the nearby PDF text after whitespace normalization, recorded both
-changes, and a saved-response replay produced two cited method drafts in
-`results/retroxpert-paper-code-repaired.json`. This is a citation check, not a
-chemical or execution validation.
-The subsequent full-source run added six pinned implementation files alongside
-the PDF and README. It produced two paper-and-code method drafts plus one
-repository-only mapping utility hint in `results/retroxpert-paper-code-full.json`.
-The final four-method abstraction report is
-`results/localretro-retroxpert-code-v2-abstraction.json`.
-
-Five separately implemented **atomic resource packages** currently use the v0.3 format: RDKit
-compound filtering, RDKit atom-map audit, RDKit retrosynthesis candidate
-evaluation, LocalRetro template-library preflight, and RetroPrime inference
-preflight. Their tests establish only the documented deterministic or
-file-checking scope. They have not established a change in agent decision
-behavior or reaction-prediction accuracy.
-# Public-catalog acquisition and batch extraction
-
-`acquire_catalog_sources.py` scans every row in `papers.jsonl`, follows public
-open-access locations (arXiv, PMLR, publisher OA pages, OpenAlex and
-Unpaywall), and writes a local `acquisition_report.json` plus an
-`acquired_manifest.json`. A row is marked `source_missing` when no public
-full-text file can be downloaded; the pipeline never invents article content.
-
-Raw downloads live under `creation_pipeline/acquired/` and are ignored by git.
-The report and manifest are committed so the run is reproducible without
-putting article PDFs in the repository.
-
-After acquisition, run up to 20 source jobs with:
-
-```bash
+~~~bash
 .venv-eval/bin/python creation_pipeline/batch_pipeline.py \
   --manifest creation_pipeline/acquired_manifest.json \
   --model gpt-6-astra --max-jobs 20 \
   --prefix public20-$(date +%Y%m%d-%H%M%S) --push
-```
+~~~
 
-`--max-jobs 20` means twenty papers are attempted; the resulting batch report
-records the actual candidate count. It may be smaller than 20 because a paper
-can yield zero candidates or because the model service fails. Each generated
-candidate is source-validated and citation-checked; execution and agent-effect
-validation remain separate stages.
+--max-jobs 20 指**尝试 20 篇**，不保证生成 20 个候选：某篇可能没有足够的方法信息，也可能遇到模型服务失败。候选经过来源与引用检查，执行验证和 agent 效果评估仍是后续步骤。
 
-## General paper and database ingestion
+## 其他论文、数据库、工具和模型文档
 
-The entry point is no longer restricted to the 52-paper catalog or named
-repositories. Supply a document, directory, public URL, or mixed JSON catalog:
+抽取核心不限于上述 52 篇，也不要求配套仓库。可复制 [database-source.example.json](examples/database-source.example.json)，替换来源路径、URL、SHA-256，并把文档放在相对于清单的指定位置：
 
-```bash
-# All supported documents in a local paper directory
+~~~bash
+.venv-eval/bin/python creation_pipeline/run_pipeline.py \
+  --config /path/to/source-manifest.json \
+  --run-id my-source-01
+~~~
+
+清单中的历史字段 paper_id 在此只是安全的**任务标识**，不表示来源必须是论文。source_type 可以是 paper、database、tool 或 model；主要文档分别使用 paper、database_doc、tool_doc、model_doc 角色。补充实现文件可用 repo_code／repo_doc；这时最好提供 repo_root 和固定版本的 repo_manifest。
+
+核心读取本地 PDF、JATS XML、HTML、Markdown、纯文本、代码和 notebook，检查引用行是否出现在提取原文中，并核对声明的 SHA-256。清单里的 url 用于记录出处，**不会**由这个入口自动下载。缺少主要文档时，除非显式使用 --allow-repo-only，否则停止。数据库文档可以支持条件化操作规则；单次 API 请求仍属于 tool_usage 提示，不自动成为方法 Skill。
+
+抽取不会固定在某段或某行；但单次 run_pipeline.py 有上下文预算，每项至多返回四个候选。若来源很长或选段不佳，不能把一次成功运行解释为“挖完全文”。任意网站的自动发现、许可审查和下载不由这个清单入口完成；跨文本片段自动归纳也尚未由它保证。
+
+### 更通用的文档、URL 和表格入口
+
+run_public_pipeline.py 可接受本地文档、目录、公开 URL、混合 JSON 清单，或推断 CSV／TSV／XLSX 表格中的论文和来源列：
+
+~~~bash
+# 本地论文目录
 .venv-eval/bin/python creation_pipeline/run_public_pipeline.py \
   --input /absolute/path/to/papers --source-type paper \
   --target-candidates 20 --model gpt-6-astra --push
 
-# Database documentation URL (not a raw database connection)
+# 数据库文档网址，不是直接连接数据库
 .venv-eval/bin/python creation_pipeline/run_public_pipeline.py \
   --input https://example.org/database/api-documentation \
   --source-type database --target-candidates 2 --model gpt-6-astra
 
-# Heterogeneous sources and multiple supporting documents per resource
+# 混合来源清单
 .venv-eval/bin/python creation_pipeline/run_public_pipeline.py \
   --catalog /absolute/path/to/sources.json --target-candidates 20 --push
 
-# Infer paper/DOI/PDF/repository columns from CSV, TSV, or XLSX
+# 从表格推断论文、DOI、PDF、仓库等列
 .venv-eval/bin/python creation_pipeline/run_public_pipeline.py \
   --table /absolute/path/to/papers.xlsx --target-candidates 20 --push
-```
+~~~
 
-Example `sources.json` (paths resolve relative to this file):
+sources.json 示例；相对路径以该文件所在目录为基准：
 
-```json
+~~~json
 {
   "items": [
-    {"id": "paper-a", "source_type": "paper", "title": "A new paper",
+    {"id": "paper-a", "source_type": "paper", "title": "论文 A",
      "sources": [{"path": "paper.pdf"}, {"path": "supplement.md"}]},
-    {"id": "database-b", "source_type": "database", "title": "A new database",
+    {"id": "database-b", "source_type": "database", "title": "数据库 B",
      "sources": [{"url": "https://example.org/api-docs"},
                  {"path": "schema.sqlite"},
                  {"path": "data-dictionary.md"}]}
   ]
 }
-```
+~~~
 
-To acquire and inspect sources without calling a model:
+只获取并检查来源、不调用模型时：
 
-```bash
+~~~bash
 .venv-eval/bin/python creation_pipeline/ingest_sources.py \
   --catalog /absolute/path/to/sources.json \
   --out creation_pipeline/intakes/my-sources
-```
+~~~
 
-Supported inputs: text PDFs, JATS XML, HTML, Markdown, plain text, DOCX,
-notebooks, JSON/JSONL, YAML/OpenAPI, SQL, CSV/TSV and local SQLite schemas.
-SQLite access is read-only and exports schema only, not table records.
-CSV/TSV rows default to metadata: provide documentation to support a procedure.
-Remote input follows explicit PDF links on paper landing pages; a detected
-abstract/access-challenge page is rejected. HTML screening is heuristic and
-still needs source review. This is not an unrestricted website crawler.
+支持文本型 PDF、JATS XML、HTML、Markdown、纯文本、DOCX、notebook、JSON／JSONL、YAML／OpenAPI、SQL、CSV／TSV 和本地 SQLite 模式。SQLite 只读并只导出结构，不导出表记录。CSV／TSV 的行默认是元数据；抽取方法仍需相应文档。公开论文落地页上的 PDF 链接会被跟随；摘要页或访问验证页面会被拒绝，但 HTML 判断仍需人工复核。这不是无限制的网页爬虫。
 
-Long documents are normalized into bounded segments with original file hashes,
-pages, URLs and a segment inventory in `ingestion_report.json`. Every primary
-text segment is queued rather than silently skipped due to context length.
-Segments are extracted independently; cross-segment synthesis is not claimed.
-Failures remain recorded per input while other inputs continue.
+长文档按预算分段，ingestion_report.json 保留原文件哈希、页码、URL 和片段清单。各主要文本片段会排队抽取，不因上下文长度而静默丢弃；但片段之间不会自动合并为同一个方法。单个来源失败会记录下来，其他来源继续处理。
 
-Tables are converted by `table_to_catalog.py`. It recognizes common aliases
-such as `title`, `paper`, `doi`, `url`, `pdf`, `github`, `repository`, `type`
-and `category`, reports ambiguous mappings, and leaves rows without a public
-source in the conversion report. The mapping is heuristic and must be
-reviewed when a table uses project-specific column names.
+table_to_catalog.py 识别 title、paper、doi、url、pdf、github、repository、type、category 等常见列名；含糊的映射会报告，没有公开来源的行也会留在转换报告中。项目自定义列名需要人工审核。扫描版 PDF 需要 OCR；私有或需认证的数据库需要用户提供有权使用的文档或模式。来源没有可支持的方法时，不会凭空生成可靠 Skill。
 
-The pipeline does not promise useful skills from every paper or database.
-Scanned PDFs require OCR; authenticated/private databases require the user to
-export authorized documentation/schema; a method absent from the supplied
-material produces no supported skill. Source citations and package format are
-checked; execution and agent-utility experiments are separate.
+在 macOS 上，模型子进程优先继承显式代理环境变量；没有设置时可使用已启用的系统 HTTPS 代理。它不会修改系统代理配置。
 
-On macOS the model subprocess now inherits explicit proxy environment variables,
-or uses the enabled system HTTPS proxy when none is set. This fixes the observed
-case where the app connected but CLI sampling timed out. It never changes the
-system's proxy configuration.
+## 抽象与去重
 
-## Packaged tool execution check
+有了多篇论文中的 method_procedure 候选后，可按任务级能力分组，并与现有资源目录比较：
 
-`publish_run.py` now checks each generated package after copying it into
-`skills/generated/`. The result is written to the skill's
-`reports/execution.json`, and each status is summarized in `PUBLISHING.json`
-and the batch report:
+~~~bash
+.venv-eval/bin/python creation_pipeline/abstract_dedup.py \
+  --source 2GFR874J=localretro-v03-replay \
+  --source 74LHJIVM=retroxpert-paper-code-full \
+  --run-id localretro-retroxpert-code-v2
+~~~
 
-- `not_applicable`: no packaged Python script; assess the text skill with an
-  agent task comparison instead.
-- `untested_no_fixture`: a packaged script exists but no test case is declared.
-- `passed` or `failed`: all declared script cases passed, or at least one did not.
+该阶段为每个候选提出能力表述、条件决策规则和去重建议，并记录与已有包的重叠关系；每个候选必须进入且只进入一个组。它在本地生成 v0.3 的 procedural_skill_candidate 文档，并在 results/ 写审核报告。**语义合并不会自动执行**：报告的 human_review_required 状态必须处理后才能发布或安装。这一步也不运行 agent 任务。原 LocalRetro／RetroXpert 对照草稿保存在 candidates/localretro-retroxpert-code-v2/，没有放进扁平安装入口。
 
-The optional `execution/fixtures.json` must declare cases with a local
-`scripts/*.py` path, string `args`, an `expected_exit`, and optionally
-`expected_json_lines` for exact output assertions (nested dictionaries may
-specify only the fields of interest). Each case runs with a 60-second maximum
-in a temporary copy, using a reduced environment without API secrets.
-Downloaded papers and cited repository code are never run merely because
-they appear in source material. The fixture is part of the reviewed skill
-package. These checks establish only the specified local behavior; model
-inference accuracy and agent utility require separate evaluations.
+## 发布后的工具执行检查
 
-For an existing tool skill, run:
+publish_run.py 把生成包复制到 skills/generated/ 后，会检查包内声明的可执行脚本。单个包的结果在 reports/execution.json，汇总在 PUBLISHING.json 和批量报告中：
 
-```bash
+- not_applicable：没有打包的 Python 脚本；应通过 agent 任务对照评价文字方法。
+- untested_no_fixture：有脚本，但没有声明测试用例。
+- passed／failed：声明的脚本用例全部通过／至少有一项失败。
+
+可选的 execution/fixtures.json 为每个测试声明本地 scripts/*.py、字符串参数 args、expected_exit，以及可选的 expected_json_lines 输出断言。每例在临时副本中最多运行 60 秒，环境中不传 API 密钥。不会因为论文或仓库文件出现在来源材料里就直接执行。脚本通过只证明指定的本地行为；模型预测精度与 agent 效用需要分别评估。
+
+对已有工具 Skill，可单独运行：
+
+~~~bash
 .venv-eval/bin/python creation_pipeline/validate_tool_execution.py \
   tools-skills/rdkit/chem-rdkit-descriptors \
   --output creation_pipeline/results/rdkit-execution-check.json
-```
+~~~
+
+## 如何理解各项状态
+
+| 状态 | 含义 |
+| --- | --- |
+| source_collected | 来源字节已锁定版本。 |
+| cited_draft | 响应结构与引用位置通过机械检查；方法语义仍需审核。 |
+| package_valid | 另有可用的脚本或接口。 |
+| execution_passed | 在说明的环境下，正反执行用例实际通过。 |
+| heldout_passed | 已完成独立任务评价；须查看任务、指标和结果。 |
+| blocked_resources | 缺少数据、权重或服务入口。 |
+
+只有经过审核、相应测试通过的包才应进入 skills/ 安装入口。**来源有效、格式有效、脚本能运行、能改变 agent 决策**是不同层级的结论，不可互相替代。
+
+早期案例说明了区别：LocalRetro 的重放生成三个引用候选，但分别受到训练数据缺失、与已有资源重叠、缺少正向模型限制；不能算三个可工作 Skill。RetroPrime 的仓库响应修复外部 URL 校验后重放，得到两个仓库来源草稿，但没有论文全文或执行验证。LocalTransform 的三个草稿虽通过引用检查，固定版本仓库却缺少相应预处理、训练或解码脚本。RetroXpert 的首次论文加代码抽取有两处 PDF 空白／行号偏差，经邻近原文校正后得到两个引用草稿；扩大到 PDF、README 和六个固定版本实现文件后，得到两个论文加代码方法草稿及一个仅来自仓库的映射提示。对应报告均在 creation_pipeline/results/，不能视为化学效果验证。
+
+另有五个按 v0.3 格式实现的**原子资源包**：RDKit 化合物过滤、RDKit 原子映射检查、RDKit 逆合成候选评分、LocalRetro 模板库预检、RetroPrime 推理预检。它们的测试只证明写明的确定性计算或文件检查范围，尚不能证明 agent 决策改善或反应预测精度提高。
