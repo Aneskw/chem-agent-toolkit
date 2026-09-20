@@ -293,3 +293,33 @@ On macOS the model subprocess now inherits explicit proxy environment variables,
 or uses the enabled system HTTPS proxy when none is set. This fixes the observed
 case where the app connected but CLI sampling timed out. It never changes the
 system's proxy configuration.
+
+## Packaged tool execution check
+
+`publish_run.py` now checks each generated package after copying it into
+`skills/generated/`. The result is written to the skill's
+`reports/execution.json`, and each status is summarized in `PUBLISHING.json`
+and the batch report:
+
+- `not_applicable`: no packaged Python script; assess the text skill with an
+  agent task comparison instead.
+- `untested_no_fixture`: a packaged script exists but no test case is declared.
+- `passed` or `failed`: all declared script cases passed, or at least one did not.
+
+The optional `execution/fixtures.json` must declare cases with a local
+`scripts/*.py` path, string `args`, an `expected_exit`, and optionally
+`expected_json_lines` for exact output assertions (nested dictionaries may
+specify only the fields of interest). Each case runs with a 60-second maximum
+in a temporary copy, using a reduced environment without API secrets.
+Downloaded papers and cited repository code are never run merely because
+they appear in source material. The fixture is part of the reviewed skill
+package. These checks establish only the specified local behavior; model
+inference accuracy and agent utility require separate evaluations.
+
+For an existing tool skill, run:
+
+```bash
+.venv-eval/bin/python creation_pipeline/validate_tool_execution.py \
+  tools-skills/rdkit/chem-rdkit-descriptors \
+  --output creation_pipeline/results/rdkit-execution-check.json
+```

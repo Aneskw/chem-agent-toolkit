@@ -8,6 +8,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+from validate_tool_execution import validate as validate_execution
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -49,6 +50,20 @@ def main() -> int:
     destination.mkdir(parents=True)
     for candidate in candidates:
         shutil.copytree(candidate, destination / candidate.name)
+    execution_checks = {}
+    for candidate in candidates:
+        report = validate_execution(destination / candidate.name)
+        execution_checks[candidate.name] = report
+        report_path = destination / candidate.name / "reports" / "execution.json"
+        report_path.parent.mkdir(exist_ok=True)
+        report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    statuses = {name: report['status'] for name, report in execution_checks.items()}
+    executable_present = any(status != 'not_applicable' for status in statuses.values())
+    all_executable_passed = executable_present and all(status in {'passed','not_applicable'} for status in statuses.values())
+    publication_state = ('tool_execution_checked_candidate' if all_executable_passed
+                         else 'tool_execution_failed_candidate' if 'failed' in statuses.values()
+                         else 'tool_execution_unchecked_candidate' if executable_present
+                         else 'source_validated_candidate')
     manifest = {
         "run_id": args.run_id,
         "paper_id": result.get("paper_id"),
@@ -56,16 +71,18 @@ def main() -> int:
         "source_scope": result.get("source_scope"),
         "source_text_complete": result.get("source_text_complete"),
         "candidate_count": len(candidates),
-        "publication_state": "source_validated_candidate",
-        "execution_validated": False,
+        "publication_state": publication_state,
+        "execution_validated": all_executable_passed,
+        "execution_checks": statuses,
         "agent_effect_validated": False,
-        "note": "Published automatically after source citation, schema, and format checks; no execution or agent utility test was run.",
+        "note": "Source citations and format checked. Declared packaged script fixtures ran where present; this does not establish scientific correctness or agent utility.",
     }
     (destination / "PUBLISHING.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     readme = destination / "README.md"
     readme.write_text(
-        "# Generated source-validated candidates\n\n"
-        "These packages were generated from a cited extraction run. They are not execution-validated skills. "
+        "# Generated skill candidates\n\n"
+        "These packages were generated from a cited extraction run. Packaged script fixture results, "
+        "where applicable, are in each `reports/execution.json`. No agent utility test has been run. "
         "Review the source evidence and requirements before installation. See `PUBLISHING.json`.\n",
         encoding="utf-8",
     )

@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "name": "ethanol_descriptors",
+      "script": "scripts/calc_descriptors.py",
+      "args": ["--smiles", "CCO"],
+      "expected_exit": 0,
+      "expected_json_lines": [
+        {"ok": true, "canonical_smiles": "CCO", "descriptors": {"molecular_weight": 46.069, "h_bond_donors": 1, "h_bond_acceptors": 1}}
+      ]
+    },
+    {
+      "name": "invalid_smiles_is_rejected",
+      "script": "scripts/calc_descriptors.py",
+      "args": ["--smiles", "not-a-smiles"],
+      "expected_exit": 2,
+      "expected_json_lines": [
+        {"ok": false, "input": "not-a-smiles", "error": "Invalid or empty SMILES"}
+      ]
+    }
+  ]
+}

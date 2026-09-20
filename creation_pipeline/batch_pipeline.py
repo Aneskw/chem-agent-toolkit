@@ -115,7 +115,12 @@ def main() -> int:
                         record["publish_error"] = publish.stderr[-1200:]
                     else:
                         record["publish_status"] = "published_locally"
-                        published.append(str((ROOT / "skills" / "generated" / run_id).relative_to(ROOT)))
+                        published_path=ROOT / "skills" / "generated" / run_id
+                        publication=json.loads((published_path / "PUBLISHING.json").read_text())
+                        record["execution_checks"] = publication.get("execution_checks", {})
+                        record["execution_validated"] = publication.get("execution_validated", False)
+                        record["publication_state"] = publication.get("publication_state")
+                        published.append(str(published_path.relative_to(ROOT)))
                 else:
                     record["publish_status"] = "not_published"
                 checkpoint('running')
