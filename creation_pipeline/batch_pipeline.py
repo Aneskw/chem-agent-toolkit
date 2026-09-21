@@ -121,6 +121,10 @@ def main() -> int:
                         record["execution_validated"] = publication.get("execution_validated", False)
                         record["publication_state"] = publication.get("publication_state")
                         published.append(str(published_path.relative_to(ROOT)))
+                        for routed in publication.get("classifications", {}).values():
+                            routed_path = routed.get("path")
+                            if routed_path and routed_path not in published:
+                                published.append(routed_path)
                 else:
                     record["publish_status"] = "not_published"
                 checkpoint('running')

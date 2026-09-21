@@ -185,7 +185,7 @@ table_to_catalog.py 识别 title、paper、doi、url、pdf、github、repository
 
 ## 发布后的工具执行检查
 
-publish_run.py 把生成包复制到 skills/generated/ 后，会检查包内声明的可执行脚本。单个包的结果在 reports/execution.json，汇总在 PUBLISHING.json 和批量报告中：
+publish_run.py 会把每次运行完整保存在 skills/generated/ 作为审计副本，同时自动把候选归类到 databases-skills/generated/、tools-skills/generated/、models-skills/open-models/ 或 workflows/generated/。database、tool、model 文档按来源类型路由；论文候选根据标题和 Skill 内容中的模型方法信号区分 AI 模型与一般工作流。可用 `--category` 人工覆盖误分类。加 `--push` 会把审计副本、分类副本一次提交并上传 GitHub。发布时还会检查包内声明的可执行脚本。单个包的结果在 reports/execution.json，汇总在 PUBLISHING.json 和批量报告中：
 
 - not_applicable：没有打包的 Python 脚本；应通过 agent 任务对照评价文字方法。
 - untested_no_fixture：有脚本，但没有声明测试用例。

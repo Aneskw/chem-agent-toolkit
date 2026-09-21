@@ -11,6 +11,16 @@
     "construct-leaving-group-vocabulary": "not_applicable",
     "graphretro-beam-search-retrosynthesis": "not_applicable"
   },
+  "classifications": {
+    "construct-leaving-group-vocabulary": {
+      "category": "model",
+      "path": "models-skills/open-models/construct-leaving-group-vocabulary"
+    },
+    "graphretro-beam-search-retrosynthesis": {
+      "category": "model",
+      "path": "models-skills/open-models/graphretro-beam-search-retrosynthesis"
+    }
+  },
   "agent_effect_validated": false,
   "note": "Source citations and format checked. Declared packaged script fixtures ran where present; this does not establish scientific correctness or agent utility."
 }

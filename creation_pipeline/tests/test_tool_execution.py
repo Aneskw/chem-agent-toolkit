@@ -61,6 +61,24 @@ class ToolExecutionTests(unittest.TestCase):
             manifest=json.loads((root/'skills'/'generated'/'sample'/'PUBLISHING.json').read_text())
             self.assertTrue(manifest['execution_validated'])
             self.assertEqual(manifest['execution_checks']['tool-skill'],'passed')
+            self.assertTrue((root/'workflows'/'generated'/'tool-skill'/'SKILL.md').is_file())
+
+    def test_paper_model_candidate_is_routed_to_models(self):
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td);here=root/'creation_pipeline';run=here/'runs'/'sample'
+            package=run/'drafts-v03'/'graph-model-inference'
+            package.mkdir(parents=True)
+            (package/'SKILL.md').write_text('# Graph model inference\nUse neural prediction.\n')
+            job=run/'jobs'/'paper';job.mkdir(parents=True)
+            (job/'bundle.json').write_text(json.dumps({'source_type':'paper','title':'A retrosynthesis model'}))
+            (here/'results').mkdir()
+            (here/'results'/'sample.json').write_text(json.dumps({'status':'method_drafts_created','paper_id':'paper'}))
+            with patch.object(publish_run,'HERE',here),patch.object(publish_run,'ROOT',root),patch('sys.argv',['publish_run.py','--run-id','sample']):
+                self.assertEqual(publish_run.main(),0)
+            routed=root/'models-skills'/'open-models'/'graph-model-inference'/'SKILL.md'
+            self.assertTrue(routed.is_file())
+            manifest=json.loads((root/'skills'/'generated'/'sample'/'PUBLISHING.json').read_text())
+            self.assertEqual(manifest['classifications']['graph-model-inference']['category'],'model')
 
 
 if __name__=='__main__':unittest.main()
