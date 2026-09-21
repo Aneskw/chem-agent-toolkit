@@ -9,6 +9,7 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+from decision_library import build_library
 
 HERE = Path(__file__).resolve().parent
 
@@ -98,6 +99,12 @@ def main() -> int:
         kind_counts = {kind: sum(item["kind"] == kind for item in response_data["candidates"])
                        for kind in ("method_procedure", "tool_usage")}
         status["stage"] = "citations_validated"
+        library = build_library([response_data])
+        (run / "decision_library.json").write_text(
+            json.dumps(library, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
+        status["decision_rules"] = library["unique_rules"]
+        status["utility"] = "not_evaluated"
         if job["status"] == "drafts_created":
             drafts = run / "drafts-v03"
             call(str(HERE / "render_drafts_v03.py"), "--run", str(run),

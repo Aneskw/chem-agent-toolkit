@@ -1,0 +1,6 @@
+{
+  "rs-frontier":"B", "rs-and":"C", "rs-stock":"A", "rs-cycle":"C",
+  "rs-empty":"B", "rs-score-floor":"A", "rs-optimality":"C", "rs-scope":"B",
+  "rx-edge-direction":"B", "rx-edge-count":"C", "rx-zero-count":"A", "rx-error-augmentation":"B",
+  "rx-order":"C", "rx-intermediates":"A", "rx-order-scope":"B", "rx-shift":"C"
+}

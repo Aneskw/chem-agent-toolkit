@@ -1,0 +1,6 @@
+{
+  "paper-a": {
+    "bundle": "../../creation_pipeline/runs/paper-a/jobs/paper-a/bundle.json",
+    "skills": "../../creation_pipeline/runs/paper-a/drafts-v03"
+  }
+}

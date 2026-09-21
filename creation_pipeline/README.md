@@ -2,10 +2,34 @@
 
 本目录从论文、数据库文档、工具文档和模型文档中抽取**带来源引用的方法候选**。模型先按 [OPERATIONAL-CONTRACT-v1.md](OPERATIONAL-CONTRACT-v1.md) 提取适用范围、前置条件、步骤、决策分支、验证检查和停止条件，再由程序核对引用并渲染为 [FORMAT-v0.3.md](FORMAT-v0.3.md) 草稿。单次工具调用会作为资源提示单独记录。
 
+完整流程是“来源锁定 → 操作契约抽取与复核 → 引用校验 → Skill 草稿 → 保守去重 → 三臂效果评测”。通用评测协议见[无 Skill／原始来源／生成 Skill 三臂评测](../evaluation/decision_gain/PROTOCOL.md)。评测的 `plan` 阶段只验证材料、盲化和调度；只有正式 `run` 的结果才能作为 agent 效用证据。
+
 
 ## 快速开始
 
 以下命令均在仓库根目录运行。可把 python3 换成项目的 .venv-eval/bin/python。处理 PDF 需要 `pypdf`，检查 Skill YAML 格式需要 `PyYAML`；调用模型需要本机已经登录的 codex 命令行工具。本流程使用 Codex 登录状态，不读取 OPENAI_API_KEY。
+
+### 任意论文 PDF 与固定版本代码仓库
+
+不必先把论文加入内置 CSV。下面的入口接受本地或公开 PDF，以及本地 Git checkout、HTTPS 或 SSH Git 地址；它读取指定 commit 的对象，不会把工作区未提交修改当作证据：
+
+~~~bash
+python3 creation_pipeline/pair_sources.py \
+  --pdf /absolute/path/to/paper.pdf \
+  --repo /absolute/path/to/repository \
+  --ref COMMIT_SHA \
+  --paper-id my-paper \
+  --out creation_pipeline/intakes/my-paper
+
+python3 creation_pipeline/run_pipeline.py \
+  --config creation_pipeline/intakes/my-paper/config.json \
+  --model gpt-6-astra \
+  --run-id my-paper-v1
+~~~
+
+`pair_sources.py` 默认按文件名选取最多 16 个与预测、搜索、训练、预处理和测试相关的代码/文档文件；可重复使用 `--file` 明确指定入口。`source_pair.json` 记录 commit、文件选择、未读文件和 PDF 哈希。远端仓库下载较慢时可增加 `--clone-timeout 1800`。
+
+每次运行还生成 `decision_library.json`。只有触发条件、动作、验证、停止条件和负向适用范围全部一致的规则才会合并；动作相似但边界不同的规则保留为变体。该去重不扩大适用范围，也不表示 Skill 已验证有效。
 
 ~~~bash
 python3 creation_pipeline/collect.py --paper-id 2GFR874J
