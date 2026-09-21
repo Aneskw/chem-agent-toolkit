@@ -1,0 +1,6 @@
+{
+  "skill": "generate-and-filter-chemical-reasoning-examples",
+  "status": "not_applicable",
+  "cases": [],
+  "scope": "No packaged Python script; evaluate agent usefulness separately."
+}

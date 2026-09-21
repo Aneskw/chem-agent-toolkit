@@ -1,0 +1,59 @@
+{
+  "selection_id": "agent-reasoning-five-20260921",
+  "selection_state": "source_validated_human_curated",
+  "agent_effect_validated": false,
+  "selection_policy": [
+    "Keep a method only if it changes a decision, search, filtering, ranking, or reasoning-quality step.",
+    "Require complete primary-paper text and validated source-line citations.",
+    "Keep distinct mechanisms separate even when they address the same retrosynthesis task.",
+    "Exclude data cleaning, token alignment, model installation, training-only configuration, and human-only evaluation procedures from this five-skill set."
+  ],
+  "skills": [
+    {
+      "name": "reaction-center-guided-retrosynthesis",
+      "paper_id": "H9EHIF3J",
+      "paper": "Retroformer: Pushing the Limits of End-to-end Retrosynthesis Transformer",
+      "source_run": "agent-reasoning-20260921c-H9EHIF3J-r01",
+      "capability": "Select connected reaction-center hypotheses, prune overlapping centers, and condition ranked reactant generation on the retained centers.",
+      "why_selected": "Adds an explicit reaction-site decision before precursor generation and provides positive thresholds, pruning, diversity, and ranking rules."
+    },
+    {
+      "name": "retro-star-retrosynthetic-planning",
+      "paper_id": "KNGUQJ73",
+      "paper": "Retro*: Learning Retrosynthetic Planning with Neural Guided A* Search",
+      "source_run": "agent-reasoning-20260921d-KNGUQJ73-r01",
+      "capability": "Use an AND-OR tree and estimated complete-route cost to decide which frontier molecule to expand and when to stop.",
+      "why_selected": "Changes route-level search from local reaction ranking to cost-aware best-first planning with explicit first-solution and optimality stopping conditions."
+    },
+    {
+      "name": "experience-guided-retrosynthetic-search",
+      "paper_id": "Z3W4BK3K",
+      "paper": "Retrosynthetic planning with experience-guided Monte Carlo tree search",
+      "source_run": "agent-reasoning-20260921e-Z3W4BK3K-r01",
+      "capability": "Propagate success and failure through an AND-OR tree and use experience-guided scores during budgeted route search.",
+      "why_selected": "Provides a complementary search policy that learns from prior successful and failed decomposition actions rather than relying only on admissible cost estimates."
+    },
+    {
+      "name": "generate-and-filter-chemical-reasoning-examples",
+      "paper_id": "K7ZGXDS6",
+      "paper": "Reasoning-Driven Retrosynthesis Prediction with Large Language Models via Reinforcement Learning",
+      "source_run": "agent-reasoning-20260921e-K7ZGXDS6-r01",
+      "capability": "Generate task-specific chemical rationales, summarize them, score chemical correctness and logic, and retain only high-quality examples.",
+      "why_selected": "Introduces an explicit Analyzer-Summarizer-Assessor loop that can improve the chemical reasoning demonstrations supplied to an agent."
+    },
+    {
+      "name": "augment-and-rank-retrosynthesis-predictions",
+      "paper_id": "K7ZGXDS6",
+      "paper": "Reasoning-Driven Retrosynthesis Prediction with Large Language Models via Reinforcement Learning",
+      "source_run": "agent-reasoning-20260921e-K7ZGXDS6-r01",
+      "capability": "Increase precursor diversity through product-SMILES and reasoning-trajectory sampling, then canonicalize, filter, merge, and frequency-rank candidates.",
+      "why_selected": "Changes the answer-selection path when ordinary beam search collapses to duplicate precursors and includes concrete validity and aggregation rules."
+    }
+  ],
+  "deduplication": {
+    "automatic_abstraction_run": "agent-reasoning-dedup-20260921",
+    "automatic_abstraction_status": "timeout_no_report",
+    "manual_result": "keep_all_five_separate",
+    "rationale": "The five skills operate at different decision layers: reaction-site selection, cost-guided route search, experience-guided route search, reasoning-example quality control, and final candidate diversification/ranking. Retro* and EG-MCTS share an AND-OR representation but use different selection and update mechanisms, so they are related variants rather than duplicates."
+  }
+}

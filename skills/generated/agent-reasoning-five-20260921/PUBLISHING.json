@@ -1,0 +1,46 @@
+{
+  "selection_id": "agent-reasoning-five-20260921",
+  "publication_state": "source_validated_human_curated",
+  "candidate_count": 5,
+  "agent_effect_validated": false,
+  "execution_validated": false,
+  "deduplication": {
+    "automatic_abstraction_run": "agent-reasoning-dedup-20260921",
+    "automatic_abstraction_status": "timeout_no_report",
+    "manual_result": "keep_all_five_separate",
+    "rationale": "The five skills operate at different decision layers: reaction-site selection, cost-guided route search, experience-guided route search, reasoning-example quality control, and final candidate diversification/ranking. Retro* and EG-MCTS share an AND-OR representation but use different selection and update mechanisms, so they are related variants rather than duplicates."
+  },
+  "classifications": {
+    "reaction-center-guided-retrosynthesis": {
+      "category": "model",
+      "path": "models-skills/open-models/reaction-center-guided-retrosynthesis",
+      "source_run": "agent-reasoning-20260921c-H9EHIF3J-r01",
+      "paper_id": "H9EHIF3J"
+    },
+    "retro-star-retrosynthetic-planning": {
+      "category": "model",
+      "path": "models-skills/open-models/retro-star-retrosynthetic-planning",
+      "source_run": "agent-reasoning-20260921d-KNGUQJ73-r01",
+      "paper_id": "KNGUQJ73"
+    },
+    "experience-guided-retrosynthetic-search": {
+      "category": "model",
+      "path": "models-skills/open-models/experience-guided-retrosynthetic-search",
+      "source_run": "agent-reasoning-20260921e-Z3W4BK3K-r01",
+      "paper_id": "Z3W4BK3K"
+    },
+    "generate-and-filter-chemical-reasoning-examples": {
+      "category": "model",
+      "path": "models-skills/open-models/generate-and-filter-chemical-reasoning-examples",
+      "source_run": "agent-reasoning-20260921e-K7ZGXDS6-r01",
+      "paper_id": "K7ZGXDS6"
+    },
+    "augment-and-rank-retrosynthesis-predictions": {
+      "category": "model",
+      "path": "models-skills/open-models/augment-and-rank-retrosynthesis-predictions",
+      "source_run": "agent-reasoning-20260921e-K7ZGXDS6-r01",
+      "paper_id": "K7ZGXDS6"
+    }
+  },
+  "note": "Complete paper text, schema, and source-line citations passed. Selection is based on procedural relevance and manual cross-paper deduplication. Agent utility has not yet been tested."
+}
