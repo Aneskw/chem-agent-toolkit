@@ -1,0 +1,16 @@
+{
+  "run_id": "graph2smiles-20260920-r01",
+  "paper_id": "VJXJQAYZ-part001",
+  "model_origin": "codex_cli",
+  "source_scope": "paper_primary_text",
+  "source_text_complete": true,
+  "candidate_count": 2,
+  "publication_state": "source_validated_candidate",
+  "execution_validated": false,
+  "execution_checks": {
+    "graph-aware-molecular-attention": "not_applicable",
+    "select-and-evaluate-graph2smiles-predictions": "not_applicable"
+  },
+  "agent_effect_validated": false,
+  "note": "Source citations and format checked. Declared packaged script fixtures ran where present; this does not establish scientific correctness or agent utility."
+}

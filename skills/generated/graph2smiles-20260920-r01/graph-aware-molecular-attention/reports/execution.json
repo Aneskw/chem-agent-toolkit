@@ -1,0 +1,6 @@
+{
+  "skill": "graph-aware-molecular-attention",
+  "status": "not_applicable",
+  "cases": [],
+  "scope": "No packaged Python script; evaluate agent usefulness separately."
+}

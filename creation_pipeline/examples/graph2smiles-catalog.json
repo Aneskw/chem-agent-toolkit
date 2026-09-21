@@ -1,0 +1,15 @@
+{
+  "items": [
+    {
+      "id": "VJXJQAYZ",
+      "source_type": "paper",
+      "title": "Permutation Invariant Graph-to-Sequence Model for Template-Free Retrosynthesis and Reaction Prediction",
+      "sources": [
+        {
+          "url": "https://arxiv.org/pdf/2110.09681",
+          "role": "paper"
+        }
+      ]
+    }
+  ]
+}

@@ -14,6 +14,23 @@ python3 creation_pipeline/run_pipeline.py --paper-id 2GFR874J --model gpt-6-astr
 
 第一条命令联网收集来源。第二条命令准备来源文本、调用模型、核对引用原文及行号、生成 v0.3 草稿并检查格式。结果写入 creation_pipeline/results/<run-id>.json，包含阶段、状态及来源／响应哈希。这里的 LocalRetro 只是原有单篇命令示例；非 LocalRetro 的完整案例见上面的复现指南。
 
+### Graph2SMILES 论文示例（VJXJQAYZ）
+
+这篇论文在早期按 DOI 自动获取时被标为 source_missing；[专用来源清单](examples/graph2smiles-catalog.json)改用公开的 arXiv PDF。先获取并解析全文，再抽取 Skill 草稿。每次重跑请给 --out 和 --run-id 使用新的名称：
+
+~~~bash
+python3 creation_pipeline/ingest_sources.py \
+  --catalog creation_pipeline/examples/graph2smiles-catalog.json \
+  --out creation_pipeline/intakes/my-graph2smiles-01
+
+python3 creation_pipeline/run_pipeline.py \
+  --config creation_pipeline/intakes/my-graph2smiles-01/manifest.json \
+  --model gpt-6-astra \
+  --run-id my-graph2smiles-01
+~~~
+
+先在 ingestion_report.json 确认来源为 prepared；再看 creation_pipeline/results/my-graph2smiles-01.json 的状态、候选数量及 source_text_complete。生成的 SKILL.md 在 creation_pipeline/runs/my-graph2smiles-01/drafts-v03/，此时仍是待审核草稿。上述清单只纳入论文 PDF；若要同时分析作者代码仓库，应另行锁定代码版本并把选定代码文件作为补充来源。
+
 给 run_pipeline.py 加上 --draft-eval-tasks，可以让模型为每个 method_procedure 候选**起草**两道“该用”和两道“不该用”的任务，保存在该次运行的 evaluation_task_drafts/。它不会自动证明题目真正未见过，也不会自动确认答案。正式测试前应审核化学前提、适用范围、与来源的重合及标准答案。实际运行记录见 [decision-pilot-with-task-drafts-20260920.json](results/decision-pilot-with-task-drafts-20260920.json)。
 
 ### 重放已有模型响应
