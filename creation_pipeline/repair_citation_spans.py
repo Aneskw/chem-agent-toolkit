@@ -7,6 +7,8 @@ import json
 import re
 from pathlib import Path
 
+from core.creation_schema import candidate_claims
+
 
 def whitespace_match(quote: str, excerpt: str) -> str | None:
     """Return exact source text for a quote differing only in whitespace."""
@@ -32,9 +34,7 @@ def repair(response: dict, bundle: dict) -> tuple[dict, list[dict]]:
     sources = {source["id"]: source for source in bundle["sources"]}
     changes = []
     for candidate in response["candidates"]:
-        claims = candidate["inputs"] + candidate["outputs"] + candidate["steps"]
-        claims += [item["reason"] for item in candidate["requirements"]]
-        for claim in claims:
+        for claim in candidate_claims(candidate):
             for citation in claim["citations"]:
                 source = sources[citation["source_id"]]
                 lines = source["lines"]
@@ -71,10 +71,15 @@ def main() -> int:
     p.add_argument("--bundle", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     args = p.parse_args()
-    result, changes = repair(json.loads(args.response.read_text()), json.loads(args.bundle.read_text()))
+    result, changes = repair(
+        json.loads(args.response.read_text(encoding="utf-8")),
+        json.loads(args.bundle.read_text(encoding="utf-8")),
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
-    args.output.with_suffix(".repairs.json").write_text(json.dumps(changes, ensure_ascii=False, indent=2) + "\n")
+    args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    args.output.with_suffix(".repairs.json").write_text(
+        json.dumps(changes, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     print(json.dumps({"repaired_citations": len(changes), "output": str(args.output)}))
     return 0
 

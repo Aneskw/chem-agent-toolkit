@@ -33,7 +33,7 @@ def main() -> int:
            "--model", args.model, "--output-schema", str(run / "response.schema.json"),
            "--output-last-message", str(output), "-"]
     try:
-        proc = subprocess.run(cmd, input=prompt, text=True, capture_output=True,
+        proc = subprocess.run(cmd, input=prompt, text=True, encoding="utf-8", capture_output=True,
                               cwd=job, timeout=args.timeout, env=model_environment())
     except subprocess.TimeoutExpired:
         print(json.dumps({"status": "timeout", "paper_id": args.paper_id}))

@@ -59,10 +59,10 @@ def main() -> int:
         if not config.is_file():
             raise FileNotFoundError(f"Missing collected source config: {config}")
         call(str(HERE / "core" / "creation.py"), "prepare", "--config", str(config), "--out", str(run))
-        prepared = json.loads((run / "prepared.json").read_text())
+        prepared = json.loads((run / "prepared.json").read_text(encoding="utf-8"))
         if prepared["jobs"][0]["status"] != "prepared":
             raise ValueError(prepared["jobs"][0].get("error", "source preparation failed"))
-        bundle = json.loads((run / "jobs" / args.paper_id / "bundle.json").read_text())
+        bundle = json.loads((run / "jobs" / args.paper_id / "bundle.json").read_text(encoding="utf-8"))
         status["omitted_source_sections"] = len(bundle.get("omitted", []))
         status["source_text_complete"] = not bundle.get("omitted")
         primary_present = bundle["coverage"].get("primary_text_supplied", bundle["coverage"]["paper_text_supplied"])
@@ -89,11 +89,12 @@ def main() -> int:
              "--output", str(repaired_dir / f"{args.paper_id}.json"))
         call(str(HERE / "core" / "creation.py"), "import-response", "--run", str(run),
              "--responses", str(repaired_dir), "--origin", "codex_current_task")
-        extraction = json.loads((run / "import_results" / "summary.json").read_text())
+        extraction = json.loads((run / "import_results" / "summary.json").read_text(encoding="utf-8"))
         job = extraction["jobs"][0]
         if job["status"] not in {"drafts_created", "no_supported_skill"}:
             raise ValueError(job.get("error", "citation audit failed"))
-        response_data = json.loads((run / "import_results" / args.paper_id / "validated.json").read_text())
+        contract_file = run / "import_results" / args.paper_id / "operational-contract.json"
+        response_data = json.loads(contract_file.read_text(encoding="utf-8"))
         kind_counts = {kind: sum(item["kind"] == kind for item in response_data["candidates"])
                        for kind in ("method_procedure", "tool_usage")}
         status["stage"] = "citations_validated"
@@ -125,6 +126,8 @@ def main() -> int:
         status.update({"stage": "drafts_rendered" if job["status"] == "drafts_created" else "no_supported_skill",
                        "status": outcome, "candidate_kinds": kind_counts,
                        "candidate_count": job.get("candidate_count", 0),
+                       "contract_version": response_data["contract_version"],
+                       "contract_file": str(contract_file.relative_to(HERE.parent)),
                        "checks": job.get("checks", []),
                        "source_bundle_sha256": job.get("bundle_sha256"),
                        "response_sha256": job.get("response_sha256"),
@@ -134,10 +137,14 @@ def main() -> int:
     except (OSError, ValueError, subprocess.CalledProcessError) as exc:
         status.update(status="failed", error=f"{type(exc).__name__}: {exc}")
     run.mkdir(parents=True, exist_ok=True)
-    (run / "pipeline_status.json").write_text(json.dumps(status, indent=2, ensure_ascii=False) + "\n")
+    (run / "pipeline_status.json").write_text(
+        json.dumps(status, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
     results = HERE / "results"
     results.mkdir(exist_ok=True)
-    (results / f"{run_id}.json").write_text(json.dumps(status, indent=2, ensure_ascii=False) + "\n")
+    (results / f"{run_id}.json").write_text(
+        json.dumps(status, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
     print(json.dumps(status, ensure_ascii=False))
     return 0 if status["status"] in {"method_drafts_created", "atomic_resource_hints_only",
                                       "repo_only_hints_created", "no_supported_skill"} else 1

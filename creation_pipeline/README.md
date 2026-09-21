@@ -1,11 +1,11 @@
 # 论文到 Skill 的创建流程
 
-本目录从论文、数据库文档、工具文档和模型文档中抽取**带来源引用的方法候选**。单次工具调用会作为资源提示单独记录。文档格式见 [FORMAT-v0.3.md](FORMAT-v0.3.md)。
+本目录从论文、数据库文档、工具文档和模型文档中抽取**带来源引用的方法候选**。模型先按 [OPERATIONAL-CONTRACT-v1.md](OPERATIONAL-CONTRACT-v1.md) 提取适用范围、前置条件、步骤、决策分支、验证检查和停止条件，再由程序核对引用并渲染为 [FORMAT-v0.3.md](FORMAT-v0.3.md) 草稿。单次工具调用会作为资源提示单独记录。
 
 
 ## 快速开始
 
-以下命令均在仓库根目录运行。可把 python3 换成项目的 .venv-eval/bin/python。处理 PDF 需要 pypdf；调用模型需要本机已经登录的 codex 命令行工具。本流程使用 Codex 登录状态，不读取 OPENAI_API_KEY。
+以下命令均在仓库根目录运行。可把 python3 换成项目的 .venv-eval/bin/python。处理 PDF 需要 `pypdf`，检查 Skill YAML 格式需要 `PyYAML`；调用模型需要本机已经登录的 codex 命令行工具。本流程使用 Codex 登录状态，不读取 OPENAI_API_KEY。
 
 ~~~bash
 python3 creation_pipeline/collect.py --paper-id 2GFR874J
@@ -29,7 +29,7 @@ python3 creation_pipeline/run_pipeline.py \
   --run-id my-graph2smiles-01
 ~~~
 
-先在 ingestion_report.json 确认来源为 prepared；再看 creation_pipeline/results/my-graph2smiles-01.json 的状态、候选数量及 source_text_complete。生成的 SKILL.md 在 creation_pipeline/runs/my-graph2smiles-01/drafts-v03/，此时仍是待审核草稿。上述清单只纳入论文 PDF；若要同时分析作者代码仓库，应另行锁定代码版本并把选定代码文件作为补充来源。
+先在 ingestion_report.json 确认来源为 prepared；再看 creation_pipeline/results/my-graph2smiles-01.json 的状态、候选数量及 source_text_complete。经过引用校验的中间操作契约保存在 `creation_pipeline/runs/my-graph2smiles-01/import_results/<paper-id>/operational-contract.json`，生成的 SKILL.md 在 creation_pipeline/runs/my-graph2smiles-01/drafts-v03/，此时仍是待审核草稿。上述清单只纳入论文 PDF；若要同时分析作者代码仓库，应另行锁定代码版本并把选定代码文件作为补充来源。
 
 给 run_pipeline.py 加上 --draft-eval-tasks，可以让模型为每个 method_procedure 候选**起草**两道“该用”和两道“不该用”的任务，保存在该次运行的 evaluation_task_drafts/。它不会自动证明题目真正未见过，也不会自动确认答案。正式测试前应审核化学前提、适用范围、与来源的重合及标准答案。实际运行记录见 [decision-pilot-with-task-drafts-20260920.json](results/decision-pilot-with-task-drafts-20260920.json)。
 
