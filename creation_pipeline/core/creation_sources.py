@@ -27,8 +27,14 @@ def read_documents(path):
     if path.suffix.lower() in {'.sqlite','.sqlite3','.db'}:
         # Schema only: opening read-only cannot mutate the database, and no
         # data rows or SQL functions from the source are executed.
-        with sqlite3.connect(path.resolve().as_uri()+'?mode=ro',uri=True) as conn:
+        # sqlite3.Connection's context manager commits/rolls back, but does
+        # not close the file handle.  Close explicitly so Windows can remove
+        # temporary database files immediately after schema extraction.
+        conn=sqlite3.connect(path.resolve().as_uri()+'?mode=ro',uri=True)
+        try:
             rows=conn.execute("SELECT type,name,sql FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY name").fetchall()
+        finally:
+            conn.close()
         return [(None,'SQLite schema snapshot (no data rows):\n'+ '\n\n'.join(str(sql) for _,_,sql in rows if sql))]
     if path.suffix.lower()=='.docx':
         with zipfile.ZipFile(path) as archive:

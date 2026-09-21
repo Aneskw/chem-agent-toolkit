@@ -26,9 +26,13 @@ class IngestionTests(unittest.TestCase):
             self.assertTrue(bundle['coverage']['primary_text_supplied'])
     def test_database_docs_and_sqlite(self):
         p=self.root/'db.sqlite'
-        with sqlite3.connect(p) as c:
+        c=sqlite3.connect(p)
+        try:
             c.execute('CREATE TABLE molecules (id INTEGER PRIMARY KEY, smiles TEXT)')
             c.execute("INSERT INTO molecules VALUES (1,'private-row-not-to-read')")
+            c.commit()
+        finally:
+            c.close()
         doc=self.root/'api.yaml';doc.write_text('openapi: 3.0.0\ninfo:\n  title: Example API\npaths:\n  /molecules:\n    get:\n      summary: Search molecules by identifier\n')
         before=p.read_bytes()
         manifest,_=prepare([{'id':'db','source_type':'database','sources':[{'path':str(doc)},{'path':str(p)}]}],self.root,self.root/'out')
