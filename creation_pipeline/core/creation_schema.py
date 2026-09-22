@@ -54,6 +54,7 @@ CANDIDATE = obj({
         "type": "array", "minItems": 0, "maxItems": 10, "items": DECISION_POINT,
     },
     "verification_checks": claim_array(max_items=12),
+    "success_criteria": claim_array(min_items=1, max_items=12),
     "stop_conditions": claim_array(max_items=12),
     "requirements": {
         "type": "array",
@@ -68,8 +69,8 @@ CANDIDATE = obj({
 })
 
 SCHEMA = obj({
-    "contract_version": {"type": "string", "enum": ["1.0"]},
-    "schema_version": {"type": "integer", "enum": [2]},
+    "contract_version": {"type": "string", "enum": ["1.1"]},
+    "schema_version": {"type": "integer", "enum": [3]},
     "paper_id": TEXT,
     "candidates": {"type": "array", "maxItems": 4, "items": CANDIDATE},
     "no_skill_reason": {"type": "string", "maxLength": 3000},
@@ -77,26 +78,34 @@ SCHEMA = obj({
 
 
 def normalize_response(response):
-    """Upgrade saved v1 responses so deterministic replays keep working."""
+    """Upgrade saved v1/v2 responses so deterministic replays keep working."""
     version = response.get("schema_version") if isinstance(response, dict) else None
-    if version == 2:
+    if version == 3:
         return response, False
-    if version != 1:
+    if version not in (1, 2):
         raise ValueError("Unsupported schema_version")
     upgraded = copy.deepcopy(response)
-    upgraded["contract_version"] = "1.0"
-    upgraded["schema_version"] = 2
+    upgraded["contract_version"] = "1.1"
+    upgraded["schema_version"] = 3
     for candidate in upgraded.get("candidates", []):
-        operation = candidate.get("operation", "")
-        candidate.setdefault("invoke_when", [{
-            "text": operation,
-            "citations": copy.deepcopy(candidate.get("steps", [{}])[0].get("citations", [])),
-        }])
-        candidate.setdefault("do_not_invoke_when", [])
-        candidate.setdefault("preconditions", [])
-        candidate.setdefault("decision_points", [])
-        candidate.setdefault("verification_checks", [])
-        candidate.setdefault("stop_conditions", [])
+        if version == 1:
+            operation = candidate.get("operation", "")
+            candidate.setdefault("invoke_when", [{
+                "text": operation,
+                "citations": copy.deepcopy(candidate.get("steps", [{}])[0].get("citations", [])),
+            }])
+            candidate.setdefault("do_not_invoke_when", [])
+            candidate.setdefault("preconditions", [])
+            candidate.setdefault("decision_points", [])
+            candidate.setdefault("verification_checks", [])
+            candidate.setdefault("stop_conditions", [])
+        # Old responses did not distinguish an acceptance criterion from a
+        # verification check. Preserve replayability without labelling this as
+        # fresh extraction under the new contract.
+        candidate.setdefault(
+            "success_criteria",
+            copy.deepcopy(candidate.get("verification_checks") or candidate.get("outputs", [])),
+        )
     return upgraded, True
 
 
@@ -104,7 +113,7 @@ def candidate_claims(candidate):
     """Yield every source-derived claim in the extraction contract."""
     for field in (
         "invoke_when", "do_not_invoke_when", "preconditions", "inputs", "outputs",
-        "steps", "verification_checks", "stop_conditions",
+        "steps", "verification_checks", "success_criteria", "stop_conditions",
     ):
         yield from candidate.get(field, [])
     for point in candidate.get("decision_points", []):

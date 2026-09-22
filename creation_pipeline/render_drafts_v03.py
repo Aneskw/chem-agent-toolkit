@@ -48,7 +48,7 @@ def render(candidate: dict, bundle: dict, check: dict) -> str:
         "---\n\n"
         f"# {name.replace('-', ' ').title()}\n\n"
         f"This cited draft describes {candidate['operation']} It is a `source_validated_candidate`, not an execution-validated package.\n\n"
-        "Use when:\n\n" + references(candidate["invoke_when"]) + "\n\n"
+        "## Applicability\n\nUse when:\n\n" + references(candidate["invoke_when"]) + "\n\n"
         "Do not use when:\n\n" + (references(candidate["do_not_invoke_when"]) or "- No source-supported exclusion was extracted.") + "\n\n"
         "Preconditions:\n\n" + (references(candidate["preconditions"]) or "- No additional source-supported precondition was extracted.") + "\n\n"
         "## Credibility\n\n"
@@ -60,6 +60,7 @@ def render(candidate: dict, bundle: dict, check: dict) -> str:
         "Decision points:\n\n" + (decision_points(candidate["decision_points"]) or "- No source-supported decision branch was extracted.") + "\n\n"
         "Verification checks:\n\n" + (references(candidate["verification_checks"]) or "- No source-supported verification check was extracted.") + "\n\n"
         "Stop conditions:\n\n" + (references(candidate["stop_conditions"]) or "- No source-supported stop condition was extracted.") + "\n\n"
+        "## Success Criteria\n\n" + references(candidate["success_criteria"]) + "\n\n"
         "## Matters & Troubleshooting\n\nResources:\n\n" + ("\n".join(requirements) or "- None identified.") +
         "\n\nUnknowns and limits:\n\n" + ("\n".join(unknowns) or "- No explicit unknowns recorded.") + "\n"
     )

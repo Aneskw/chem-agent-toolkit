@@ -8,7 +8,10 @@ from pathlib import Path
 
 import yaml
 
-SECTIONS = ["Credibility", "Reference", "Input & Output", "Procedure Guidance", "Matters & Troubleshooting"]
+SECTIONS = [
+    "Applicability", "Credibility", "Reference", "Input & Output",
+    "Procedure Guidance", "Success Criteria", "Matters & Troubleshooting",
+]
 KEYS = ["name", "description", "license", "compatibility", "allowed-tools"]
 
 

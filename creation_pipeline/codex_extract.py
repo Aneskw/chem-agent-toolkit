@@ -56,7 +56,7 @@ def main() -> int:
         + messages[1]["content"]
     )
     schema=json.loads((run/'response.schema.json').read_text(encoding='utf-8'))
-    if schema['properties']['schema_version'].get('enum')==[2]:
+    if max(schema['properties']['schema_version'].get('enum', [0])) >= 2:
         receipts=[]
         if args.repair_response:
             revised=json.loads(args.repair_response.read_text(encoding='utf-8'))

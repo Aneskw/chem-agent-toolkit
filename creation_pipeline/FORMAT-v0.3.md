@@ -23,19 +23,24 @@ runtime requirements, including network/weights/endpoint when applicable.
 
 Required body sections, in order:
 
-1. `# Skill Name`: what it does; positive and negative applicability.
-2. `## Credibility`: evidence, tested scope, exact limits, and one of
+1. `# Skill Name`: what it does.
+2. `## Applicability`: positive and negative applicability and any
+   preconditions.
+3. `## Credibility`: evidence, tested scope, exact limits, and one of
    **high confidence (Enforce strictly)**, **medium confidence (Need
    verification)**, **low confidence (Highly flexible)**. Confidence is for the
    *stated operation*, not the entire scientific domain. High requires
    executable acceptance evidence; cited text alone is never high.
-3. `## Reference`: pinned paper/repository/data URLs, commit or DOI, source
+4. `## Reference`: pinned paper/repository/data URLs, commit or DOI, source
    selection rationale, and local reference files when needed.
-4. `## Input & Output`: schemas, units, paths, error/blocked states, and what
+5. `## Input & Output`: schemas, units, paths, error/blocked states, and what
    may not be fabricated.
-5. `## Procedure Guidance`: only decision-changing instructions and commands
+6. `## Procedure Guidance`: only decision-changing instructions and commands
    or scripts for atomic database/tool/model resources.
-6. `## Matters & Troubleshooting`: relevant limits, stop conditions and
+7. `## Success Criteria`: the documented return status, output property, or
+   acceptance condition that shows the stated operation completed. This does
+   not by itself prove a broader scientific claim.
+8. `## Matters & Troubleshooting`: relevant limits, stop conditions and
    recovery steps.
 
 Creation states are separate from confidence: `source_collected`,

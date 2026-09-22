@@ -52,6 +52,7 @@ def candidate():
         "steps": [cited("Perform the first step."), cited("Perform the second step.")],
         "decision_points": [],
         "verification_checks": [cited("Check the documented result.")],
+        "success_criteria": [cited("The documented result is accepted.")],
         "stop_conditions": [],
         "requirements": [],
         "unknowns": ["Implementation command is not supplied."],
@@ -61,8 +62,8 @@ def candidate():
 class CreationContractTests(unittest.TestCase):
     def test_method_contract_validates_and_renders(self):
         response = {
-            "contract_version": "1.0",
-            "schema_version": 2,
+            "contract_version": "1.1",
+            "schema_version": 3,
             "paper_id": "paper-1",
             "candidates": [candidate()],
             "no_skill_reason": "",
@@ -70,16 +71,17 @@ class CreationContractTests(unittest.TestCase):
         checks = validate(response, bundle())
         self.assertEqual(checks[0]["state"], "draft_unexecuted")
         text = render(candidate(), bundle(), checks[0])
-        self.assertIn("Use when:", text)
+        self.assertIn("## Applicability", text)
         self.assertIn("Verification checks:", text)
+        self.assertIn("## Success Criteria", text)
         self.assertIn("Check the documented result.", text)
 
     def test_method_requires_operational_signal(self):
         item = candidate()
         item["verification_checks"] = []
         response = {
-            "contract_version": "1.0",
-            "schema_version": 2,
+            "contract_version": "1.1",
+            "schema_version": 3,
             "paper_id": "paper-1",
             "candidates": [item],
             "no_skill_reason": "",
@@ -89,16 +91,28 @@ class CreationContractTests(unittest.TestCase):
 
     def test_new_contract_fields_require_real_citations(self):
         item = candidate()
-        item["stop_conditions"] = [cited("Stop when the source says to stop.")]
-        item["stop_conditions"][0]["citations"][0]["quote"] = "This quote is not in the source text"
+        item["success_criteria"][0]["citations"][0]["quote"] = "This quote is not in the source text"
         response = {
-            "contract_version": "1.0",
-            "schema_version": 2,
+            "contract_version": "1.1",
+            "schema_version": 3,
             "paper_id": "paper-1",
             "candidates": [item],
             "no_skill_reason": "",
         }
         with self.assertRaisesRegex(ValueError, "Citation quote not found"):
+            validate(response, bundle())
+
+    def test_success_criteria_is_required(self):
+        item = candidate()
+        item.pop("success_criteria")
+        response = {
+            "contract_version": "1.1",
+            "schema_version": 3,
+            "paper_id": "paper-1",
+            "candidates": [item],
+            "no_skill_reason": "",
+        }
+        with self.assertRaisesRegex(ValueError, "missing=.*success_criteria"):
             validate(response, bundle())
 
     def test_legacy_response_is_upgraded_for_replay(self):
@@ -116,10 +130,28 @@ class CreationContractTests(unittest.TestCase):
             "no_skill_reason": "",
         })
         self.assertTrue(legacy)
-        self.assertEqual(upgraded["contract_version"], "1.0")
-        self.assertEqual(upgraded["schema_version"], 2)
+        self.assertEqual(upgraded["contract_version"], "1.1")
+        self.assertEqual(upgraded["schema_version"], 3)
         self.assertEqual(len(upgraded["candidates"][0]["invoke_when"]), 1)
+        self.assertTrue(upgraded["candidates"][0]["success_criteria"])
         self.assertEqual(validate(upgraded, bundle(), enforce_contract=False)[0]["state"], "draft_unexecuted")
+
+    def test_v2_response_is_upgraded_for_replay(self):
+        item = candidate()
+        item.pop("success_criteria")
+        upgraded, legacy = normalize_response({
+            "contract_version": "1.0",
+            "schema_version": 2,
+            "paper_id": "paper-1",
+            "candidates": [item],
+            "no_skill_reason": "",
+        })
+        self.assertTrue(legacy)
+        self.assertEqual(upgraded["schema_version"], 3)
+        self.assertEqual(
+            upgraded["candidates"][0]["success_criteria"],
+            upgraded["candidates"][0]["verification_checks"],
+        )
 
 
 if __name__ == "__main__":

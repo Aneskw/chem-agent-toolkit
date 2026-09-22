@@ -38,6 +38,7 @@ def fixture():
             "if_false": claim("Compare alternatives separately."),
         }],
         "verification_checks": [claim("Check that every obligation was included.")],
+        "success_criteria": [claim("Every required cost is included in the total.")],
         "stop_conditions": [claim("Stop if a required cost is unavailable.")],
         "requirements": [],
         "unknowns": [],
@@ -52,7 +53,7 @@ def fixture():
         }],
     }
     response = {
-        "contract_version": "1.0", "schema_version": 2, "paper_id": "test",
+        "contract_version": "1.1", "schema_version": 3, "paper_id": "test",
         "candidates": [candidate], "no_skill_reason": "",
     }
     return response, bundle

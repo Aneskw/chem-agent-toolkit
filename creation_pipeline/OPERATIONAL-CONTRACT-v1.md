@@ -1,4 +1,4 @@
-# Chemical Skill Extraction Contract v1
+# Chemical Skill Extraction Contract v1.1
 
 ## Purpose
 
@@ -26,6 +26,9 @@ decision.
    operation.
 7. Return no candidate when the supplied sources do not support a useful
    procedure.
+8. Give every candidate at least one observable, source-supported success
+   criterion. It must describe completion of the stated operation, not claim
+   broader scientific validity that the supplied source does not establish.
 
 ## Canonical response
 
@@ -38,8 +41,8 @@ response, every claim object that is present must contain at least one
 `Citation` object in the format shown under **Evidence claims**.
 
 ```yaml
-contract_version: "1.0"
-schema_version: 2
+contract_version: "1.1"
+schema_version: 3
 paper_id: "<pipeline job id>"
 
 candidates:
@@ -88,6 +91,10 @@ candidates:
       - text: "How an intermediate or final result should be checked."
         citations: []
 
+    success_criteria:
+      - text: "A documented return status, output property, or acceptance condition that shows this operation completed."
+        citations: []
+
     stop_conditions:
       - text: "When to stop, abstain, or request another resource."
         citations: []
@@ -108,11 +115,14 @@ no_skill_reason: "Required when candidates is empty; otherwise empty."
 
 `do_not_invoke_when`, `preconditions`, `decision_points`,
 `verification_checks`, `stop_conditions`, `requirements`, and `unknowns` may
-be empty. The model must not fabricate content merely to populate them.
+be empty. `success_criteria` may not be empty. The model must not fabricate
+content merely to populate them.
 
-The implementation uses JSON schema version `2` for this contract. Saved
-schema version `1` responses are upgraded during replay with empty new fields;
-they are not misrepresented as fresh contract-guided extractions.
+The implementation uses JSON schema version `3` for this contract. Saved
+schema version `1` and `2` responses are upgraded only for replay: their
+`success_criteria` are copied from existing verification checks, or from
+outputs when no check exists. They are not represented as fresh v1.1
+extractions.
 
 ## Evidence claims
 
@@ -140,6 +150,7 @@ A fresh method candidate must contain:
 
 - at least one cited positive trigger;
 - at least one cited input and output;
+- at least one cited success criterion;
 - at least two cited ordered steps;
 - at least one cited decision point, verification check, or stop condition;
 - a procedural claim cited to the source type's primary document;
@@ -164,12 +175,13 @@ The renderer compiles the validated contract deterministically:
 
 | Contract fields | `SKILL.md` destination |
 | --- | --- |
-| `name`, `description`, `invoke_when`, `do_not_invoke_when` | frontmatter and opening applicability |
+| `name`, `description`, `invoke_when`, `do_not_invoke_when`, `preconditions` | frontmatter and `## Applicability` |
 | pipeline validation state | `## Credibility` |
 | source bundle and claim citations | `## Reference` |
 | `inputs`, `outputs` | `## Input & Output` |
 | `steps`, `decision_points`, `verification_checks`, `stop_conditions` | `## Procedure Guidance` |
-| `preconditions`, `requirements`, `unknowns` | scope and `## Matters & Troubleshooting` |
+| `success_criteria` | `## Success Criteria` |
+| `requirements`, `unknowns` | `## Matters & Troubleshooting` |
 
 The renderer, not the extraction model, assigns the draft label and confidence
 floor. A source-cited but unexecuted candidate remains low confidence and must
