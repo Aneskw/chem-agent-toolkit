@@ -55,15 +55,16 @@ def main() -> int:
         + messages[0]["content"] + "\n\nSOURCE BUNDLE AND OUTPUT SCHEMA:\n"
         + messages[1]["content"]
     )
-    schema=json.loads((run/'response.schema.json').read_text())
+    schema=json.loads((run/'response.schema.json').read_text(encoding='utf-8'))
     if schema['properties']['schema_version'].get('enum')==[2]:
         receipts=[]
         if args.repair_response:
-            revised=json.loads(args.repair_response.read_text())
+            revised=json.loads(args.repair_response.read_text(encoding='utf-8'))
         else:
             first,receipt=call(prompt,schema,args.model,args.timeout)
             receipts.append(receipt)
-            (response_dir/f'{args.paper_id}.first.json').write_text(json.dumps(first,indent=2)+'\n')
+            (response_dir/f'{args.paper_id}.first.json').write_text(
+                json.dumps(first,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
             critique=('Review the proposed decision rules against the ORIGINAL SOURCES below. Return a revised extraction, not a score. '
                   'Delete generic advice, invented chemical claims, and advice that needs an unavailable trained model. '
                   'Preserve supported method choices and recovery rules, mark adaptations inferred. '
@@ -72,15 +73,18 @@ def main() -> int:
                       +prompt+'\nPROPOSED EXTRACTION:\n'+json.dumps(first))
             revised,review_receipt=call(critique,schema,args.model,args.timeout)
             receipts.append(review_receipt)
-        (response_dir/f'{args.paper_id}.reviewed-unchecked.json').write_text(json.dumps(revised,indent=2)+'\n')
-        bundle=json.loads((job/'bundle.json').read_text())
+        (response_dir/f'{args.paper_id}.reviewed-unchecked.json').write_text(
+            json.dumps(revised,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        bundle=json.loads((job/'bundle.json').read_text(encoding='utf-8'))
         revised,audit=audit_and_repair(revised,bundle,prompt,schema,args.model,args.timeout)
-        output.write_text(json.dumps(revised,indent=2)+'\n')
+        output.write_text(json.dumps(revised,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         receipt_path=response_dir/f'{args.paper_id}.receipt.json'
-        if args.repair_response and receipt_path.exists():receipts=json.loads(receipt_path.read_text()).get('stages',[])
+        if args.repair_response and receipt_path.exists():
+            receipts=json.loads(receipt_path.read_text(encoding='utf-8')).get('stages',[])
         receipt_path.write_text(json.dumps({
             'paper_id':args.paper_id,'stages':receipts,'audit':audit,
-            'status':'reviewed_response_received','semantic_review':'model_review_not_independent_chemical_validation'},indent=2)+'\n')
+            'status':'reviewed_response_received','semantic_review':'model_review_not_independent_chemical_validation'},
+            ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         print(json.dumps({'paper_id':args.paper_id,'status':'reviewed_response_received'}))
         return 0
     cmd = ["codex", "exec", "--ephemeral", "--skip-git-repo-check", "--sandbox", "read-only",
@@ -101,7 +105,9 @@ def main() -> int:
     receipt = {"paper_id": args.paper_id, "model": args.model,
                "response_sha256": hashlib.sha256(body).hexdigest(),
                "response_bytes": len(body), "status": "response_received"}
-    (response_dir / f"{args.paper_id}.receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
+    (response_dir / f"{args.paper_id}.receipt.json").write_text(
+        json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     print(json.dumps(receipt))
     return 0
 

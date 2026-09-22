@@ -45,7 +45,7 @@ def text_digest(value: str) -> str:
 
 
 def dump(path: Path, value: object) -> None:
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def validate_tasks(tasks: list[dict], oracle: dict) -> None:
@@ -84,8 +84,8 @@ def freeze(
 ) -> None:
     if destination.exists():
         raise ValueError("Preregistration already exists")
-    tasks = json.loads(tasks_path.read_text())
-    oracle = json.loads(oracle_path.read_text())
+    tasks = json.loads(tasks_path.read_text(encoding="utf-8"))
+    oracle = json.loads(oracle_path.read_text(encoding="utf-8"))
     validate_tasks(tasks, oracle)
     if repeats < 1:
         raise ValueError("Repeats must be positive")
@@ -108,7 +108,7 @@ def freeze(
 
 
 def verify_lock(args: argparse.Namespace) -> tuple[dict, list[dict], dict]:
-    lock = json.loads(args.lock.read_text())
+    lock = json.loads(args.lock.read_text(encoding="utf-8"))
     for key, path in (("tasks", args.tasks), ("oracle", args.oracle), ("protocol", args.protocol)):
         if digest(path) != lock[key + "_sha256"]:
             raise ValueError(f"Frozen {key} changed")
@@ -118,8 +118,8 @@ def verify_lock(args: argparse.Namespace) -> tuple[dict, list[dict], dict]:
         raise ValueError("Model/repeats differ from protocol lock")
     if tuple(lock.get("conditions", ())) != CONDITIONS:
         raise ValueError("Frozen conditions differ from this evaluator")
-    tasks = json.loads(args.tasks.read_text())
-    oracle = json.loads(args.oracle.read_text())
+    tasks = json.loads(args.tasks.read_text(encoding="utf-8"))
+    oracle = json.loads(args.oracle.read_text(encoding="utf-8"))
     validate_tasks(tasks, oracle)
     if len(tasks) != lock["task_count"]:
         raise ValueError("Frozen task count changed")
@@ -127,7 +127,7 @@ def verify_lock(args: argparse.Namespace) -> tuple[dict, list[dict], dict]:
 
 
 def load_materials(path: Path, task_families: set[str]) -> tuple[dict, dict]:
-    families = json.loads(path.read_text())
+    families = json.loads(path.read_text(encoding="utf-8"))
     if set(families) != task_families:
         missing = sorted(task_families - set(families))
         extra = sorted(set(families) - task_families)
@@ -139,7 +139,7 @@ def load_materials(path: Path, task_families: set[str]) -> tuple[dict, dict]:
             raise ValueError(f"Material {family} needs exactly bundle and skills")
         bundle_path = (path.parent / item["bundle"]).resolve()
         skill_root = (path.parent / item["skills"]).resolve()
-        bundle = json.loads(bundle_path.read_text())
+        bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
         skill_paths = sorted(skill_root.glob("*/SKILL.md"))
         if not skill_paths:
             raise ValueError("No generated skills for " + family)
@@ -147,7 +147,7 @@ def load_materials(path: Path, task_families: set[str]) -> tuple[dict, dict]:
             f"SOURCE {source_item['id']} ({source_item['role']}):\n" + "\n".join(source_item["lines"])
             for source_item in bundle["sources"]
         )
-        skills = "\n\n".join(skill_path.read_text() for skill_path in skill_paths)
+        skills = "\n\n".join(skill_path.read_text(encoding="utf-8") for skill_path in skill_paths)
         material[family] = {"no-skill": "", "source-text": source, "with-skill": skills}
         hashes[family] = {
             "bundle_sha256": digest(bundle_path),
@@ -353,7 +353,7 @@ def run(args: argparse.Namespace) -> int:
         for future in as_completed(futures):
             row = future.result()
             rows.append(row)
-            with (args.out / "attempts.jsonl").open("a") as output:
+            with (args.out / "attempts.jsonl").open("a", encoding="utf-8") as output:
                 output.write(json.dumps(row) + "\n")
             print(json.dumps({"completed": len(rows), "scheduled": len(schedule), "task": row["task_id"],
                               "condition": row["condition"], "ok": row["ok"],

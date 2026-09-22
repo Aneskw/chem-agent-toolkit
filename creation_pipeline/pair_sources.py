@@ -93,17 +93,20 @@ def pair(pdf, repo, out, ref='HEAD', files=None, max_files=16, paper_id='paper',
     except subprocess.CalledProcessError:origin=str(source_repo.resolve())
     slug=re.sub(r'^(?:https://github.com/|git@github.com:)','',origin).removesuffix('.git')
     manifest={'repo':slug,'commit':commit,'tree':entries}
-    (out/'repo.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    (out/'repo.json').write_text(
+        json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     job={'paper_id':paper_id,'title':title or Path(pdf).stem,'repo_root':'repo',
          'repo_manifest':'repo.json','sources':sources}
     config={'base':'.','schema_version':2,'max_context_chars':240000,'jobs':[job]}
-    (out/'config.json').write_text(json.dumps(config,indent=2)+'\n')
+    (out/'config.json').write_text(
+        json.dumps(config,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     report={'paper_id':paper_id,'pdf_sha256':sources[0]['sha256'],'pdf_pages':len(pages),
             'repository':origin,'commit':commit,'selection':'explicit' if files else 'filename_heuristic',
             'selected_files':[s['path'] for s in sources[1:]],'skipped':skipped,
             'unselected_files':[p for p in inventory if 'repo/'+p not in {s['path'] for s in sources[1:]}],
             'note':'Selection coverage is recorded; unselected code and PDF graphics are not reviewed.'}
-    (out/'source_pair.json').write_text(json.dumps(report,indent=2)+'\n')
+    (out/'source_pair.json').write_text(
+        json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     return out/'config.json'
 
 

@@ -51,6 +51,9 @@ python3 evaluation/decision_gain/run.py freeze \
 Skill 抽取进程不得读取任务、答案或后续作答。由 Skill 自动起草的题只能作为开发回归题，
 不能作为该 Skill 自身有效性的正式证据。
 
+仓库中的 `preregistration.json` 对应当前任务、协议和判分器；历史锁保存在带版本号的
+文件中，不得改写。修复判分器或调整任务后必须重新生成当前锁，同时保留旧锁供审计。
+
 ## 2. 生成 Skill 并绑定材料
 
 先运行 PDF／代码仓库到 Skill 的创建流程。评测材料清单按 `family` 对应题目：

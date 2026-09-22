@@ -14,11 +14,13 @@ def call(prompt, schema, model, timeout=900):
         root=Path(directory)
         # Put only the answer schema in the child's working directory. Source
         # documents, skills and test oracles are never discoverable in ancestors.
-        target=root/'schema.json';target.write_text(json.dumps(schema))
+        target=root/'schema.json'
+        target.write_text(json.dumps(schema, ensure_ascii=False), encoding='utf-8')
         command=['codex','exec','--ephemeral','--skip-git-repo-check','--sandbox','read-only',
                  '--model',model,'--output-schema',str(target),'--json','-']
         proc=subprocess.run(command,input='Use only the supplied text. Do not call tools or read files.\n'+prompt,
-                            text=True,capture_output=True,cwd=root,timeout=timeout,env=model_environment())
+                            text=True,encoding='utf-8',capture_output=True,cwd=root,
+                            timeout=timeout,env=model_environment())
     answer=None;usage={};tools=[]
     for line in proc.stdout.splitlines():
         try:event=json.loads(line)

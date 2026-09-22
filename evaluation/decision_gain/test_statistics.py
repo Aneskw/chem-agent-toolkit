@@ -50,21 +50,27 @@ class StatisticsTests(unittest.TestCase):
             bundle=root/'bundle.json';skills=root/'skills';skill=skills/'decision-rule'/'SKILL.md'
             materials=root/'materials.json';lock=root/'lock.json';out=root/'plan'
             tasks.write_text(json.dumps([{'id':'t1','family':'paper-a','request':'Choose a method.',
-                'options':{'A':'first','B':'second','C':'third'},'tags':['scope-negative']}]))
-            oracle.write_text(json.dumps({'t1':'B'}));protocol.write_text('frozen protocol')
-            bundle.write_text(json.dumps({'sources':[{'id':'paper','role':'paper','lines':['raw source']}]}))
-            skill.parent.mkdir(parents=True);skill.write_text('---\nname: decision-rule\n---\nUse distilled rule.')
-            materials.write_text(json.dumps({'paper-a':{'bundle':'bundle.json','skills':'skills'}}))
+                'options':{'A':'first','B':'second','C':'third'},'tags':['scope-negative']}]), encoding='utf-8')
+            oracle.write_text(json.dumps({'t1':'B'}), encoding='utf-8')
+            protocol.write_text('frozen protocol', encoding='utf-8')
+            source_text='raw source ﬁ 中文'
+            bundle.write_text(json.dumps({'sources':[{'id':'paper','role':'paper','lines':[source_text]}]},
+                ensure_ascii=False), encoding='utf-8')
+            skill.parent.mkdir(parents=True)
+            skill.write_text('---\nname: decision-rule\n---\n使用 distilled rule ﬁ。', encoding='utf-8')
+            materials.write_text(json.dumps({'paper-a':{'bundle':'bundle.json','skills':'skills'}}),
+                encoding='utf-8')
             run.freeze(tasks,oracle,protocol,lock,model='gpt-5.6-sol',seed=193,repeats=1)
             args=argparse.Namespace(lock=lock,tasks=tasks,oracle=oracle,protocol=protocol,
                 materials=materials,model='gpt-5.6-sol',repeats=1,out=out)
             self.assertEqual(run.write_plan(args),0)
-            manifest=json.loads((out/'manifest.json').read_text())
+            manifest=json.loads((out/'manifest.json').read_text(encoding='utf-8'))
             self.assertEqual(manifest['status'],'planned_no_model_calls')
             self.assertEqual(manifest['scheduled_attempts'],3)
             hashes=manifest['prompt_sha256']
             self.assertEqual(len(hashes),3)
             self.assertEqual(len(set(hashes.values())),3)
-            self.assertEqual(manifest['material_hashes']['paper-a']['source_text_chars'],32)
+            expected='SOURCE paper (paper):\n'+source_text
+            self.assertEqual(manifest['material_hashes']['paper-a']['source_text_chars'],len(expected))
 
 if __name__=='__main__':unittest.main()

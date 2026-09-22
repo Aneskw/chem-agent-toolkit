@@ -30,8 +30,10 @@ class PairTests(unittest.TestCase):
             page[NameObject('/Contents')]=writer._add_object(stream)
             pdf=base/'unseen.pdf'
             with pdf.open('wb') as f:writer.write(f)
-            config=pair(str(pdf),str(repo),base/'pair',files=['predict.py'],paper_id='unseen')
-            settings=json.loads(config.read_text())
+            config=pair(str(pdf),str(repo),base/'pair',files=['predict.py'],paper_id='unseen',
+                        title='中文方法 ﬁ')
+            settings=json.loads(config.read_text(encoding='utf-8'))
+            self.assertEqual(settings['jobs'][0]['title'],'中文方法 ﬁ')
             bundle=make_bundle(settings['jobs'][0],config.parent)
             self.assertFalse(bundle['omitted']);self.assertNotEqual(bundle['commit'],'unversioned')
             self.assertTrue(any('original' in '\n'.join(s['lines']) for s in bundle['sources']))

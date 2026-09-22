@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T09:02:26.229869+00:00",
+  "task_count": 16,
+  "tasks_sha256": "4130062df8712e8a39b5cdb39c812a30fea41d50a5c307489553df3c4181919a",
+  "oracle_sha256": "090713b37d33ee539cc1708728c542990e54db49829dc8fd47505c598199e5e6",
+  "protocol_sha256": "803ccd76a8e216da2cf89a0289e21ee79663cd261ca8c4a7da4a0572e06041d9",
+  "scorer_sha256": "4da9ed540fa5d2b5efd5a0a56bd2ebbc54826546a9caa97d2c020ac7b78e367b",
+  "model": "gpt-5.6-sol",
+  "seed": 193,
+  "repeats": 1,
+  "conditions": [
+    "no-skill",
+    "source-text",
+    "with-skill"
+  ],
+  "policy": {
+    "minimum_tasks": 12,
+    "bootstrap_samples": 10000,
+    "confidence": 0.95,
+    "alpha": 0.05,
+    "scope_tag": "scope-negative"
+  }
+}
