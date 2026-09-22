@@ -1,4 +1,4 @@
-"""Prepare source bundles, call a configurable LLM, audit and render draft skills."""
+"""Prepare source bundles, call a configurable LLM, and audit extracted contracts."""
 import argparse
 import hashlib
 import json
@@ -166,24 +166,6 @@ def parse_response(text):
         text=match.group(1)
     return normalize_response(json.loads(text))
 
-def render(response,bundle,checks,destination,mode):
-    source_index={s['id']:{k:v for k,v in s.items() if k!='lines'} for s in bundle['sources']}
-    for candidate,result in zip(response['candidates'],checks):
-        folder=destination/candidate['name'];folder.mkdir(parents=True,exist_ok=False)
-        def claims(items,numbered=False):
-            lines=[]
-            for i,claim in enumerate(items,1):
-                refs=', '.join(f"{c['source_id']}:L{c['start']}-L{c['end']}" for c in claim['citations'])
-                lines.append(f"{str(i)+'.' if numbered else '-'} {claim['text']}（{refs}）")
-            return '\n'.join(lines)
-        text=f"---\nname: {candidate['name']}\ndescription: {json.dumps(candidate['description'],ensure_ascii=False)}\n---\n\n# {candidate['name']}\n\n状态：{result['state']}；来源模式：{mode}。这是未执行的技能草稿，引用检查不代表语义正确或可运行。\n\n## 输入\n\n{claims(candidate['inputs'])}\n\n## 输出\n\n{claims(candidate['outputs'])}\n\n## 步骤\n\n{claims(candidate['steps'],True)}\n\n## 资源和未知项\n\n"
-        text+='\n'.join('- '+r['path']+'：'+r['reason']['text'] for r in candidate['requirements'])+'\n\n'
-        text+='\n'.join('- '+u for u in candidate['unknowns'])+'\n\n'
-        text+=f"缺失仓库文件：{', '.join(result['missing_repo_files']) or '在声明的需求中未发现'}。外部资源尚未核实。\n\n[来源索引与精确引用](references/evidence.json)记录文件、版本和原文位置；需要语义复核及运行验收。\n"
-        (folder/'SKILL.md').write_text(text,encoding='utf-8')
-        dump(folder/'references/evidence.json',{'paper_id':bundle['paper_id'],'commit':bundle['commit'],
-            'source_index':source_index,'candidate':candidate,'audit':result,'coverage':bundle['coverage']})
-
 def execute(run,provider_config=None,replay_dir=None,max_repairs=1,response_origin=None):
     prepared=json.loads((run/'prepared.json').read_text(encoding='utf-8'))
     config=json.loads(provider_config.read_text(encoding='utf-8')) if provider_config else None
@@ -227,8 +209,7 @@ def execute(run,provider_config=None,replay_dir=None,max_repairs=1,response_orig
                 dump(target/'operational-contract.json',response)
                 dump(target/'validated.json',response)
                 dump(target/f'validation-{attempt}.json',{'ok':True,'checks':checks,'usage':usage,'elapsed_seconds':round(time.monotonic()-started,3)})
-                render(response,bundle,checks,target/'drafts',mode)
-                entry.update(status='drafts_created' if response['candidates'] else 'no_supported_skill',
+                entry.update(status='candidates_validated' if response['candidates'] else 'no_supported_skill',
                     candidate_count=len(response['candidates']),checks=checks,attempts=attempt,
                     no_skill_reason=response['no_skill_reason'],bundle_sha256=job['bundle_sha256'],
                     contract_version=response['contract_version'],

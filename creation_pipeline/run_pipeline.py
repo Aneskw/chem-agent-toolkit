@@ -92,7 +92,7 @@ def main() -> int:
              "--responses", str(repaired_dir), "--origin", "codex_current_task")
         extraction = json.loads((run / "import_results" / "summary.json").read_text(encoding="utf-8"))
         job = extraction["jobs"][0]
-        if job["status"] not in {"drafts_created", "no_supported_skill"}:
+        if job["status"] not in {"candidates_validated", "no_supported_skill"}:
             raise ValueError(job.get("error", "citation audit failed"))
         contract_file = run / "import_results" / args.paper_id / "operational-contract.json"
         response_data = json.loads(contract_file.read_text(encoding="utf-8"))
@@ -105,7 +105,7 @@ def main() -> int:
         )
         status["decision_rules"] = library["unique_rules"]
         status["utility"] = "not_evaluated"
-        if job["status"] == "drafts_created":
+        if job["status"] == "candidates_validated":
             drafts = run / "drafts-v03"
             call(str(HERE / "render_drafts_v03.py"), "--run", str(run),
                  "--paper-id", args.paper_id, "--out", str(drafts))
@@ -130,7 +130,7 @@ def main() -> int:
             outcome = "method_drafts_created"
         else:
             outcome = "atomic_resource_hints_only"
-        status.update({"stage": "drafts_rendered" if job["status"] == "drafts_created" else "no_supported_skill",
+        status.update({"stage": "drafts_rendered" if job["status"] == "candidates_validated" else "no_supported_skill",
                        "status": outcome, "candidate_kinds": kind_counts,
                        "candidate_count": job.get("candidate_count", 0),
                        "contract_version": response_data["contract_version"],

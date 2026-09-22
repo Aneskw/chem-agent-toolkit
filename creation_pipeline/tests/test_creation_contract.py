@@ -1,10 +1,13 @@
+import json
 import sys
 from pathlib import Path
+import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "core"))
 
+from creation import digest, execute
 from creation_schema import normalize_response, validate
 from render_drafts_v03 import render
 
@@ -60,6 +63,43 @@ def candidate():
 
 
 class CreationContractTests(unittest.TestCase):
+    def test_import_validates_contract_without_rendering_a_second_skill(self):
+        response = {
+            "contract_version": "1.1",
+            "schema_version": 3,
+            "paper_id": "paper-1",
+            "candidates": [candidate()],
+            "no_skill_reason": "",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            run = root / "run"
+            job = run / "jobs" / "paper-1"
+            responses = root / "responses"
+            job.mkdir(parents=True)
+            responses.mkdir()
+            bundle_file = job / "bundle.json"
+            messages_file = job / "messages.json"
+            bundle_file.write_text(json.dumps(bundle()), encoding="utf-8")
+            messages_file.write_text("[]", encoding="utf-8")
+            (run / "prepared.json").write_text(json.dumps({
+                "jobs": [{
+                    "paper_id": "paper-1",
+                    "status": "prepared",
+                    "bundle_sha256": digest(bundle_file.read_bytes()),
+                    "messages_sha256": digest(messages_file.read_bytes()),
+                }],
+            }), encoding="utf-8")
+            (responses / "paper-1.json").write_text(json.dumps(response), encoding="utf-8")
+
+            execute(run, replay_dir=responses, response_origin="codex_current_task")
+
+            result = run / "import_results" / "paper-1"
+            summary = json.loads((run / "import_results" / "summary.json").read_text(encoding="utf-8"))
+            self.assertEqual(summary["jobs"][0]["status"], "candidates_validated")
+            self.assertTrue((result / "operational-contract.json").is_file())
+            self.assertFalse((result / "drafts").exists())
+
     def test_method_contract_validates_and_renders(self):
         response = {
             "contract_version": "1.1",
