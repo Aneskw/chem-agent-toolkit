@@ -1,0 +1,186 @@
+{
+  "candidate": {
+    "name": "rdkit-descriptor-result-triage",
+    "description": "Run the included RDKit descriptor calculator and distinguish computed graph features from measured chemical or biological outcomes.",
+    "kind": "method_procedure",
+    "operation": "calculate descriptors for SMILES records, retain explicit invalid-input failures, and limit interpretation to computed structure features",
+    "inputs": [
+      {
+        "text": "One SMILES string or a text file with one SMILES per line.",
+        "citations": [
+          {
+            "source_id": "s1",
+            "start": 10,
+            "end": 16,
+            "quote": "Read SMILES from `--smiles` or a text file"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "text": "JSON records with ok status, canonical SMILES and RDKit descriptors, or an explicit invalid-SMILES error.",
+        "citations": [
+          {
+            "source_id": "s4",
+            "start": 7,
+            "end": 27,
+            "quote": "Invalid or empty SMILES"
+          },
+          {
+            "source_id": "s1",
+            "start": 19,
+            "end": 19,
+            "quote": "canonical SMILES, molecular weight, LogP, TPSA"
+          }
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "text": "Run `python3 resources/tools-skills/rdkit/chem-rdkit-descriptors/scripts/calc_descriptors.py --smiles CCO` (or use --input for a file); check each JSON record's ok field and exclude failed records from descriptor comparisons.",
+        "citations": [
+          {
+            "source_id": "s1",
+            "start": 14,
+            "end": 19,
+            "quote": "python3 scripts/calc_descriptors.py --smiles"
+          },
+          {
+            "source_id": "s4",
+            "start": 32,
+            "end": 45,
+            "quote": "return 0 if all(r[\"ok\"] for r in records) else 2"
+          }
+        ]
+      }
+    ],
+    "requirements": [
+      {
+        "path": "tools-skills/rdkit/chem-rdkit-descriptors/scripts/calc_descriptors.py",
+        "kind": "repo_file",
+        "reason": {
+          "text": "The calculator implements SMILES parsing and descriptor output.",
+          "citations": [
+            {
+              "source_id": "s4",
+              "start": 7,
+              "end": 14,
+              "quote": "Chem.MolFromSmiles"
+            }
+          ]
+        }
+      }
+    ],
+    "unknowns": [
+      "Descriptor values are not measured activity, safety or pharmacokinetic outcomes; a target RDKit version is not established by these sources."
+    ],
+    "decisions": [
+      {
+        "when": "A requested descriptor record has ok=false or is being used as evidence of biological activity.",
+        "requires": "The calculator's ok status and the intended downstream claim.",
+        "choose": "Correct or exclude invalid SMILES; for valid records, describe values only as computed structure descriptors.",
+        "avoid": "Use missing descriptor fields or calculated LogP/TPSA as experimental activity or safety evidence.",
+        "because": "Invalid SMILES produce ok=false, and the source explicitly limits descriptors to graph-derived quantities.",
+        "check": "Verify ok=true before using values and preserve the original input/error record for failures.",
+        "stop_or_fallback": "Stop the descriptor-based comparison for failed records until the input is corrected; request measured data for experimental claims.",
+        "scope": "This RDKit descriptor calculator and its JSON records, not all ADMET measurements.",
+        "support": "direct",
+        "citations": [
+          {
+            "source_id": "s3",
+            "start": 1,
+            "end": 3,
+            "quote": "They are not experimental measurements"
+          },
+          {
+            "source_id": "s4",
+            "start": 12,
+            "end": 12,
+            "quote": "Invalid or empty SMILES"
+          }
+        ]
+      }
+    ],
+    "resource_manifest": [
+      {
+        "path": "tools-skills/rdkit/chem-rdkit-descriptors/scripts/calc_descriptors.py",
+        "kind": "source_code",
+        "source_url": "local://tools-skills/rdkit/chem-rdkit-descriptors/scripts/calc_descriptors.py",
+        "source_revision": "working-tree-resource-snapshot",
+        "sha256": "0b55d6132d83dc3b04413ed1c4a22788a62b96f0a02eda5992c43a080dfe67fe",
+        "restore_command": "included at tools-skills/rdkit/chem-rdkit-descriptors/scripts/calc_descriptors.py",
+        "status": "present",
+        "citations": [
+          {
+            "source_id": "s4",
+            "start": 31,
+            "end": 49,
+            "quote": "if __name__ == \"__main__\":"
+          }
+        ]
+      },
+      {
+        "path": "rdkit",
+        "kind": "dependency",
+        "source_url": "https://www.rdkit.org/docs/Install.html",
+        "source_revision": "version not pinned by source",
+        "sha256": "",
+        "restore_command": "python3 -m pip install rdkit",
+        "status": "download_required",
+        "citations": [
+          {
+            "source_id": "s4",
+            "start": 7,
+            "end": 9,
+            "quote": "from rdkit import Chem"
+          }
+        ]
+      }
+    ]
+  },
+  "audit": {
+    "name": "rdkit-descriptor-result-triage",
+    "state": "draft_unexecuted",
+    "missing_repo_files": [],
+    "external_assets_unverified": [],
+    "missing_model_resources": [],
+    "missing_category_resources": [],
+    "resource_manifest_entries": 2,
+    "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+  },
+  "sources": [
+    {
+      "id": "s1",
+      "role": "tool_doc",
+      "path": "/Users/xllin/Documents/Codex/2026-09-20/new-chat-2/outputs/chem-agent-toolkit/tools-skills/rdkit/chem-rdkit-descriptors/SKILL.md",
+      "page": null,
+      "sha256": "ef3a065dbcee1aab50634d8db9e23e26c765d16d143e2564952defe44b955a50",
+      "url": "local://tools-skills/rdkit/chem-rdkit-descriptors/SKILL.md"
+    },
+    {
+      "id": "s2",
+      "role": "tool_doc",
+      "path": "/Users/xllin/Documents/Codex/2026-09-20/new-chat-2/outputs/chem-agent-toolkit/tools-skills/rdkit/chem-rdkit-descriptors/references/api.md",
+      "page": null,
+      "sha256": "a1846abdcf9080db8212611eb2489fb7daedbab48944c53293a06ba776faad47",
+      "url": "local://tools-skills/rdkit/chem-rdkit-descriptors/references/api.md"
+    },
+    {
+      "id": "s3",
+      "role": "tool_doc",
+      "path": "/Users/xllin/Documents/Codex/2026-09-20/new-chat-2/outputs/chem-agent-toolkit/tools-skills/rdkit/chem-rdkit-descriptors/references/science.md",
+      "page": null,
+      "sha256": "2aa6589df103dfeea67108e81fe712851dc39467550696715dea4562c790f224",
+      "url": "local://tools-skills/rdkit/chem-rdkit-descriptors/references/science.md"
+    },
+    {
+      "id": "s4",
+      "role": "repo_code",
+      "path": "/Users/xllin/Documents/Codex/2026-09-20/new-chat-2/outputs/chem-agent-toolkit/tools-skills/rdkit/chem-rdkit-descriptors/scripts/calc_descriptors.py",
+      "page": null,
+      "sha256": "0b55d6132d83dc3b04413ed1c4a22788a62b96f0a02eda5992c43a080dfe67fe",
+      "url": "local://tools-skills/rdkit/chem-rdkit-descriptors/scripts/calc_descriptors.py"
+    }
+  ]
+}
