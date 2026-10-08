@@ -10,6 +10,8 @@ import sqlite3
 import zipfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from urllib.parse import quote
+import re
 
 class TextHTML(HTMLParser):
     def __init__(self):super().__init__();self.skip=0;self.parts=[]
@@ -87,6 +89,8 @@ def make_bundle(job,base,max_chars=80000):
     if not root.is_dir():raise ValueError('Source root does not exist')
     if job.get('repo_manifest'):
         meta=json.loads((base/job['repo_manifest']).read_text())
+        if any(Path(item['path']).is_absolute() or '..' in Path(item['path']).parts
+               for item in meta['tree']):raise ValueError('Unsafe path in repository manifest')
         files=[x['path'] for x in meta['tree'] if x['type']=='blob']
         commit=meta['commit'];repo_url='https://github.com/'+meta['repo']
     elif job.get('repo_root'):
@@ -98,6 +102,37 @@ def make_bundle(job,base,max_chars=80000):
         commit=job.get('commit','unversioned');repo_url=job.get('repo_url','')
     else:
         files=[];commit=job.get('commit','not_applicable');repo_url=''
+    local_files={name for name in files if (root/name).is_file()}
+    resource_catalog=[]
+    if job.get('repo_manifest'):
+        github_slug=meta['repo'] if re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+',meta['repo']) else ''
+        selected={Path(item['path']).relative_to('repo').as_posix() for item in job['sources']
+                  if item['role'] in {'repo_code','repo_doc'} and Path(item['path']).parts[0]=='repo'}
+        for entry in meta['tree']:
+            name=entry['path']
+            low=name.lower()
+            if entry['type']!='blob' or not (name in selected or
+                low.endswith(('.pt','.pth','.ckpt','.safetensors'))):continue
+            local=root/name
+            resource_catalog.append({
+                'path':name,
+                'source_url':f'https://raw.githubusercontent.com/{github_slug}/{commit}/{quote(name)}' if github_slug else 'local://'+name if local.is_file() else '',
+                'git_blob_sha1':entry['sha'],
+                'local_present':local.is_file(),
+                'local_sha256':hashlib.sha256(local.read_bytes()).hexdigest() if local.is_file() else ''})
+    for name in job.get('resource_paths',[]):
+        path=Path(name)
+        if path.is_absolute() or '..' in path.parts or str(path) not in files:
+            raise ValueError('Resource path absent or unsafe in repository inventory: '+name)
+        if any(item['path']==name for item in resource_catalog):continue
+        local=root/name
+        entry=next((item for item in meta['tree'] if item['path']==name and item['type']=='blob'),None) if job.get('repo_manifest') else None
+        source_url=(f'https://raw.githubusercontent.com/{github_slug}/{commit}/{quote(name)}'
+                    if job.get('repo_manifest') and github_slug else 'local://'+name if local.is_file() else '')
+        resource_catalog.append({'path':name,'source_url':source_url,
+            'git_blob_sha1':entry['sha'] if entry else '',
+            'local_present':local.is_file(),
+            'local_sha256':hashlib.sha256(local.read_bytes()).hexdigest() if local.is_file() else ''})
     sources=[];used=0;omitted=[]
     for index,item in enumerate(job['sources']):
         if item['role'] not in ['paper','repo_doc','repo_code','database_doc','tool_doc','model_doc','metadata']:raise ValueError('Unknown source role')
@@ -113,6 +148,13 @@ def make_bundle(job,base,max_chars=80000):
             blob=path.read_bytes()
             actual=hashlib.sha1(b'blob '+str(len(blob)).encode()+b'\0'+blob).hexdigest()
             if actual!=expected:raise ValueError('Repository source differs from recorded Git blob: '+relative)
+        if item['role'] in {'repo_code','repo_doc','database_doc','tool_doc','model_doc'}:
+            try:relative=path.relative_to(root).as_posix()
+            except ValueError:relative=''
+            if relative and not any(entry['path']==relative for entry in resource_catalog):
+                resource_catalog.append({'path':relative,
+                    'source_url':item.get('url') or 'local://'+relative,
+                    'git_blob_sha1':'','local_present':True,'local_sha256':data_hash})
         for page,text in read_documents(path):
             lines=text.splitlines()
             if not lines:continue
@@ -129,7 +171,10 @@ def make_bundle(job,base,max_chars=80000):
     if source_type not in ['paper','database','tool','model']:raise ValueError('Unknown source_type')
     primary_role={'paper':'paper','database':'database_doc','tool':'tool_doc','model':'model_doc'}[source_type]
     bundle={'version':1,'paper_id':job['paper_id'],'source_type':source_type,'primary_role':primary_role,'title':job['title'],'repo_root':str(root),'repo_url':repo_url,
-            'commit':commit,'repo_files':sorted(files),'sources':sources,'omitted':omitted,
+            'commit':commit,'repo_files':sorted(files),'local_repo_files':sorted(local_files),
+            'resource_catalog':resource_catalog,'model_capability':job.get('model_capability',''),
+            'data_capability':job.get('data_capability',''),
+            'sources':sources,'omitted':omitted,
             'coverage':{'paper_text_supplied':any(s['role']=='paper' for s in sources),
                         'primary_text_supplied':any(s['role']==primary_role for s in sources),
                         'selected_source_files':len(sources),'text_characters':used}}

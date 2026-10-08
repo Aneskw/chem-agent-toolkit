@@ -35,6 +35,7 @@ def repair(response: dict, bundle: dict) -> tuple[dict, list[dict]]:
         claims = candidate["inputs"] + candidate["outputs"] + candidate["steps"]
         claims += [item["reason"] for item in candidate["requirements"]]
         claims += candidate.get('decisions',[])
+        claims += [{'citations': item['citations']} for item in candidate.get('resource_manifest',[])]
         for claim in claims:
             for citation in claim["citations"]:
                 source = sources[citation["source_id"]]

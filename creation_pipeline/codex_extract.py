@@ -10,7 +10,7 @@ from pathlib import Path
 from network_env import model_environment
 from model_call import call
 from repair_citation_spans import repair
-from core.creation_schema import validate
+from core.creation_schema import reconcile_resources, validate
 
 
 def audit_and_repair(value,bundle,prompt,schema,model,timeout):
@@ -20,8 +20,10 @@ def audit_and_repair(value,bundle,prompt,schema,model,timeout):
         try:
             import copy
             checked,changes=repair(copy.deepcopy(value),bundle)
+            checked,resource_changes=reconcile_resources(checked,bundle)
             validate(checked,bundle)
-            return checked,{'model_repairs':receipts,'mechanical_citation_repairs':changes}
+            return checked,{'model_repairs':receipts,'mechanical_citation_repairs':changes,
+                            'resource_reconciliation':resource_changes}
         except (ValueError,KeyError) as error:
             if attempt==2:raise
             feedback=('Repair ONLY schema/citation errors in this extraction using the original sources. '

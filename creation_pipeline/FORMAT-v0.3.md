@@ -33,9 +33,14 @@ Required body sections, in order:
    selection rationale, and local reference files when needed.
 4. `## Input & Output`: schemas, units, paths, error/blocked states, and what
    may not be fabricated.
-5. `## Procedure Guidance`: only decision-changing instructions and commands
+5. `Resource Recovery Manifest`: for every external dataset, source checkout,
+   preprocessing asset, checkpoint, endpoint, or dependency, record its kind,
+   source URL, revision/version, SHA-256 when present, restore command, and
+   status. If the source or hash is unavailable, use `blocked_resources` or
+   `unverified`; never invent a download URL or checksum.
+6. `## Procedure Guidance`: only decision-changing instructions and commands
    or scripts for atomic database/tool/model resources.
-6. `## Matters & Troubleshooting`: relevant limits, stop conditions and
+7. `## Matters & Troubleshooting`: relevant limits, stop conditions and
    recovery steps.
 
 Creation states are separate from confidence: `source_collected`,

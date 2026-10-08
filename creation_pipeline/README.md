@@ -67,6 +67,51 @@ python3 creation_pipeline/decision_library.py --run creation_pipeline/runs/paper
 适用范围和精确来源。先抽取，再让模型对原始来源复核；两次调用都在临时目录中
 完成且不得使用工具。复核仍是模型审查，不等同于独立化学家审查。
 
+schema v2 中，凡依赖外部源码、预处理、数据、checkpoint、endpoint 或依赖的候选，
+还必须写出 `resource_manifest`：来源 URL、版本/commit、可用时的 SHA-256、恢复命令
+和状态。缺少可靠来源或哈希时必须标记 `blocked_resources`/`unverified`，不能把
+README 中的一条命令当成可执行 Skill，也不能编造下载链接。
+
+固定版本仓库的 `repo_files` 只是远程文件清单；`local_repo_files` 才表示 intake
+目录里实际有文件。`resource_catalog` 为选定源码和仓库中的权重给出固定 commit
+的直链、Git blob SHA-1 和本地 SHA-256；本地数据库/工具/模型文档及源码也按实际
+字节记录 SHA-256。Git blob SHA-1 不能当作文件 SHA-256。
+远程权重应标为 `download_required`，带固定版本 URL 与恢复命令；仅有文件名不能
+标为 `present`。对单步模型可在 intake 的 job 中设置
+`"model_capability": "single_step_inference"`：模型推理候选会分别检查推理源码、
+预处理和 checkpoint 的获取合同，缺项显示 `blocked_resources`。这仍是草稿状态，
+下载链接及实际推理须另行验证。
+用 `pair_sources.py` 配对单步模型论文时，也可传
+`--model-capability single_step_inference` 自动写入该配置。
+该模式不会把单纯的预处理/训练候选当成已完成的模型推理 Skill；运行结果另有
+`model_resource_status`，区分 `no_model_draft`、`blocked_resources` 与
+`draft_unexecuted`。即使是 `draft_unexecuted`，也还没有证明权重可下载、推理
+可运行或对 agent 有帮助。
+
+三类 Skill 的材料门槛见每个候选的 `checks`：数据库/API 候选至少给出数据或服务
+入口；工具候选至少给出源码、服务入口或安装来源；单步模型候选分别给出推理源码、
+预处理和 checkpoint。需要真实数据文件的数据库任务可在 intake job 中设置
+`"data_capability": "downloadable_dataset"`，此时仅有数据库主页或 API 文档
+不够，必须有随附数据文件或直达文件的下载地址和恢复命令。缺项列在
+`missing_category_resources` / `missing_model_resources`，状态为 `blocked_resources`。
+模型配对默认优先选入常见的推理入口文件名；不常见的项目结构仍应使用重复的
+`--file` 明确指定入口及预处理文件。仓库中的数据文件或权重可重复传
+`--resource path/in/repo`：不作为论文正文读取，100 MB 以内从固定 commit
+带入 intake；更大的文件只记录固定版本直链（非 GitHub 来源则报错）。生成草稿时，
+已验证为 `present` 的文件会复制到该 Skill 的 `resources/`，不再只有文件名。
+若论文主要产出数据集，在配对命令中加 `--data-capability downloadable_dataset`，
+并用 `--resource` 指定仓库里的真实数据文件。数据库类或该模式下，数据集清单须
+指向随附文件，或带具体恢复命令的直达文件下载地址；数据库主页、论文页、申请页
+不会通过该项检查。无扩展名的特殊下载接口目前需要人工核对，不会被静态检查误报为已具备数据。
+若模型预处理来自另一份 Skill，可在资源清单写其具体源码文件的直链、版本和恢复命令；
+只写另一份 Skill 的名称不算具备预处理代码。
+`draft_unexecuted` 只表示来源和资源合同的
+静态检查通过，不表示下载、安装或推理已经实测。
+
+自己写 Skill 时，也按 [FORMAT-v0.3.md](FORMAT-v0.3.md) 写正反适用条件、可信度、
+来源、输入输出、操作步骤和限制；引用的文件或下载地址应能在资源清单中核对。
+写完可运行 `python3 creation_pipeline/validate_skill_format.py /absolute/path/to/skill-folder`。
+
 任意 PDF / Git 仓库无需加入 `repo_map.json`：
 
 ```bash

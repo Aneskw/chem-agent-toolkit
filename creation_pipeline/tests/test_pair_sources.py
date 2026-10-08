@@ -18,7 +18,9 @@ class PairTests(unittest.TestCase):
             base=Path(d);repo=base/'repo';repo.mkdir()
             subprocess.run(['git','init','-q',str(repo)],check=True)
             source=repo/'predict.py';source.write_text('def predict():\n    return "original"\n')
-            subprocess.run(['git','-C',str(repo),'add','predict.py'],check=True)
+            (repo/'translate.py').write_text('def translate():\n    return "prediction"\n')
+            (repo/'data.csv').write_text('smiles\nCCO\n')
+            subprocess.run(['git','-C',str(repo),'add','predict.py','translate.py','data.csv'],check=True)
             subprocess.run(['git','-C',str(repo),'-c','user.name=Fixture','-c','user.email=fixture@example.invalid',
                             'commit','-qm','fixture'],check=True)
             source.write_text('raise RuntimeError("uncommitted change must not become evidence")\n')
@@ -36,5 +38,18 @@ class PairTests(unittest.TestCase):
             self.assertFalse(bundle['omitted']);self.assertNotEqual(bundle['commit'],'unversioned')
             self.assertTrue(any('original' in '\n'.join(s['lines']) for s in bundle['sources']))
             self.assertFalse(any('uncommitted' in '\n'.join(s['lines']) for s in bundle['sources']))
+            model_config=pair(str(pdf),str(repo),base/'model-pair',paper_id='model',
+                              model_capability='single_step_inference',resources=['data.csv'])
+            report=json.loads((model_config.parent/'source_pair.json').read_text())
+            self.assertIn('repo/translate.py',report['selected_files'])
+            self.assertIn('data.csv',report['copied_resources'])
+            self.assertEqual((model_config.parent/'repo'/'data.csv').read_text(),'smiles\nCCO\n')
+            model_bundle=make_bundle(json.loads(model_config.read_text())['jobs'][0],model_config.parent)
+            resource=next(item for item in model_bundle['resource_catalog'] if item['path']=='data.csv')
+            self.assertTrue(resource['local_present'])
+            dataset_config=pair(str(pdf),str(repo),base/'dataset-pair',paper_id='dataset',
+                                resources=['data.csv'],data_capability='downloadable_dataset')
+            dataset_job=json.loads(dataset_config.read_text())['jobs'][0]
+            self.assertEqual(dataset_job['data_capability'],'downloadable_dataset')
 
 if __name__=='__main__':unittest.main()

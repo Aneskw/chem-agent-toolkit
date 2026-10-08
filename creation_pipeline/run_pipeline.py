@@ -19,7 +19,11 @@ class MissingPaperText(Exception):
 
 
 def call(*args: str) -> None:
-    subprocess.run([sys.executable, *args], check=True)
+    result=subprocess.run([sys.executable, *args], text=True, capture_output=True)
+    if result.stdout:print(result.stdout,end='')
+    if result.returncode:
+        detail=(result.stderr or result.stdout).strip()[-2000:]
+        raise ValueError(f'{Path(args[0]).name} exited {result.returncode}: {detail}')
 
 
 def main() -> int:
@@ -92,15 +96,22 @@ def main() -> int:
             shutil.copyfile(args.response_file, response)
             status["model_origin"] = "saved_response_replay"
         else:
+            status['stage']='model_extraction'
             call(str(HERE / "codex_extract.py"), "--run", str(run),
                  "--paper-id", args.paper_id, "--model", args.model)
             status["model_origin"] = "codex_cli"
         status["stage"] = "model_response_received"
         repaired_dir = run / "checked_responses"
         repaired_dir.mkdir()
+        status['stage']='citation_audit'
         call(str(HERE / "repair_citation_spans.py"), "--response", str(response),
              "--bundle", str(run / "jobs" / args.paper_id / "bundle.json"),
              "--output", str(repaired_dir / f"{args.paper_id}.json"))
+        from core.creation_schema import reconcile_resources
+        repaired_path=repaired_dir / f"{args.paper_id}.json"
+        reconciled,resource_changes=reconcile_resources(json.loads(repaired_path.read_text()),bundle)
+        repaired_path.write_text(json.dumps(reconciled,indent=2,ensure_ascii=False)+'\n')
+        status['resource_reconciliation_count']=len(resource_changes)
         call(str(HERE / "core" / "creation.py"), "import-response", "--run", str(run),
              "--responses", str(repaired_dir), "--origin", "codex_current_task")
         extraction = json.loads((run / "import_results" / "summary.json").read_text())
@@ -145,6 +156,12 @@ def main() -> int:
                        "status": outcome, "candidate_kinds": kind_counts,
                        "candidate_count": job.get("candidate_count", 0),
                        "checks": job.get("checks", []),
+                       "model_capability": bundle.get('model_capability', ''),
+                       "model_resource_status": (
+                           'not_requested' if bundle.get('model_capability')!='single_step_inference' else
+                           'no_model_draft' if not kind_counts['method_procedure'] else
+                           'blocked_resources' if any(check['state']=='blocked_resources' for check in job.get('checks',[])) else
+                           'draft_unexecuted'),
                        "source_bundle_sha256": job.get("bundle_sha256"),
                        "response_sha256": job.get("response_sha256"),
                        "run_dir": str(run.relative_to(HERE.parent))})
