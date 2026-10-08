@@ -1,0 +1,78 @@
+{
+  "model": "gpt-5.6-luna",
+  "date": "2026-10-08",
+  "source_commit": "f3d079f28fc646151cc369d46ac7fc2257224f71",
+  "execution": "Fresh subagent contexts per skill and condition; two tasks per context; no-skill and skill-text prompts otherwise matched. A further skill arm was instructed to read the exact committed SKILL.md.",
+  "summary": {
+    "tasks": 8,
+    "skills": 4,
+    "no_skill_correct": 8,
+    "skill_text_correct": 8,
+    "exact_skill_read_correct": 8,
+    "observed_accuracy_difference": 0.0
+  },
+  "rows": [
+    {
+      "task_id": "committee-reference-offset",
+      "gold": "B",
+      "no_skill": {"choice": "B", "reason": "Force-component disagreement is comparable for this purpose, while absolute-energy spread is confounded by model-specific energy zeros."},
+      "skill_text": {"choice": "B", "reason": "Different elemental energy zeros make absolute-energy spread incomparable; rank by force disagreement and retain energy spread only as context."},
+      "exact_skill_read": {"choice": "B", "reason": "Different energy zeros make absolute-energy spread incomparable; rank by force disagreement and keep energy spread as contextual data."}
+    },
+    {
+      "task_id": "committee-common-error",
+      "gold": "C",
+      "no_skill": {"choice": "C", "reason": "Committee agreement can be confidently wrong; broaden or validate the committee before relying on disagreement alone."},
+      "skill_text": {"choice": "C", "reason": "Near-zero committee disagreement can mask shared errors, so broaden or externally validate the committee before relying on spread alone."},
+      "exact_skill_read": {"choice": "C", "reason": "Committee disagreement is not calibrated accuracy; broaden or externally validate before relying on spread alone."}
+    },
+    {
+      "task_id": "redock-best-is-not-top",
+      "gold": "A",
+      "no_skill": {"choice": "A", "reason": "The protocol evaluates the top-ranked pose; its 1.8 Angstrom RMSD exceeds the predefined 0.5 Angstrom gate. The third pose is only diagnostic of a ranking problem."},
+      "skill_text": {"choice": "A", "reason": "The top-scored pose is 1.8 Angstrom, exceeding the predefined 0.5 Angstrom gate; the 0.3 Angstrom third pose indicates a ranking problem only."},
+      "exact_skill_read": {"choice": "A", "reason": "The gate is applied solely to the top-scored pose; 1.8 Angstrom fails, while the 0.3 Angstrom third pose only diagnoses a ranking problem."}
+    },
+    {
+      "task_id": "redock-coordinate-frame",
+      "gold": "B",
+      "no_skill": {"choice": "B", "reason": "Aligning receptor coordinate frames preserves the physical docking-pose error before calculating symmetry-aware ligand RMSD."},
+      "skill_text": {"choice": "B", "reason": "Aligning receptor frames preserves the docked pose's translational and rotational error before calculating in-place symmetry-aware RMSD."},
+      "exact_skill_read": {"choice": "B", "reason": "Align receptor frames first, transform the docked pose, then calculate in-place symmetry-aware RMSD so docking error is preserved."}
+    },
+    {
+      "task_id": "qha-edge-minimum",
+      "gold": "C",
+      "no_skill": {"choice": "C", "reason": "An edge minimum indicates the sampled volume range is insufficient; extend the range, recompute phonons, and refit before reporting expansion."},
+      "skill_text": {"choice": "C", "reason": "An edge minimum indicates the sampled window is insufficient; extend the volume range, recompute needed phonons, and refit before reporting expansion."},
+      "exact_skill_read": {"choice": "C", "reason": "An edge minimum requires extending the volume window, recomputing phonons, and refitting before reporting expansion."}
+    },
+    {
+      "task_id": "qha-poisoned-volume",
+      "gold": "B",
+      "no_skill": {"choice": "B", "reason": "A robust isolated -11 THz branch signals a failed or unstable point that must be resolved before fitting the free energy."},
+      "skill_text": {"choice": "B", "reason": "A robust isolated imaginary branch indicates a failed or unstable volume point, so it must be recomputed or resolved before fitting free energies."},
+      "exact_skill_read": {"choice": "B", "reason": "A robust isolated imaginary branch indicates a failed volume point that must be resolved before fitting free energy."}
+    },
+    {
+      "task_id": "screen-microstate-weight",
+      "gold": "A",
+      "no_skill": {"choice": "A", "reason": "Rank at the parent-compound level within each seed, then summarize independent seeds so P does not gain weight from extra enumeration."},
+      "skill_text": {"choice": "A", "reason": "Reduce valid microstates to one declared parent score within each seed, then summarize independent seeds to prevent enumeration from adding weight."},
+      "exact_skill_read": {"choice": "A", "reason": "Reduce each parent to one declared score within each seed, then summarize independent seeds so enumeration count does not add statistical weight."}
+    },
+    {
+      "task_id": "screen-lucky-seed",
+      "gold": "C",
+      "no_skill": {"choice": "C", "reason": "Replicate robustness requires comparing parent-level performance and variability across all seeds, not selecting a protocol from one favorable run."},
+      "skill_text": {"choice": "C", "reason": "Replicate robustness requires comparing parent-level performance and variability across all seeds rather than selecting a lucky run."},
+      "exact_skill_read": {"choice": "C", "reason": "Replicate robustness requires parent-level performance and variability across all four seeds; a single lucky run cannot establish superiority."}
+    }
+  ],
+  "limitations": [
+    "Tasks were authored after viewing the skills, so this is not blinded independent evaluation.",
+    "Only 4 of the 22 new skills were tested, with 2 tasks each and one run per arm.",
+    "The answer options are easy for the bare model, causing an 8/8 ceiling in the control arm.",
+    "The exact-skill-read arm relied on agent instructions to read the committed file; no tool-event audit was retained."
+  ]
+}
