@@ -1,0 +1,82 @@
+[
+  {
+    "id": "committee-reference-offset",
+    "skill": "committee-force-disagreement",
+    "request": "Four independently pretrained force fields have different elemental energy zeros. Candidate A has the largest cross-model absolute-energy spread, but candidate B has the largest force-component disagreement. You can label one structure with DFT. What is the best next step?",
+    "options": {
+      "A": "Label A because the absolute-energy spread is largest.",
+      "B": "Label B, retaining energy spread only as contextual diagnostic data.",
+      "C": "Average the absolute energies across models and label the lower mean-energy candidate."
+    }
+  },
+  {
+    "id": "committee-common-error",
+    "skill": "committee-force-disagreement",
+    "request": "A force-field committee agrees almost exactly on a set of strained structures, but a small independently labeled sample shows large force errors for every member. What conclusion should guide further labeling?",
+    "options": {
+      "A": "Committee agreement proves the remaining structures are low risk.",
+      "B": "Replace force disagreement with raw absolute-energy spread and stop validation.",
+      "C": "Agreement is not calibrated accuracy; broaden or validate the committee before using spread as the only acquisition rule."
+    }
+  },
+  {
+    "id": "redock-best-is-not-top",
+    "skill": "symmetry-aware-redocking-control",
+    "request": "A self-docking run has a predefined 0.5 Angstrom top-pose RMSD gate. Symmetry-corrected in-place RMSDs in score order are 1.8, 1.2, and 0.3 Angstrom. How should the protocol be classified?",
+    "options": {
+      "A": "Fail the top-pose gate; the third pose is a diagnostic of a ranking problem.",
+      "B": "Pass because at least one docked pose is within 0.5 Angstrom.",
+      "C": "Rigidly align pose one to the reference and recalculate the gate."
+    }
+  },
+  {
+    "id": "redock-coordinate-frame",
+    "skill": "symmetry-aware-redocking-control",
+    "request": "The crystallographic ligand and docked ligand are stored with different receptor coordinate frames. The goal is to measure docking-pose recovery. Which alignment preserves the docking error?",
+    "options": {
+      "A": "Superimpose each docked ligand on the crystallographic ligand before RMSD.",
+      "B": "Align the receptor frames, apply that transform to the docked pose, then calculate in-place symmetry-aware ligand RMSD.",
+      "C": "Use atom-index RMSD directly across the unaligned files."
+    }
+  },
+  {
+    "id": "qha-edge-minimum",
+    "skill": "quasi-harmonic-volume-scan",
+    "request": "A quasi-harmonic fit gives a 600 K free-energy minimum at the largest sampled volume; lower-temperature minima are interior. What is the defensible next action before reporting thermal expansion?",
+    "options": {
+      "A": "Report the edge volume as the true minimum and calculate expansion.",
+      "B": "Fit an unconstrained high-order polynomial to force an interior minimum.",
+      "C": "Extend the sampled volume range, recompute the needed phonon points, and refit."
+    }
+  },
+  {
+    "id": "qha-poisoned-volume",
+    "skill": "quasi-harmonic-volume-scan",
+    "request": "Across a QHA volume scan, most phonon spectra have only tiny negative acoustic frequencies near Gamma; one isolated volume has a robust -11 THz branch. What should be done?",
+    "options": {
+      "A": "Integrate every spectrum because all negative frequencies are harmless acoustic noise.",
+      "B": "Treat the isolated strongly imaginary branch as a failed point and recompute or resolve it before fitting F(V,T).",
+      "C": "Discard every volume with any negative frequency and fit the remaining edge points."
+    }
+  },
+  {
+    "id": "screen-microstate-weight",
+    "skill": "microstate-aware-virtual-screening",
+    "request": "In each of four seeded docking runs, parent P has ten enumerated microstates and parent Q has one. The screen's unit of follow-up is a parent compound. How should ranking avoid an enumeration advantage?",
+    "options": {
+      "A": "Reduce valid microstates to one declared parent score within each seed, then summarize independent seeds.",
+      "B": "Pool all eleven microstate scores and let P contribute ten observations.",
+      "C": "Keep only the single seed where P has the most favorable pose."
+    }
+  },
+  {
+    "id": "screen-lucky-seed",
+    "skill": "microstate-aware-virtual-screening",
+    "request": "Protocol X recovers actives very well in one seeded run but ranks them poorly in three other seeds. Protocol Y is slightly less impressive in the best seed but consistent across all four. The evaluation plan specified replicate robustness. What is the sound comparison?",
+    "options": {
+      "A": "Choose X using its highest-performing seed only.",
+      "B": "Pool microstate scores from all seeds and ignore which replicate produced them.",
+      "C": "Compare parent-level performance and variability across all seeds; do not choose X from its lucky run alone."
+    }
+  }
+]

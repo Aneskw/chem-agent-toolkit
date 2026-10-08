@@ -1,0 +1,10 @@
+{
+  "committee-reference-offset": "B",
+  "committee-common-error": "C",
+  "redock-best-is-not-top": "A",
+  "redock-coordinate-frame": "B",
+  "qha-edge-minimum": "C",
+  "qha-poisoned-volume": "B",
+  "screen-microstate-weight": "A",
+  "screen-lucky-seed": "C"
+}
