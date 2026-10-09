@@ -22,6 +22,13 @@ python3 scripts/query_pubchem.py --query 2244 --output result.json
 
 Check the process exit code and `ok` before using the result. PubChem records are database annotations; retain the returned CID and the retrieval URL in downstream records.
 
+## Resource acquisition
+
+The wrapper and examples are included in this Skill. PubChem records are
+retrieved at runtime from the official PUG REST endpoint; see
+[`resources/RESTORE.md`](resources/RESTORE.md) for the direct URL and restore
+contract.
+
 ## Failure and recovery
 
 - Network or TLS failure: report the error and retry only after connectivity is restored.

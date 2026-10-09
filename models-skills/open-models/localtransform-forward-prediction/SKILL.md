@@ -20,6 +20,13 @@ Status: `blocked_upstream_missing_files`. The repository snapshot has not passed
 - Upstream commit: `1b763f20e4d1df560d15aab2a61291fe0c50fae3`
 - [Upstream README](https://github.com/kaist-amsg/LocalTransform/blob/1b763f20e4d1df560d15aab2a61291fe0c50fae3/README.md)
 
+Resource acquisition: the upstream README gives the direct USPTO-480k source
+at https://github.com/wengong-jin/nips17-rexgen/tree/master/USPTO and the
+training command that produces `models/LocalTransform_sep.pth`. The upstream
+repository does not provide a public pretrained-checkpoint URL in the pinned
+revision, so a clean inference run remains `blocked_resources` until that
+checkpoint is supplied or trained from the pinned source.
+
 ## Input and output
 
 Input: reactant SMILES plus the matching source checkout, model weights, and preprocessing files. Current output is a structured missing-resource report; it is not a product prediction.

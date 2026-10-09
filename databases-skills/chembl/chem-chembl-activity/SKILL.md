@@ -14,6 +14,10 @@ Query public ChEMBL activity records by a ChEMBL molecule or target identifier. 
 
 API: https://www.ebi.ac.uk/chembl/api/data/docs
 
+Resource contract: [`resources/RESTORE.md`](resources/RESTORE.md). The query
+wrapper is included at `scripts/query_activity.py`; records are retrieved at
+runtime from the official ChEMBL endpoint.
+
 The script uses the ChEMBL REST endpoint `/activity.json` with `molecule_chembl_id` or `target_chembl_id`. Results depend on the current public database and should be cached with retrieval time.
 
 ## Input and output

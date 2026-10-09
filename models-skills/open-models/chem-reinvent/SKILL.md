@@ -14,6 +14,12 @@ Use a pinned REINVENT4 checkout, TOML configuration, scoring components, seed, a
 
 Repository: https://github.com/MolecularAI/REINVENT4
 
+Source checkout and inference code are obtained with `git clone` from the
+repository above. Public prior-model checkpoints are distributed through the
+official Zenodo record: https://doi.org/10.5281/zenodo.15641296. Select the
+required prior model, record its file URL and SHA-256, and place it in the TOML
+configuration's prior-model path before inference.
+
 The upstream CLI is configuration-driven. Pin the repository revision, configuration file, scoring components, random seed, and output directory.
 
 ## Input and output

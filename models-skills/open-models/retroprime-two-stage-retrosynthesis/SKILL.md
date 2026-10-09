@@ -3,6 +3,7 @@ name: retroprime-two-stage-retrosynthesis
 description: >-
   Invoke for: single-step retrosynthesis with RetroPrime when one product SMILES must pass through its P2S and S2R stages to produce deduplicated reactant candidates. Do not use for multi-step routes, training, or calibrated success probabilities.
 license: MIT (upstream code; weights subject to source terms)
+compatibility: Python 3.11 with PyTorch, RDKit, pinned RetroPrime source, two USPTO-50K checkpoints, and CPU runtime
 allowed-tools: Read, Bash, Write
 ---
 
@@ -12,7 +13,7 @@ Run the pinned RetroPrime compatibility wrapper for one connected product SMILES
 
 ## Credibility
 
-Status: `inference_smoke_tested`. Two real CPU two-stage examples and three negative cases passed in the tested Python 3.11/PyTorch 2.2.2 compatibility environment. This is an execution check, not an accuracy benchmark.
+Status: `inference_smoke_tested`. **medium confidence (Need verification)**. Two real CPU two-stage examples and three negative cases passed in the tested Python 3.11/PyTorch 2.2.2 compatibility environment. This is an execution check, not an accuracy benchmark.
 
 ## Reference
 
@@ -21,22 +22,27 @@ Status: `inference_smoke_tested`. Two real CPU two-stage examples and three nega
 - [Upstream example runner](https://github.com/wangxr0526/RetroPrime/blob/a765b670b72fbfd512d0d437da8f27a95f9f0554/run_example.sh)
 - [SMILES tokenizer](https://github.com/wangxr0526/RetroPrime/blob/a765b670b72fbfd512d0d437da8f27a95f9f0554/retroprime/transformer_model/script/smi_tokenizer.py)
 
-## Input and output
+Resource acquisition, checkpoint placement, hashes, and the compatibility
+patches applied by the wrapper are in [`resources/RESTORE.md`](resources/RESTORE.md).
+The snapshot does not claim a verified public checkpoint URL; record the
+upstream artifact provenance before inference.
+
+## Input & Output
 
 Input: one connected product SMILES with a bond and `top_k` from 1–10. The wrapper uses the pinned USPTO-50K two-stage weights and a beam size of 10.
 
 Output: JSON containing the normalized product, deduplicated reactants, intermediate positions, both weight hashes, and per-stage timing. The upstream interface does not provide calibrated probabilities, so none are added.
 
-## Procedure
+## Procedure Guidance
 
-1. Use the tested dependencies in `requirements-retroprime-lock.txt` and restore both weight files.
-2. Run `./run_retroprime.sh --product "CC(=O)Nc1ccccc1" --top-k 10`, or call `scripts/predict_retroprime.py --source-root PATH_TO_RETROPRIME`.
+1. Follow `resources/RESTORE.md`, install the pinned dependencies, and restore both weight files.
+2. Run `scripts/predict_retroprime.py --source-root PATH_TO_RETROPRIME --product "CC(=O)Nc1ccccc1" --top-k 10 --output-dir PATH_TO_OUTPUT`.
 3. Check the exit code and `ok` field; retain stderr and optional intermediate files in a new output directory.
 
-## Fixed cases
+### Fixed cases
 
 Use [examples/cases.json](examples/cases.json) for two positive and three negative cases. Expected checks cover the complete five-stage chain, candidate count, consecutive ranks, representative first candidate, and explicit rejection of invalid inputs.
 
-## Failure and recovery
+## Matters & Troubleshooting
 
 Reject invalid, disconnected, bondless, or out-of-range inputs. Restore missing or mismatched resources instead of bypassing hashes. If either stage fails, preserve the log and stop repeated retries. An empty candidate list does not prove that the target is unsynthesizable.

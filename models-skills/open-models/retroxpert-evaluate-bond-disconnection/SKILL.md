@@ -16,6 +16,12 @@ Status: `blocked_resources`: `checkpoints/USPTO50K_typed_checkpoint.pt` is missi
 
 ## Reference
 
+Upstream implementation: https://github.com/uta-smile/RetroXpert
+Resource acquisition and the current checkpoint limitation are documented in
+[`resources/RESTORE.md`](resources/RESTORE.md). The repository snapshot does
+not contain the inference adapter or a verified public checkpoint URL, so this
+Skill remains a resource preflight until both are supplied.
+
 - Fixed source record: `../../evidence/RetroXpert/repo.json`, commit `321cc3daf2f3a7ac9ab5b37dde5b666b338e1ed5`
 - [Upstream training/evaluation entry](../../evidence/RetroXpert/train.py)
 - [Upstream README](../../evidence/RetroXpert/readme.md)

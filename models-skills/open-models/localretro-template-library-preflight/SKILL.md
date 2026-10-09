@@ -25,6 +25,9 @@ upstream environment, which are not bundled; no extraction result is claimed.
 
 ## Reference
 
+Restore the pinned LocalRetro source and dataset using the acquisition
+contract in [`../localretro-single-step-retrosynthesis/resources/RESTORE.md`](../localretro-single-step-retrosynthesis/resources/RESTORE.md).
+
 - Wang et al., *JACS Au* 2021, DOI `10.1021/jacsau.1c00246`, describes local
   template derivation from mapped training reactions.
 - Pinned `kaist-amsg/LocalRetro` commit

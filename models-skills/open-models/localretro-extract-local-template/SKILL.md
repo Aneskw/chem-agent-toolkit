@@ -32,3 +32,6 @@ Reject unmapped, duplicate-map, empty, or invalid reactions. Preserve the origin
 
 - Paper: https://doi.org/10.1021/jacsau.1c00246
 - Upstream implementation: https://github.com/kaist-amsg/LocalRetro
+
+Restore the pinned LocalRetro source, preprocessing data, and checkpoint using
+the acquisition contract in [`../localretro-single-step-retrosynthesis/resources/RESTORE.md`](../localretro-single-step-retrosynthesis/resources/RESTORE.md).

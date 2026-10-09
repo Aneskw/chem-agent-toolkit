@@ -14,6 +14,12 @@ Use the pinned GenMol checkout, model checkpoint, SAFE input, seed, and requeste
 
 Repository: https://github.com/NVIDIA-BioNeMo/genmol
 
+Code and preprocessing are included upstream in the pinned repository. The
+pretrained checkpoint is directly available from the NVIDIA NGC catalog:
+https://catalog.ngc.nvidia.com/orgs/nvidia/teams/clara/resources/genmol_v1
+Follow the catalog download instructions, place `model.ckpt` in the
+checkpoint directory, and record the downloaded artifact hash before running.
+
 GenMol uses masked discrete diffusion over SAFE molecular sequences. Record the GenMol revision, checkpoint path, SAFE input, seed, and requested generation count.
 
 ## Input and output
