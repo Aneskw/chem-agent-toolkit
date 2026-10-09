@@ -1,0 +1,19 @@
+{
+  "base": ".",
+  "max_context_chars": 80000,
+  "jobs": [
+    {
+      "paper_id": "my-database-docs",
+      "source_type": "database",
+      "title": "Database documentation supplied by the researcher",
+      "sources": [
+        {
+          "path": "docs/database-api.html",
+          "role": "database_doc",
+          "url": "https://example.org/replace-with-the-actual-source-page",
+          "sha256": "replace-with-the-actual-file-sha256"
+        }
+      ]
+    }
+  ]
+}

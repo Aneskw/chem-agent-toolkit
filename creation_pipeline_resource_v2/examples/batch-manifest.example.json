@@ -1,0 +1,21 @@
+{
+  "max_context_chars": 80000,
+  "jobs": [
+    {
+      "paper_id": "paper-localretro",
+      "source_type": "paper",
+      "title": "A paper with a local full text file",
+      "sources": [
+        {"path": "sources/localretro.pdf", "role": "paper", "url": "https://doi.org/replace", "sha256": "replace"}
+      ]
+    },
+    {
+      "paper_id": "database-pubchem",
+      "source_type": "database",
+      "title": "Database documentation",
+      "sources": [
+        {"path": "sources/pubchem-api.md", "role": "database_doc", "url": "https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest-tutorial", "sha256": "replace"}
+      ]
+    }
+  ]
+}

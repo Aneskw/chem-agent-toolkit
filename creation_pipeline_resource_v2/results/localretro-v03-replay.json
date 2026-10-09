@@ -1,0 +1,41 @@
+{
+  "run_id": "localretro-v03-replay",
+  "paper_id": "2GFR874J",
+  "stage": "drafts_rendered",
+  "status": "cited_drafts_created",
+  "model_origin": "saved_response_replay",
+  "candidate_count": 3,
+  "checks": [
+    {
+      "name": "derive-local-reaction-template-library",
+      "state": "blocked_resources",
+      "missing_repo_files": [
+        "data/USPTO_50K/raw_train.csv",
+        "data/USPTO_50K/class_train.csv"
+      ],
+      "external_assets_unverified": [],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    },
+    {
+      "name": "predict-retrosynthesis-with-local-and-global-reactivity",
+      "state": "draft_unexecuted",
+      "missing_repo_files": [],
+      "external_assets_unverified": [
+        "au1c00246_si_001.pdf"
+      ],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    },
+    {
+      "name": "evaluate-retrosynthesis-exact-match-and-round-trip",
+      "state": "draft_unexecuted",
+      "missing_repo_files": [],
+      "external_assets_unverified": [
+        "pretrained Molecular Transformer (MT)"
+      ],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    }
+  ],
+  "source_bundle_sha256": "7b6350ce63f05c39e1b52e8967d190a00240043461a64f7b4e46cf2178b2f367",
+  "response_sha256": "5bc6455a69b62e1470a8e268f85e2e180b599cd9c4ed2e0f1f3b1b1c0dd52184",
+  "run_dir": "creation_pipeline/runs/localretro-v03-replay"
+}

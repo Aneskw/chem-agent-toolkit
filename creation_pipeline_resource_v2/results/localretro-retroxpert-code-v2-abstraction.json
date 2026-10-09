@@ -1,0 +1,210 @@
+{
+  "status": "abstraction_review_required",
+  "model_origin": "codex_cli",
+  "source_runs": [
+    {
+      "paper_id": "2GFR874J",
+      "run_id": "localretro-v03-replay",
+      "response_sha256": "5bc6455a69b62e1470a8e268f85e2e180b599cd9c4ed2e0f1f3b1b1c0dd52184",
+      "bundle_sha256": "7b6350ce63f05c39e1b52e8967d190a00240043461a64f7b4e46cf2178b2f367"
+    },
+    {
+      "paper_id": "74LHJIVM",
+      "run_id": "retroxpert-paper-code-full",
+      "response_sha256": "3a49e734814ee19bf8497e98fd38ab9685014a4f4781b0e5bfae398144188210",
+      "bundle_sha256": "3439ba38b3b2e20f6a3fc854d9bf3dc675c33703e6b653b4106f257697c6f354"
+    }
+  ],
+  "candidate_count": 4,
+  "surface_repair_count": 14,
+  "response_sha256": "b079fa0dccaabc19d5d868710d22e9e6051df3f1c92bbfdb35b33da935340d97",
+  "clusters": [
+    {
+      "name": "rank-precursors-through-localized-reaction-template-application",
+      "abstract_capability": "Choose candidate reaction sites and applicable local transformations using molecular context, then rank the precursor sets produced by applying those transformations.",
+      "member_ids": [
+        "2GFR874J/predict-retrosynthesis-with-local-and-global-reactivity"
+      ],
+      "relation": "same_capability",
+      "dedup_action": "review_duplicate",
+      "rationale": "The task and mechanism substantially overlap with localretro-single-step-retrosynthesis. This is a proposed catalog duplicate requiring inspection of package behavior. Shared single-step retrosynthesis goals do not justify merging template application with bond-disconnection or sequence-generation mechanisms.",
+      "decision_rules": [
+        {
+          "when": "A target product, local template library, and trained classifiers are available for template-based single-step prediction.",
+          "do": "Score atom and bond template-center combinations using local environments and global reactivity context, rank them, and apply the selected templates to obtain precursor proposals.",
+          "do_not": "Treat template extraction or resource preflight as precursor prediction, or interpret ranking scores as experimental success probabilities.",
+          "supported_by": [
+            "2GFR874J/predict-retrosynthesis-with-local-and-global-reactivity"
+          ]
+        },
+        {
+          "when": "The reaction class is supplied.",
+          "do": "Restrict template application to templates associated with that class.",
+          "do_not": "Assume a known class for an untyped input.",
+          "supported_by": [
+            "2GFR874J/predict-retrosynthesis-with-local-and-global-reactivity"
+          ]
+        }
+      ],
+      "overlap_with_catalog": [
+        "localretro-single-step-retrosynthesis",
+        "localretro-extract-local-template",
+        "localretro-template-library-preflight",
+        "retroprime-two-stage-retrosynthesis"
+      ],
+      "limits": [
+        "No implementation or execution is established.",
+        "Usable trained parameters, implementation settings, and template-application failure, deduplication, and tie handling are not established.",
+        "The supplied summary distinguishes the published method from later repository changes; equivalence requires review.",
+        "Catalog overlap note for localretro-single-step-retrosynthesis: substantial task and mechanism overlap; proposed duplicate.",
+        "Catalog overlap note for localretro-extract-local-template: upstream template construction, a separate capability.",
+        "Catalog overlap note for localretro-template-library-preflight: upstream readiness checks, a separate capability.",
+        "Catalog overlap note for retroprime-two-stage-retrosynthesis: shared prediction goal with a different mechanism; retain separately."
+      ],
+      "review_state": "human_review_required"
+    },
+    {
+      "name": "judge-precursor-proposals-by-reference-agreement-and-forward-consistency",
+      "abstract_capability": "Distinguish agreement with recorded reactants from recovery of the desired product under a supplied forward model, using explicit matching and stereochemistry rules.",
+      "member_ids": [
+        "2GFR874J/evaluate-retrosynthesis-exact-match-and-round-trip"
+      ],
+      "relation": "same_capability",
+      "dedup_action": "review_duplicate",
+      "rationale": "chem-retro-candidate-evaluation describes the same evaluation task. Human review should check whether its stereochemistry exception and round-trip acceptance logic match this candidate before treating them as duplicates.",
+      "decision_rules": [
+        {
+          "when": "Predicted and reference reactant sets are available as canonical SMILES.",
+          "do": "Assess exact set agreement; when reference stereocenters lack specified stereoinformation, apply the stated atom-and-connectivity matching exception.",
+          "do_not": "Extend that exception to references with specified stereochemistry or silently substitute later repository metrics.",
+          "supported_by": [
+            "2GFR874J/evaluate-retrosynthesis-exact-match-and-round-trip"
+          ]
+        },
+        {
+          "when": "Assessing round-trip correctness with the specified pretrained forward model available.",
+          "do": "Accept a proposal if it matches the reference reactants or its forward prediction matches the desired product.",
+          "do_not": "Require both conditions, equate forward consistency with experimental feasibility, or substitute an unspecified forward model.",
+          "supported_by": [
+            "2GFR874J/evaluate-retrosynthesis-exact-match-and-round-trip"
+          ]
+        }
+      ],
+      "overlap_with_catalog": [
+        "chem-retro-candidate-evaluation",
+        "localtransform-forward-prediction"
+      ],
+      "limits": [
+        "Canonicalization, product equivalence, forward-model checkpoint and inference configuration remain unspecified.",
+        "Invalid inputs, duplicates, and forward-model failure handling are unresolved.",
+        "No evaluation results or execution success are established.",
+        "Catalog overlap note for chem-retro-candidate-evaluation: direct capability overlap; proposed duplicate subject to matching-rule review.",
+        "Catalog overlap note for localtransform-forward-prediction: related forward-model resource checking, but neither this evaluation capability nor the specified Molecular Transformer."
+      ],
+      "review_state": "human_review_required"
+    },
+    {
+      "name": "constrain-reaction-center-selection-by-predicted-disconnection-count",
+      "abstract_capability": "Use a graph-level estimate of how many bonds change to constrain bond-level reaction-center selection, construct synthons, and separately assess center and synthon agreement when labels exist.",
+      "member_ids": [
+        "74LHJIVM/auxiliary-guided-reaction-center-identification"
+      ],
+      "relation": "related_variants",
+      "dedup_action": "merge_as_variants",
+      "rationale": "A proposed variant group with retroxpert-evaluate-bond-disconnection has a useful shared decision: count-guided selection and assessment of disconnections. The catalog describes typed evaluation, while this candidate includes conditional typed or untyped handling and synthon construction. Preserve those scope distinctions pending human review.",
+      "decision_rules": [
+        {
+          "when": "Reaction types are supplied.",
+          "do": "Use the typed branch with reaction-class features; otherwise use the untyped branch.",
+          "do_not": "Apply typed evaluation assumptions to inputs lacking reaction types.",
+          "supported_by": [
+            "74LHJIVM/auxiliary-guided-reaction-center-identification"
+          ]
+        },
+        {
+          "when": "Auxiliary disconnection-count predictions are available.",
+          "do": "Select the predicted number of most probable disconnections. In the described repository postprocessor, average paired directed-edge retained-edge probabilities, double the undirected count, and select the lowest-scoring directed entries; select none for a zero count.",
+          "do_not": "Reverse the retained-edge score convention or replace count guidance with the 0.5 threshold except for the stated main-task-only ablation.",
+          "supported_by": [
+            "74LHJIVM/auxiliary-guided-reaction-center-identification"
+          ]
+        },
+        {
+          "when": "Selected disconnections are converted into synthons and reference labels are available.",
+          "do": "Remove selected bonds, serialize synthons, verify matching dataset and prediction lengths, and compare disconnection sets and synthon sets independently.",
+          "do_not": "Treat synthon construction as completed reactant generation or use one agreement check as a substitute for the other.",
+          "supported_by": [
+            "74LHJIVM/auxiliary-guided-reaction-center-identification"
+          ]
+        }
+      ],
+      "overlap_with_catalog": [
+        "retroxpert-evaluate-bond-disconnection"
+      ],
+      "limits": [
+        "The repository reports an information leak and revised results; original paper accuracy is not verified performance.",
+        "No execution or checkpoint validation is established.",
+        "The described postprocessor requires labeled benchmark artifacts; arbitrary unlabeled-product support is not established.",
+        "Tie handling, self-loops, and inconsistent directed-edge selections remain unresolved.",
+        "Catalog overlap note for retroxpert-evaluate-bond-disconnection: proposed shared capability group with typed evaluation and broader conditional center-selection variants."
+      ],
+      "review_state": "human_review_required"
+    },
+    {
+      "name": "train-downstream-precursor-generation-on-upstream-prediction-errors",
+      "abstract_capability": "Align intermediate fragments with target reactants, augment sequence ordering, and expose a downstream generator to upstream training errors while keeping end-to-end evaluation separate from evaluation with reference intermediates.",
+      "member_ids": [
+        "74LHJIVM/train-reactant-generation-to-correct-synthon-errors"
+      ],
+      "relation": "distinct",
+      "dedup_action": "keep_separate",
+      "rationale": "This capability governs training-data construction and stage-aware evaluation. It is distinct from reaction-center prediction, inference-only retrosynthesis, and standalone candidate scoring. Their pipeline relationships do not establish duplication.",
+      "decision_rules": [
+        {
+          "when": "Constructing ordinary product-plus-synthon training pairs.",
+          "do": "Align reactants to synthons by shared mapped atoms and add reversed synthon/reactant ordering under the chosen source's eligibility condition.",
+          "do_not": "Silently equate the paper's multi-synthon condition with the repository's condition that skips single-reactant examples.",
+          "supported_by": [
+            "74LHJIVM/train-reactant-generation-to-correct-synthon-errors"
+          ]
+        },
+        {
+          "when": "Upstream reaction-center predictions on training data fail the guided center check.",
+          "do": "Realign reference reactants to the predicted synthons, remove mapping numbers, tokenize, and append these examples without reversal to the ordinary augmented corpus; use [RXN_0] for unknown reaction types in the described repository flow.",
+          "do_not": "Include successful predictions in the error-only additions or claim that producing augmented files proves the trainer consumed them.",
+          "supported_by": [
+            "74LHJIVM/train-reactant-generation-to-correct-synthon-errors"
+          ]
+        },
+        {
+          "when": "Evaluating the complete retrosynthesis pipeline.",
+          "do": "Send every predicted synthon set to the reactant generator, including sets from incorrect centers, and assess top-N canonical reactant-set agreement. Reserve reference synthons for isolated generator evaluation.",
+          "do_not": "Filter out incorrect centers or report evaluation with reference synthons as end-to-end performance.",
+          "supported_by": [
+            "74LHJIVM/train-reactant-generation-to-correct-synthon-errors"
+          ]
+        }
+      ],
+      "overlap_with_catalog": [
+        "retroxpert-evaluate-bond-disconnection",
+        "chem-retro-candidate-evaluation",
+        "retroprime-two-stage-retrosynthesis"
+      ],
+      "limits": [
+        "Successful training, error correction, and benefit on new data are not established.",
+        "Original augmentation gains require qualification because of the repository's information-leak correction.",
+        "Consumption of error-augmented files by training is unverified; the supplied inventory also differs from the README's preprocessing script name.",
+        "Exact-match evaluation does not establish chemical feasibility and may reject valid alternative reactants.",
+        "Catalog overlap note for retroxpert-evaluate-bond-disconnection: related upstream evaluation, not downstream training augmentation.",
+        "Catalog overlap note for chem-retro-candidate-evaluation: overlapping final exact-match scoring, not the training capability.",
+        "Catalog overlap note for retroprime-two-stage-retrosynthesis: related staged inference goal with a different mechanism and scope."
+      ],
+      "review_state": "human_review_required"
+    }
+  ],
+  "unresolved": [
+    "Catalog comparisons use supplied package descriptions only; full package behavior must be inspected before any duplicate or variant consolidation.",
+    "All deduplication actions are proposals for human review, not authorization for automatic semantic merging.",
+    "Evidence is limited to supplied summaries and evidence identifiers; unavailable source text was not inspected."
+  ]
+}

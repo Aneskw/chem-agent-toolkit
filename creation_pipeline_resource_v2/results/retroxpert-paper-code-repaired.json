@@ -1,0 +1,39 @@
+{
+  "run_id": "retroxpert-paper-code-repaired",
+  "paper_id": "74LHJIVM",
+  "stage": "drafts_rendered",
+  "status": "method_drafts_created",
+  "source_scope": "paper_and_repository",
+  "model_origin": "saved_response_replay",
+  "candidate_kinds": {
+    "method_procedure": 2,
+    "tool_usage": 0
+  },
+  "candidate_count": 2,
+  "checks": [
+    {
+      "name": "identify-reaction-centers-with-egat",
+      "state": "draft_unexecuted",
+      "missing_repo_files": [],
+      "external_assets_unverified": [
+        "DGL",
+        "RDKit",
+        "RDChiral"
+      ],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    },
+    {
+      "name": "train-and-evaluate-synthon-to-reactant-generation",
+      "state": "draft_unexecuted",
+      "missing_repo_files": [],
+      "external_assets_unverified": [
+        "RDKit",
+        "OpenNMT"
+      ],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    }
+  ],
+  "source_bundle_sha256": "62786ca09bf7c8505013cdc044fe3c2b873fb6180b8749336e554cd0a0decdd9",
+  "response_sha256": "2e0fe21b06cd13715a23627e1d70a8c749738845d7d12ca64e81eeaa09eca46b",
+  "run_dir": "creation_pipeline/runs/retroxpert-paper-code-repaired"
+}

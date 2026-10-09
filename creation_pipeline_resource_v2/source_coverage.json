@@ -1,0 +1,426 @@
+{
+  "total_papers": 52,
+  "counts": {
+    "paper_and_repository": 2,
+    "repository_only": 3,
+    "metadata_only": 47
+  },
+  "papers": [
+    {
+      "paper_id": "3MEL5L54",
+      "title": "Bayesian reaction optimization as a tool for chemical synthesis",
+      "source_list": "Fwd Prediction.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "X4QW3UVV",
+      "title": "A generalized-template-based graph neural network for accurate organic reactivity prediction",
+      "source_list": "Fwd Prediction.csv",
+      "state": "repository_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": true
+    },
+    {
+      "paper_id": "UEHSKYCV",
+      "title": "Predicting Organic Reaction Outcomes with Weisfeiler-Lehman Network",
+      "source_list": "Fwd Prediction.csv",
+      "state": "repository_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": true
+    },
+    {
+      "paper_id": "EVX236A9",
+      "title": "Predicting Retrosynthetic Reactions Using Self-Corrected Transformer Neural Networks",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "74LHJIVM",
+      "title": "RetroXpert: Decompose Retrosynthesis Prediction like a Chemist",
+      "source_list": "Retrosynthesis.csv",
+      "state": "paper_and_repository",
+      "paper_fulltext_local": true,
+      "pinned_repository": true
+    },
+    {
+      "paper_id": "VQ33W3ED",
+      "title": "RetroPrime: A Diverse, plausible and Transformer-based method for Single-Step retrosynthesis predictions",
+      "source_list": "Retrosynthesis.csv",
+      "state": "repository_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": true
+    },
+    {
+      "paper_id": "H9EHIF3J",
+      "title": "Retroformer: Pushing the Limits of End-to-end Retrosynthesis Transformer",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "VJXJQAYZ",
+      "title": "Permutation Invariant Graph-to-Sequence Model for Template-Free Retrosynthesis and Reaction Prediction",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "CABX3BR4",
+      "title": "State-of-the-art augmented NLP transformer models for direct and single-step retrosynthesis",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "8WSK7AA3",
+      "title": "Computer-Assisted Synthetic Planning: The End of the Beginning",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "DU3DZAZ7",
+      "title": "Learning Graph Models for Retrosynthesis Prediction",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "P2R8K7X3",
+      "title": "A Graph to Graphs Framework for Retrosynthesis Prediction",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "RM7L9XDU",
+      "title": "Predicting retrosynthetic pathways using transformer-based models and a hyper-graph exploration strategy",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "DMXL3WVG",
+      "title": "GTA: Graph Truncated Attention for Retrosynthesis",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "LJMZ9IL6",
+      "title": "\"Found in Translation\": Predicting Outcomes of Complex Organic Chemistry Reactions using Neural Sequence-to-Sequence Models",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "52TVS7QP",
+      "title": "FusionRetro: Molecule Representation Fusion via In-Context Learning for Retrosynthetic Planning",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "JRVP7MQF",
+      "title": "Valid, Plausible, and Diverse Retrosynthesis Using Tied Two-Way Transformers with Latent Variables",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "DZT4L37P",
+      "title": "BiG2S: A dual task graph-to-sequence model for the end-to-end template-free reaction prediction",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "TUR3HL2E",
+      "title": "Enhanced Template-Free Reaction Prediction with Molecular Graphs and Sequence-based Data Augmentation",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "29BYRNCZ",
+      "title": "Retrosynthesis Prediction with Conditional Graph Logic Network",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "2GFR874J",
+      "title": "Deep Retrosynthetic Reaction Prediction using Local Reactivity and Global Attention",
+      "source_list": "Retrosynthesis.csv",
+      "state": "paper_and_repository",
+      "paper_fulltext_local": true,
+      "pinned_repository": true
+    },
+    {
+      "paper_id": "KNGUQJ73",
+      "title": "Retro*: Learning Retrosynthetic Planning with Neural Guided A* Search",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "BTJ7PAYZ",
+      "title": "SemiRetro: Semi-template framework boosts deep retrosynthesis prediction",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "C5HMZZWJ",
+      "title": "UAlign: Pushing the Limit of Template-free Retrosynthesis Prediction with Unsupervised SMILES Alignment",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "SJW9P6LU",
+      "title": "Automated reaction database and reaction network analysis: extraction of reaction templates using cheminformatics",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "V6R5QSYU",
+      "title": "Extraction of organic chemistry grammar from unsupervised learning of chemical reactions",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "FDYPZYCV",
+      "title": "T-Rex: Text-assisted Retrosynthesis Prediction",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "L4DYAUVP",
+      "title": "RetroOOD: Understanding Out-of-Distribution Generalization in Retrosynthesis Prediction",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "3BI8XFLH",
+      "title": "Deep learning in retrosynthesis planning: datasets, models and tools",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "NXNCNJWP",
+      "title": "Active Retrosynthetic Planning Aware of Route Quality",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "H3WHHCTG",
+      "title": "Chemistry-informed molecular graph as reaction descriptor for machine-learned retrosynthesis planning",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "ZIHHA28M",
+      "title": "Retrosynthesis Prediction with Local Template Retrieval",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "7YL28TR5",
+      "title": "Retrosynthesis prediction with an iterative string editing model",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "WUJUHU7F",
+      "title": "Syntax-Guided Procedural Synthesis of Molecules",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "HM3FHN9P",
+      "title": "Computer-aided evaluation and exploration of chemical spaces constrained by reaction pathways",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "J9Y2VK8A",
+      "title": "GRASP: Navigating Retrosynthetic Planning with Goal-driven Policy",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "DFMMLF4H",
+      "title": "RetroInText: A Multimodal Large Language Model Enhanced Framework for Retrosynthetic Planning via In-Context Representation Learning",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "X2W4DHI4",
+      "title": "Multimodal Large Language Models for Inverse Molecular Design with Retrosynthetic Planning",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "Z3W4BK3K",
+      "title": "Retrosynthetic planning with experience-guided Monte Carlo tree search",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "KN2MZQSJ",
+      "title": "Neural-Symbolic Machine Learning for Retrosynthesis and Reaction Prediction",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "SHHG5K4J",
+      "title": "Chematica: A Story of Computer Code That Started to Think like a Chemist",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "ZCMNWV6R",
+      "title": "Efficient retrosynthetic planning with MCTS exploration enhanced A* search | Communications Chemistry",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "X6UFMAW8",
+      "title": "Planning chemical syntheses with deep neural networks and symbolic AI",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "I9874Q73",
+      "title": "NextMove Software | Pistachio",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "BAW3TIAH",
+      "title": "Chimera: Accurate retrosynthesis prediction by ensembling models with diverse inductive biases",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "2GBACBD2",
+      "title": "Learning A Hierarchical Graph Autoregression Model for Semi-template Molecular Retrosynthesis",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "YXTSBPES",
+      "title": "RSGPT: a generative transformer model for retrosynthesis planning pre-trained on ten billion datapoints",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "K7ZGXDS6",
+      "title": "Reasoning-Driven Retrosynthesis Prediction with Large Language Models via Reinforcement Learning",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "U5RSQN4E",
+      "title": "Large language models to accelerate organic chemistry synthesis",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "64T7R8Q4",
+      "title": "Retrosynthetic crosstalk between single-step reaction and multi-step planning",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "MMMCU9EX",
+      "title": "RetroGFN: Diverse and Feasible Retrosynthesis using GFlowNets",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    },
+    {
+      "paper_id": "XAIXY4T2",
+      "title": "RETRO-R1: LLM-based Agentic Retrosynthesis",
+      "source_list": "Retrosynthesis.csv",
+      "state": "metadata_only",
+      "paper_fulltext_local": false,
+      "pinned_repository": false
+    }
+  ]
+}

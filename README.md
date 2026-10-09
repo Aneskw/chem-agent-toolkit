@@ -58,6 +58,13 @@ locally authenticated Codex CLI. The
 the complete source text, and generated skills on paired held-out decisions.
 Its `plan` command validates the design without making model calls.
 
+两版创建流程都保留在 `main`：
+
+- [默认版](creation_pipeline/README.md)：操作契约、引用校验、去重和三臂评测；入口为 `python3 creation_pipeline/run_pipeline.py`。
+- [资源恢复版](creation_pipeline_resource_v2/README.md)：从开发分支 `861cad1` 保存，额外检查数据直链、推理/预处理源码和 checkpoint 的获取合同；入口为 `python3 creation_pipeline_resource_v2/run_pipeline.py`。它是独立版本，不会覆盖默认版。
+
+两版的运行目录和格式契约相互独立。资源恢复版的静态检查通过不代表下载或模型推理已实际执行，更不代表 Skill 提升了 agent 表现。
+
 Paper snapshots, repository evidence, run logs, and format notes are kept in the project archive. Each skill's `reference` section points to a pinned source. A verified status means only that the stated execution checks passed.
 
 ## Paper decision-rule case study

@@ -1,0 +1,289 @@
+{
+  "candidate": {
+    "name": "retroprime-two-stage-inference-check",
+    "description": "Use RetroPrime for product-to-reactant single-step retrosynthesis only when tokenization, both prediction stages and both matching checkpoints are available.",
+    "kind": "method_procedure",
+    "operation": "run product-to-synthon and synthon-to-reactant inference in sequence, then inspect the reactant output rather than treating first-stage synthons as final precursors",
+    "inputs": [
+      {
+        "text": "A text file of product SMILES, an output directory, and a beam size.",
+        "citations": [
+          {
+            "source_id": "s1",
+            "start": 158,
+            "end": 164,
+            "quote": "input file name: INPUT.txt"
+          },
+          {
+            "source_id": "s2",
+            "start": 3,
+            "end": 7,
+            "quote": "input_file=$1"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "text": "A reactant prediction file produced after the synthon stage and second translation stage.",
+        "citations": [
+          {
+            "source_id": "s2",
+            "start": 40,
+            "end": 49,
+            "quote": "reactants_predicted.txt"
+          }
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "text": "Canonicalize and tokenize the input product SMILES before translation.",
+        "citations": [
+          {
+            "source_id": "s2",
+            "start": 24,
+            "end": 25,
+            "quote": "smi_tokenizer.py -input $input_file"
+          },
+          {
+            "source_id": "s3",
+            "start": 34,
+            "end": 39,
+            "quote": "canonical_list = [canonical_smiles(smiles) for smiles in file_list]"
+          }
+        ]
+      },
+      {
+        "text": "Load the product-to-synthon checkpoint, translate to synthons, process them for stage two, then load the synthon-to-reactant checkpoint and translate to reactants.",
+        "citations": [
+          {
+            "source_id": "s2",
+            "start": 26,
+            "end": 49,
+            "quote": "echo Synthons to Reactants"
+          }
+        ]
+      }
+    ],
+    "requirements": [],
+    "unknowns": [
+      "The upstream README names checkpoint files ending _model.pt, while the pinned run_example.sh expects _model_step_90000.pt and _model_step_100000.pt; inspect the archive and resolve these paths before execution.",
+      "The upstream Google Drive archive is documented but its live download could not be verified from this environment; no inference run was performed for this generated draft."
+    ],
+    "decisions": [
+      {
+        "when": "A product SMILES is to be converted into reactant candidates with RetroPrime.",
+        "requires": "The tokenizer, full pinned RetroPrime checkout, both stage checkpoints and a resolved checkpoint-path mapping.",
+        "choose": "Run canonicalization/tokenization, product-to-synthon translation, stage-two preparation, and synthon-to-reactant translation in that order.",
+        "avoid": "Return first-stage synthons as final reactants or run stage two with an unmatched checkpoint.",
+        "because": "The supplied runner has distinct product-to-synthon and synthon-to-reactant stages with separate model paths.",
+        "check": "Confirm the second translation writes reactants_predicted.txt and that both checkpoint paths match files extracted from the documented archive.",
+        "stop_or_fallback": "Stop before inference when either checkpoint is missing or the README and runner filenames have not been reconciled.",
+        "scope": "RetroPrime single-step candidate generation; not a multistep route or experimental feasibility prediction.",
+        "support": "direct",
+        "citations": [
+          {
+            "source_id": "s1",
+            "start": 124,
+            "end": 128,
+            "quote": "model_P2S=${model_save_path}/USPTO-50K_pos_pred/USPTO-50K_pos_pred_model.pt"
+          },
+          {
+            "source_id": "s2",
+            "start": 40,
+            "end": 49,
+            "quote": "echo Synthons to Reactants"
+          }
+        ]
+      }
+    ],
+    "resource_manifest": [
+      {
+        "path": "run_example.sh",
+        "kind": "source_code",
+        "source_url": "https://raw.githubusercontent.com/wangxr0526/RetroPrime/a765b670b72fbfd512d0d437da8f27a95f9f0554/run_example.sh",
+        "source_revision": "a765b670b72fbfd512d0d437da8f27a95f9f0554",
+        "sha256": "1ce43453fc5207f027f6b733022c4ecad4742f24e8d9b963ace014eb35ba255a",
+        "restore_command": "included at run_example.sh",
+        "status": "present",
+        "citations": [
+          {
+            "source_id": "s2",
+            "start": 1,
+            "end": 7,
+            "quote": "input_file=$1"
+          }
+        ]
+      },
+      {
+        "path": "retroprime/transformer_model/translate.py",
+        "kind": "source_code",
+        "source_url": "https://raw.githubusercontent.com/wangxr0526/RetroPrime/a765b670b72fbfd512d0d437da8f27a95f9f0554/retroprime/transformer_model/translate.py",
+        "source_revision": "a765b670b72fbfd512d0d437da8f27a95f9f0554",
+        "sha256": "894defac3eced6bc6292b4222efbebb7e1ee71e12db2b414b29cc672f1a8de33",
+        "restore_command": "included at retroprime/transformer_model/translate.py",
+        "status": "present",
+        "citations": [
+          {
+            "source_id": "s2",
+            "start": 26,
+            "end": 31,
+            "quote": "translate.py -gpu ${gpu}"
+          }
+        ]
+      },
+      {
+        "path": "retroprime/transformer_model/script/evaluate.py",
+        "kind": "source_code",
+        "source_url": "https://raw.githubusercontent.com/wangxr0526/RetroPrime/a765b670b72fbfd512d0d437da8f27a95f9f0554/retroprime/transformer_model/script/evaluate.py",
+        "source_revision": "a765b670b72fbfd512d0d437da8f27a95f9f0554",
+        "sha256": "9b714da658a4652961ab8ee1a00a4437918b26c4e620ddd64f0efd6b1cf52239",
+        "restore_command": "included at retroprime/transformer_model/script/evaluate.py",
+        "status": "present",
+        "citations": [
+          {
+            "source_id": "s2",
+            "start": 32,
+            "end": 39,
+            "quote": "evaluate.py -beam_size ${beam_size}"
+          }
+        ]
+      },
+      {
+        "path": "retroprime/transformer_model/script/smi_tokenizer.py",
+        "kind": "preprocessing",
+        "source_url": "https://raw.githubusercontent.com/wangxr0526/RetroPrime/a765b670b72fbfd512d0d437da8f27a95f9f0554/retroprime/transformer_model/script/smi_tokenizer.py",
+        "source_revision": "a765b670b72fbfd512d0d437da8f27a95f9f0554",
+        "sha256": "c95e09f45046ad478728764106d496f4adcf40c20a66b6723cf49dad564a62c4",
+        "restore_command": "included at retroprime/transformer_model/script/smi_tokenizer.py",
+        "status": "present",
+        "citations": [
+          {
+            "source_id": "s3",
+            "start": 34,
+            "end": 39,
+            "quote": "canonical_list = [canonical_smiles(smiles) for smiles in file_list]"
+          }
+        ]
+      },
+      {
+        "path": "retroprime/transformer_model/experiments/checkpoints/USPTO-50K_pos_pred/USPTO-50K_pos_pred_model.pt",
+        "kind": "checkpoint",
+        "source_url": "https://drive.google.com/file/d/1-715B8jU0rRC3YaY4p6URQcgjcRG2OlV/view?usp=sharing",
+        "source_revision": "archive linked by pinned README; archive itself unversioned",
+        "sha256": "",
+        "restore_command": "gdown 1-715B8jU0rRC3YaY4p6URQcgjcRG2OlV -O retroprime-models.zip && unzip retroprime-models.zip -d retroprime/transformer_model/experiments",
+        "status": "unverified",
+        "citations": [
+          {
+            "source_id": "s1",
+            "start": 101,
+            "end": 103,
+            "quote": "First, download the model file we trained"
+          },
+          {
+            "source_id": "s1",
+            "start": 124,
+            "end": 128,
+            "quote": "USPTO-50K_pos_pred_model.pt"
+          }
+        ]
+      },
+      {
+        "path": "retroprime/transformer_model/experiments/checkpoints/USPTO-50K_S2R/USPTO-50K_S2R_model.pt",
+        "kind": "checkpoint",
+        "source_url": "https://drive.google.com/file/d/1-715B8jU0rRC3YaY4p6URQcgjcRG2OlV/view?usp=sharing",
+        "source_revision": "archive linked by pinned README; archive itself unversioned",
+        "sha256": "",
+        "restore_command": "gdown 1-715B8jU0rRC3YaY4p6URQcgjcRG2OlV -O retroprime-models.zip && unzip retroprime-models.zip -d retroprime/transformer_model/experiments",
+        "status": "unverified",
+        "citations": [
+          {
+            "source_id": "s1",
+            "start": 101,
+            "end": 103,
+            "quote": "First, download the model file we trained"
+          },
+          {
+            "source_id": "s1",
+            "start": 124,
+            "end": 128,
+            "quote": "USPTO-50K_S2R_model.pt"
+          }
+        ]
+      },
+      {
+        "path": "RetroPrime-source.zip",
+        "kind": "dependency",
+        "source_url": "https://github.com/wangxr0526/RetroPrime/archive/a765b670b72fbfd512d0d437da8f27a95f9f0554.zip",
+        "source_revision": "a765b670b72fbfd512d0d437da8f27a95f9f0554",
+        "sha256": "",
+        "restore_command": "curl -L https://github.com/wangxr0526/RetroPrime/archive/a765b670b72fbfd512d0d437da8f27a95f9f0554.zip -o RetroPrime-source.zip",
+        "status": "download_required",
+        "citations": [
+          {
+            "source_id": "s1",
+            "start": 101,
+            "end": 105,
+            "quote": "We provide a template"
+          }
+        ]
+      }
+    ]
+  },
+  "audit": {
+    "name": "retroprime-two-stage-inference-check",
+    "state": "blocked_resources",
+    "missing_repo_files": [],
+    "external_assets_unverified": [],
+    "missing_model_resources": [
+      "checkpoint"
+    ],
+    "missing_category_resources": [],
+    "resource_manifest_entries": 7,
+    "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+  },
+  "sources": [
+    {
+      "id": "s1",
+      "role": "model_doc",
+      "path": "/Users/xllin/Documents/Codex/2026-09-20/new-chat-2/outputs/chem-agent-toolkit/creation_pipeline/intakes/trial-retroprime/source/README.md",
+      "page": null,
+      "sha256": "1a16418c873edb4a36584cf2a90352da53ca44504848abcaf986e432840582c9",
+      "url": "https://raw.githubusercontent.com/wangxr0526/RetroPrime/a765b670b72fbfd512d0d437da8f27a95f9f0554/README.md"
+    },
+    {
+      "id": "s2",
+      "role": "repo_code",
+      "path": "/Users/xllin/Documents/Codex/2026-09-20/new-chat-2/outputs/chem-agent-toolkit/creation_pipeline/intakes/trial-retroprime/source/run_example.sh",
+      "page": null,
+      "sha256": "1ce43453fc5207f027f6b733022c4ecad4742f24e8d9b963ace014eb35ba255a",
+      "url": "https://raw.githubusercontent.com/wangxr0526/RetroPrime/a765b670b72fbfd512d0d437da8f27a95f9f0554/run_example.sh"
+    },
+    {
+      "id": "s3",
+      "role": "repo_code",
+      "path": "/Users/xllin/Documents/Codex/2026-09-20/new-chat-2/outputs/chem-agent-toolkit/creation_pipeline/intakes/trial-retroprime/source/retroprime/transformer_model/script/smi_tokenizer.py",
+      "page": null,
+      "sha256": "c95e09f45046ad478728764106d496f4adcf40c20a66b6723cf49dad564a62c4",
+      "url": "https://raw.githubusercontent.com/wangxr0526/RetroPrime/a765b670b72fbfd512d0d437da8f27a95f9f0554/retroprime/transformer_model/script/smi_tokenizer.py"
+    },
+    {
+      "id": "s4",
+      "role": "repo_code",
+      "path": "/Users/xllin/Documents/Codex/2026-09-20/new-chat-2/outputs/chem-agent-toolkit/creation_pipeline/intakes/trial-retroprime/source/retroprime/transformer_model/translate.py",
+      "page": null,
+      "sha256": "894defac3eced6bc6292b4222efbebb7e1ee71e12db2b414b29cc672f1a8de33",
+      "url": "https://raw.githubusercontent.com/wangxr0526/RetroPrime/a765b670b72fbfd512d0d437da8f27a95f9f0554/retroprime/transformer_model/translate.py"
+    },
+    {
+      "id": "s5",
+      "role": "repo_code",
+      "path": "/Users/xllin/Documents/Codex/2026-09-20/new-chat-2/outputs/chem-agent-toolkit/creation_pipeline/intakes/trial-retroprime/source/retroprime/transformer_model/script/evaluate.py",
+      "page": null,
+      "sha256": "9b714da658a4652961ab8ee1a00a4437918b26c4e620ddd64f0efd6b1cf52239",
+      "url": "https://raw.githubusercontent.com/wangxr0526/RetroPrime/a765b670b72fbfd512d0d437da8f27a95f9f0554/retroprime/transformer_model/script/evaluate.py"
+    }
+  ]
+}

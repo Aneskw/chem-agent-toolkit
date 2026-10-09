@@ -1,0 +1,18 @@
+{
+  "max_context_chars": 120000,
+  "jobs": [
+    {
+      "paper_id": "LJMZ9IL6",
+      "source_type": "paper",
+      "title": "\"Found in Translation\": Predicting Outcomes of Complex Organic Chemistry Reactions using Neural Sequence-to-Sequence Models",
+      "sources": [
+        {
+          "path": "acquired/LJMZ9IL6/paper.pdf",
+          "role": "paper",
+          "url": "https://arxiv.org/pdf/1711.04810.pdf",
+          "sha256": "6dfa50a0a880e1f699335c8d5b14500ad56904a852091bb9bea607d10f39e0f4"
+        }
+      ]
+    }
+  ]
+}

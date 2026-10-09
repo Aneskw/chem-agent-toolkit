@@ -9,6 +9,10 @@ creation_pipeline/cache/
 creation_pipeline/runs/
 creation_pipeline/acquired/
 creation_pipeline/intakes/
+creation_pipeline_resource_v2/cache/
+creation_pipeline_resource_v2/runs/
+creation_pipeline_resource_v2/acquired/
+creation_pipeline_resource_v2/intakes/
 evaluation/targeted/results/
 evaluation/decision_gain/results/
 evaluation/decision_gain/materials.json

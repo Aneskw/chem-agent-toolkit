@@ -1,0 +1,21 @@
+{
+  "input_files": [
+    {
+      "file": "Fwd Prediction.csv",
+      "sha256": "3ec6b9a6089683a32ebb8b29f399e63f083ae40ec3c45cb2b2389d1f39292a1e"
+    },
+    {
+      "file": "Retrosynthesis.csv",
+      "sha256": "b76ba8c8a923e7fd5105b9bd5da66dbdb64a92cf4502d428b739c1b131e9cfb2"
+    }
+  ],
+  "papers": 52,
+  "with_doi": 33,
+  "with_url": 50,
+  "excluded_fields": [
+    "Abstract Note",
+    "File Attachments",
+    "Link Attachments",
+    "Notes"
+  ]
+}

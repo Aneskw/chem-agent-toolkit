@@ -1,0 +1,32 @@
+{
+  "run_id": "retroprime-v03-replay",
+  "paper_id": "VQ33W3ED",
+  "stage": "drafts_rendered",
+  "status": "cited_drafts_created",
+  "model_origin": "saved_response_replay",
+  "candidate_count": 2,
+  "checks": [
+    {
+      "name": "predict-reactants-with-retroprime",
+      "state": "blocked_resources",
+      "missing_repo_files": [
+        "retroprime/transformer_model/experiments/checkpoints/USPTO-50K_pos_pred/USPTO-50K_pos_pred_model_step_90000.pt",
+        "retroprime/transformer_model/experiments/checkpoints/USPTO-50K_S2R/USPTO-50K_S2R_model_step_100000.pt"
+      ],
+      "external_assets_unverified": [
+        "https://drive.google.com/file/d/1-715B8jU0rRC3YaY4p6URQcgjcRG2OlV/view?usp=sharing"
+      ],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    },
+    {
+      "name": "train-retroprime-two-stage-models",
+      "state": "draft_unexecuted",
+      "missing_repo_files": [],
+      "external_assets_unverified": [],
+      "checks": "Schema and citation text/location checked; semantic completeness and execution NOT verified."
+    }
+  ],
+  "source_bundle_sha256": "8a0449ee3f35dc0c5f5dd91bca1b185792691aa271806986ea4dd272afddbac8",
+  "response_sha256": "452438f2ab34e21e32e837a3e4ddb5fe3faa35b0da8a5fc2c57428b96b5415c3",
+  "run_dir": "creation_pipeline/runs/retroprime-v03-replay"
+}

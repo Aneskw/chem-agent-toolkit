@@ -1,0 +1,21 @@
+{
+  "skill": "chem-rdkit-descriptors",
+  "status": "passed",
+  "cases": [
+    {
+      "name": "ethanol_descriptors",
+      "status": "passed",
+      "exit_code": 0,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "name": "invalid_smiles_is_rejected",
+      "status": "passed",
+      "exit_code": 2,
+      "error": null,
+      "stderr_tail": ""
+    }
+  ],
+  "scope": "Declared local script cases only; does not establish scientific correctness or agent utility."
+}
