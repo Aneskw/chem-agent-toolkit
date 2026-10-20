@@ -1,0 +1,112 @@
+"""Shell-free checks in per-check workspaces; generated checks require opt-in."""
+from __future__ import annotations
+
+import json
+import os
+import signal
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+from .records import redact, safe_relative
+
+
+def terminate_tree(proc):
+    if os.name == "nt":
+        try:
+            subprocess.run(["taskkill", "/PID", str(proc.pid), "/T", "/F"], capture_output=True, timeout=5)
+        except (subprocess.TimeoutExpired, OSError):
+            pass
+        if proc.poll() is None:
+            proc.kill()
+    else:
+        try:
+            os.killpg(proc.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+    proc.wait(timeout=5)
+
+
+def validate_test(test):
+    if not isinstance(test, dict) or not isinstance(test.get("name"), str) or not test["name"]:
+        raise ValueError("Check needs a name")
+    argv = test.get("argv")
+    if not isinstance(argv, list) or not argv or any(not isinstance(v, str) or "\0" in v for v in argv):
+        raise ValueError("Check argv must be a nonempty list of strings")
+    if type(test.get("expected_exit", 0)) is not int:
+        raise ValueError("expected_exit must be an integer")
+    for key in ("stdout_contains", "artifacts"):
+        if not isinstance(test.get(key, []), list) or any(not isinstance(s, str) for s in test.get(key, [])):
+            raise ValueError(f"{key} must be an array of strings")
+    if not isinstance(test.get("json_equals", {}), dict):
+        raise ValueError("json_equals must be an object")
+    if not test.get("stdout_contains") and not test.get("json_equals") and not test.get("artifacts"):
+        raise ValueError("Execution check needs a result assertion, not exit code alone")
+    return test
+
+
+def execute(test, package, sources, work, timeout, env_allow):
+    validate_test(test)
+    work = Path(work)
+    work.mkdir(parents=True, exist_ok=False)
+    macros = {"{python}": sys.executable, "{package}": str(Path(package).resolve()), "{run}": str(work.resolve())}
+    macros.update({"{source:" + key + "}": value["path"] for key, value in sources.entries.items()})
+    argv = []
+    for arg in test["argv"]:
+        for token, value in macros.items():
+            arg = arg.replace(token, value)
+        argv.append(arg)
+    names = {"PATH", "SYSTEMROOT", "WINDIR", "TEMP", "TMP", "TMPDIR", "HOME", "USERPROFILE", "LANG", "LC_ALL"} | set(env_allow)
+    env = {k: v for k, v in os.environ.items() if k.upper() in names or k in names}
+    env.update({"PYTHONIOENCODING": "utf-8", "PYTHONUTF8": "1", "PYTHONDONTWRITEBYTECODE": "1"})
+    started = time.monotonic()
+    options = {"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP} if os.name == "nt" else {"start_new_session": True}
+    # Spool output rather than permitting an unbounded pipe allocation.
+    with (work / "stdout.log").open("wb") as stdout, (work / "stderr.log").open("wb") as stderr:
+        proc = subprocess.Popen(argv, cwd=work, stdout=stdout, stderr=stderr, env=env, **options)
+        timed_out = False
+        try:
+            proc.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            timed_out = True
+            terminate_tree(proc)
+    output_limit = 1_000_000
+    with (work / "stdout.log").open("rb") as stream:
+        raw = stream.read(output_limit + 1)
+    with (work / "stderr.log").open("rb") as stream:
+        error = stream.read(4000).decode("utf-8", errors="replace")
+    stdout_text = raw.decode("utf-8", errors="replace")
+    problems = []
+    if timed_out:
+        problems.append("Check exceeded timeout")
+    if proc.returncode != test.get("expected_exit", 0):
+        problems.append(f"Exit {proc.returncode}; expected {test.get('expected_exit', 0)}")
+    if len(raw) > output_limit:
+        problems.append("stdout exceeds check capture limit")
+    for literal in test.get("stdout_contains", []):
+        if literal not in stdout_text:
+            problems.append(f"Missing stdout assertion: {literal[:150]}")
+    if test.get("json_equals"):
+        try:
+            data = json.loads(stdout_text)
+            for key, expected in test["json_equals"].items():
+                actual = data
+                for part in key.split("."):
+                    actual = actual[int(part)] if isinstance(actual, list) else actual[part]
+                if actual != expected:
+                    problems.append(f"JSON assertion differs: {key}")
+        except (ValueError, KeyError, IndexError, TypeError) as exc:
+            problems.append("Invalid stdout JSON assertion: " + str(exc))
+    for relative in test.get("artifacts", []):
+        artifact = safe_relative(work, relative)
+        if not artifact.is_file() or artifact.stat().st_size == 0:
+            problems.append("Missing/empty artifact: " + relative)
+    # Never retain unredacted logs, including in keep-debug workspaces.
+    (work / "stdout.log").write_text(redact(stdout_text[:output_limit]), encoding="utf-8")
+    (work / "stderr.log").write_text(redact(error), encoding="utf-8")
+    return {"name": test["name"], "status": "fail" if problems else "pass", "required": True,
+            "kind": test.get("kind", "positive"), "evidence": test.get("evidence"),
+            "elapsed_seconds": round(time.monotonic() - started, 3), "exit_code": proc.returncode,
+            "findings": [redact(p) for p in problems], "stdout_excerpt": redact(stdout_text[:2000]),
+            "stderr_excerpt": redact(error[:2000])}

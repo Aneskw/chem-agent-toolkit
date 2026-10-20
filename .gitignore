@@ -2,6 +2,7 @@
 __pycache__/
 .pytest_cache/
 *.pyc
+.pipeline/
 .venv-eval/
 evaluation/public_benchmarks/cache/
 evaluation/public_benchmarks/runs/

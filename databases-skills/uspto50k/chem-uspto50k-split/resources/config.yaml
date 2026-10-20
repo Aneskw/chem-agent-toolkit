@@ -1,3 +1,0 @@
-dataset: USPTO50K
-required_splits: [train, valid, test]
-required_column: reaction_smiles

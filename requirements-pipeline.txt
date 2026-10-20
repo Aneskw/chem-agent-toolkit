@@ -1,0 +1,3 @@
+# Optional YAML and text-PDF input support. The core and JSON configs use stdlib.
+PyYAML>=6.0,<7
+pypdf>=5,<7
