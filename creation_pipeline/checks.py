@@ -17,9 +17,29 @@ def result(name, problems, required=True, **extra):
             "findings": problems, **extra}
 
 
-def static_checks(package, name=None, coverage=None):
+def runtime_path_problems(package, files):
+    problems = []
+    for item in files:
+        text = (package / item["path"]).read_text(encoding="utf-8")
+        if re.search(r"\{(?:package|source:|run\}|bundle\}|tool:)", text) or re.search(r"[A-Za-z]:[/\\].*?\.pipeline[/\\]", text):
+            problems.append("Pipeline-only path/macro in runtime file: " + item["path"])
+    return problems
+
+
+def static_checks(package, name=None, coverage=None, bundle=None, tool=False):
     package = Path(package)
     files = manifest(package)
+    if tool:
+        problems = []
+        for item in files:
+            if item["path"].endswith(".py"):
+                try:
+                    ast.parse((package / item["path"]).read_text(encoding="utf-8"))
+                except SyntaxError as exc:
+                    problems.append(str(exc))
+        if not any(f["path"].startswith("scripts/") for f in files):
+            problems.append("Tool missing scripts")
+        return [result("tool_structure", problems), result("runtime_paths", runtime_path_problems(package, files))]
     if not (package / "SKILL.md").is_file():
         return [result("structure", ["Missing SKILL.md"])]
     main = (package / "SKILL.md").read_text(encoding="utf-8")
@@ -66,9 +86,10 @@ def static_checks(package, name=None, coverage=None):
                 continue
             relative = href.split("#", 1)[0]
             target = path.parent / relative
-            if not target.resolve().is_relative_to(package.resolve()) or not target.is_file():
+            if not target.resolve().is_relative_to(Path(bundle or package).resolve()) or not target.is_file():
                 problems.append(f"Broken or external package link in {item['path']}: {href}")
     checks = [result("structure", problems)]
+    checks.append(result("runtime_paths", runtime_path_problems(package, files)))
     if coverage is not None:
         missing = []
         for key in ("scope", "io", "usage", "result_checks"):

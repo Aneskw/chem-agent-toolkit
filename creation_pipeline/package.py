@@ -12,7 +12,7 @@ from .records import digest, has_link, read_json, safe_relative, redact
 ROLES = {"scripts", "references", "examples", "resources", "assets"}
 
 
-def save_files(staging, files, max_bytes):
+def save_files(staging, files, max_bytes, tool=False):
     if not isinstance(files, list) or not files:
         raise ValueError("Model must supply a nonempty file list")
     staging = Path(staging)
@@ -40,8 +40,10 @@ def save_files(staging, files, max_bytes):
         data = item["content"].encode("utf-8")
         total += len(data)
         validated[relative] = data
-    if "SKILL.md" not in validated or total > max_bytes:
+    if (not tool and "SKILL.md" not in validated) or total > max_bytes:
         raise ValueError("Package missing SKILL.md or exceeds package_bytes")
+    if tool and ("SKILL.md" in validated or not any(p.startswith("scripts/") for p in validated)):
+        raise ValueError("A shared tool needs scripts/ and has no SKILL.md")
     # Replace only the registered staging contents after validating the full response.
     if staging.exists():
         for path in staging.rglob("*"):
@@ -81,6 +83,8 @@ def verify_output(output):
 
 
 def install(output, destination):
+    if (Path(output) / "summary.json").exists():
+        return install_bundle(output, destination)
     record, package = verify_output(output)
     if record["status"] != "ready":
         raise ValueError("Only ready outputs may be installed")
@@ -92,3 +96,38 @@ def install(output, destination):
     if manifest(target) != record["files"]:
         raise ValueError("Installed files do not match validated manifest")
     return {"installed": str(target), "build_id": record["build_id"]}
+
+
+def verify_bundle(output):
+    output = Path(output).absolute()
+    if has_link(output):
+        raise ValueError("Linked build output")
+    summary = read_json(output / "summary.json")
+    bundle = output / "bundle"
+    recorded = read_json(bundle / "manifest.json")
+    current = [f for f in manifest(bundle) if f["path"] != "manifest.json"]
+    if current != recorded["files"] or recorded["entities"] != summary["entities"]:
+        raise ValueError("Bundle changed since validation")
+    for entity in recorded["entities"]:
+        name = entity["name"]
+        path = safe_relative(output, "records/" + name + ".json")
+        record = read_json(path)
+        relative = ("skills/" if entity["kind"] == "skill" else "tools/") + name
+        package = safe_relative(bundle, relative)
+        if package.exists() and manifest(package) != record["files"]:
+            raise ValueError("Entity changed since validation: " + name)
+    return summary, bundle
+
+
+def install_bundle(output, destination):
+    summary, bundle = verify_bundle(output)
+    if summary["status"] != "ready":
+        raise ValueError("Only fully ready bundles may be installed; select/rebuild ready candidates for partial batches")
+    target = Path(destination).absolute() / summary["build_id"]
+    if target.exists() or has_link(target):
+        raise ValueError("Installation destination exists or contains a linked path")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(bundle, target)
+    if manifest(target) != manifest(bundle):
+        raise ValueError("Installed bundle differs from validated bundle")
+    return {"installed": str(target), "skills": str(target / "skills"), "build_id": summary["build_id"]}

@@ -13,6 +13,7 @@ Identify the tool and the task it performs. State only the capability boundaries
 Describe required inputs and primary outputs. Include formats, units, index
 conventions, path resolution, or in-place changes only when needed for correct use.
 Explain optional parameters only when they affect common calls or are easy to misuse.
+For numerous fields, prefer compact real parameter/key lists or tables; distinguish field descriptions from executable request examples.
 Do not reproduce the full API reference or repeat unambiguous details from the example.
 
 ## Usage

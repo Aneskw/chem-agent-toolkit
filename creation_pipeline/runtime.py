@@ -36,6 +36,8 @@ def validate_test(test):
         raise ValueError("Check argv must be a nonempty list of strings")
     if type(test.get("expected_exit", 0)) is not int:
         raise ValueError("expected_exit must be an integer")
+    if not isinstance(test.get("cwd", "{run}"), str):
+        raise ValueError("Check cwd must be a path string")
     for key in ("stdout_contains", "artifacts"):
         if not isinstance(test.get(key, []), list) or any(not isinstance(s, str) for s in test.get(key, [])):
             raise ValueError(f"{key} must be an array of strings")
@@ -51,12 +53,24 @@ def execute(test, package, sources, work, timeout, env_allow):
     work = Path(work)
     work.mkdir(parents=True, exist_ok=False)
     macros = {"{python}": sys.executable, "{package}": str(Path(package).resolve()), "{run}": str(work.resolve())}
+    bundle = Path(package).resolve().parent.parent
+    if bundle.name == "bundle":
+        macros["{bundle}"] = str(bundle)
+        tools = bundle / "tools"
+        if tools.is_dir():
+            macros.update({"{tool:" + p.name + "}": str(p) for p in tools.iterdir() if p.is_dir()})
     macros.update({"{source:" + key + "}": value["path"] for key, value in sources.entries.items()})
     argv = []
     for arg in test["argv"]:
         for token, value in macros.items():
             arg = arg.replace(token, value)
         argv.append(arg)
+    execution_cwd = test.get("cwd", "{run}") or "{run}"
+    for token, value in macros.items():
+        execution_cwd = execution_cwd.replace(token, value)
+    execution_cwd = Path(execution_cwd).absolute()
+    if not execution_cwd.is_dir():
+        raise ValueError("Check working directory does not exist: " + str(execution_cwd))
     names = {"PATH", "SYSTEMROOT", "WINDIR", "TEMP", "TMP", "TMPDIR", "HOME", "USERPROFILE", "LANG", "LC_ALL"} | set(env_allow)
     env = {k: v for k, v in os.environ.items() if k.upper() in names or k in names}
     env.update({"PYTHONIOENCODING": "utf-8", "PYTHONUTF8": "1", "PYTHONDONTWRITEBYTECODE": "1"})
@@ -64,7 +78,7 @@ def execute(test, package, sources, work, timeout, env_allow):
     options = {"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP} if os.name == "nt" else {"start_new_session": True}
     # Spool output rather than permitting an unbounded pipe allocation.
     with (work / "stdout.log").open("wb") as stdout, (work / "stderr.log").open("wb") as stderr:
-        proc = subprocess.Popen(argv, cwd=work, stdout=stdout, stderr=stderr, env=env, **options)
+        proc = subprocess.Popen(argv, cwd=execution_cwd, stdout=stdout, stderr=stderr, env=env, **options)
         timed_out = False
         try:
             proc.wait(timeout=timeout)
@@ -108,5 +122,6 @@ def execute(test, package, sources, work, timeout, env_allow):
     return {"name": test["name"], "status": "fail" if problems else "pass", "required": True,
             "kind": test.get("kind", "positive"), "evidence": test.get("evidence"),
             "elapsed_seconds": round(time.monotonic() - started, 3), "exit_code": proc.returncode,
+            "cwd": str(execution_cwd),
             "findings": [redact(p) for p in problems], "stdout_excerpt": redact(stdout_text[:2000]),
             "stderr_excerpt": redact(error[:2000])}

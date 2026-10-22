@@ -1,82 +1,56 @@
-# First implementation acceptance record
+# Validation report
 
-Development branch: `pipeline/task-skill-v1`; legacy baseline: `6bb535a`.
-Environment: Windows, Python 3.11, Codex CLI 0.158.0, RDKit 2026.03.6.
-The CLI used the existing configured model (`gpt-6-luna`); no Agent efficacy test was run.
+Reviewed on 2026-10-22. Local live builds used Python 3.11, installed RDKit 2026.03.6 and the authenticated Codex CLI with its configured `gpt-6-luna` model. They used HTTP transport through that CLI. No standalone paid model API or Agent efficacy benchmark was run.
 
-## Engineering checks
+## Engineering verification
 
-`python -m unittest discover -s tests -v`: **30 tests passed**. Fixture model
-responses are explicitly marked replay and are not new extraction evidence.
+`python -m unittest discover -s tests -v`: **60 tests passed**. Coverage includes resource-only input, candidate selection, zero candidates, discovery repair, source snapshots, plan continuation, shared-tool ordering, actual shared interfaces reaching authors, independent failures, hash-checked installation, execution assertions, explicit working directories, failed-oracle retention and model-backend failure handling.
 
-Coverage includes verbatim single-file builds, bounded repair, unchanged-failure
-stopping, missing resources, blocked/draft/failed states, missing minimum-content
-attestations, result assertions and expected rejection, extension positive/negative
-requirements, evidence-gap handling, hash-checked installation, file/source mutation
-detection, paths, controlled cleanup, filtered environments, bounded source views,
-CLI turn/tool-event checks, inherited MCP disabling and process timeouts.
+Document tests cover DOCX, notebook, HTML/XML, SQLite schema and XLSX catalog parsing. Network/provider fixtures cover pinned GitHub export, limits, compatible chat and Ollama message protocols. Fixtures are explicitly replay, not fresh model evidence.
 
-CLI help and configuration-only preflight passed. The real compact package was
-installed into a temporary directory, its manifest verified, and its documented
-example successfully executed outside the build directory. No formal skill
-installation, Git push or Agent benchmark was performed.
+CLI help/configuration preflight, static bundle checks and installation into a new directory were also exercised. Detailed development validation is maintained outside user documentation.
 
-## Actual model-authored builds
+## Resource-driven live builds
 
-| Case | Build ID | Runtime files | Model calls | Status |
-| --- | --- | --- | --- | --- |
-| Compact direct | `20261021T001021-bd1db25f` | 1 | 3 | ready |
-| Existing-code adapter | `20261021T002118-d64f2cc1` | 2 | 3 | ready |
-| User-defined extension | `20261021T001602-c6b19e53` | 2 | 5 | ready |
-| New API after code freeze | `20261021T002311-84b1e030` | 1 | 2 | ready |
+No concrete task, desired candidate names, hand-written per-candidate checks or expected file sets were supplied in these inputs. Candidate counts differ across runs; limits did not require filling a quota.
 
-These final cases used new model calls, not saved response replay. Each output
-contains the runtime package and `build.json` under `.pipeline/outputs/<id>/`.
-Those local records hold exact file hashes, source excerpts, executed checks and
-model usage; outputs are intentionally ignored by Git. All four final builds
-removed their registered temporary workspace after successful output verification.
+| Case | Build ID | Actual result |
+| --- | --- | --- |
+| RDKit BRICS and RECAP upstream source modules | `20261022T010315-9a56d084` | Two ready skills; 11 model calls; five generated result checks passed |
+| Independent discovery from the same modules | `20261022T011009-1672caa8` | Two candidates, one selected and ready; six calls |
+| Continue that saved plan | `20261022T011725-08658ec8` | Ready; two authoring-related calls and no discovery; installation and example execution succeeded |
+| Dimorphite-DL paper plus v1.2.5 code | `20261022T012135-f9f8381f` | Draft; source pair acquired, required runtime dependency unavailable |
+| Same paper plus paper-era implementation | `20261022T012305-7e1fbb34` | Ready; 11 calls; two source-grounded CLI result checks passed |
+| Continue the paper-era plan | `20261022T012818-bc6cad6e` | Ready; one authoring call and no discovery |
+| Final repository-code review and upstream suite | `20261022T085347-22c804de` | Ready; source plan reused; upstream `--test` executed with explicit source cwd and content review passed |
+| Final unchanged-output reuse | `20261022T085642-22f7a5ae` | Ready; zero model calls; installation and Python example in relocated bundle verified |
+| Reuse unchanged ready paper output | `20261022T012937-022fbeae` | Ready; zero model calls; reused files, not new generation or new execution evidence |
 
-- Compact direct: a **35-line SKILL.md**, with the ethane example plus invalid,
-  empty and whitespace-only input checks.
-- Adapter: the original descriptor implementation recovered from baseline Git,
-  plus a generated CLI adapter. Valid rows, failed-row preservation, original order
-  and empty-input behavior were checked. The original implementation stays external
-  and its actual repository/revision/file acquisition is documented.
-- Extension: a generated user-defined inclusive mass-window CLI, checked for accept,
-  reject, malformed/empty input, equality, reversed bounds and a nonfinite bound;
-  targeted content review passed. This is a numerical filter, not drug-likeness.
-- New resource: installed RDKit CalcMolFormula docstrings were supplied only after
-  pipeline code was frozen. The generated example returned ethanol C2H6O and rejected
-  invalid/empty/whitespace inputs. Pipeline source/prompt hashes were unchanged
-  throughout this case. This is a transfer smoke test within one library, not
-  a statistical benchmark or broad cross-tool generalization claim.
+Packages and detailed records remain under `.pipeline/outputs/<id>/`, excluded from Git. The BRICS and RECAP main-file Python examples were separately executed. Complete bundles were installed outside their output directories and verified.
 
-## What the unsuccessful trials taught us
+### Sources and interpretation
 
-Initial trials revealed Windows CLI state access restrictions, repeated WebSocket
-timeouts, ambiguity in mediated reading, inherited built-in/MCP tools, and malformed
-double-encoded file responses. Those runs were not counted as successful builds.
-The backend now mediates reads, disables unrelated capabilities and known user MCP
-servers, supports an optional HTTP transport, and uses structured object envelopes
-for authored file text. Markdown body organization remains free.
+RDKit input consisted of the actual installed `Chem/BRICS.py` and `Chem/Recap.py`, including upstream docstrings, implementation and embedded examples/tests. The model chose related operations and explained hierarchy/fragment handling without generating unnecessary wrappers.
 
-An initial extension stayed draft because essential boundary tests had not run.
-An initial adapter ran correctly but lacked the real upstream acquisition address.
-The inputs/checks were completed instead of weakening the stated task. Review
-now separates missing evidence from defects that file edits can repair.
+The paper input is the public Dimorphite-DL full text, DOI `10.1186/s13321-019-0336-9`, obtained as Europe PMC XML for `PMC6689865`. Code came from the official `durrantlab/dimorphite_dl` repository:
 
-## Remaining evidence boundaries
+- `v1.2.5` resolved to `9008e12b43419d596b96c0f85dfced3def340f8d`.
+- The paper-era implementation was pinned to `155a5c6bbbc6664e05eec8a470a4998d7909e019` (2019-08-13).
 
-- No Agent benchmark, question generation, parallel efficacy trials or A/B gains
-  were implemented or run. These remain a later independent project.
-- A full paper-plus-implementation case is still to be selected and validated.
-  Existing-code adaptation is demonstrated; reconstructing algorithms from formulas
-  is outside the first-version scope.
-- GPU/weights, live HTTP/remote tool environments and heavyweight dependencies
-  are not validated by these local cases.
-- PDF parsing is optional; pypdf is not installed here. Supply extracted text or
-  install the optional dependency. Scanned-document OCR is not implemented.
-- The model calls ran during development with a dirty working tree, recorded as
-  such. Default records support scoped provenance, not exact full model replay.
-- `ready` establishes the recorded engineering checks in their tested scope, not
-  universal scientific correctness or Agent benefit.
+GitHub source acquisition uses commit metadata and an official pinned archive, exporting eligible text only. Snapshots record actual file hashes. The paper and software versions are not treated as interchangeable.
+
+The older implementation's passing checks assert documented protonated/deprotonated outputs under deliberately extreme pH values from upstream tests. They verify those program branches, not scientific validity at those pH values, experimental populations, pKa accuracy or general predictive performance.
+
+The final paper-era package also passed the upstream test entrypoint using its required source working directory. Its installed main-file Python example returned ionization states and preserved properties when the pinned source directory was on the import path. The legacy API reads ambient `sys.argv` and prints a banner: embedding it in a larger CLI/notebook/service requires separate attention; the example was tested as a standalone script.
+
+The v1.2.5 case lacked `loguru` in the existing interpreter. No dependency was installed to make it pass. It remained draft. This demonstrates missing-runtime evidence handling, not that every modern interface was executed.
+
+## Scope of confidence
+
+Generated main files identify useful API distinctions and supply real calls. The examples support engineering usability in the tested scope. Their optimal granularity, selection stability and benefit for an Agent remain unmeasured. Small or overly broad candidates can still occur; model review is not an independent correctness proof.
+
+Shared tool generation, dependency ordering, interface propagation, failure handling and relocation have deterministic end-to-end tests. A genuinely valuable shared adapter autonomously discovered in a real research project has not yet been established by these samples; no adapter was forced merely to populate the tool layer.
+
+API/Ollama protocols were tested with local fixtures, not live external credentials/services. Generic non-GitHub Git acquisition has not been fully validated in this network. DOI/arXiv resolution is implemented but these live cases used a direct XML article address. The normal interpreter lacks pypdf, so no live PDF case is claimed. No OCR, visual input, unrestricted search, automatic environment setup, GPU/service deployment or Agent benchmark was exercised.
+
+`ready` means applicable recorded checks passed. It does not imply exhaustive API coverage, universal runtime compatibility, scientific correctness or Agent benefit. Plan reuse with zero model calls is reuse of past scoped evidence, not a new independent validation.

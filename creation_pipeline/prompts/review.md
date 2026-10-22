@@ -15,3 +15,7 @@ Set resolution to supply_evidence when completion needs unavailable source detai
 credentials, execution results or an external resource that file edits cannot create.
 Use revise_files when supplied evidence is enough to correct the artifact, and none
 when no change is needed. Never invent a source URL to repair absent provenance.
+For external repository code, confirm runtime instructions give the actual acquisition
+address and required version, entrypoint and adjacent resources. A commit without a
+repository address is not usable acquisition guidance. Do not require a repository
+checkout for an installed library that can already be called directly.

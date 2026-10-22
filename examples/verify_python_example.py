@@ -26,6 +26,9 @@ for index, block in enumerate(blocks):
         if not found:
             raise SystemExit("The configured test requires a smiles input variable in the example")
         ast.fix_missing_locations(tree)
+    # A documented standalone example must not inherit this verifier's flags/paths.
+    prior_argv = sys.argv
+    sys.argv = [f"skill-example-{index + 1}.py"]
     try:
         exec(compile(tree, f"SKILL.md:python-example-{index + 1}", "exec"), namespace)
     except ValueError:
@@ -33,5 +36,7 @@ for index, block in enumerate(blocks):
             raise
         print("input-rejected")
         raise SystemExit(0)
+    finally:
+        sys.argv = prior_argv
 if args.expect_rejection:
     raise SystemExit("Expected input rejection, but the example completed")

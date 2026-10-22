@@ -1,26 +1,55 @@
-# Chem Agent Toolkit — task-focused skill creation
+# Tool Skill Creation Pipeline
 
-This branch builds one useful tool skill from a concrete task and trustworthy resources. A model writes SKILL.md and any justified supporting files; the program checks interfaces, runs explicitly configured checks, coordinates bounded repair and packages the result. Simple tasks can remain a single file.
+Discover reusable capabilities from papers, documentation and source code, then build English tool skills. A specific task is optional: the model reads the resources, selects capability boundaries and writes the final files. Existing tools are reused; shared adapters are generated only when justified.
 
-Development branch: `pipeline/task-skill-v1`. The prior repository is preserved at commit `6bb535a`; main is unchanged. Historical generated catalogs and the two old implementations are not part of this branch’s active tree.
+## Quick start
 
-Start with the [usage guide](docs/pipeline/usage.md), [agreed design](docs/pipeline/design.md) and [acceptance record](docs/pipeline/acceptance.md). The [documentation index](docs/README.md) links the authoritative skill specifications and legacy evidence.
+Requirements: Python 3.11+, Git, and an authenticated Codex CLI or a configured compatible model API. Tool execution uses your existing environment.
 
-```text
-python -m creation_pipeline --help
-python -m unittest discover -s tests -v
+Create `sources.json`:
+
+```json
+{
+  "sources": [{"id": "tool", "path": "./my-tool"}],
+  "prompt": "Prioritize reusable inference capabilities; exclude training."
+}
 ```
 
-For an installed RDKit environment, `python examples/prepare_rdkit.py` prepares real local source material and build configurations. See the guide before running a live model build.
+`prompt` is optional. Paths resolve relative to the configuration file.
+
+```text
+python -m creation_pipeline build sources.json
+```
+
+To inspect the choices before building:
+
+```text
+python -m creation_pipeline discover sources.json
+python -m creation_pipeline build --plan .pipeline/outputs/<id>/plan.json
+```
+
+Continuation uses the saved source snapshots and plan. It does not repeat discovery. Edit candidate selection in `plan.json` if needed; source context is locked separately.
+
+## Outputs
+
+A batch contains a reusable plan, a summary, individual records, and a bundle of `skills/` and any necessary shared `tools/`. Each entity has its own status: `ready`, `draft`, `blocked` or `failed`. Zero candidates is a valid result; candidate limits are ceilings, not quotas.
+
+Generated checks need explicit execution permission (`--execute-generated-checks` or configuration). Without required execution evidence, packages stay drafts. Downloading a repository never automatically runs its code. No dependency installation, environment construction, MCP service or Agent benchmark is performed.
+
+## Documentation
+
+- [Usage](docs/pipeline/usage.md): inputs, models, execution, continuation and installation.
+- [Architecture](docs/pipeline/design.md): discovery, shared tools, checking and records.
+- [Minimum skill content](docs/skills/minimum.md) and [packaging guide](docs/skills/packaging.md).
+- [Validation report](docs/pipeline/acceptance.md): tested behavior and evidence limits.
 
 ## Layout
 
-- `creation_pipeline/`: the single build implementation and stage prompts.
-- `docs/`: content specifications, design, operation and historical index.
-- `tests/pipeline/`: deterministic engineering tests, separate from model efficacy.
-- `examples/`: preparation and verification helpers, not prewritten final skills.
-- `skills/`: explicitly adopted outputs; builds do not install here automatically.
-- `evaluation/`: reserved for later independent Agent benchmarking.
-- `.pipeline/`: ignored local sources, cache, staging and outputs.
+- `creation_pipeline/`: implementation, prompts and model backends.
+- `examples/`: source-only configurations and preparation helpers.
+- `tests/pipeline/`: deterministic engineering tests.
+- `skills/`: explicitly adopted skills.
+- `evaluation/`: independent Agent evaluation work.
+- `.pipeline/`: local source cache, workspaces and build outputs; excluded from Git.
 
-Build success is scoped engineering evidence. Agent gains and scientific generalization are not established by a generated example or a passing smoke test. No automatic deployment, Git commit or push is performed.
+Run engineering tests with `python -m unittest discover -s tests -v`.

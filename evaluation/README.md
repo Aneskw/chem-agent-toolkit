@@ -1,13 +1,7 @@
-# Agent evaluation is separate
+# Agent effectiveness evaluation
 
-This directory is reserved for a later, independently designed evaluation project.
-The creation pipeline does not generate benchmark questions, run Agent A/B tests,
-score Agent improvements or treat engineering validation as effectiveness evidence.
+Agent effectiveness is evaluated separately from skill construction. This directory is reserved for independent evaluation work; the build pipeline does not create benchmark questions, run Agent A/B experiments or score effectiveness.
 
-After a major pipeline revision and a batch of useful skills, freeze independent
-tasks and oracles, use matched tools and environments, and run multiple comparisons.
-Distinguish instruction gains from new tool/script capabilities. Keep original
-traces, costs and negative outcomes independently of routine build cleanup.
+A study should freeze independent tasks and expected outcomes, keep tool and environment access comparable, and compare quality, recovery, cost and runtime across multiple runs. Distinguish the effect of instructions from the effect of newly supplied scripts or tools.
 
-Earlier experiments remain at Git baseline `6bb535a`; see
-[the legacy index](../docs/history/README.md).
+Retain original experimental traces, scores and negative results independently of ordinary build cleanup. Passing build checks alone does not establish Agent benefit.

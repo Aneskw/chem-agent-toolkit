@@ -1,11 +1,9 @@
 # Documentation
 
-- [Minimum skill information](skills/minimum.md): four semantic requirements.
-- [Packaging guide](skills/packaging.md): task boundaries and optional files.
-- [Pipeline design](pipeline/design.md): agreed architecture and implementation goals.
-- [Usage and current limits](pipeline/usage.md): executable commands and actual behavior.
-- [Acceptance record](pipeline/acceptance.md): checks actually run, distinct from goals.
-- [Legacy index](history/README.md): baseline, removed trees and earlier negative results.
+- [Usage](pipeline/usage.md): setup, supported sources, commands, models and execution policy.
+- [Architecture](pipeline/design.md): discovery, plans, shared tools and output records.
+- [Minimum skill content](skills/minimum.md): required information, without fixed headings.
+- [Packaging guide](skills/packaging.md): capability boundaries and file organization.
+- [Validation report](pipeline/acceptance.md): actual checks, samples and known limits.
 
-The minimum and packaging documents are authoritative for skill content. The design
-is not a claim that every proposed feature has already been validated.
+These documents describe the current project. Build records describe individual outputs; engineering checks do not establish Agent effectiveness.

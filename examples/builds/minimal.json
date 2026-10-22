@@ -1,4 +1,4 @@
 {
-  "task": "Describe one concrete task and its expected outcome",
-  "sources": [{"id": "tool", "path": "../../path-to-your-tool-or-docs"}]
+  "sources": [{"id": "tool", "path": "../../path-to-your-tool-or-docs"}],
+  "limits": {"max_candidates": 6, "max_builds": 3}
 }

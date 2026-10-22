@@ -4,15 +4,18 @@ from __future__ import annotations
 import json
 import re
 import subprocess
+import shutil
 import urllib.request
 from pathlib import Path
 
 from .models import BlockedError
+from .acquisition import Acquisition
+from .documents import read_text
 from .records import digest, has_link, redact, safe_relative
 
 
 EXCLUDED = {".git", ".pipeline", ".venv", "venv", "node_modules", "__pycache__", ".aws", ".ssh", ".codex"}
-SUFFIXES = {".md", ".txt", ".rst", ".py", ".toml", ".json", ".yaml", ".yml", ".csv", ".smi", ".jsonl", ".sh", ".pdf", ".html", ".xml", ".ini", ".cfg", ".ts", ".js", ".cpp", ".h"}
+SUFFIXES = {".md", ".txt", ".rst", ".py", ".toml", ".json", ".yaml", ".yml", ".csv", ".smi", ".jsonl", ".sh", ".pdf", ".html", ".xml", ".ini", ".cfg", ".ts", ".js", ".cpp", ".h", ".htm", ".docx", ".ipynb", ".tsv", ".sql", ".sqlite", ".sqlite3", ".db", ".xyz", ".mol", ".sdf", ".pdb", ".smarts"}
 
 
 def permitted(path):
@@ -23,86 +26,121 @@ def permitted(path):
 
 class Sources:
     def __init__(self, config, cache):
-        self.limits = config["limits"]
-        self.entries = {}
-        self.evidence = []
-        self.cache = Path(cache)
+        self.config, self.limits = config, config["limits"]
+        self.entries, self.evidence, self.errors = {}, [], []
+        self.cache = Path(cache).absolute()
+        if has_link(self.cache):
+            raise ValueError("Linked source cache")
+        self.acquisition = Acquisition(config, self.cache)
+        self.total_bytes = 0
         for item in config["sources"]:
-            entry = dict(item)
-            if "url" in item:
-                url = item["url"]
-                if not url.startswith("https://") or "@" in url.split("/", 3)[2]:
-                    raise ValueError("Remote sources require HTTPS without embedded credentials")
-                # A content hash identifies the cache object; URL alone is not immutable.
-                try:
-                    request = urllib.request.Request(url, headers={"User-Agent": "task-skill-pipeline/1"})
-                    with urllib.request.urlopen(request, timeout=30) as response:
-                        data = response.read(self.limits["source_bytes"] + 1)
-                except OSError as exc:
-                    raise BlockedError(f"Cannot fetch source {item['id']}: {redact(exc)}") from exc
-                if len(data) > self.limits["source_bytes"]:
-                    raise BlockedError("Remote document exceeds source_bytes; supply a local source")
-                sha = digest(data)
-                if item.get("sha256") and item["sha256"] != sha:
-                    raise ValueError("Downloaded source hash differs from configuration")
-                suffix = ".pdf" if data.startswith(b"%PDF") else ".txt"
-                cached = self.cache / (sha + suffix)
-                cached.parent.mkdir(parents=True, exist_ok=True)
-                if has_link(cached):
-                    raise ValueError("Cache paths must not contain links")
-                cached.write_bytes(data)
-                entry["path"] = str(cached)
-            root = Path(entry["path"])
-            if not root.exists():
-                raise BlockedError(f"Missing source: {item['id']}")
-            if has_link(root):
-                raise ValueError("Linked sources are not supported; provide their actual path")
-            if root.is_file():
-                if not permitted(Path(root.name)):
-                    raise ValueError("Source file is excluded or has an unsupported type")
-                data = root.read_bytes() if root.stat().st_size <= self.limits["source_bytes"] else None
-                if data is None:
-                    raise BlockedError("Source file exceeds source_bytes")
-                sha = digest(data)
-                if item.get("sha256") and sha != item["sha256"]:
-                    raise ValueError("Local source hash differs from configuration")
-                entry["sha256"] = sha
-                entry["files"] = [root.name]
+            if "table" in item:
+                expanded, errors = self.acquisition.expand_table(item)
+                self.errors.extend(errors)
             else:
-                files = []
-                # Prune before descent: do not enumerate all dependencies or hidden stores.
-                import os
-                capped = False
-                for directory, names, filenames in os.walk(root, followlinks=False):
-                    names[:] = sorted(n for n in names if n not in EXCLUDED and not n.startswith(".")
-                                      and not has_link(Path(directory) / n))
-                    for name in sorted(filenames):
-                        file = Path(directory) / name
-                        relative = file.relative_to(root)
-                        if permitted(relative) and not has_link(file):
-                            files.append(relative.as_posix())
-                            if len(files) >= self.limits["source_files"]:
-                                capped = True
-                                break
-                    if capped:
-                        break
-                entry["files"] = files
-                entry["index_truncated"] = capped
-                proc = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True)
-                if proc.returncode == 0:
-                    entry["resolved_ref"] = proc.stdout.strip()
-                    dirty = subprocess.run(["git", "-C", str(root), "status", "--porcelain"], capture_output=True, text=True)
-                    entry["working_tree_dirty"] = bool(dirty.stdout.strip())
-                if item.get("ref"):
-                    resolved = subprocess.run(["git", "-C", str(root), "rev-parse", item["ref"]], capture_output=True, text=True)
-                    if resolved.returncode or resolved.stdout.strip() != entry.get("resolved_ref"):
-                        raise BlockedError("Requested ref is not checked out; provide a separate checkout at that ref")
-                    if entry.get("working_tree_dirty"):
-                        raise BlockedError("Pinned source has uncommitted changes; provide a clean checkout")
-            self.entries[item["id"]] = entry
+                expanded = [item]
+            for source in expanded:
+                try:
+                    self.add(source)
+                except (OSError, ValueError, subprocess.SubprocessError) as exc:
+                    self.errors.append({"source": source["id"], "error": redact(exc)})
+        if not self.entries:
+            raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+
+    def add(self, item):
+        sid = item["id"]
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", sid) or sid in self.entries:
+            raise ValueError("Duplicate or invalid source ID")
+        entry = self.acquisition.prepare(item)
+        root = Path(entry["path"]).absolute()
+        if not root.exists() or has_link(root):
+            raise BlockedError("Missing source or linked path: " + sid)
+        original = str(root)
+        files, capped = [], False
+        if root.is_file():
+            if not permitted(Path(root.name)):
+                raise ValueError("Unsupported source file type")
+            files = [root.name]
+        else:
+            import os
+            for directory, names, filenames in os.walk(root, followlinks=False):
+                names[:] = sorted(n for n in names if n not in EXCLUDED and not n.startswith(".")
+                                  and not has_link(Path(directory) / n))
+                for name in sorted(filenames):
+                    file = Path(directory) / name
+                    relative = file.relative_to(root)
+                    if permitted(relative) and not has_link(file):
+                        if file.stat().st_size > self.limits["source_bytes"]:
+                            self.errors.append({"source": sid, "path": relative.as_posix(), "error": "File exceeds source_bytes; omitted"})
+                            continue
+                        files.append(relative.as_posix())
+                        if len(files) >= self.limits["source_files"]:
+                            capped = True
+                            break
+                if capped:
+                    break
+            proc = None if entry.get("repository_export") else subprocess.run(
+                ["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True)
+            if proc is not None and not proc.returncode:
+                entry["resolved_ref"] = proc.stdout.strip()
+                dirty = subprocess.run(["git", "-C", str(root), "status", "--porcelain"], capture_output=True, text=True)
+                entry["working_tree_dirty"] = bool(dirty.stdout.strip())
+            if entry.get("ref") and not entry.get("repository_export"):
+                resolved = subprocess.run(["git", "-C", str(root), "rev-parse", "--verify", entry["ref"] + "^{commit}"], capture_output=True, text=True)
+                if resolved.returncode or resolved.stdout.strip() != entry.get("resolved_ref") or entry.get("working_tree_dirty"):
+                    raise BlockedError("Pinned local source must be a clean checkout at the requested ref")
+        if not files:
+            raise BlockedError("No supported files in source " + sid)
+        inventory = []
+        for name in files:
+            path = root if root.is_file() else safe_relative(root, name)
+            data = path.read_bytes()
+            if len(data) > self.limits["source_bytes"]:
+                raise BlockedError("File exceeds source_bytes")
+            self.total_bytes += len(data)
+            if self.total_bytes > self.limits["source_total_bytes"]:
+                raise BlockedError("Total source snapshot budget exhausted")
+            inventory.append({"path": name, "sha256": digest(data), "bytes": len(data)})
+        if item.get("sha256") and (not root.is_file() or inventory[0]["sha256"] != item["sha256"]):
+            raise ValueError("Source hash differs from configuration")
+        key = digest(json.dumps(inventory, sort_keys=True).encode())
+        snapshot = safe_relative(self.cache, "snapshots/" + key)
+        for file in inventory:
+            target = safe_relative(snapshot, file["path"])
+            target.parent.mkdir(parents=True, exist_ok=True)
+            source = root if root.is_file() else root / file["path"]
+            if target.exists() and digest(target.read_bytes()) != file["sha256"]:
+                raise ValueError("Existing snapshot was modified; refusing to overwrite")
+            if not target.exists():
+                shutil.copyfile(source, target)
+            if digest(target.read_bytes()) != file["sha256"]:
+                raise ValueError("Source changed during snapshot copy")
+        entry.update(path=str(snapshot / root.name if root.is_file() else snapshot),
+                     original_path=original, files=files, inventory=inventory,
+                     snapshot_id=key, index_truncated=capped)
+        self.entries[sid] = entry
+        return {"source": sid, "index": self.index()[-1]}
+
+    def restore(self, entries, evidence, errors):
+        self.entries = {e["id"]: dict(e) for e in entries}
+        self.evidence, self.errors = evidence, errors
+        self.total_bytes = sum(i["bytes"] for e in entries for i in e["inventory"])
+        self.verify()
+
+    def verify(self):
+        for entry in self.entries.values():
+            root = Path(entry["path"])
+            if root.is_dir():
+                current = sorted(p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file())
+                if current != sorted(i["path"] for i in entry["inventory"]):
+                    raise ValueError("Source snapshot file set changed: " + entry["id"])
+            for item in entry["inventory"]:
+                file = root if root.is_file() else safe_relative(root, item["path"])
+                if has_link(file) or not file.is_file() or digest(file.read_bytes()) != item["sha256"]:
+                    raise ValueError("Source snapshot changed or missing: " + entry["id"] + "/" + item["path"])
 
     def index(self):
-        return [{**{k: v for k, v in entry.items() if k not in ("path", "files")},
+        return [{**{k: v for k, v in entry.items() if k not in ("path", "files", "inventory", "original_path")},
                  "files": entry["files"][:100], "index_preview_truncated": len(entry["files"]) > 100}
                 for entry in self.entries.values()]
 
@@ -121,22 +159,16 @@ class Sources:
         return path
 
     def _text(self, path):
-        if path.stat().st_size > self.limits["source_bytes"]:
-            raise ValueError("File exceeds source_bytes; narrow the supplied source")
         data = path.read_bytes()
-        if path.suffix.lower() == ".pdf":
-            try:
-                from pypdf import PdfReader
-            except ImportError as exc:
-                raise BlockedError("PDF reading needs pypdf; provide extracted text or install pypdf") from exc
-            text = "\n".join(f"[page {i + 1}]\n{page.extract_text() or ''}" for i, page in enumerate(PdfReader(path).pages))
-            if not text.strip():
-                raise BlockedError("PDF has no extractable text; OCR is not provided")
-        else:
-            text = data.decode("utf-8-sig")
-        return redact(text), digest(data)
+        return redact(read_text(path, self.limits["source_bytes"])), digest(data)
 
     def request(self, action):
+        if action["action"] in ("fetch", "repository", "resolve"):
+            key = {"fetch": "url", "repository": "repo", "resolve": "paper"}[action["action"]]
+            item = {"id": action.get("source"), key: action.get("query", "")}
+            if key == "repo" and action.get("path"):
+                item["ref"] = action["path"]
+            return self.add(item)
         sid, name = action.get("source"), action.get("path", "")
         start = max(1, int(action.get("start", 1)))
         offset = max(0, int(action.get("offset", 0)))
@@ -198,4 +230,4 @@ class Sources:
         return result
 
     def manifest(self):
-        return [{k: v for k, v in entry.items() if k != "files"} for entry in self.entries.values()]
+        return [dict(entry) for entry in self.entries.values()]

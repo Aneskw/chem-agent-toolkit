@@ -22,10 +22,23 @@ PLAN = obj({
     "checks": STRINGS, "evidence": array({"id": STRING, "claim": STRING}), "gaps": STRINGS,
 })
 
+ENTITY = obj({**PLAN["properties"],
+    "kind": {"type": "string", "enum": ["skill", "tool"]},
+    "implementation": {"type": "string", "enum": ["upstream", "adapter", "composition"]},
+    "rationale": STRING, "upstream_behavior": STRING, "needs": STRINGS,
+    "selected": {"type": "boolean"}, "priority": {"type": "integer"},
+})
+
+DISCOVERY = obj({
+    "summary": STRING, "candidates": {"type": "array", "items": ENTITY},
+    "omitted": array({"capability": STRING, "reason": STRING}), "limitations": STRINGS,
+})
+
 AUTHOR = obj({
     "files": array({"path": STRING, "content": STRING, "purpose": STRING}),
     "coverage": obj({key: STRING for key in ("scope", "io", "usage", "result_checks")}),
     "tests": array({"name": STRING, "argv": STRINGS, "expected_exit": {"type": "integer"},
+                    "cwd": STRING,
                     "stdout_contains": STRINGS, "evidence": STRING, "purpose": STRING,
                     "kind": {"type": "string", "enum": ["positive", "negative", "boundary"]}}),
     "notes": STRINGS,

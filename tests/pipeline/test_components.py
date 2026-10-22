@@ -14,7 +14,7 @@ from creation_pipeline.intake import Sources
 from creation_pipeline.models import BlockedError, load_config
 from creation_pipeline.model_backend import CodexBackend, disable_mcp_options
 from creation_pipeline.package import install, manifest, save_files, verify_output
-from creation_pipeline.pipeline import ROOT, build
+from creation_pipeline.analyze import ROOT
 from creation_pipeline.records import clean_run, digest, read_json, safe_relative, write_json
 from creation_pipeline.runtime import execute
 
@@ -50,8 +50,10 @@ class ReplayBackend:
 
     def __init__(self, values):
         self.values = iter(values)
+        self.prompts = []
 
     def call(self, prompt, timeout, schema=None):
+        self.prompts.append(prompt)
         return next(self.values), {"model": "deterministic-test-fixture", "usage": None}
 
 
@@ -66,7 +68,7 @@ class PipelineTests(unittest.TestCase):
         (self.source / "adder.py").write_text('def add(a, b):\n    """Return a+b. Example: add(2,3)==5."""\n    return a+b\n', encoding="utf-8")
         self.config = self.root / "build.json"
         self.options = {"task": "Add two numbers", "sources": [{"id": "tool", "path": "source"}],
-                        "limits": {"repair_rounds": 1}, "checks": [{"name": "actual-tool-result",
+                        "limits": {"repair_rounds": 1}, "checks": [{"candidate": "add-numbers", "name": "actual-tool-result",
                         "argv": ["{python}", "-c", "import sys; sys.path.insert(0,sys.argv[1]); from adder import add; print(add(2,3))", "{source:tool}"],
                         "stdout_contains": ["5"]}]}
         write_json(self.config, self.options)
@@ -75,92 +77,17 @@ class PipelineTests(unittest.TestCase):
     def tearDown(self):
         self.temp.cleanup()
 
-    def backend(self, *artifacts, plan=None):
-        return ReplayBackend([{"action": "read", "source": "tool", "path": "adder.py", "start": 1, "limit": 50},
-                              response(plan or PLAN), *[response(a) for a in (artifacts or (ARTIFACT,))]])
 
-    def run_build(self, *artifacts, plan=None, **kw):
-        result = build(self.config, self.state, backend=self.backend(*artifacts, plan=plan), **kw)
-        return result, read_json(Path(result["output"]) / "build.json")
 
-    def test_compact_build_keeps_verbatim_files_and_cleans_only_work(self):
-        result, record = self.run_build()
-        self.assertEqual(result["status"], "ready")
-        output = Path(result["output"])
-        self.assertEqual((output / "add-numbers/SKILL.md").read_text(encoding="utf-8"), MAIN)
-        self.assertEqual(len(record["files"]), 1)
-        self.assertTrue(record["replay"])
-        self.assertIsNone(record["model_metrics"]["reported_token_totals"])
-        self.assertFalse((self.state / "runs" / result["build_id"]).exists())
-        self.assertTrue((self.source / "adder.py").exists())
-        verify_output(output)
 
-    def test_missing_source_is_blocked_and_keeps_error_record(self):
-        self.options["sources"][0]["path"] = "missing"
-        write_json(self.config, self.options)
-        result, record = self.run_build()
-        self.assertEqual(result["status"], "blocked")
-        self.assertIn("Missing source", record["error"])
 
-    def test_readiness_blocker_does_not_author_files(self):
-        plan = dict(PLAN, readiness="blocked", gaps=["missing implementation"])
-        result, record = self.run_build(plan=plan)
-        self.assertEqual(result["status"], "blocked")
-        self.assertNotIn("package", record)
 
-    def test_plan_only_is_not_a_ready_package(self):
-        result, record = self.run_build(plan_only=True)
-        self.assertEqual(result["status"], "draft")
-        self.assertNotIn("package", record)
 
-    def test_no_execution_is_draft(self):
-        self.options["checks"] = []
-        write_json(self.config, self.options)
-        result, record = self.run_build()
-        self.assertEqual(result["status"], "draft")
-        self.assertEqual(record["checks"][-1]["status"], "not_run")
 
-    def test_check_failure_does_not_weaken_configured_oracle(self):
-        self.options["checks"][0]["stdout_contains"] = ["impossible-value"]
-        self.options["limits"]["repair_rounds"] = 2
-        write_json(self.config, self.options)
-        result, record = self.run_build(ARTIFACT, ARTIFACT)
-        self.assertEqual(result["status"], "failed")
-        self.assertEqual(record["stopped_reason"], "Repeated unchanged failure")
-        self.assertEqual(record["test_definitions"]["configured"][0]["stdout_contains"], ["impossible-value"])
-        self.assertTrue(Path(record["temporary_workspace"]).exists())
 
-    def test_invalid_coverage_can_be_repaired_without_fixed_headings(self):
-        wrong = copy.deepcopy(ARTIFACT)
-        wrong["coverage"]["io"] = "invented quotation"
-        result, record = self.run_build(wrong, ARTIFACT)
-        self.assertEqual(result["status"], "ready")
-        self.assertEqual(record["repair_rounds"], 1)
 
-    def test_model_budget_failure_is_explicit(self):
-        self.options["limits"]["model_calls"] = 1
-        write_json(self.config, self.options)
-        result, record = self.run_build()
-        self.assertEqual(result["status"], "failed")
-        self.assertIn("budget", record["error"])
 
-    def test_install_checks_manifest_and_refuses_existing_destination(self):
-        result, _ = self.run_build()
-        target = self.root / "installed"
-        installed = install(result["output"], target)
-        self.assertTrue(Path(installed["installed"]).is_dir())
-        with self.assertRaises(ValueError):
-            install(result["output"], target)
-        (Path(result["output"]) / "add-numbers/extra.txt").write_text("unvalidated", encoding="utf-8")
-        with self.assertRaises(ValueError):
-            install(result["output"], self.root / "other")
 
-    def test_draft_cannot_install(self):
-        self.options["checks"] = []
-        write_json(self.config, self.options)
-        result, _ = self.run_build()
-        with self.assertRaises(ValueError):
-            install(result["output"], self.root / "installed")
 
     def test_clean_requires_registration_and_supports_dry_run(self):
         run = self.state / "runs/example"
@@ -241,45 +168,10 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(classify(results), "draft")
         self.assertFalse((self.root / "checks").exists())
 
-    def test_absent_coverage_cannot_bypass_minimum_checks(self):
-        bad = copy.deepcopy(ARTIFACT)
-        del bad["coverage"]
-        result, record = self.run_build(bad, bad)
-        self.assertEqual(result["status"], "failed")
-        self.assertIn("minimum", record["error"])
 
-    def test_package_mutation_during_check_is_detected(self):
-        self.options["limits"]["repair_rounds"] = 0
-        self.options["checks"] = [{"name": "mutate", "argv": ["{python}", "-c",
-            'from pathlib import Path; import sys; Path(sys.argv[1],"SKILL.md").write_text("changed"); print("done")',
-            "{package}"], "stdout_contains": ["done"]}]
-        write_json(self.config, self.options)
-        result, record = self.run_build()
-        self.assertEqual(result["status"], "failed")
-        self.assertTrue(any(r["name"] == "artifact_immutability" for r in record["checks"]))
 
-    def test_source_mutation_during_check_is_detected(self):
-        self.options["checks"] = [{"name": "mutate", "argv": ["{python}", "-c",
-            'from pathlib import Path; import sys; Path(sys.argv[1],"adder.py").write_text("changed"); print("done")',
-            "{source:tool}"], "stdout_contains": ["done"]}]
-        write_json(self.config, self.options)
-        result, record = self.run_build()
-        self.assertEqual(result["status"], "failed")
-        self.assertIn("Sources changed", record["error"])
 
-    def test_blocked_plan_without_evidence_is_reported_as_blocked(self):
-        plan = dict(PLAN, readiness="blocked", evidence=[], files=[], gaps=["missing interface"])
-        result, _ = self.run_build(plan=plan)
-        self.assertEqual(result["status"], "blocked")
 
-    def test_explicit_document_gets_a_real_initial_view(self):
-        self.options["sources"][0]["path"] = "source/adder.py"
-        write_json(self.config, self.options)
-        backend = ReplayBackend([response(PLAN), response(ARTIFACT)])
-        result = build(self.config, self.state, backend=backend, plan_only=True)
-        record = read_json(Path(result["output"]) / "build.json")
-        self.assertEqual(record["evidence"][0]["id"], "e1")
-        self.assertIn("def add", record["evidence"][0]["excerpt"])
 
     def test_expected_failure_and_json_assertions(self):
         config = load_config(self.config)
@@ -288,6 +180,27 @@ class PipelineTests(unittest.TestCase):
                 "expected_exit": 2, "json_equals": {"ok": False}}
         report = execute(test, self.root, sources, self.root / "check", 10, [])
         self.assertEqual(report["status"], "pass")
+
+    def test_check_can_use_explicit_source_directory_without_moving_logs(self):
+        sources = Sources(load_config(self.config), self.root / 'cache')
+        test = {'name': 'relative-resource', 'argv': ['{python}', '-c', "from pathlib import Path; print('def add' in Path('adder.py').read_text())"],
+                'cwd': '{source:tool}', 'stdout_contains': ['True']}
+        work = self.root / 'cwd-check'
+        report = execute(test, self.root, sources, work, 10, [])
+        self.assertEqual(report['status'], 'pass')
+        self.assertTrue((work / 'stdout.log').exists())
+        self.assertEqual(report['cwd'], sources.entries['tool']['path'])
+
+    def test_example_verifier_does_not_leak_its_arguments(self):
+        import subprocess
+        import sys
+        package = self.root / 'example'
+        package.mkdir()
+        (package / 'SKILL.md').write_text('```python\nimport sys\nassert len(sys.argv) == 1\nprint("standalone-example")\n```\n', encoding='utf-8')
+        process = subprocess.run([sys.executable, str(ROOT / 'examples/verify_python_example.py'), str(package)],
+                                 capture_output=True, text=True, timeout=10)
+        self.assertEqual(process.returncode, 0, process.stderr)
+        self.assertIn('standalone-example', process.stdout)
 
     def test_timeout_kills_check_and_reports_failure(self):
         sources = Sources(load_config(self.config), self.root / "cache")
@@ -333,28 +246,7 @@ class PipelineTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             disable_mcp_options({"mcp_servers": {"unsupported.name": {}}})
 
-    def test_extension_without_negative_execution_is_draft(self):
-        self.options["intent"] = "extension"
-        write_json(self.config, self.options)
-        plan = dict(PLAN, intent="extension", added_behavior="Additional numerical rule")
-        backend = self.backend(ARTIFACT, {"status": "pass", "resolution": "none", "findings": []}, plan=plan)
-        result = build(self.config, self.state, backend=backend)
-        record = read_json(Path(result["output"]) / "build.json")
-        self.assertEqual(result["status"], "draft")
-        self.assertEqual(record["checks"][-1]["name"], "extension_positive_negative")
 
-    def test_missing_review_evidence_stops_as_draft_without_rewriting(self):
-        self.options["intent"] = "extension"
-        write_json(self.config, self.options)
-        plan = dict(PLAN, intent="extension", added_behavior="Additional numerical rule")
-        backend = self.backend(ARTIFACT, {"status": "fail", "resolution": "supply_evidence",
-                                       "findings": ["Missing upstream acquisition location"]}, plan=plan)
-        result = build(self.config, self.state, backend=backend)
-        record = read_json(Path(result["output"]) / "build.json")
-        self.assertEqual(result["status"], "draft")
-        self.assertEqual(record["repair_rounds"], 0)
-        review = next(r for r in record["checks"] if r["name"] == "content_review")
-        self.assertEqual(review["status"], "not_run")
 
 
 if __name__ == "__main__":

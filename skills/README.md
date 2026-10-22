@@ -1,6 +1,3 @@
 # Adopted skills
 
-New builds go to `.pipeline/outputs/`, not here. Install a ready, hash-verified
-output explicitly to this directory if it should become part of the repository.
-Generated packages contain no pipeline bookkeeping by default. Adopted records
-can be retained under `build-records/<skill-name>/` with their corresponding version.
+Build outputs stay under `.pipeline/outputs/` until explicitly adopted. Installation preserves a ready bundle's `skills/` and shared `tools/` layout under a build-ID directory. Do not copy a dependent skill alone and assume shared tools are included. Keep adopted build records separately when versioning an installed bundle.

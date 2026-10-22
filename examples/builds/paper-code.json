@@ -1,0 +1,7 @@
+{
+  "sources": [
+    {"id": "paper", "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6689865/fullTextXML"},
+    {"id": "code", "repo": "https://github.com/durrantlab/dimorphite_dl.git", "ref": "v1.2.5"}
+  ],
+  "limits": {"max_candidates": 5, "max_builds": 2}
+}

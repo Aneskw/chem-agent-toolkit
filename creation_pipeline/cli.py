@@ -8,17 +8,18 @@ from pathlib import Path
 from .analyze import ROOT
 from .checks import static_checks
 from .models import load_config
-from .package import install, verify_output
+from .package import install, verify_output, verify_bundle
 from .pipeline import build
 from .records import clean_run, redact
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Build one model-authored tool skill; no automatic installation or Agent benchmark")
+    parser = argparse.ArgumentParser(description="Discover reusable tool capabilities and build a skill/tool bundle")
     commands = parser.add_subparsers(dest="command", required=True)
-    for operation in ("build", "plan"):
+    for operation in ("build", "discover", "plan"):
         child = commands.add_parser(operation)
-        child.add_argument("config")
+        child.add_argument("config", nargs="?")
+        child.add_argument("--plan", dest="plan_path", help="Continue a saved plan without rediscovery")
         child.add_argument("--state-dir", default=str(ROOT / ".pipeline"))
         child.add_argument("--keep-debug", action="store_true")
         child.add_argument("--execute-generated-checks", action="store_true",
@@ -35,18 +36,31 @@ def main(argv=None):
     child.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
     try:
-        if args.command in ("build", "plan"):
+        if args.command in ("build", "discover", "plan"):
+            if bool(args.config) == bool(args.plan_path):
+                raise ValueError("Supply one configuration or --plan path")
             if args.preflight:
+                if args.plan_path:
+                    raise ValueError("Preflight takes a configuration; continuation validates saved sources itself")
                 config = load_config(args.config)
                 result = {"status": "configuration_valid", "source_count": len(config["sources"]),
                           "source_availability": "not_checked", "model_calls": 0}
             else:
-                result = build(args.config, args.state_dir, plan_only=args.command == "plan",
+                result = build(args.config, args.state_dir, plan_only=args.command in ("discover", "plan"), plan_path=args.plan_path,
                                keep_debug=args.keep_debug, execute_generated=args.execute_generated_checks,
                                notify=lambda m: print(m, file=sys.stderr, flush=True))
         elif args.command == "check":
             path = Path(args.path)
-            if (path / "build.json").is_file():
+            if (path / "summary.json").is_file():
+                record, bundle = verify_bundle(path)
+                reports = []
+                for entity in record["entities"]:
+                    directory = bundle / ("skills" if entity["kind"] == "skill" else "tools") / entity["name"]
+                    if directory.exists():
+                        reports += static_checks(directory, entity["name"], bundle=bundle, tool=entity["kind"] == "tool")
+                result = {"status": "fail" if any(r["status"] == "fail" for r in reports) else "pass",
+                          "checks": reports, "recorded_build_status": record["status"], "execution": "not_rerun"}
+            elif (path / "build.json").is_file():
                 record, package = verify_output(path)
                 reports = static_checks(package, record["plan"]["name"], record.get("coverage"))
                 result = {"status": "fail" if any(r["status"] == "fail" for r in reports) else "pass",
@@ -61,7 +75,7 @@ def main(argv=None):
         else:
             result = clean_run(args.state_dir, args.build_id, args.dry_run)
         print(json.dumps(result, ensure_ascii=False, indent=2))
-        return 1 if result.get("status") in ("failed", "blocked", "fail") else 0
+        return 1 if result.get("status") in ("failed", "blocked", "fail", "partial") else 0
     except (ValueError, OSError, KeyError) as exc:
         print(json.dumps({"status": "error", "error": redact(exc)}, ensure_ascii=False), file=sys.stderr)
         return 2
