@@ -23,13 +23,15 @@ PLAN = obj({
 })
 
 ENTITY = obj({**PLAN["properties"],
-    "kind": {"type": "string", "enum": ["skill", "tool"]},
+    "kind": {"type": "string", "enum": ["skill"]},
     "implementation": {"type": "string", "enum": ["upstream", "adapter", "composition"]},
+    "method_evidence": array({"id": STRING, "claim": STRING}),
     "rationale": STRING, "upstream_behavior": STRING, "needs": STRINGS,
     "selected": {"type": "boolean"}, "priority": {"type": "integer"},
 })
 
 DISCOVERY = obj({
+    "handoff": array({"fact": STRING, "evidence": STRINGS}),
     "summary": STRING, "candidates": {"type": "array", "items": ENTITY},
     "omitted": array({"capability": STRING, "reason": STRING}), "limitations": STRINGS,
 })
@@ -41,9 +43,12 @@ AUTHOR = obj({
                     "cwd": STRING,
                     "stdout_contains": STRINGS, "evidence": STRING, "purpose": STRING,
                     "kind": {"type": "string", "enum": ["positive", "negative", "boundary"]}}),
+    "issues": array({"id": STRING, "description": STRING, "blocking": {"type": "boolean"},
+                      "resolution": STRING}),
     "notes": STRINGS,
 })
 
 REVIEW = obj({"status": {"type": "string", "enum": ["pass", "fail", "not_run"]},
               "resolution": {"type": "string", "enum": ["none", "revise_files", "supply_evidence"]},
-              "findings": STRINGS})
+              "findings": STRINGS,
+              "issues_complete": {"type": "boolean"}})

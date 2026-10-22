@@ -14,11 +14,13 @@ from .records import clean_run, redact
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Discover reusable tool capabilities and build a skill/tool bundle")
+    parser = argparse.ArgumentParser(description="Discover reusable tool capabilities and build source-grounded skill packages")
     commands = parser.add_subparsers(dest="command", required=True)
-    for operation in ("build", "discover", "plan"):
+    for operation in ("build", "discover", "plan", "revise"):
         child = commands.add_parser(operation)
         child.add_argument("config", nargs="?")
+        child.add_argument("--feedback-file")
+        child.add_argument("--no-adopt", action="store_true")
         child.add_argument("--plan", dest="plan_path", help="Continue a saved plan without rediscovery")
         child.add_argument("--state-dir", default=str(ROOT / ".pipeline"))
         child.add_argument("--keep-debug", action="store_true")
@@ -36,9 +38,11 @@ def main(argv=None):
     child.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
     try:
-        if args.command in ("build", "discover", "plan"):
+        if args.command in ("build", "discover", "plan", "revise"):
             if bool(args.config) == bool(args.plan_path):
                 raise ValueError("Supply one configuration or --plan path")
+            if args.command == "revise" and (not args.plan_path or not args.feedback_file):
+                raise ValueError("revise requires --plan and --feedback-file")
             if args.preflight:
                 if args.plan_path:
                     raise ValueError("Preflight takes a configuration; continuation validates saved sources itself")
@@ -46,8 +50,10 @@ def main(argv=None):
                 result = {"status": "configuration_valid", "source_count": len(config["sources"]),
                           "source_availability": "not_checked", "model_calls": 0}
             else:
-                result = build(args.config, args.state_dir, plan_only=args.command in ("discover", "plan"), plan_path=args.plan_path,
+                result = build(args.config, args.state_dir, plan_only=args.command in ("discover", "plan", "revise"), plan_path=args.plan_path,
                                keep_debug=args.keep_debug, execute_generated=args.execute_generated_checks,
+                               no_adopt=args.no_adopt,
+                               feedback=Path(args.feedback_file).read_text(encoding="utf-8") if args.command == "revise" else None,
                                notify=lambda m: print(m, file=sys.stderr, flush=True))
         elif args.command == "check":
             path = Path(args.path)

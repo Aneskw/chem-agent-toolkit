@@ -1,4 +1,4 @@
-"""Execute the skill's Python examples; used only by explicitly configured checks."""
+"""Execute delivered Python examples; the optional marker proves completion only."""
 import re
 import ast
 import argparse
@@ -9,7 +9,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument("package")
 parser.add_argument("--smiles", help="Replace the explicitly requested sample input variable")
 parser.add_argument("--expect-rejection", action="store_true")
+parser.add_argument("--completion-marker", action="store_true")
 args = parser.parse_args()
+# Match `python -c` imports when a check declares an upstream source cwd.
+sys.path.insert(0, str(Path.cwd()))
 text = (Path(args.package) / "SKILL.md").read_text(encoding="utf-8")
 blocks = re.findall(r"```python\s*\n(.*?)```", text, re.S)
 if not blocks:
@@ -40,3 +43,5 @@ for index, block in enumerate(blocks):
         sys.argv = prior_argv
 if args.expect_rejection:
     raise SystemExit("Expected input rejection, but the example completed")
+if args.completion_marker:
+    print("skill-example-completed")

@@ -18,7 +18,7 @@ from tests.pipeline.test_components import MAIN, COVERAGE, PLAN, ARTIFACT, Repla
 def candidate(name="add-numbers", **updates):
     value = dict(copy.deepcopy(PLAN), name=name, kind="skill", implementation="upstream",
                 rationale="Preserve numeric input conventions", upstream_behavior="Adds two numbers",
-                selected=True, priority=1, needs=[])
+                selected=True, priority=1, needs=[], method_evidence=[{"id": "e1", "claim": "source method"}])
     value.update(updates)
     return value
 
@@ -38,8 +38,8 @@ class DiscoveryTests(unittest.TestCase):
         self.source.write_text('def add(a,b):\n    """add(2,3) == 5; reject text inputs."""\n    return a+b\n', encoding="utf-8")
         self.config = self.root / "config.json"
         self.options = {"sources": [{"id": "tool", "path": "api.py"}], "network": False,
-            "prompt": "Keep the existing interface; no scientific claims", "limits": {"repair_rounds": 1},
-            "checks": [{"candidate": "add-numbers", "name": "result", "argv": ["{python}", "-c", "print(2+3)"], "stdout_contains": ["5"]}]}
+            "adoption": {"enabled": False}, "prompt": "Keep the existing interface; no scientific claims", "limits": {"repair_rounds": 1},
+            "checks": [{"candidate": "add-numbers", "name": "result", "argv": ["{python}", "-c", "print(2 + 3)"], "stdout_contains": ["5"]}]}
         write_json(self.config, self.options)
         self.state = self.root / "state"
 
@@ -71,7 +71,7 @@ class DiscoveryTests(unittest.TestCase):
         continued = build(state_root=self.state, plan_path=Path(result["output"]) / "plan.json",
                           backend=ReplayBackend([response(ARTIFACT)]))
         self.assertEqual(continued["status"], "ready", continued)
-        self.assertEqual(continued["model_calls"], 1)
+        self.assertEqual(continued["model_calls"], 2)
 
     def test_snapshot_mutation_rejected_before_model_call(self):
         result, _ = self.run_case(discovery(candidate()), plan_only=True)
@@ -132,7 +132,7 @@ class DiscoveryTests(unittest.TestCase):
 
     def test_generated_checks_require_opt_in(self):
         artifact = copy.deepcopy(ARTIFACT)
-        artifact["tests"] = [{"name": "grounded", "argv": ["{python}", "-c", "print(2+3)"],
+        artifact["tests"] = [{"name": "grounded", "argv": ["{python}", "-c", "print(2 + 3)"],
             "expected_exit": 0, "stdout_contains": ["5"], "evidence": "e1", "purpose": "upstream example", "kind": "positive"}]
         self.options["checks"] = []
         write_json(self.config, self.options)
@@ -153,30 +153,13 @@ class DiscoveryTests(unittest.TestCase):
         self.assertEqual(result["status"], "ready")
         self.assertTrue(all(self.options["prompt"] in p for p in prompts))
 
-    def test_cycles_and_missing_shared_tools_rejected(self):
+    def test_shared_dependencies_rejected(self):
         with self.assertRaises(ValueError):
-            ordered(discovery(candidate(needs=["missing"])))
-        a = candidate("a", kind="tool", needs=["b"])
-        b = candidate("b", kind="tool", needs=["a"])
-        with self.assertRaises(ValueError):
-            ordered(discovery(a, b))
+            ordered(discovery(candidate(needs=["shared"])))
 
-    def test_shared_tool_generated_once_and_relocated(self):
-        tool = candidate("shared-add", kind="tool", implementation="adapter", files=[{"path": "scripts/add.py", "purpose": "Shared CLI"}])
-        tool_artifact = {"files": [{"path": "scripts/add.py", "content": "import sys\nprint(int(sys.argv[1])+int(sys.argv[2]))\n", "purpose": "CLI"}],
-                         "coverage": {k: "" for k in COVERAGE}, "tests": [], "notes": []}
-        self.options["checks"].append({"candidate": "shared-add", "name": "shared-result", "argv": ["{python}", "{package}/scripts/add.py", "2", "3"], "stdout_contains": ["5"]})
-        self.options["checks"][0]["argv"] = ["{python}", "{tool:shared-add}/scripts/add.py", "2", "3"]
-        write_json(self.config, self.options)
-        result, summary = self.run_case(discovery(candidate(needs=["shared-add"]), tool), tool_artifact,
-            {"status": "pass", "resolution": "none", "findings": []}, ARTIFACT)
-        self.assertEqual(result["status"], "ready", summary)
-        installed = install(result["output"], self.root / "relocated")
-        self.assertIn("authored_files", self.last_backend.prompts[-1])
-        self.assertIn("int(sys.argv[1])", self.last_backend.prompts[-1])
-        import subprocess
-        proc = subprocess.run([__import__('sys').executable, str(Path(installed['installed']) / 'tools/shared-add/scripts/add.py'), '2', '3'], capture_output=True, text=True)
-        self.assertEqual(proc.stdout.strip(), '5')
+    def test_independent_tool_rejected(self):
+        with self.assertRaises(ValueError):
+            ordered(discovery(candidate(kind="tool")))
 
     def test_duplicate_candidate_and_false_evidence_rejected(self):
         for plan in (discovery(candidate(), candidate()), discovery(candidate(evidence=[{"id": "fake", "claim": "x"}]))):
@@ -255,17 +238,17 @@ class DiscoveryTests(unittest.TestCase):
     def test_invalid_discovery_repaired_without_reacquiring_sources(self):
         result, _ = self.run_case(discovery(candidate(), candidate()), discovery(candidate()), ARTIFACT)
         self.assertEqual(result['status'], 'ready')
-        self.assertEqual(result['model_calls'], 3)
+        self.assertEqual(result['model_calls'], 4)
 
     def test_dropping_failed_generated_oracle_cannot_become_ready(self):
         self.options['checks'] = []
         write_json(self.config, self.options)
         artifact = copy.deepcopy(ARTIFACT)
-        test = {'name': 'grounded', 'argv': ['{python}', '-c', 'print(4)'], 'expected_exit': 0,
-                'stdout_contains': ['5'], 'evidence': 'e1', 'purpose': 'upstream example', 'kind': 'positive'}
+        test = {'name': 'grounded', 'argv': ['{python}', '-c', 'print(2 + 3)'], 'expected_exit': 0,
+                'stdout_contains': ['99'], 'evidence': 'e1', 'purpose': 'upstream example', 'kind': 'positive'}
         artifact['tests'] = [test]
         replacement = copy.deepcopy(artifact)
-        replacement['tests'] = [dict(test, name='different', argv=['{python}', '-c', 'print(5)'])]
+        replacement['tests'] = [dict(test, name='different', stdout_contains=['5'])]
         result, _ = self.run_case(discovery(candidate()), artifact, replacement, execute_generated=True)
         self.assertEqual(result['status'], 'draft')
         record = read_json(Path(result['output']) / 'records/add-numbers.json')

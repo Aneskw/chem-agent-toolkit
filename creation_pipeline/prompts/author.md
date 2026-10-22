@@ -1,4 +1,4 @@
-Write the complete English skill/tool files directly. The program saves their content
+Write the complete English skill files directly. The program saves their content
 verbatim; there is no fixed chapter renderer. Follow the supplied authoritative
 minimum and packaging specifications. Four information requirements are semantic,
 not required headings. Keep essential correctness in SKILL.md. A simple tool should
@@ -11,8 +11,7 @@ Return a JSON object in payload:
 - files: [{path, content, purpose}]. Include the entire final file set, even on repair.
   Paths may be SKILL.md or below scripts/, references/, examples/, resources/, assets/.
   Every new file needs a real task-related purpose. Use YAML name and description
-  frontmatter in SKILL.md; name must match the plan. A tool entity has no SKILL.md:
-  supply its scripts/references and return empty coverage strings.
+  frontmatter in SKILL.md; name must match the plan. Only skills are supported.
 - coverage: {scope, io, usage, result_checks}. Each value is a short exact quotation
   from SKILL.md locating that information. These are author attestations, not a
   replacement for independent content review or execution.
@@ -38,6 +37,14 @@ be executed unless explicitly enabled. The program performs actual execution.
 Never mark a runtime or scientific claim verified based on writing a test alone.
 On feedback, repair the cause without weakening the task, oracles or configured
 checks. If the plan's task/algorithm must change, report the limitation instead.
+Preserve generated check names and expected assertions across repairs. Repair
+argv/cwd when invocation is wrong. Assertions inspect stdout, not stderr: for
+unittest output, use TextTestRunner(stream=sys.stdout) and propagate unsuccessful
+results as a nonzero exit. Do not replace a failed expected output with incidental
+observed output merely to pass.
+Prefer running relevant existing upstream tests over retyping their fixtures.
+When fixtures must be embedded, preserve source bytes including leading blank
+lines and fixed-width columns; formatting damage is a test-input defect.
 Each check also has cwd: use "{run}" for the fresh isolated check directory unless
 upstream requires a specific working directory. Use "{source:ID}" for a directory
 source when a command reads adjacent files relative to cwd. Logs still go to {run};
@@ -48,15 +55,6 @@ Always respect user_guidance and constraints, not only the plan's paraphrase.
 Use compact real parameter/key lists or tables for numerous I/O fields; do not
 copy the whole API. Separate CLI parse/setup failures, row errors and valid negatives.
 Qualify guarantees such as "always JSON" unless all relevant paths support them.
-Reuse shared tools at ../../tools/<name>/ from a skill directory. Compute paths
-relative to __file__ in scripts, or document the skill directory as the working
-directory for CLI examples. Never use build-cache absolute paths in runtime files.
-External upstream sources remain external: document actual pinned acquisition,
-not pipeline-only source macros. No new dependency environment/Docker configs.
-Checks may use {bundle} for the common bundle root and {tool:NAME} for an approved
-shared tool directory. Ground expected values in source evidence. Test actual
-examples/results, including the shared call path, not just imports or --help.
-If using an external repository script/module, include its actual usable repository
-address and pinned revision in runtime instructions (or a linked required reference).
-Saying only "acquire the upstream repository" is insufficient. For installed libraries
-use their actual package/import prerequisites; do not invent a repository requirement.
+Do not reference sibling skills, shared tools or pipeline cache paths. Research extensions must reproduce source-supported behavior, not invent algorithms. Runtime examples need actual acquisition addresses/versions and adjacent resources when relevant.
+Return issues: [{id, description, blocking, resolution}]. Unresolved required evidence/dependencies block readiness. All material notes must appear here. No self-declared scientific verification.
+Prefer checking primary Python examples using argv ["{python}", "<absolute repository>/examples/verify_python_example.py", "{package}", ...] or the delivered Python statements as the -c argument, with source-grounded output assertions. If your result checks use different statements, the host separately executes all delivered Python blocks when execution is permitted. That completion check does not replace meaningful result assertions. Mark non-executable illustrative blocks as text. Tests need cwd.

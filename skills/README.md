@@ -1,3 +1,8 @@
-# Adopted skills
+# Skills
 
-Build outputs stay under `.pipeline/outputs/` until explicitly adopted. Installation preserves a ready bundle's `skills/` and shared `tools/` layout under a build-ID directory. Do not copy a dependent skill alone and assume shared tools are included. Keep adopted build records separately when versioning an installed bundle.
+Engineering-ready packages. Agent benefit remains unmeasured.
+
+| Skill | Tags | Batch |
+| --- | --- | --- |
+| [rdkit-recap-terminal-fragments](2026-10-22-molecular-fragmentation/rdkit-recap-terminal-fragments/SKILL.md) | molecular-fragmentation | 2026-10-22-molecular-fragmentation |
+| [chembl-structure-checker](2026-10-23-structure-curation/chembl-structure-checker/SKILL.md) | structure-curation | 2026-10-23-structure-curation |

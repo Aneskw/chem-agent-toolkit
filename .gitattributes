@@ -1,0 +1,4 @@
+# Preserve validated package bytes and catalog hashes on every checkout.
+skills/** -text whitespace=cr-at-eol
+skills/README.md text eol=lf
+skills/catalog.json text eol=lf

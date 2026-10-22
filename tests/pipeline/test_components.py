@@ -49,12 +49,20 @@ class ReplayBackend:
     replay = True
 
     def __init__(self, values):
-        self.values = iter(values)
+        self.values = list(values)
         self.prompts = []
 
     def call(self, prompt, timeout, schema=None):
         self.prompts.append(prompt)
-        return next(self.values), {"model": "deterministic-test-fixture", "usage": None}
+        from creation_pipeline.schemas import REVIEW
+        if schema == REVIEW and (not self.values or "status" not in self.values[0].get("payload", {})):
+            return response({"status": "pass", "resolution": "none", "findings": [], "issues_complete": True}), {"model": "fixture-review", "usage": None}
+        if not self.values:
+            raise ValueError("No fixture response")
+        value = self.values.pop(0)
+        if schema == REVIEW:
+            value["payload"].setdefault("issues_complete", True)
+        return value, {"model": "deterministic-test-fixture", "usage": None}
 
 
 class PipelineTests(unittest.TestCase):

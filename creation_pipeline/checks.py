@@ -101,6 +101,21 @@ def static_checks(package, name=None, coverage=None, bundle=None, tool=False):
     return checks
 
 
+def covers_example(block, code):
+    """Match every delivered statement in order, permitting added assertions."""
+    try:
+        expected, actual = ast.parse(block).body, ast.parse(code).body
+    except SyntaxError:
+        return False
+    index = 0
+    for node in actual:
+        if index < len(expected) and ast.dump(node) == ast.dump(expected[index]):
+            index += 1
+        elif index and index < len(expected) and not isinstance(node, ast.Assert):
+            return False
+    return index == len(expected)
+
+
 def run_checks(config, artifact, package, sources, work, allow_generated=False):
     tests = [(item, "configured") for item in config["checks"]]
     tests += [(item, "generated") for item in artifact["tests"]]
@@ -127,6 +142,38 @@ def run_checks(config, artifact, package, sources, work, allow_generated=False):
         except (ValueError, OSError) as exc:
             results.append({"name": test.get("name", f"check-{index + 1}") if isinstance(test, dict) else "invalid-check",
                             "status": "fail", "required": True, "origin": origin, "findings": [redact(exc)]})
+    main = Path(package) / "SKILL.md"
+    if main.exists():
+        blocks = re.findall(r"```python\s*\n(.*?)```", main.read_text(encoding="utf-8"), re.S)
+        executed = [(t, origin) for t, origin in tests if any(
+            r.get("name") == t.get("name") and r.get("origin") == origin and r["status"] == "pass"
+            for r in results)]
+        covered = []
+        for block in blocks:
+            covered.append(any(("-c" in t["argv"] and covers_example(block, t["argv"][t["argv"].index("-c") + 1]))
+                               or (any(v.endswith("verify_python_example.py") for v in t["argv"]) and "{package}" in t["argv"])
+                               for t, origin in executed))
+        if not all(covered):
+            report = {"name": "primary_example_execution", "status": "not_run", "required": True,
+                      "origin": "host_example", "evidence_kind": "execution_only_not_result_oracle",
+                      "findings": ["Delivered Python examples require --execute-generated-checks"]}
+            if allow_generated:
+                try:
+                    remaining = config.get("_deadline", float("inf")) - time.monotonic()
+                    if remaining <= 0:
+                        raise ValueError("Build time budget exhausted before example execution")
+                    runner = Path(__file__).resolve().parent.parent / "examples" / "verify_python_example.py"
+                    test = {"name": "primary_example_execution",
+                            "argv": ["{python}", str(runner), "{package}", "--completion-marker"],
+                            "cwd": tests[0][0].get("cwd", "{run}") if tests else "{run}",
+                            "stdout_contains": ["skill-example-completed"]}
+                    report = execute(test, package, sources, Path(work) / "delivered-examples",
+                                     min(config["limits"]["check_timeout"], remaining),
+                                     config["environment"].get("allow", []))
+                    report.update(origin="host_example", evidence_kind="execution_only_not_result_oracle")
+                except (ValueError, OSError) as exc:
+                    report.update(status="fail", findings=[redact(exc)])
+            results.append(report)
     if not tests:
         results.append({"name": "minimal_execution", "status": "not_run", "required": True,
                         "findings": ["No minimal result-checking execution test was provided"]})

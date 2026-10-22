@@ -1,9 +1,5 @@
 # Documentation
 
-- [Usage](pipeline/usage.md): setup, supported sources, commands, models and execution policy.
-- [Architecture](pipeline/design.md): discovery, plans, shared tools and output records.
-- [Minimum skill content](skills/minimum.md): required information, without fixed headings.
-- [Packaging guide](skills/packaging.md): capability boundaries and file organization.
-- [Validation report](pipeline/acceptance.md): actual checks, samples and known limits.
+Start with [usage](pipeline/usage.md) to run the pipeline, then [configuration](pipeline/configuration.md) for fields. Read [design](pipeline/design.md) to understand stages and [outputs](pipeline/outputs.md) to interpret results. [Status](pipeline/status.md) distinguishes implementation from verification.
 
-These documents describe the current project. Build records describe individual outputs; engineering checks do not establish Agent effectiveness.
+Skill content is governed by [minimum](skills/minimum.md) and [packaging](skills/packaging.md). Development planning and detailed trial history are maintained outside user documentation.

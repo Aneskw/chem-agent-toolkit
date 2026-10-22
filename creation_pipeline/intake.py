@@ -57,6 +57,7 @@ class Sources:
             raise BlockedError("Missing source or linked path: " + sid)
         original = str(root)
         files, capped = [], False
+        omitted = []
         if root.is_file():
             if not permitted(Path(root.name)):
                 raise ValueError("Unsupported source file type")
@@ -69,6 +70,8 @@ class Sources:
                 for name in sorted(filenames):
                     file = Path(directory) / name
                     relative = file.relative_to(root)
+                    if not permitted(relative) and len(omitted) < 100:
+                        omitted.append({"path": relative.as_posix(), "reason": "unsupported/excluded format"})
                     if permitted(relative) and not has_link(file):
                         if file.stat().st_size > self.limits["source_bytes"]:
                             self.errors.append({"source": sid, "path": relative.as_posix(), "error": "File exceeds source_bytes; omitted"})
@@ -117,7 +120,7 @@ class Sources:
                 raise ValueError("Source changed during snapshot copy")
         entry.update(path=str(snapshot / root.name if root.is_file() else snapshot),
                      original_path=original, files=files, inventory=inventory,
-                     snapshot_id=key, index_truncated=capped)
+                     snapshot_id=key, index_truncated=capped, omitted_preview=omitted)
         self.entries[sid] = entry
         return {"source": sid, "index": self.index()[-1]}
 
@@ -163,6 +166,11 @@ class Sources:
         return redact(read_text(path, self.limits["source_bytes"])), digest(data)
 
     def request(self, action):
+        if action["action"] == "read_many":
+            requests = json.loads(action.get("query", "[]"))
+            if not isinstance(requests, list) or not 1 <= len(requests) <= 6 or any(not isinstance(r, dict) for r in requests):
+                raise ValueError("read_many needs 1..6 read objects")
+            return {"reads": [self.request({**r, "action": "read"}) for r in requests]}
         if action["action"] in ("fetch", "repository", "resolve"):
             key = {"fetch": "url", "repository": "repo", "resolve": "paper"}[action["action"]]
             item = {"id": action.get("source"), key: action.get("query", "")}
@@ -182,6 +190,29 @@ class Sources:
             files = [p.name + ("/" if p.is_dir() else "") for p in sorted(directory.iterdir())
                      if not has_link(p) and not any(part.startswith(".") or part in EXCLUDED for part in p.relative_to(root).parts)]
             return {"items": files[start - 1:start - 1 + limit], "total": len(files)}
+        if action["action"] == "search" and (not name or Path(self.entries[sid]["path"], name).is_dir()):
+            entry = self.entries[sid]
+            query = action.get("query", "").lower()
+            if not query:
+                raise ValueError("Search needs a nonempty query")
+            matches = []
+            prefix = name.rstrip("/") + "/" if name else ""
+            for file in entry["files"]:
+                if not file.startswith(prefix):
+                    continue
+                try:
+                    text, sha = self._text(self._file(sid, file))
+                except (ValueError, UnicodeError, OSError):
+                    continue
+                for number, line in enumerate(text.splitlines(), 1):
+                    if query in line.lower():
+                        matches.append({"path": file, "line": number, "text": line[:300]})
+                        if len(matches) >= 500:
+                            break
+                if len(matches) >= 500:
+                    break
+            return {"matches": matches[start-1:start-1+limit], "capped": len(matches) >= 500,
+                    "note": "Search locates files; read actual passages before citing"}
         path = self._file(sid, name)
         text, sha = self._text(path)
         lines = text.splitlines()
@@ -215,7 +246,7 @@ class Sources:
         for item in evidence:
             if (not isinstance(item, dict) or item.get("id") not in known or not item.get("claim")
                     or not known[item["id"]]["excerpt"].strip()):
-                raise ValueError("Evidence must cite an actual read ID and describe the supported claim")
+                raise ValueError("Invalid evidence reference " + repr(item) + "; use actual nonempty read IDs: " + ",".join(known))
         return [dict(known[item["id"]], claim=item["claim"]) for item in evidence]
 
     def compact_evidence(self):

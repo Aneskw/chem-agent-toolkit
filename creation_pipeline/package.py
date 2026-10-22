@@ -121,13 +121,21 @@ def verify_bundle(output):
 
 def install_bundle(output, destination):
     summary, bundle = verify_bundle(output)
-    if summary["status"] != "ready":
-        raise ValueError("Only fully ready bundles may be installed; select/rebuild ready candidates for partial batches")
+    ready = [e for e in summary["entities"] if e["status"] == "ready" and e["kind"] == "skill"]
+    if not ready:
+        raise ValueError("No ready skills to install")
     target = Path(destination).absolute() / summary["build_id"]
     if target.exists() or has_link(target):
         raise ValueError("Installation destination exists or contains a linked path")
     target.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(bundle, target)
-    if manifest(target) != manifest(bundle):
-        raise ValueError("Installed bundle differs from validated bundle")
+    target.mkdir(parents=True)
+    try:
+        for entity in ready:
+            relative = "skills/" + entity["name"]
+            shutil.copytree(safe_relative(bundle, relative), safe_relative(target, relative))
+            if manifest(safe_relative(target, relative)) != manifest(safe_relative(bundle, relative)):
+                raise ValueError("Installed files differ")
+    except Exception:
+        shutil.rmtree(target)
+        raise
     return {"installed": str(target), "skills": str(target / "skills"), "build_id": summary["build_id"]}

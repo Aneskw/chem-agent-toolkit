@@ -29,7 +29,7 @@ def load_config(path):
     if not isinstance(config, dict):
         raise ValueError("Configuration must be an object")
     allowed = {"task", "sources", "model", "limits", "checks", "environment", "intent", "notes", "http_only",
-               "prompt", "constraints", "network", "execute_generated_checks"}
+               "prompt", "constraints", "network", "execute_generated_checks", "batch", "adoption"}
     unknown = set(config) - allowed
     if unknown:
         raise ValueError(f"Unknown configuration fields: {sorted(unknown)}")
@@ -45,6 +45,20 @@ def load_config(path):
     config.setdefault("execute_generated_checks", False)
     if any(type(config[k]) is not bool for k in ("network", "execute_generated_checks")):
         raise ValueError("network and execute_generated_checks must be booleans")
+    for key, defaults in (("batch", {"label": "skills", "tags": []}), ("adoption", {"enabled": True})):
+        config.setdefault(key, defaults.copy())
+        if not isinstance(config[key], dict) or set(config[key]) - set(defaults):
+            raise ValueError("Unsupported " + key + " configuration")
+        for field, value in defaults.items():
+            config[key].setdefault(field, value)
+    from .library import slug
+    if not isinstance(config["batch"]["label"], str):
+        raise ValueError("batch.label must be text")
+    slug(config["batch"]["label"])
+    if not isinstance(config["batch"]["tags"], list) or any(not isinstance(t, str) or not t or "|" in t or "\n" in t for t in config["batch"]["tags"]):
+        raise ValueError("batch.tags must be simple text labels")
+    if type(config["adoption"]["enabled"]) is not bool:
+        raise ValueError("adoption.enabled must be boolean")
     sources = config.get("sources")
     if not isinstance(sources, list) or not sources:
         raise ValueError("At least one source is required")
@@ -90,6 +104,7 @@ def load_config(path):
               "source_total_bytes": 30_000_000, "network_requests": 12, "network_timeout": 60,
               "max_candidates": 8, "max_builds": 4, "candidate_calls": 10}
     limits["view_chars"] = 12000
+    limits["context_chars"] = 160000
     overrides = config.get("limits", {})
     if not isinstance(overrides, dict) or set(overrides) - set(limits):
         raise ValueError("Unknown limit setting")

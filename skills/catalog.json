@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "skills": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "path": "2026-10-22-molecular-fragmentation/rdkit-recap-terminal-fragments",
+      "batch": "2026-10-22-molecular-fragmentation",
+      "tags": [
+        "molecular-fragmentation"
+      ],
+      "build_id": "20261022T235548-09672526",
+      "scope": "Call RecapDecompose on an RDKit molecule, then use GetLeaves() for terminal nodes. An empty dictionary means the returned hierarchy has no terminal child nodes; the source’s embedded tests show this can occur for tested molecules.",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "1604364d587e500a4a4d49d78a8d05bb8d7dd8b36ce5ea1a302b5b23957cafbe",
+          "bytes": 1901
+        }
+      ],
+      "checks": [
+        {
+          "name": "structure",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "runtime_paths",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "minimum_author_attestation",
+          "status": "pass",
+          "evidence_kind": "author_attestation_not_semantic_proof"
+        },
+        {
+          "name": "Documented example yields three leaves and a leaf molecule",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "Molecule with no decomposition has empty leaves",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "content_review",
+          "status": "pass",
+          "evidence_kind": "model_review_not_independent_scientific_validation"
+        },
+        {
+          "name": "Documented example yields three leaves and a leaf molecule",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "Molecule with no decomposition has empty leaves",
+          "status": "pass",
+          "evidence_kind": null
+        }
+      ],
+      "issues": [],
+      "agent_efficacy": "not_evaluated",
+      "sources": [
+        {
+          "id": "recap",
+          "snapshot_id": "a1996f49d039b4da6a5681b22926f959d02a0038bc4f040e9eee16b8b098c5ca"
+        }
+      ]
+    },
+    {
+      "name": "chembl-structure-checker",
+      "path": "2026-10-23-structure-curation/chembl-structure-checker",
+      "batch": "2026-10-23-structure-curation",
+      "tags": [
+        "structure-curation"
+      ],
+      "build_id": "20261023T004748-3c824288",
+      "scope": "One molblock supplied as text; reports upstream Checker findings without correcting the structure or deciding whether it should be accepted.",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "ca6c5c0a916fd43e4aa0b0af46db0e66ac2b9a2964b4af82d8850269bfc3fee3",
+          "bytes": 1878
+        }
+      ],
+      "checks": [
+        {
+          "name": "structure",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "runtime_paths",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "minimum_author_attestation",
+          "status": "pass",
+          "evidence_kind": "author_attestation_not_semantic_proof"
+        },
+        {
+          "name": "README stereo finding and clean result",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "primary_example_execution",
+          "status": "pass",
+          "evidence_kind": "execution_only_not_result_oracle"
+        },
+        {
+          "name": "content_review",
+          "status": "pass",
+          "evidence_kind": "model_review_not_independent_scientific_validation"
+        },
+        {
+          "name": "README stereo finding and clean result",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "primary_example_execution",
+          "status": "pass",
+          "evidence_kind": "execution_only_not_result_oracle"
+        }
+      ],
+      "issues": [
+        {
+          "id": "dependency-availability",
+          "description": "The previous attempt could not import the package because the isolated check directory did not contain it. The package is expected at the supplied source snapshot for the revised check; RDKit must also be available to execute it.",
+          "blocking": false,
+          "resolution": "Revised the check cwd to the pinned source directory so Python can import the supplied package. The declared runtime prerequisites remain documented."
+        }
+      ],
+      "agent_efficacy": "not_evaluated",
+      "sources": [
+        {
+          "id": "paper",
+          "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC7458899/fullTextXML",
+          "snapshot_id": "18346905cdf64db2a646eb040f4107227feb1e4e8c3b9718bb59126ebf7f612d"
+        },
+        {
+          "id": "code",
+          "repo": "https://github.com/chembl/ChEMBL_Structure_Pipeline.git",
+          "resolved_ref": "d252cd22d67674da4fa607b761c5b5a144cfdf07",
+          "snapshot_id": "650ff86c5d3decc44afdd70bd6c3081ae29361e955cad03c2079bbfacb3a36a8"
+        }
+      ]
+    }
+  ]
+}

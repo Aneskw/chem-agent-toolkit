@@ -21,23 +21,11 @@ def ordered(plan):
     by_name = {e["name"]: e for e in entities}
     if len(by_name) != len(entities):
         raise ValueError("Duplicate candidate names")
-    result, visiting, visited = [], set(), set()
-    def visit(name):
-        if name in visiting:
-            raise ValueError("Cyclic shared tool dependency")
-        if name in visited:
-            return
-        visiting.add(name)
-        for need in by_name[name]["needs"]:
-            if need not in by_name or by_name[need]["kind"] != "tool":
-                raise ValueError("Unresolved shared tool dependency: " + need)
-            visit(need)
-        visiting.remove(name)
-        visited.add(name)
-        result.append(by_name[name])
-    for entity in sorted(entities, key=lambda e: (e["priority"], e["name"])):
-        visit(entity["name"])
-    return result
+    for entity in entities:
+        if entity.get("kind", "skill") != "skill" or entity.get("needs"):
+            raise ValueError("Independent tools/shared dependencies are unsupported; rediscover as skills with local scripts")
+    return sorted(entities, key=lambda e: (e["priority"], e["name"]))
+
 
 
 def validate_discovery(plan, config, sources):
@@ -55,7 +43,7 @@ def validate_discovery(plan, config, sources):
             validate_plan(entity, require_build=bool(entity.get("selected")))
         except ValueError as exc:
             raise ValueError(f"Candidate {entity.get('name', '<unnamed>')}: {exc}") from exc
-        if entity.get("kind") not in ("tool", "skill") or entity.get("implementation") not in ("upstream", "adapter", "composition"):
+        if entity.get("kind") not in ("skill",) or entity.get("implementation") not in ("upstream", "adapter", "composition"):
             raise ValueError("Invalid candidate kind/implementation")
         for key in ("rationale", "upstream_behavior"):
             if not isinstance(entity.get(key), str) or not entity[key].strip():
@@ -63,7 +51,7 @@ def validate_discovery(plan, config, sources):
         if type(entity.get("selected")) is not bool or type(entity.get("priority")) is not int:
             raise ValueError("Candidate needs boolean selected and integer priority")
         if not isinstance(entity.get("needs"), list) or any(not isinstance(v, str) for v in entity["needs"]):
-            raise ValueError("Candidate needs shared tool names")
+            raise ValueError("Candidate needs must be an empty array; shared tools are unsupported")
         if config["intent"] != "auto" and entity["intent"] != config["intent"]:
             raise ValueError("Candidate conflicts with explicit packaging intent")
         sources.validate_evidence(entity["evidence"])
@@ -71,6 +59,14 @@ def validate_discovery(plan, config, sources):
             raise ValueError("Extension must identify added behavior")
         if entity["selected"] and entity["kind"] == "skill" and entity["readiness"] != "blocked" and not any(f.get("path") == "SKILL.md" for f in entity["files"]):
             raise ValueError("Skill plan needs SKILL.md")
+    for entity in plan["candidates"]:
+        if entity["intent"] == "extension" and not entity.get("method_evidence"):
+            raise ValueError("Extension needs source-backed method_evidence")
+        if entity.get("method_evidence"):
+            sources.validate_evidence(entity["method_evidence"])
+    for fact in plan.get("handoff", []):
+        sources.validate_evidence([{ "id": identifier.strip(), "claim": fact["fact"]}
+                                  for identifier in (__import__("re").split(r"[,;]", fact["evidence"]) if isinstance(fact["evidence"], str) else fact["evidence"])])
     ordered(plan)
     return plan
 
@@ -92,6 +88,9 @@ def analyze(session, config):
     for attempt in range(config["limits"]["repair_rounds"] + 1):
         plan = session.stage(instructions, context, schema=DISCOVERY)
         try:
+            if not plan.get("candidates") and not plan.get("omitted"):
+                if any(w in str(plan.get("summary", "")).lower() for w in ("awaiting", "requested", "pending")):
+                    raise ValueError("Analysis is incomplete: read results already available in read_evidence. Request more reads if needed, then finish selection; do not complete while awaiting reads.")
             return validate_discovery(plan, config, session.sources)
         except ValueError as exc:
             if attempt == config["limits"]["repair_rounds"]:
