@@ -1,0 +1,7 @@
+# Host-side validation; the portable runner uses only Python's standard library.
+jsonschema>=4.18,<5
+PyYAML>=6,<7
+# Optional XLSX ingestion is included in the source distribution.
+openpyxl>=3.1,<4
+# PDF source pairing and the complete regression suite.
+pypdf>=6.21,<7

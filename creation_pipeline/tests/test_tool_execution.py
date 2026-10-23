@@ -56,7 +56,7 @@ class ToolExecutionTests(unittest.TestCase):
             ]}))
             (here/'results').mkdir()
             (here/'results'/'sample.json').write_text(json.dumps({'status':'method_drafts_created','paper_id':'paper'}))
-            with patch.object(publish_run,'HERE',here),patch.object(publish_run,'ROOT',root),patch('sys.argv',['publish_run.py','--run-id','sample']):
+            with patch.object(publish_run,'HERE',here),patch.object(publish_run,'ROOT',root),patch('sys.argv',['publish_run.py','--success-policy','archive','--run-id','sample']):
                 self.assertEqual(publish_run.main(),0)
             manifest=json.loads((root/'skills'/'generated'/'sample'/'PUBLISHING.json').read_text())
             self.assertTrue(manifest['execution_validated'])
@@ -73,7 +73,7 @@ class ToolExecutionTests(unittest.TestCase):
             (job/'bundle.json').write_text(json.dumps({'source_type':'paper','title':'A retrosynthesis model'}))
             (here/'results').mkdir()
             (here/'results'/'sample.json').write_text(json.dumps({'status':'method_drafts_created','paper_id':'paper'}))
-            with patch.object(publish_run,'HERE',here),patch.object(publish_run,'ROOT',root),patch('sys.argv',['publish_run.py','--run-id','sample']):
+            with patch.object(publish_run,'HERE',here),patch.object(publish_run,'ROOT',root),patch('sys.argv',['publish_run.py','--success-policy','archive','--run-id','sample']):
                 self.assertEqual(publish_run.main(),0)
             routed=root/'models-skills'/'open-models'/'graph-model-inference'/'SKILL.md'
             self.assertTrue(routed.is_file())

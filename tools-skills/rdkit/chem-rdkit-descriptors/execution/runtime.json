@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "platform": "linux/amd64",
+  "entrypoint": ["python", "/opt/skill/scripts/calc_descriptors.py"],
+  "script": "scripts/calc_descriptors.py",
+  "fixtures": "execution/fixtures.json",
+  "files": ["Dockerfile", "requirements.txt", "scripts/calc_descriptors.py", "execution/fixtures.json"]
+}

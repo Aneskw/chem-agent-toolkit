@@ -58,12 +58,13 @@ locally authenticated Codex CLI. The
 the complete source text, and generated skills on paired held-out decisions.
 Its `plan` command validates the design without making model calls.
 
-两版创建流程都保留在 `main`：
+当前模型驱动容器化入口统一为 [creation_pipeline/run_pipeline.py](creation_pipeline/README.md)，最终源码交付见 `deliverables/`。创建、归档及严格执行验收分别报告。
 
-- [默认版](creation_pipeline/README.md)：操作契约、引用校验、去重和三臂评测；入口为 `python3 creation_pipeline/run_pipeline.py`。
-- [资源恢复版](creation_pipeline_resource_v2/README.md)：从开发分支 `861cad1` 保存，额外检查数据直链、推理/预处理源码和 checkpoint 的获取合同；入口为 `python3 creation_pipeline_resource_v2/run_pipeline.py`。它是独立版本，不会覆盖默认版。
+`source-2026.10.23-r3.1` 默认按实际需求验收：纯文本候选有依据地免 Docker，工具候选自动构建并验证；缺绑定或需求不明阻塞。仅生成草稿须显式 `--draft-only`。详见 [交付指南](creation_pipeline/DELIVERY.md)。
 
-两版的运行目录和格式契约相互独立。资源恢复版的静态检查通过不代表下载或模型推理已实际执行，更不代表 Skill 提升了 agent 表现。
+Git 保存源码、测试、配置示例及[验收摘要](reports/DELIVERY-ACCEPTANCE.md)。本地 `deliverables/`、`validation/` 和运行日志不纳入版本控制；交付 ZIP 与详细证据应作为单独发布附件上传，源码仓库克隆后不自带这些附件。
+
+`creation_pipeline_resource_v2/` 是另一个资源恢复研究模块，保留其独立功能，不属于本次容器化交付入口。其静态检查不代表下载、推理或 agent 效果已经验证。
 
 Paper snapshots, repository evidence, run logs, and format notes are kept in the project archive. Each skill's `reference` section points to a pinned source. A verified status means only that the stated execution checks passed.
 

@@ -23,8 +23,17 @@ def main() -> int:
     parser.add_argument("--target-candidates", type=int, default=20)
     parser.add_argument("--rounds", type=int, default=1)
     parser.add_argument("--push", action="store_true")
+    parser.add_argument("--runtime-mode", choices=("auto", "off", "docker"), default="auto")
+    parser.add_argument('--draft-only',action='store_true')
+    parser.add_argument("--tool-bindings", type=Path)
+    parser.add_argument('--success-policy',choices=('delivery','creation','execution','draft'),default='delivery')
+    parser.add_argument('--case-seconds',type=int)
+    parser.add_argument('--round-seconds',type=int)
     parser.add_argument("--skip-acquire", action="store_true")
     args = parser.parse_args()
+    from delivery import cli_mode
+    if args.success_policy == 'draft': args.draft_only = True
+    cli_mode(args, parser)
     prefix = f"public-{datetime.now():%Y%m%d-%H%M%S}"
     manifest = HERE / 'acquired_manifest.json'
     if args.table:
@@ -59,6 +68,12 @@ def main() -> int:
            "--model", args.model,
            "--rounds", str(args.rounds), "--target-candidates", str(args.target_candidates),
            "--prefix", prefix]
+    cmd += ["--runtime-mode", args.runtime_mode]
+    cmd += ['--success-policy',args.success_policy]
+    if args.case_seconds is not None:cmd+=['--case-seconds',str(args.case_seconds)]
+    if args.round_seconds is not None:cmd+=['--round-seconds',str(args.round_seconds)]
+    if args.tool_bindings:
+        cmd += ["--tool-bindings", str(args.tool_bindings.resolve())]
     if args.max_jobs is not None:cmd += ['--max-jobs',str(args.max_jobs)]
     if args.push:
         cmd.append("--push")

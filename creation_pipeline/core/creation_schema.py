@@ -76,6 +76,12 @@ SCHEMA = obj({
     "no_skill_reason": {"type": "string", "maxLength": 3000},
 })
 
+# Optional for saved responses; absence is UNKNOWN, never an implicit exemption.
+CANDIDATE['properties']['tool_requirement'] = obj({
+    'status': {'type': 'string', 'enum': ['required', 'not_required', 'unknown']},
+    'reason': CLAIM,
+})
+
 
 def normalize_response(response):
     """Upgrade saved v1/v2 responses so deterministic replays keep working."""
@@ -122,6 +128,8 @@ def candidate_claims(candidate):
         yield point["if_false"]
     for requirement in candidate.get("requirements", []):
         yield requirement["reason"]
+    if candidate.get('tool_requirement'):
+        yield candidate['tool_requirement']['reason']
 
 
 def procedure_claims(candidate):

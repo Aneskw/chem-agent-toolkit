@@ -1,0 +1,48 @@
+{
+  "schema_version": 3,
+  "planner": {
+    "model": "gpt-6.1-sol",
+    "max_attempts": 3,
+    "total_seconds": 1500,
+    "model_timeout": 300,
+    "context_chars": 60000,
+    "max_read_rounds": 4,
+    "validation_reserve_seconds": 400,
+    "repair_reserve_seconds": 150,
+    "build_seconds": 600,
+    "test_seconds": 120,
+    "document_seconds": 180,
+    "pin_base_image": true,
+    "registry_seconds": 120,
+    "memory": "2g",
+    "cpus": "2",
+    "pids": 128
+  },
+  "tools": {
+    "rdkit-descriptors": {
+      "root": "../../tools-skills/rdkit/chem-rdkit-descriptors",
+      "generation": {
+        "constraints": [
+          "Validate the documented CLI operation only. Preserve source and existing fixtures. Establish source-grounded current acceptance contracts before execution; do not invent numerical scientific oracles. Keep this smoke validation small."
+        ]
+      }
+    }
+  },
+  "bindings": [
+    {
+      "selector": {
+        "job_id": "rdkit-example",
+        "source_ids_any": [
+          "s1",
+          "s2",
+          "s3",
+          "s4"
+        ]
+      },
+      "requirement": "required",
+      "tools": [
+        "rdkit-descriptors"
+      ]
+    }
+  ]
+}

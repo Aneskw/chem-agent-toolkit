@@ -7,11 +7,13 @@ import json
 import shutil
 import subprocess
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 from decision_library import build_library
 
 HERE = Path(__file__).resolve().parent
+RUN_DEADLINE=None
 
 
 class MissingPaperText(Exception):
@@ -19,10 +21,21 @@ class MissingPaperText(Exception):
 
 
 def call(*args: str) -> None:
-    subprocess.run([sys.executable, *args], check=True)
+    if RUN_DEADLINE is None:
+        result = subprocess.run([sys.executable, *args], text=True, capture_output=True, encoding='utf-8', errors='replace')
+        if result.stdout: print(result.stdout, end='')
+        if result.returncode: raise subprocess.CalledProcessError(result.returncode, args, output=result.stdout, stderr=result.stderr)
+    else:
+        from runtime_package import process
+        remaining=RUN_DEADLINE-time.monotonic()
+        if remaining<=0:raise subprocess.TimeoutExpired(args,0)
+        result=process([sys.executable,*args],timeout=remaining,supervise=True)
+        if result['stdout']:print(result['stdout'],end='')
+        if result['exit_code']:raise subprocess.CalledProcessError(result['exit_code'],args,output=result['stdout'],stderr=result['stderr'])
 
 
 def main() -> int:
+    started=time.monotonic()
     p = argparse.ArgumentParser()
     p.add_argument("--paper-id", help="ID from the literature catalog, or job ID in --config")
     p.add_argument("--config", type=Path, help="Local source manifest; accepts paper, database, tool or model documentation")
@@ -33,7 +46,21 @@ def main() -> int:
     p.add_argument("--allow-repo-only", action="store_true", help="Create repository hints, never paper-derived skill drafts")
     p.add_argument("--draft-eval-tasks", action="store_true",
                    help="also propose two positive and two negative decision-task drafts per method skill; human review still required")
+    p.add_argument("--runtime-mode", choices=("auto", "off", "docker"), default="auto", help='Deprecated: default auto follows each candidate requirement')
+    p.add_argument('--draft-only', action='store_true', help='Generate source-checked drafts; never claim delivery or execution acceptance')
+    p.add_argument("--tool-bindings", type=Path)
+    p.add_argument('--publish-local',action='store_true',help='Archive candidates locally after extraction and optional Docker acceptance; never pushes')
+    p.add_argument('--success-policy',choices=('delivery','creation','execution','draft'),default='delivery')
+    p.add_argument('--total-seconds',type=int,help='Bound the complete invocation including extraction, Docker and local archive')
+    p.add_argument('--extraction-timeout',type=int,default=900,help='Per model call timeout during extraction/review')
     args = p.parse_args()
+    global RUN_DEADLINE
+    if args.total_seconds is not None and args.total_seconds<1:p.error('total-seconds must be positive')
+    if args.extraction_timeout<1:p.error('extraction-timeout must be positive')
+    RUN_DEADLINE=time.monotonic()+args.total_seconds if args.total_seconds else None
+    from delivery import cli_mode
+    if args.success_policy == 'draft': args.draft_only = True
+    cli_mode(args, p)
     if args.config:
         config = args.config.resolve()
         settings = json.loads(config.read_text(encoding="utf-8"))
@@ -51,6 +78,8 @@ def main() -> int:
     if run.exists():
         p.error(f"run already exists: {run}")
     status = {"run_id": run_id, "paper_id": args.paper_id, "stage": "started", "status": "running"}
+    status.update(runtime_mode=args.runtime_mode, runtime_status="not_run", agent_effect_status="not_evaluated")
+    if args.tool_bindings:status['tool_bindings']=str(args.tool_bindings.resolve())
     try:
         if not args.skip_collect and not args.config:
             call(str(HERE / "collect.py"), "--paper-id", args.paper_id)
@@ -80,7 +109,7 @@ def main() -> int:
             status["model_origin"] = "saved_response_replay"
         else:
             call(str(HERE / "codex_extract.py"), "--run", str(run),
-                 "--paper-id", args.paper_id, "--model", args.model)
+                 "--paper-id", args.paper_id, "--model", args.model,'--timeout',str(args.extraction_timeout))
             status["model_origin"] = "codex_cli"
         status["stage"] = "model_response_received"
         repaired_dir = run / "checked_responses"
@@ -94,6 +123,7 @@ def main() -> int:
         job = extraction["jobs"][0]
         if job["status"] not in {"candidates_validated", "no_supported_skill"}:
             raise ValueError(job.get("error", "citation audit failed"))
+        status.update(extraction_succeeded=True,extraction_status=job['status'],candidate_count=job.get('candidate_count',0))
         contract_file = run / "import_results" / args.paper_id / "operational-contract.json"
         response_data = json.loads(contract_file.read_text(encoding="utf-8"))
         kind_counts = {kind: sum(item["kind"] == kind for item in response_data["candidates"])
@@ -111,6 +141,10 @@ def main() -> int:
                  "--paper-id", args.paper_id, "--out", str(drafts))
             for folder in drafts.iterdir():
                 call(str(HERE / "validate_skill_format.py"), str(folder))
+            from delivery import stage
+            status.update(stage(drafts,args.paper_id,args.tool_bindings,
+                deadline=RUN_DEADLINE-(30 if args.publish_local else 0) if RUN_DEADLINE else None,
+                draft_only=args.draft_only))
             if args.draft_eval_tasks:
                 task_drafts = run / "evaluation_task_drafts"
                 task_drafts.mkdir()
@@ -130,6 +164,7 @@ def main() -> int:
             outcome = "method_drafts_created"
         else:
             outcome = "atomic_resource_hints_only"
+        status["extraction_status"] = outcome
         status.update({"stage": "drafts_rendered" if job["status"] == "candidates_validated" else "no_supported_skill",
                        "status": outcome, "candidate_kinds": kind_counts,
                        "candidate_count": job.get("candidate_count", 0),
@@ -141,8 +176,22 @@ def main() -> int:
                        "run_dir": str(run.relative_to(HERE.parent))})
     except MissingPaperText as exc:
         status.update(status="primary_text_missing", error=str(exc))
-    except (OSError, ValueError, subprocess.CalledProcessError) as exc:
+    except (OSError, ValueError, subprocess.CalledProcessError,subprocess.TimeoutExpired) as exc:
         status.update(status="failed", error=f"{type(exc).__name__}: {exc}")
+        if isinstance(exc,subprocess.CalledProcessError):
+            status['failure_details']={'command':exc.cmd,'exit_code':exc.returncode,
+                'stdout_tail':(exc.output or '')[-2000:],'stderr_tail':(exc.stderr or '')[-2000:]}
+        elif isinstance(exc,subprocess.TimeoutExpired):
+            status['failure_details']={'command':exc.cmd,'timeout_seconds':exc.timeout,
+                'scope':getattr(exc,'scope',None),'cleanup':getattr(exc,'cleanup',[])}
+    from workflow_state import CREATED
+    from strict_acceptance import evaluate, record_passes, candidates, publication_completed
+    status.update(success_policy=args.success_policy,extraction_succeeded=status.get('extraction_succeeded',False) or status['status'] in CREATED|{'no_supported_skill'},
+                  archive_status='not_requested',execution_passed_candidates=sum(s=='execution_passed' for s in status.get('runtime_checks',{}).values()))
+    status.update(evaluate(candidates(run / 'drafts-v03'), status.get('candidate_count', 0)))
+    from delivery import evaluate as delivery_evaluate
+    status.update(delivery_evaluate(candidates(run/'drafts-v03'),status.get('candidate_count',0),
+                                   'draft' if args.draft_only else 'delivery'))
     run.mkdir(parents=True, exist_ok=True)
     (run / "pipeline_status.json").write_text(
         json.dumps(status, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
@@ -152,9 +201,32 @@ def main() -> int:
     (results / f"{run_id}.json").write_text(
         json.dumps(status, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    print(json.dumps(status, ensure_ascii=False))
-    return 0 if status["status"] in {"method_drafts_created", "atomic_resource_hints_only",
-                                      "repo_only_hints_created", "no_supported_skill"} else 1
+    if args.publish_local and status['status'] in CREATED:
+        try:
+            call(str(HERE/'publish_run.py'),'--run-id',run_id,'--success-policy',
+                 'archive' if args.draft_only else args.success_policy)
+            publication=json.loads((HERE.parent/'skills/generated'/run_id/'PUBLISHING.json').read_text(encoding='utf-8'))
+            status.update(archive_status='completed',publication_manifest=str(HERE.parent/'skills/generated'/run_id/'PUBLISHING.json'),
+                          execution_passed_candidates=publication['execution_passed_candidates'])
+        except subprocess.CalledProcessError as exc:
+            if exc.returncode == 2 and publication_completed(exc.output):
+                status.update(archive_status='completed', current_acceptance_validated=False, acceptance_error=str(exc))
+            else:
+                status.update(archive_status='failed',archive_error=str(exc))
+        except (OSError,subprocess.TimeoutExpired) as exc:
+            status.update(archive_status='failed',archive_error=str(exc))
+    exit_code=(1 if not status['extraction_succeeded'] or status['archive_status']=='failed' else
+               2 if args.success_policy in {'delivery','execution'} and not status['delivery_accepted'] else
+               2 if args.success_policy=='execution' and (not status.get('candidate_count') or status['execution_passed_candidates']!=status['candidate_count']
+                                                         or not record_passes(status)) else 0)
+    if status['archive_status']=='failed' or not status['extraction_succeeded']:
+        status.update(delivery_accepted=False, delivery_status='blocked')
+    status['exit_code']=exit_code
+    status['elapsed_seconds']=round(time.monotonic()-started,3)
+    for path in [run/'pipeline_status.json',results/f'{run_id}.json']:
+        path.write_text(json.dumps(status,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    print(json.dumps(status, ensure_ascii=True))
+    return exit_code
 
 
 if __name__ == "__main__":
