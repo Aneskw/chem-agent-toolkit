@@ -1,0 +1,17 @@
+{
+  "base": ".",
+  "jobs": [
+    {
+      "paper_id": "text-review",
+      "title": "Text-only review scope",
+      "source_type": "tool",
+      "sources": [
+        {
+          "path": "text-review.txt",
+          "role": "tool_doc",
+          "sha256": "bbfad4eface19ec1ad39519f2b96733192f69d81911a00c2eb138ac7747c6914"
+        }
+      ]
+    }
+  ]
+}

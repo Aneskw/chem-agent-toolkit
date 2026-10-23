@@ -84,6 +84,10 @@ def main() -> int:
         path = args.out / candidate["name"]
         path.mkdir(exist_ok=False)
         (path / "SKILL.md").write_text(render(candidate, bundle, check), encoding="utf-8")
+        from candidate_identity import identity, write
+        write(path/'candidate.json',identity(candidate,bundle,args.paper_id))
+        from delivery import seal_content
+        seal_content(path, candidate, bundle)
     print(json.dumps({"paper_id": args.paper_id, "drafts": len(response["candidates"]), "out": str(args.out)}))
     return 0
 
