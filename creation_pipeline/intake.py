@@ -8,20 +8,33 @@ import shutil
 import urllib.request
 from pathlib import Path
 
-from .models import BlockedError
+from .models import BlockedError, exceeded
 from .acquisition import Acquisition
 from .documents import read_text
-from .records import digest, has_link, redact, safe_relative
+from .records import digest, has_link, redact, safe_relative, file_digest
 
 
-EXCLUDED = {".git", ".pipeline", ".venv", "venv", "node_modules", "__pycache__", ".aws", ".ssh", ".codex"}
-SUFFIXES = {".md", ".txt", ".rst", ".py", ".toml", ".json", ".yaml", ".yml", ".csv", ".smi", ".jsonl", ".sh", ".pdf", ".html", ".xml", ".ini", ".cfg", ".ts", ".js", ".cpp", ".h", ".htm", ".docx", ".ipynb", ".tsv", ".sql", ".sqlite", ".sqlite3", ".db", ".xyz", ".mol", ".sdf", ".pdb", ".smarts"}
+EXCLUDED = {".git", ".pipeline", ".venv", "venv", "node_modules", "__pycache__",
+            ".pytest_cache", ".mypy_cache", ".ruff_cache", ".aws", ".ssh"}
+SUFFIXES = set()  # No extension allowlist: parsing support is separate from retention.
+
+
+def exclusion(path):
+    path = Path(path)
+    if any(part in EXCLUDED for part in path.parts):
+        return "internal metadata, installed environment, cache or credential store"
+    name = path.name.lower()
+    if name in {".ds_store", "thumbs.db"} or name.startswith("~$") or name.endswith((".swp", ".swo")):
+        return "system/editor temporary file"
+    if name in {".env", "id_rsa", "id_ed25519"} or name.endswith((".key", ".pem")):
+        return "credential-bearing file (templates/documentation are retained)"
+    if name.startswith(".env.") and not name.endswith((".example", ".sample", ".template")):
+        return "environment secrets file"
+    return None
 
 
 def permitted(path):
-    return (not any(part in EXCLUDED or part.startswith(".env") for part in path.parts)
-            and not any(word in path.name.lower() for word in ("credential", "private_key", "id_rsa"))
-            and (path.suffix.lower() in SUFFIXES or path.name in {"LICENSE", "Dockerfile", "Makefile"}))
+    return exclusion(path) is None
 
 
 class Sources:
@@ -40,9 +53,11 @@ class Sources:
             else:
                 expanded = [item]
             for source in expanded:
+                before_bytes = self.total_bytes
                 try:
                     self.add(source)
                 except (OSError, ValueError, subprocess.SubprocessError) as exc:
+                    self.total_bytes = before_bytes
                     self.errors.append({"source": source["id"], "error": redact(exc)})
         if not self.entries:
             raise BlockedError("No readable sources: " + str(self.errors)[:2000])
@@ -65,19 +80,26 @@ class Sources:
         else:
             import os
             for directory, names, filenames in os.walk(root, followlinks=False):
-                names[:] = sorted(n for n in names if n not in EXCLUDED and not n.startswith(".")
-                                  and not has_link(Path(directory) / n))
+                retained = []
+                for n in sorted(names):
+                    rel = (Path(directory) / n).relative_to(root)
+                    reason = exclusion(rel) or ("linked directory; not followed" if has_link(Path(directory) / n) else None)
+                    if reason:
+                        omitted.append({"path": rel.as_posix(), "reason": reason})
+                    else:
+                        retained.append(n)
+                names[:] = retained
                 for name in sorted(filenames):
                     file = Path(directory) / name
                     relative = file.relative_to(root)
-                    if not permitted(relative) and len(omitted) < 100:
-                        omitted.append({"path": relative.as_posix(), "reason": "unsupported/excluded format"})
+                    if not permitted(relative) or has_link(file):
+                        omitted.append({"path": relative.as_posix(), "reason": exclusion(relative) or "linked file; not followed"})
                     if permitted(relative) and not has_link(file):
-                        if file.stat().st_size > self.limits["source_bytes"]:
+                        if exceeded(file.stat().st_size, self.limits["source_bytes"]):
                             self.errors.append({"source": sid, "path": relative.as_posix(), "error": "File exceeds source_bytes; omitted"})
                             continue
                         files.append(relative.as_posix())
-                        if len(files) >= self.limits["source_files"]:
+                        if self.limits["source_files"] is not None and len(files) >= self.limits["source_files"]:
                             capped = True
                             break
                 if capped:
@@ -97,26 +119,33 @@ class Sources:
         inventory = []
         for name in files:
             path = root if root.is_file() else safe_relative(root, name)
-            data = path.read_bytes()
-            if len(data) > self.limits["source_bytes"]:
+            size = path.stat().st_size
+            if exceeded(size, self.limits["source_bytes"]):
                 raise BlockedError("File exceeds source_bytes")
-            self.total_bytes += len(data)
-            if self.total_bytes > self.limits["source_total_bytes"]:
+            self.total_bytes += size
+            if exceeded(self.total_bytes, self.limits["source_total_bytes"]):
                 raise BlockedError("Total source snapshot budget exhausted")
-            inventory.append({"path": name, "sha256": digest(data), "bytes": len(data)})
+            inventory.append({"path": name, "sha256": file_digest(path), "bytes": size})
         if item.get("sha256") and (not root.is_file() or inventory[0]["sha256"] != item["sha256"]):
             raise ValueError("Source hash differs from configuration")
         key = digest(json.dumps(inventory, sort_keys=True).encode())
+        if item.get("storage") == "reference":
+            if not root.is_file():
+                raise ValueError("Reference storage supports individual files; directories use filtered snapshots")
+            entry.update(path=str(root), original_path=original, files=files, inventory=inventory,
+                         snapshot_id=key, index_truncated=capped, omitted_preview=omitted)
+            self.entries[sid] = entry
+            return {"source": sid, "index": self.index()[-1]}
         snapshot = safe_relative(self.cache, "snapshots/" + key)
         for file in inventory:
             target = safe_relative(snapshot, file["path"])
             target.parent.mkdir(parents=True, exist_ok=True)
             source = root if root.is_file() else root / file["path"]
-            if target.exists() and digest(target.read_bytes()) != file["sha256"]:
+            if target.exists() and file_digest(target) != file["sha256"]:
                 raise ValueError("Existing snapshot was modified; refusing to overwrite")
             if not target.exists():
                 shutil.copyfile(source, target)
-            if digest(target.read_bytes()) != file["sha256"]:
+            if file_digest(target) != file["sha256"]:
                 raise ValueError("Source changed during snapshot copy")
         entry.update(path=str(snapshot / root.name if root.is_file() else snapshot),
                      original_path=original, files=files, inventory=inventory,
@@ -139,7 +168,7 @@ class Sources:
                     raise ValueError("Source snapshot file set changed: " + entry["id"])
             for item in entry["inventory"]:
                 file = root if root.is_file() else safe_relative(root, item["path"])
-                if has_link(file) or not file.is_file() or digest(file.read_bytes()) != item["sha256"]:
+                if has_link(file) or not file.is_file() or file_digest(file) != item["sha256"]:
                     raise ValueError("Source snapshot changed or missing: " + entry["id"] + "/" + item["path"])
 
     def index(self):
@@ -246,7 +275,7 @@ class Sources:
         for item in evidence:
             if (not isinstance(item, dict) or item.get("id") not in known or not item.get("claim")
                     or not known[item["id"]]["excerpt"].strip()):
-                raise ValueError("Invalid evidence reference " + repr(item) + "; use actual nonempty read IDs: " + ",".join(known))
+                raise ValueError("Invalid evidence reference " + repr(item) + "; use known nonempty evidence IDs (native locators do not prove reading): " + ",".join(known))
         return [dict(known[item["id"]], claim=item["claim"]) for item in evidence]
 
     def compact_evidence(self):

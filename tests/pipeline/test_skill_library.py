@@ -37,27 +37,30 @@ class SkillLibraryTests(unittest.TestCase):
         result, _ = self.case.run_case(f.discovery(f.candidate()), artifact)
         self.assertEqual(result['adoption'][0]['status'], 'not_eligible')
 
-    def test_uncovered_actual_example_is_not_ready(self):
+    def test_reviewer_can_reject_an_unchecked_wrong_example(self):
         artifact = copy.deepcopy(ARTIFACT)
         artifact['files'][0]['content'] = artifact['files'][0]['content'].replace('print(2 + 3)', 'print(99)')
         artifact['coverage']['usage'] = 'print(99)'
-        result, _ = self.case.run_case(f.discovery(f.candidate()), artifact, artifact)
+        review = {"status":"fail","resolution":"supply_evidence","findings":["Source expects 5, actual example prints 99"]}
+        result, _ = self.case.run_case(f.discovery(f.candidate()), artifact, review)
         self.assertEqual(result['status'], 'draft')
 
-    def test_host_executes_delivered_example_separately(self):
+    def test_explicit_delivered_example_check_executes(self):
         artifact = copy.deepcopy(ARTIFACT)
         artifact['files'][0]['content'] = artifact['files'][0]['content'].replace('print(2 + 3)', 'print(sum([2, 3]))')
         artifact['coverage']['usage'] = 'print(sum([2, 3]))'
+        artifact["tests"] = [{"name":"delivered-example", "argv":["{python}", str(Path(__file__).resolve().parents[2] / "examples/verify_python_example.py"), "{package}"], "stdout_contains":["5"], "evidence":"e1", "purpose":"Actual source-backed example"}]
         result, _ = self.case.run_case(f.discovery(f.candidate()), artifact, execute_generated=True)
         self.assertEqual(result['status'], 'ready')
         record = read_json(Path(result['output']) / 'records' / 'add-numbers.json')
-        self.assertTrue(any(c['name'] == 'primary_example_execution' and c['status'] == 'pass'
+        self.assertTrue(any(c['name'] == 'delivered-example' and c['status'] == 'pass'
                             for c in record['checks']))
 
     def test_host_example_failure_prevents_ready(self):
         artifact = copy.deepcopy(ARTIFACT)
         artifact['files'][0]['content'] = artifact['files'][0]['content'].replace('print(2 + 3)', 'raise RuntimeError("broken")')
         artifact['coverage']['usage'] = 'raise RuntimeError("broken")'
+        artifact["tests"] = [{"name":"broken-example", "argv":["{python}", str(Path(__file__).resolve().parents[2] / "examples/verify_python_example.py"), "{package}"], "stdout_contains":["5"], "evidence":"e1", "purpose":"Actual example"}]
         result, _ = self.case.run_case(f.discovery(f.candidate()), artifact, artifact, execute_generated=True)
         self.assertEqual(result['status'], 'failed')
 
@@ -68,7 +71,9 @@ class SkillLibraryTests(unittest.TestCase):
         artifact['tests'] = [{'name': 'unexecuted', 'argv': ['{python}', '-c', 'print(sum([2, 3]))'],
             'stdout_contains': ['5'], 'evidence': 'e1', 'purpose': 'source example'}]
         result, _ = self.case.run_case(f.discovery(f.candidate()), artifact)
-        self.assertEqual(result['status'], 'draft')
+        self.assertEqual(result['status'], 'ready')
+        record = read_json(Path(result['output']) / 'records/add-numbers.json')
+        self.assertTrue(any(c['name'] == 'unexecuted' and c['status'] == 'not_run' for c in record['checks']))
 
     def test_revise_preserves_parent_and_passes_feedback(self):
         result, _ = self.case.run_case(f.discovery(f.candidate()), plan_only=True)

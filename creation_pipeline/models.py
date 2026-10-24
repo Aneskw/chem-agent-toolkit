@@ -11,8 +11,16 @@ class BlockedError(ValueError):
     pass
 
 
+class IncompleteError(ValueError):
+    """A discovery stopped before a defensible decision; not zero value."""
+
+
 class ModelCallError(ValueError):
     """Transport/backend failure, not a defect in authored files."""
+
+
+class BudgetError(ModelCallError):
+    """An execution bound stopped work; not evidence of a defective skill."""
 
 
 def load_config(path):
@@ -29,7 +37,7 @@ def load_config(path):
     if not isinstance(config, dict):
         raise ValueError("Configuration must be an object")
     allowed = {"task", "sources", "model", "limits", "checks", "environment", "intent", "notes", "http_only",
-               "prompt", "constraints", "network", "execute_generated_checks", "batch", "adoption"}
+               "prompt", "constraints", "execution", "network", "execute_generated_checks", "batch", "adoption"}
     unknown = set(config) - allowed
     if unknown:
         raise ValueError(f"Unknown configuration fields: {sorted(unknown)}")
@@ -66,8 +74,10 @@ def load_config(path):
     for index, source in enumerate(sources):
         if not isinstance(source, dict):
             raise ValueError("Each source must be an object")
-        if set(source) - {"id", "path", "url", "repo", "paper", "table", "ref", "sha256", "license"}:
+        if set(source) - {"id", "path", "url", "repo", "paper", "table", "ref", "sha256", "license", "storage"}:
             raise ValueError("Unsupported source field")
+        if source.get("storage", "copy") not in ("copy", "reference"):
+            raise ValueError("source.storage must be copy or reference")
         sid = source.setdefault("id", f"source{index + 1}")
         if not isinstance(sid, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", sid) or sid in ids:
             raise ValueError("Source IDs must be unique simple identifiers")
@@ -97,22 +107,35 @@ def load_config(path):
         raise ValueError("API backends require model.name")
     if "api_key_env" in model and not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", model["api_key_env"]):
         raise ValueError("api_key_env must be an environment variable name")
+    if model["backend"] != "codex_cli":
+        raise ValueError("Only codex_cli Agent execution is supported; direct API/Ollama backends are temporarily closed")
+    if set(model) & {"base_url", "api_key_env", "structured"}:
+        raise ValueError("Direct API model settings are not supported by the Agent-only pipeline")
     config["model"] = model
-    limits = {"model_calls": 40, "repair_rounds": 2, "model_timeout": 300,
-              "check_timeout": 60, "source_bytes": 2_000_000, "read_lines": 160,
-              "source_files": 1500, "package_bytes": 1_000_000, "total_seconds": 1800,
-              "source_total_bytes": 30_000_000, "network_requests": 12, "network_timeout": 60,
-              "max_candidates": 8, "max_builds": 4, "candidate_calls": 10}
-    limits["view_chars"] = 12000
-    limits["context_chars"] = 160000
+    execution = config.setdefault("execution", {"profile": "production"})
+    if not isinstance(execution, dict) or set(execution) - {"profile"}:
+        raise ValueError("execution supports profile only")
+    profile = execution.setdefault("profile", "production")
+    if profile not in ("production", "development"):
+        raise ValueError("execution.profile must be production or development")
+    limits = {k: None for k in ("model_calls", "candidate_calls", "model_timeout", "total_seconds",
+        "discovery_seconds", "agent_events", "max_candidates", "max_builds", "source_bytes",
+        "source_total_bytes", "source_files", "package_bytes", "network_requests", "repair_rounds")}
+    limits.update(check_timeout=120, converter_timeout=60, network_timeout=60, read_lines=160, view_chars=12000,
+                  context_chars=160000)
+    # Development is an explicit opt-in preset, never a quality shortcut.
+    if profile == "development":
+        limits.update(model_calls=8, max_candidates=3, max_builds=1, repair_rounds=2)
     overrides = config.get("limits", {})
     if not isinstance(overrides, dict) or set(overrides) - set(limits):
         raise ValueError("Unknown limit setting")
     limits.update(overrides)
-    if any(type(v) is not int or v < 0 for v in limits.values()):
-        raise ValueError("Limits must be nonnegative integers")
-    if any(limits[k] == 0 for k in limits if k != "repair_rounds"):
-        raise ValueError("Only repair_rounds may be zero")
+    if any(v is not None and (type(v) is not int or v < 0 or (v == 0 and k != "repair_rounds"))
+           for k, v in limits.items()):
+        raise ValueError("Limits must be null (disabled) or positive integers; repair_rounds may be zero")
+    for k in ("network_timeout", "read_lines", "view_chars", "context_chars"):
+        if limits[k] is None:
+            raise ValueError(k + " must be a positive integer")
     config["limits"] = limits
     if type(config.get("http_only", False)) is not bool:
         raise ValueError("http_only must be a boolean")
@@ -140,14 +163,15 @@ def load_config(path):
 def validate_plan(plan, require_build=True):
     if not isinstance(plan, dict):
         raise ValueError("Plan must be an object")
-    for key in ("name", "task", "scope", "entrypoint", "readiness", "intent", "added_behavior"):
+    required = ("name", "task", "scope", "entrypoint", "readiness") if "construction" in plan else ("name", "task", "scope", "entrypoint", "readiness", "intent", "added_behavior")
+    for key in required:
         if not isinstance(plan.get(key), str) or not plan[key].strip():
             raise ValueError(f"Plan needs {key}")
     if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", plan["name"]):
         raise ValueError("Skill name must use lowercase words separated by hyphens")
     if plan["readiness"] not in ("callable", "adapter_needed", "blocked"):
         raise ValueError("Unknown readiness")
-    if plan["intent"] not in ("direct", "extension"):
+    if "construction" not in plan and plan["intent"] not in ("direct", "extension"):
         raise ValueError("Unknown packaging intent")
     for key in ("dependencies", "files", "checks", "evidence", "gaps"):
         if not isinstance(plan.get(key), list):
@@ -155,3 +179,17 @@ def validate_plan(plan, require_build=True):
     if require_build and plan["readiness"] != "blocked" and (not plan["files"] or not plan["evidence"]):
         raise ValueError("Plan must identify intended files and actual source evidence")
     return plan
+
+
+def bound(value):
+    """Numeric bound for internal comparisons; persisted configuration retains null."""
+    return float("inf") if value is None else value
+
+
+def exceeded(value, limit):
+    return limit is not None and value > limit
+
+
+def iterations(limit):
+    import itertools
+    return itertools.count() if limit is None else range(limit + 1)

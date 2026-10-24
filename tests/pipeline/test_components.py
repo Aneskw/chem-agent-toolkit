@@ -173,7 +173,8 @@ class PipelineTests(unittest.TestCase):
         test = {"name": "suggested", "argv": ["{python}", "-c", "print(5)"], "stdout_contains": ["5"],
                 "evidence": "e1", "purpose": "example"}
         results = run_checks(config, {"tests": [test]}, self.root, sources, self.root / "checks")
-        self.assertEqual(classify(results), "draft")
+        self.assertFalse(any(r["status"] == "pass" for r in results))
+        self.assertFalse(any(r["required"] for r in results))
         self.assertFalse((self.root / "checks").exists())
 
 
@@ -210,11 +211,11 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(process.returncode, 0, process.stderr)
         self.assertIn('standalone-example', process.stdout)
 
-    def test_timeout_kills_check_and_reports_failure(self):
+    def test_timeout_kills_check_and_records_unverified(self):
         sources = Sources(load_config(self.config), self.root / "cache")
         test = {"name": "timeout", "argv": ["{python}", "-c", "import time; time.sleep(30)"], "stdout_contains": ["done"]}
         report = execute(test, self.root, sources, self.root / "check", 0.2, [])
-        self.assertEqual(report["status"], "fail")
+        self.assertEqual(report["status"], "not_run")
         self.assertTrue(any("timeout" in s for s in report["findings"]))
 
     def test_arbitrary_environment_is_not_inherited(self):

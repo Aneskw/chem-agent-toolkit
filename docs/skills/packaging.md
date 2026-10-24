@@ -32,6 +32,8 @@ Document existing prerequisites only when necessary; no generated Docker/Conda e
 
 ## Checks and confidence
 
-Execution, meaningful output, scientific adequacy and Agent benefit are separate claims. Main executable examples must be tested as delivered with source-grounded assertions. Relevant invalid inputs, valid negatives and setup failures have different meanings. Source extensions/scripts need meaningful boundary/failing behavior when supported by evidence, not arbitrary new scientific verdicts.
+Execution, meaningful output, scientific adequacy and Agent benefit are separate claims. When execution is available, test the relevant delivered paths with source-grounded assertions. Do not blindly execute all blocks, alternatives or external-input steps. Record unavailable verification without claiming success. Relevant invalid inputs, valid negatives and setup failures have different meanings. Source extensions/scripts need meaningful boundary/failing behavior when supported by evidence, not arbitrary new scientific verdicts.
 
 Build records retain test definitions, results, notes and unresolved issues outside normal runtime context. Engineering-ready status does not establish Agent gain. Avoid boilerplate and repetitive claims of confidence.
+
+Binary support assets may be delivered when useful and source/license conditions are understood. Do not treat all resources as UTF-8 text. Candidate scope and file organization may evolve with evidence; record meaningful adjustments outside runtime context. No server/Docker provisioning is performed.

@@ -5,9 +5,14 @@ def guidance(config):
 
 
 def candidate_context(session, config, plan):
-    return {**guidance(config), "plan": plan, "sources": session.sources.index(),
+    context = {**guidance(config), "plan": plan, "sources": session.sources.index(),
             "evidence": session.sources.validate_evidence(plan["evidence"]),
             "handoff": config.get("_handoff", []),
-            "example_runner": str(__import__("pathlib").Path(__file__).resolve().parents[1] / "examples/verify_python_example.py"),
+
             "resource_capabilities": ["list", "read", "read_many", "search", "fetch", "repository", "resolve"],
             "limits": {"view_chars": config["limits"]["view_chars"]}}
+    if getattr(session, "native", False):
+        context.pop("resource_capabilities")
+        context.pop("limits")
+        context["resource_index"] = session.workspace["resource_index"]
+    return context

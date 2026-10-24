@@ -99,23 +99,22 @@ class SourceTests(unittest.TestCase):
         with self.assertRaises(BlockedError):
             acquisition.download("https://example.org/doc")
         self.config["network"] = True
-        acquisition.requests = self.config["limits"]["network_requests"]
+        self.config["limits"]["network_requests"] = 1
+        acquisition.requests = 1
         with self.assertRaises(BlockedError):
             acquisition.download("https://example.org/doc")
 
-    def test_download_respects_size_and_xml_type(self):
+    def test_download_respects_explicit_size_and_xml_type(self):
+        class Response(io.BytesIO):
+            url = "https://example.org/fullTextXML"
+            headers = {"Content-Type": "application/xml"}
         acquisition = Acquisition(self.config, self.root / "cache")
-        mock = MagicMock()
-        mock.__enter__.return_value = mock
-        mock.url = "https://example.org/fullTextXML"
-        mock.headers = {"Content-Type": "application/xml"}
-        mock.read.return_value = b"<article><p>text</p></article>"
-        with patch("creation_pipeline.acquisition.urllib.request.urlopen", return_value=mock):
-            path, _ = acquisition.download(mock.url)
+        with patch("creation_pipeline.acquisition.urllib.request.urlopen", return_value=Response(b"<article/>")):
+            path, _ = acquisition.download(Response.url)
             self.assertEqual(path.suffix, ".xml")
-        mock.read.return_value = b"x" * (self.config["limits"]["source_bytes"] + 1)
-        with patch("creation_pipeline.acquisition.urllib.request.urlopen", return_value=mock), self.assertRaises(BlockedError):
-            acquisition.download(mock.url)
+        self.config["limits"]["source_bytes"] = 10
+        with patch("creation_pipeline.acquisition.urllib.request.urlopen", return_value=Response(b"x" * 11)), self.assertRaises(BlockedError):
+            acquisition.download("https://example.org/oversized.xml")
 
     def test_provider_envelope_and_usage_chat_and_ollama(self):
         for kind in ("chat_completions", "ollama"):
@@ -138,7 +137,7 @@ class SourceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             APIBackend({"backend": "chat_completions", "name": "x", "base_url": "http://example.org/v1"}).call("test", 1)
 
-    def test_github_export_pins_commit_and_omits_binary_assets(self):
+    def test_github_export_pins_commit_and_retains_binary_assets(self):
         stream = io.BytesIO()
         with zipfile.ZipFile(stream, 'w') as archive:
             archive.writestr('tool-abc/api.py', 'def add(a,b): return a+b')
@@ -148,13 +147,15 @@ class SourceTests(unittest.TestCase):
         metadata.read.return_value = json.dumps({'sha': 'a' * 40}).encode()
         zipped = MagicMock()
         zipped.__enter__.return_value = zipped
-        zipped.read.return_value = stream.getvalue()
+        zipped.read.side_effect = io.BytesIO(stream.getvalue()).read
+        zipped.url = "https://codeload.github.com/example/tool/zip/" + "a" * 40
+        zipped.headers = {}
         acquisition = Acquisition(self.config, self.root / 'cache')
         with patch('creation_pipeline.acquisition.urllib.request.urlopen', side_effect=[metadata, zipped]):
             path, origin = acquisition.repository('https://github.com/example/tool.git', 'v1')
         self.assertEqual(origin['resolved_ref'], 'a' * 40)
         self.assertTrue((path / 'api.py').exists())
-        self.assertFalse((path / 'weights.pt').exists())
+        self.assertTrue((path / 'weights.pt').exists())
 
     def test_snapshot_added_files_are_detected(self):
         source = self.root / 'code'

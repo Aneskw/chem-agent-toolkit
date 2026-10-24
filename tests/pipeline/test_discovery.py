@@ -106,13 +106,13 @@ class DiscoveryTests(unittest.TestCase):
         self.assertEqual(result["status"], "partial", summary)
         self.assertEqual(summary["counts"], {"ready": 1, "blocked": 1})
 
-    def test_no_execution_is_draft_and_not_installable(self):
+    def test_content_review_without_execution_preserves_unverified_scope(self):
         self.options["checks"] = []
         write_json(self.config, self.options)
         result, _ = self.run_case(discovery(candidate()), ARTIFACT)
-        self.assertEqual(result["status"], "draft")
-        with self.assertRaises(ValueError):
-            install(result["output"], self.root / "installed")
+        self.assertEqual(result["status"], "ready")
+        record = read_json(Path(result["output"]) / "records/add-numbers.json")
+        self.assertTrue(any(r["status"] == "not_run" for r in record["checks"]))
 
     def test_install_complete_bundle_and_detect_mutation(self):
         result, _ = self.run_case(discovery(candidate()), ARTIFACT)
@@ -137,7 +137,9 @@ class DiscoveryTests(unittest.TestCase):
         self.options["checks"] = []
         write_json(self.config, self.options)
         result, _ = self.run_case(discovery(candidate()), artifact)
-        self.assertEqual(result["status"], "draft")
+        self.assertEqual(result["status"], "ready")
+        record = read_json(Path(result["output"]) / "records/add-numbers.json")
+        self.assertTrue(any(r["status"] == "not_run" for r in record["checks"]))
         result, _ = self.run_case(discovery(candidate()), artifact, execute_generated=True)
         self.assertEqual(result["status"], "ready")
 
@@ -177,15 +179,15 @@ class DiscoveryTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 api.call('test', 1)
 
-    def test_missing_coverage_fails_instead_of_ready(self):
+    def test_coverage_is_not_required(self):
         artifact = copy.deepcopy(ARTIFACT)
-        del artifact["coverage"]
-        result, _ = self.run_case(discovery(candidate()), artifact, artifact)
-        self.assertEqual(result["status"], "failed")
+        artifact.pop("coverage", None)
+        result, _ = self.run_case(discovery(candidate()), artifact)
+        self.assertEqual(result["status"], "ready")
 
     def test_file_defect_repaired_without_weakening_checks(self):
         wrong = copy.deepcopy(ARTIFACT)
-        wrong["coverage"]["io"] = "not in main file"
+        wrong["files"][0]["content"] = wrong["files"][0]["content"].replace("name: add-numbers", "name: incorrect-name")
         result, _ = self.run_case(discovery(candidate()), wrong, ARTIFACT)
         self.assertEqual(result["status"], "ready")
         record = read_json(Path(result["output"]) / "records/add-numbers.json")
@@ -199,10 +201,10 @@ class DiscoveryTests(unittest.TestCase):
         result, _ = self.run_case(discovery(candidate()), ARTIFACT)
         self.assertEqual(result["status"], "failed")
 
-    def test_extension_without_negative_case_is_draft(self):
+    def test_no_arbitrary_negative_case_quota(self):
         result, _ = self.run_case(discovery(candidate(intent="extension", added_behavior="Additional acceptance rule")),
             ARTIFACT, {"status": "pass", "resolution": "none", "findings": []})
-        self.assertEqual(result["status"], "draft")
+        self.assertEqual(result["status"], "ready")
 
     def test_missing_review_evidence_does_not_trigger_rewriting(self):
         result, _ = self.run_case(discovery(candidate(intent="extension", added_behavior="Additional rule")),

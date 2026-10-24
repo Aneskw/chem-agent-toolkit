@@ -106,3 +106,12 @@ def clean_run(state_root, run_id, dry_run=False):
     if not dry_run:
         shutil.rmtree(run)
     return {"removed": [str(run)], "dry_run": dry_run}
+
+
+def file_digest(path):
+    """Hash a file without loading it into memory."""
+    h = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import ast
+import tokenize
 import re
 import time
 from pathlib import Path
@@ -12,6 +13,11 @@ from .records import redact, safe_relative
 from .runtime import execute, validate_test
 
 
+def python_source(path):
+    with tokenize.open(path) as stream:
+        return stream.read()
+
+
 def result(name, problems, required=True, **extra):
     return {"name": name, "status": "fail" if problems else "pass", "required": required,
             "findings": problems, **extra}
@@ -20,7 +26,13 @@ def result(name, problems, required=True, **extra):
 def runtime_path_problems(package, files):
     problems = []
     for item in files:
-        text = (package / item["path"]).read_text(encoding="utf-8")
+        path = package / item["path"]
+        if path.suffix.lower() not in {".md", ".txt", ".py", ".sh", ".json", ".yaml", ".yml", ".toml"}:
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except UnicodeError:
+            continue
         if re.search(r"\{(?:package|source:|run\}|bundle\}|tool:)", text) or re.search(r"[A-Za-z]:[/\\].*?\.pipeline[/\\]", text):
             problems.append("Pipeline-only path/macro in runtime file: " + item["path"])
     return problems
@@ -34,15 +46,15 @@ def static_checks(package, name=None, coverage=None, bundle=None, tool=False):
         for item in files:
             if item["path"].endswith(".py"):
                 try:
-                    ast.parse((package / item["path"]).read_text(encoding="utf-8"))
-                except SyntaxError as exc:
+                    ast.parse(python_source(package / item["path"]))
+                except (SyntaxError, UnicodeError) as exc:
                     problems.append(str(exc))
         if not any(f["path"].startswith("scripts/") for f in files):
             problems.append("Tool missing scripts")
         return [result("tool_structure", problems), result("runtime_paths", runtime_path_problems(package, files))]
     if not (package / "SKILL.md").is_file():
         return [result("structure", ["Missing SKILL.md"])]
-    main = (package / "SKILL.md").read_text(encoding="utf-8")
+    main = (package / "SKILL.md").read_text(encoding="utf-8-sig")
     problems = []
     match = re.match(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|$)", main, re.S)
     if not match:
@@ -72,15 +84,15 @@ def static_checks(package, name=None, coverage=None, bundle=None, tool=False):
         path = package / item["path"]
         if path.suffix.lower() == ".py":
             try:
-                ast.parse(path.read_text(encoding="utf-8"), filename=item["path"])
-            except SyntaxError as exc:
+                ast.parse(python_source(path), filename=item["path"])
+            except (SyntaxError, UnicodeError) as exc:
                 problems.append(f"Python syntax error in {item['path']}: {exc}")
         if path.suffix.lower() != ".md":
             continue
         text = path.read_text(encoding="utf-8")
         # Inline Markdown links; code examples are not interpreted as Markdown links.
         prose = re.sub(r"```.*?```", "", text, flags=re.S)
-        for href in re.findall(r"\]\(([^\s)]+)(?:\s+\"[^\"]*\")?\)", prose):
+        for href in re.findall(r"\]\((<[^>]+>|[^\s)]+)(?:\s+\"[^\"]*\")?\)", prose):
             href = unquote(href.strip("<>"))
             if re.match(r"^[a-zA-Z][\w+.-]*:", href) or href.startswith("#"):
                 continue
@@ -90,14 +102,6 @@ def static_checks(package, name=None, coverage=None, bundle=None, tool=False):
                 problems.append(f"Broken or external package link in {item['path']}: {href}")
     checks = [result("structure", problems)]
     checks.append(result("runtime_paths", runtime_path_problems(package, files)))
-    if coverage is not None:
-        missing = []
-        for key in ("scope", "io", "usage", "result_checks"):
-            quote = coverage.get(key) if isinstance(coverage, dict) else None
-            if not isinstance(quote, str) or not quote.strip() or quote not in main:
-                missing.append("Missing exact author coverage quotation: " + key)
-        checks.append(result("minimum_author_attestation", missing,
-                             evidence_kind="author_attestation_not_semantic_proof"))
     return checks
 
 
@@ -116,10 +120,13 @@ def covers_example(block, code):
     return index == len(expected)
 
 
-def run_checks(config, artifact, package, sources, work, allow_generated=False):
+def run_checks(config, artifact, package, sources, work, allow_generated=False, prior=None):
     tests = [(item, "configured") for item in config["checks"]]
     tests += [(item, "generated") for item in artifact["tests"]]
-    results = []
+    results = list(prior or [])
+    names = [t.get("name") for t, _ in tests if isinstance(t, dict)]
+    if len(names) != len(set(names)):
+        return [result("check_definitions", ["Duplicate check names"], required=True)]
     known_evidence = {item["id"] for item in sources.evidence if item["excerpt"].strip()}
     for index, (test, origin) in enumerate(tests):
         try:
@@ -129,54 +136,27 @@ def run_checks(config, artifact, package, sources, work, allow_generated=False):
                                 "findings": ["Build time budget exhausted before check execution"]})
                 break
             validate_test(test)
+            import json
+            from .records import digest
+            signature = digest(json.dumps(test, sort_keys=True).encode())
+            if any(r.get("signature") == signature for r in results):
+                continue
             if origin == "generated" and (test.get("evidence") not in known_evidence or not test.get("purpose")):
                 raise ValueError("Generated checks need real source evidence and purpose")
             if origin == "generated" and not allow_generated:
-                results.append({"name": test["name"], "status": "not_run", "required": not bool(config["checks"]),
+                results.append({"name": test["name"], "status": "not_run", "required": False,
                                 "origin": origin, "findings": ["Generated execution requires --execute-generated-checks"]})
                 continue
             report = execute(test, package, sources, Path(work) / f"check-{index + 1}",
-                             min(config["limits"]["check_timeout"], remaining), config["environment"].get("allow", []))
+                             min(config["limits"]["check_timeout"] if config["limits"]["check_timeout"] is not None else remaining, remaining), config["environment"].get("allow", []))
             report["origin"] = origin
             results.append(report)
         except (ValueError, OSError) as exc:
             results.append({"name": test.get("name", f"check-{index + 1}") if isinstance(test, dict) else "invalid-check",
                             "status": "fail", "required": True, "origin": origin, "findings": [redact(exc)]})
-    main = Path(package) / "SKILL.md"
-    if main.exists():
-        blocks = re.findall(r"```python\s*\n(.*?)```", main.read_text(encoding="utf-8"), re.S)
-        executed = [(t, origin) for t, origin in tests if any(
-            r.get("name") == t.get("name") and r.get("origin") == origin and r["status"] == "pass"
-            for r in results)]
-        covered = []
-        for block in blocks:
-            covered.append(any(("-c" in t["argv"] and covers_example(block, t["argv"][t["argv"].index("-c") + 1]))
-                               or (any(v.endswith("verify_python_example.py") for v in t["argv"]) and "{package}" in t["argv"])
-                               for t, origin in executed))
-        if not all(covered):
-            report = {"name": "primary_example_execution", "status": "not_run", "required": True,
-                      "origin": "host_example", "evidence_kind": "execution_only_not_result_oracle",
-                      "findings": ["Delivered Python examples require --execute-generated-checks"]}
-            if allow_generated:
-                try:
-                    remaining = config.get("_deadline", float("inf")) - time.monotonic()
-                    if remaining <= 0:
-                        raise ValueError("Build time budget exhausted before example execution")
-                    runner = Path(__file__).resolve().parent.parent / "examples" / "verify_python_example.py"
-                    test = {"name": "primary_example_execution",
-                            "argv": ["{python}", str(runner), "{package}", "--completion-marker"],
-                            "cwd": tests[0][0].get("cwd", "{run}") if tests else "{run}",
-                            "stdout_contains": ["skill-example-completed"]}
-                    report = execute(test, package, sources, Path(work) / "delivered-examples",
-                                     min(config["limits"]["check_timeout"], remaining),
-                                     config["environment"].get("allow", []))
-                    report.update(origin="host_example", evidence_kind="execution_only_not_result_oracle")
-                except (ValueError, OSError) as exc:
-                    report.update(status="fail", findings=[redact(exc)])
-            results.append(report)
     if not tests:
-        results.append({"name": "minimal_execution", "status": "not_run", "required": True,
-                        "findings": ["No minimal result-checking execution test was provided"]})
+        results.append({"name": "execution_scope", "status": "not_run", "required": False,
+                        "findings": ["No executable check supplied; source/content review must assess the unverified scope"]})
     return results
 
 

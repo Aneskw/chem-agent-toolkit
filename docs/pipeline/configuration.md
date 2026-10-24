@@ -1,84 +1,60 @@
-# Configuration reference
+# Configuration
 
-JSON or YAML object; only `sources` is required. Unknown top-level fields are rejected. The authoritative parser/defaults are `creation_pipeline/models.py`. YAML requires PyYAML. Relative source paths resolve from the configuration file.
+JSON or YAML object. Only sources is required; YAML needs PyYAML. Unknown top-level fields are rejected. Paths resolve relative to the configuration file. Parser/defaults: creation_pipeline/models.py.
 
-```json
-{"sources": [{"id": "tool", "path": "./tool"}], "prompt": "Prioritize inference; exclude training.", "batch": {"label": "inference", "tags": ["inference"]}, "adoption": {"enabled": true}}
-```
-
-Equivalent YAML (save as `sources.yaml`):
-
-```yaml
-sources:
-  - id: tool
-    path: ./tool
-prompt: Prioritize inference; exclude training.
-batch:
-  label: inference
-  tags: [inference]
-adoption:
-  enabled: true
-```
-
-For a paper plus pinned code, see the [ChEMBL configuration](../../examples/builds/chembl-curation.json).
-
-| Field | Type / default | Meaning |
+| Field | Default | Meaning |
 | --- | --- | --- |
-| sources | nonempty array, required | Each item has one of path/url/repo/paper/table |
-| prompt | string, empty | Optional model guidance |
-| task | string, optional | Legacy alias when prompt absent |
-| notes | string, empty | Supplementary user guidance |
-| constraints | object, empty | Model-interpreted preferences; not arbitrary executable rules |
-| intent | auto / direct / extension; auto | Extension must describe a source-existing research method |
-| model | object, codex_cli | Backend settings below |
-| limits | object | Positive integer budgets below; repair_rounds may be zero |
-| checks | array, empty | User-defined execution assertions, each names its candidate |
-| environment | object, allow=[] | Allowed runtime environment-variable names, never secret values |
-| network | boolean, true | Known-address acquisition and identifier resolution |
-| http_only | boolean, false | Codex transport override for supported default provider setup |
-| execute_generated_checks | boolean, false | Permission to run generated checks |
-| batch | object | label='skills', tags=[]; readable ASCII label and text tags |
-| adoption | object | enabled=true; automatically adopt individual ready skills |
+| sources | required nonempty array | Local files/directories, known URLs/repos/paper identifiers/catalogs |
+| prompt / notes | empty strings | Optional guidance; task is a legacy prompt alias |
+| constraints | {} | Model-interpreted preferences, not executable enforcement rules |
+| model | {backend: codex_cli} | Optional name; backend must be codex_cli |
+| execution | {profile: production} | production or development |
+| limits | see below | Optional execution/resource overrides |
+| network | true | Enable known-address acquisition, including supplements; not search |
+| execute_generated_checks | false | Permit generated checks; CLI flag can enable it |
+| environment | {allow: []} | Runtime environment variable names to pass, never secret values |
+| batch | {label: skills, tags: []} | Readable batch label and simple tags |
+| adoption | {enabled: true} | Adopt eligible individual skills |
+| http_only | false | Codex built-in-provider transport override |
+| checks | [] | User-defined check objects, each with candidate name |
+| intent | auto | Legacy guidance direct/extension/auto; explain behavior in construction |
+
+API/Ollama are rejected during configuration validation, before resource fetching or model calls. base_url/api_key_env/structured settings are not accepted for Agent execution. The underlying Codex connection to its model is unaffected. User model selection and Windows sandbox configuration are retained; arbitrary CLI profiles/plugins are not inherited.
 
 ## Sources
 
-Each item accepts id, path, url, repo, paper, table, ref, sha256, license. Exactly one location field is allowed. id defaults to source1, source2, etc.; unique simple identifiers only. license is retained metadata, not an automated legal assessment.
+Each source has exactly one of path, url, repo, paper, table. Optional id (simple unique identifier), ref, sha256, license and storage are accepted.
 
-- path: local file/directory. ref on a local repository requires a clean checkout already at that ref.
-- url: direct HTTPS document, limited PDF-link following.
-- repo: HTTPS Git URL; ref optionally pins a branch/tag/commit, resolved commit recorded.
-- paper: `doi:...` or `arxiv:...`; public resolution can fail.
-- table: CSV/TSV/XLSX catalog, not arbitrary spreadsheet analysis. Recognized columns: pdf/url/doi/repository/github/path.
-- sha256: optional expected hash for a single file.
+- path: local file or directory. ref requires a clean local repository at that revision.
+- url: a known HTTPS resource, preserving unknown/binary types. HTML is retained rather than replaced by a guessed PDF link.
+- repo: known HTTPS Git repository; resolved version recorded. Archive acquisition streams to disk; no checkout hook or installation is run.
+- paper: DOI/arXiv identifier, resolved to a public full text when available; no title search.
+- table: CSV/TSV/XLSX resource catalog with pdf/url/doi/repository/github/path columns. For ordinary data use path.
+- storage: copy (default) or reference. Reference applies to individual files, avoids a duplicate copy and checks source hashes; directories use filtered snapshots.
+- sha256: optional expected single-file digest; license is provenance metadata, not a legal assessment.
 
-Text/code, textual PDFs, DOCX text, HTML/XML, notebook source cells and SQLite schema are supported. Repository exports are selected source evidence, not installations. Excluded files and limits can prevent complete coverage. No OCR or visual input.
+Unknown file extensions are retained; parsing support is separate. No implicit input size/count cap. Optional development limits can deliberately narrow a trial; limitations/exclusions are recorded. See [resources](resources.md).
 
-## Models
+## Execution profiles and limits
 
-The object accepts only backend, name, base_url, api_key_env and structured. backend: codex_cli (default), chat_completions, ollama. name is optional for CLI (uses CLI configuration), required for API/Ollama. base_url selects the endpoint; remote endpoints require HTTPS. api_key_env names a credential environment variable. structured defaults true for compatible API strict schema; false requests JSON mode. No automatic backend fallback or model download.
+Production defaults to null (disabled) for model_calls, candidate_calls, model_timeout, total_seconds, discovery_seconds, agent_events, max_candidates, max_builds, source_bytes, source_total_bytes, source_files, package_bytes, network_requests and repair_rounds.
 
-Models receive guidance, constraints, source views and stage artifacts, not the raw configuration or credential values. Budgets and execution permissions are enforced by the host.
+Development defaults: model_calls=8, max_candidates=3, max_builds=1, repair_rounds=2. It does not impose a model time limit. All defaults can be explicitly overridden; null disables a limit. repair_rounds may also be zero. Quality standards do not change between profiles.
 
-## Limits
+```json
+{
+  "sources": [{"path": "./research-code"}],
+  "execution": {"profile": "development"},
+  "limits": {"model_calls": 6, "max_candidates": 2, "max_builds": 1}
+}
+```
 
-| Key | Default |
-| --- | --- |
-| model_calls / candidate_calls | 40 / 10 |
-| repair_rounds | 2 |
-| model_timeout / check_timeout / total_seconds | 300 / 60 / 1800 |
-| source_bytes / source_total_bytes | 2000000 / 30000000 |
-| source_files / read_lines / view_chars | 1500 / 160 / 12000 |
-| package_bytes | 1000000 |
-| context_chars | 160000 |
-| network_requests / network_timeout | 12 / 60 |
-| max_candidates / max_builds | 8 / 4 |
+network_timeout=60 seconds, converter_timeout=60 seconds and check_timeout=120 seconds are per-operation fault controls, not whole-build deadlines. converter_timeout/check_timeout may be null for a deliberately long check. Diagnostic text protocol view settings remain read_lines=160, view_chars=12000, context_chars=160000; these do not restrict native original-file access or Codex conversation compaction.
 
-Counts are ceilings, not quotas. Request/response history contributes to model calls and context.
+model_calls counts CLI turns, not internal inference requests. Missing usage is unknown, not zero. No automatic monetary-cost estimate. Optional agent_events counts CLI-reported tool completions; the CLI does not report every native tool there.
 
-## Checks
+## Check definitions
 
-A check has name, candidate (configured checks), argv (string array), expected_exit (0), cwd ('{run}'), stdout_contains ([]), optional json_equals or artifacts, and kind. Generated checks also cite actual evidence and purpose. At least one output assertion is required.
+name, argv (string array, no shell), cwd ('{run}' by convention), expected_exit (0), stdout_contains ([]), optional json_equals/artifacts, kind, and generated-check evidence/purpose. At least one result assertion is required. Check names must not collide with host validation names.
 
-Macros: `{python}`, `{package}`, `{run}`, `{source:ID}`. These are check-only, never runtime documentation. Set cwd to a source directory only when upstream requires adjacent files. Logs remain in the run workspace. Every primary Python block needs execution coverage. If the submitted checks do not execute the delivered statements, the host runs the actual blocks separately when generated execution is permitted, using the first check's cwd. Its completion marker proves execution only; separate meaningful, source-grounded result assertions are still required.
-
-An unknown field such as `my_task` is rejected; put free text in prompt/notes. A valid configuration does not establish source availability or semantic compliance with preferences.
+Macros: {python}, {package}, {run}, {source:ID}, only in check definitions, never runtime skill text. Execute the actual delivered script or explicitly selected example path. No blanket execution of all Python blocks. A mock or syntax check does not establish a real tool run. Configured assertions cannot be silently weakened.

@@ -1,33 +1,37 @@
-Discover reusable tool capabilities from resources, without requiring a user task.
-Read actual docs AND relevant implementation/examples/tests using list/read/search.
-Initial views are real reads, not full reading. Report unread scope honestly.
-Use fetch/repository/resolve actions for relevant additional resources only.
-Return one discovery object combining selection and planning, not two essays.
-Each candidate must have:
-- name: unique lowercase-hyphen ID across skills/tools.
-- kind: skill only. Reusable code belongs in the skill scripts/, never an independent tool.
-- task, scope, entrypoint: concrete reusable capability, boundary and real interface.
-- rationale: specific usage difficulty and why instructions/adaptation help.
-- upstream_behavior and added_behavior: distinguish existing and new; use "none"
-  for no new domain behavior. Formatting adapters normally remain direct.
-- intent: direct or extension; choose when config says auto, respect explicit limits.
-- implementation: upstream, adapter or composition. Multiple tools may serve one
-  coherent capability. Broad research task orchestration is not the primary output.
-- readiness: callable, adapter_needed or blocked; gaps name missing resources.
-- needs: always [] (no shared tool layer).
-- dependencies: real external requirements, versions and acquisition locations.
-- files: [{path,purpose}]. Skills need SKILL.md; tools only justified scripts/ or
-  references/ files. Do not create environment configs or MCP services.
-- checks: meaningful verification and expected outcomes from source tests/examples
-  or documented rules, never from the new implementation alone.
-- evidence: [{id,claim}], actual eN reads supporting the capability and entrypoint.
-- selected: boolean; priority: smaller integer first.
-Use max_candidates/max_builds as ceilings, never quotas. One library is not always
-one skill; neither is every function. Different triggers/I/O/result meaning justify
-splitting. Keep necessary scripts local to the skill. Provide a short omitted list
-of important exclusions/merges and limitations. Zero candidates is valid.
-Do not invent algorithms, scientific thresholds, URLs, availability or Agent gain.
-No benchmark question generation. Missing evidence is a gap, not permission to
-reconstruct algorithms from formulas.
+Discover reusable skills from real research resources without requiring a user task.
+This stage ends at candidate discovery. Do not write SKILL.md, author runtime packages,
+or call finish; the host invokes a dedicated author stage next. Save only candidate/progress
+records here. Summaries describe findings, not package completion.
+First understand the resource as a whole (paper overview, README, layout, key examples).
+Identify major capability directions, then read selectively to resolve concrete uncertainties.
+Do not stop at the easiest API, nor exhaustively read every file. Documentation, implementation,
+examples and tests are complementary evidence, not a reading quota.
 
-Return handoff: [{fact,evidence:[read IDs]}] for important interfaces, pitfalls and unresolved scope facts. Facts need actual eN read IDs. Each candidate has method_evidence: [{id,claim}]; extensions must cite the EXISTING research method or implementation, not an idea invented while reading docs. No new scientific behavior. Mechanical glue is permitted with explicit scope. Reuse upstream calls; do not force scripts or output counts.
+Judge what useful difficulty a skill removes: choosing the right interface, data/units/index
+conventions, scattered steps, state, result semantics, or an existing research-specific method.
+Simple/familiar calls can be valuable when concise guidance removes a real recurring difficulty.
+Do not invent benefit scores or claim measured Agent gain. No output quota by default.
+
+One coherent capability may use multiple tools; neither a whole library nor each function
+is automatically one skill. Keep mandatory preparation and result interpretation together.
+Research extensions must reproduce an existing method/code, never invent algorithms,
+scientific thresholds, URLs or acceptance policies. Mechanical glue is allowed when transparent.
+Independent tools, shared tool layers, MCP and generated environments are out of scope.
+
+For each candidate return name, capability, boundary, value, usage_path (real key interfaces),
+construction (explain direct packaging versus existing research/code adaptation), evidence
+[{id,claim}], gaps, blocked. Evidence claims identify inspected functions/passages/pages.
+eN IDs in resources.json are file locators, not proof of reading. No fixed output filenames,
+detailed parameter catalog or executable test commands are required at discovery.
+A missing local dependency is normally an execution limitation, not an unpackageable capability.
+Mark only the affected candidate blocked; let other candidates proceed.
+
+Use the helper for a concrete missing known URL/repository/DOI, explain why, then continue
+in this conversation. No autonomous search or recursive link chasing. End reading when
+capability, useful scope, invocation and key uncertainties are sufficiently understood.
+Return outcome, summary, candidates, omitted (important exclusions/merges with reasons),
+limitations. Distinguish no suitable candidates after adequate inspection from blocked sources
+and incomplete work. max_candidates/max_builds apply ONLY when non-null development limits.
+You may durably save candidates through the helper as you finish them; final candidates may
+be empty with outcome=candidates; saved_candidates must explicitly list the saved names you select.
+Use saved_candidates=[] when returning full candidates. Old saved files are not automatically selected.

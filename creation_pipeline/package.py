@@ -6,13 +6,13 @@ import os
 import re
 from pathlib import Path
 
-from .records import digest, has_link, read_json, safe_relative, redact
+from .records import digest, has_link, read_json, safe_relative, redact, file_digest
 
 
 ROLES = {"scripts", "references", "examples", "resources", "assets"}
 
 
-def save_files(staging, files, max_bytes, tool=False):
+def save_files(staging, files, max_bytes, tool=False, validate_only=False):
     if not isinstance(files, list) or not files:
         raise ValueError("Model must supply a nonempty file list")
     staging = Path(staging)
@@ -40,10 +40,12 @@ def save_files(staging, files, max_bytes, tool=False):
         data = item["content"].encode("utf-8")
         total += len(data)
         validated[relative] = data
-    if (not tool and "SKILL.md" not in validated) or total > max_bytes:
+    if (not tool and "SKILL.md" not in validated) or (max_bytes is not None and total > max_bytes):
         raise ValueError("Package missing SKILL.md or exceeds package_bytes")
     if tool and ("SKILL.md" in validated or not any(p.startswith("scripts/") for p in validated)):
         raise ValueError("A shared tool needs scripts/ and has no SKILL.md")
+    if validate_only:
+        return
     # Replace only the registered staging contents after validating the full response.
     if staging.exists():
         for path in staging.rglob("*"):
@@ -66,8 +68,7 @@ def manifest(package):
         if has_link(path):
             raise ValueError("Runtime package contains linked paths")
         if path.is_file():
-            data = path.read_bytes()
-            result.append({"path": path.relative_to(package).as_posix(), "sha256": digest(data), "bytes": len(data)})
+            result.append({"path": path.relative_to(package).as_posix(), "sha256": file_digest(path), "bytes": path.stat().st_size})
     return result
 
 

@@ -27,6 +27,14 @@ def main(argv=None):
         child.add_argument("--execute-generated-checks", action="store_true",
                            help="Trust and run model-proposed code with this user's permissions")
         child.add_argument("--preflight", action="store_true", help="Validate configuration only; no source fetching or model calls")
+    child = commands.add_parser("resume", help="Resume an interrupted native run from its local checkpoint")
+    child.add_argument("build_id")
+    child.add_argument("--extra-turns", type=int, default=0, help="Explicitly extend the saved turn budget; does not extend time")
+    child.add_argument("--rediscover", action="store_true", help="Re-enter discovery in the retained native session")
+    child.add_argument("--state-dir", default=str(ROOT / ".pipeline"))
+    child.add_argument("--no-adopt", action="store_true")
+    child.add_argument("--keep-debug", action="store_true")
+    child.add_argument("--execute-generated-checks", action="store_true")
     child = commands.add_parser("check")
     child.add_argument("path", help="Build output directory or standalone skill directory")
     child = commands.add_parser("install")
@@ -55,6 +63,10 @@ def main(argv=None):
                                no_adopt=args.no_adopt,
                                feedback=Path(args.feedback_file).read_text(encoding="utf-8") if args.command == "revise" else None,
                                notify=lambda m: print(m, file=sys.stderr, flush=True))
+        elif args.command == "resume":
+            result = build(state_root=args.state_dir, resume_id=args.build_id, keep_debug=args.keep_debug,
+                no_adopt=args.no_adopt, execute_generated=args.execute_generated_checks, rediscover=args.rediscover, extra_turns=args.extra_turns,
+                notify=lambda m: print(m, file=sys.stderr, flush=True))
         elif args.command == "check":
             path = Path(args.path)
             if (path / "summary.json").is_file():
@@ -81,7 +93,7 @@ def main(argv=None):
         else:
             result = clean_run(args.state_dir, args.build_id, args.dry_run)
         print(json.dumps(result, ensure_ascii=False, indent=2))
-        return 1 if result.get("status") in ("failed", "blocked", "fail", "partial") else 0
+        return 1 if result.get("status") in ("failed", "blocked", "fail", "partial", "interrupted", "incomplete") else 0
     except (ValueError, OSError, KeyError) as exc:
         print(json.dumps({"status": "error", "error": redact(exc)}, ensure_ascii=False), file=sys.stderr)
         return 2

@@ -1,36 +1,23 @@
----
-name: tool-task-name
-description: >
-  State the task and the requests or conditions that should trigger this skill.
----
+# Minimum tool-skill content
 
-# Skill Name
+Produce an English SKILL.md with YAML name and description. The name identifies the capability;
+description explains when the Agent should select it. Do not repeat that description mechanically.
 
-Identify the tool and the task it performs. State only the capability boundaries that affect tool selection or result interpretation. Avoid repeating the description.
+Every skill must convey these four kinds of information, with flexible organization and headings:
 
-## Input & Output
+1. **Capability and necessary boundary.** Identify the tool and coherent capability. State limits
+   only when they change tool selection, execution or result meaning.
+2. **Inputs and outputs.** Required inputs and principal results; formats, units, shapes, indices,
+   paths or mutation only when needed. For many fields use compact real keys/tables. Do not copy
+   the full API or repeat obvious example details.
+3. **Usable invocation.** A complete minimal normal path using real imports/commands and result
+   access. State essential dependencies/resources before needed. Explicitly identify continuous
+   steps, independent alternatives and external inputs when ambiguity would affect use.
+4. **Result interpretation/checks.** Explain the minimum tool-specific usable-result checks,
+   meaningful empty outcomes and failure signals. Execution is not scientific validity.
 
-Describe required inputs and primary outputs. Include formats, units, index
-conventions, path resolution, or in-place changes only when needed for correct use.
-Explain optional parameters only when they affect common calls or are easy to misuse.
-For numerous fields, prefer compact real parameter/key lists or tables; distinguish field descriptions from executable request examples.
-Do not reproduce the full API reference or repeat unambiguous details from the example.
-
-## Usage
-
-Provide one complete, minimal example using the real API or command. Include necessary imports, input preparation, invocation, and result access.
-
-Explain additional steps or branches only when the example cannot express them clearly.
-
-State special prerequisites only when required: dependencies, version constraints,
-credentials, remote connections, resources, or working directories. Put them before the call that needs them; omit a separate environment section when unnecessary.
-
-If supporting files are needed, link each file with a specific condition for reading it. Keep essential correctness requirements in this main file.
-
-## Result Checks
-
-State the tool-specific minimum checks for a usable result. Explain empty results or failure signals and the necessary response when relevant.
-
-Distinguish successful execution from valid output or a supported scientific conclusion where these differ.
-
-These four information requirements are mandatory; their headings and length are flexible. Merge sections when this improves clarity. Add content only when it changes tool selection, correct execution, or result interpretation. Omit empty sections, generic advice, and duplicated instructions. Remove these authoring instructions when producing an actual skill.
+One file is enough when adequate. Conditional references/scripts/assets are allowed; link them
+with their purpose and when they are needed. Keep normal-path correctness in the main file.
+No mandatory chapter template, length target, file quota or author coverage quotations.
+Add content only when it helps selection, correct execution or interpretation. Omit generic
+boilerplate, build logs, internal evidence IDs and verification verdicts from runtime instructions.

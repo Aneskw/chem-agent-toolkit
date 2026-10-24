@@ -15,7 +15,7 @@ import urllib.request
 import urllib.parse
 from pathlib import Path
 
-from .models import BlockedError, ModelCallError
+from .models import BlockedError, ModelCallError, bound
 from .records import digest, redact, sanitized, write_json
 from .runtime import terminate_tree
 
@@ -165,8 +165,8 @@ class Session:
     def stage(self, instructions, context, schema=None):
         history = []
         omissions = 0
-        while len(self.receipts) < self.limits["model_calls"]:
-            remaining = self.limits["total_seconds"] - (time.monotonic() - self.started)
+        while len(self.receipts) < bound(self.limits["model_calls"]):
+            remaining = bound(self.limits["total_seconds"]) - (time.monotonic() - self.started)
             if remaining <= 0:
                 raise ValueError("Build time budget exhausted")
             prompt = ("You discover and author reusable tool capabilities using a JSON request protocol. "
@@ -196,7 +196,7 @@ class Session:
                 raise ValueError("Stage context exceeds context_chars; narrow the candidate or source scope")
             try:
                 self.notify(f"Model request {len(self.receipts) + 1}/{self.limits['model_calls']}")
-                answer, receipt = self.backend.call(prompt, min(self.limits["model_timeout"], int(remaining) + 1), schema=schema)
+                answer, receipt = self.backend.call(prompt, min(bound(self.limits["model_timeout"]), remaining) if remaining != float("inf") else self.limits["model_timeout"], schema=schema)
             except (OSError, ValueError, subprocess.SubprocessError) as exc:
                 self.receipts.append({"status": "failed", "usage": None, "error": redact(exc)})
                 raise ModelCallError(redact(exc)) from exc

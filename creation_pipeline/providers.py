@@ -83,7 +83,4 @@ class APIBackend:
 
 
 def backend_for(config, scratch):
-    model = config["model"]
-    if model["backend"] == "codex_cli":
-        return CodexBackend(model.get("name"), scratch, config.get("http_only", False))
-    return APIBackend(model)
+    raise ValueError("Direct model transports are closed; use the native Codex Agent pipeline")

@@ -65,14 +65,15 @@ def adopt(output, records, config, destination):
                             "tags": config["batch"]["tags"], "build_id": Path(output).name,
                             "scope": record["plan"]["scope"], "files": record["files"],
                             "checks": [{k: c.get(k) for k in ("name", "status", "evidence_kind")} for c in record["checks"]],
-                            "issues": record.get("issues", []), "agent_efficacy": "not_evaluated"}
+                            "issues": record.get("issues", []), "notes": record.get("notes", []),
+                            "unverified": [{"name": c["name"], "findings": c.get("findings", [])} for c in record["checks"] if c["status"] == "not_run"], "agent_efficacy": "not_evaluated"}
                     doc = read_json(Path(output) / "plan.json")
                     item["sources"] = [{k: s[k] for k in ("id", "url", "repo", "resolved_ref", "snapshot_id") if k in s} for s in doc["sources"]]
                     catalog["skills"].append(item)
                     active[name] = item
                     results.append({"name": name, "status": "adopted", "path": str(target)})
                 write_json(catalog_path, sanitized(catalog))
-                lines = ["# Skills", "", "Engineering-ready packages. Agent benefit remains unmeasured.", "",
+                lines = ["# Skills", "", "Reviewed packages; inspect recorded checks and unverified scope. Agent benefit remains unmeasured.", "",
                          "| Skill | Tags | Batch |", "| --- | --- | --- |"]
                 for item in catalog["skills"]:
                     lines.append(f"| [{item['name']}]({item['path']}/SKILL.md) | {', '.join(item['tags'])} | {item['batch']} |")

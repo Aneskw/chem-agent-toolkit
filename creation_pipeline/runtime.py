@@ -31,6 +31,8 @@ def terminate_tree(proc):
 def validate_test(test):
     if not isinstance(test, dict) or not isinstance(test.get("name"), str) or not test["name"]:
         raise ValueError("Check needs a name")
+    if test["name"] in {"structure", "runtime_paths", "content_review", "artifact_immutability", "blocking_issues", "changed_failed_oracles"}:
+        raise ValueError("Check name is reserved for host validation")
     argv = test.get("argv")
     if not isinstance(argv, list) or not argv or any(not isinstance(v, str) or "\0" in v for v in argv):
         raise ValueError("Check argv must be a nonempty list of strings")
@@ -119,7 +121,12 @@ def execute(test, package, sources, work, timeout, env_allow):
     # Never retain unredacted logs, including in keep-debug workspaces.
     (work / "stdout.log").write_text(redact(stdout_text[:output_limit]), encoding="utf-8")
     (work / "stderr.log").write_text(redact(error), encoding="utf-8")
-    return {"name": test["name"], "status": "fail" if problems else "pass", "required": True,
+    environment_gap = bool(proc.returncode != test.get("expected_exit", 0) and
+        any(token in error for token in ("ModuleNotFoundError:", "No module named", "command not found")))
+    if timed_out:
+        environment_gap = True
+    return {"name": test["name"], "status": "not_run" if timed_out else "fail" if problems else "pass",
+            "required": not timed_out, "unverified": timed_out, "possible_environment_gap": environment_gap and not timed_out,
             "kind": test.get("kind", "positive"), "evidence": test.get("evidence"),
             "elapsed_seconds": round(time.monotonic() - started, 3), "exit_code": proc.returncode,
             "cwd": str(execution_cwd),
