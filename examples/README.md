@@ -1,41 +1,30 @@
 # Examples
 
-Configurations supply real resources, not desired candidate names or answers. Existing tool environments remain external.
+This directory is reserved for one or two complete build batches once the pipeline workflow is sufficiently established. No curated batch is currently published.
 
-## RDKit source and feedback
-
-```text
-python examples/prepare_rdkit_sources.py
-python -m creation_pipeline discover .pipeline/example-configs/rdkit-sources.json
-python -m creation_pipeline revise --plan <plan.json> --feedback-file feedback.md
-python -m creation_pipeline build --plan <revised-plan.json> --execute-generated-checks
-```
-
-Example feedback: narrow a broad RECAP hierarchy skill to terminal-fragment retrieval and interpretation of empty results. The actual adopted [terminal-fragment package](../skills/2026-10-22-molecular-fragmentation/rdkit-recap-terminal-fragments/SKILL.md) was generated after such feedback. Its Python block and source-backed result checks passed; this is not an Agent benefit measurement.
+Each batch should show the input resources, important intermediate decisions/checks, and the complete resulting skill packages. Keep related files together:
 
 ```text
-python examples/verify_python_example.py skills/2026-10-22-molecular-fragmentation/rdkit-recap-terminal-fragments
+examples/
+  <batch-name>/
+    README.md                 # purpose, prerequisites, commands and verified scope
+    input.json                # runnable pipeline configuration
+    resources/                # small permitted fixtures or pinned acquisition instructions
+    records/                  # selected discovery, summary, review and check records
+    skills/
+      <skill-name>/
+        SKILL.md
+        ...                   # all necessary supporting files
 ```
 
-The helper executes Python blocks. Additional result assertions, environment and scope still matter. It is not a universal semantic validator.
+The batch README should explain:
 
-## Research paper and official implementation
+- Which capabilities were found and why they were packaged.
+- Where resources came from, including versions/commits and how to obtain them again.
+- Required software/resources and the exact preparation and build commands.
+- How the important records relate to the generated files.
+- Which checks actually ran, what remained unverified, and what a reproduction can reasonably reproduce.
 
-`builds/chembl-curation.json` supplies the public ChEMBL structure-curation article and a pinned official commit, including upstream rules/tests. It does not require generating a wrapper or all three components as separate skills.
+Include redistributable inputs or acquisition steps rather than full upstream trees, large datasets or weights. Keep useful provenance and checks; omit caches, credentials, redundant logs and machine-specific temporary paths. Original run details can remain local under .pipeline.
 
-```text
-python -m creation_pipeline discover examples/builds/chembl-curation.json
-python -m creation_pipeline build --plan .pipeline/outputs/<id>/plan.json --execute-generated-checks
-```
-
-One real run discovered Checker, Standardizer and Parent as separate candidates, selected only Checker under the one-build budget, and adopted the [Checker skill](../skills/2026-10-23-structure-curation/chembl-structure-checker/SKILL.md). Its documented stereo finding and clean empty tuple passed result assertions; the delivered example, review and relocation passed. The run used the pinned source checkout with existing RDKit 2026.03.6; it did not test a fresh package installation. Earlier failed checks were retained, not counted as ready.
-
-To run the adopted example in an environment where its declared prerequisite is already available:
-
-```text
-python examples/verify_python_example.py skills/2026-10-23-structure-curation/chembl-structure-checker
-```
-
-For a separate installation, select version `chembl_structure_pipeline==1.2.4` explicitly; an unversioned pip command does not pin it. Neither the helper nor the pipeline installs this dependency automatically.
-
-`builds/paper-code.json` retains the Dimorphite-DL version-difference example; its modern tag may require unavailable external dependencies. A generated draft is an honest result. `builds/minimal.json` is a path template to edit, not a ready input on every machine.
+Resource versions can be pinned, but another model run need not produce byte-identical skills. Distinguish rerunning the workflow from reproducing an actual tool result. Until complete batches are added, use the project's [usage](../docs/pipeline/usage.md) and [configuration](../docs/pipeline/configuration.md) guides.

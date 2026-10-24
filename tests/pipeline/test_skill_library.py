@@ -49,7 +49,7 @@ class SkillLibraryTests(unittest.TestCase):
         artifact = copy.deepcopy(ARTIFACT)
         artifact['files'][0]['content'] = artifact['files'][0]['content'].replace('print(2 + 3)', 'print(sum([2, 3]))')
         artifact['coverage']['usage'] = 'print(sum([2, 3]))'
-        artifact["tests"] = [{"name":"delivered-example", "argv":["{python}", str(Path(__file__).resolve().parents[2] / "examples/verify_python_example.py"), "{package}"], "stdout_contains":["5"], "evidence":"e1", "purpose":"Actual source-backed example"}]
+        artifact["tests"] = [{"name":"delivered-example", "argv":["{python}", str(Path(__file__).resolve().parents[2] / "creation_pipeline/example_runner.py"), "{package}"], "stdout_contains":["5"], "evidence":"e1", "purpose":"Actual source-backed example"}]
         result, _ = self.case.run_case(f.discovery(f.candidate()), artifact, execute_generated=True)
         self.assertEqual(result['status'], 'ready')
         record = read_json(Path(result['output']) / 'records' / 'add-numbers.json')
@@ -60,7 +60,7 @@ class SkillLibraryTests(unittest.TestCase):
         artifact = copy.deepcopy(ARTIFACT)
         artifact['files'][0]['content'] = artifact['files'][0]['content'].replace('print(2 + 3)', 'raise RuntimeError("broken")')
         artifact['coverage']['usage'] = 'raise RuntimeError("broken")'
-        artifact["tests"] = [{"name":"broken-example", "argv":["{python}", str(Path(__file__).resolve().parents[2] / "examples/verify_python_example.py"), "{package}"], "stdout_contains":["5"], "evidence":"e1", "purpose":"Actual example"}]
+        artifact["tests"] = [{"name":"broken-example", "argv":["{python}", str(Path(__file__).resolve().parents[2] / "creation_pipeline/example_runner.py"), "{package}"], "stdout_contains":["5"], "evidence":"e1", "purpose":"Actual example"}]
         result, _ = self.case.run_case(f.discovery(f.candidate()), artifact, artifact, execute_generated=True)
         self.assertEqual(result['status'], 'failed')
 

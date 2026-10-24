@@ -1,4 +1,4 @@
-"""Execute delivered Python examples; the optional marker proves completion only."""
+"""Explicitly execute a skill's Python examples; completion is not a result oracle."""
 import re
 import ast
 import argparse

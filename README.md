@@ -43,6 +43,6 @@ Reviewed skills are organized under `skills/<date>-<batch>/<name>/`. Use --no-ad
 - [Resources and supplements](docs/pipeline/resources.md)
 - [Design](docs/pipeline/design.md), [outputs](docs/pipeline/outputs.md), [status](docs/pipeline/status.md)
 - [Minimum content](docs/skills/minimum.md), [packaging](docs/skills/packaging.md)
-- [Existing examples](examples/README.md): retained historical cases; not the current complex-resource acceptance trial
+- [Examples](examples/README.md): reserved for complete build batches with inputs, important records, outputs and reproduction instructions
 
 Engineering tests: `python -m unittest discover -s tests -q`. Agent benefit evaluation remains separate.

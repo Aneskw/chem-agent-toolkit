@@ -210,7 +210,6 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
               "started_at": now(), "status": "failed", "entities": [], "errors": [],
               "agent_efficacy": "not_evaluated_separate_work", "replay": bool(getattr(backend, "replay", False))}
     implementation = [p for p in sorted((ROOT / "creation_pipeline").rglob("*")) if p.suffix in (".py", ".md")]
-    implementation.append(ROOT / "examples/verify_python_example.py")
     record["implementation_sha256"] = hash_object({p.relative_to(ROOT).as_posix(): digest(p.read_bytes())
                                                   for p in implementation})
     session, sources, plan, config = None, None, None, None

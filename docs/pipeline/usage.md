@@ -25,4 +25,4 @@ python -m creation_pipeline clean <build-id> --dry-run
 
 check verifies recorded files/static structure, not fresh runtime execution. install checks eligible output and collisions. Clean only registered local workspaces; do not clean incomplete work intended for resume.
 
-Compatibility discover/plan/revise/--plan remain diagnostic interfaces, not the normal human workflow. Hand-editing evidence is unsupported. Direct API/Ollama configuration fails early. Existing examples are preserved historical cases and may contain an earlier plan-based invocation; they are not new complex-resource validation.
+Compatibility discover/plan/revise/--plan remain diagnostic interfaces, not the normal human workflow. Hand-editing evidence is unsupported. Direct API/Ollama configuration fails early. The examples directory is reserved for complete build batches; no curated batch is currently published. Follow this guide and the configuration reference to run the pipeline.

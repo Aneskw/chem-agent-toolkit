@@ -206,7 +206,7 @@ class PipelineTests(unittest.TestCase):
         package = self.root / 'example'
         package.mkdir()
         (package / 'SKILL.md').write_text('```python\nimport sys\nassert len(sys.argv) == 1\nprint("standalone-example")\n```\n', encoding='utf-8')
-        process = subprocess.run([sys.executable, str(ROOT / 'examples/verify_python_example.py'), str(package)],
+        process = subprocess.run([sys.executable, str(ROOT / 'creation_pipeline/example_runner.py'), str(package)],
                                  capture_output=True, text=True, timeout=10)
         self.assertEqual(process.returncode, 0, process.stderr)
         self.assertIn('standalone-example', process.stdout)
