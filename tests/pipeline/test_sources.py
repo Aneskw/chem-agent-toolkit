@@ -8,11 +8,10 @@ import zipfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from creation_pipeline.acquisition import Acquisition
-from creation_pipeline.documents import read_text, table_rows
-from creation_pipeline.intake import Sources
+from creation_pipeline.resources.acquisition import Acquisition
+from creation_pipeline.resources.documents import read_text, table_rows
+from creation_pipeline.resources.intake import Sources
 from creation_pipeline.models import BlockedError, load_config
-from creation_pipeline.providers import APIBackend
 from creation_pipeline.records import write_json
 
 
@@ -89,8 +88,8 @@ class SourceTests(unittest.TestCase):
     def test_snapshot_does_not_change_with_original(self):
         sources = Sources(self.config, self.root / "cache")
         self.doc.write_text("changed", encoding="utf-8")
-        text = sources.request({"action": "read", "source": "doc", "path": "doc.md"})
-        self.assertIn("Actual source", text["excerpt"])
+        text = Path(sources.entries["doc"]["path"]).read_text()
+        self.assertIn("Actual source", text)
         sources.verify()
 
     def test_fetch_budget_and_disabled_network(self):
@@ -109,33 +108,12 @@ class SourceTests(unittest.TestCase):
             url = "https://example.org/fullTextXML"
             headers = {"Content-Type": "application/xml"}
         acquisition = Acquisition(self.config, self.root / "cache")
-        with patch("creation_pipeline.acquisition.urllib.request.urlopen", return_value=Response(b"<article/>")):
+        with patch("creation_pipeline.resources.acquisition.urllib.request.urlopen", return_value=Response(b"<article/>")):
             path, _ = acquisition.download(Response.url)
             self.assertEqual(path.suffix, ".xml")
         self.config["limits"]["source_bytes"] = 10
-        with patch("creation_pipeline.acquisition.urllib.request.urlopen", return_value=Response(b"x" * 11)), self.assertRaises(BlockedError):
+        with patch("creation_pipeline.resources.acquisition.urllib.request.urlopen", return_value=Response(b"x" * 11)), self.assertRaises(BlockedError):
             acquisition.download("https://example.org/oversized.xml")
-
-    def test_provider_envelope_and_usage_chat_and_ollama(self):
-        for kind in ("chat_completions", "ollama"):
-            backend = APIBackend({"backend": kind, "name": "fixture", "base_url": "http://localhost:1234", "api_key_env": ""})
-            answer = {"action": "complete", "payload": {"candidates": []}}
-            body = ({"choices": [{"finish_reason": "stop", "message": {"content": json.dumps(answer)}}], "usage": {"prompt_tokens": 5}}
-                    if kind == "chat_completions" else {"done": True, "done_reason": "stop", "message": {"content": json.dumps(answer)}, "eval_count": 3})
-            mock = MagicMock()
-            mock.__enter__.return_value = mock
-            mock.read.return_value = json.dumps(body).encode()
-            with patch("creation_pipeline.providers.urllib.request.build_opener") as opener:
-                opener.return_value.open.return_value = mock
-                value, receipt = backend.call("test", 1)
-                sent = json.loads(opener.return_value.open.call_args.args[0].data)
-                self.assertEqual(sent["model"], "fixture")
-                self.assertEqual(value, answer)
-                self.assertTrue(receipt["usage"])
-
-    def test_provider_rejects_remote_plain_http(self):
-        with self.assertRaises(ValueError):
-            APIBackend({"backend": "chat_completions", "name": "x", "base_url": "http://example.org/v1"}).call("test", 1)
 
     def test_github_export_pins_commit_and_retains_binary_assets(self):
         stream = io.BytesIO()
@@ -151,7 +129,7 @@ class SourceTests(unittest.TestCase):
         zipped.url = "https://codeload.github.com/example/tool/zip/" + "a" * 40
         zipped.headers = {}
         acquisition = Acquisition(self.config, self.root / 'cache')
-        with patch('creation_pipeline.acquisition.urllib.request.urlopen', side_effect=[metadata, zipped]):
+        with patch('creation_pipeline.resources.acquisition.urllib.request.urlopen', side_effect=[metadata, zipped]):
             path, origin = acquisition.repository('https://github.com/example/tool.git', 'v1')
         self.assertEqual(origin['resolved_ref'], 'a' * 40)
         self.assertTrue((path / 'api.py').exists())
@@ -174,6 +152,6 @@ class SourceTests(unittest.TestCase):
         prepared = {'id': 'code', 'path': str(exported), 'repo': 'https://github.com/example/tool.git',
                     'resolved_ref': 'a' * 40, 'repository_export': True}
         self.config['sources'] = [{'id': 'code', 'repo': prepared['repo']}]
-        with patch('creation_pipeline.acquisition.Acquisition.prepare', return_value=prepared):
+        with patch('creation_pipeline.resources.acquisition.Acquisition.prepare', return_value=prepared):
             sources = Sources(self.config, self.root / 'cache')
         self.assertEqual(sources.entries['code']['resolved_ref'], 'a' * 40)

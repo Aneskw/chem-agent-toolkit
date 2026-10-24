@@ -6,13 +6,12 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from creation_pipeline.analyze import ordered
+from creation_pipeline.generation.discovery import ordered
 from creation_pipeline.models import load_config
-from creation_pipeline.package import install, manifest, verify_bundle
+from creation_pipeline.artifacts.package import install, manifest, verify_bundle
 from creation_pipeline.pipeline import ROOT, build
-from creation_pipeline.providers import APIBackend
 from creation_pipeline.records import read_json, write_json
-from tests.pipeline.test_components import MAIN, COVERAGE, PLAN, ARTIFACT, ReplayBackend, response
+from tests.pipeline.support import MAIN, PLAN, ARTIFACT, ReplayStages, response
 
 
 def candidate(name="add-numbers", **updates):
@@ -47,9 +46,9 @@ class DiscoveryTests(unittest.TestCase):
         self.temp.cleanup()
 
     def run_case(self, *values, **kwargs):
-        backend = ReplayBackend([response(v) for v in values])
+        backend = ReplayStages([response(v) for v in values])
         self.last_backend = backend
-        result = build(self.config, self.state, backend=backend, **kwargs)
+        result = build(self.config, self.state, _session_factory=backend, **kwargs)
         return result, read_json(Path(result["output"]) / "summary.json")
 
     def test_no_task_needed_and_verbatim_single_file(self):
@@ -69,7 +68,7 @@ class DiscoveryTests(unittest.TestCase):
         result, _ = self.run_case(discovery(candidate()), plan_only=True)
         self.source.write_text("original input changed", encoding="utf-8")
         continued = build(state_root=self.state, plan_path=Path(result["output"]) / "plan.json",
-                          backend=ReplayBackend([response(ARTIFACT)]))
+                          _session_factory=ReplayStages([response(ARTIFACT)]))
         self.assertEqual(continued["status"], "ready", continued)
         self.assertEqual(continued["model_calls"], 2)
 
@@ -78,7 +77,7 @@ class DiscoveryTests(unittest.TestCase):
         plan_path = Path(result["output"]) / "plan.json"
         plan = read_json(plan_path)
         Path(plan["sources"][0]["path"]).write_text("tampered", encoding="utf-8")
-        result = build(state_root=self.state, plan_path=plan_path, backend=ReplayBackend([]))
+        result = build(state_root=self.state, plan_path=plan_path, _session_factory=ReplayStages([]))
         self.assertEqual(result["status"], "failed")
         self.assertIn("snapshot", str(result["errors"]))
 
@@ -88,7 +87,7 @@ class DiscoveryTests(unittest.TestCase):
         doc = read_json(path)
         doc["discovery"]["candidates"][0]["selected"] = False
         write_json(path, doc)
-        result = build(state_root=self.state, plan_path=path, backend=ReplayBackend([]))
+        result = build(state_root=self.state, plan_path=path, _session_factory=ReplayStages([]))
         self.assertEqual(result["status"], "no_candidates")
 
     def test_source_context_edit_rejected(self):
@@ -97,7 +96,7 @@ class DiscoveryTests(unittest.TestCase):
         doc = read_json(path)
         doc["config"]["execute_generated_checks"] = True
         write_json(path, doc)
-        result = build(state_root=self.state, plan_path=path, backend=ReplayBackend([]))
+        result = build(state_root=self.state, plan_path=path, _session_factory=ReplayStages([]))
         self.assertEqual(result["status"], "failed")
 
     def test_independent_candidate_survives_failure(self):
@@ -126,7 +125,7 @@ class DiscoveryTests(unittest.TestCase):
 
     def test_ready_resume_reuses_files_without_model_calls(self):
         result, _ = self.run_case(discovery(candidate()), ARTIFACT)
-        again = build(state_root=self.state, plan_path=Path(result["output"]) / "plan.json", backend=ReplayBackend([]))
+        again = build(state_root=self.state, plan_path=Path(result["output"]) / "plan.json", _session_factory=ReplayStages([]))
         self.assertEqual(again["status"], "ready", again)
         self.assertEqual(again["model_calls"], 0)
 
@@ -144,14 +143,9 @@ class DiscoveryTests(unittest.TestCase):
         self.assertEqual(result["status"], "ready")
 
     def test_user_guidance_reaches_author(self):
-        backend = ReplayBackend([response(discovery(candidate())), response(ARTIFACT)])
-        original = backend.call
-        prompts = []
-        def call(prompt, *args, **kwargs):
-            prompts.append(prompt)
-            return original(prompt, *args, **kwargs)
-        backend.call = call
-        result = build(self.config, self.state, backend=backend)
+        backend = ReplayStages([response(discovery(candidate())), response(ARTIFACT)])
+        result = build(self.config, self.state, _session_factory=backend)
+        prompts = backend.prompts
         self.assertEqual(result["status"], "ready")
         self.assertTrue(all(self.options["prompt"] in p for p in prompts))
 
@@ -167,17 +161,6 @@ class DiscoveryTests(unittest.TestCase):
         for plan in (discovery(candidate(), candidate()), discovery(candidate(evidence=[{"id": "fake", "claim": "x"}]))):
             result, _ = self.run_case(plan, plan)
             self.assertEqual(result["status"], "failed")
-
-    def test_api_rejects_incomplete_response(self):
-        api = APIBackend({"backend": "chat_completions", "name": "test", "base_url": "http://localhost:1234/v1", "api_key_env": ""})
-        response_mock = __import__('unittest.mock', fromlist=['Mock']).Mock()
-        response_mock.__enter__ = lambda s: s
-        response_mock.__exit__ = lambda *args: None
-        response_mock.read.return_value = json.dumps({"choices": [{"finish_reason": "length", "message": {"content": "{}"}}]}).encode()
-        with patch('creation_pipeline.providers.urllib.request.build_opener') as opener:
-            opener.return_value.open.return_value = response_mock
-            with self.assertRaises(ValueError):
-                api.call('test', 1)
 
     def test_coverage_is_not_required(self):
         artifact = copy.deepcopy(ARTIFACT)
@@ -259,36 +242,36 @@ class DiscoveryTests(unittest.TestCase):
 
     def test_author_prompt_update_reuses_discovery_but_rebuilds_files(self):
         result, _ = self.run_case(discovery(candidate()), plan_only=True)
-        from creation_pipeline.analyze import specifications
+        from creation_pipeline.generation.discovery import specifications
         changed = specifications()
-        changed['creation_pipeline/prompts/author.md'] = 'new-author-prompt'
+        changed['creation_pipeline/generation/prompts/author.md'] = 'new-author-prompt'
         with patch('creation_pipeline.pipeline.specifications', return_value=changed):
             again = build(state_root=self.state, plan_path=Path(result['output']) / 'plan.json',
-                          backend=ReplayBackend([response(ARTIFACT)]))
+                          _session_factory=ReplayStages([response(ARTIFACT)]))
         self.assertEqual(again['status'], 'ready')
         summary = read_json(Path(again['output']) / 'summary.json')
-        self.assertEqual(summary['revalidated_prompts'], ['creation_pipeline/prompts/author.md'])
+        self.assertEqual(summary['revalidated_prompts'], ['creation_pipeline/generation/prompts/author.md'])
 
     def test_discovery_rule_change_requires_rediscovery(self):
         result, _ = self.run_case(discovery(candidate()), plan_only=True)
-        from creation_pipeline.analyze import specifications
+        from creation_pipeline.generation.discovery import specifications
         changed = specifications()
-        changed['creation_pipeline/prompts/analyze.md'] = 'new-discovery-policy'
+        changed['creation_pipeline/generation/prompts/analyze.md'] = 'new-discovery-policy'
         with patch('creation_pipeline.pipeline.specifications', return_value=changed):
-            again = build(state_root=self.state, plan_path=Path(result['output']) / 'plan.json', backend=ReplayBackend([]))
+            again = build(state_root=self.state, plan_path=Path(result['output']) / 'plan.json', _session_factory=ReplayStages([]))
         self.assertEqual(again['status'], 'failed')
 
     def test_backend_failure_is_not_retried_as_file_repair(self):
-        backend = ReplayBackend([response(discovery(candidate()))])
-        original = backend.call
+        backend = ReplayStages([response(discovery(candidate()))])
+        original = backend.stage
         calls = []
-        def fail_author(prompt, *args, **kwargs):
+        def fail_author(session, prompt, *args, **kwargs):
             calls.append(prompt)
             if len(calls) > 1:
-                raise OSError('model service unavailable')
-            return original(prompt, *args, **kwargs)
-        backend.call = fail_author
-        result = build(self.config, self.state, backend=backend)
+                raise __import__("creation_pipeline.models", fromlist=["ModelCallError"]).ModelCallError('model service unavailable')
+            return original(session, prompt, *args, **kwargs)
+        backend.stage = fail_author
+        result = build(self.config, self.state, _session_factory=backend)
         self.assertEqual(result['status'], 'failed')
         self.assertEqual(len(calls), 2)
         record = read_json(Path(result['output']) / 'records/add-numbers.json')

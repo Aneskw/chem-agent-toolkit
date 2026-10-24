@@ -10,11 +10,11 @@ import subprocess
 import threading
 import time
 
-from .model_backend import codex_command
-from .models import ModelCallError, BudgetError, bound
-from .records import read_json, write_json, redact, digest
-from .runtime import terminate_tree
-from .workspace import prepare
+from creation_pipeline.agent.command import codex_command
+from creation_pipeline.models import ModelCallError, BudgetError, bound
+from creation_pipeline.records import read_json, write_json, redact, digest
+from creation_pipeline.validation.runtime import terminate_tree
+from creation_pipeline.resources.workspace import prepare
 
 
 class NativeSession:
@@ -48,7 +48,7 @@ class NativeSession:
         self.state["receipts"] = self.receipts
 
     def refresh_sources(self):
-        from .workspace import sync_sources
+        from creation_pipeline.resources.workspace import sync_sources
         sync_sources(self.sources, self.work)
 
     def stage(self, instructions, context, schema=None):

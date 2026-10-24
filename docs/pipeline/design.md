@@ -44,13 +44,14 @@ One failed candidate does not block others. Scope changes and sources update int
 
 ## Modules
 
-- models/cli: Agent-only configuration, execution profiles and user commands.
-- acquisition/intake/documents/workspace: streaming acquisition, filtered snapshots/references, locators, cached views and registry.
-- agent_tools: supplements, incremental candidates, chunk writing, durable finalization, recorded checks.
-- agent_backend: native sessions, optional limits, events, registry synchronization and image audits.
-- analyze/schemas/context: concise discovery and stage handoffs.
-- author/prompts: direct delivery, repair and source/content review.
-- checks/runtime: deterministic validation and applicable execution.
-- pipeline: orchestration, partial continuation, scoped conclusion and recovery.
-- package/library/records: manifests, adoption/catalog and cleanup.
-- model_backend/providers: isolated historical transport/replay compatibility, not public API backends.
+The entry point is `python -m creation_pipeline`. Internal modules use responsibility-based packages; no direct API or tool-disabled model transport is retained. See [code organization](code-organization.md) for the full tree and dependency boundaries.
+
+- pipeline: stage orchestration, partial continuation, scoped conclusion and recovery.
+- models/cli/schemas/records/paths: configuration, commands, Agent result records, durable records and stable paths.
+- resources: acquisition, snapshots, document views, original-file locators and supplements.
+- agent: Codex CLI discovery, native sessions/events and a thin helper command router.
+- generation: candidate decisions, prompts, handoffs, direct-file writing and review coordination.
+- validation: deterministic checks, explicit check execution and recorded Agent diagnostics.
+- artifacts: file manifests, delivery receipts, installation and library adoption.
+
+Deterministic test doubles live only under tests/pipeline/support.py. They simulate Agent decisions and file writes through the same delivery helpers as production; they do not require a second production backend.

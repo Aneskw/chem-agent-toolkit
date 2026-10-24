@@ -6,11 +6,12 @@ import subprocess
 
 if not __package__:
     import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    __package__ = "creation_pipeline"
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    __package__ = "creation_pipeline.resources"
 
-from .documents import read_text
-from .records import write_json, read_json, file_digest
+from creation_pipeline.resources.documents import read_text
+from creation_pipeline.paths import PACKAGE_ROOT
+from creation_pipeline.records import write_json, read_json, file_digest
 
 IMAGES = {".png", ".jpg", ".jpeg", ".webp"}
 
@@ -66,7 +67,7 @@ def prepare(sources, work):
                 "warning": "eN IDs identify source files, not proof of reading. Cite only inspected passages/pages.",
                 "limits": "Snapshots exclude secrets, unsupported formats and files over configured budgets; see omissions.",
                 "rendering": "render_command takes PDF, 1-based page, output prefix. Open the resulting PNG with the image tool."}
-    document["helper"] = [__import__("sys").executable, str(Path(__file__).with_name("agent_tools.py"))]
+    document["helper"] = [__import__("sys").executable, str(PACKAGE_ROOT / "agent/tools.py")]
     document["commands"] = {"inventory": "inventory --run RUN [--query PATH_SUBSTRING] [--source ID] [--limit N --offset N]", "candidate": "candidate --run RUN --definition CANDIDATE_JSON", "supplement": "supplement --run RUN --url URL|--repo URL|--paper DOI --reason WHY [--ref COMMIT]",
         "write": "write --package PACKAGE --path RELATIVE --base64 SMALL_UTF8_CHUNK [--append]",
         "finish": "finish --run RUN --package PACKAGE --token TOKEN [--metadata JSON_FILE]",

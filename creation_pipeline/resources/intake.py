@@ -1,17 +1,15 @@
-"""Bounded source indexing and model-requested reading, with retained evidence."""
+"""Source snapshots, complete inventories and source-evidence integrity."""
 from __future__ import annotations
 
 import json
 import re
 import subprocess
 import shutil
-import urllib.request
 from pathlib import Path
 
-from .models import BlockedError, exceeded
-from .acquisition import Acquisition
-from .documents import read_text
-from .records import digest, has_link, redact, safe_relative, file_digest
+from creation_pipeline.models import BlockedError, exceeded
+from creation_pipeline.resources.acquisition import Acquisition
+from creation_pipeline.records import digest, has_link, redact, safe_relative, file_digest
 
 
 EXCLUDED = {".git", ".pipeline", ".venv", "venv", "node_modules", "__pycache__",
@@ -175,100 +173,6 @@ class Sources:
         return [{**{k: v for k, v in entry.items() if k not in ("path", "files", "inventory", "original_path")},
                  "files": entry["files"][:100], "index_preview_truncated": len(entry["files"]) > 100}
                 for entry in self.entries.values()]
-
-    def _file(self, sid, name):
-        entry = self.entries.get(sid)
-        if entry is None:
-            raise ValueError("Unknown source ID")
-        root = Path(entry["path"])
-        if root.is_file():
-            if name != root.name:
-                raise ValueError("Unknown source file")
-            return root
-        path = safe_relative(root, name)
-        if not permitted(Path(name)) or not path.is_file():
-            raise ValueError("Source path is unavailable or excluded")
-        return path
-
-    def _text(self, path):
-        data = path.read_bytes()
-        return redact(read_text(path, self.limits["source_bytes"])), digest(data)
-
-    def request(self, action):
-        if action["action"] == "read_many":
-            requests = json.loads(action.get("query", "[]"))
-            if not isinstance(requests, list) or not 1 <= len(requests) <= 6 or any(not isinstance(r, dict) for r in requests):
-                raise ValueError("read_many needs 1..6 read objects")
-            return {"reads": [self.request({**r, "action": "read"}) for r in requests]}
-        if action["action"] in ("fetch", "repository", "resolve"):
-            key = {"fetch": "url", "repository": "repo", "resolve": "paper"}[action["action"]]
-            item = {"id": action.get("source"), key: action.get("query", "")}
-            if key == "repo" and action.get("path"):
-                item["ref"] = action["path"]
-            return self.add(item)
-        sid, name = action.get("source"), action.get("path", "")
-        start = max(1, int(action.get("start", 1)))
-        offset = max(0, int(action.get("offset", 0)))
-        limit = min(self.limits["read_lines"], max(1, int(action.get("limit", 80))))
-        if action["action"] == "list":
-            entry = self.entries[sid]
-            root = Path(entry["path"])
-            directory = root if not name else safe_relative(root, name)
-            if has_link(directory) or not directory.is_dir():
-                raise ValueError("Not a readable directory")
-            files = [p.name + ("/" if p.is_dir() else "") for p in sorted(directory.iterdir())
-                     if not has_link(p) and not any(part.startswith(".") or part in EXCLUDED for part in p.relative_to(root).parts)]
-            return {"items": files[start - 1:start - 1 + limit], "total": len(files)}
-        if action["action"] == "search" and (not name or Path(self.entries[sid]["path"], name).is_dir()):
-            entry = self.entries[sid]
-            query = action.get("query", "").lower()
-            if not query:
-                raise ValueError("Search needs a nonempty query")
-            matches = []
-            prefix = name.rstrip("/") + "/" if name else ""
-            for file in entry["files"]:
-                if not file.startswith(prefix):
-                    continue
-                try:
-                    text, sha = self._text(self._file(sid, file))
-                except (ValueError, UnicodeError, OSError):
-                    continue
-                for number, line in enumerate(text.splitlines(), 1):
-                    if query in line.lower():
-                        matches.append({"path": file, "line": number, "text": line[:300]})
-                        if len(matches) >= 500:
-                            break
-                if len(matches) >= 500:
-                    break
-            return {"matches": matches[start-1:start-1+limit], "capped": len(matches) >= 500,
-                    "note": "Search locates files; read actual passages before citing"}
-        path = self._file(sid, name)
-        text, sha = self._text(path)
-        lines = text.splitlines()
-        if action["action"] == "search":
-            query = action.get("query", "")
-            matches = []
-            for i, line in enumerate(lines, 1):
-                column = line.lower().find(query.lower())
-                if column >= 0:
-                    left = max(0, column - 100)
-                    matches.append({"line": i, "column": column + 1, "text": line[left:left + 800]})
-            selected, used = [], 0
-            for item in matches[start - 1:start - 1 + limit]:
-                if used + len(item["text"]) > self.limits["view_chars"]:
-                    break
-                selected.append(item)
-                used += len(item["text"])
-            return {"matches": selected, "total": len(matches), "sha256": sha,
-                    "next_start": start + len(selected) if start - 1 + len(selected) < len(matches) else None}
-        end = min(len(lines), start - 1 + limit)
-        window = "\n".join(lines[start - 1:end])
-        excerpt = window[offset:offset + self.limits["view_chars"]]
-        record = {"source": sid, "path": name, "start": start, "end": end, "sha256": sha,
-                  "offset": offset, "excerpt": excerpt, "id": f"e{len(self.evidence) + 1}",
-                  "next_offset": offset + len(excerpt) if offset + len(excerpt) < len(window) else None}
-        self.evidence.append(record)
-        return record
 
     def validate_evidence(self, evidence):
         known = {item["id"]: item for item in self.evidence}

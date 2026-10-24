@@ -8,16 +8,18 @@ import unittest
 from unittest.mock import patch
 
 from creation_pipeline.models import load_config, ModelCallError
-from creation_pipeline.intake import Sources, permitted
+from creation_pipeline.resources.intake import Sources, permitted
 from creation_pipeline.records import write_json, read_json
-from creation_pipeline.workspace import prepare, sync_sources
-from creation_pipeline.agent_tools import supplement, finish, delivered, write_chunk, check
-from creation_pipeline.package import manifest
-from creation_pipeline.checks import static_checks, run_checks
-from creation_pipeline.agent_backend import NativeSession
-from creation_pipeline.author import author
-from creation_pipeline.analyze import normalize, validate_discovery
-from tests.pipeline.test_components import MAIN
+from creation_pipeline.resources.workspace import prepare, sync_sources
+from creation_pipeline.resources.supplements import supplement
+from creation_pipeline.artifacts.delivery import finish, delivered, write_chunk
+from creation_pipeline.validation.agent_checks import check
+from creation_pipeline.artifacts.package import manifest
+from creation_pipeline.validation.checks import static_checks, run_checks
+from creation_pipeline.agent.backend import NativeSession
+from creation_pipeline.generation.author import author
+from creation_pipeline.generation.discovery import normalize, validate_discovery
+from tests.pipeline.support import MAIN
 
 
 class ResearchTests(unittest.TestCase):
@@ -63,15 +65,14 @@ class ResearchTests(unittest.TestCase):
     def test_api_backends_rejected_at_configuration(self):
         for backend in ("chat_completions", "ollama"):
             self.raw["model"] = {"backend": backend, "name": "unused"}
-            with self.assertRaisesRegex(ValueError, "temporarily closed"):
+            with self.assertRaisesRegex(ValueError, "Only codex_cli"):
                 self.load()
 
-    def test_api_backend_cannot_bypass_public_entry_by_injection(self):
+    def test_api_injection_is_not_a_public_entrypoint(self):
+        import inspect
         from creation_pipeline.pipeline import build
-        from creation_pipeline.providers import APIBackend
-        with self.assertRaisesRegex(ValueError, "native Agent"):
-            build(self.input, self.root / "unused", backend=APIBackend({"name": "unused"}))
-        self.assertFalse((self.root / "unused").exists())
+        self.assertNotIn("backend", inspect.signature(build).parameters)
+        self.assertFalse((Path(__file__).resolve().parents[2] / "creation_pipeline/providers.py").exists())
 
     def test_large_unknown_and_hidden_research_files_survive(self):
         (self.source / "array.h5").write_bytes(b"\0" * 2_100_000)
@@ -108,14 +109,14 @@ class ResearchTests(unittest.TestCase):
             sources.verify()
 
     def test_inventory_pagination_does_not_exclude_other_files(self):
-        from creation_pipeline.agent_tools import inventory
+        from creation_pipeline.resources.supplements import inventory
         result = inventory(self.work, source="tool", limit=1)
         self.assertEqual(result["total"], 1)
         self.assertTrue(Path(result["items"][0]["original"]).exists())
         self.assertIn("pagination", result["note"])
 
     def test_incremental_candidate_has_valid_source_provenance(self):
-        from creation_pipeline.agent_tools import save_candidate
+        from creation_pipeline.generation.candidates import save_candidate
         candidate = {"name": "addition", "capability": "Add", "boundary": "numbers",
             "value": "Index convention", "usage_path": "api.add", "construction": "Use source directly",
             "evidence": [{"id": "e1", "claim": "api.py function add"}], "gaps": [], "blocked": False}
@@ -130,7 +131,7 @@ class ResearchTests(unittest.TestCase):
             save_candidate(self.work, definition)
 
     def test_only_explicit_saved_candidates_are_selected(self):
-        from creation_pipeline.analyze import analyze
+        from creation_pipeline.generation.discovery import analyze
         candidate = {"name": "selected", "capability": "Add", "boundary": "numbers",
             "value": "Convention", "usage_path": "api.add", "construction": "Source usage",
             "evidence": [{"id": "e1", "claim": "api.py add"}], "gaps": [], "blocked": False}
@@ -160,7 +161,7 @@ class ResearchTests(unittest.TestCase):
             case.tearDown()
 
     def test_review_cannot_pass_its_own_blocking_finding(self):
-        from creation_pipeline.author import review
+        from creation_pipeline.generation.author import review
         from tests.pipeline.test_discovery import candidate
         session = NativeSession(self.config, self.sources, copy.deepcopy(self.config["limits"]), self.work)
         response = {"status": "pass", "resolution": "none", "findings": [
@@ -190,7 +191,7 @@ class ResearchTests(unittest.TestCase):
         prepare(self.sources, self.work)
         extra = self.root / "supplement.md"
         extra.write_text("A concrete missing API detail", encoding="utf-8")
-        with patch("creation_pipeline.acquisition.Acquisition.download", return_value=(extra, {"resolved_url": "https://example.org/supplement.md"})) as fetch:
+        with patch("creation_pipeline.resources.acquisition.Acquisition.download", return_value=(extra, {"resolved_url": "https://example.org/supplement.md"})) as fetch:
             first = supplement(self.work, {"url": "https://example.org/supplement.md"}, "Clarify return semantics")
             second = supplement(self.work, {"url": "https://example.org/supplement.md"}, "Same uncertainty")
         self.assertEqual(fetch.call_count, 1)

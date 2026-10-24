@@ -5,12 +5,12 @@ import json
 import sys
 from pathlib import Path
 
-from .analyze import ROOT
-from .checks import static_checks
-from .models import load_config
-from .package import install, verify_output, verify_bundle
+from creation_pipeline.paths import ROOT
+from creation_pipeline.validation.checks import static_checks
+from creation_pipeline.models import load_config
+from creation_pipeline.artifacts.package import install, verify_output, verify_bundle
 from .pipeline import build
-from .records import clean_run, redact
+from creation_pipeline.records import clean_run, redact
 
 
 def main(argv=None):
@@ -80,7 +80,7 @@ def main(argv=None):
                           "checks": reports, "recorded_build_status": record["status"], "execution": "not_rerun"}
             elif (path / "build.json").is_file():
                 record, package = verify_output(path)
-                reports = static_checks(package, record["plan"]["name"], record.get("coverage"))
+                reports = static_checks(package, record["plan"]["name"])
                 result = {"status": "fail" if any(r["status"] == "fail" for r in reports) else "pass",
                           "checks": reports, "recorded_build_status": record["status"],
                           "execution": "not_rerun", "scope": "manifest_and_static_only"}

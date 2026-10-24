@@ -12,9 +12,9 @@ import tarfile
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from .documents import table_rows
-from .models import BlockedError, exceeded
-from .records import digest, has_link, safe_relative, write_json, read_json
+from creation_pipeline.resources.documents import table_rows
+from creation_pipeline.models import BlockedError, exceeded
+from creation_pipeline.records import digest, has_link, safe_relative, write_json, read_json
 
 
 def https_url(value):
@@ -63,7 +63,7 @@ class Acquisition:
         index = links / (digest(url.encode()) + ".json")
         if index.exists():
             cached = read_json(index)
-            from .records import file_digest
+            from creation_pipeline.records import file_digest
             if Path(cached["path"]).is_file() and file_digest(cached["path"]) == cached["sha256"]:
                 return Path(cached["path"]), cached["origin"]
         self.cache.mkdir(parents=True, exist_ok=True)
@@ -109,7 +109,7 @@ class Acquisition:
         raise BlockedError("No public PDF resolved; provide or identify an actual full-text address")
 
     def _extract(self, archive_path, exported, zipped):
-        from .intake import exclusion
+        from creation_pipeline.resources.intake import exclusion
         total, count, omitted = 0, 0, []
         archive = zipfile.ZipFile(archive_path) if zipped else tarfile.open(archive_path)
         with archive:

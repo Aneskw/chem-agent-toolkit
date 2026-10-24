@@ -9,10 +9,5 @@ def candidate_context(session, config, plan):
             "evidence": session.sources.validate_evidence(plan["evidence"]),
             "handoff": config.get("_handoff", []),
 
-            "resource_capabilities": ["list", "read", "read_many", "search", "fetch", "repository", "resolve"],
-            "limits": {"view_chars": config["limits"]["view_chars"]}}
-    if getattr(session, "native", False):
-        context.pop("resource_capabilities")
-        context.pop("limits")
-        context["resource_index"] = session.workspace["resource_index"]
+            "resource_index": session.workspace["resource_index"]}
     return context

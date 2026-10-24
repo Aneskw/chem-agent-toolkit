@@ -11,18 +11,18 @@ from collections import Counter
 from pathlib import Path
 
 from . import __version__
-from .acquisition import Acquisition
-from .analyze import ROOT, analyze, ordered, specifications, validate_discovery
-from .author import author, review
-from .checks import classify, run_checks, static_checks
-from .intake import Sources
-from .model_backend import Session
-from .models import BlockedError, BudgetError, IncompleteError, ModelCallError, load_config, bound, iterations
-from .package import manifest
-from .providers import backend_for
-from .library import adopt
-from .schemas import DISCOVERY
-from .records import clean_run, digest, has_link, now, read_json, redact, sanitized, write_json, safe_relative
+from creation_pipeline.resources.acquisition import Acquisition
+from creation_pipeline.generation.discovery import ROOT, analyze, ordered, specifications, validate_discovery
+from creation_pipeline.generation.author import author, review
+from creation_pipeline.validation.checks import classify, run_checks, static_checks
+from creation_pipeline.resources.intake import Sources
+from creation_pipeline.models import BlockedError, BudgetError, IncompleteError, ModelCallError, load_config, bound, iterations
+from creation_pipeline.artifacts.package import manifest
+from creation_pipeline.artifacts.library import adopt
+from creation_pipeline.schemas import CANDIDATES
+from creation_pipeline.agent.backend import NativeSession
+from creation_pipeline.generation.discovery import normalize
+from creation_pipeline.records import clean_run, digest, has_link, now, read_json, redact, sanitized, write_json, safe_relative
 
 
 def hash_object(value):
@@ -35,7 +35,7 @@ def _restore(document, state, replan=False):
     config = copy.deepcopy(document["config"])
     current_specs = specifications()
     changed = {p for p in current_specs if current_specs[p] != document["specifications"].get(p)}
-    author_only = {"creation_pipeline/prompts/author.md", "creation_pipeline/prompts/review.md"}
+    author_only = {"creation_pipeline/generation/prompts/author.md", "creation_pipeline/generation/prompts/review.md"}
     if changed - author_only and not replan:
         raise ValueError("Discovery/content specifications changed; run discovery again before building")
     config["_revalidated_prompts"] = sorted(changed)
@@ -84,7 +84,7 @@ def _candidate(session, config, entity, bundle, work, allow_generated):
                 scoped["_previous_issues"] = previous.get("issues", []) if previous else []
                 artifact = author(session, scoped, entity, directory, feedback, previous)
                 previous = artifact
-                if getattr(session, "native", False) and artifact.get("candidate_update"):
+                if artifact.get("candidate_update"):
                     update = artifact["candidate_update"]
                     if not update.get("reason") or not update.get("evidence"):
                         raise ValueError("Scope adjustments need reason and source evidence")
@@ -103,15 +103,14 @@ def _candidate(session, config, entity, bundle, work, allow_generated):
                 reports = static_checks(directory, entity["name"], bundle=bundle)
                 initial = manifest(bundle)
                 if not any(r["status"] == "fail" for r in reports):
-                    native = getattr(session, "native", False)
                     scoped["_oracle_changes"] = []
-                    pre_review = review(session, entity, artifact, reports, scoped) if native else None
+                    pre_review = review(session, entity, artifact, reports, scoped)
                     if pre_review:
                         reports.append(pre_review)
                     if pre_review is None or pre_review["status"] == "pass":
                         reports += run_checks(scoped, artifact, directory, session.sources,
                                               work / entity["name"] / f"attempt-{attempt}-{uuid.uuid4().hex[:8]}", allow_generated,
-                                              prior=_agent_reports(session, directory) if native else None)
+                                              prior=_agent_reports(session, directory))
                     if initial != manifest(bundle):
                         reports.append({"name": "artifact_immutability", "status": "fail", "required": True,
                                         "findings": ["Execution modified bundle files"]})
@@ -121,11 +120,10 @@ def _candidate(session, config, entity, bundle, work, allow_generated):
                         for n, old in failed_oracles.items() if n not in proposed_tests or old != {
                             k: proposed_tests[n].get(k) for k in ("expected_exit", "stdout_contains", "json_equals", "artifacts")}]
                     record["checks"] = reports
-                    if not native or any(r["status"] == "fail" for r in reports) or scoped["_oracle_changes"]:
+                    if any(r["status"] == "fail" for r in reports) or scoped["_oracle_changes"]:
                         final_review = review(session, entity, artifact, reports, scoped)
-                        if native:
-                            seen = {r.get("verification_id") for r in reports if r.get("verification_id")}
-                            reports += [r for r in _agent_reports(session, directory) if r.get("verification_id") not in seen]
+                        seen = {r.get("verification_id") for r in reports if r.get("verification_id")}
+                        reports += [r for r in _agent_reports(session, directory) if r.get("verification_id") not in seen]
                         reports = [r for r in reports if r["name"] != "content_review"] + [final_review]
                         if final_review["status"] == "pass":
                             for report in reports:
@@ -143,7 +141,7 @@ def _candidate(session, config, entity, bundle, work, allow_generated):
                     if name not in current_tests or oracle != {k: current_tests[name].get(k) for k in
                         ("expected_exit", "stdout_contains", "json_equals", "artifacts")}]
                 oracle_review = next((r for r in reports if r["name"] == "content_review"), {})
-                verified_correction = bool(getattr(session, "native", False) and oracle_review.get("status") == "pass"
+                verified_correction = bool(oracle_review.get("status") == "pass"
                     and oracle_review.get("oracle_changes_verified"))
                 if changed and verified_correction:
                     reports.append({"name": "source_backed_oracle_correction", "status": "pass", "required": False,
@@ -191,10 +189,8 @@ def _candidate(session, config, entity, bundle, work, allow_generated):
 
 
 def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None, keep_debug=False,
-          execute_generated=False, backend=None, notify=lambda message: None, feedback=None,
+          execute_generated=False, _session_factory=None, notify=lambda message: None, feedback=None,
           library_root=None, no_adopt=False, resume_id=None, rediscover=False, extra_turns=0):
-    if backend is not None and not getattr(backend, "replay", False):
-        raise ValueError("Only deterministic replay injection is supported; production uses the native Agent")
     state = Path(state_root or ROOT / ".pipeline").absolute()
     if has_link(state):
         raise ValueError("State root must not contain linked paths")
@@ -208,7 +204,7 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
     write_json(work / "workspace.json", {"build_id": build_id, "workspace": str(work.resolve())})
     record = {"schema_version": 3, "pipeline_version": __version__, "build_id": build_id,
               "started_at": now(), "status": "failed", "entities": [], "errors": [],
-              "agent_efficacy": "not_evaluated_separate_work", "replay": bool(getattr(backend, "replay", False))}
+              "agent_efficacy": "not_evaluated_separate_work", "replay": _session_factory is not None}
     implementation = [p for p in sorted((ROOT / "creation_pipeline").rglob("*")) if p.suffix in (".py", ".md")]
     record["implementation_sha256"] = hash_object({p.relative_to(ROOT).as_posix(): digest(p.read_bytes())
                                                   for p in implementation})
@@ -271,14 +267,9 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
         if config["model"]["backend"] != "codex_cli":
             raise ValueError("Saved API/Ollama runs are not executable in the Agent-only pipeline")
         config["execute_generated_checks"] = execute_generated or config["execute_generated_checks"]
-        if backend is None and config["model"]["backend"] == "codex_cli":
-            from .agent_backend import NativeSession
-            session = NativeSession(config, sources, copy.deepcopy(config["limits"]), work, keep_debug)
-        else:
-            session = Session(backend or backend_for(config, work / "model-calls"), sources,
-                              copy.deepcopy(config["limits"]), work, keep_debug)
+        session = (_session_factory or NativeSession)(config, sources, copy.deepcopy(config["limits"]), work, keep_debug)
         session.started = time.monotonic() if config["limits"]["total_seconds"] is None else config["_deadline"] - config["limits"]["total_seconds"]
-        if resume_id and getattr(session, "native", False):
+        if resume_id:
             session.started -= sum(r.get("elapsed_seconds", 0) for r in session.receipts)
             config["_deadline"] = session.started + bound(config["limits"]["total_seconds"])
         session.notify = notify
@@ -288,9 +279,9 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
             context = {"previous_discovery": plan, "feedback": feedback, "sources": sources.index(),
                        "read_evidence": sources.compact_evidence(), "user_guidance": config["prompt"],
                        "constraints": config["constraints"], "user_notes": config["notes"]}
-            revised = session.stage((ROOT / "creation_pipeline/prompts/revise.md").read_text(encoding="utf-8"), context,
-                                    schema=DISCOVERY)
-            plan = validate_discovery(revised, config, sources)
+            revised = session.stage((ROOT / "creation_pipeline/generation/prompts/revise.md").read_text(encoding="utf-8"), context,
+                                    schema=CANDIDATES)
+            plan = validate_discovery(normalize(revised), config, sources)
             write_json(output / "revision.json", {"parent": str(Path(plan_path).absolute()), "feedback": feedback})
         if plan is None:
             notify("Discovering capabilities and choosing packaging directions")
@@ -353,7 +344,6 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                 write_json(output / "records" / (name + ".json"), sanitized(entity_record))
                 record["entities"].append({"name": name, "kind": "skill", "status": entity_record["status"], "needs": []})
                 if entity_record["status"] == "ready" and entity_record.get("additional_candidates"):
-                    from .analyze import normalize
                     for raw in entity_record["additional_candidates"]:
                         addition = normalize({"candidates": [raw]})["candidates"][0]
                         candidate_plan = {"summary": "Source-supported scope adjustment", "candidates": [addition], "omitted": [], "limitations": []}

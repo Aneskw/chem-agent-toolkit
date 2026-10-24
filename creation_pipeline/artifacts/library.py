@@ -4,8 +4,8 @@ import shutil
 import tempfile
 from datetime import datetime
 from pathlib import Path
-from .package import manifest
-from .records import read_json, write_json, safe_relative, has_link, sanitized
+from creation_pipeline.artifacts.package import manifest
+from creation_pipeline.records import read_json, write_json, safe_relative, has_link, sanitized
 
 
 def slug(value):

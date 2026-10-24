@@ -59,7 +59,7 @@ def load_config(path):
             raise ValueError("Unsupported " + key + " configuration")
         for field, value in defaults.items():
             config[key].setdefault(field, value)
-    from .library import slug
+    from creation_pipeline.artifacts.library import slug
     if not isinstance(config["batch"]["label"], str):
         raise ValueError("batch.label must be text")
     slug(config["batch"]["label"])
@@ -93,24 +93,13 @@ def load_config(path):
     model = config.get("model", {})
     if isinstance(model, str):
         model = {"name": model}
-    if not isinstance(model, dict) or set(model) - {"backend", "name", "base_url", "api_key_env", "structured"}:
-        raise ValueError("Unsupported model configuration")
-    model.setdefault("backend", "codex_cli")
-    for key in ("name", "base_url", "api_key_env"):
-        if key in model and not isinstance(model[key], str):
-            raise ValueError("model." + key + " must be text")
-    if "structured" in model and type(model["structured"]) is not bool:
-        raise ValueError("model.structured must be boolean")
-    if model["backend"] not in ("codex_cli", "chat_completions", "ollama"):
-        raise ValueError("Unsupported model backend")
-    if model["backend"] != "codex_cli" and not model.get("name"):
-        raise ValueError("API backends require model.name")
-    if "api_key_env" in model and not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", model["api_key_env"]):
-        raise ValueError("api_key_env must be an environment variable name")
-    if model["backend"] != "codex_cli":
-        raise ValueError("Only codex_cli Agent execution is supported; direct API/Ollama backends are temporarily closed")
-    if set(model) & {"base_url", "api_key_env", "structured"}:
-        raise ValueError("Direct API model settings are not supported by the Agent-only pipeline")
+    if not isinstance(model, dict) or set(model) - {"backend", "name"}:
+        raise ValueError("Only native Agent model.name is supported; direct API settings are unsupported")
+    if model.get("backend", "codex_cli") != "codex_cli":
+        raise ValueError("Only codex_cli Agent execution is supported")
+    if "name" in model and not isinstance(model["name"], str):
+        raise ValueError("model.name must be text")
+    model["backend"] = "codex_cli"  # Accept existing native configurations.
     config["model"] = model
     execution = config.setdefault("execution", {"profile": "production"})
     if not isinstance(execution, dict) or set(execution) - {"profile"}:
@@ -121,8 +110,7 @@ def load_config(path):
     limits = {k: None for k in ("model_calls", "candidate_calls", "model_timeout", "total_seconds",
         "discovery_seconds", "agent_events", "max_candidates", "max_builds", "source_bytes",
         "source_total_bytes", "source_files", "package_bytes", "network_requests", "repair_rounds")}
-    limits.update(check_timeout=120, converter_timeout=60, network_timeout=60, read_lines=160, view_chars=12000,
-                  context_chars=160000)
+    limits.update(check_timeout=120, converter_timeout=60, network_timeout=60)
     # Development is an explicit opt-in preset, never a quality shortcut.
     if profile == "development":
         limits.update(model_calls=8, max_candidates=3, max_builds=1, repair_rounds=2)
@@ -133,7 +121,7 @@ def load_config(path):
     if any(v is not None and (type(v) is not int or v < 0 or (v == 0 and k != "repair_rounds"))
            for k, v in limits.items()):
         raise ValueError("Limits must be null (disabled) or positive integers; repair_rounds may be zero")
-    for k in ("network_timeout", "read_lines", "view_chars", "context_chars"):
+    for k in ("network_timeout",):
         if limits[k] is None:
             raise ValueError(k + " must be a positive integer")
     config["limits"] = limits

@@ -8,9 +8,9 @@ import time
 from pathlib import Path
 from urllib.parse import unquote
 
-from .package import manifest
-from .records import redact, safe_relative
-from .runtime import execute, validate_test
+from creation_pipeline.artifacts.package import manifest
+from creation_pipeline.records import redact, safe_relative
+from creation_pipeline.validation.runtime import execute, validate_test
 
 
 def python_source(path):
@@ -38,7 +38,7 @@ def runtime_path_problems(package, files):
     return problems
 
 
-def static_checks(package, name=None, coverage=None, bundle=None, tool=False):
+def static_checks(package, name=None, *, bundle=None, tool=False):
     package = Path(package)
     files = manifest(package)
     if tool:
@@ -137,7 +137,7 @@ def run_checks(config, artifact, package, sources, work, allow_generated=False, 
                 break
             validate_test(test)
             import json
-            from .records import digest
+            from creation_pipeline.records import digest
             signature = digest(json.dumps(test, sort_keys=True).encode())
             if any(r.get("signature") == signature for r in results):
                 continue

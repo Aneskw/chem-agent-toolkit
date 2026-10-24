@@ -4,7 +4,7 @@ Use a native Codex Agent to discover reusable capabilities from papers, document
 
 ## Prepare
 
-Python 3.11+, Git and authenticated Codex CLI on PATH. Direct model API/Ollama backends are temporarily closed. Install optional parsers only if needed:
+Python 3.11+, Git and authenticated Codex CLI on PATH. The pipeline supports native Codex Agent execution only. Install optional parsers only if needed:
 
 ```text
 python -m pip install "PyYAML>=6,<7" "pypdf>=5,<7"
@@ -41,7 +41,7 @@ Reviewed skills are organized under `skills/<date>-<batch>/<name>/`. Use --no-ad
 
 - [Usage](docs/pipeline/usage.md), [configuration](docs/pipeline/configuration.md)
 - [Resources and supplements](docs/pipeline/resources.md)
-- [Design](docs/pipeline/design.md), [outputs](docs/pipeline/outputs.md), [status](docs/pipeline/status.md)
+- [Design](docs/pipeline/design.md), [code organization](docs/pipeline/code-organization.md), [outputs](docs/pipeline/outputs.md), [status](docs/pipeline/status.md)
 - [Minimum content](docs/skills/minimum.md), [packaging](docs/skills/packaging.md)
 - [Examples](examples/README.md): reserved for complete build batches with inputs, important records, outputs and reproduction instructions
 

@@ -2,14 +2,14 @@
 import json
 from pathlib import Path
 
-from .models import validate_plan, bound, iterations
-from .records import digest
-from .schemas import DISCOVERY
+from creation_pipeline.models import validate_plan, bound, iterations
+from creation_pipeline.records import digest
+from creation_pipeline.schemas import CANDIDATES
 
-ROOT = Path(__file__).resolve().parents[1]
+from creation_pipeline.paths import ROOT, PROMPTS
 SPEC_PATHS = ("docs/skills/minimum.md", "docs/skills/packaging.md",
-              "creation_pipeline/prompts/analyze.md", "creation_pipeline/prompts/author.md",
-              "creation_pipeline/prompts/review.md")
+              "creation_pipeline/generation/prompts/analyze.md", "creation_pipeline/generation/prompts/author.md",
+              "creation_pipeline/generation/prompts/review.md")
 
 
 def specifications():
@@ -72,60 +72,43 @@ def validate_discovery(plan, config, sources):
 
 
 def analyze(session, config):
-    instructions = (ROOT / "creation_pipeline/prompts/analyze.md").read_text(encoding="utf-8")
-    native = getattr(session, "native", False)
-    initial = []
-    for sid, entry in session.sources.entries.items():
-        path = Path(entry["path"])
-        if not native and path.is_file() and len(initial) < 2:
-            initial.append(session.sources.request({"action": "read", "source": sid,
-                "path": path.name, "start": 1, "limit": 120}))
+    instructions = (PROMPTS / "analyze.md").read_text(encoding="utf-8")
     context = {
         "user_guidance": config["prompt"], "notes": config["notes"], "constraints": config["constraints"],
         "intent": config["intent"], "limits": {k: config["limits"][k] for k in ("max_candidates", "max_builds")},
         "sources": session.sources.index(), "source_errors": session.sources.errors,
-        "initial_source_views": initial,
     }
-    if native:
-        previous_result = session.state.get("completed", {}).get("discovery")
-        if previous_result and Path(previous_result).is_file():
-            from .records import read_json
-            context["previous_discovery"] = read_json(previous_result)
-            context["previous_run_errors"] = config.get("_previous_run_errors", [])
-            context["continuation_instruction"] = "Correct the recorded result using current instructions and errors; avoid repeating source exploration."
+    previous_result = session.state.get("completed", {}).get("discovery")
+    if previous_result and Path(previous_result).is_file():
+        from creation_pipeline.records import read_json
+        context["previous_discovery"] = read_json(previous_result)
+        context["previous_run_errors"] = config.get("_previous_run_errors", [])
+        context["continuation_instruction"] = "Correct the recorded result using current instructions and errors; avoid repeating source exploration."
     last_invalid = None
     for attempt in iterations(config["limits"]["repair_rounds"]):
-        stage_schema = DISCOVERY
-        if native:
-            from .schemas import CANDIDATES
-            stage_schema = CANDIDATES
+        stage_schema = CANDIDATES
         old_timeout = session.limits["model_timeout"]
-        if native:
-            stage_cap = min(bound(old_timeout), bound(config["limits"]["discovery_seconds"]))
-            session.limits["model_timeout"] = None if stage_cap == float("inf") else stage_cap
+        stage_cap = min(bound(old_timeout), bound(config["limits"]["discovery_seconds"]))
+        session.limits["model_timeout"] = None if stage_cap == float("inf") else stage_cap
         try:
             plan = session.stage(instructions, context, schema=stage_schema)
         finally:
             session.limits["model_timeout"] = old_timeout
-        if native and plan.get("outcome") == "candidates" and not plan.get("candidates"):
-            from .records import read_json
-            from .records import safe_relative
+        if plan.get("outcome") == "candidates" and not plan.get("candidates"):
+            from creation_pipeline.records import read_json
+            from creation_pipeline.records import safe_relative
             names = plan.get("saved_candidates", [])
             plan["candidates"] = [read_json(safe_relative(session.work, "candidates/" + n + ".json")) for n in names]
-        if native and plan.get("outcome") in ("incomplete", "blocked"):
-            from .records import write_json
+        if plan.get("outcome") in ("incomplete", "blocked"):
+            from creation_pipeline.records import write_json
             write_json(session.work / "discovery-partial.json", plan)
-            from .models import BlockedError, IncompleteError
+            from creation_pipeline.models import BlockedError, IncompleteError
             error = IncompleteError if plan["outcome"] == "incomplete" else BlockedError
             raise error("Discovery " + plan["outcome"] + ": " + plan["summary"])
-        if native and bool(plan.get("candidates")) != (plan.get("outcome") == "candidates"):
+        if bool(plan.get("candidates")) != (plan.get("outcome") == "candidates"):
             raise ValueError("Discovery outcome contradicts candidate list")
-        if native:
-            plan = normalize(plan)
+        plan = normalize(plan)
         try:
-            if not native and not plan.get("candidates") and not plan.get("omitted"):
-                if any(w in str(plan.get("summary", "")).lower() for w in ("awaiting", "requested", "pending")):
-                    raise ValueError("Analysis is incomplete: read results already available in read_evidence. Request more reads if needed, then finish selection; do not complete while awaiting reads.")
             return validate_discovery(plan, config, session.sources)
         except ValueError as exc:
             signature = digest(json.dumps([plan, str(exc)], sort_keys=True).encode())

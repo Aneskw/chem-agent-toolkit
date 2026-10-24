@@ -9,7 +9,7 @@ import sys
 import time
 from pathlib import Path
 
-from .records import redact, safe_relative
+from creation_pipeline.records import redact, safe_relative
 
 
 def terminate_tree(proc):

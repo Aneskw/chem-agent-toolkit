@@ -12,7 +12,7 @@ Version 5.0.0. Verification date: 2026-10-24. This is a scoped capability summar
 | Native source/content review | Separate Agent session inspected EDBO implementation, examples and paper; content passed, runtime explicitly unverified |
 | Checks, scoped readiness and library integrity | Deterministic tests for permission, real-example selection, faults, unverified catalog entries, collision and recovery |
 
-110 engineering tests passed: `python -m unittest discover -s tests -q`. Tests using fake CLI responses validate mechanics, not model quality. `git diff --check` passed. Old example materials were removed; examples is reserved for complete build batches. Existing formal skills remain unchanged.
+102 engineering tests passed: `python -m unittest discover -s tests -q`. Tests using fake CLI responses validate mechanics, not model quality. `git diff --check` passed. The current code uses responsibility-based subpackages and only native Agent execution; direct API/Ollama and the old host-mediated text request loop have been removed. No new model-quality trial was run for this structural cleanup. Old example materials were removed; examples is reserved for complete build batches. Existing formal skills remain unchanged.
 
 The real local trial used authenticated Codex CLI requesting gpt-6.1-sol, 3 CLI turns and no model time limit. It completed acquisition, discovery, two-file delivery, content review and output verification. The code environment was not installed; EDBO numerical optimization/CSV execution was not performed. ready here means scoped applicable review passed without known blocking defects. It does not mean all tools ran or a scientific result was reproduced. Trial adoption was disabled and no public example was added.
 

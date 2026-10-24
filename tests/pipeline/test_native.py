@@ -6,12 +6,12 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from creation_pipeline.agent_backend import NativeSession, audit_images
-from creation_pipeline.intake import Sources
+from creation_pipeline.agent.backend import NativeSession, audit_images
+from creation_pipeline.resources.intake import Sources
 from creation_pipeline.models import load_config, ModelCallError
-from creation_pipeline.workspace import prepare
+from creation_pipeline.resources.workspace import prepare
 from creation_pipeline.records import write_json, read_json
-from creation_pipeline.analyze import analyze
+from creation_pipeline.generation.discovery import analyze
 
 
 class NativeTests(unittest.TestCase):
@@ -47,7 +47,7 @@ print(json.dumps({"type":"turn.completed","usage":{"input_tokens":10,"output_tok
 
     def test_native_turn_resume_and_durable_receipts(self):
         session = self.session()
-        with patch("creation_pipeline.agent_backend.codex_command", return_value=[sys.executable, str(self.fake)]):
+        with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]):
             self.assertEqual(session.stage("test", {}, {}), {"value": "new"})
             self.assertEqual(session.stage("test", {}, {}), {"value": "resume"})
         self.assertEqual(session.receipts[0]["tool_events"], 1)
@@ -65,7 +65,7 @@ print(json.dumps({"type":"turn.completed","usage":{"input_tokens":10,"output_tok
     def test_failure_retains_session_and_does_not_retry(self):
         self.fake.write_text('import json\nprint(json.dumps({"type":"thread.started","thread_id":"retained"}))\n', encoding="utf-8")
         session = self.session()
-        with patch("creation_pipeline.agent_backend.codex_command", return_value=[sys.executable, str(self.fake)]):
+        with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]):
             with self.assertRaises(ModelCallError):
                 session.stage("test", {}, {})
         self.assertEqual(read_json(session.state_path)["sessions"]["discovery"], "retained")
@@ -80,7 +80,7 @@ time.sleep(30)
 ''', encoding="utf-8")
         session = self.session()
         session.limits["model_timeout"] = 1
-        with patch("creation_pipeline.agent_backend.codex_command", return_value=[sys.executable, str(self.fake)]):
+        with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]):
             with self.assertRaises(BudgetError):
                 session.stage("test", {}, {})
         saved = read_json(session.state_path)
@@ -105,12 +105,12 @@ time.sleep(30)
         self.assertEqual(len(self.sources.evidence), 1)
 
     def test_direct_file_validation_preserves_bytes(self):
-        from creation_pipeline.package import save_files
+        from creation_pipeline.artifacts.delivery import validate_package
         target = self.work / "artifact"
         target.mkdir()
         raw = b"---\r\nname: sample\r\ndescription: sample\r\n---\r\nBody\r\n"
         (target / "SKILL.md").write_bytes(raw)
-        save_files(target, [{"path": "SKILL.md", "purpose": "Usage", "content": raw.decode()}], 1000, validate_only=True)
+        validate_package(target, 1000)
         self.assertEqual((target / "SKILL.md").read_bytes(), raw)
 
     def test_missing_checkpoint_does_not_make_fake_resume(self):
@@ -149,17 +149,17 @@ sys.stdin.read()
 for i in range(5):
  print(json.dumps({"type":"item.completed","item":{"type":"command_execution","command":"same","status":"failed"}}),flush=True)
 ''', encoding="utf-8")
-        with patch("creation_pipeline.agent_backend.codex_command", return_value=[sys.executable, str(self.fake)]):
+        with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]):
             with self.assertRaisesRegex(ModelCallError, "Repeated identical"):
                 self.session().stage("test", {}, {})
 
     def test_complete_native_build_and_failed_turn_resume(self):
         from creation_pipeline.pipeline import build
-        from tests.pipeline.test_components import MAIN, COVERAGE
+        from tests.pipeline.support import MAIN
         from tests.pipeline.test_discovery import candidate, discovery
         plan = discovery(candidate())
         plan.update(outcome="candidates", handoff=[])
-        fixture = {"discovery": plan, "main": MAIN, "coverage": COVERAGE}
+        fixture = {"discovery": plan, "main": MAIN}
         write_json(self.root / "fixture.json", fixture)
         # First author turn fails after session creation. Resume must reuse that
         # candidate session without repeating discovery, then run actual checks.
@@ -176,7 +176,7 @@ if phase=='author':
   marker.touch(); sys.exit(1)
  out=Path(c['output_directory']); out.mkdir(parents=True,exist_ok=True)
  (out/'SKILL.md').write_text(d['main'],encoding='utf-8')
- result={'files':[{'path':'SKILL.md','purpose':'Invocation'}], 'coverage':d['coverage'],
+ result={'files':[{'path':'SKILL.md','purpose':'Invocation'}],
  'tests':[{'name':'source-result','argv':['{python}','-c','print(2 + 3)'],
  'cwd':'{run}','expected_exit':0,'stdout_contains':['5'],'evidence':'e1','purpose':'Source result','kind':'positive'}], 'issues':[], 'notes':[]}
  Path(c['metadata_path']).parent.mkdir(parents=True,exist_ok=True)
@@ -191,7 +191,7 @@ print(json.dumps({'type':'turn.completed','usage':{'input_tokens':10,'output_tok
         options.update(adoption={"enabled": False}, execute_generated_checks=True)
         options["limits"]["repair_rounds"] = 0
         write_json(self.root / "input.json", options)
-        with patch("creation_pipeline.agent_backend.codex_command", return_value=[sys.executable, str(self.fake)]):
+        with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]):
             result = build(self.root / "input.json", self.root / "state", keep_debug=True)
             self.assertEqual(result["status"], "failed", result)
             resumed = build(state_root=self.root / "state", resume_id=result["build_id"], keep_debug=True)

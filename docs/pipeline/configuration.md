@@ -7,7 +7,7 @@ JSON or YAML object. Only sources is required; YAML needs PyYAML. Unknown top-le
 | sources | required nonempty array | Local files/directories, known URLs/repos/paper identifiers/catalogs |
 | prompt / notes | empty strings | Optional guidance; task is a legacy prompt alias |
 | constraints | {} | Model-interpreted preferences, not executable enforcement rules |
-| model | {backend: codex_cli} | Optional name; backend must be codex_cli |
+| model | {} | Optional name passed to Codex CLI; a model-name string is also accepted |
 | execution | {profile: production} | production or development |
 | limits | see below | Optional execution/resource overrides |
 | network | true | Enable known-address acquisition, including supplements; not search |
@@ -19,7 +19,7 @@ JSON or YAML object. Only sources is required; YAML needs PyYAML. Unknown top-le
 | checks | [] | User-defined check objects, each with candidate name |
 | intent | auto | Legacy guidance direct/extension/auto; explain behavior in construction |
 
-API/Ollama are rejected during configuration validation, before resource fetching or model calls. base_url/api_key_env/structured settings are not accepted for Agent execution. The underlying Codex connection to its model is unaffected. User model selection and Windows sandbox configuration are retained; arbitrary CLI profiles/plugins are not inherited.
+Direct model API/Ollama execution is not implemented. API settings such as base_url/api_key_env/structured are rejected before resource fetching. Existing model.backend=codex_cli configurations remain accepted; no other backend is supported. The underlying Codex connection to its model is unaffected. User model selection and Windows sandbox configuration are retained; arbitrary CLI profiles/plugins are not inherited.
 
 ## Sources
 
@@ -49,7 +49,7 @@ Development defaults: model_calls=8, max_candidates=3, max_builds=1, repair_roun
 }
 ```
 
-network_timeout=60 seconds, converter_timeout=60 seconds and check_timeout=120 seconds are per-operation fault controls, not whole-build deadlines. converter_timeout/check_timeout may be null for a deliberately long check. Diagnostic text protocol view settings remain read_lines=160, view_chars=12000, context_chars=160000; these do not restrict native original-file access or Codex conversation compaction.
+network_timeout=60 seconds, converter_timeout=60 seconds and check_timeout=120 seconds are per-operation fault controls, not whole-build deadlines. converter_timeout/check_timeout may be null for a deliberately long check. Agent resources are original files and optional prepared views; no host read-request protocol or text-context pagination is used.
 
 model_calls counts CLI turns, not internal inference requests. Missing usage is unknown, not zero. No automatic monetary-cost estimate. Optional agent_events counts CLI-reported tool completions; the CLI does not report every native tool there.
 

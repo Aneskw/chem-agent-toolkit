@@ -9,60 +9,16 @@ import unittest
 from unittest.mock import Mock, patch
 from pathlib import Path
 
-from creation_pipeline.checks import classify, run_checks, static_checks
-from creation_pipeline.intake import Sources
+from creation_pipeline.validation.checks import classify, run_checks, static_checks
+from creation_pipeline.resources.intake import Sources
 from creation_pipeline.models import BlockedError, load_config
-from creation_pipeline.model_backend import CodexBackend, disable_mcp_options
-from creation_pipeline.package import install, manifest, save_files, verify_output
-from creation_pipeline.analyze import ROOT
+from creation_pipeline.artifacts.package import install, manifest, verify_output
+from creation_pipeline.generation.discovery import ROOT
 from creation_pipeline.records import clean_run, digest, read_json, safe_relative, write_json
-from creation_pipeline.runtime import execute
+from creation_pipeline.validation.runtime import execute
 
 
-MAIN = """---
-name: add-numbers
-description: Add two numeric inputs using the supplied tool.
----
-# Add numbers
-Use adder for numeric addition. This does not concatenate strings.
-Inputs a and b are numbers; output is their sum.
-```python
-print(2 + 3)
-```
-Check that the result equals 5 for this example.
-"""
-COVERAGE = {"scope": "Use adder for numeric addition.", "io": "Inputs a and b are numbers; output is their sum.",
-            "usage": "print(2 + 3)", "result_checks": "Check that the result equals 5 for this example."}
-PLAN = {"name": "add-numbers", "task": "Add two numbers", "scope": "Numeric addition",
-        "entrypoint": "adder.add(a,b)", "readiness": "callable", "intent": "direct", "added_behavior": "none",
-        "dependencies": [], "files": [{"path": "SKILL.md", "purpose": "Instructions"}],
-        "checks": ["2+3=5"], "evidence": [{"id": "e1", "claim": "Tool adds two numbers"}], "gaps": []}
-ARTIFACT = {"files": [{"path": "SKILL.md", "content": MAIN, "purpose": "Instructions"}],
-            "coverage": COVERAGE, "tests": [], "notes": []}
-
-
-def response(value):
-    return {"action": "complete", "payload": value}
-
-
-class ReplayBackend:
-    replay = True
-
-    def __init__(self, values):
-        self.values = list(values)
-        self.prompts = []
-
-    def call(self, prompt, timeout, schema=None):
-        self.prompts.append(prompt)
-        from creation_pipeline.schemas import REVIEW
-        if schema == REVIEW and (not self.values or "status" not in self.values[0].get("payload", {})):
-            return response({"status": "pass", "resolution": "none", "findings": [], "issues_complete": True}), {"model": "fixture-review", "usage": None}
-        if not self.values:
-            raise ValueError("No fixture response")
-        value = self.values.pop(0)
-        if schema == REVIEW:
-            value["payload"].setdefault("issues_complete", True)
-        return value, {"model": "deterministic-test-fixture", "usage": None}
+from tests.pipeline.support import MAIN, PLAN, ARTIFACT, write_fixture_files
 
 
 class PipelineTests(unittest.TestCase):
@@ -84,17 +40,6 @@ class PipelineTests(unittest.TestCase):
 
     def tearDown(self):
         self.temp.cleanup()
-
-
-
-
-
-
-
-
-
-
-
 
 
     def test_clean_requires_registration_and_supports_dry_run(self):
@@ -121,65 +66,30 @@ class PipelineTests(unittest.TestCase):
             files = copy.deepcopy(ARTIFACT["files"])
             files.append({"path": path, "content": content, "purpose": "test"})
             with self.subTest(path=path), self.assertRaises(ValueError):
-                save_files(self.root / "package", files, 10000)
+                write_fixture_files(self.root / "package", files, 10000)
 
     def test_missing_link_and_python_syntax_are_reported(self):
         artifact = copy.deepcopy(ARTIFACT)
         artifact["files"][0]["content"] += "\n[Details](references/missing.md)\n"
         artifact["files"].append({"path": "scripts/run.py", "content": "def broken(\n", "purpose": "bad script"})
         package = self.root / "package"
-        save_files(package, artifact["files"], 10000)
+        write_fixture_files(package, artifact["files"], 10000)
         findings = static_checks(package)[0]["findings"]
         self.assertTrue(any("link" in s for s in findings))
         self.assertTrue(any("syntax" in s for s in findings))
-
-    def test_source_reads_are_bounded_and_evidence_is_real(self):
-        sources = Sources(load_config(self.config), self.root / "cache")
-        record = sources.request({"action": "read", "source": "tool", "path": "adder.py", "start": 1, "limit": 1})
-        self.assertEqual(record["start"], record["end"])
-        self.assertEqual(record["sha256"], digest((self.source / "adder.py").read_bytes()))
-        with self.assertRaises(ValueError):
-            sources.validate_evidence([{"id": "made-up", "claim": "x"}])
-        with self.assertRaises(ValueError):
-            sources.request({"action": "read", "source": "tool", "path": "../build.json"})
-
-    def test_source_search_returns_locations_not_execution_claims(self):
-        sources = Sources(load_config(self.config), self.root / "cache")
-        record = sources.request({"action": "search", "source": "tool", "path": "adder.py", "query": "return"})
-        self.assertEqual(record["total"], 2)
-        self.assertEqual(sources.evidence, [])
-
-    def test_large_single_line_is_paginated_and_duplicate_evidence_is_compact(self):
-        (self.source / "long.txt").write_text("0123456789" * 500, encoding="utf-8")
-        config = load_config(self.config)
-        config["limits"]["view_chars"] = 100
-        sources = Sources(config, self.root / "cache")
-        action = {"action": "read", "source": "tool", "path": "long.txt", "start": 1, "limit": 1}
-        first = sources.request(action)
-        self.assertEqual(len(first["excerpt"]), 100)
-        self.assertEqual(first["next_offset"], 100)
-        sources.request(action)
-        third = sources.request(dict(action, offset=100))
-        self.assertEqual(third["offset"], 100)
-        compact = sources.compact_evidence()
-        self.assertEqual(compact[1]["excerpt_ref"], "e1")
-        self.assertNotIn("excerpt", compact[1])
 
     def test_generated_checks_need_opt_in(self):
         config = load_config(self.config)
         config["checks"] = []
         sources = Sources(config, self.root / "cache")
-        sources.request({"action": "read", "source": "tool", "path": "adder.py"})
+        from creation_pipeline.resources.workspace import prepare
+        prepare(sources, self.root / "agent-run")
         test = {"name": "suggested", "argv": ["{python}", "-c", "print(5)"], "stdout_contains": ["5"],
                 "evidence": "e1", "purpose": "example"}
         results = run_checks(config, {"tests": [test]}, self.root, sources, self.root / "checks")
         self.assertFalse(any(r["status"] == "pass" for r in results))
         self.assertFalse(any(r["required"] for r in results))
         self.assertFalse((self.root / "checks").exists())
-
-
-
-
 
 
     def test_expected_failure_and_json_assertions(self):
@@ -206,7 +116,7 @@ class PipelineTests(unittest.TestCase):
         package = self.root / 'example'
         package.mkdir()
         (package / 'SKILL.md').write_text('```python\nimport sys\nassert len(sys.argv) == 1\nprint("standalone-example")\n```\n', encoding='utf-8')
-        process = subprocess.run([sys.executable, str(ROOT / 'creation_pipeline/example_runner.py'), str(package)],
+        process = subprocess.run([sys.executable, str(ROOT / 'creation_pipeline/validation/example_runner.py'), str(package)],
                                  capture_output=True, text=True, timeout=10)
         self.assertEqual(process.returncode, 0, process.stderr)
         self.assertIn('standalone-example', process.stdout)
@@ -228,34 +138,6 @@ class PipelineTests(unittest.TestCase):
             self.assertEqual(report["status"], "pass")
         finally:
             del os.environ["PIPELINE_TEST_SECRET"]
-
-    def test_backend_requires_completed_turn_and_rejects_actual_tools(self):
-        good = {"type": "item.completed", "item": {"type": "agent_message", "text": json.dumps(response(PLAN))}}
-        complete = {"type": "turn.completed", "usage": {"input_tokens": 10, "output_tokens": 5}}
-        for events, should_pass in (([good, complete], True), ([good], False),
-                ([{"type": "item.completed", "item": {"type": "command_execution"}}, good, complete], False)):
-            process = Mock(returncode=0)
-            process.communicate.return_value = ("\n".join(json.dumps(e) for e in events), "")
-            with self.subTest(events=events), patch("creation_pipeline.model_backend.codex_command", return_value=["codex"]), \
-                    patch("creation_pipeline.model_backend.subprocess.Popen", return_value=process):
-                backend = CodexBackend(scratch=self.root / "model")
-                if should_pass:
-                    answer, receipt = backend.call("test", 1)
-                    self.assertEqual(answer["action"], "complete")
-                    self.assertEqual(receipt["usage"]["input_tokens"], 10)
-                else:
-                    with self.assertRaises(ValueError):
-                        backend.call("test", 1)
-
-    def test_user_mcp_tables_are_explicitly_disabled_including_profile_servers(self):
-        options = disable_mcp_options({"mcp_servers": {"user-server": {}}, "profile": "local",
-            "profiles": {"local": {"mcp_servers": {"another-server": {}}}}})
-        self.assertIn('mcp_servers.user-server.enabled=false', options)
-        self.assertIn('mcp_servers.another-server.enabled=false', options)
-        with self.assertRaises(ValueError):
-            disable_mcp_options({"mcp_servers": {"unsupported.name": {}}})
-
-
 
 
 if __name__ == "__main__":

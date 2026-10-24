@@ -12,10 +12,10 @@ from pathlib import Path
 
 if not __package__:
     import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    __package__ = "creation_pipeline"
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    __package__ = "creation_pipeline.resources"
 
-from .models import BlockedError
+from creation_pipeline.models import BlockedError
 
 
 class HTMLText(HTMLParser):
