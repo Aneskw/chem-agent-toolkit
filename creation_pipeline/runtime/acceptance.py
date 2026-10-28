@@ -182,6 +182,8 @@ def grounding_problem(record, index, source):
     readable = index.get('read_files', index['files'])
     if not path:
         return 'source_path is missing'
+    if not isinstance(path, str):
+        return 'source_path must be a string'
     if path not in readable:
         listed = ', '.join(sorted(str(name) for name in readable)[:6]) or 'the read materials'
         return 'source_path ' + str(path) + ' is not read material; quote one of ' + listed
@@ -203,6 +205,40 @@ def grounding_problem(record, index, source):
 
 def grounded(record, index, source):
     return grounding_problem(record, index, source) is None
+
+
+def input_check_problems(check, index, source, position=0):
+    """Independent check defects can be reported together before another paid turn."""
+    label = 'Input check ' + (check['id'] if isinstance(check.get('id'), str) and check['id']
+                              else '#' + str(position))
+    problems = []
+    def problem(message):
+        problems.append(label + ': ' + message)
+    if not isinstance(check.get('id'), str) or not check['id']:
+        problem('id must be a nonempty string')
+    channel = check.get('channel')
+    if not isinstance(channel, str) or channel not in {'args', 'input_files'}:
+        problem('channel must be args or input_files')
+    if channel == 'args' and (type(check.get('key')) is not int or check['key'] < 0):
+        problem('Argument check key must be a nonnegative index')
+    if channel == 'input_files' and not isinstance(check.get('key'), str):
+        problem('File check key must be a path')
+    if not isinstance(check.get('pattern'), str):
+        problem('needs a pattern string')
+    else:
+        try:
+            re.compile(check['pattern'])
+        except re.error as exc:
+            problem('pattern is not a valid regular expression: ' + str(exc))
+    mode = check.get('mode', 'full_text')
+    if not isinstance(mode, str) or mode not in {'full_text', 'each_line'}:
+        problem('Input check mode must be full_text or each_line')
+    if mode == 'each_line' and channel != 'input_files':
+        problem('each_line applies only to fixture contents')
+    citation = grounding_problem(check, index, source)
+    if citation:
+        problem(citation)
+    return problems
 
 
 def contracts(plan, cases, index, source, *, check_consistency=True):
@@ -243,27 +279,15 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
         raw_checks = policy.get('checks', [])
         if not isinstance(raw_checks, list) or any(not isinstance(item, dict) for item in raw_checks):
             raise ValueError('Input checks must be objects')
-        for check in raw_checks:
-            if (not grounded(check, index, source) or not isinstance(check.get('id'), str) or not check['id']
-                    or not isinstance(check.get('channel'), str)
-                    or check['channel'] not in {'args', 'input_files'}):
-                raise ValueError('Input checks require grounded id/channel/key/pattern')
-            if check['channel'] == 'args' and (type(check.get('key')) is not int or check['key'] < 0):
-                raise ValueError('Argument check key must be a nonnegative index')
-            if check['channel'] == 'input_files' and not isinstance(check.get('key'), str):
-                raise ValueError('File check key must be a path')
-            if not isinstance(check.get('pattern'), str):
-                raise ValueError('Input check ' + str(check.get('id')) + ' needs a pattern string')
-            try:
-                re.compile(check['pattern'])
-            except re.error as exc:
-                # A malformed regex is a repairable plan error, never a crash (run 39).
-                raise ValueError('Input check ' + str(check.get('id'))
-                                 + ' pattern is not a valid regular expression: ' + str(exc)) from exc
-            if not isinstance(check.get('mode', 'full_text'), str) or check.get('mode', 'full_text') not in {'full_text', 'each_line'}:
-                raise ValueError('Input check mode must be full_text or each_line')
-            if check.get('mode') == 'each_line' and check['channel'] != 'input_files':
-                raise ValueError('each_line applies only to fixture contents')
+        problems = [p for number, check in enumerate(raw_checks)
+                    for p in input_check_problems(check, index, source, number)]
+        if problems:
+            extra = ('\nAdditional check problems: ' + str(len(problems) - 20)) if len(problems) > 20 else ''
+            raise ValueError('Input checks require grounded id/channel/key/pattern:\n'
+                             + '\n'.join(problems[:20]) + extra
+                             + '\nChecks are validity predicates: match declared VALID inputs; '
+                               'a rejection must fail its named predicate. Copy one contiguous '
+                               'source quotation; do not join excerpts with ellipses.')
         checks = {check['id']: check for check in policy.get('checks', [])}
         if len(checks) != len(policy.get('checks', [])):
             raise ValueError('Input check IDs must be unique')
@@ -321,7 +345,9 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
                                if isinstance(selected, list) else [])
                     raise ValueError('Operation ' + str(operation.get('id')) + ' is required but its '
                                      'checks do not reference declared policy checks; missing IDs: '
-                                     + ', '.join(missing) + '. Define check objects in the TOP-LEVEL '
+                                     + (', '.join(missing) or '<no unresolved IDs; selection may be empty>')
+                                     + '; selected=' + json.dumps(selected) + '; declared IDs='
+                                     + json.dumps(sorted(checks)) + '. Define check objects in the TOP-LEVEL '
                                      'acceptance_json.checks array, not inside input_contract. Keep '
                                      'operations[].checks as a list of string IDs, for example ["nonempty"], '
                                      'and add matching rejection cases. Do not replace these IDs with objects.')

@@ -751,7 +751,15 @@ ACCEPTANCE_SPEC = """Acceptance v2: acceptance_json is a JSON object with invali
 source_quote (an exact quote from read source explaining applicability).
 """+INPUT_CONTRACT_SPEC+"""For required input constraints add
 checks: [{id, channel: args|input_files, key: argument index|fixture filename,
-pattern: full-match regex, source_path, source_quote}]. Checks must reflect actual
+pattern: full-match regex, source_path, source_quote}]. Checks are VALIDITY predicates:
+they match valid inputs, not the invalid examples. For a documented nonblank rule,
+use a predicate such as (?s).*\\S.* (JSON-escape the backslash), not ^\\s*$ or
+a literal rejected token. A rejection must NOT match the predicate named by violates.
+For input_files, key is the same fixture filename in normal and rejection cases;
+only contents change, and argument_index must point to /input/<key> in both.
+Define these check objects in TOP-LEVEL acceptance_json.checks; operations[].checks
+contains only their string IDs. Copy a contiguous source quotation for each object,
+without ellipses or stitched excerpts. Checks must reflect actual
 documented input constraints. If a reliable predicate cannot be expressed, leave
 checks empty and record the limitation: acceptance will be incomplete.
 Each normal/rejection case_json must include acceptance: {purpose:

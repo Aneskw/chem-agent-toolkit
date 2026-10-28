@@ -48,7 +48,19 @@
       "model_calls": 3,
       "stop_code": "content_review_not_run",
       "detail": "Content reviewer required future Docker execution evidence before allowing the content gate to pass"
+    },
+    {
+      "run": 52,
+      "structured_reasoning": "low",
+      "build_id": "20261028T231003-9e2fda73",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run52-20261028",
+      "status": "blocked",
+      "implementation_commit": "af9f36c",
+      "scenario": "descriptors-a",
+      "model_calls": 6,
+      "stop_code": "planning_no_progress",
+      "detail": "Repeated generic input-check grounding rejection; offline replay names blank_line and its stitched source quotation"
     }
   ],
-  "next_run": 52
+  "next_run": 53
 }

@@ -103,6 +103,26 @@ class ContractTests(unittest.TestCase):
             self.classification({'status': 'probably'})
         self.assertIn('none_documented', str(caught.exception))
 
+    def test_check_diagnostic_collects_named_independent_source_and_type_errors(self):
+        checks = [dict(check('wrong_quote'), source_quote='invented rejection wording'),
+                  dict(check('wrong_channel'), channel={'bad': True}),
+                  dict(check('wrong_pattern'), pattern='[')]
+        policy = {'invalid_input': 'required', 'scope': 'one SMILES', 'purposes': ['computation'],
+                  'source_path': PATH, 'source_quote': 'terminal fragments', 'checks': checks}
+        with self.assertRaises(ValueError) as caught:
+            contracts({'acceptance_json': json.dumps(policy)}, [], self.index, self.root)
+        message = str(caught.exception)
+        for text in ('wrong_quote', 'invented rejection wording', PATH, 'wrong_channel',
+                     'wrong_pattern', 'valid regular expression', 'validity predicates'):
+            self.assertIn(text, message)
+        policy['checks'] = [check()]
+        self.assertEqual(contracts({'acceptance_json': json.dumps(policy)}, [], self.index, self.root)['checks'], [check()])
+
+    def test_non_string_citation_path_is_a_clean_named_check_error(self):
+        from creation_pipeline.runtime.acceptance import input_check_problems
+        errors = input_check_problems(dict(check('bad_path'), source_path={'path': PATH}), self.index, self.root)
+        self.assertIn('Input check bad_path: source_path must be a string', errors)
+
     def test_a_recorded_absence_is_accepted_only_with_a_bound_confirmation(self):
         self.assertEqual(self.classification(self.absent()), 'none_documented')
         for field in ('reason', 'scope', 'limitation', 'checked', 'review'):

@@ -34,3 +34,23 @@
 新增专项回归验证上述边界，尤其证明内容 pass 后没有 Docker 证据仍 blocked，不能进入 accepted。本轮失败不计成功，也未续跑。
 
 轮后验证：564 OK (3 skipped)，三个自检全绿，Docker 29.8.2 可用；日志 `E:\Users\27343\Docker\acceptance-run51-postflight-tests.log`。新的内容审阅提示仍需后续真实轮次验证，不能据离线回归宣布解决了所有模型行为波动。
+
+## run52：审阅边界已走通，检查引文诊断仍不具名
+
+起点 `af9f36c`，构建 `20261028T231003-9e2fda73`，北京时间 23:10:03–23:25:59，预算计数 6，状态 blocked，停止码 planning_no_progress。内容审阅通过，实际请求与发送推理档均为 low；三次规划耗时约 236.8、73.9、77.3 秒，均完成，没有再触发 run50 的超时。本轮仍未到 Docker。
+
+首次诊断指向 direct operation 未引用顶层检查；之后两次都只说 `Input checks require grounded id/channel/key/pattern`，没有指名对象。原始计划离线重放确认：具体失败是 **blank_line** 的 source_quote 用 `...` 拼接文档片段，不逐字匹配 `package/SKILL.md`。其余两条检查引文可以匹配，不能说它们也引用错误。三条 pattern 分别匹配空白/非法 token，另有有效性谓词方向问题，原门禁会在后续覆盖校验中继续拒绝，不允许通过修改判定放行。
+
+轮后改动：输入检查的独立类型、正则和来源问题在一条拒绝中集中报告（最多展示 20 条，并标示剩余数），每条指名 check ID/位置和具体字段；来源失败使用既有 grounding_problem，包含路径或引文首行；保护非字符串 source_path，避免另一个类型崩溃。补充模型可见的既有规则：有效性谓词接受正常输入、拒绝用例不满足所指谓词、正常/非法文件 fixtures 使用同一绑定文件名、检查对象只定义在顶层、引文连续且不拼接。没有改变通过条件或删除用例。
+
+离线重放：`E:\Users\27343\Docker\acceptance-descriptors-a-run52-20261028\input-check-diagnostic-replay.json`，同一原始计划仍被拒绝、0 次模型调用、无业务执行。新回归同时覆盖多个独立检查错误的具名聚合、有效检查仍可通过，以及错误路径类型的干净拒绝。专项 59 项通过；全量与三个自检结果在本轮收尾补入。
+
+轮后验证完成：566 OK (3 skipped)，三个自检全绿，Docker 29.8.2 可用。日志 `E:\Users\27343\Docker\acceptance-run52-postflight-tests.log`。提示与 schema 按 freeze 顺序更新，未改验收含义。
+
+## 独立结果审计
+
+`python validation/deepseek-api/audit_extended_acceptance.py <batch-directory> <scenario>` 在批次结束后检查：冻结输入、实际入口与冻结原脚本字节、prepared/digest、image.id 与报告一致、所有记录 passed、当前严格 Docker 资格、对应场景真实数值/拒绝及退出后文件输出。混合批次需在拒绝行之后仍有有效行输出。不能只看 ready，也不能复制原脚本却用另一入口替代执行。
+
+对于已通过执行的批次，审计器另在**绑定镜像**内用标准库 importlib.metadata 读取依赖版本（不导入或执行化学/几何业务代码、不安装软件、禁用网络），验证描述符原依赖 pins 与 ASE 版本。该环境元数据探测不会调用模型，结果单独保存在批次根目录 acceptance-audit.json，不改写原始运行证据。若审计未通过，不计入四项成功。脚本的只读自检已证明：旧的有效运行证据可被接受，未执行业务的阻塞证据会被拒绝；旧结果不计作新成功。
+
+两个尚未运行的典型场景补充了明确的来源测试数据：原子映射用原始测试的 reactant_only_maps=[3]；几何用两 He 位于 (0,0,0)/(0,0,2)，检查 2.0 Å，并以 target=3.0 验证“检查完成但约束失败”。期望来自预设坐标和来源 API 语义，不从运行结果倒推。
