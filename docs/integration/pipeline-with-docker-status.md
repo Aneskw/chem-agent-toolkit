@@ -21,7 +21,7 @@
 | 交付与审查语义 | 作者声明的入口、块索引（含 1-based 单块可见归一化）、上游路径别名、作者检查进入规划上下文、许可证意见不影响绑定判定 | `2bebb12`、`4b1c535` 等 |
 | 健壮性 | 非法 policy 字段类型、非法正则、缺失操作 check 等均为**可修复的计划拒绝**，不再让整批崩溃 | `6808ab1`、`fe9017f` |
 
-离线回归：`python -m unittest discover -s tests -q` → **540 OK (3 skipped)**。
+离线回归：`python -m unittest discover -s tests -q` → **544 OK (3 skipped)**。
 
 ## 2. 已经被真实实验证实的部分
 
@@ -39,6 +39,22 @@
 失败用例是**门禁正确捕获的真实缺陷**：用例传入空串 `""`，期望脚本以 exit 1 拒绝；但 RDKit 把空串解析为“空分子”，脚本于是输出 `{"leaves": [], "count": 0}` 并 exit 0——即 SKILL.md 承诺的“无效 SMILES 退出 1”并未对空白输入实现。已据此强化作者提示：**文档里承诺的拒绝必须由交付代码显式实现，不能依赖上游解析器**（`7cc6ff9`）。
 
 其余轮次（13–39）的失败几乎都发生在规划阶段，且每次只暴露一个契约缺口。
+
+### 2.1 第 41 次运行（恢复验收后的第一轮，11 次调用）
+
+阶段推进正常：来源获取 → 发现（2 次）→ 编写（1 次）→ 独立审阅（1 次）→ 入口绑定 → 环境规划（4 次尝试 + 1 次补丁重试）。规划的**前三次尝试每轮都向前推进一格**：
+
+1. `invalid_input must equal the declared input contract: required`（用例字段与声明不一致）；
+2. 修正后触发 next gate：`required needs at least one named check with a matching rejection case`；
+3. 补上具名 check 后进入覆盖率门禁，报出 4 条原因；
+4. 第四次尝试先提交了一个手写转义的补丁（`/tests/8` 的 `case_json` 转义坏掉，整包补丁被拒），第二次补丁合法并被应用（测试从 8 条增到 10 条）。
+
+但仍然 `blocked`，停止码 `planning_no_progress`：第四次尝试的覆盖率诊断与第三次**逐字相同**，被“同一诊断重复即停止”的防浪费规则终止。
+
+**根因不是模型没改，而是门禁没有说清改什么**：计划里 `documented_invalid_smiles_c1cc` 这个 check 的 pattern 是 `^C1CC$`——它只匹配**无效**输入。而 `required` 下的 check 是**有效性谓词**（每个正常用例都必须满足），于是所有正常用例都被它判为不满足 → `positive` 为空 → 覆盖率一次性冒出 4 条通用原因（无正常输入、purpose 未覆盖、缺拒绝、缺可直接调用的用法用例）。模型看到的是“缺用例”，于是继续加用例，永远修不到那个写反的谓词。
+
+已修复（`fe4921e`）：覆盖率诊断现在指名**具体用例 + 具体 check + pattern**，并说明“check 是有效性谓词、无效输入必须**不满足** `acceptance.violates` 指名的那个谓词”，同时新增“拒绝用例声明的谓词把它自己匹配上了（谓词写反）”“`violates` 指向未声明的 check”两类具名诊断。判定语义不变（仍是不通过），只是把可执行的修复方向放进拒绝文本——而拒绝文本就是下一次修复的提示词。
+
 
 ## 3. 当前卡点：planner 的困境（重点）
 
@@ -75,6 +91,7 @@
 | 34 | `invalid_input` 返回成对象 → `TypeError` 崩溃 | 类型健壮性 |
 | 35 | 引文非逐字（换行差异） | 证据严格性 |
 | 39 | 正则含中置全局旗标 → `re.PatternError` 崩溃 | 类型健壮性 |
+| 41 | 有效性谓词写反（check 只匹配无效输入）→ 4 条通用覆盖率原因、修不到点 | 契约语义 + 诊断可操作性 |
 | 22/16 | 引用用证据定位符 `e1` 当 `source_id`；`runtime_requirement` 返回字符串 | 字段语义 |
 
 以上每一项都已被**离线修复并加入回归**，但这也说明：模型并不是“不会写计划”，而是**难以在一次回答里同时命中 8 组精确契约**。
@@ -84,23 +101,30 @@
 1. **契约数量 > 单轮修复带宽**：与其继续逐个打补丁，不如把验收契约分级（先让“能跑的最小计划”通过 Docker，再分级收紧），或把规划拆成环境/契约/用例三段，每段单独校验与修复。
 2. **一次返回全部错误**：把 fail-fast 改成“收集所有 gate 错误一次性反馈”，可让每个修复轮价值翻倍——这是当前投入产出比最高的改动。
 3. **让执行先行**：当前是“先把断言写死再执行”；对这类 CLI 工具，先允许 `none_documented`/空检查跑通一次，再据真实输出补断言，可显著降低规划难度（但会与“不从输出倒推预期”的原则冲突，需要独立审阅把关）。
+4. **诊断必须指名对象**：第 41 轮证明，泛化原因（“缺正常输入”）会把模型推向错误方向（继续加用例），而真正的缺陷是一个写反的谓词。把用例名、check id、pattern 和修复方向写进拒绝文本，是比增加调用预算更便宜的改进。
 
 ## 4. 最小剩余工作
 
-1. 新开一轮真实实验（建议 12–16 次调用，`api_retries=1`、`api_connect_retries=1`），使用当前代码；
-2. 若仍卡在规划：优先实现“**一次收集所有 gate 错误**”的反馈（预计 1 个提交，可离线回归），再重跑；
-3. 规划通过后，重点观察 `pin_base_image` 与业务验收：第 36 轮已证明 Docker 与验收链路本身可用，剩余问题集中在“交付代码是否实现其文档承诺的拒绝行为”。
+1. 用修复后的诊断重跑一轮真实实验（16 次调用封套，`api_retries=1`、`api_connect_retries=1`）；
+2. 若仍卡在规划，且失败形态仍是“补丁里手写转义 `case_json` 坏掉”（第 26/29/31/41 轮共 4 次），则让修复轮支持**整份计划替换**（原生 JSON 值，不经过转义），而不是把补丁作为唯一入口；
+3. 若诊断指名后仍反复一轮修一个契约，再实现“**一次收集所有 gate 错误**”（当前覆盖率门禁已聚合，其余门禁仍是 fail-fast）；
+4. 规划通过后，重点观察 `pin_base_image` 与业务验收：第 36 轮已证明 Docker 与验收链路本身可用，剩余问题集中在“交付代码是否实现其文档承诺的拒绝行为”。
 
 ## 5. 复现
 
 ```powershell
 cd E:\Users\27343\Docker\chem-agent-toolkit-integration_deepseekapi
-python -m unittest discover -s tests -q                      # 540 OK (3 skipped)
+python -m unittest discover -s tests -q                      # 544 OK (3 skipped)
 python validation/deepseek-api/verify_prompt_contract.py     # 提示与校验器一致性
 python validation/deepseek-api/verify_acceptance_prompt.py check
 python -m creation_pipeline build validation/deepseek-api/acceptance-normal-input.json `
   --state-dir <new>\state --library-dir <new>\library
 ```
 
-证据：`validation/deepseek-api/evidence/real-batch-run{8..39}-20261027/`（每轮 prompt/response/report/receipt，凭据形状命中 0）。
-其中 `real-batch-run36` 含**首次成功 Docker 构建与业务验收报告**。
+证据：
+
+- 仓库内 `validation/deepseek-api/evidence/real-batch-run{2..22}-20261027/`（该区间已随提交入库，每轮 prompt/response/report/receipt，凭据形状命中 0）；
+- 第 23 轮起每轮产物在副本外的同级目录 `E:\Users\27343\Docker\acceptance-deepseek-run<N>-<date>\`（`state/` 审计目录 + `run<N>.log`），未入库以免把运行时状态塞进仓库；
+- 第 36 轮目录 `acceptance-deepseek-run36-20261028` 内含**首次成功 Docker 构建**的 `image.id`（`sha256:42fc066e5…`）、`build-log.json` 与 22 KB 的业务验收 `execution/report.json`；
+- 第 41 轮目录 `acceptance-deepseek-run41-20261028` 内含四份 `materials/planning/<n>/rejection.json`，可以逐字看到本节 §2.1 的四次诊断。
+
