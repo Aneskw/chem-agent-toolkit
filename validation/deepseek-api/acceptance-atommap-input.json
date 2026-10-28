@@ -1,0 +1,58 @@
+{
+  "sources": [
+    {
+      "id": "existing_atommap",
+      "license": "MIT",
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit_newpipeline\\tools-skills\\rdkit\\chem-reaction-atommap-audit"
+    }
+  ],
+  "prompt": "Discover and package one executable Skill using the supplied reaction atom-map audit Skill as source material. Preserve scripts/audit_atom_maps.py byte-for-byte as the delivered entry. Preserve --reaction and --input with optional --output, JSONL fields, exit 2 on any failed row, and mixed-batch continuation. Require complete bound Docker business acceptance using source-grounded packaged tests: a valid mapped reaction, permitted reactant-only leaving-group maps, duplicate maps, missing maps, unexpected product maps and malformed reaction syntax. Verify meaningful returned map identities and diagnostics, not just process completion. Include a valid file batch and a mixed valid/invalid file batch persisted through the delivered --output flag, retaining all rows and asserting the rejected row after container exit. Old credibility/test claims are source context, not current execution evidence. Do not weaken source behavior, modify the business entry, or delete a failing check. Do not install dependencies or execute business code on the host; chemistry execution is permitted only inside Docker. Do not claim reaction feasibility or chemical mapping correctness.",
+  "model": {
+    "name": "gpt-6-astra",
+    "transport": "https",
+    "reasoning_effort": "medium",
+    "service_tier": "default",
+    "backend": "codex_cli"
+  },
+  "execution": {
+    "profile": "production",
+    "stop_on_runtime_failure": true,
+    "progress_watch": "observe"
+  },
+  "limits": {
+    "model_calls": 16,
+    "model_timeout": 600,
+    "total_seconds": 3600,
+    "agent_progress_timeout": null,
+    "max_candidates": 1,
+    "max_builds": 1,
+    "repair_rounds": 2
+  },
+  "runtime_defaults": {
+    "options": {
+      "backend": "deepseek_api",
+      "api_model": "deepseek-v4-pro",
+      "api_retries": 1,
+      "api_stream": true,
+      "api_max_output_tokens": 65536,
+      "pin_base_image": true,
+      "model_timeout": 600,
+      "total_seconds": 2400,
+      "reasoning_effort": "medium",
+      "service_tier": "default",
+      "progress_watch": "observe",
+      "api_connect_retries": 1
+    }
+  },
+  "batch": {
+    "label": "extended-atommap",
+    "tags": [
+      "existing-skill",
+      "descriptors",
+      "acceptance",
+      "docker"
+    ]
+  },
+  "notes": "Operator authorised iterative debugging and fresh independent reruns on 2026-10-28 until two descriptor file experiments and two additional typical scenarios pass. Each run retains 16 admitted stage calls, 600 seconds per call, 3600 seconds total, pin_base_image=true; no resume/restart of failed runs, no weakening contracts, no upstream push. Native stages use Codex CLI, structured stages DeepSeek. Preserve every failed run and fix offline before a new run.",
+  "network": false
+}

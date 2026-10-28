@@ -1,0 +1,58 @@
+{
+  "sources": [
+    {
+      "id": "existing_structure",
+      "license": "MIT",
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit_newpipeline\\tools-skills\\ASE\\chem-structure-check"
+    }
+  ],
+  "prompt": "Discover and package one executable Skill using the supplied read-only XYZ structure checker as source material. Preserve scripts/check_structure.py byte-for-byte and its documented --request JSON-file CLI and JSON stdout behavior. Use ASE==3.26.0 as documented. Require complete bound Docker acceptance with a genuine coordinate-distance calculation on a small two-atom XYZ fixture with source/API-grounded geometry_checks, including a known target distance and meaningful geometry_checks value/coverage assertions. Also verify a structure whose requested geometry constraint fails while inspection itself correctly completes: status success and exit 0 can coexist with passed:false and an error finding. Treat this as a completed inspection result, not an infrastructure failure or invalid request. Verify rejection of an invalid request with documented exit 2 and error.code, and input-file immutability. Do not invent a tool output-file flag or claim an output structure is written; this tool reports on stdout and explicitly does not modify structures. Preserve documented input/path/one-based-index semantics. Old source credibility claims are not current evidence. Do not weaken assertions, change source code, or delete a failed case. Do not install dependencies or execute business/geometry code on the host; execution is permitted only in Docker. Do not claim physical or transition-state validation.",
+  "model": {
+    "name": "gpt-6-astra",
+    "transport": "https",
+    "reasoning_effort": "medium",
+    "service_tier": "default",
+    "backend": "codex_cli"
+  },
+  "execution": {
+    "profile": "production",
+    "stop_on_runtime_failure": true,
+    "progress_watch": "observe"
+  },
+  "limits": {
+    "model_calls": 16,
+    "model_timeout": 600,
+    "total_seconds": 3600,
+    "agent_progress_timeout": null,
+    "max_candidates": 1,
+    "max_builds": 1,
+    "repair_rounds": 2
+  },
+  "runtime_defaults": {
+    "options": {
+      "backend": "deepseek_api",
+      "api_model": "deepseek-v4-pro",
+      "api_retries": 1,
+      "api_stream": true,
+      "api_max_output_tokens": 65536,
+      "pin_base_image": true,
+      "model_timeout": 600,
+      "total_seconds": 2400,
+      "reasoning_effort": "medium",
+      "service_tier": "default",
+      "progress_watch": "observe",
+      "api_connect_retries": 1
+    }
+  },
+  "batch": {
+    "label": "extended-geometry",
+    "tags": [
+      "existing-skill",
+      "descriptors",
+      "acceptance",
+      "docker"
+    ]
+  },
+  "notes": "Operator authorised iterative debugging and fresh independent reruns on 2026-10-28 until two descriptor file experiments and two additional typical scenarios pass. Each run retains 16 admitted stage calls, 600 seconds per call, 3600 seconds total, pin_base_image=true; no resume/restart of failed runs, no weakening contracts, no upstream push. Native stages use Codex CLI, structured stages DeepSeek. Preserve every failed run and fix offline before a new run.",
+  "network": false
+}

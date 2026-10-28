@@ -1,0 +1,58 @@
+{
+  "sources": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit_newpipeline\\tools-skills\\rdkit\\chem-rdkit-descriptors",
+      "license": "BSD-3-Clause",
+      "id": "existing_descriptors"
+    }
+  ],
+  "prompt": "Discover and package one executable Skill using the supplied existing chem-rdkit-descriptors Skill as source material. Preserve scripts/calc_descriptors.py byte-for-byte as the delivered business entry; do not replace it with a demonstration or synthetic output. Preserve its documented CLI scope (--smiles and --input with optional --output), requirements.txt dependency pins, per-row JSONL results, invalid/empty input diagnostics and exit 2, and mixed batch continuation behavior. Ground numerical expected values in execution/fixtures.json; old reports are historical references only and are not evidence for this run. Require complete bound Docker acceptance with at least one actual ethanol descriptor calculation asserting molecular_weight 46.069 and donor/acceptor counts, explicit invalid and empty input rejection, and a mixed valid/invalid file input persisted through the delivered --output flag with row-level assertions after container exit. Read relevant original documentation and fixtures before asserting behavior. Do not weaken documented behavior or remove a failing check. Do not run chemistry/business code or install dependencies on the host; business execution is permitted only inside Docker. Do not claim scientific validity beyond source-backed algorithmic results.",
+  "model": {
+    "name": "gpt-6-astra",
+    "transport": "https",
+    "reasoning_effort": "medium",
+    "service_tier": "default",
+    "backend": "codex_cli"
+  },
+  "execution": {
+    "profile": "production",
+    "stop_on_runtime_failure": true,
+    "progress_watch": "observe"
+  },
+  "limits": {
+    "model_calls": 16,
+    "model_timeout": 600,
+    "total_seconds": 3600,
+    "agent_progress_timeout": null,
+    "max_candidates": 1,
+    "max_builds": 1,
+    "repair_rounds": 2
+  },
+  "runtime_defaults": {
+    "options": {
+      "backend": "deepseek_api",
+      "api_model": "deepseek-v4-pro",
+      "api_retries": 1,
+      "api_stream": true,
+      "api_max_output_tokens": 65536,
+      "pin_base_image": true,
+      "model_timeout": 600,
+      "total_seconds": 2400,
+      "reasoning_effort": "medium",
+      "service_tier": "default",
+      "progress_watch": "observe",
+      "api_connect_retries": 1
+    }
+  },
+  "batch": {
+    "label": "extended-descriptors-b",
+    "tags": [
+      "existing-skill",
+      "descriptors",
+      "acceptance",
+      "docker"
+    ]
+  },
+  "notes": "Operator authorised iterative debugging and fresh independent reruns on 2026-10-28 until two descriptor file experiments and two additional typical scenarios pass. Each run retains 16 admitted stage calls, 600 seconds per call, 3600 seconds total, pin_base_image=true; no resume/restart of failed runs, no weakening contracts, no upstream push. Native stages use Codex CLI, structured stages DeepSeek. Preserve every failed run and fix offline before a new run.",
+  "network": false
+}
