@@ -175,16 +175,41 @@ def handoff(package, sources, destination):
                          safe_relative(destination, "sources/" + source["id"] + "/" + f["path"]), f["sha256"])
 
 
+def validate_bound_entrypoint(p, binding):
+    """A path appearing in argv is not proof that the script is executed."""
+    from .entry import runtime_path
+    entry = runtime_path(binding)
+    target = '/opt/skill/' + entry
+    argv = p.get('entrypoint') or []
+    valid = p.get('script') == entry and bool(argv)
+    if valid and argv[0] != target:
+        executable = argv[0].rsplit('/', 1)[-1]
+        flags = []
+        if entry.endswith('.py') and re.fullmatch(r'python(?:[23](?:\.\d+)*)?', executable):
+            # Only standalone switches with no code/module/operand semantics.
+            flags = ['-u', '-B', '-I', '-E', '-s', '-S', '-O', '-OO', '-q', '-P']
+        elif not (entry.endswith('.sh') and executable in {'sh', 'bash', 'dash', 'ash'}):
+            valid = False
+        position = 1
+        while position < len(argv) and argv[position] in flags:
+            position += 1
+        valid = valid and position < len(argv) and argv[position] == target
+    if not valid:
+        raise RuntimeBlocked('entry_mismatch',
+            'Plan must execute the bound delivered script ' + target
+            + ' as the executable or as the script operand of a supported Python/shell interpreter; '
+              'inline code (-c), module execution (-m), command wrappers and a path used only as an argument '
+              'do not bind execution. Use [python, ' + target + '] for Python. Received: '
+            + json.dumps(argv, ensure_ascii=False), 'binding')
+
+
 def validate(p, index, source, binding, opts, locked=None, anchors=None):
     if redact(json.dumps(p, ensure_ascii=False)) != json.dumps(p, ensure_ascii=False):
         raise RuntimeBlocked("unsafe_plan", "Plan contains credential-like literals", "environment")
+    validate_bound_entrypoint(p, binding)
     cases, _, total = planner.validate_plan(p, index, source,
                                             [c for c in locked if c.get('origin') != 'authored_check'] if locked else None,
                                             anchors)
-    from .entry import runtime_path
-    entry = runtime_path(binding)
-    if p["script"] != entry or "/opt/skill/" + entry not in p["entrypoint"]:
-        raise RuntimeBlocked("entry_mismatch", "Plan must invoke the actual delivered entry", "binding")
     if any(c.get("timeout_seconds", 30) > opts["test_seconds"] for c in cases):
         raise planner.PlanningError("Case exceeds explicit operation timeout")
     if opts["max_context_bytes"] is not None and total > opts["max_context_bytes"]:
@@ -205,7 +230,11 @@ def propose(source, binding, audit, opts, constraints=None, locked=None, feedbac
     from .entry import runtime_path
     for number in attempts:
         p, index, _ = planner.plan(source, {"script": runtime_path(binding),
-            "constraints": ["Invoke the unchanged delivered package entry, not only the upstream tool."] + (constraints or [])},
+            "constraints": ["Invoke the unchanged delivered package entry, not only the upstream tool. "
+                            "ENTRYPOINT must execute that script directly, or use a supported Python/shell "
+                            "interpreter followed by the script path. Python standalone flags such as -u "
+                            "are allowed; inline code (-c), module execution (-m), and command wrappers "
+                            "cannot substitute for executing the bound script."] + (constraints or [])},
             Path(audit) / str(number), opts, deadline, feedback=feedback, previous=previous, call_guard=call_guard,
             required=required)
         try:

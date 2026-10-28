@@ -79,6 +79,28 @@ class RuntimeBuildTests(unittest.TestCase):
         self.assertTrue((Path(request.frozen_directory) / 'runtime/context/package/main.py').exists())
         self.assertTrue((Path(request.frozen_directory) / 'runtime/locked-tests.json').exists())
 
+    def test_script_path_as_unused_argument_cannot_bind_execution(self):
+        for number, prefix in enumerate((['python', '-c', 'print(123)'], ['python', '-m', 'unrelated'],
+                                        ['echo'], ['bash', '-c', 'echo ok'], ['python', '-W'])):
+            with self.subTest(prefix=prefix):
+                p = plan()
+                p['entrypoint'] = prefix + ['/opt/skill/package/main.py']
+                with patch.object(LocalExecutor, 'host', return_value=HOST), \
+                     patch.object(planner, 'plan', side_effect=AssertionError('No model call')):
+                    prepare(self.record, self.package, self.sources, self.root / ('bad-' + str(number)),
+                            {'plan': p}, LocalExecutor())
+                result = self.record['runtime_preparation']
+                self.assertEqual(result['status'], 'runtime_blocked')
+                self.assertEqual(result['gaps'][0]['code'], 'entry_mismatch')
+                self.assertIn('/opt/skill/package/main.py', result['gaps'][0]['detail'])
+
+    def test_bound_script_supports_direct_execution_and_safe_python_flags(self):
+        from creation_pipeline.runtime.preparation import validate_bound_entrypoint
+        for argv in (['/opt/skill/package/main.py'],
+                     ['python3.11', '-u', '-B', '/opt/skill/package/main.py', '--input', 'value']):
+            p = plan(); p['entrypoint'] = argv
+            validate_bound_entrypoint(p, {'entry': 'main.py'})
+
     def test_unknown_and_ambiguous_block_without_model_or_docker(self):
         for unknown in (False, True):
             record = copy.deepcopy(self.record)
