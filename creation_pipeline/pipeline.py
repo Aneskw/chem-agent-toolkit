@@ -8,18 +8,19 @@ import subprocess
 import time
 import uuid
 from collections import Counter
+from contextlib import ExitStack
 from pathlib import Path
 
 from . import __version__
 from creation_pipeline.resources.acquisition import Acquisition
 from creation_pipeline.generation.discovery import ROOT, analyze, ordered, specifications, validate_discovery
 from creation_pipeline.generation.author import author, review
-from creation_pipeline.validation.checks import classify, run_checks, static_checks
+from creation_pipeline.validation.checks import classify, static_checks
 from creation_pipeline.resources.intake import Sources
 from creation_pipeline.models import BlockedError, BudgetError, IncompleteError, ModelCallError, load_config, bound, iterations
 from creation_pipeline.artifacts.package import manifest
 from creation_pipeline.artifacts.library import adopt
-from creation_pipeline.schemas import CANDIDATES
+from creation_pipeline.validation.acceptance import certify, require_ready, ACCEPTANCE_VERSION
 from creation_pipeline.agent.backend import NativeSession
 from creation_pipeline.generation.discovery import normalize
 from creation_pipeline.records import clean_run, digest, has_link, now, read_json, redact, sanitized, write_json, safe_relative
@@ -33,6 +34,7 @@ def _restore(document, state, replan=False):
     if document.get("schema_version") != 3:
         raise ValueError("Legacy plan schema: rediscover with the skill-only pipeline")
     config = copy.deepcopy(document["config"])
+    config.setdefault("research_access", "known_only")
     current_specs = specifications()
     changed = {p for p in current_specs if current_specs[p] != document["specifications"].get(p)}
     author_only = {"creation_pipeline/generation/prompts/author.md", "creation_pipeline/generation/prompts/review.md"}
@@ -50,151 +52,89 @@ def _restore(document, state, replan=False):
 
 
 
-def _agent_reports(session, directory):
-    ledger = session.work / "agent-checks.jsonl"
-    if not ledger.exists():
-        return []
-    current = manifest(directory)
-    reports = []
-    for line in ledger.read_text(encoding="utf-8").splitlines():
-        report = json.loads(line)
-        if Path(report["package"]).resolve() == directory.resolve() and report["files"] == current:
-            reports.append(report)
-    return reports
-
-def _candidate(session, config, entity, bundle, work, allow_generated):
+def _candidate(session, config, entity, bundle, work):
     directory = safe_relative(bundle, "skills/" + entity["name"])
-    record = {"name": entity["name"], "kind": entity["kind"], "plan": entity, "status": "failed",
-              "checks": [], "repair_rounds": 0, "files": [], "repair_history": []}
+    record = {"name": entity["name"], "kind": "skill", "plan": entity, "status": "failed",
+              "checks": [], "repair_rounds": 0, "files": [], "basis": [], "repair_summary": []}
     if entity["readiness"] == "blocked":
-        record.update(status="blocked", error="; ".join(entity["gaps"]))
-        return record
+        record.update(status="incomplete", error="; ".join(entity["gaps"]))
+        return certify(record)
     before_calls, global_limit = len(session.receipts), session.limits["model_calls"]
-    candidate_limit = min(bound(global_limit), before_calls + bound(config["limits"]["candidate_calls"]))
-    session.limits["model_calls"] = None if candidate_limit == float("inf") else candidate_limit
-    previous, feedback, signature = None, [], None
-    failed_oracles = {}
-    scoped = copy.deepcopy(config)
-    scoped["execute_generated_checks"] = allow_generated
-    scoped["checks"] = [t for t in config["checks"] if t.get("candidate") == entity["name"]]
+    cap = min(bound(global_limit), before_calls + bound(config["limits"]["candidate_calls"]))
+    session.limits["model_calls"] = None if cap == float("inf") else cap
+    previous, feedback, signature, last_delivery = None, [], None, None
     try:
         for attempt in iterations(config["limits"]["repair_rounds"]):
             record["repair_rounds"] = attempt
-            try:
-                scoped["_previous_issues"] = previous.get("issues", []) if previous else []
-                artifact = author(session, scoped, entity, directory, feedback, previous)
-                previous = artifact
-                if artifact.get("candidate_update"):
-                    update = artifact["candidate_update"]
-                    if not update.get("reason") or not update.get("evidence"):
-                        raise ValueError("Scope adjustments need reason and source evidence")
-                    session.sources.validate_evidence(update["evidence"])
-                    record.setdefault("plan_adjustments", []).append({"before": copy.deepcopy(entity), "update": update})
-                    for key in ("scope", "task", "entrypoint", "construction", "evidence"):
-                        if key in update:
-                            entity[key] = update[key]
-                record.update(
-                    test_definitions={"configured": scoped["checks"], "generated": artifact["tests"]},
-                    issues=artifact.get("issues", []), notes=artifact.get("notes", []),
-                    additional_candidates=artifact.get("additional_candidates", []),
-                    file_purposes=[{"path": f["path"], "purpose": f["purpose"]} for f in artifact["files"]])
-                write_json(work / entity["name"] / "authored-metadata.json", sanitized({k: record[k] for k in
-                    ("test_definitions", "issues", "notes", "file_purposes")}))
-                reports = static_checks(directory, entity["name"], bundle=bundle)
-                initial = manifest(bundle)
-                if not any(r["status"] == "fail" for r in reports):
-                    scoped["_oracle_changes"] = []
-                    pre_review = review(session, entity, artifact, reports, scoped)
-                    if pre_review:
-                        reports.append(pre_review)
-                    if pre_review is None or pre_review["status"] == "pass":
-                        reports += run_checks(scoped, artifact, directory, session.sources,
-                                              work / entity["name"] / f"attempt-{attempt}-{uuid.uuid4().hex[:8]}", allow_generated,
-                                              prior=_agent_reports(session, directory))
-                    if initial != manifest(bundle):
-                        reports.append({"name": "artifact_immutability", "status": "fail", "required": True,
-                                        "findings": ["Execution modified bundle files"]})
-                    session.sources.verify()
-                    proposed_tests = {t["name"]: t for t in artifact["tests"]}
-                    scoped["_oracle_changes"] = [{"name": n, "previous": old, "proposed": proposed_tests.get(n)}
-                        for n, old in failed_oracles.items() if n not in proposed_tests or old != {
-                            k: proposed_tests[n].get(k) for k in ("expected_exit", "stdout_contains", "json_equals", "artifacts")}]
-                    record["checks"] = reports
-                    if any(r["status"] == "fail" for r in reports) or scoped["_oracle_changes"]:
-                        final_review = review(session, entity, artifact, reports, scoped)
-                        seen = {r.get("verification_id") for r in reports if r.get("verification_id")}
-                        reports += [r for r in _agent_reports(session, directory) if r.get("verification_id") not in seen]
-                        reports = [r for r in reports if r["name"] != "content_review"] + [final_review]
-                        if final_review["status"] == "pass":
-                            for report in reports:
-                                if report.get("possible_environment_gap") and report["name"] in final_review.get("execution_gaps", []):
-                                    report.update(status="not_run", required=False, unverified=True)
-                                    report["findings"].append("Review confirmed an external prerequisite gap; execution remains unverified")
-                issues = artifact.get("issues", [])
-                if not isinstance(issues, list) or any(not isinstance(i, dict) or type(i.get("blocking")) is not bool for i in issues):
-                    raise ValueError("Invalid structured issues")
-                if any(i["blocking"] for i in issues):
-                    reports.append({"name": "blocking_issues", "status": "not_run", "required": True,
-                                    "findings": [i["description"] for i in issues if i["blocking"]]})
-                current_tests = {t["name"]: t for t in artifact["tests"]}
-                changed = [name for name, oracle in failed_oracles.items()
-                    if name not in current_tests or oracle != {k: current_tests[name].get(k) for k in
-                        ("expected_exit", "stdout_contains", "json_equals", "artifacts")}]
-                oracle_review = next((r for r in reports if r["name"] == "content_review"), {})
-                verified_correction = bool(oracle_review.get("status") == "pass"
-                    and oracle_review.get("oracle_changes_verified"))
-                if changed and verified_correction:
-                    reports.append({"name": "source_backed_oracle_correction", "status": "pass", "required": False,
-                                    "findings": oracle_review["findings"], "changed_checks": changed})
-                if changed and not verified_correction:
-                    reports.append({"name": "changed_failed_oracles", "status": "not_run", "required": True,
-                        "findings": ["Previously failed checks removed/expected results changed; requires independent oracle review: " + ", ".join(changed)]})
-                record.update(status=classify(reports), checks=reports,
-                    test_definitions={"configured": scoped["checks"], "generated": artifact["tests"]},
-                    issues=issues, notes=artifact.get("notes", []), file_purposes=[{"path": f["path"], "purpose": f["purpose"]} for f in artifact["files"]])
-                if record["status"] != "failed":
-                    record.pop("error", None)
-                    break
-                record["repair_history"].append({"attempt": attempt, "checks": reports,
-                                                "generated_tests": artifact["tests"]})
-                for report in reports:
-                    if report["status"] == "fail" and report.get("origin") == "generated" and report["name"] in current_tests:
-                        test = current_tests[report["name"]]
-                        failed_oracles[test["name"]] = {k: test.get(k) for k in
-                            ("expected_exit", "stdout_contains", "json_equals", "artifacts")}
-                feedback = [r for r in reports if r["status"] == "fail"]
-            except (ValueError, OSError, KeyError, TypeError) as exc:
-                if isinstance(exc, ModelCallError):
-                    record.update(status="incomplete" if isinstance(exc, BudgetError) else "failed", error=redact(exc), stopped_reason="Model execution stopped; no file-repair retry")
-                    break
-                if isinstance(exc, BlockedError):
-                    record.update(status="blocked", error=redact(exc))
-                    break
-                feedback = [{"name": "author_or_validation", "status": "fail", "required": True, "findings": [redact(exc)]}]
-                record.update(status="failed", checks=feedback, error=redact(exc))
-            current = hash_object({"issues": [{"name": r.get("name"), "status": r.get("status"), "findings": r.get("findings")} for r in feedback],
-                                   "files": manifest(directory) if directory.exists() else []})
+            artifact = author(session, config, entity, directory, feedback, previous)
+            previous = artifact
+            if artifact.get("candidate_update"):
+                update = artifact["candidate_update"]
+                if not update.get("reason") or not update.get("evidence"):
+                    raise ValueError("Scope adjustment requires reason and evidence")
+                session.sources.validate_evidence(update["evidence"])
+                record.setdefault("plan_adjustments", []).append(update)
+                for key in ("scope", "task", "entrypoint", "construction", "evidence"):
+                    if key in update:
+                        entity[key] = update[key]
+            record.update(basis=artifact["basis"], issues=artifact.get("issues", []),
+                          notes=artifact.get("notes", []), additional_candidates=artifact.get("additional_candidates", []))
+            reports = static_checks(directory, entity["name"])
+            delivery_key = hash_object({"files": manifest(directory), "basis": artifact["basis"],
+                                        "sources": session.sources.manifest(), "issues": artifact.get("issues", [])})
+            if delivery_key == last_delivery:
+                record.update(status="incomplete", stopped_reason="Author returned unchanged files and evidence; review not repeated")
+                break
+            last_delivery = delivery_key
+            initial = manifest(bundle)
+            if not any(r["status"] == "fail" for r in reports):
+                reports.append(review(session, entity, artifact, reports, config))
+                if initial != manifest(bundle):
+                    reports.append({"name": "artifact_immutability", "status": "fail", "required": True,
+                                    "findings": ["Review modified delivered files"]})
+                session.sources.verify()
+            unresolved = [i["description"] for i in artifact.get("issues", []) if i["blocking"]]
+            if unresolved:
+                reports.append({"name": "blocking_issues", "status": "fail", "required": True, "findings": unresolved})
+            record.update(status=classify(reports), checks=reports,
+                          review_context=hash_object({"specs": specifications(), "basis": artifact["basis"],
+                                                      "sources": session.sources.manifest()}))
+            if record["status"] == "ready":
+                break
+            feedback = [r for r in reports if r["status"] != "pass"]
+            record["repair_summary"].append({"attempt": attempt, "problems": [
+                {k: f.get(k) for k in ("location", "problem", "action")}
+                if isinstance(f, dict) else str(f)
+                for r in feedback for f in r.get("findings", [])]})
+            current = hash_object({"files": manifest(directory), "basis": artifact["basis"], "feedback": feedback})
             if current == signature:
-                record["stopped_reason"] = "Repeated unchanged failure"
+                record.update(status="incomplete", stopped_reason="Repeated unchanged content failure")
                 break
             signature = current
-    except (ValueError, OSError, subprocess.SubprocessError) as exc:
+            if any(r["status"] == "not_run" for r in reports):
+                record["status"] = "incomplete"
+                # One author opportunity to supply additional evidence; unchanged loop stops above.
+        else:
+            record["stopped_reason"] = "Explicit development repair limit reached"
+    except (ModelCallError, IncompleteError, BlockedError) as exc:
+        record.update(status="incomplete", error=redact(exc))
+    except (ValueError, OSError, KeyError, TypeError, subprocess.SubprocessError) as exc:
         record.update(status="failed", error=redact(exc))
     finally:
         session.limits["model_calls"] = global_limit
         record["model_calls"] = session.receipts[before_calls:]
         if directory.exists():
             record["files"] = manifest(directory)
-    return record
+    return certify(record)
 
 
-def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None, keep_debug=False,
-          execute_generated=False, _session_factory=None, notify=lambda message: None, feedback=None,
-          library_root=None, no_adopt=False, resume_id=None, rediscover=False, extra_turns=0):
+def _build(config_path=None, state_root=None, *, plan_only=False, keep_debug=False,
+          _session_factory=None, notify=lambda message: None,
+          library_root=None, no_adopt=False, resume_id=None, rediscover=False, extra_turns=0, _build_id=None):
     state = Path(state_root or ROOT / ".pipeline").absolute()
     if has_link(state):
         raise ValueError("State root must not contain linked paths")
-    build_id = resume_id or (time.strftime("%Y%m%dT%H%M%S") + "-" + uuid.uuid4().hex[:8])
+    build_id = resume_id or _build_id or (time.strftime("%Y%m%dT%H%M%S") + "-" + uuid.uuid4().hex[:8])
     work = safe_relative(state, "runs/" + build_id)
     output = safe_relative(state, "outputs/" + build_id)
     if resume_id and (not (work / "checkpoint.json").is_file()):
@@ -214,8 +154,9 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
         if resume_id:
             checkpoint = read_json(work / "checkpoint.json")
             config = checkpoint["config"]
-            if "execution" not in config:
-                raise ValueError("Legacy checkpoint: start a v5 build and reuse cached resources; old session rules cannot be resumed safely")
+            config.setdefault("research_access", "known_only")
+            if "execution" not in config or any(k in config for k in ("checks", "execute_generated_checks")):
+                raise ValueError("Legacy checkpoint: start a source/content-review build using existing resources")
             if (output / "summary.json").is_file():
                 previous_summary = read_json(output / "summary.json")
                 config["_previous_run_errors"] = previous_summary.get("errors", [])
@@ -237,22 +178,16 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                     raise ValueError("Saved plan source context changed; refuse resume")
                 config, sources = _restore(document, state)
                 plan, prior_output = document["discovery"], output
-        elif plan_path:
-            if has_link(Path(plan_path)):
-                raise ValueError("Linked plan path")
-            document = read_json(plan_path)
-            prior_output = Path(plan_path).absolute().parent
-            lock = read_json(prior_output / "sources.lock.json")
-            if hash_object({k: document[k] for k in ("config", "sources", "evidence", "source_errors", "specifications", "network_requests")}) != lock["source_context_sha256"]:
-                raise ValueError("Plan source context changed; rediscover rather than editing source evidence")
-            config, sources = _restore(document, state, replan=feedback is not None)
-            plan = document["discovery"]
-            notify("Continuing saved discovery plan; no discovery model call")
         else:
             config = load_config(config_path)
             config["_deadline"] = time.monotonic() + bound(config["limits"]["total_seconds"])
+            if _session_factory is None:
+                notify("Checking selected Agent connection before acquiring resources")
+                record["preflight_receipts"] = NativeSession.preflight(config, work, notify)
             notify("Acquiring and snapshotting sources")
             sources = Sources(config, state / "cache")
+        if resume_id and _session_factory is None:
+            record["preflight_receipts"] = NativeSession.preflight(config, work, notify)
         if type(extra_turns) is not int or extra_turns < 0 or (extra_turns and not resume_id):
             raise ValueError("extra_turns must be nonnegative and requires resume")
         if extra_turns:
@@ -266,23 +201,12 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
         config.setdefault("_deadline", time.monotonic() + bound(config["limits"]["total_seconds"]))
         if config["model"]["backend"] != "codex_cli":
             raise ValueError("Saved API/Ollama runs are not executable in the Agent-only pipeline")
-        config["execute_generated_checks"] = execute_generated or config["execute_generated_checks"]
         session = (_session_factory or NativeSession)(config, sources, copy.deepcopy(config["limits"]), work, keep_debug)
         session.started = time.monotonic() if config["limits"]["total_seconds"] is None else config["_deadline"] - config["limits"]["total_seconds"]
         if resume_id:
             session.started -= sum(r.get("elapsed_seconds", 0) for r in session.receipts)
             config["_deadline"] = session.started + bound(config["limits"]["total_seconds"])
         session.notify = notify
-        if feedback is not None:
-            if plan is None:
-                raise ValueError("Revision requires --plan")
-            context = {"previous_discovery": plan, "feedback": feedback, "sources": sources.index(),
-                       "read_evidence": sources.compact_evidence(), "user_guidance": config["prompt"],
-                       "constraints": config["constraints"], "user_notes": config["notes"]}
-            revised = session.stage((ROOT / "creation_pipeline/generation/prompts/revise.md").read_text(encoding="utf-8"), context,
-                                    schema=CANDIDATES)
-            plan = validate_discovery(normalize(revised), config, sources)
-            write_json(output / "revision.json", {"parent": str(Path(plan_path).absolute()), "feedback": feedback})
         if plan is None:
             notify("Discovering capabilities and choosing packaging directions")
             plan = analyze(session, config)
@@ -319,30 +243,20 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                 if prior_output and (prior_output / "records" / (name + ".json")).exists():
                     old = read_json(prior_output / "records" / (name + ".json"))
                     old_path = safe_relative(prior_output, "bundle/skills/" + name)
-                    if old.get("fingerprint") == fingerprint and old["status"] == "ready" and manifest(old_path) == old["files"]:
+                    if old.get("fingerprint") == fingerprint and old["status"] == "ready" and old.get("acceptance_version") == ACCEPTANCE_VERSION and manifest(old_path) == old["files"]:
+                        require_ready(old)
                         if old_path.resolve() != (bundle / "skills" / name).resolve():
                             shutil.copytree(old_path, bundle / "skills" / name, dirs_exist_ok=True)
                         entity_record = dict(old, reused_from=prior_output.name, model_calls=[])
                 if entity_record is None:
-                    entity_record = _candidate(session, config, entity, bundle, work,
-                                              execute_generated or config["execute_generated_checks"])
+                    entity_record = _candidate(session, config, entity, bundle, work)
                 entity_record["fingerprint"] = fingerprint
-                # Run the delivered files from a different directory before readiness.
-                if entity_record["status"] == "ready" and not entity_record.get("reused_from"):
-                    relocated = work / "relocated" / name
-                    shutil.copytree(bundle / "skills" / name, relocated, dirs_exist_ok=bool(resume_id))
-                    artifact = {"tests": entity_record["test_definitions"]["generated"]}
-                    scoped = copy.deepcopy(config)
-                    scoped["checks"] = entity_record["test_definitions"]["configured"]
-                    checks = run_checks(scoped, artifact, relocated, sources, work / "relocation-checks" / name,
-                                        execute_generated or config["execute_generated_checks"])
-                    if manifest(relocated) != entity_record["files"]:
-                        checks.append({"name": "relocation_immutability", "status": "fail", "required": True, "findings": ["Relocated files changed"]})
-                    entity_record["checks"] += checks
-                    entity_record["status"] = classify(entity_record["checks"])
+                certify(entity_record)
                 outcomes[name] = entity_record
                 write_json(output / "records" / (name + ".json"), sanitized(entity_record))
-                record["entities"].append({"name": name, "kind": "skill", "status": entity_record["status"], "needs": []})
+                record["entities"].append({"name": name, "kind": "skill", "status": entity_record["status"], "needs": [],
+                    **({"reason": entity_record.get("error") or entity_record.get("stopped_reason") or "Content review requires changes; see review record"}
+                       if entity_record["status"] != "ready" else {})})
                 if entity_record["status"] == "ready" and entity_record.get("additional_candidates"):
                     for raw in entity_record["additional_candidates"]:
                         addition = normalize({"candidates": [raw]})["candidates"][0]
@@ -377,6 +291,8 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                 (output / "bundle").mkdir(exist_ok=True)
             write_json(output / "bundle/manifest.json", {"build_id": build_id, "entities": record["entities"],
                 "files": manifest(bundle), "agent_efficacy": "not_evaluated"})
+            document.update(sources=sources.manifest(), evidence=sources.evidence, source_errors=sources.errors, network_requests=sources.acquisition.requests)
+            write_json(output / "plan.json", sanitized(document))
             adoption_enabled = config["adoption"]["enabled"] and not no_adopt
             if any(r["status"] == "ready" for r in outcomes.values()) and adoption_enabled:
                 record["adoption"] = adopt(output, list(outcomes.values()), config, library_root or ROOT / "skills")
@@ -384,8 +300,7 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                 record["adoption"] = [{"name": n, "status": "not_eligible" if adoption_enabled else "disabled"} for n in outcomes]
             states = [r["status"] for r in record["entities"]]
             record["status"] = ("no_candidates" if not states else "ready" if all(s == "ready" for s in states)
-                                else "partial" if "ready" in states else "failed" if "failed" in states
-                                else "blocked" if "blocked" in states else "incomplete" if "incomplete" in states else "draft")
+                                else "partial" if "ready" in states else "incomplete" if "incomplete" in states else "failed")
             if any(a["status"] == "conflict" for a in record.get("adoption", [])):
                 record["status"] = "partial"
     except KeyboardInterrupt:
@@ -396,17 +311,18 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
         record["errors"].append(redact(exc))
     record["finished_at"] = now()
     record["counts"] = dict(Counter(e["status"] for e in record["entities"]))
+    if (work / "preflight-receipts.json").exists() and not record.get("preflight_receipts"):
+        record["preflight_receipts"] = read_json(work / "preflight-receipts.json")
     receipts = session.receipts if session else []
-    record["model_metrics"] = {"calls_attempted": len(receipts), "usage_fully_reported": bool(receipts) and all(r.get("usage") for r in receipts),
+    record["model_metrics"] = {"calls_attempted": len(receipts) + len(record.get("preflight_receipts", [])), "usage_fully_reported": bool(receipts) and all(r.get("usage") for r in receipts),
                                "receipts": receipts, "monetary_cost": None}
-    usages = [r["usage"] for r in receipts if isinstance(r.get("usage"), dict)]
-    usage_keys = {k for u in usages for k, v in u.items() if type(v) is int}
-    record["model_metrics"]["reported_totals"] = {k: sum(u.get(k, 0) for u in usages if type(u.get(k, 0)) is int)
-                                                   for k in usage_keys} if usages else None
+    from creation_pipeline.agent.metrics import summarize_usage
+    record["model_metrics"].update(summarize_usage(record.get("preflight_receipts", []) + receipts))
     if plan is not None:
         record["accepted_plan_sha256"] = hash_object(plan)
         record["discovery_summary"] = plan["summary"]
         record["candidate_count"] = len(plan["candidates"])
+        record["discovery"] = plan
     if sources:
         record["sources"] = sources.index()
         record["source_errors"] = sources.errors
@@ -420,12 +336,51 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
             write_json(output / "plan.json", sanitized(document))
             write_json(output / "sources.lock.json", {"source_context_sha256": context_hash})
             record["source_context_sha256"] = context_hash
-    successful = record["status"] in ("ready", "planned", "no_candidates")
-    record["temporary_workspace"] = str(work) if not successful or keep_debug else None
+    record["temporary_workspace"] = str(work)
     write_json(output / "summary.json", sanitized(record))
-    if successful and not keep_debug:
-        clean_run(state, build_id)
-    return {"build_id": build_id, "status": record["status"], "output": str(output),
+    from creation_pipeline.retention import archive, register_cache, mark, remove_registered
+    try:
+        entries = sources.manifest() if sources else []
+        cache = register_cache(state, entries)
+        archive_path = archive(state, output, record, config, entries)
+        mark(state, build_id, last_activity=time.time(), cache=cache, status=record["status"])
+        record["archive"] = str(archive_path)
+        successful = record["status"] in ("ready", "planned", "no_candidates")
+        if successful and not keep_debug:
+            clean_run(state, build_id)
+            remove_registered(state, "outputs/" + build_id)
+            record["temporary_workspace"] = None
+        write_json(archive_path / "summary.json", sanitized({k: v for k, v in record.items()
+            if k not in ("evidence", "sources", "model_metrics")} | {"model_metrics": {k: v for k, v in record["model_metrics"].items() if k != "receipts"}}))
+    except (OSError, ValueError, KeyError) as exc:
+        record.setdefault("warnings", []).append("Archive/cleanup incomplete; workspace retained where possible: " + redact(exc))
+        write_json(output / "summary.json", sanitized(record))
+    return {"build_id": build_id, "status": record["status"], "output": record.get("archive", str(output)),
             "counts": record["counts"], "entities": record["entities"],
             "discovery_summary": record.get("discovery_summary"), "candidate_count": record.get("candidate_count", 0),
-            "adoption": record.get("adoption", []), "deferred": record.get("deferred", []), "model_calls": len(receipts), "errors": record["errors"]}
+            "adoption": record.get("adoption", []), "deferred": record.get("deferred", []), "model_calls": len(receipts) + len(record.get("preflight_receipts", [])), "errors": record["errors"], "warnings": record.get("warnings", [])}
+
+
+def build(config_path=None, state_root=None, **kwargs):
+    from creation_pipeline.retention import lease, sweep, mark, initialize
+    state = Path(state_root or ROOT / ".pipeline").absolute()
+    if has_link(state):
+        raise ValueError("State root must not contain linked paths")
+    state.mkdir(parents=True, exist_ok=True)
+    notify = kwargs.get("notify", lambda message: None)
+    try:
+        initialize(state)
+        report = sweep(state)
+    except (OSError, ValueError, KeyError) as exc:
+        report = {"removed": [], "warnings": [redact(exc)]}
+    if report["removed"] or report["warnings"]:
+        notify(f"Retention: {len(report['removed'])} temporary paths removed; {len(report['warnings'])} warnings")
+    bid = kwargs.get("resume_id") or (time.strftime("%Y%m%dT%H%M%S") + "-" + uuid.uuid4().hex[:8])
+    with ExitStack() as stack:
+        with lease(state, "retention-sweep"):
+            stack.enter_context(lease(state, bid))
+            mark(state, bid, last_activity=time.time())
+        try:
+            return _build(config_path, state, _build_id=bid, **kwargs)
+        finally:
+            mark(state, bid, last_activity=time.time())

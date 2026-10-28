@@ -1,28 +1,39 @@
 # Usage
 
-See [configuration](configuration.md) and [resources](resources.md). Use authenticated native Codex CLI, Python 3.11+ and Git. Only resources are required, not a task.
+Use authenticated Codex CLI and Python 3.11+. See README for optional parser installation.
+
+```json
+{"sources": [{"path": "./paper.pdf"}, {"path": "./code"}]}
+```
 
 ```text
+python -m creation_pipeline build sources.json
 python -m creation_pipeline build sources.json --preflight
-python -m creation_pipeline build sources.json --execute-generated-checks
+python -m creation_pipeline build sources.json --no-adopt --keep-debug
+python -m creation_pipeline resume BUILD_ID --extra-turns 4
 ```
 
-Preflight validates fields/backend, not remote availability. Build automatically discovers, chooses, writes, reviews and organizes individual skills. --no-adopt is appropriate for trials. --keep-debug preserves successful workspaces. Without generated execution permission, content review still proceeds and unverified runtime is explicitly recorded; do not confuse this with actual tool execution.
+--preflight validates configuration only (no network/model calls). Every real build additionally
+performs a lightweight selected-model handshake before acquiring research resources. Its connectivity
+timeout is 90 seconds, distinct from optional development model time limits.
 
-Production defaults have no overall time/count/size quota. Development can opt into a preset and explicit overrides. It uses the same content standards. Per-network-operation and check timeouts remain configurable fault controls.
+Normal builds need no manual plan edit/approval. User guidance is optional. Default approved output
+is skills/name. --no-adopt retains approved packages in compact records; --keep-debug retains full
+workspace temporarily. resume needs its checkpoint and unchanged specifications; use archived drafts
+as new material when the original full workspace/session is unavailable.
 
 ```text
-python -m creation_pipeline resume <build-id> --keep-debug
+python -m creation_pipeline retention
+python -m creation_pipeline pin BUILD_ID
+python -m creation_pipeline unpin BUILD_ID
+python -m creation_pipeline prune --dry-run
+python -m creation_pipeline prune
+python -m creation_pipeline check skills/NAME
 ```
 
-Requires the local checkpoint, resource registry and session files. Sources/specifications and finalized delivery hashes are validated. Existing successful checks are reused only when applicable to the same files. Optional --rediscover re-enters discovery under current specifications. --extra-turns extends an existing finite budget explicitly; a null production budget needs no extension. Do not concurrently resume one run. Pre-v5 native checkpoints cannot safely inherit new stage rules: start a new build, reusing sources/cache.
+check reports static properties only, not semantic approval or execution. pin protects a registered
+batch and its resource cache. Unregistered historical files are listed, never auto-migrated/deleted.
 
-```text
-python -m creation_pipeline check .pipeline/outputs/<build-id>
-python -m creation_pipeline install .pipeline/outputs/<build-id> --destination ./export
-python -m creation_pipeline clean <build-id> --dry-run
-```
-
-check verifies recorded files/static structure, not fresh runtime execution. install checks eligible output and collisions. Clean only registered local workspaces; do not clean incomplete work intended for resume.
-
-Compatibility discover/plan/revise/--plan remain diagnostic interfaces, not the normal human workflow. Hand-editing evidence is unsupported. Direct API/Ollama configuration fails early. The examples directory is reserved for complete build batches; no curated batch is currently published. Follow this guide and the configuration reference to run the pipeline.
+Old generated execution, verify-pending and promote options are not supported. See configuration.md
+for accepted inputs and outputs.md for lifecycle details. A transport error is not a Skill defect;
+a useful rejected draft may be repaired after resolving its concrete content or source gaps.

@@ -1,0 +1,38 @@
+{
+  "status": "ready",
+  "acceptance_scope": "source_and_content_review_only",
+  "checks": [
+    {
+      "name": "structure",
+      "status": "pass",
+      "required": true,
+      "findings": []
+    },
+    {
+      "name": "runtime_paths",
+      "status": "pass",
+      "required": true,
+      "findings": []
+    },
+    {
+      "status": "pass",
+      "resolution": "none",
+      "findings": [],
+      "name": "content_review",
+      "required": true,
+      "evidence_kind": "source_and_content_review_only"
+    }
+  ],
+  "issues": [],
+  "repair_summary": [],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "sha256": "de5f0850374a6f812f943d0ccc298cd15d79da790b1db1441e0925f082f0596b",
+      "bytes": 4913
+    }
+  ],
+  "final_scope": "The user supplies the reaction components and, when needed, SMILES strings, compound names that can be resolved, or prepared descriptor matrices. The function performs component encoding, feature cleanup, Cartesian expansion, and optional min–max scaling; resolving invalid or unavailable structures remains input preparation.",
+  "scope_adjustments": [],
+  "record_kind": "portable selection, not a resumable acceptance receipt"
+}

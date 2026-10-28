@@ -1,0 +1,3857 @@
+{
+  "source_repository": "https://github.com/Aneskw/chem-agent-toolkit",
+  "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c",
+  "scope": "Formal package roots; excludes candidates and test fixtures. Mixed historical authorship, not all proven pipeline-generated.",
+  "acceptance": "Legacy collection reviewed and refined on 2026-10-28, separately from automated current-pipeline approvals. Content review is not full target-tool execution or measured Agent benefit.",
+  "categories": {
+    "unclassified": 42,
+    "models-skills": 7,
+    "tools-skills": 13,
+    "databases-skills": 4
+  },
+  "skills": [
+    {
+      "name": "aggregate-augmented-reaction-predictions",
+      "origin": "skills/generated/verified20-20260920-CABX3BR4-r01/aggregate-augmented-reaction-predictions",
+      "origins": [
+        "skills/generated/verified20-20260920-CABX3BR4-r01/aggregate-augmented-reaction-predictions"
+      ],
+      "path": "unclassified/aggregate-augmented-reaction-predictions",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2230,
+          "sha256": "e75338e8b409c568b36f40cf7156d3bba2ee668dda47b0711d59384b4de22d1e",
+          "upstream_blob": "b6d3e6afbe993e18622ea6c5c6936bf50ca2fe93"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5182,
+          "sha256": "be7d2c8c6b0af8d8e88e97cbcd72db7e68fa3772d4c7a827f5993682420d31bf",
+          "source_blob": "b6d3e6afbe993e18622ea6c5c6936bf50ca2fe93",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced extraction scaffolding with an explicit method/tool contract and bounded interpretation."
+        ],
+        "consulted_sources": [
+          "https://www.nature.com/articles/s41467-020-19266-y",
+          "https://www.rdkit.org/docs/source/rdkit.Chem.rdmolfiles.html"
+        ]
+      }
+    },
+    {
+      "name": "augment-and-rank-retrosynthesis-predictions",
+      "origin": "models-skills/open-models/augment-and-rank-retrosynthesis-predictions",
+      "origins": [
+        "models-skills/open-models/augment-and-rank-retrosynthesis-predictions",
+        "skills/generated/agent-reasoning-five-20260921/augment-and-rank-retrosynthesis-predictions"
+      ],
+      "path": "models-skills/open-models/augment-and-rank-retrosynthesis-predictions",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2678,
+          "sha256": "a043adf0dab88aa0fe40c2395cb8ae26979643532494764495d5335c90e62286",
+          "upstream_blob": "7b408c58ab2cb714b7cda57523cf159ab7ac5b0b"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 6592,
+          "sha256": "9cbbbdc979b2278fd3087292bbfe92c71f7d235acb3816f8a9232ed7d15617fc",
+          "source_blob": "7b408c58ab2cb714b7cda57523cf159ab7ac5b0b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "reports/execution.json",
+          "bytes": 185,
+          "sha256": "f8625f2fc9fe45a9678f0dbd485481863b578f2765de917e203d93a38264573b",
+          "source_blob": "d13db7ef1596bfb00d47cffe4b81dbebb1a9768a",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "reports/execution.json"
+        ],
+        "notes": [
+          "Replaced extraction scaffolding with an explicit method/tool contract and bounded interpretation.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records."
+        ],
+        "consulted_sources": [
+          "https://arxiv.org/html/2507.17448v1",
+          "https://github.com/OpenDFM/RetroDFM-R/tree/8eeb3f4564ad10b3d8d1c4f62b4506f453948291"
+        ]
+      }
+    },
+    {
+      "name": "bond-cleavage-mechanism-ranking",
+      "origin": "skills/bond-cleavage-mechanism-ranking",
+      "origins": [
+        "skills/bond-cleavage-mechanism-ranking"
+      ],
+      "path": "unclassified/bond-cleavage-mechanism-ranking",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2251,
+          "sha256": "c4ba38400cbe5f671100055e16389de50ed6bfa5b3d162f5bd1ea2eb8e9092ea",
+          "upstream_blob": "1682c71d401d0b84548200b3e3cbf7596a2b8b4d"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2534,
+          "sha256": "386a648185a6b4688b471d47f6ed22073db6d7fd2f31d28b0d7db61c84270e98",
+          "source_blob": "1682c71d401d0b84548200b3e3cbf7596a2b8b4d",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Avoided assuming every homolytic cleavage starts from a neutral parent."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "check-mismatched-retrosynthesis-with-forward-prediction",
+      "origin": "skills/generated/verified20-20260920-P2R8K7X3-r01/check-mismatched-retrosynthesis-with-forward-prediction",
+      "origins": [
+        "skills/generated/verified20-20260920-P2R8K7X3-r01/check-mismatched-retrosynthesis-with-forward-prediction"
+      ],
+      "path": "unclassified/check-mismatched-retrosynthesis-with-forward-prediction",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2147,
+          "sha256": "8713fabe1a138abe895bd5d32ed744565056d996e352097f47a429625ff5a38b",
+          "upstream_blob": "208a8d97dce6af11af529aac6749a08bf1dadb47"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 3745,
+          "sha256": "3e8f215ae67399e530f057ed888b793f8b8367925b137767eb524cf8dd189773",
+          "source_blob": "208a8d97dce6af11af529aac6749a08bf1dadb47",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced extraction scaffolding with an explicit method/tool contract and bounded interpretation."
+        ],
+        "consulted_sources": [
+          "https://arxiv.org/abs/2003.12725"
+        ]
+      }
+    },
+    {
+      "name": "chem-ase-geometry",
+      "origin": "tools-skills/ASE/chem-ase-geometry",
+      "origins": [
+        "tools-skills/ASE/chem-ase-geometry"
+      ],
+      "path": "tools-skills/ASE/chem-ase-geometry",
+      "files": [
+        {
+          "path": "references/api.md",
+          "bytes": 8710,
+          "sha256": "859eb6bf8f7d83db69c0bfdcaa61d141d054afa0d5f7f6af8d9d613a98633a91",
+          "source_blob": "d68d0a805d3b9b407c227b9c2355de955c53a1eb",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/geometry.py",
+          "bytes": 24428,
+          "sha256": "0a30a093e930a1ddec50e93f5d22ef0c37d46aba8d009a44e86338a4f6fddcf6",
+          "source_blob": "e5db7f601fcf111cb9ac3964fad353801e661a4d",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 5228,
+          "sha256": "c168362b584699360b94267232b905411439ebf1cd1e0fdeb4d684a5f79ebb46",
+          "upstream_blob": "3ec18be92448adfc1621e50cd48f5b07cd7a7d7f"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5228,
+          "sha256": "3b1601dc321f070ced3bd5e8fd3636380f91ff945fe3117db3b23e9005633173",
+          "source_blob": "3ec18be92448adfc1621e50cd48f5b07cd7a7d7f",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 8710,
+          "sha256": "859eb6bf8f7d83db69c0bfdcaa61d141d054afa0d5f7f6af8d9d613a98633a91",
+          "source_blob": "d68d0a805d3b9b407c227b9c2355de955c53a1eb",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/geometry.py",
+          "bytes": 24428,
+          "sha256": "0a30a093e930a1ddec50e93f5d22ef0c37d46aba8d009a44e86338a4f6fddcf6",
+          "source_blob": "e5db7f601fcf111cb9ac3964fad353801e661a4d",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Reviewed main instructions and package support roles. Retained the existing coherent contract, script and conditional API reference; no full-tool execution or measured Agent gain is claimed.",
+          "Moved legacy compatibility metadata into visible environment guidance to pass the Codex Skill format checker; retained the existing functional workflow."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chem-chembl-activity",
+      "origin": "databases-skills/chembl/chem-chembl-activity",
+      "origins": [
+        "databases-skills/chembl/chem-chembl-activity"
+      ],
+      "path": "databases-skills/chembl/chem-chembl-activity",
+      "files": [
+        {
+          "path": "references/api.md",
+          "bytes": 477,
+          "sha256": "196e68bde5b6df7bd34eb8e10a062290c6dd54558b5110e875590005f3bc9c49",
+          "upstream_blob": "d24c994786dd9e34b99b0f00ef2783336198d949"
+        },
+        {
+          "path": "scripts/query_activity.py",
+          "bytes": 1968,
+          "sha256": "0e19e3006ce42dcd0fa763edf7e901af06d608aae0d2cd28cb6092bbb17438b2",
+          "upstream_blob": "e94cdd932526bc6b3ce68c7f9922fdfea5044243"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 1699,
+          "sha256": "b17691f7a9fa4ab8f92a57cb79ecd57d48f9a8770f7f4ff8d2eb355d52f822ae",
+          "upstream_blob": "135d1552ede660695e48f393bc583c3a7f7b030d"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1722,
+          "sha256": "6972343e3184763b63a6024423596efee7a5ab04b9d0c719bca669664fbd815c",
+          "source_blob": "135d1552ede660695e48f393bc583c3a7f7b030d",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/input.json",
+          "bytes": 47,
+          "sha256": "f62c95d5e32dcff8a9cebdfaf828ea55fef28fcaeab445dc0430a266404afd8b",
+          "source_blob": "a1d472eb9b77319343aed7b7046279a82bb4a5f6",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/output.json",
+          "bytes": 48,
+          "sha256": "08ba6cb87709eeb5042a0ccef0acf27b2fece0ec17a583b530fcc3d1cfa08a0f",
+          "source_blob": "563a8b275a09c7e23957ffb9fa80afbac109ce73",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 243,
+          "sha256": "c2fe43bed4a7efe3c364ffda6e31ece98feaf323f7a02fafbed3101563e1d78a",
+          "source_blob": "d24c994786dd9e34b99b0f00ef2783336198d949",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/RESTORE.md",
+          "bytes": 611,
+          "sha256": "6d3918a4857fe97e5e3cc3fd16cbac97fba4fc689fde771c5cc3f990b891c0e5",
+          "source_blob": "e11dde742df8f999f2a324416e776e5fbe3db5ae",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/config.yaml",
+          "bytes": 65,
+          "sha256": "2359e09ce6f08c6228fed06762175bf6ee8b246fc62b7c38c7bad3445cb757ac",
+          "source_blob": "14541364dff95e39f5aed34c3d3717add7396379",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/query_activity.py",
+          "bytes": 1221,
+          "sha256": "8c495c3fc0a8af9e4718c22d21af3bf3fc1357bf8dd31348c3140828eed39f30",
+          "source_blob": "e94cdd932526bc6b3ce68c7f9922fdfea5044243",
+          "source_mode": "100755"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "references/api.md",
+          "scripts/query_activity.py",
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "examples/input.json",
+          "examples/output.json",
+          "resources/RESTORE.md",
+          "resources/config.yaml"
+        ],
+        "notes": [
+          "Remove fixed CA path and expose actual page metadata rather than implying all activities returned.",
+          "Provide actual flags, bounded results, scientific field interpretation and pagination.",
+          "Make the reference useful instead of a repeated generic prerequisite.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records."
+        ],
+        "consulted_sources": [
+          "https://github.com/chembl/GLaDOS-docs/blob/master/web-services/chembl-data-web-services.md"
+        ]
+      }
+    },
+    {
+      "name": "chem-idpp-path",
+      "origin": "tools-skills/ASE/chem-idpp-path",
+      "origins": [
+        "tools-skills/ASE/chem-idpp-path"
+      ],
+      "path": "tools-skills/ASE/chem-idpp-path",
+      "files": [
+        {
+          "path": "references/api.md",
+          "bytes": 4927,
+          "sha256": "a41bc5a9867e91e0f09b2ca671b26df3f70fa4c7664f538c1bf70f8da4efcd38",
+          "source_blob": "9d45559fa2d68d303650e57e288ae1db5dd00b0b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/idpp_path.py",
+          "bytes": 14907,
+          "sha256": "c4da9b0679a0512f1d221cad3623ffa3eaba73263ef99fc05c4147f36767c765",
+          "source_blob": "d9b1d15b0914fd61a435760649871664a6366aeb",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 5466,
+          "sha256": "e955a07a9b4d73fac49eb71a50bbc7ff096680498b6fef762105415862335311",
+          "upstream_blob": "33acef209a67859e71511061962585a30d9369aa"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5466,
+          "sha256": "75a155c5cdbd110c8a953d232837635790c47f86b15b300bf92ce1edc012bb16",
+          "source_blob": "33acef209a67859e71511061962585a30d9369aa",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 4927,
+          "sha256": "a41bc5a9867e91e0f09b2ca671b26df3f70fa4c7664f538c1bf70f8da4efcd38",
+          "source_blob": "9d45559fa2d68d303650e57e288ae1db5dd00b0b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/idpp_path.py",
+          "bytes": 14907,
+          "sha256": "c4da9b0679a0512f1d221cad3623ffa3eaba73263ef99fc05c4147f36767c765",
+          "source_blob": "d9b1d15b0914fd61a435760649871664a6366aeb",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Reviewed main instructions and package support roles. Retained the existing coherent contract, script and conditional API reference; no full-tool execution or measured Agent gain is claimed.",
+          "Moved legacy compatibility metadata into visible environment guidance to pass the Codex Skill format checker; retained the existing functional workflow."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chem-openbabel-convert",
+      "origin": "tools-skills/openbabel/chem-openbabel-convert",
+      "origins": [
+        "tools-skills/openbabel/chem-openbabel-convert"
+      ],
+      "path": "tools-skills/openbabel/chem-openbabel-convert",
+      "files": [
+        {
+          "path": "scripts/convert_molecule.py",
+          "bytes": 1742,
+          "sha256": "a2b4b4967a366952fb02893548854156be0a3b468cdc3930cf5dbdaa899ce857",
+          "upstream_blob": "7ab76518a9b64346a49d8c5b90ae18754f49e607"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 1528,
+          "sha256": "fef892d816af6ba5f1bba737bfb295b09d0fd6d3a5605451e218da030cda28ec",
+          "upstream_blob": "d28d2283410505a5cf723f7153c4de7107dde9ba"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1560,
+          "sha256": "5ff0bec8864a5f4c5df242f289e604dd7e9fdb38bef4a9a66197a50b183df921",
+          "source_blob": "d28d2283410505a5cf723f7153c4de7107dde9ba",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/input.smi",
+          "bytes": 4,
+          "sha256": "5c9aa2a3024d56c903d547798cbd04ff743433ba0950dbfd8e19238e40651172",
+          "source_blob": "d5434d138cb5fe20d52c8d357fc84aa7b45e5d8c",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/output.json",
+          "bytes": 85,
+          "sha256": "cef437436dede90ae3f343fdb65575d5cbce0f0a69a30a1ab9c0012a895e469d",
+          "source_blob": "a76a568b70b0903ae78e8dfa54eb40c92f1b3b9d",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 243,
+          "sha256": "da0aec5cb7d56bec2301bee77e5ac4409bfdb44331d149900855d0bdaeab655b",
+          "source_blob": "3e03b8a39f5a4bebd4d476e85b9ef26130c27097",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/config.yaml",
+          "bytes": 53,
+          "sha256": "ed56f26beab7ec5c87624cb6e40114ee200bcc787d347437858b933b507b4c31",
+          "source_blob": "ff27f680fe396274f712dd2b312544579a11da7b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/convert_molecule.py",
+          "bytes": 897,
+          "sha256": "a16a4bfece626924456194d02090bf21639de0859608465bd854b7a9cf7c0ad3",
+          "source_blob": "7ab76518a9b64346a49d8c5b90ae18754f49e607",
+          "source_mode": "100755"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "scripts/convert_molecule.py",
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "examples/input.smi",
+          "examples/output.json",
+          "references/api.md",
+          "resources/config.yaml"
+        ],
+        "notes": [
+          "Check actual file conversion and prevent replacing the input; preserve obabel diagnostics.",
+          "Replace generic boilerplate with the real wrapper usage, output checks and format boundary.",
+          "Prevented stale existing output from being mistaken for newly successful conversion.",
+          "Documented output preservation contract.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records."
+        ],
+        "consulted_sources": [
+          "https://openbabel.org/docs/Command-line_tools/babel.html"
+        ]
+      }
+    },
+    {
+      "name": "chem-pubchem-query",
+      "origin": "databases-skills/pubchem/chem-pubchem-query",
+      "origins": [
+        "databases-skills/pubchem/chem-pubchem-query"
+      ],
+      "path": "databases-skills/pubchem/chem-pubchem-query",
+      "files": [
+        {
+          "path": "references/api.md",
+          "bytes": 557,
+          "sha256": "c78b85a7afd6cda91ea8557d7c09b67fcb5b5ca7157be45389353a892623c1d9",
+          "upstream_blob": "9e798cb95a74bce43e8b93ab69da6c7724a94cbb"
+        },
+        {
+          "path": "scripts/query_pubchem.py",
+          "bytes": 2884,
+          "sha256": "e078545edcc5aac100685ae6eb7646018a9a811c5c6869a3b6ee670bd984ec6c",
+          "upstream_blob": "04fde2db530bb1ff2e0d20b8a00e33e69999173f"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 1710,
+          "sha256": "f4c2d91a91646f0073954c4da404bbdd756fb73b37f9e2754b3b0316829274fd",
+          "upstream_blob": "8f5d60e85dcdae9b0d26b540051fd19ac9422bc7"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1675,
+          "sha256": "5b81b1fd5c34b7d6db2d5fc891687603addffb62538bbabbf05020b26c96e395",
+          "source_blob": "8f5d60e85dcdae9b0d26b540051fd19ac9422bc7",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/input.txt",
+          "bytes": 9,
+          "sha256": "fd993623c048a3ba3495325f58dd3e9eace0ca2f94c5460564f936e79def5b16",
+          "source_blob": "40e1ca52382321958c0ba2368411049131c3220b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/output.json",
+          "bytes": 90,
+          "sha256": "17220ecf59de7d9fe33f317ab4217ec577078758dbf5d98851cc5006682c086e",
+          "source_blob": "ef4dcc8ad323325fcc7d67037495c8025a8d46fe",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 272,
+          "sha256": "9db8f34690c9922a568d8aa3b256be42dce4231020875aa5f75a72d5d1d761e8",
+          "source_blob": "9e798cb95a74bce43e8b93ab69da6c7724a94cbb",
+          "source_mode": "100644"
+        },
+        {
+          "path": "reports/.gitkeep",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "source_mode": "100644"
+        },
+        {
+          "path": "reports/smoke_caffeine.json",
+          "bytes": 427,
+          "sha256": "4bba94557ade90426d9978a8e1eef1e67cbb02e74ec1ddfb71fb5a77721fe7f6",
+          "source_blob": "587888b773348a4df2a697c72496113bfd809051",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/RESTORE.md",
+          "bytes": 769,
+          "sha256": "37bf0dfb41d46d17c848f621dcd57bdf2e2b8a85a9b86bc7516eb9eaa1adcecc",
+          "source_blob": "2b05582b46bada9990249a1430cff7f9939deded",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/config.yaml",
+          "bytes": 55,
+          "sha256": "b74f5e3108ed124adaa80d00c59a1618042cf261eda8f1e410cd7eb5e8d665d4",
+          "source_blob": "096538626559680701b8721d8936c5321b88b992",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/query_pubchem.py",
+          "bytes": 2070,
+          "sha256": "5eaa8514b961ff38962cb798e49095f3bf5ca48e8d7f245540cd1ec6315872d8",
+          "source_blob": "04fde2db530bb1ff2e0d20b8a00e33e69999173f",
+          "source_mode": "100755"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "references/api.md",
+          "scripts/query_pubchem.py",
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "examples/input.txt",
+          "examples/output.json",
+          "reports/.gitkeep",
+          "reports/smoke_caffeine.json",
+          "resources/RESTORE.md",
+          "resources/config.yaml"
+        ],
+        "notes": [
+          "Route identifiers explicitly; POST SMILES; use default trust store; reject ambiguous multi-record matches.",
+          "Replace generic query instructions with explicit namespaces and output semantics.",
+          "Align reference with explicit routing and single-record policy.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records."
+        ],
+        "consulted_sources": [
+          "https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest"
+        ]
+      }
+    },
+    {
+      "name": "chem-rdkit-compound-filter",
+      "origin": "tools-skills/rdkit/chem-rdkit-compound-filter",
+      "origins": [
+        "tools-skills/rdkit/chem-rdkit-compound-filter"
+      ],
+      "path": "tools-skills/rdkit/chem-rdkit-compound-filter",
+      "files": [
+        {
+          "path": "examples/hits.csv",
+          "bytes": 82,
+          "sha256": "5c75e112c892a71f7c6c97be88a82b2c4ae43e6433b16abd97eca6cc145103b4",
+          "source_blob": "c74ba20260da5224ece6f7406b527a0896459492",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/train.csv",
+          "bytes": 28,
+          "sha256": "1b4a16265e634fc9eb012d02a915871d5af20de134178a977e59d5bad1ddff7c",
+          "source_blob": "49cb349a1e88f6b5ac9bf829f3def25e7d2b4e4d",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/science.md",
+          "bytes": 855,
+          "sha256": "643bd1f158ed6b59520427c2e504e90cbeb987101ac32b41180c069bfadfac99",
+          "source_blob": "0018463b9537d89b2f02a763dd2eae4a8ebb69a9",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/filter_compounds.py",
+          "bytes": 4887,
+          "sha256": "9e0b9ac6c6d0bca575d83044d55c8c830ce90d321ab66f8feaa6a2be5efa8fdd",
+          "source_blob": "f1f8ebf6a056b041cdae26291d5bec0110413d4e",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 3518,
+          "sha256": "9196a2c8cba1947e9a3353cbf5e2476fb0f0ea90db8e6b30a5a117de4dfd3e84",
+          "upstream_blob": "b903e14fc1df7c428f3c4b7378b9c0933db02c88"
+        },
+        {
+          "path": "tests/test_filter_compounds.py",
+          "bytes": 2748,
+          "sha256": "0447d78979a22ce3feafdcc99705579404bd62b422e071037b06efcae8015ad9",
+          "source_blob": "2dcfc9e8654408c4877ed01b6404e3672824facb",
+          "source_mode": "100644"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 3302,
+          "sha256": "3a2741ac100edea9580b3ebb32b5e849107cef09e35b1de51d72e17caf15adb2",
+          "source_blob": "b903e14fc1df7c428f3c4b7378b9c0933db02c88",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/hits.csv",
+          "bytes": 82,
+          "sha256": "5c75e112c892a71f7c6c97be88a82b2c4ae43e6433b16abd97eca6cc145103b4",
+          "source_blob": "c74ba20260da5224ece6f7406b527a0896459492",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/output.txt",
+          "bytes": 9,
+          "sha256": "3f1fc605b1087f50395dac8ce2981a09d3019a2f37ec61cdc0df692230570636",
+          "source_blob": "17163bb170390c1702f3d00f75238344e0d78612",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/train.csv",
+          "bytes": 28,
+          "sha256": "1b4a16265e634fc9eb012d02a915871d5af20de134178a977e59d5bad1ddff7c",
+          "source_blob": "49cb349a1e88f6b5ac9bf829f3def25e7d2b4e4d",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/science.md",
+          "bytes": 855,
+          "sha256": "643bd1f158ed6b59520427c2e504e90cbeb987101ac32b41180c069bfadfac99",
+          "source_blob": "0018463b9537d89b2f02a763dd2eae4a8ebb69a9",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/config.yaml",
+          "bytes": 98,
+          "sha256": "293ad4bc24bdab25184190fe525f78a53979c012d5a6804e3966620a0062cb2d",
+          "source_blob": "26e9f0cdd3f53bbd539ada919038cba3278c9ee8",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/filter_compounds.py",
+          "bytes": 4887,
+          "sha256": "9e0b9ac6c6d0bca575d83044d55c8c830ce90d321ab66f8feaa6a2be5efa8fdd",
+          "source_blob": "f1f8ebf6a056b041cdae26291d5bec0110413d4e",
+          "source_mode": "100644"
+        },
+        {
+          "path": "tests/test_filter_compounds.py",
+          "bytes": 2748,
+          "sha256": "0447d78979a22ce3feafdcc99705579404bd62b422e071037b06efcae8015ad9",
+          "source_blob": "2dcfc9e8654408c4877ed01b6404e3672824facb",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "examples/output.txt",
+          "resources/config.yaml"
+        ],
+        "notes": [
+          "Use relocatable path and distinguish binary/positive labels from continuous assay measurements.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records.",
+          "Moved legacy compatibility metadata into visible environment guidance to pass the Codex Skill format checker; retained the existing functional workflow."
+        ],
+        "consulted_sources": [
+          "https://www.rdkit.org/docs/Install.html"
+        ]
+      }
+    },
+    {
+      "name": "chem-rdkit-descriptors",
+      "origin": "tools-skills/rdkit/chem-rdkit-descriptors",
+      "origins": [
+        "tools-skills/rdkit/chem-rdkit-descriptors"
+      ],
+      "path": "tools-skills/rdkit/chem-rdkit-descriptors",
+      "files": [
+        {
+          "path": "examples/input.smi",
+          "bytes": 27,
+          "sha256": "73a13d0b30a51b54bd0f0c91ec7b53fdea0eb638bff4bd85b3584272b1cb8e3c",
+          "source_blob": "44357190b2d1cc0723c7bac9184e7554d42ea754",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/science.md",
+          "bytes": 220,
+          "sha256": "2aa6589df103dfeea67108e81fe712851dc39467550696715dea4562c790f224",
+          "source_blob": "f5e9be9e255f1432c4e2aa094a435bec7862b0a1",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/calc_descriptors.py",
+          "bytes": 1661,
+          "sha256": "0b55d6132d83dc3b04413ed1c4a22788a62b96f0a02eda5992c43a080dfe67fe",
+          "source_blob": "4cc4df036f0ae44240f180b613fe68a805871995",
+          "source_mode": "100755"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 1383,
+          "sha256": "b5ad4252765ed278dcf0f03a72401c903ad2ebb4fb4da53554f2d8240bf09ae8",
+          "upstream_blob": "d389049fcbb9891188403a22b2eff269489ab91b"
+        }
+      ],
+      "source_commit": "6bb535add721d8ea77585adc3b6ed6f44bd6432a",
+      "version_selection": "Restored complete pre-Docker package at user request; default collection source commit does not apply to this package.",
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1129,
+          "sha256": "ef3a065dbcee1aab50634d8db9e23e26c765d16d143e2564952defe44b955a50",
+          "source_blob": "d389049fcbb9891188403a22b2eff269489ab91b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/input.smi",
+          "bytes": 27,
+          "sha256": "73a13d0b30a51b54bd0f0c91ec7b53fdea0eb638bff4bd85b3584272b1cb8e3c",
+          "source_blob": "44357190b2d1cc0723c7bac9184e7554d42ea754",
+          "source_mode": "100644"
+        },
+        {
+          "path": "execution/fixtures.json",
+          "bytes": 649,
+          "sha256": "71ac030ef8c477692cfde304902c883d6129f791185138b5aadd1d31c26a4bfe",
+          "source_blob": "63421929dbdff034efcc5ccb57dd292bc52a2112",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 199,
+          "sha256": "a1846abdcf9080db8212611eb2489fb7daedbab48944c53293a06ba776faad47",
+          "source_blob": "e8104ba7e1f00b5fbc3dcb76e8c2f9f7a80ab7dc",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/science.md",
+          "bytes": 220,
+          "sha256": "2aa6589df103dfeea67108e81fe712851dc39467550696715dea4562c790f224",
+          "source_blob": "f5e9be9e255f1432c4e2aa094a435bec7862b0a1",
+          "source_mode": "100644"
+        },
+        {
+          "path": "reports/.gitkeep",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+          "source_mode": "100644"
+        },
+        {
+          "path": "reports/smoke_test.json",
+          "bytes": 316,
+          "sha256": "27ae224268d2cb141a8c7461cbbb2b2b5e82d27bf68daf52634e9e0c2a48d1a9",
+          "source_blob": "f4bfa76ae04e1085947f86d5cbd7e96303267efe",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/config.yaml",
+          "bytes": 50,
+          "sha256": "3a4823b7b731f99102c899cf7814a8b9a2ca9f2a88b1b4d9a62f8d187ccf07ad",
+          "source_blob": "9827444b41bb5457fe38372bb1e47a0b08152e50",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/calc_descriptors.py",
+          "bytes": 1661,
+          "sha256": "0b55d6132d83dc3b04413ed1c4a22788a62b96f0a02eda5992c43a080dfe67fe",
+          "source_blob": "4cc4df036f0ae44240f180b613fe68a805871995",
+          "source_mode": "100755"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "execution/fixtures.json",
+          "references/api.md",
+          "reports/.gitkeep",
+          "reports/smoke_test.json",
+          "resources/config.yaml"
+        ],
+        "notes": [
+          "Made installation and package-relative invocation explicit; removed a nonexistent version-pin claim.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records."
+        ],
+        "consulted_sources": [
+          "https://www.rdkit.org/docs/Install.html"
+        ]
+      }
+    },
+    {
+      "name": "chem-reaction-atommap-audit",
+      "origin": "tools-skills/rdkit/chem-reaction-atommap-audit",
+      "origins": [
+        "tools-skills/rdkit/chem-reaction-atommap-audit"
+      ],
+      "path": "tools-skills/rdkit/chem-reaction-atommap-audit",
+      "files": [
+        {
+          "path": "examples/reactions.txt",
+          "bytes": 73,
+          "sha256": "bdf07a769ddd15e46ede8958db31e669a45368470a0277ed75a3bd0a8a392091",
+          "source_blob": "aa96324ae1a98476a3615164f94f463d741e3aa8",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/science.md",
+          "bytes": 698,
+          "sha256": "fd808057638a138a28b663c3e72548e8eb7ec027047a8f20a9e0d2bbf7a2fc58",
+          "source_blob": "ca528cbfdf540089b7c5afba00fcce012c69a1ae",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/audit_atom_maps.py",
+          "bytes": 2623,
+          "sha256": "07ab4cd77d5b74eb86d0cd34ae6a181a20a41315dee0a7d76a5946bdd9ae4333",
+          "source_blob": "18bff248126148f87fa71192993e4273a908ef80",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 2840,
+          "sha256": "41425f72456c7ddb8def5fa9db5befed56b57a664fc48d4eef550442b27a5e38",
+          "upstream_blob": "7f6717fa776a1d0a2966744aa20cd5d4b780ea22"
+        },
+        {
+          "path": "tests/test_audit.py",
+          "bytes": 938,
+          "sha256": "25346a95957c24406252642deb99e330ae8506f08904e25023006d7e52e29b70",
+          "source_blob": "f223c99d7b082bf090ac7b3e444b5841840613bd",
+          "source_mode": "100644"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2770,
+          "sha256": "68557810928c0b4fb72290702bd3ffb97ac7750f76292d914f4cd67488d4e87f",
+          "source_blob": "7f6717fa776a1d0a2966744aa20cd5d4b780ea22",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/reactions.txt",
+          "bytes": 73,
+          "sha256": "bdf07a769ddd15e46ede8958db31e669a45368470a0277ed75a3bd0a8a392091",
+          "source_blob": "aa96324ae1a98476a3615164f94f463d741e3aa8",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/science.md",
+          "bytes": 698,
+          "sha256": "fd808057638a138a28b663c3e72548e8eb7ec027047a8f20a9e0d2bbf7a2fc58",
+          "source_blob": "ca528cbfdf540089b7c5afba00fcce012c69a1ae",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/audit_atom_maps.py",
+          "bytes": 2623,
+          "sha256": "07ab4cd77d5b74eb86d0cd34ae6a181a20a41315dee0a7d76a5946bdd9ae4333",
+          "source_blob": "18bff248126148f87fa71192993e4273a908ef80",
+          "source_mode": "100644"
+        },
+        {
+          "path": "tests/test_audit.py",
+          "bytes": 938,
+          "sha256": "25346a95957c24406252642deb99e330ae8506f08904e25023006d7e52e29b70",
+          "source_blob": "f223c99d7b082bf090ac7b3e444b5841840613bd",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced inaccessible build-workspace source locks with independently reachable upstream provenance and explicit package paths.",
+          "Corrected LocalRetro paper attribution.",
+          "Moved legacy compatibility metadata into visible environment guidance to pass the Codex Skill format checker; retained the existing functional workflow.",
+          "Kept angle-bracket reaction notation in the body rather than the frontmatter description, as required by the Skill format validator."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chem-reaction-stage-audit",
+      "origin": "skills/chem-reaction-stage-audit",
+      "origins": [
+        "skills/chem-reaction-stage-audit"
+      ],
+      "path": "unclassified/chem-reaction-stage-audit",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4607,
+          "sha256": "e021c9fdd766a0b51a382d3a2ee49d95f3665a3ca0fa6b011b7cf2e3471c2eb9",
+          "source_blob": "6eb55f1c562bbb532585da8b567f12735df4e030",
+          "source_mode": "100644"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4607,
+          "sha256": "e021c9fdd766a0b51a382d3a2ee49d95f3665a3ca0fa6b011b7cf2e3471c2eb9",
+          "source_blob": "6eb55f1c562bbb532585da8b567f12735df4e030",
+          "source_mode": "100644"
+        },
+        {
+          "path": "reports/status.md",
+          "bytes": 844,
+          "sha256": "5c32327d68c74203b87331f9c11b8db12b26f6c0bac32959807e9035286ae22e",
+          "source_blob": "b5ec46f14dfe81c2713ac8402c12647bb1760931",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [],
+        "removed_files": [
+          "reports/status.md"
+        ],
+        "notes": [
+          "Reviewed main instructions and package support roles. Retained the existing coherent contract, script and conditional API reference; no full-tool execution or measured Agent gain is claimed.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chem-retro-candidate-evaluation",
+      "origin": "tools-skills/rdkit/chem-retro-candidate-evaluation",
+      "origins": [
+        "tools-skills/rdkit/chem-retro-candidate-evaluation"
+      ],
+      "path": "tools-skills/rdkit/chem-retro-candidate-evaluation",
+      "files": [
+        {
+          "path": "examples/predictions.jsonl",
+          "bytes": 175,
+          "sha256": "354de0972b80e92f071f3d8c6c42946546dee43dc1eee8b467f19fcd583f1432",
+          "source_blob": "1666df07faea6719fb5ce808ebc2a9cadee45427",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/interpretation.md",
+          "bytes": 714,
+          "sha256": "2fc7db46e3240e5cdb712d2f6de21ca852700966c43def4c537bc095da6639c7",
+          "source_blob": "0f1523fcde7c7d61e743b07d45b20d2bd8761743",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/evaluate_candidates.py",
+          "bytes": 4085,
+          "sha256": "5fba758c89e5e769edcbaaecfe0c05e726da1ce806ea9b0f81cf002431a5f9ce",
+          "source_blob": "6cd6f7a479009faf28479758cfa4319d12da72ab",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 3158,
+          "sha256": "7ab3284339ad6228fbdb027bf6d1d3d8a65e6a3b131a350d1e1bec6d77788511",
+          "upstream_blob": "1b497c6a897c0f44d9e8506168097cd92ad92ddc"
+        },
+        {
+          "path": "tests/test_evaluate.py",
+          "bytes": 1387,
+          "sha256": "1c6acbdf34ad8f6e72151e3f10c0145b40c211b81a195aadf321c48d5bbf212e",
+          "source_blob": "f39aa09f460c25481b51d9429afd59d103b99089",
+          "source_mode": "100644"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 3083,
+          "sha256": "1052b13527a28bd39d8065618fb62bc452378d54fa73ce9764b67f1b8d968994",
+          "source_blob": "1b497c6a897c0f44d9e8506168097cd92ad92ddc",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/predictions.jsonl",
+          "bytes": 175,
+          "sha256": "354de0972b80e92f071f3d8c6c42946546dee43dc1eee8b467f19fcd583f1432",
+          "source_blob": "1666df07faea6719fb5ce808ebc2a9cadee45427",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/interpretation.md",
+          "bytes": 714,
+          "sha256": "2fc7db46e3240e5cdb712d2f6de21ca852700966c43def4c537bc095da6639c7",
+          "source_blob": "0f1523fcde7c7d61e743b07d45b20d2bd8761743",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/evaluate_candidates.py",
+          "bytes": 4085,
+          "sha256": "5fba758c89e5e769edcbaaecfe0c05e726da1ce806ea9b0f81cf002431a5f9ce",
+          "source_blob": "6cd6f7a479009faf28479758cfa4319d12da72ab",
+          "source_mode": "100644"
+        },
+        {
+          "path": "tests/test_evaluate.py",
+          "bytes": 1387,
+          "sha256": "1c6acbdf34ad8f6e72151e3f10c0145b40c211b81a195aadf321c48d5bbf212e",
+          "source_blob": "f39aa09f460c25481b51d9429afd59d103b99089",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced inaccessible build-workspace source locks with independently reachable upstream provenance and explicit package paths.",
+          "Corrected LocalRetro paper attribution.",
+          "Moved legacy compatibility metadata into visible environment guidance to pass the Codex Skill format checker; retained the existing functional workflow."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chem-structure-check",
+      "origin": "tools-skills/ASE/chem-structure-check",
+      "origins": [
+        "tools-skills/ASE/chem-structure-check"
+      ],
+      "path": "tools-skills/ASE/chem-structure-check",
+      "files": [
+        {
+          "path": "references/api.md",
+          "bytes": 5636,
+          "sha256": "26f6457d7458a7c313c662eb08fb6450be8720cf805ac5b3e35cf4be5c3325b5",
+          "source_blob": "45c1beeadf8dfe3178ea88a3c6092e9092fd8d0c",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/check_structure.py",
+          "bytes": 20751,
+          "sha256": "e59e8066df2106510abcf4081a0b74460e280739f1277863d2caf035bdd9bfee",
+          "source_blob": "75be6c60a751b8a3ea26a8eb2441d2d836e7e508",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 5336,
+          "sha256": "fa2f64b98c09869e8a2fc8e4d6dcd4021b202292162c61d40f911c75d06a3355",
+          "upstream_blob": "c9a69943e517a36f6cafcbba0fbf901a89f969a8"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5336,
+          "sha256": "3d68cd65f3edb5c356f248814a081527522d8a2b910ba081a43f0b8ae2759e87",
+          "source_blob": "c9a69943e517a36f6cafcbba0fbf901a89f969a8",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 5636,
+          "sha256": "26f6457d7458a7c313c662eb08fb6450be8720cf805ac5b3e35cf4be5c3325b5",
+          "source_blob": "45c1beeadf8dfe3178ea88a3c6092e9092fd8d0c",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/check_structure.py",
+          "bytes": 20751,
+          "sha256": "e59e8066df2106510abcf4081a0b74460e280739f1277863d2caf035bdd9bfee",
+          "source_blob": "75be6c60a751b8a3ea26a8eb2441d2d836e7e508",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Reviewed main instructions and package support roles. Retained the existing coherent contract, script and conditional API reference; no full-tool execution or measured Agent gain is claimed.",
+          "Moved legacy compatibility metadata into visible environment guidance to pass the Codex Skill format checker; retained the existing functional workflow."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chem-uspto50k-split",
+      "origin": "databases-skills/uspto50k/chem-uspto50k-split",
+      "origins": [
+        "databases-skills/uspto50k/chem-uspto50k-split"
+      ],
+      "path": "databases-skills/uspto50k/chem-uspto50k-split",
+      "files": [
+        {
+          "path": "references/api.md",
+          "bytes": 375,
+          "sha256": "f868ef89b678a2c508c68d81850e1b3470e421be6fd49d7498e53309e86e6a8d",
+          "upstream_blob": "a51e4e614c0886a3c3a57409def50082af5bdb9d"
+        },
+        {
+          "path": "resources/RESTORE.md",
+          "bytes": 1877,
+          "sha256": "f6f26ab1a1a5478767e9f5a8faa3fd5fd9064e45975e6fbfc2eb6b8cfd7426c5",
+          "upstream_blob": "918c951ba5e7133c2956ad6a893ba6a455d6630c"
+        },
+        {
+          "path": "scripts/validate_split.py",
+          "bytes": 2032,
+          "sha256": "0df4a0f4fb70b721f411de1ccdc27a30b7428e987809217290693e5244c5a2a8",
+          "upstream_blob": "42bc53c692c005fce763c3b6281ef828deb87c7e"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 1535,
+          "sha256": "0b5f3b88ab4b4cfedaeb66d9bbc50215fb9f15f60b5657b6f498ec636d2f9073",
+          "upstream_blob": "bc4e30b8b368615a6936f9e8410ed0ac8bb64aff"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2140,
+          "sha256": "5dd3fbeaeff76d3dfe62875dfdb446ebd29d4817e1fbc48c8c11d26c02362b69",
+          "source_blob": "bc4e30b8b368615a6936f9e8410ed0ac8bb64aff",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/input.csv",
+          "bytes": 38,
+          "sha256": "fb796693815204726aa8c67417dc358ed08ea907b510170fcd505aed078a74b7",
+          "source_blob": "1b90608e38a67fdc843360964a5a5d9c5d7d9f6a",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/output.json",
+          "bytes": 47,
+          "sha256": "b40749dae0ef08b5e1d79b6815de42184585b73abd79a9ab1ba6c54b54e4712e",
+          "source_blob": "40dfdda3f964000a1dda5b0ba7d51ea6f12bf41d",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 230,
+          "sha256": "574dce6ea57e1b820d643fb2ab1f03c2d46a9902a16ebd3843919102c632f383",
+          "source_blob": "a51e4e614c0886a3c3a57409def50082af5bdb9d",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/RESTORE.md",
+          "bytes": 1862,
+          "sha256": "4ab1592525184c825c27717df2f4343338714fb51efccb8935ecd3a1405e7d7d",
+          "source_blob": "918c951ba5e7133c2956ad6a893ba6a455d6630c",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/config.yaml",
+          "bytes": 89,
+          "sha256": "2f60c60f64df12e1f4ac3a8af7c741ea65ee98a61d03eeda3d58bd3f9cdfad53",
+          "source_blob": "bcb0c4d8e09d2827da104634d694556d34b7cb68",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/validate_split.py",
+          "bytes": 1329,
+          "sha256": "986116919d6147769a7bbba82ae1821358e192a170fc47d763d4a1f0bcf371ab",
+          "source_blob": "42bc53c692c005fce763c3b6281ef828deb87c7e",
+          "source_mode": "100755"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "references/api.md",
+          "resources/RESTORE.md",
+          "scripts/validate_split.py",
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "examples/input.csv",
+          "examples/output.json",
+          "resources/config.yaml"
+        ],
+        "notes": [
+          "Reject empty data/values, read header correctly, and state exact-text scope; duplicate counts are diagnostic.",
+          "Specify exact-text audit, real command, and nonempty/overlap success semantics.",
+          "Replace vague validator API text with its actual scope.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records.",
+          "Aligned retained resource instructions with the actual CLI flag."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chem-vasp-calculation",
+      "origin": "tools-skills/VASP/chem-vasp-calculation",
+      "origins": [
+        "tools-skills/VASP/chem-vasp-calculation"
+      ],
+      "path": "tools-skills/VASP/chem-vasp-calculation",
+      "files": [
+        {
+          "path": "references/api.md",
+          "bytes": 7330,
+          "sha256": "ec3c4ad2109e1e63f116bacdf3ba22e6aa1d05e3fc2513171c152b8911951d48",
+          "source_blob": "166e09628c3277318968c8d5d51340c97d97cd34",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/prepare_vasp.py",
+          "bytes": 8902,
+          "sha256": "7e0057123eccbaa041880012d1cba2e7ce2e9ed3708e513e9458c521fef28e4b",
+          "source_blob": "b94dc829cb795219a9be1db7961417f52664fb08",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 5630,
+          "sha256": "a093fe7841f4d27ee0678580aaea8c14d6eab5ef54d7f0e6c0c397235cf5af9f",
+          "upstream_blob": "5a4a17cbaf29b2d2dc1759943866a954eed5bd5a"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5630,
+          "sha256": "f0d8d91694551e751283a4fdbcca7994ad308e09734ede9492e75635bc15b5a8",
+          "source_blob": "5a4a17cbaf29b2d2dc1759943866a954eed5bd5a",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 7330,
+          "sha256": "ec3c4ad2109e1e63f116bacdf3ba22e6aa1d05e3fc2513171c152b8911951d48",
+          "source_blob": "166e09628c3277318968c8d5d51340c97d97cd34",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/prepare_vasp.py",
+          "bytes": 8902,
+          "sha256": "7e0057123eccbaa041880012d1cba2e7ce2e9ed3708e513e9458c521fef28e4b",
+          "source_blob": "b94dc829cb795219a9be1db7961417f52664fb08",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Reviewed main instructions and package support roles. Retained the existing coherent contract, script and conditional API reference; no full-tool execution or measured Agent gain is claimed.",
+          "Moved legacy compatibility metadata into visible environment guidance to pass the Codex Skill format checker; retained the existing functional workflow."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chem-vasp-neb",
+      "origin": "tools-skills/VASP/chem-vasp-neb",
+      "origins": [
+        "tools-skills/VASP/chem-vasp-neb"
+      ],
+      "path": "tools-skills/VASP/chem-vasp-neb",
+      "files": [
+        {
+          "path": "references/api.md",
+          "bytes": 7263,
+          "sha256": "822c4c19d2771fe7edf6f1541f35fa5a180c6da0180c3fed34bcc716eae9add4",
+          "source_blob": "6f154f5ffa4d84e11c9c37ab29a57b0c0d700e1b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/prepare_neb.py",
+          "bytes": 10963,
+          "sha256": "3d3a0a960f0e00bb6228c7a170ee3d2dc29f81702b0fc5c4fedf763bc7e1c29d",
+          "source_blob": "1c54ff44af0ef69aec085e012e534ac68645a3e0",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 5585,
+          "sha256": "a6d6e7cfde9ef8a4fdc2c2f7805e9727d6779e73ced2f99cba190491604a69d8",
+          "upstream_blob": "6f82d4438e1e60f02ed2735b1b3b36379c8a0b82"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5585,
+          "sha256": "8d6696051523c35cb6934b78070fb02db5fe68527050ce3a7b57a2f3d3598517",
+          "source_blob": "6f82d4438e1e60f02ed2735b1b3b36379c8a0b82",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 7263,
+          "sha256": "822c4c19d2771fe7edf6f1541f35fa5a180c6da0180c3fed34bcc716eae9add4",
+          "source_blob": "6f154f5ffa4d84e11c9c37ab29a57b0c0d700e1b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/prepare_neb.py",
+          "bytes": 10963,
+          "sha256": "3d3a0a960f0e00bb6228c7a170ee3d2dc29f81702b0fc5c4fedf763bc7e1c29d",
+          "source_blob": "1c54ff44af0ef69aec085e012e534ac68645a3e0",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Reviewed main instructions and package support roles. Retained the existing coherent contract, script and conditional API reference; no full-tool execution or measured Agent gain is claimed.",
+          "Moved legacy compatibility metadata into visible environment guidance to pass the Codex Skill format checker; retained the existing functional workflow."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chem-vasp-neb-validation",
+      "origin": "tools-skills/VASP/chem-vasp-neb-validation",
+      "origins": [
+        "tools-skills/VASP/chem-vasp-neb-validation"
+      ],
+      "path": "tools-skills/VASP/chem-vasp-neb-validation",
+      "files": [
+        {
+          "path": "references/api.md",
+          "bytes": 6256,
+          "sha256": "78928cd47b3ab377ae73fafe0121cd3e8b88cc955a1816fb730dc7e8c0e31fb7",
+          "source_blob": "962bd8d94881ba20290f403de4bc88c727c574f7",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/check_neb.py",
+          "bytes": 14513,
+          "sha256": "b86fd4994e9e1c0bb80df17e891e13c03eeec99ff53d28150f9a88fdce9d5357",
+          "source_blob": "42f5f3d8dc50a930ca68a2f5a8fd9595c086d71b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 5401,
+          "sha256": "daf44b40a109a6b21cae1910e6a7af700c084d582ba0457c7e6248f91e9644cb",
+          "upstream_blob": "f54b0cdcab696639ec4f4e4c493c5dca9ea44b82"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5401,
+          "sha256": "540ccc8caaca0f39c2a3594c57d77645db9c77eecf1d713dd6f686aedb2a5be0",
+          "source_blob": "f54b0cdcab696639ec4f4e4c493c5dca9ea44b82",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 6256,
+          "sha256": "78928cd47b3ab377ae73fafe0121cd3e8b88cc955a1816fb730dc7e8c0e31fb7",
+          "source_blob": "962bd8d94881ba20290f403de4bc88c727c574f7",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/check_neb.py",
+          "bytes": 14513,
+          "sha256": "b86fd4994e9e1c0bb80df17e891e13c03eeec99ff53d28150f9a88fdce9d5357",
+          "source_blob": "42f5f3d8dc50a930ca68a2f5a8fd9595c086d71b",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Reviewed main instructions and package support roles. Retained the existing coherent contract, script and conditional API reference; no full-tool execution or measured Agent gain is claimed.",
+          "Moved legacy compatibility metadata into visible environment guidance to pass the Codex Skill format checker; retained the existing functional workflow."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chem-vasp-ts-validation",
+      "origin": "tools-skills/VASP/chem-vasp-ts-validation",
+      "origins": [
+        "tools-skills/VASP/chem-vasp-ts-validation"
+      ],
+      "path": "tools-skills/VASP/chem-vasp-ts-validation",
+      "files": [
+        {
+          "path": "references/api.md",
+          "bytes": 9245,
+          "sha256": "ee0a6446fe7ca784f6d061fbef3c72913985c9fe56d4ece314ddf20eb9d99b93",
+          "source_blob": "b8b4cd7055cd9e3fe73e4547efa59fa47139d53f",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/validate_ts.py",
+          "bytes": 25171,
+          "sha256": "4b674db4282bc991e1e886e503d90090603a73cdfa27e442ad6011bc695d3999",
+          "source_blob": "3392d29b94cb721eeec1a3dd6edd0a92f5461af2",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 6614,
+          "sha256": "2e5485621402bbc780e11f7f611bdf0afa39d027d467b16876cb3452980ea788",
+          "upstream_blob": "b5b2a4ffdccf087661847f9ac7cd28c110a61a43"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 6614,
+          "sha256": "a455285b75d643cdc6a2a009b4286e607a6df4ff618594f64d4ce813305e7603",
+          "source_blob": "b5b2a4ffdccf087661847f9ac7cd28c110a61a43",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 9245,
+          "sha256": "ee0a6446fe7ca784f6d061fbef3c72913985c9fe56d4ece314ddf20eb9d99b93",
+          "source_blob": "b8b4cd7055cd9e3fe73e4547efa59fa47139d53f",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/validate_ts.py",
+          "bytes": 25171,
+          "sha256": "4b674db4282bc991e1e886e503d90090603a73cdfa27e442ad6011bc695d3999",
+          "source_blob": "3392d29b94cb721eeec1a3dd6edd0a92f5461af2",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Reviewed main instructions and package support roles. Retained the existing coherent contract, script and conditional API reference; no full-tool execution or measured Agent gain is claimed.",
+          "Moved legacy compatibility metadata into visible environment guidance to pass the Codex Skill format checker; retained the existing functional workflow."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chem-xtb-ts-validation",
+      "origin": "tools-skills/chem-xtb-ts-validation",
+      "origins": [
+        "tools-skills/chem-xtb-ts-validation"
+      ],
+      "path": "tools-skills/chem-xtb-ts-validation",
+      "files": [
+        {
+          "path": "references/api.md",
+          "bytes": 5017,
+          "sha256": "f7ecf3b99342210517756e007cb1bfd6b1811b9bf53ba74071a194128e067e03",
+          "source_blob": "aea1c2b64eca20e3e90726de909fa9da9df6f752",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/validate_ts.py",
+          "bytes": 20851,
+          "sha256": "df04985accecdabd6b77d02d936c581479377b8a833b32d469c500caa0e65c69",
+          "source_blob": "c1bd03568f0b12dd62f584d842e568e4a6bcfe7e",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 4549,
+          "sha256": "895b06f152606dd58a9a51231f6835ebf2443705fa7d27388d3866c6e77eef6c",
+          "upstream_blob": "75b0827a44cdc48fc0cfa3a4c85f69fbbc83af82"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4550,
+          "sha256": "9af67c15f34433d3a2b4b5e83221501c684dbcbb9bd66327d32e4eff93300105",
+          "source_blob": "75b0827a44cdc48fc0cfa3a4c85f69fbbc83af82",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/api.md",
+          "bytes": 5017,
+          "sha256": "f7ecf3b99342210517756e007cb1bfd6b1811b9bf53ba74071a194128e067e03",
+          "source_blob": "aea1c2b64eca20e3e90726de909fa9da9df6f752",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/validate_ts.py",
+          "bytes": 20851,
+          "sha256": "df04985accecdabd6b77d02d936c581479377b8a833b32d469c500caa0e65c69",
+          "source_blob": "c1bd03568f0b12dd62f584d842e568e4a6bcfe7e",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Reviewed main instructions and package support roles. Retained the existing coherent contract, script and conditional API reference; no full-tool execution or measured Agent gain is claimed.",
+          "Moved legacy compatibility metadata into visible environment guidance to pass the Codex Skill format checker; retained the existing functional workflow."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "chembl-compound-image",
+      "origin": "skills/generated/chembl-generic-route-fix-20260920/chembl-compound-image",
+      "origins": [
+        "skills/generated/chembl-generic-route-fix-20260920/chembl-compound-image"
+      ],
+      "path": "unclassified/chembl-compound-image",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1465,
+          "sha256": "419cb65a21a994bcbeb76563c5ad39276d83356b4944a1b12c72e22a91e84a15",
+          "upstream_blob": "09f56367468d2090d4143cf01d634f7ae5485066"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1891,
+          "sha256": "db2722b4fe37c7b05ced9d5e0e3a74128f3718d34edcd8def82adaa940d32cc8",
+          "source_blob": "09f56367468d2090d4143cf01d634f7ae5485066",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replace endpoint-only draft with a complete SVG request and documented optional parameters."
+        ],
+        "consulted_sources": [
+          "https://github.com/chembl/GLaDOS-docs/blob/4f41ab17ef202999ece407aa6003a27cf7840e71/web-services/chembl-data-web-services.md"
+        ]
+      }
+    },
+    {
+      "name": "chembl-molecule-flexmatch",
+      "origin": "skills/generated/chembl-generic-route-fix-20260920/chembl-molecule-flexmatch",
+      "origins": [
+        "skills/generated/chembl-generic-route-fix-20260920/chembl-molecule-flexmatch"
+      ],
+      "path": "unclassified/chembl-molecule-flexmatch",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1870,
+          "sha256": "82bf576e5892d59c4c6c5c6f235ffd87ebba4b407bd45ae870c973fc6e5cba68",
+          "upstream_blob": "6eb1932948fca5fe95db70baff18c219e1a49fe7"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1946,
+          "sha256": "559bfcdf9b2d30d82641b6245b62006af797d5ac6313bd03fd47c7d4598f6662",
+          "source_blob": "6eb1932948fca5fe95db70baff18c219e1a49fe7",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Make flexmatch callable without inventing unsupported stereochemistry/tautomer guarantees."
+        ],
+        "consulted_sources": [
+          "https://github.com/chembl/chembl_webservices_2/blob/59fb52665cc1fc09a495d9a8c118687ddd0ad781/chembl_webservices/resources/molecule.py",
+          "https://github.com/chembl/GLaDOS-docs/blob/4f41ab17ef202999ece407aa6003a27cf7840e71/web-services/chembl-data-web-services.md"
+        ]
+      }
+    },
+    {
+      "name": "chembl-similarity-request",
+      "origin": "skills/generated/chembl-generic-route-fix-20260920/chembl-similarity-request",
+      "origins": [
+        "skills/generated/chembl-generic-route-fix-20260920/chembl-similarity-request"
+      ],
+      "path": "unclassified/chembl-similarity-request",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1867,
+          "sha256": "7c47217bf63e8bb217b60b04abd91eb53818429264740c87ca5d526d0221bebf",
+          "upstream_blob": "797c350b2084bde7d97243402095ae5bc556adfc"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1792,
+          "sha256": "a2edd8d9f65210b4a2216eb134a77cf2e59949f231aaf6373b79ea11e6f1bc64",
+          "source_blob": "797c350b2084bde7d97243402095ae5bc556adfc",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Define percent cutoff, encoded path and score/result boundaries using official documentation."
+        ],
+        "consulted_sources": [
+          "https://github.com/chembl/GLaDOS-docs/blob/4f41ab17ef202999ece407aa6003a27cf7840e71/web-services/chembl-data-web-services.md"
+        ]
+      }
+    },
+    {
+      "name": "chembl-target-text-search",
+      "origin": "skills/generated/chembl-generic-route-fix-20260920/chembl-target-text-search",
+      "origins": [
+        "skills/generated/chembl-generic-route-fix-20260920/chembl-target-text-search"
+      ],
+      "path": "unclassified/chembl-target-text-search",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1554,
+          "sha256": "8c910e0c7cdd66b87a9c06705bfaba81bfd4d053de4887332fc48ad7bb343ff9",
+          "upstream_blob": "8f9651f1943c7f6fd6dce39a7af4c7081178bd85"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1650,
+          "sha256": "d4e243b393777c09bc992d9842234b19a60c620325245135fff815c94759f55b",
+          "source_blob": "8f9651f1943c7f6fd6dce39a7af4c7081178bd85",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Provide an executable text-search template, page interpretation and target disambiguation."
+        ],
+        "consulted_sources": [
+          "https://github.com/chembl/GLaDOS-docs/blob/4f41ab17ef202999ece407aa6003a27cf7840e71/web-services/chembl-data-web-services.md"
+        ]
+      }
+    },
+    {
+      "name": "choose-retrosynthesis-evaluation-scope",
+      "origin": "skills/generated/verified20-20260920-CABX3BR4-r01/choose-retrosynthesis-evaluation-scope",
+      "origins": [
+        "skills/generated/verified20-20260920-CABX3BR4-r01/choose-retrosynthesis-evaluation-scope"
+      ],
+      "path": "unclassified/choose-retrosynthesis-evaluation-scope",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1884,
+          "sha256": "9266627d864e23919f8e43917a6843cbdccc2b3d4d15680704fdfbaf405d2d9d",
+          "upstream_blob": "74a473546cb7fa787a8e61106cc5e3bf84d38694"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4626,
+          "sha256": "7e28b0d53e50a4141b1241b9484c6198f651ee5890e2de889ae5d7155fd7420d",
+          "source_blob": "74a473546cb7fa787a8e61106cc5e3bf84d38694",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced extraction scaffolding with an explicit method/tool contract and bounded interpretation."
+        ],
+        "consulted_sources": [
+          "https://www.nature.com/articles/s41467-020-19266-y"
+        ]
+      }
+    },
+    {
+      "name": "committee-force-disagreement",
+      "origin": "skills/committee-force-disagreement",
+      "origins": [
+        "skills/committee-force-disagreement"
+      ],
+      "path": "unclassified/committee-force-disagreement",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2530,
+          "sha256": "66ed3298ca219d5130b34a0abfb5a9dce96bee0844da83feefa4c4c6640a3d81",
+          "upstream_blob": "7808178db89b521e7ba36fa6ed9d7fca9db216c5"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2341,
+          "sha256": "6b6c734ba0ed20705ee64160f698bfe40d1f86fb8869d011e6cce463427f325d",
+          "source_blob": "7808178db89b521e7ba36fa6ed9d7fca9db216c5",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "conformer-ensemble-population",
+      "origin": "skills/conformer-ensemble-population",
+      "origins": [
+        "skills/conformer-ensemble-population"
+      ],
+      "path": "unclassified/conformer-ensemble-population",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2530,
+          "sha256": "10032a8a9759900a6aeae52fa69399d187b7fd1e0f1ab455c1a0129fdaf1b323",
+          "upstream_blob": "846abe5a5b840af0d10c2bb5cecb2a0542ffe30c"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2271,
+          "sha256": "11c88690a27988b961ba5bbab8da81da39807f1ab4258a1700b074cb5597168b",
+          "source_blob": "846abe5a5b840af0d10c2bb5cecb2a0542ffe30c",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "construct-retrosynthetic-route-benchmark",
+      "origin": "skills/generated/verified20-20260920-52TVS7QP-r01/construct-retrosynthetic-route-benchmark",
+      "origins": [
+        "skills/generated/verified20-20260920-52TVS7QP-r01/construct-retrosynthetic-route-benchmark"
+      ],
+      "path": "unclassified/construct-retrosynthetic-route-benchmark",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2334,
+          "sha256": "60dd419366e5aca4cd75cb797f1e4ced35bfdc7b4d725b0c0eace3942deb4215",
+          "upstream_blob": "d0c0eb8f8eae1e661be029e59b4a0d7742efa565"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4537,
+          "sha256": "1bd1b3697e2544cf6f1ae2a380f6d8bbe8f5cb45e8b823329668d94015d5b00e",
+          "source_blob": "d0c0eb8f8eae1e661be029e59b4a0d7742efa565",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced extraction scaffolding with an explicit method/tool contract and bounded interpretation."
+        ],
+        "consulted_sources": [
+          "https://arxiv.org/html/2209.15315v3"
+        ]
+      }
+    },
+    {
+      "name": "context-aware-retrosynthetic-planning",
+      "origin": "skills/generated/verified20-20260920-52TVS7QP-r01/context-aware-retrosynthetic-planning",
+      "origins": [
+        "skills/generated/verified20-20260920-52TVS7QP-r01/context-aware-retrosynthetic-planning"
+      ],
+      "path": "unclassified/context-aware-retrosynthetic-planning",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2148,
+          "sha256": "72df916692e7c8bebcf7d40d50751bdd61a2168e1848958990dce69cb9d3c5eb",
+          "upstream_blob": "1a0c1bddf32199fbac887ef3438066f9ce29df7c"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5126,
+          "sha256": "e581c7f5bedd78c5abcac87e8a76394a8e8ba3f6163b83e68c64243b6b9ea25e",
+          "source_blob": "1a0c1bddf32199fbac887ef3438066f9ce29df7c",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced extraction scaffolding with an explicit method/tool contract and bounded interpretation."
+        ],
+        "consulted_sources": [
+          "https://arxiv.org/html/2209.15315v3"
+        ]
+      }
+    },
+    {
+      "name": "convex-hull-reference-scale",
+      "origin": "skills/convex-hull-reference-scale",
+      "origins": [
+        "skills/convex-hull-reference-scale"
+      ],
+      "path": "unclassified/convex-hull-reference-scale",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2021,
+          "sha256": "d77cb29c34a8051cb1c3550eadcae7bd048c62c2815321574ddcf7f1d794687f",
+          "upstream_blob": "8df1ea579d4c6b6f4096c00c60779d28fce2b728"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2293,
+          "sha256": "a0f4e527bcfd5f14c93234e4f4b8430ca3041626160e5450e1cd9c4fef662cdb",
+          "source_blob": "8df1ea579d4c6b6f4096c00c60779d28fce2b728",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "defect-formation-reference",
+      "origin": "skills/defect-formation-reference",
+      "origins": [
+        "skills/defect-formation-reference"
+      ],
+      "path": "unclassified/defect-formation-reference",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2001,
+          "sha256": "f8743db8090124d45cfd19212adb06f1a5dbbb688068008a7d3f643ede2720ed",
+          "upstream_blob": "7f9bf9792acb8f7ba131279700d4e0211421029c"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2277,
+          "sha256": "ade77c89c26543912ad70bb39f8f68db3164c29c29e005ba165e7d631476c7b6",
+          "source_blob": "7f9bf9792acb8f7ba131279700d4e0211421029c",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "delaney-esol-scaffold-evaluation",
+      "origin": "databases-skills/delaney-esol/delaney-esol-scaffold-evaluation",
+      "origins": [
+        "databases-skills/delaney-esol/delaney-esol-scaffold-evaluation"
+      ],
+      "path": "databases-skills/delaney-esol/delaney-esol-scaffold-evaluation",
+      "files": [
+        {
+          "path": "resources/datasets/delaney-processed.csv",
+          "bytes": 96699,
+          "sha256": "8c06a76f0c6487d29ab0f903e6a7a7139f189ab3c1178f159c8be8964602f189",
+          "source_blob": "970b0d32771f1d67175d4f4a630e13f446ba97a8",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 2660,
+          "sha256": "2aa601a90014b3ff707549097ef6f81abb8bc38f5714c58f3f836750e4dac795",
+          "upstream_blob": "b2395929dc2bfd43a09966056c38a2bd499ef9e3"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4054,
+          "sha256": "c70a42c95834fdd0f3ac347da47c83afc6a5784e1a37aedb8506bea598e63485",
+          "source_blob": "b2395929dc2bfd43a09966056c38a2bd499ef9e3",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/evidence.json",
+          "bytes": 5768,
+          "sha256": "3d8bcf1fec2869fd3fc578941d2c7a5b8335df0ffc9f589d12c555256c31d2a2",
+          "source_blob": "33e3cac91bc524e3772fbea705d02946228de569",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/datasets/delaney-processed.csv",
+          "bytes": 96699,
+          "sha256": "8c06a76f0c6487d29ab0f903e6a7a7139f189ab3c1178f159c8be8964602f189",
+          "source_blob": "970b0d32771f1d67175d4f4a630e13f446ba97a8",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/deepchem/molnet/load_function/delaney_datasets.py",
+          "bytes": 3507,
+          "sha256": "12bf9a7118a9d9bf47347224b57a45900306f2b55813e2e310c55e18473d21ce",
+          "source_blob": "9e68bf6e9d54d858d1d5dffe79ec62994b1d7c78",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "references/evidence.json",
+          "resources/deepchem/molnet/load_function/delaney_datasets.py"
+        ],
+        "notes": [
+          "Provide an actual local-data loading/splitting path, correct label and coverage checks; no fake full DeepChem bundle.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records.",
+          "Removed obsolete commentary about source fragments removed from the package."
+        ],
+        "consulted_sources": [
+          "https://github.com/deepchem/deepchem/blob/455d07f3e17e880a4d980b5b0365e4a02b417e14/deepchem/molnet/load_function/delaney_datasets.py",
+          "https://github.com/deepchem/deepchem/blob/455d07f3e17e880a4d980b5b0365e4a02b417e14/deepchem/splits/splitters.py"
+        ]
+      }
+    },
+    {
+      "name": "derive-local-reaction-template-library",
+      "origin": "skills/generated/my-localretro-02/derive-local-reaction-template-library",
+      "origins": [
+        "skills/generated/my-localretro-02/derive-local-reaction-template-library"
+      ],
+      "path": "unclassified/derive-local-reaction-template-library",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2324,
+          "sha256": "daea51ce9bf0681f8e06d0eed083d812c75c0e8a33e1bf3a5ecf1019bac8f8df",
+          "upstream_blob": "0590ccd934d5cf028ecdc832171cbfa4d9be1237"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4796,
+          "sha256": "a532db67b48bf80d85728dcb4f0b6573a50b1d89ca110855bf8791b29112b049",
+          "source_blob": "0590ccd934d5cf028ecdc832171cbfa4d9be1237",
+          "source_mode": "100644"
+        },
+        {
+          "path": "reports/execution.json",
+          "bytes": 180,
+          "sha256": "726d8502836470d114dbd225990327a636333041cb4ff1097da70ccdd8b6dd96",
+          "source_blob": "0f456bd612774a4831beff0cddf389293bc1ef96",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "reports/execution.json"
+        ],
+        "notes": [
+          "Replace method-only draft with actual upstream extraction command, schema and output mapping.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records."
+        ],
+        "consulted_sources": [
+          "https://github.com/kaist-amsg/LocalRetro/blob/eba83e72efabeb854fec86c865e8743c295a8a1e/README.md",
+          "https://github.com/kaist-amsg/LocalRetro/blob/eba83e72efabeb854fec86c865e8743c295a8a1e/preprocessing/Extract_from_train_data.py"
+        ]
+      }
+    },
+    {
+      "name": "electrochemical-stability-window",
+      "origin": "skills/electrochemical-stability-window",
+      "origins": [
+        "skills/electrochemical-stability-window"
+      ],
+      "path": "unclassified/electrochemical-stability-window",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 3036,
+          "sha256": "2899565a8e9db2736c924a8475ad7196f5f760afa85f4e33fc144e1a614ed6a7",
+          "upstream_blob": "e90ade49d16cd9aaf8135da7215bc041a583362c"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2344,
+          "sha256": "c11d876ddee0e5bdaf49969fabc7ba72cc28ad35d9c0b767337224fcaff1b494",
+          "source_blob": "e90ade49d16cd9aaf8135da7215bc041a583362c",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+        ],
+        "consulted_sources": [
+          "https://pymatgen.org/pymatgen.analysis"
+        ]
+      }
+    },
+    {
+      "name": "evaluate-planning-with-depth-pruning-and-set-matching",
+      "origin": "skills/generated/verified20-20260920-52TVS7QP-r01/evaluate-planning-with-depth-pruning-and-set-matching",
+      "origins": [
+        "skills/generated/verified20-20260920-52TVS7QP-r01/evaluate-planning-with-depth-pruning-and-set-matching"
+      ],
+      "path": "unclassified/evaluate-planning-with-depth-pruning-and-set-matching",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1924,
+          "sha256": "8849bfaba83ec6ae01ce10ddd60a6ed6bd7b621e94623b673f7fc0b6ccbf55d8",
+          "upstream_blob": "87011e810b7053967275a597e031006e99379a16"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4627,
+          "sha256": "ffff0447944150c4f3c2cb55590c086c9369ce3b2b43a007e5f7effca5c23664",
+          "source_blob": "87011e810b7053967275a597e031006e99379a16",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Clarified the retrospective-only depth cap, differing reference depths, AND completion and exact-set policy."
+        ],
+        "consulted_sources": [
+          "https://arxiv.org/html/2209.15315v3"
+        ]
+      }
+    },
+    {
+      "name": "gln-constrained-retrosynthesis-search",
+      "origin": "skills/generated/verified-resume-20260920-29BYRNCZ-r01/gln-constrained-retrosynthesis-search",
+      "origins": [
+        "skills/generated/verified-resume-20260920-29BYRNCZ-r01/gln-constrained-retrosynthesis-search"
+      ],
+      "path": "unclassified/gln-constrained-retrosynthesis-search",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2358,
+          "sha256": "061844a7894dae76774ae22ca0b3d579086cef259f032ebdce6c0abde3799dbb",
+          "upstream_blob": "4bd57dc2059d137baa18f8d81d039da6bce5b18a"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5671,
+          "sha256": "ec407bfe01844d44a99492070b9640e701d59f6d7bec93082f211f8b0dd64d9c",
+          "source_blob": "4bd57dc2059d137baa18f8d81d039da6bce5b18a",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced extraction scaffolding with an explicit method/tool contract and bounded interpretation."
+        ],
+        "consulted_sources": [
+          "https://github.com/Hanjun-Dai/GLN/blob/b5bd7b181a61a8289cc1d1a33825b2c417bed0ef/gln/test/model_inference.py"
+        ]
+      }
+    },
+    {
+      "name": "identify-reaction-centers-and-extract-synthons",
+      "origin": "skills/generated/verified20-20260920-P2R8K7X3-r01/identify-reaction-centers-and-extract-synthons",
+      "origins": [
+        "skills/generated/verified20-20260920-P2R8K7X3-r01/identify-reaction-centers-and-extract-synthons"
+      ],
+      "path": "unclassified/identify-reaction-centers-and-extract-synthons",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2006,
+          "sha256": "694b5a6940449da637f0e726c710558accd0c516b1158bd81319f48d0c74e8ed",
+          "upstream_blob": "4f64c9bec413e1b594e2a073e84b3155cc1ef4f1"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 3876,
+          "sha256": "f128dfce26203b2ea360a8d400e5681105344e2e27d574206d82a941a760c8d9",
+          "source_blob": "4f64c9bec413e1b594e2a073e84b3155cc1ef4f1",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced extraction scaffolding with an explicit method/tool contract and bounded interpretation."
+        ],
+        "consulted_sources": [
+          "https://arxiv.org/abs/2003.12725"
+        ]
+      }
+    },
+    {
+      "name": "ir-spectrum-candidate-ranking",
+      "origin": "skills/ir-spectrum-candidate-ranking",
+      "origins": [
+        "skills/ir-spectrum-candidate-ranking"
+      ],
+      "path": "unclassified/ir-spectrum-candidate-ranking",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2796,
+          "sha256": "be93281f59753e0ace567b693141fa4e9ccb95ef3d7d53a431ac8684e35c016e",
+          "upstream_blob": "0d7a81ffcc6b926f4179619a8d98e3d6b9fd7b4d"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2177,
+          "sha256": "1b785ea4b4076dd8900b337091147731c9a9f606ab0dba13289a4921700f3c88",
+          "source_blob": "0d7a81ffcc6b926f4179619a8d98e3d6b9fd7b4d",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+        ],
+        "consulted_sources": [
+          "https://webbook.nist.gov/chemistry/quant-ir/"
+        ]
+      }
+    },
+    {
+      "name": "localretro-single-step-retrosynthesis",
+      "origin": "models-skills/open-models/localretro-single-step-retrosynthesis",
+      "origins": [
+        "models-skills/open-models/localretro-single-step-retrosynthesis"
+      ],
+      "path": "models-skills/open-models/localretro-single-step-retrosynthesis",
+      "files": [
+        {
+          "path": "resources/RESTORE.md",
+          "bytes": 1632,
+          "sha256": "4e04c2c188b4769c01474f2a8cce21119967a28e8f9cefd035032a95442da613",
+          "upstream_blob": "df626a28ce63d8a32a283cc560cd2385bea15903"
+        },
+        {
+          "path": "scripts/inference_manifest.json",
+          "bytes": 1393,
+          "sha256": "ce637661978e3e34a6b6ea66414b54329eae5165324b56f62a8aa6f175bac7b9",
+          "source_blob": "e3a6e666bfec3cc8e89c89f14cd88acd6b19e73b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/predict_localretro.py",
+          "bytes": 5736,
+          "sha256": "51ffebf60ed2da7ade28d5a9bb00ba6d43fa1bee7678feebfd33d350072e98a4",
+          "upstream_blob": "33ac800afef1ef9c7a96a4972547c70419bb9240"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 2349,
+          "sha256": "d8c787800eba81266e1b71b236a7cb32ad95ee7672256a5ea6003227d90f14bc",
+          "upstream_blob": "f60c7550d3798cd01c1a663d9c85693bc39f039f"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 3395,
+          "sha256": "ef5adfc90c065a941997af465a3f4c58f09a04c2033703dffeccf7e53f6d89d2",
+          "source_blob": "f60c7550d3798cd01c1a663d9c85693bc39f039f",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/cases.json",
+          "bytes": 1512,
+          "sha256": "870a5e309b87e535e594f25ea937d42ea4749dece3f6b88f71fa458492dcbc3e",
+          "source_blob": "5c109540650a2a73a2e55b349010d864a80c8bda",
+          "source_mode": "100644"
+        },
+        {
+          "path": "examples/input.json",
+          "bytes": 47,
+          "sha256": "3a48acfe94392a5c40e504614ca80b033cf8e72d90840f7acf4171be817bf5ae",
+          "source_blob": "425acc4b7c73b0a7bb68154a696c6b302f90df9a",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/model-interface.md",
+          "bytes": 233,
+          "sha256": "645f79a67f7a0a5a847176ec3aa64baba69967d22d81baff9ae71b7b09d07166",
+          "source_blob": "510a6cd116916e4419b0fd28233e8c1adfceb9fb",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/RESTORE.md",
+          "bytes": 2062,
+          "sha256": "b8e6b05ed7dd76523aaf91dd4ac867e4af677e7a3a27e747ef246734f248fd53",
+          "source_blob": "df626a28ce63d8a32a283cc560cd2385bea15903",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/config.yaml",
+          "bytes": 22,
+          "sha256": "e859c8266258edfbbb4c7bfce03e3ea5cfce386a44581df510fb381cc8c17e04",
+          "source_blob": "02a6d9848ae8fbce0e1ef035e87cb3c25173e854",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/inference_manifest.json",
+          "bytes": 1393,
+          "sha256": "ce637661978e3e34a6b6ea66414b54329eae5165324b56f62a8aa6f175bac7b9",
+          "source_blob": "e3a6e666bfec3cc8e89c89f14cd88acd6b19e73b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/predict_localretro.py",
+          "bytes": 4478,
+          "sha256": "222320e12399b9f857c8b89a82dd37fd6b95a73481ac9ee9bede6cd7a659e855",
+          "source_blob": "33ac800afef1ef9c7a96a4972547c70419bb9240",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/preflight.py",
+          "bytes": 1435,
+          "sha256": "968020acd1c14a823b97dc790e7bbf0a28842f6ea813df5a8c63fe799b39d373",
+          "source_blob": "a3848cdae8303612e976b02f617a826fa47c6e95",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/requirements.json",
+          "bytes": 476,
+          "sha256": "53a2227d56c17da8e361c2c4aa498b0b584a84dae79a3729a04937d48bdfb95b",
+          "source_blob": "00ba71f1b3a38d530731627d06781f1d98f0618a",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "resources/RESTORE.md",
+          "scripts/predict_localretro.py",
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "examples/cases.json",
+          "examples/input.json",
+          "references/model-interface.md",
+          "resources/config.yaml",
+          "scripts/preflight.py",
+          "scripts/requirements.json"
+        ],
+        "notes": [
+          "Allow explicitly reviewed compatible artifact hashes without silently disabling fixed source/config checks.",
+          "Make prediction independently usable, remove sibling dependency and describe honest retrained-artifact contract.",
+          "Replace circular sibling restore link with the actual source/artifact preparation contract.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records.",
+          "Separated manifest validation from target-model imports so compatible/custom artifact contracts can be regression-tested offline."
+        ],
+        "consulted_sources": [
+          "https://github.com/kaist-amsg/LocalRetro/blob/eba83e72efabeb854fec86c865e8743c295a8a1e/README.md",
+          "https://github.com/kaist-amsg/LocalRetro/blob/eba83e72efabeb854fec86c865e8743c295a8a1e/Retrosynthesis.py",
+          "https://github.com/kaist-amsg/LocalRetro/blob/eba83e72efabeb854fec86c865e8743c295a8a1e/preprocessing/Extract_from_train_data.py"
+        ]
+      }
+    },
+    {
+      "name": "localretro-template-library-preflight",
+      "origin": "models-skills/open-models/localretro-template-library-preflight",
+      "origins": [
+        "models-skills/open-models/localretro-template-library-preflight"
+      ],
+      "path": "models-skills/open-models/localretro-template-library-preflight",
+      "files": [
+        {
+          "path": "scripts/preflight.py",
+          "bytes": 3117,
+          "sha256": "2a6f5a999c2c57185c47e45da56d25271fb43efd187b9b2421dd72d9b68b47e0",
+          "source_blob": "10fc0aa6ec440fafd94bc5b5102d1380cc634819",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 1955,
+          "sha256": "8f3db4a5ac0c47a1e4af85ae80365e435fcaacb4d2e963069303b85656d0a854",
+          "upstream_blob": "f00950a8d0d1a1a2815988e3706225f07f58f514"
+        },
+        {
+          "path": "tests/test_preflight.py",
+          "bytes": 1535,
+          "sha256": "69c83eaa2b5340eeec3da83b78cd9079fade82ab860bfe635e49387d61ad30dc",
+          "source_blob": "c41aa2469ac3651049db23ac5431d38ffa9782a5",
+          "source_mode": "100644"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 3205,
+          "sha256": "e07395e3923906998c23f81f32d3edb7d10a47c34aaa25397feebe107f9396c4",
+          "source_blob": "f00950a8d0d1a1a2815988e3706225f07f58f514",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/preflight.py",
+          "bytes": 3117,
+          "sha256": "2a6f5a999c2c57185c47e45da56d25271fb43efd187b9b2421dd72d9b68b47e0",
+          "source_blob": "10fc0aa6ec440fafd94bc5b5102d1380cc634819",
+          "source_mode": "100644"
+        },
+        {
+          "path": "tests/test_preflight.py",
+          "bytes": 1535,
+          "sha256": "69c83eaa2b5340eeec3da83b78cd9079fade82ab860bfe635e49387d61ad30dc",
+          "source_blob": "c41aa2469ac3651049db23ac5431d38ffa9782a5",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Give standalone source/data preparation and accurate interpreter/commit scope."
+        ],
+        "consulted_sources": [
+          "https://github.com/kaist-amsg/LocalRetro/blob/eba83e72efabeb854fec86c865e8743c295a8a1e/README.md",
+          "https://github.com/kaist-amsg/LocalRetro/blob/eba83e72efabeb854fec86c865e8743c295a8a1e/preprocessing/Extract_from_train_data.py"
+        ]
+      }
+    },
+    {
+      "name": "microstate-aware-virtual-screening",
+      "origin": "skills/microstate-aware-virtual-screening",
+      "origins": [
+        "skills/microstate-aware-virtual-screening"
+      ],
+      "path": "unclassified/microstate-aware-virtual-screening",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2261,
+          "sha256": "74a0e1297c52628d77951c921ea6e4d1a048fbfbd0de7712c2903d0952bf29c4",
+          "upstream_blob": "e10efd0e598065c83754d7d56e4adc14fb8cb5c8"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2296,
+          "sha256": "a32404ee63dcf5394d6d3a17559942cbd06550e7d206047a667010f07c248e88",
+          "source_blob": "e10efd0e598065c83754d7d56e4adc14fb8cb5c8",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "mlip-unit-consistent-error-audit",
+      "origin": "skills/mlip-unit-consistent-error-audit",
+      "origins": [
+        "skills/mlip-unit-consistent-error-audit"
+      ],
+      "path": "unclassified/mlip-unit-consistent-error-audit",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1913,
+          "sha256": "8ffba91181a82ffc6e108595e1bb3bf8cf063b9b1d45ea4978f4dc7c8b4fac36",
+          "upstream_blob": "f184e83dba4944aaaceb92cb50304dc4fd6a9739"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2180,
+          "sha256": "3c8c4e4ef9852920a23cbb136c8a1133508a63a5092f4a2b008a555c88b58ada",
+          "source_blob": "f184e83dba4944aaaceb92cb50304dc4fd6a9739",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "nmr-kinetics-deconvolution",
+      "origin": "skills/nmr-kinetics-deconvolution",
+      "origins": [
+        "skills/nmr-kinetics-deconvolution"
+      ],
+      "path": "unclassified/nmr-kinetics-deconvolution",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2038,
+          "sha256": "d6242a410529360238df5d21ca70d232c385c62bc0e647c6dc3b7c5eb594bfad",
+          "upstream_blob": "bf28998057073e35514a971f894d6591ad229be6"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2304,
+          "sha256": "bd618926a611034db5295564877801edd44ec931c1f5f0fab333b08b847229d9",
+          "source_blob": "bf28998057073e35514a971f894d6591ad229be6",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "parent-analog-stereo-audit",
+      "origin": "skills/parent-analog-stereo-audit",
+      "origins": [
+        "skills/parent-analog-stereo-audit"
+      ],
+      "path": "unclassified/parent-analog-stereo-audit",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1933,
+          "sha256": "6165bf832229d823406756b101fb5a36e5aa142711b5a8c6288ec91a3d9dd27a",
+          "upstream_blob": "fdeab9770020876c4a24dc040ab1fc405f5e939d"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2157,
+          "sha256": "d5c5df042022e8f37dc058d6c994a16dbdd4d448f3b2a4da392879d1750f048e",
+          "source_blob": "fdeab9770020876c4a24dc040ab1fc405f5e939d",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "parent-standardized-lead-triage",
+      "origin": "skills/parent-standardized-lead-triage",
+      "origins": [
+        "skills/parent-standardized-lead-triage"
+      ],
+      "path": "unclassified/parent-standardized-lead-triage",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1926,
+          "sha256": "db21eb6f744c7bd8709942a41fef7da2ed26705f4d7ea6f2256a8054aa06121f",
+          "upstream_blob": "5f46e6a53c89439268c5a28d28606153a60a34f3"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2181,
+          "sha256": "cee2e3920f5f239772a1f3f873d82d378f131091dc02eb8ccaa0c72a4e5adecc",
+          "source_blob": "5f46e6a53c89439268c5a28d28606153a60a34f3",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "polymorph-free-energy-comparison",
+      "origin": "skills/polymorph-free-energy-comparison",
+      "origins": [
+        "skills/polymorph-free-energy-comparison"
+      ],
+      "path": "unclassified/polymorph-free-energy-comparison",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1954,
+          "sha256": "e0dfd5342f10d018a78804549e4b418a244d967c78ac734457b4f39adec43eab",
+          "upstream_blob": "58535742bc1d9614172ba81ba5f76d2f6843f933"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2201,
+          "sha256": "602d12d82f61035a7837f9226fec3d3d60a53a0c0183e6525be7046e00fcff99",
+          "source_blob": "58535742bc1d9614172ba81ba5f76d2f6843f933",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "pose-geometry-validity-gate",
+      "origin": "skills/pose-geometry-validity-gate",
+      "origins": [
+        "skills/pose-geometry-validity-gate"
+      ],
+      "path": "unclassified/pose-geometry-validity-gate",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1873,
+          "sha256": "ebf0bd751f5557015a4e2d9a00b6243339cab97a42aac353eecdd2c7853ca2a8",
+          "upstream_blob": "448bab6cbe97706b584d9ba5e1be162e1a42eb94"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2128,
+          "sha256": "bdce334d8bbcdad2716bf5580f9042cb0d07a889d64f95ed65c29426277a8ad1",
+          "source_blob": "448bab6cbe97706b584d9ba5e1be162e1a42eb94",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "potential-consistent-thermochemistry",
+      "origin": "skills/potential-consistent-thermochemistry",
+      "origins": [
+        "skills/potential-consistent-thermochemistry"
+      ],
+      "path": "unclassified/potential-consistent-thermochemistry",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2114,
+          "sha256": "58b9a27eb146166ee26be64c203f923a2881237eeb47127c1c2fbb94f08d7c18",
+          "upstream_blob": "e0072d26b9eb81d611966db9bc6a839fb6755bc7"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2381,
+          "sha256": "2db2a10f4768880dbc722b436e1e84d5f3ea10cf2c4cfc528bfff718cb23d9ec",
+          "source_blob": "e0072d26b9eb81d611966db9bc6a839fb6755bc7",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "predict-class-conditioned-local-retrosynthesis",
+      "origin": "skills/generated/my-localretro-02/predict-class-conditioned-local-retrosynthesis",
+      "origins": [
+        "skills/generated/my-localretro-02/predict-class-conditioned-local-retrosynthesis"
+      ],
+      "path": "unclassified/predict-class-conditioned-local-retrosynthesis",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2406,
+          "sha256": "1dbf794eaf7c33fe8520b0dcff8b3ad801aad127b2a78bbefe7f1b4572f71006",
+          "upstream_blob": "b7e447e89168dff952f6b699fe14998df4a4eb03"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4570,
+          "sha256": "c9f4a622d7d474087922b3306a42f0b32a35f711b44fbc5c5b042f45522fe4c9",
+          "source_blob": "b7e447e89168dff952f6b699fe14998df4a4eb03",
+          "source_mode": "100644"
+        },
+        {
+          "path": "reports/execution.json",
+          "bytes": 188,
+          "sha256": "03dc132f84bc011e46520e35a7dbdd2074a8a7aacff22fca01bdc1df58db3121",
+          "source_blob": "ef3f2fa60cdda8faf612fffdb7ffff322368418a",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "reports/execution.json"
+        ],
+        "notes": [
+          "Match declared scope to real test-set/class-filter plumbing; expose source CLI type pitfall.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records.",
+          "Clarified the actual upstream decoded result format."
+        ],
+        "consulted_sources": [
+          "https://github.com/kaist-amsg/LocalRetro/blob/eba83e72efabeb854fec86c865e8743c295a8a1e/README.md",
+          "https://github.com/kaist-amsg/LocalRetro/blob/eba83e72efabeb854fec86c865e8743c295a8a1e/scripts/Decode_predictions.py"
+        ]
+      }
+    },
+    {
+      "name": "predict-reactants-through-reaction-centers",
+      "origin": "skills/generated/verified20-20260920-74LHJIVM-r01/predict-reactants-through-reaction-centers",
+      "origins": [
+        "skills/generated/verified20-20260920-74LHJIVM-r01/predict-reactants-through-reaction-centers"
+      ],
+      "path": "unclassified/predict-reactants-through-reaction-centers",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2518,
+          "sha256": "067f6ff062949173ecab7e8dd03aa22b2d27c47f4fe661c6dd257b9e5f7e3ac0",
+          "upstream_blob": "61c720b45021bb2910845c95658247f886794f6f"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5933,
+          "sha256": "777e7a3f5b1e2553959a0db3d16e866d8b6a2a6c7d0084dce26327f85bbfeb20",
+          "source_blob": "61c720b45021bb2910845c95658247f886794f6f",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Made existing-model prerequisites explicit; retained the method integration and end-to-end evaluation value without inventing an unavailable executable API."
+        ],
+        "consulted_sources": [
+          "https://arxiv.org/abs/2011.02893"
+        ]
+      }
+    },
+    {
+      "name": "predict-reaction-products-with-confidence-abstention",
+      "origin": "skills/generated/verified20-LJMZ9IL6-resource-label-fix/predict-reaction-products-with-confidence-abstention",
+      "origins": [
+        "skills/generated/verified20-LJMZ9IL6-resource-label-fix/predict-reaction-products-with-confidence-abstention"
+      ],
+      "path": "unclassified/predict-reaction-products-with-confidence-abstention",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1930,
+          "sha256": "c55809e85e2553b9e809d7eff78e9ac1afe5ee49c46bdeba14c9394d39191bf7",
+          "upstream_blob": "c22a5e699c99a4e0d25af3e727164ffd6008f08f"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4622,
+          "sha256": "d0d6a0d8eb8e7360f5d9f788374dd466ffeb5dbc45a27bfdc7d97ee964b05c53",
+          "source_blob": "c22a5e699c99a4e0d25af3e727164ffd6008f08f",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced extraction scaffolding with an explicit method/tool contract and bounded interpretation.",
+          "Retained original primary-paper provenance."
+        ],
+        "consulted_sources": [
+          "https://arxiv.org/pdf/1711.04810.pdf"
+        ]
+      }
+    },
+    {
+      "name": "prepare-single-product-reaction-sequences",
+      "origin": "skills/generated/verified20-LJMZ9IL6-resource-label-fix/prepare-single-product-reaction-sequences",
+      "origins": [
+        "skills/generated/verified20-LJMZ9IL6-resource-label-fix/prepare-single-product-reaction-sequences"
+      ],
+      "path": "unclassified/prepare-single-product-reaction-sequences",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2342,
+          "sha256": "a36aef8128273ad2aed4e5859bfd86aad1f22ad5f4eb7c95f98c4c67f2cff696",
+          "upstream_blob": "78a91239ccd715e4dc1abc9c56d841352465fbeb"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4987,
+          "sha256": "26b4c627519b7dd45abccbbb6ae06183c1b369f0b1cbb7a179a9af20755c681f",
+          "source_blob": "78a91239ccd715e4dc1abc9c56d841352465fbeb",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced extraction scaffolding with an explicit method/tool contract and bounded interpretation.",
+          "Retained original primary-paper provenance."
+        ],
+        "consulted_sources": [
+          "https://arxiv.org/pdf/1711.04810.pdf"
+        ]
+      }
+    },
+    {
+      "name": "quasi-harmonic-volume-scan",
+      "origin": "skills/quasi-harmonic-volume-scan",
+      "origins": [
+        "skills/quasi-harmonic-volume-scan"
+      ],
+      "path": "unclassified/quasi-harmonic-volume-scan",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2043,
+          "sha256": "3383135ee46b750de4bff8d6ad23eef9043fa95445d381b8068b55e9269e90e5",
+          "upstream_blob": "d4ff726367a7b8d069005d276553814baa82c1ab"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2318,
+          "sha256": "dca8ea967176202eb63d39fe3ebd69dfe0f60162e458a863e7d5e2937f496ed6",
+          "source_blob": "d4ff726367a7b8d069005d276553814baa82c1ab",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "reaction-center-guided-retrosynthesis",
+      "origin": "models-skills/open-models/reaction-center-guided-retrosynthesis",
+      "origins": [
+        "models-skills/open-models/reaction-center-guided-retrosynthesis",
+        "skills/generated/agent-reasoning-five-20260921/reaction-center-guided-retrosynthesis"
+      ],
+      "path": "models-skills/open-models/reaction-center-guided-retrosynthesis",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 3234,
+          "sha256": "9bdf423c962057ec0a38e236e5ea1b1308883f4898a970ae25b0184247038d70",
+          "upstream_blob": "cd77debbf5cf68de520578c865809e9cb581041f"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 7313,
+          "sha256": "a30f99204b5fdc526cbb08d0503e3edd190c13237507aa2b9bba6897a39a4480",
+          "source_blob": "cd77debbf5cf68de520578c865809e9cb581041f",
+          "source_mode": "100644"
+        },
+        {
+          "path": "reports/execution.json",
+          "bytes": 179,
+          "sha256": "94e8da1a14f52127245b13852f7f39387e8620d876ddd39372312aeb398ef2b3",
+          "source_blob": "37ff291c84958fb533672ff2a7efa255f1c2c55f",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "reports/execution.json"
+        ],
+        "notes": [
+          "Replaced ambiguous paper-algorithm reconstruction with the actual pinned batch entrypoint; documented dataset-only scope and suffix behavior.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records."
+        ],
+        "consulted_sources": [
+          "https://github.com/yuewan2/Retroformer/blob/4e94540e06f5a0ed52ac7b7c4acdd98e92aeda56/retroformer/translate.py"
+        ]
+      }
+    },
+    {
+      "name": "replicate-ligand-md-stability",
+      "origin": "skills/replicate-ligand-md-stability",
+      "origins": [
+        "skills/replicate-ligand-md-stability"
+      ],
+      "path": "unclassified/replicate-ligand-md-stability",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1919,
+          "sha256": "b1fad230d14208123c4cb036058a3be640f67cb523702ba2a2dbb5f9fa340b2a",
+          "upstream_blob": "9bca33f149ff1eafc75204d5e235fc74e42ef172"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2172,
+          "sha256": "2c669003aafc56395f3b361924d15eacc4b2d7ddbb784952038d6fa60b6f2c00",
+          "source_blob": "9bca33f149ff1eafc75204d5e235fc74e42ef172",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "retro-star-retrosynthetic-planning",
+      "origin": "models-skills/open-models/retro-star-retrosynthetic-planning",
+      "origins": [
+        "models-skills/open-models/retro-star-retrosynthetic-planning",
+        "skills/generated/agent-reasoning-five-20260921/retro-star-retrosynthetic-planning"
+      ],
+      "path": "models-skills/open-models/retro-star-retrosynthetic-planning",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2439,
+          "sha256": "d8b51e7131323823970f063ec78dacebadc6f526a774111b63dc2d3e14c5c12d",
+          "upstream_blob": "92ba562bd7030fb637ae23f20f8ad6fefd3b91b4"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 6331,
+          "sha256": "5c29fbcc54ff366971fc8b5a9fd15992978e445d390b7bc73f6aff367b5573a1",
+          "source_blob": "92ba562bd7030fb637ae23f20f8ad6fefd3b91b4",
+          "source_mode": "100644"
+        },
+        {
+          "path": "reports/execution.json",
+          "bytes": 176,
+          "sha256": "5a2c5eb12f1608267eac1f02a003c910733ea8170fa2a2a3cd0724f4da884670",
+          "source_blob": "334c0a812d193777442542c0f0f2676e261da7b3",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "reports/execution.json"
+        ],
+        "notes": [
+          "Replaced non-executable algorithm reconstruction with the official API and explicit asset, budget and failure contracts.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records."
+        ],
+        "consulted_sources": [
+          "https://github.com/binghong-ml/retro_star/blob/60e7a24213810706a7075d113704c9320158d726/retro_star/api.py"
+        ]
+      }
+    },
+    {
+      "name": "retroprime-inference-preflight",
+      "origin": "models-skills/open-models/retroprime-inference-preflight",
+      "origins": [
+        "models-skills/open-models/retroprime-inference-preflight"
+      ],
+      "path": "models-skills/open-models/retroprime-inference-preflight",
+      "files": [
+        {
+          "path": "scripts/preflight.py",
+          "bytes": 3727,
+          "sha256": "a7e4019934efe7d5e329842b21276526ce2e39ebd4f8ba9c1fe68aae5203e940",
+          "source_blob": "5437c79eada6c409331fcf04bfc93e5b91d56743",
+          "source_mode": "100644"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 2130,
+          "sha256": "e16f5e70b4d1b04f6a485dbfafc911570493c257bc38fde730968f11f4464408",
+          "upstream_blob": "73c9c65c601a39400975dc9611e444715e997e4b"
+        },
+        {
+          "path": "tests/test_retroprime_preflight.py",
+          "bytes": 2043,
+          "sha256": "49de6143326eaabdfa837b62b68096d2de4e7b75831e1374a7f3b0c554dde6c3",
+          "source_blob": "2d3ec70198587a759146eade996b2be523e92e2b",
+          "source_mode": "100644"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2808,
+          "sha256": "d1c8bdc3e6883df797147860b7ac991cc0d571b1a9d03eddcd9ad4ab6cc5abb5",
+          "source_blob": "73c9c65c601a39400975dc9611e444715e997e4b",
+          "source_mode": "100644"
+        },
+        {
+          "path": "scripts/preflight.py",
+          "bytes": 3727,
+          "sha256": "a7e4019934efe7d5e329842b21276526ce2e39ebd4f8ba9c1fe68aae5203e940",
+          "source_blob": "5437c79eada6c409331fcf04bfc93e5b91d56743",
+          "source_mode": "100644"
+        },
+        {
+          "path": "tests/test_retroprime_preflight.py",
+          "bytes": 2043,
+          "sha256": "49de6143326eaabdfa837b62b68096d2de4e7b75831e1374a7f3b0c554dde6c3",
+          "source_blob": "2d3ec70198587a759146eade996b2be523e92e2b",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Remove dependency on deleted Skill and distinguish host-module/file checks from target-runtime readiness."
+        ],
+        "consulted_sources": [
+          "https://github.com/wangxr0526/RetroPrime/blob/a765b670b72fbfd512d0d437da8f27a95f9f0554/README.md",
+          "https://github.com/wangxr0526/RetroPrime/blob/a765b670b72fbfd512d0d437da8f27a95f9f0554/run_example.sh"
+        ]
+      }
+    },
+    {
+      "name": "retroprime-two-stage-inference-check",
+      "origin": "models-skills/open-models/retroprime-two-stage-inference-check",
+      "origins": [
+        "models-skills/open-models/retroprime-two-stage-inference-check"
+      ],
+      "path": "models-skills/open-models/retroprime-two-stage-inference-check",
+      "files": [
+        {
+          "path": "scripts/run_inference.py",
+          "bytes": 5356,
+          "sha256": "ee398c59a4c013af76e2cb2fc841c74a19f19a267c32a50b00bbe03c1539598b"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 2920,
+          "sha256": "ee98575e3a11513e50b8c991059a65fa6a82eda4c466549646143e7c40d83057",
+          "upstream_blob": "e0796c125ace771673e190782e7953359866c748"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 7192,
+          "sha256": "94224afb612b4408c498411ded126c3c957ffd84a3fe78058e24a220df4f8a34",
+          "source_blob": "e0796c125ace771673e190782e7953359866c748",
+          "source_mode": "100644"
+        },
+        {
+          "path": "references/evidence.json",
+          "bytes": 12530,
+          "sha256": "6969aae15f04a33b8571b3d4ff91597265b260341bc6a4f113085d0f78af6420",
+          "source_blob": "310fd1552cb6d31d6e00f1169eca34d3e5c4d97f",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/retroprime/transformer_model/script/evaluate.py",
+          "bytes": 6952,
+          "sha256": "9b714da658a4652961ab8ee1a00a4437918b26c4e620ddd64f0efd6b1cf52239",
+          "source_blob": "3230b1cc10a522c7283427642799bf1d5e02d372",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/retroprime/transformer_model/script/smi_tokenizer.py",
+          "bytes": 1341,
+          "sha256": "c95e09f45046ad478728764106d496f4adcf40c20a66b6723cf49dad564a62c4",
+          "source_blob": "7183512fb0d2e7a4bdd6a4f8c2a87467e5068fba",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/retroprime/transformer_model/translate.py",
+          "bytes": 1171,
+          "sha256": "894defac3eced6bc6292b4222efbebb7e1ee71e12db2b414b29cc672f1a8de33",
+          "source_blob": "28c1a44155399f8ef4730907b1e5c9586d8edd8f",
+          "source_mode": "100644"
+        },
+        {
+          "path": "resources/run_example.sh",
+          "bytes": 2219,
+          "sha256": "1ce43453fc5207f027f6b733022c4ecad4742f24e8d9b963ace014eb35ba255a",
+          "source_blob": "20efe7b7e8c6e2cd6c548604d710051c4e11b0d5",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "scripts/run_inference.py",
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "references/evidence.json",
+          "resources/retroprime/transformer_model/script/evaluate.py",
+          "resources/retroprime/transformer_model/script/smi_tokenizer.py",
+          "resources/retroprime/transformer_model/translate.py",
+          "resources/run_example.sh"
+        ],
+        "notes": [
+          "Replace non-standalone upstream fragments with a small explicit-checkpoint stage launcher; no environment installation.",
+          "Resolve filename ambiguity with explicit inputs and a real standalone orchestration entrypoint.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records."
+        ],
+        "consulted_sources": [
+          "https://github.com/wangxr0526/RetroPrime/blob/a765b670b72fbfd512d0d437da8f27a95f9f0554/run_example.sh",
+          "https://github.com/wangxr0526/RetroPrime/blob/a765b670b72fbfd512d0d437da8f27a95f9f0554/README.md"
+        ]
+      }
+    },
+    {
+      "name": "select-and-evaluate-graph2smiles-predictions",
+      "origin": "skills/generated/graph2smiles-20260920-r01/select-and-evaluate-graph2smiles-predictions",
+      "origins": [
+        "skills/generated/graph2smiles-20260920-r01/select-and-evaluate-graph2smiles-predictions"
+      ],
+      "path": "unclassified/select-and-evaluate-graph2smiles-predictions",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2873,
+          "sha256": "abb7723ff4e6448b74fb7516a41f96255ea370e2af356b0671295a872d381b45",
+          "upstream_blob": "e623dc568f8f64a5797685aaa0656fd5f72a98c4"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5263,
+          "sha256": "65c727782d8ffe6e22650388bd7dd6c5fb1392e441d2928f0ca03684fc8a3a45",
+          "source_blob": "e623dc568f8f64a5797685aaa0656fd5f72a98c4",
+          "source_mode": "100644"
+        },
+        {
+          "path": "reports/execution.json",
+          "bytes": 186,
+          "sha256": "0e578d77d085cec2c194cc34b1637aff4e4b1ba807e28771da58d30d6f8b20e5",
+          "source_blob": "6b4b655d902e8a97feb55d5da990c73c54afe029",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [
+          "reports/execution.json"
+        ],
+        "notes": [
+          "Added the actual prepared-data command, cache-skip behavior and upstream invalid/deduplication semantics rather than inventing rank preservation.",
+          "Moved reviewed build-only/unused/incomplete support files out of the Skill package; preserved copies in local developer records."
+        ],
+        "consulted_sources": [
+          "https://github.com/coleygroup/Graph2SMILES/blob/1b87f9ffdb739346b94853dfe8e5d63ac0198a38/predict.py"
+        ]
+      }
+    },
+    {
+      "name": "select-reaction-smiles-augmentation",
+      "origin": "skills/generated/verified20-20260920-CABX3BR4-r01/select-reaction-smiles-augmentation",
+      "origins": [
+        "skills/generated/verified20-20260920-CABX3BR4-r01/select-reaction-smiles-augmentation"
+      ],
+      "path": "unclassified/select-reaction-smiles-augmentation",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2202,
+          "sha256": "b0acb0227370500ac936a69cc3087295ca52714c1975b062e64c7a96d2cb6f7a",
+          "upstream_blob": "db5b46696b000f352d5b8cf33adc929cd61f926c"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 5089,
+          "sha256": "cf3d8b5bdd0cd1fb348a0c5bb2a9412df47241d2842316d22468cbcaad692532",
+          "source_blob": "db5b46696b000f352d5b8cf33adc929cd61f926c",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Replaced extraction scaffolding with an explicit method/tool contract and bounded interpretation."
+        ],
+        "consulted_sources": [
+          "https://www.nature.com/articles/s41467-020-19266-y",
+          "https://github.com/bigchem/synthesis"
+        ]
+      }
+    },
+    {
+      "name": "symmetry-aware-redocking-control",
+      "origin": "skills/symmetry-aware-redocking-control",
+      "origins": [
+        "skills/symmetry-aware-redocking-control"
+      ],
+      "path": "unclassified/symmetry-aware-redocking-control",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2773,
+          "sha256": "c59e57a51d49cbe7a13a66749c712036208908ac508948839904fea7df09ca72",
+          "upstream_blob": "6bac61815d59a45920559d920f05fc23ad4e8e0d"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2168,
+          "sha256": "4243e4a673c136829fa726cd30f4b11e74a9f94d0ef6d12984e07e5225c7bc19",
+          "source_blob": "6bac61815d59a45920559d920f05fc23ad4e8e0d",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+        ],
+        "consulted_sources": [
+          "https://www.rdkit.org/docs/source/rdkit.Chem.rdMolAlign.html"
+        ]
+      }
+    },
+    {
+      "name": "synthesis-precursor-evidence",
+      "origin": "skills/synthesis-precursor-evidence",
+      "origins": [
+        "skills/synthesis-precursor-evidence"
+      ],
+      "path": "unclassified/synthesis-precursor-evidence",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1982,
+          "sha256": "9514208df92425022aefc89fac284c0bbf500aed011eaf46ba5d9303446fa945",
+          "upstream_blob": "e3ee09b87abe00c27ad117e3fc4a3b2af9bef1be"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2242,
+          "sha256": "bb3d341a44a86878123b785d645c66563ef98f1894a4f910b914b3f5f9ae68a9",
+          "source_blob": "e3ee09b87abe00c27ad117e3fc4a3b2af9bef1be",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "template-guided-docking-box",
+      "origin": "skills/template-guided-docking-box",
+      "origins": [
+        "skills/template-guided-docking-box"
+      ],
+      "path": "unclassified/template-guided-docking-box",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 1977,
+          "sha256": "56998ec2527178b193682ce144de61a9ff55f0f4eac0634cc5e7ddae297367a1",
+          "upstream_blob": "0f024d31fe9fe685289fcfee06aa94f951f02718"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2227,
+          "sha256": "ab219aca88639a2983609ee8123c01c15b0f49ceeb0be505028369f2b42053dd",
+          "source_blob": "0f024d31fe9fe685289fcfee06aa94f951f02718",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "widom-sorbent-screening",
+      "origin": "skills/widom-sorbent-screening",
+      "origins": [
+        "skills/widom-sorbent-screening"
+      ],
+      "path": "unclassified/widom-sorbent-screening",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 3121,
+          "sha256": "6b8dbd590e82d3b1b67b2e2ca3194ec21b56a1241d01b454ff77140a80d3c821",
+          "upstream_blob": "ca28a995b8312d67eab042b93419fcf9bd6337ab"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2321,
+          "sha256": "74898dc4538a8ee2e1aa2f0dcc0c8e348baaffa53ca6cfa3944004680788a798",
+          "source_blob": "ca28a995b8312d67eab042b93419fcf9bd6337ab",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+        ],
+        "consulted_sources": []
+      }
+    },
+    {
+      "name": "xrd-mixture-phase-quantification",
+      "origin": "skills/xrd-mixture-phase-quantification",
+      "origins": [
+        "skills/xrd-mixture-phase-quantification"
+      ],
+      "path": "unclassified/xrd-mixture-phase-quantification",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 3049,
+          "sha256": "04bdd54a01d3a3bdbfdc4441247f246785cdd12542358e909b83475a78acc2ad",
+          "upstream_blob": "f9501c0ca9094ad0f9809b8580333bb86aa98c2a"
+        }
+      ],
+      "imported_files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 2262,
+          "sha256": "288e9aa80d54051f6f7b1da55f15c43c74989e456787f9a41e2ed236f00550e8",
+          "source_blob": "f9501c0ca9094ad0f9809b8580333bb86aa98c2a",
+          "source_mode": "100644"
+        }
+      ],
+      "review": {
+        "date": "2026-10-28",
+        "scope": "Capability-centered source/content and package-support review; no heavy target-tool execution or Agent-gain evaluation.",
+        "changed_files": [
+          "SKILL.md"
+        ],
+        "removed_files": [],
+        "notes": [
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+        ],
+        "consulted_sources": [
+          "https://onlinelibrary.wiley.com/iucr/itc/Ha/ch3o9v0001/"
+        ]
+      }
+    }
+  ],
+  "excluded_packages": [
+    {
+      "name": "retroxpert-evaluate-bond-disconnection",
+      "original_paths": [
+        "models-skills/open-models/retroxpert-evaluate-bond-disconnection"
+      ],
+      "reason": "No inference adapter is delivered; documented command only tests a checkpoint path in an old evidence workspace."
+    },
+    {
+      "name": "wln-build-molecular-graph",
+      "original_paths": [
+        "models-skills/open-models/wln-build-molecular-graph"
+      ],
+      "reason": "Documented executable run.py is not delivered; command requires an old virtual environment and batch workspace."
+    },
+    {
+      "name": "retroprime-two-stage-retrosynthesis",
+      "original_paths": [
+        "models-skills/open-models/retroprime-two-stage-retrosynthesis"
+      ],
+      "reason": "Resource recovery instructions depend on another Skill package through an incorrect relative link; package is not independently self-contained."
+    },
+    {
+      "name": "attach-semi-template-residuals",
+      "original_paths": [
+        "skills/generated/verified-resume-20260920-BTJ7PAYZ-r01/attach-semi-template-residuals"
+      ],
+      "reason": "Template representation and attachment operations are undefined; map/match/replace alone does not specify a reliable graph rewrite.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "chem-diffdock-nim",
+      "original_paths": [
+        "models-skills/nim/chem-diffdock-nim"
+      ],
+      "reason": "Only checks two files exist and the endpoint string is nonempty; little DiffDock-specific preparation value.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "chem-genmol",
+      "original_paths": [
+        "models-skills/open-models/chem-genmol"
+      ],
+      "reason": "Only checks a repository directory and checkpoint file exist; no SAFE or task-configuration guidance.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "chem-openmm-md",
+      "original_paths": [
+        "tools-skills/openmm/chem-openmm-md"
+      ],
+      "reason": "Only enumerates available platforms; better as a preparation step than a standalone simulation Skill.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "chem-reinvent",
+      "original_paths": [
+        "models-skills/open-models/chem-reinvent"
+      ],
+      "reason": "Claims to check the configuration path, but only checks executable availability; little task-specific help.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "construct-leaving-group-vocabulary",
+      "original_paths": [
+        "models-skills/open-models/construct-leaving-group-vocabulary",
+        "skills/generated/graphretro-manual-01/construct-leaving-group-vocabulary"
+      ],
+      "reason": "Attachment-marker encoding and ambiguous component alignment are undefined; source references point to an old local workspace.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "correct-and-filter-semi-template-pairs",
+      "original_paths": [
+        "skills/generated/verified-resume-20260920-BTJ7PAYZ-r01/correct-and-filter-semi-template-pairs"
+      ],
+      "reason": "No usable paired predictor contract, template vocabulary or pair-prior construction is established.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "experience-guided-retrosynthetic-search",
+      "original_paths": [
+        "models-skills/open-models/experience-guided-retrosynthetic-search",
+        "skills/generated/agent-reasoning-five-20260921/experience-guided-retrosynthetic-search"
+      ],
+      "reason": "The core PUCT expression is damaged, with no definite implementation entrypoint to resolve selection behavior.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "generate-and-filter-chemical-reasoning-examples",
+      "original_paths": [
+        "models-skills/open-models/generate-and-filter-chemical-reasoning-examples",
+        "skills/generated/agent-reasoning-five-20260921/generate-and-filter-chemical-reasoning-examples"
+      ],
+      "reason": "Requires a score of at least 4/5 but supplies no scoring rubric, leaving the main acceptance rule undefined.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "generate-reactant-graphs-with-valid-action-beam-search",
+      "original_paths": [
+        "skills/generated/verified20-20260920-P2R8K7X3-r01/generate-reactant-graphs-with-valid-action-beam-search"
+      ],
+      "reason": "Valid-action rules and atom/bond vocabularies are neither defined nor tied to a usable predictor.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "gln-support-restricted-training",
+      "original_paths": [
+        "skills/generated/verified-resume-20260920-29BYRNCZ-r01/gln-support-restricted-training"
+      ],
+      "reason": "The required gradient equation and weighting for the uniform-sampling approximation are missing.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "graph-aware-molecular-attention",
+      "original_paths": [
+        "skills/generated/graph2smiles-20260920-r01/graph-aware-molecular-attention"
+      ],
+      "reason": "Distance buckets are specified, but the attention equation needed to produce the promised representations is not.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "graphretro-beam-search-retrosynthesis",
+      "original_paths": [
+        "models-skills/open-models/graphretro-beam-search-retrosynthesis",
+        "skills/generated/graphretro-manual-01/graphretro-beam-search-retrosynthesis"
+      ],
+      "reason": "Final attachment and stereochemistry rules depend on a missing appendix; references use old local paths.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "localretro-extract-local-template",
+      "original_paths": [
+        "models-skills/open-models/localretro-extract-local-template"
+      ],
+      "reason": "The documented scripts/extract_template.py entrypoint is not included.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "localtransform-forward-prediction",
+      "original_paths": [
+        "models-skills/open-models/localtransform-forward-prediction"
+      ],
+      "reason": "Mostly generic file/commit checks; the command depends on the old repository/evidence layout.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "rdkit-descriptor-result-triage",
+      "original_paths": [
+        "tools-skills/rdkit/rdkit-descriptor-result-triage"
+      ],
+      "reason": "Duplicates the existing descriptor calculator and interpretation boundary with substantially more template text.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    },
+    {
+      "name": "robustify-rgn-against-synthon-errors",
+      "original_paths": [
+        "skills/generated/verified20-20260920-74LHJIVM-r01/robustify-rgn-against-synthon-errors"
+      ],
+      "reason": "Does not define target alignment when erroneous synthons change component counts or correspondence, the core augmentation case.",
+      "removed_on": "2026-10-28",
+      "source_commit": "1e7cada4f693501b35e69b99676cdcbcc801c29c"
+    }
+  ],
+  "version_overrides": [
+    {
+      "name": "chem-rdkit-descriptors",
+      "source_commit": "6bb535add721d8ea77585adc3b6ed6f44bd6432a",
+      "reason": "Use complete version preceding Docker runtime integration."
+    }
+  ],
+  "screening": {
+    "date": "2026-10-28",
+    "reviewed_packages": 83,
+    "removed_packages": 17,
+    "retained_packages": 66,
+    "criterion": "Help toward the declared capability; no mandatory universal workflow, scripts or bundled external dependencies.",
+    "note": "The 66 retained packages received a subsequent capability-centered refinement; see refinement and per-package review fields."
+  },
+  "refinement": {
+    "date": "2026-10-28",
+    "summary": {
+      "packages_reviewed": 66,
+      "packages_modified": 66,
+      "main_files_modified": 65,
+      "files_modified_or_added": 76,
+      "files_removed": 44,
+      "original_files": 158,
+      "current_files": 115,
+      "main_bytes_before": 236392,
+      "main_bytes_after": 176575
+    },
+    "checks": "66 package metadata/link checks, Python syntax checks, offline regression tests; heavy models and live service outputs not verified."
+  }
+}

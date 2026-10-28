@@ -1,4 +1,4 @@
-"""Deterministic structure checks, explicit evidence gaps and execution dispatch."""
+"""Deterministic structure checks, source references and syntax; no target execution."""
 from __future__ import annotations
 
 import ast
@@ -10,7 +10,6 @@ from urllib.parse import unquote
 
 from creation_pipeline.artifacts.package import manifest
 from creation_pipeline.records import redact, safe_relative
-from creation_pipeline.validation.runtime import execute, validate_test
 
 
 def python_source(path):
@@ -33,7 +32,7 @@ def runtime_path_problems(package, files):
             text = path.read_text(encoding="utf-8")
         except UnicodeError:
             continue
-        if re.search(r"\{(?:package|source:|run\}|bundle\}|tool:)", text) or re.search(r"[A-Za-z]:[/\\].*?\.pipeline[/\\]", text):
+        if re.search(r"\{(?:package|source:|run\}|bundle\}|tool:|verification\}|example_runner\})", text) or re.search(r"[A-Za-z]:[/\\].*?\.pipeline[/\\]", text):
             problems.append("Pipeline-only path/macro in runtime file: " + item["path"])
     return problems
 
@@ -105,65 +104,11 @@ def static_checks(package, name=None, *, bundle=None, tool=False):
     return checks
 
 
-def covers_example(block, code):
-    """Match every delivered statement in order, permitting added assertions."""
-    try:
-        expected, actual = ast.parse(block).body, ast.parse(code).body
-    except SyntaxError:
-        return False
-    index = 0
-    for node in actual:
-        if index < len(expected) and ast.dump(node) == ast.dump(expected[index]):
-            index += 1
-        elif index and index < len(expected) and not isinstance(node, ast.Assert):
-            return False
-    return index == len(expected)
-
-
-def run_checks(config, artifact, package, sources, work, allow_generated=False, prior=None):
-    tests = [(item, "configured") for item in config["checks"]]
-    tests += [(item, "generated") for item in artifact["tests"]]
-    results = list(prior or [])
-    names = [t.get("name") for t, _ in tests if isinstance(t, dict)]
-    if len(names) != len(set(names)):
-        return [result("check_definitions", ["Duplicate check names"], required=True)]
-    known_evidence = {item["id"] for item in sources.evidence if item["excerpt"].strip()}
-    for index, (test, origin) in enumerate(tests):
-        try:
-            remaining = config.get("_deadline", float("inf")) - time.monotonic()
-            if remaining <= 0:
-                results.append({"name": "build_time_budget", "status": "not_run", "required": True,
-                                "findings": ["Build time budget exhausted before check execution"]})
-                break
-            validate_test(test)
-            import json
-            from creation_pipeline.records import digest
-            signature = digest(json.dumps(test, sort_keys=True).encode())
-            if any(r.get("signature") == signature for r in results):
-                continue
-            if origin == "generated" and (test.get("evidence") not in known_evidence or not test.get("purpose")):
-                raise ValueError("Generated checks need real source evidence and purpose")
-            if origin == "generated" and not allow_generated:
-                results.append({"name": test["name"], "status": "not_run", "required": False,
-                                "origin": origin, "findings": ["Generated execution requires --execute-generated-checks"]})
-                continue
-            report = execute(test, package, sources, Path(work) / f"check-{index + 1}",
-                             min(config["limits"]["check_timeout"] if config["limits"]["check_timeout"] is not None else remaining, remaining), config["environment"].get("allow", []))
-            report["origin"] = origin
-            results.append(report)
-        except (ValueError, OSError) as exc:
-            results.append({"name": test.get("name", f"check-{index + 1}") if isinstance(test, dict) else "invalid-check",
-                            "status": "fail", "required": True, "origin": origin, "findings": [redact(exc)]})
-    if not tests:
-        results.append({"name": "execution_scope", "status": "not_run", "required": False,
-                        "findings": ["No executable check supplied; source/content review must assess the unverified scope"]})
-    return results
-
 
 def classify(checks):
     required = [item for item in checks if item.get("required")]
     if any(item["status"] == "fail" for item in required):
         return "failed"
-    if not required or any(item["status"] == "not_run" for item in required):
-        return "draft"
+    if not required or any(item["status"] != "pass" for item in required):
+        return "incomplete"
     return "ready"

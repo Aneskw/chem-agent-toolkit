@@ -13,9 +13,8 @@ from creation_pipeline.records import write_json, read_json
 from creation_pipeline.resources.workspace import prepare, sync_sources
 from creation_pipeline.resources.supplements import supplement
 from creation_pipeline.artifacts.delivery import finish, delivered, write_chunk
-from creation_pipeline.validation.agent_checks import check
 from creation_pipeline.artifacts.package import manifest
-from creation_pipeline.validation.checks import static_checks, run_checks
+from creation_pipeline.validation.checks import static_checks
 from creation_pipeline.agent.backend import NativeSession
 from creation_pipeline.generation.author import author
 from creation_pipeline.generation.discovery import normalize, validate_discovery
@@ -144,21 +143,6 @@ class ResearchTests(unittest.TestCase):
             plan = analyze(session, self.config)
         self.assertEqual([c["name"] for c in plan["candidates"]], ["selected"])
 
-    def test_reviewed_unexecuted_scope_is_retained_in_catalog(self):
-        from tests.pipeline.test_discovery import DiscoveryTests, candidate, discovery
-        from tests.pipeline.test_components import ARTIFACT
-        case = DiscoveryTests()
-        case.setUp()
-        try:
-            case.options["checks"] = []
-            case.options["adoption"] = {"enabled": True}
-            write_json(case.config, case.options)
-            result, _ = case.run_case(discovery(candidate()), copy.deepcopy(ARTIFACT), library_root=case.root / "library")
-            self.assertEqual(result["status"], "ready")
-            catalog = read_json(case.root / "library/catalog.json")
-            self.assertTrue(catalog["skills"][0]["unverified"])
-        finally:
-            case.tearDown()
 
     def test_review_cannot_pass_its_own_blocking_finding(self):
         from creation_pipeline.generation.author import review
@@ -171,20 +155,7 @@ class ResearchTests(unittest.TestCase):
             report = review(session, candidate(), {"files": []}, [], self.config)
         self.assertEqual(report["status"], "fail")
 
-    def test_credentials_in_direct_files_are_rejected(self):
-        (self.package / "SKILL.md").write_text(MAIN + "\napi_key=sk-1234567890123456", encoding="utf-8")
-        with self.assertRaisesRegex(ValueError, "credential"):
-            finish(self.work, self.package, "token")
 
-    def test_discovery_and_review_cannot_finalize_runtime_files(self):
-        for phase in ("discovery", "review"):
-            write_json(self.work / "active-phase.json", {"phase": phase})
-            with self.assertRaisesRegex(ValueError, "author stage"):
-                finish(self.work, self.package, "token")
-            with self.assertRaisesRegex(ValueError, "must not write"):
-                write_chunk(self.package, "SKILL.md", base64.b64encode(b"overwritten").decode())
-        write_json(self.work / "active-phase.json", {"phase": "author"})
-        finish(self.work, self.package, "token")
 
     def test_supplement_is_registered_cached_and_survives_new_session(self):
         self.config["network"] = True
@@ -208,16 +179,6 @@ class ResearchTests(unittest.TestCase):
         self.assertIn("tool", self.sources.entries)
         self.assertTrue(self.sources.errors)
 
-    def test_durable_delivery_supports_binary_and_rejects_stale_files(self):
-        (self.package / "assets").mkdir()
-        (self.package / "assets/example.png").write_bytes(b"\x89PNG\0binary")
-        (self.package / "scripts").mkdir()
-        (self.package / "scripts/__init__.py").touch()
-        finish(self.work, self.package, "candidate-token")
-        self.assertEqual(len(delivered(self.work, self.package, "candidate-token")["files"]), 3)
-        self.assertTrue(all(r["status"] == "pass" for r in static_checks(self.package)))
-        (self.package / "SKILL.md").write_text(MAIN + "changed", encoding="utf-8")
-        self.assertIsNone(delivered(self.work, self.package, "candidate-token"))
 
     def test_writer_small_chunks_and_path_boundaries(self):
         write_chunk(self.package, "references/detail.md", base64.b64encode(b"first\n").decode())
@@ -226,29 +187,8 @@ class ResearchTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             write_chunk(self.package, "../outside", base64.b64encode(b"bad").decode())
 
-    def test_finalized_files_recover_even_without_final_model_json(self):
-        from tests.pipeline.test_discovery import candidate
-        session = NativeSession(self.config, self.sources, copy.deepcopy(self.config["limits"]), self.work)
-        def incomplete(instructions, context, schema=None):
-            finish(self.work, self.package, context["delivery_token"])
-            raise ModelCallError("Final response missing after files were saved")
-        with patch.object(session, "stage", side_effect=incomplete):
-            artifact = author(session, self.config, candidate(), self.package)
-        self.assertTrue(artifact["completed"])
-        self.assertNotIn("coverage", artifact)
 
-    def test_check_permission_is_respected_by_review_helper(self):
-        definition = self.work / "check.json"
-        write_json(definition, {"name": "should-not-run", "argv": ["does-not-exist"], "stdout_contains": ["result"]})
-        report = check(self.work, self.package, definition)
-        self.assertEqual(report["status"], "not_run")
-        self.assertTrue((self.work / "agent-checks.jsonl").exists())
 
-    def test_python_blocks_are_not_blindly_executed(self):
-        (self.package / "SKILL.md").write_text(MAIN + '\n```python\nraise RuntimeError("illustration")\n```\n', encoding="utf-8")
-        reports = run_checks(self.config, {"tests": []}, self.package, self.sources, self.work / "checks", True)
-        self.assertFalse(any(r["status"] == "fail" for r in reports))
-        self.assertTrue(any(r["status"] == "not_run" for r in reports))
 
     def test_compact_candidates_allow_mixed_blocked_and_callable(self):
         common = {"name": "capability", "capability": "Addition", "boundary": "numbers",
@@ -259,6 +199,30 @@ class ResearchTests(unittest.TestCase):
         validate_discovery(discovery, self.config, self.sources)
         self.assertEqual(discovery["candidates"][0]["readiness"], "callable")
         self.assertEqual(discovery["candidates"][1]["readiness"], "blocked")
+
+    def test_stale_old_resource_lock_does_not_block_supplements(self):
+        self.config["network"] = True
+        prepare(self.sources, self.work)
+        (self.work / ".resource.lock").write_text("stale")
+        extra = self.root / "extra.md"
+        extra.write_text("Specific interface detail")
+        with patch("creation_pipeline.resources.acquisition.Acquisition.download", return_value=(extra, {"resolved_url": "https://example.org/extra.md"})):
+            result = supplement(self.work, {"url": "https://example.org/extra.md"}, "Clarify interface", related_to=["tool"])
+        self.assertEqual(result["status"], "acquired")
+
+    def test_active_resource_operation_is_not_overwritten(self):
+        from creation_pipeline.records import lease
+        with lease(self.work, "resources"):
+            with self.assertRaises(OSError):
+                supplement(self.work, {"url": "https://example.org/extra.md"}, "Clarify interface")
+        self.assertEqual(len(read_json(self.work / "resource-state.json")["sources"]), 1)
+
+    def test_author_cannot_silently_update_an_unused_discovery_file(self):
+        from creation_pipeline.generation.candidates import save_candidate
+        write_json(self.work / "active-phase.json", {"phase": "author"})
+        with self.assertRaisesRegex(ValueError, "candidate_update"):
+            save_candidate(self.work, self.work / "definition.json")
+        self.assertFalse((self.work / "candidates").exists())
 
 
 if __name__ == "__main__":

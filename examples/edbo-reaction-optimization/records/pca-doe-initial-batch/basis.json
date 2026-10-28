@@ -1,0 +1,62 @@
+[
+  {
+    "location": "SKILL.md / prerequisites",
+    "claim": "The DOE example requires an EDBO Data reaction object and imports pyDOE2; EDBO package version and installation steps are stated in its pinned setup metadata and README, while setup.py omits pyDOE2.",
+    "source": "e234",
+    "locator": "examples/DOE/DOE.py module docstring and imports; setup.py version 0.1.0; README Installation section",
+    "origin": "upstream",
+    "source_path": "examples/DOE/DOE.py",
+    "source_id": "code",
+    "sha256": "f528bc131c04a6c2fd99bf113ca91905fc1f82f67bcaf871d18892f6e4213992"
+  },
+  {
+    "location": "SKILL.md / Inputs and component contract",
+    "claim": "The example detects descriptors and index headers by component-key substring and encoded() compares each selected identifier tuple to the complete reaction index tuple in source order.",
+    "source": "e234",
+    "locator": "examples/DOE/DOE.py component_submatrix() lines 31-48; init_design.__init__(); encoded() lines 133-146",
+    "origin": "upstream",
+    "source_path": "examples/DOE/DOE.py",
+    "source_id": "code",
+    "sha256": "f528bc131c04a6c2fd99bf113ca91905fc1f82f67bcaf871d18892f6e4213992"
+  },
+  {
+    "location": "SKILL.md / PCA interpretation",
+    "claim": "No PCA index correction is required: pca() returns a DataFrame, standardize() reconstructs one from ordered values/columns, and principles() inserts identifiers from a positional ndarray via .values.",
+    "source": "e226",
+    "locator": "examples/DOE/DOE.py principles() lines 62-76; edbo/math_utils.py pca() lines 95-109; edbo/utils.py standardize() lines 148-170",
+    "origin": "upstream",
+    "source_path": "edbo/math_utils.py",
+    "source_id": "code",
+    "sha256": "1c88937e1de8fdad1607289fe14e15d91a275d5d0dd8c224a6025f158b2d24d8"
+  },
+  {
+    "location": "SKILL.md / component-key source and order",
+    "claim": "The reaction-space builder retains descriptor dictionaries keyed by component_dict keys, creates each index header from the descriptor base-data first-column name plus _index, and attaches descriptors and index_headers to reaction.",
+    "source": "e224",
+    "locator": "edbo/feature_utils.py lines 390-425 and 433-446",
+    "origin": "upstream",
+    "source_path": "edbo/feature_utils.py",
+    "source_id": "code",
+    "sha256": "904ce626b0f9764b666122a8304bc812fbb93efa2e659c73646328382432e17f"
+  },
+  {
+    "location": "SKILL.md / Input contract and representative workflow",
+    "claim": "DOE component_submatrix selects descriptor and index columns by substring; encoded() compares proposed tuples against the full index tuple. Therefore all component keys, in the builder/index order and matching their corresponding fields, are needed for encoded-row retrieval.",
+    "source": "e234",
+    "locator": "examples/DOE/DOE.py component_submatrix() lines 31-48 and encoded() lines 133-146",
+    "origin": "upstream",
+    "source_path": "examples/DOE/DOE.py",
+    "source_id": "code",
+    "sha256": "f528bc131c04a6c2fd99bf113ca91905fc1f82f67bcaf871d18892f6e4213992"
+  },
+  {
+    "location": "SKILL.md / Representative workflow and result meaning",
+    "claim": "LHS, PBD and CCD/LHS arguments, mapped level identifiers, encoded row access and exact full-index matching follow the example.",
+    "source": "e234",
+    "locator": "examples/DOE/DOE.py lhs(), pbd(), ccd_lhs(), get_closest(), get_closest_principles(), encoded()",
+    "origin": "upstream",
+    "source_path": "examples/DOE/DOE.py",
+    "source_id": "code",
+    "sha256": "f528bc131c04a6c2fd99bf113ca91905fc1f82f67bcaf871d18892f6e4213992"
+  }
+]

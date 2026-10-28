@@ -1,0 +1,128 @@
+{
+  "status": "ready",
+  "acceptance_scope": "source_and_content_review_only",
+  "checks": [
+    {
+      "name": "structure",
+      "status": "pass",
+      "required": true,
+      "findings": []
+    },
+    {
+      "name": "runtime_paths",
+      "status": "pass",
+      "required": true,
+      "findings": []
+    },
+    {
+      "status": "pass",
+      "resolution": "none",
+      "findings": [],
+      "name": "content_review",
+      "required": true,
+      "evidence_kind": "source_and_content_review_only"
+    }
+  ],
+  "issues": [
+    {
+      "id": "pca-index-warning-retracted",
+      "description": "A prior review asserted PCA coordinates and component identifiers could misalign due to indexes.",
+      "blocking": false,
+      "resolution": "Retracted after inspecting source: principles() inserts unique.iloc[:,0].values positionally; edbo/utils.py standardize() reconstructs an ordered DataFrame. The monkeypatch was removed."
+    },
+    {
+      "id": "pydoe2-registration",
+      "description": "Supplemental pyDOE2 README evidence was inspected directly, but helper registration could not complete because an existing resource lock remained.",
+      "blocking": false,
+      "resolution": "The skill links the official README and metadata cites its exact installation section; the helper lock limitation is retained as an unresolved registration note."
+    },
+    {
+      "id": "component-key-clarification",
+      "description": "The DOE components argument expects component keys used for descriptor selection, not generated index-header names; encoded output also requires every indexed component in builder order.",
+      "blocking": false,
+      "resolution": "Skill now derives keys from reaction.descriptors and explains matching/order requirements; the original candidate scope/entrypoint was updated with helper candidate for the complete-index retrieval contract."
+    }
+  ],
+  "repair_summary": [
+    {
+      "attempt": 0,
+      "problems": [
+        {
+          "location": "SKILL.md / Inputs and mapping; Representative workflow",
+          "problem": "The skill presents the example’s PCA-to-level mapping as a reliable path, but the pinned implementation can misassociate component identifiers with PCA coordinates. `pca()` returns a DataFrame with a fresh range index; `principles()` inserts the identifiers from `unique` by index alignment, even though `drop_duplicates()` can leave gaps in that index. The subsequent nearest lookup uses the resulting rows to choose level identifiers.",
+          "action": "Revise the skill to disclose this source defect and avoid claiming the pinned example safely performs PCA mapping as written. Give a source-grounded corrected mapping step or limit the representative path to a verified safe case."
+        },
+        {
+          "location": "SKILL.md / setup paragraph",
+          "problem": "The prerequisites identify EDBO 0.1.0 and link the example and pyDOE2 project, but do not give an actionable installation/setup entrypoint for either dependency. The EDBO README documents a Python 3.7.5 environment and `pip install edbo`; the skill should convey the relevant setup entry and make clear that the example itself must be retrieved from the pinned commit.",
+          "action": "Add the README’s relevant setup entrypoint and a concise installation command or official setup instruction for pyDOE2, while retaining the pinned source link for obtaining `DOE.py`."
+        }
+      ]
+    },
+    {
+      "attempt": 1,
+      "problems": [
+        {
+          "location": "SKILL.md / Inputs and mapping; Representative workflow",
+          "problem": "The skill allows choosing a subset of reaction components, but `encoded()` matches the selected identifiers against every column in `reaction.index_headers`. When the reaction space has additional components, the selected tuple does not have the same width as that full index, so the lookup cannot retrieve the promised rows.",
+          "action": "Either constrain the documented workflow to designs that include every `reaction.index_headers` component, or revise the encoding lookup to match only the selected component index columns and verify the resulting rows against the full reaction index."
+        }
+      ]
+    },
+    {
+      "attempt": "developer_source_audit",
+      "problems": [
+        {
+          "location": "SKILL.md / compatibility corrections",
+          "problem": "The claimed PCA alignment defect is not established by the pinned code. principles() inserts unique.iloc[:,0].values, which supplies positional ndarray values, not a Series aligned by index. Its default standardize(... target=None) also returns a fresh DataFrame. The current text states a false premise and adds an unnecessary monkeypatch.",
+          "evidence": "Inspect examples/DOE/DOE.py principles() around lines 62-77, especially the .values in col.insert; edbo/utils.py standardize() around lines 148-172; do not rely on the earlier review assertion.",
+          "action": "Independently verify these exact expressions. Remove the false defect claim and its workaround unless original code demonstrates a real counterexample. Keep source-faithful instructions."
+        },
+        {
+          "location": "SKILL.md / subset encoder and invocation boundary",
+          "problem": "The existing encoded() matches the full reaction index in source order. The sample has grown a replacement encoder to support a broader subset contract, rather than documenting the source-supported complete-component normal path.",
+          "evidence": "examples/DOE/DOE.py encoded() compares experiment tuples against reaction.base_data[reaction.index_headers].",
+          "action": "Prefer a coherent representative path using the complete component selection in the matching source order, with explicit input conventions, instead of rewriting upstream internals. Record a justified source-backed scope clarification when needed."
+        },
+        {
+          "location": "SKILL.md / acquisition and setup links",
+          "problem": "The link labeled examples/DOE/DOE.py points to /blob/<commit> without the file path, and README setup is mentioned without its own direct entrypoint.",
+          "evidence": "Original input repo https://github.com/b-shields/edbo at 9b41eac3f6d9e520547702fd5b0c7ef6441625a4.",
+          "action": "Use the actual pinned file URL ending /examples/DOE/DOE.py and the pinned /README.md setup link. If pyDOE2 evidence is used, inspect its actual official content and register saved material; snippets alone are not evidence."
+        }
+      ],
+      "resolution": "See final writing basis and review; prior PCA premise must not be treated as established."
+    },
+    {
+      "attempt": "developer_source_audit",
+      "problems": [
+        {
+          "location": "SKILL.md / Inputs and component contract; Representative workflow",
+          "problem": "The example sets `components = list(reaction.index_headers)`, but these are index field names, not necessarily the component keys used to select descriptors. In the reaction-space builder, index headers are created by appending `_index` to a component descriptor’s first-column name. The DOE helper searches descriptor columns for the supplied key. For a common `ligand` / `ligand_index` naming pair, passing `ligand_index` will not select columns named for `ligand`, so the workflow cannot construct the promised design.",
+          "evidence": "Pinned `edbo/feature_utils.py`, lines 419–425, inserts and records headers as `des.base_data.columns.values[0] + '_index'`, while retaining `component_dict` keys in `descriptor_dict` at lines 390–404 and 423. Pinned `examples/DOE/DOE.py`, lines 31–47, searches `rxn.data` columns containing each supplied key, then separately finds the index header containing that key.",
+          "impact": "The documented normal path can fail during component preparation before design generation, despite using the complete index-header list.",
+          "action": "Use the reaction’s component keys (in the matching index order) for `components`, not `reaction.index_headers`; state how to obtain those keys from the prepared object, such as `reaction.descriptors` when its keys match the index fields, and preserve the source’s required key-to-header correspondence. Record the source-backed scope/entrypoint clarification in candidate_update if the original candidate implied a broader contract; do not reintroduce PCA or encoder monkeypatches.",
+          "blocking": true,
+          "category": "source"
+        }
+      ],
+      "resolution": "See final writing basis and review; prior PCA premise must not be treated as established."
+    }
+  ],
+  "files": [
+    {
+      "path": "SKILL.md",
+      "sha256": "ee211c0fdaa5c076951bdf6197ce00b667339075621da800824ef2f205866d5a",
+      "bytes": 4670
+    }
+  ],
+  "final_scope": "The user supplies a prepared EDBO reaction-space object. Supply component keys from reaction.descriptors in the same builder order as reaction.index_headers, with each key matching its descriptor columns and generated index header. Use every indexed component to retrieve encoded rows.",
+  "scope_adjustments": [
+    {
+      "reason": "Reconciled the author-written corrected candidate after its discovery-helper handoff was not consumed; future author use is rejected in favor of metadata candidate_update.",
+      "before": "The user supplies a prepared EDBO reaction-space object and chooses the components to include. The example performs component subsetting, PCA or direct coordinate use, scaling, DOE generation, nearest-level mapping, and encoded-point lookup.",
+      "after": "The user supplies a prepared EDBO reaction-space object. Supply component keys from reaction.descriptors in the same builder order as reaction.index_headers, with each key matching its descriptor columns and generated index header. Use every indexed component to retrieve encoded rows."
+    }
+  ],
+  "record_kind": "portable selection, not a resumable acceptance receipt"
+}

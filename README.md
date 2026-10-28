@@ -1,48 +1,84 @@
 # Research Skill Creation Pipeline
 
-Use a native Codex Agent to discover reusable capabilities from papers, documentation and code, then write and review English skill packages. A task description is optional. The program prepares sources, provides processing helpers, checks delivered files, records evidence and organizes reviewed skills.
+Discover reusable capabilities from research papers, documentation and code with a native Codex
+Agent. The pipeline prepares original resources, guides concise English Skill writing, checks
+files and independently reviews the content against sources. A task description is optional.
 
 ## Prepare
 
-Python 3.11+, Git and authenticated Codex CLI on PATH. The pipeline supports native Codex Agent execution only. Install optional parsers only if needed:
+Python 3.11+, Git and authenticated Codex CLI on PATH. Optional parsers:
 
 ```text
 python -m pip install "PyYAML>=6,<7" "pypdf>=5,<7"
 ```
 
-Poppler (`pdftotext`, `pdftoppm`) improves PDF text/page processing. Tool dependencies remain external; no server, Docker or automatic environment installation is provided.
+Poppler improves PDF text extraction and page rendering. Target tools do not need to be installed:
+this version reviews their usage instructions without executing tools, examples or generated scripts.
 
 ## Build
 
-Save sources.json (paths relative to this file):
+Save sources.json (local paths resolve relative to this file):
 
 ```json
 {
   "sources": [
     {"path": "./paper.pdf"},
     {"repo": "https://github.com/organization/project.git", "ref": "<commit>"}
-  ],
-  "batch": {"label": "research-methods", "tags": []}
+  ]
 }
 ```
 
 ```text
-python -m creation_pipeline build sources.json --preflight
-python -m creation_pipeline build sources.json --execute-generated-checks
+python -m creation_pipeline build sources.json
 ```
 
-Production defaults impose no model time/turn, candidate/build-count or source-size quota. Agent reads selectively; retained resources are not all injected into context. Development presets and explicit limits are available. No manual plan approval is required.
+The selected model/connection is tested before resource acquisition. Production has no implicit
+candidate, source-size, model-time or turn quotas. An explicit development profile can limit trials.
+Agent reads originals and prepared views selectively; resources are not injected wholesale.
+Scoped supplemental research resolves gaps related to inputs, not unrelated research topics.
 
-Generated execution is opt-in. Without it, source/content review can still complete, but runtime remains unverified and is recorded. A ready skill means applicable review passed without known blocking defects, not every tool was executed or scientific validity was established. Host checks use current user privileges; native commands use the Codex workspace sandbox and receive the execution policy as instructions.
+```mermaid
+flowchart LR
+  A[Configuration and connection preflight] --> B[Acquire and index originals]
+  B --> C[Discover useful capabilities]
+  C --> D[Write Skill and writing basis]
+  D --> E[Static file checks]
+  E --> F[Independent source/content review]
+  F -->|Concrete defects| D
+  F -->|Approved| G[skills/name and compact records]
+```
 
-Reviewed skills are organized under `skills/<date>-<batch>/<name>/`. Use --no-adopt for trials and --keep-debug to retain successful workspaces. Failures retain local recovery data.
+Approved pure packages go directly to skills/name. Approval means source/content review, not
+runtime verification, scientific validation or measured Agent benefit. Review includes explicit
+input/output contracts, source-supported preparation, representative Usage and concise expression.
+
+Browse [current Skills](skills/README.md) and the separately stored [legacy collection](skills/legacy-pipeline/README.md).
+Historical imports retain their own source and validation records rather than entering the current approval catalog.
+
+Successful builds retain one package and compact records under .pipeline/records. Unfinished
+builds retain their latest drafts there; full workspaces expire after 7 days. Registered cache units
+expire after 30 unused days. Cleanup runs on the next build startup, never as a background service.
+Pinned and active batches are protected; historical unregistered directories are not auto-deleted.
+
+```text
+python -m creation_pipeline build sources.json --no-adopt
+python -m creation_pipeline retention
+python -m creation_pipeline pin <build-id>
+python -m creation_pipeline unpin <build-id>
+python -m creation_pipeline prune --dry-run
+```
+
+--no-adopt retains approved packages in the local archive. --keep-debug retains full successful
+workspaces for the normal retention window; use pin for indefinite retention.
 
 ## Documentation
 
 - [Usage](docs/pipeline/usage.md), [configuration](docs/pipeline/configuration.md)
-- [Resources and supplements](docs/pipeline/resources.md)
-- [Design](docs/pipeline/design.md), [code organization](docs/pipeline/code-organization.md), [outputs](docs/pipeline/outputs.md), [status](docs/pipeline/status.md)
+- [Resources](docs/pipeline/resources.md), [scoped research](docs/pipeline/research-access.md)
+- [Acceptance](docs/pipeline/acceptance.md), [outputs and retention](docs/pipeline/outputs.md)
+- [Design](docs/pipeline/design.md), [code organization](docs/pipeline/code-organization.md), [status](docs/pipeline/status.md)
 - [Minimum content](docs/skills/minimum.md), [packaging](docs/skills/packaging.md)
-- [Examples](examples/README.md): reserved for complete build batches with inputs, important records, outputs and reproduction instructions
+- [Examples](examples/README.md): curated batches with input, discovery, writing basis and final review
 
-Engineering tests: `python -m unittest discover -s tests -q`. Agent benefit evaluation remains separate.
+Engineering regression tests: python -m unittest discover -s tests -q.
+Agent benefit evaluation remains separate. Direct model API/Ollama backends are unsupported.

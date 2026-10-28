@@ -1,0 +1,124 @@
+{
+  "build_id": "20261027T091718-9faa49c9",
+  "pipeline_version": "7.0.0",
+  "status": "ready",
+  "started_at": "2026-10-27T01:17:18.894832+00:00",
+  "finished_at": "2026-10-27T01:44:13.526494+00:00",
+  "candidate_count": 3,
+  "deferred": [
+    "iterative-reaction-bayesian-optimization"
+  ],
+  "errors": [],
+  "implementation_sha256": "d2f1344d41d8690792b5d4b84a5b385c4dfe82fa486bc07b7976a5db29340068",
+  "specifications_at_discovery": {
+    "docs/skills/minimum.md": "0aed6a83675c01994befafb010e88c46b39b42307379462c0041e0e021a5f6ee",
+    "docs/skills/packaging.md": "00a4e772c764e87c61e842bd4b14daac5246f29ec311c5a8fbfed203df4f8631",
+    "creation_pipeline/generation/prompts/analyze.md": "13da6a80855585db577ff03cdfeb203ce38a249ebe49c74df43344eb8f302909",
+    "creation_pipeline/generation/prompts/author.md": "459d05920bcdc34f90a8cc635fd186b1e5b1a1a10dde864c21291bf608224edd",
+    "creation_pipeline/generation/prompts/review.md": "3f2a7af680cac84627f48e2f1ee336ea47b35722687ae90f294ae1a1dbea8150"
+  },
+  "stage_prompt_fingerprints": [
+    {
+      "phase": "discovery",
+      "prompt_sha256": "7578aad8293dab94d5c7619f4fed18cdb863761e4f99a43169114858b90d91ef"
+    },
+    {
+      "phase": "author",
+      "prompt_sha256": "4603484f3eff42cf2f7dd43b17cd72d0d7ad2342dea198113b41126124e9d5b7"
+    },
+    {
+      "phase": "review",
+      "prompt_sha256": "98b169af8420a0c2cad7ca416ba3a7b82cc31a0f39ab1a779ecacdcc3ae2236f"
+    },
+    {
+      "phase": "author",
+      "prompt_sha256": "504d5dec343d60156749b9cb6dc5bebd49a3a08452f49bbaabc4b1cbe9061e0d"
+    },
+    {
+      "phase": "review",
+      "prompt_sha256": "c3ed76ae69bd692ae20087504da7437513ad2b9fd6f986e8b6dcdc323dee6e6a"
+    },
+    {
+      "phase": "author",
+      "prompt_sha256": "90371cf07fca3de6146039aba529c75eab7289a6c68aad8ae2ed60f6c63cd0d7"
+    },
+    {
+      "phase": "review",
+      "prompt_sha256": "18471051132e9c39aec9fe3e8d070be359b5345ab4e39d92cbe10c145f75fb04"
+    },
+    {
+      "phase": "author",
+      "prompt_sha256": "5b485973ad02939720c6c432f0fdeca813030071640e61dc06d0c3271ac6bd1e"
+    },
+    {
+      "phase": "review",
+      "prompt_sha256": "3f3bba20d9ef1f9d3d0fabbe2d759ea10e70bb7aabad94e5e933d5e6529b9c1e"
+    },
+    {
+      "phase": "author",
+      "prompt_sha256": "98bf9b3b2e3d3e13a02f58d5abfddf1ef157d9d641b3acec42f3caa836acdab2"
+    },
+    {
+      "phase": "review",
+      "prompt_sha256": "2a00d726ff3db6efa9d0723e64a61b6f5f11bd6b5e48df4571d5fbcdde5ca616"
+    },
+    {
+      "phase": "author",
+      "prompt_sha256": "d438db5833a50d6283ffce1d02c43b2ff79bf4434e64593e10dcf0e4de40dfa5"
+    },
+    {
+      "phase": "review",
+      "prompt_sha256": "40fcb292a87c5d84c665bf8bb53f9fe17e0c25c52339c793803a063ebfb0a324"
+    }
+  ],
+  "developer_source_audit": "Additional source review withdrew a mistaken PCA-defect claim and avoided unnecessary upstream monkeypatches; this was a development intervention, not an autonomous phase.",
+  "development_limit_extensions": [
+    {
+      "model_calls": 14,
+      "reason": "Targeted source audit and contract repair after the original 12-call development run"
+    }
+  ],
+  "candidates": 3,
+  "accepted": [
+    "build-encoded-reaction-space",
+    "pca-doe-initial-batch"
+  ],
+  "model": [
+    "gpt-6-luna"
+  ],
+  "development_limits": {
+    "max_candidates": 3,
+    "max_builds": 2,
+    "model_calls": 14,
+    "repair_rounds": 2
+  },
+  "stage_calls": 13,
+  "preflight_calls": 1,
+  "acceptance_scope": "source_and_content_review_only",
+  "target_execution": false,
+  "agent_efficacy": "not_evaluated",
+  "usage": {
+    "reported_totals": {
+      "input_tokens": 4974099,
+      "cached_input_tokens": 4633088,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 46139,
+      "reasoning_output_tokens": 16503
+    },
+    "usage_unknown_calls": 0,
+    "usage_fully_reported": true,
+    "usage_note": "CLI-reported tokens; cached/reasoning counts are subsets, not additional totals; not a bill",
+    "calls_attempted": 14,
+    "monetary_cost": null
+  },
+  "adoption": [
+    {
+      "name": "build-encoded-reaction-space",
+      "status": "adopted"
+    },
+    {
+      "name": "pca-doe-initial-batch",
+      "status": "adopted"
+    }
+  ]
+}

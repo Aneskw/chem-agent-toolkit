@@ -1,0 +1,37 @@
+{
+  "sources": [
+    {
+      "id": "paper",
+      "url": "https://doyle.chem.ucla.edu/wp-content/uploads/2021/02/58.-Bayesian-reaction-optimization-as-a-tool-for-chemical-synthesis.pdf",
+      "sha256": "007c91498f3c3ed24b1b3d15c1fef8ec66a469d01ff7100e4c0775134d5dec9d"
+    },
+    {
+      "id": "code",
+      "repo": "https://github.com/b-shields/edbo.git",
+      "ref": "9b41eac3f6d9e520547702fd5b0c7ef6441625a4"
+    }
+  ],
+  "model": {},
+  "http_only": true,
+  "network": true,
+  "research_access": "supplement",
+  "execution": {
+    "profile": "development"
+  },
+  "limits": {
+    "max_candidates": 3,
+    "max_builds": 2,
+    "model_calls": 14,
+    "repair_rounds": 2
+  },
+  "batch": {
+    "label": "edbo-tool-skills",
+    "tags": [
+      "reaction-optimization"
+    ]
+  },
+  "adoption": {
+    "enabled": true
+  },
+  "notes": "Original EDBO study DOI 10.1038/s41586-021-03213-y. Discover reusable capabilities from these original resources. Do not inspect historical generated Skills or previous trial output. Do not replace the input with EDBO+. Follow the current source/content-only review workflow."
+}

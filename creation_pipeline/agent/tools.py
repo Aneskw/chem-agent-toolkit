@@ -8,9 +8,8 @@ if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     __package__ = "creation_pipeline.agent"
 
-from creation_pipeline.resources.supplements import supplement, inventory
+from creation_pipeline.resources.supplements import supplement, inventory, register
 from creation_pipeline.artifacts.delivery import write_chunk, finish
-from creation_pipeline.validation.agent_checks import check
 from creation_pipeline.generation.candidates import save_candidate
 from creation_pipeline.records import sanitized
 
@@ -34,6 +33,10 @@ def main(argv=None):
         locations.add_argument("--" + key)
     p.add_argument("--reason", required=True)
     p.add_argument("--ref")
+    p.add_argument("--related-to", action="append")
+    p = commands.add_parser("register")
+    p.add_argument("--run", required=True)
+    p.add_argument("--definition", required=True)
     p = commands.add_parser("write")
     p.add_argument("--package", required=True)
     p.add_argument("--path", required=True)
@@ -43,9 +46,6 @@ def main(argv=None):
     for key in ("run", "package", "token"):
         p.add_argument("--" + key, required=True)
     p.add_argument("--metadata")
-    p = commands.add_parser("check")
-    for key in ("run", "package", "definition"):
-        p.add_argument("--" + key, required=True)
     args = parser.parse_args(argv)
     try:
         if args.command == "inventory":
@@ -53,13 +53,13 @@ def main(argv=None):
         elif args.command == "candidate":
             result = save_candidate(args.run, args.definition)
         elif args.command == "supplement":
-            result = supplement(args.run, {k: getattr(args, k) for k in ("url", "repo", "paper") if getattr(args, k)}, args.reason, args.ref)
+            result = supplement(args.run, {k: getattr(args, k) for k in ("url", "repo", "paper") if getattr(args, k)}, args.reason, args.ref, args.related_to)
+        elif args.command == "register":
+            result = register(args.run, args.definition)
         elif args.command == "write":
             result = write_chunk(args.package, args.path, args.base64, args.append)
         elif args.command == "finish":
             result = finish(args.run, args.package, args.token, args.metadata)
-        else:
-            result = check(args.run, args.package, args.definition)
         print(json.dumps(sanitized(result), ensure_ascii=False))
         return 0
     except Exception as exc:

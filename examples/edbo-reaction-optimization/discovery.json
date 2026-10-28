@@ -1,0 +1,144 @@
+{
+  "outcome": "candidates",
+  "summary": "Inspected the original EDBO paper, repository overview, core implementation, and DOE example. Three source-supported capabilities address separate recurring steps: preparing an encoded reaction domain, choosing an initial DOE batch for mixed reaction components, and iteratively proposing batches from measured outcomes.",
+  "saved_candidates": [],
+  "candidates": [
+    {
+      "name": "build-encoded-reaction-space",
+      "task": "Construct a Cartesian reaction domain from component options, encoding each component as descriptors or numeric features and returning the encoded domain with its component index.",
+      "scope": "The user supplies the reaction components and, when needed, SMILES strings, compound names that can be resolved, or prepared descriptor matrices. The function performs component encoding, feature cleanup, Cartesian expansion, and optional min–max scaling; resolving invalid or unavailable structures remains input preparation.",
+      "entrypoint": "Provide `reaction_components` and optional `encoding` or `descriptor_matrices` to `edbo.feature_utils.reaction_space(...)`; it encodes each component, forms the Cartesian index with `itertools.product`, expands component descriptors, and returns an `edbo.utils.Data` reaction space. `BO_express` also builds this space from its constructor inputs.",
+      "rationale": "Chemical condition lists often mix categorical reagents, molecular structures, and numeric settings. This workflow connects those inputs to a usable model domain and retains component identities for interpreting selected conditions.",
+      "construction": "Follow `encode_component` choices (`ohe`, `mordred`/`smiles`, `numeric`, or `resolve`), descriptor precedence, cleanup/decorrelation, Cartesian index creation, and `expand_space`; describe required inputs and resulting domain/index without assuming descriptor availability or successful name resolution.",
+      "upstream_behavior": "Construct a Cartesian reaction domain from component options, encoding each component as descriptors or numeric features and returning the encoded domain with its component index.",
+      "added_behavior": "source-supported only",
+      "kind": "skill",
+      "needs": [],
+      "selected": true,
+      "priority": 0,
+      "readiness": "callable",
+      "gaps": [
+        "The source describes name resolution through an NIH database but does not guarantee resolution coverage or validate all input structures.",
+        "Examples for each encoding mode were not inspected; Mordred and other dependencies are source-declared but were not installed or executed."
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "SKILL.md",
+          "purpose": "Capability instructions"
+        }
+      ],
+      "checks": [],
+      "evidence": [
+        {
+          "id": "e1",
+          "claim": "Paper introduction and Fig. 1 describe reaction optimization over multiple condition components and the large condition space motivating the framework (PDF text view, lines 43–52 and Fig. 1 caption at 111–113)."
+        },
+        {
+          "id": "e220",
+          "claim": "`BO_express` accepts reaction component lists and encodings, and initializes its reaction space through `reaction_space` (edbo/bro.py, lines 533–656)."
+        },
+        {
+          "id": "e221",
+          "claim": "`encode_component` documents and implements the encoding choices, while `reaction_space` handles descriptor precedence, cleanup, Cartesian expansion, and scaling (edbo/feature_utils.py, lines 128–206 and 291–448)."
+        }
+      ],
+      "method_evidence": []
+    },
+    {
+      "name": "pca-doe-initial-batch",
+      "task": "Select initial experiments for a mixed-level reaction domain by reducing each component’s descriptors to a one-dimensional coordinate, applying a numerical design, mapping design coordinates to the nearest available component levels, and retrieving corresponding encoded domain points.",
+      "scope": "The user supplies a prepared EDBO reaction-space object and chooses the components to include. The example performs component subsetting, PCA or direct coordinate use, scaling, DOE generation, nearest-level mapping, and encoded-point lookup.",
+      "entrypoint": "Create `init_design(reaction, components)`, choose `lhs(samples)`, `pbd()`, or `ccd_lhs(...)`, then call `get_closest_principles()` and `encoded()` to obtain the encoded experiment rows. The returned selection can be used as initial data for optimization.",
+      "rationale": "Standard numerical DOE designs do not directly select valid combinations from multi-level categorical chemical components. This example adapts numeric designs back to actual available reagents and conditions for an initial optimization batch.",
+      "construction": "Keep the preparation dependency explicit: the reaction space and component names must be available first. Describe how `component_submatrix` and `principles` prepare scaled per-component coordinates, how design coordinates map to nearest real levels, and how `encoded()` looks up the corresponding reaction-space rows.",
+      "upstream_behavior": "Select initial experiments for a mixed-level reaction domain by reducing each component’s descriptors to a one-dimensional coordinate, applying a numerical design, mapping design coordinates to the nearest available component levels, and retrieving corresponding encoded domain points.",
+      "added_behavior": "source-supported only",
+      "kind": "skill",
+      "needs": [],
+      "selected": true,
+      "priority": 1,
+      "readiness": "callable",
+      "gaps": [
+        "This is an example module, not a documented `edbo` package API; the inspected source does not establish supported behavior for arbitrary component selections or degenerate PC coordinates.",
+        "The literature discussion of the chosen initialization strategy is not fully transcribed here; source support for this candidate rests on the explicit example implementation and stated purpose."
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "SKILL.md",
+          "purpose": "Capability instructions"
+        }
+      ],
+      "checks": [],
+      "evidence": [
+        {
+          "id": "e234",
+          "claim": "DOE example states its methods use EDBO `Data` objects and identifies `BO_express.reaction` as a way to obtain the encoded reaction space (examples/DOE/DOE.py, lines 7–10)."
+        },
+        {
+          "id": "e234",
+          "claim": "`init_design` documents its purpose as DOE over component PCs to address ordering of multi-level categorical variables; it prepares component submatrices and PCs (examples/DOE/DOE.py, lines 80–104)."
+        },
+        {
+          "id": "e234",
+          "claim": "The example implements LHS, Plackett–Burman, and hybrid CCD/LHS numerical designs and maps coordinates to closest levels and encoded domain points (examples/DOE/DOE.py, lines 106–206)."
+        }
+      ],
+      "method_evidence": []
+    },
+    {
+      "name": "iterative-reaction-bayesian-optimization",
+      "task": "Run a human-in-the-loop or simulated batch optimization cycle over a supplied encoded domain: fit a surrogate to known outcomes, select the next batch with an acquisition function, and optionally append available outcomes for subsequent rounds.",
+      "scope": "The user provides an encoded domain and initial measured results, or an experiment index/computational objective for automatic result lookup. The optimizer fits the model and proposes batches; laboratory execution and measurement remain external in the human-in-the-loop path.",
+      "entrypoint": "Initialize `edbo.BO` with `domain` or `domain_path`, results, and optional `exindex`; choose `model`, `acquisition_function`, `init_method`, and `batch_size`; call `init_sample()` for initial points and `run()` after measured outcomes are available. For known-index or computational objectives, `simulate(iterations=...)` runs initialization and repeated fit/acquisition/result-update cycles.",
+      "rationale": "Repeatedly turning an expanding reaction results table into an informed next experiment batch requires coordinating model fitting, acquisition, duplicate handling, and outcome updates. The public workflow makes that cycle explicit and configurable.",
+      "construction": "Explain the input requirements and distinction between interactive `run()` and automated `simulate()`. Keep the key sequence visible: objective data preparation, `model.fit()`, `acq.evaluate(...)`, and optional result append. Identify the selected experiments as the primary output.",
+      "upstream_behavior": "Run a human-in-the-loop or simulated batch optimization cycle over a supplied encoded domain: fit a surrogate to known outcomes, select the next batch with an acquisition function, and optionally append available outcomes for subsequent rounds.",
+      "added_behavior": "source-supported only",
+      "kind": "skill",
+      "needs": [],
+      "selected": true,
+      "priority": 2,
+      "readiness": "callable",
+      "gaps": [
+        "The paper reports experimental performance, but those measured results do not imply a guaranteed benefit for a new reaction or domain.",
+        "The simulation path requires a known result index or computational objective; the interactive path requires the user to measure and add proposed experiments."
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "SKILL.md",
+          "purpose": "Capability instructions"
+        }
+      ],
+      "checks": [],
+      "evidence": [
+        {
+          "id": "e1",
+          "claim": "Paper describes initialization with experimental design, fitting a surrogate, sequential acquisition-based experiment selection, posterior updates, and termination when yield is maximized, resources are depleted, or improvement is unlikely (PDF text view, lines 145–164)."
+        },
+        {
+          "id": "e220",
+          "claim": "`BO` constructor documents domain/results inputs, model, acquisition, initialization, batch size, and duplicate handling (edbo/bro.py, lines 35–118)."
+        },
+        {
+          "id": "e220",
+          "claim": "`init_sample` returns proposed domain points; `run` fits the model and selects the next batch; `simulate` initializes and loops through fitting, acquisition, and appending known results (edbo/bro.py, lines 158–195 and 232–368)."
+        },
+        {
+          "id": "e228",
+          "claim": "The objective container standardizes target values and provides `get_results` for computational objectives or experiment-index lookup, with optional append to known results (edbo/objective.py, lines 14–21 and 121–191)."
+        }
+      ],
+      "method_evidence": []
+    }
+  ],
+  "omitted": [],
+  "limitations": [
+    "The repository snapshot is an older EDBO version (setup.py identifies version 0.1.0); candidate guidance should remain tied to this inspected API.",
+    "No software was installed, target tools were not executed, and no tests were run.",
+    "Only selected sources were inspected; the repository’s full API and all paper supplementary details were not audited."
+  ],
+  "handoff": []
+}

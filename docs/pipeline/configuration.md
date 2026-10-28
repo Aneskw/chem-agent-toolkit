@@ -10,13 +10,11 @@ JSON or YAML object. Only sources is required; YAML needs PyYAML. Unknown top-le
 | model | {} | Optional name passed to Codex CLI; a model-name string is also accepted |
 | execution | {profile: production} | production or development |
 | limits | see below | Optional execution/resource overrides |
-| network | true | Enable known-address acquisition, including supplements; not search |
-| execute_generated_checks | false | Permit generated checks; CLI flag can enable it |
-| environment | {allow: []} | Runtime environment variable names to pass, never secret values |
+| network | true | Enable resource networking, including native tools; false overrides research_access |
+| research_access | supplement | Scoped native search/browsing, or known_only for known-address access |
 | batch | {label: skills, tags: []} | Readable batch label and simple tags |
 | adoption | {enabled: true} | Adopt eligible individual skills |
 | http_only | false | Codex built-in-provider transport override |
-| checks | [] | User-defined check objects, each with candidate name |
 | intent | auto | Legacy guidance direct/extension/auto; explain behavior in construction |
 
 Direct model API/Ollama execution is not implemented. API settings such as base_url/api_key_env/structured are rejected before resource fetching. Existing model.backend=codex_cli configurations remain accepted; no other backend is supported. The underlying Codex connection to its model is unaffected. User model selection and Windows sandbox configuration are retained; arbitrary CLI profiles/plugins are not inherited.
@@ -49,12 +47,17 @@ Development defaults: model_calls=8, max_candidates=3, max_builds=1, repair_roun
 }
 ```
 
-network_timeout=60 seconds, converter_timeout=60 seconds and check_timeout=120 seconds are per-operation fault controls, not whole-build deadlines. converter_timeout/check_timeout may be null for a deliberately long check. Agent resources are original files and optional prepared views; no host read-request protocol or text-context pagination is used.
+network_timeout=60 seconds, converter_timeout=60 seconds are per-operation fault controls, not whole-build deadlines. converter_timeout may be null for a deliberately long conversion. Agent resources are original files and optional prepared views; no host read-request protocol or text-context pagination is used.
 
-model_calls counts CLI turns, not internal inference requests. Missing usage is unknown, not zero. No automatic monetary-cost estimate. Optional agent_events counts CLI-reported tool completions; the CLI does not report every native tool there.
+model_calls limits stage CLI turns, not internal inference requests. The separate connection
+preflight is recorded too, but does not consume the development stage-turn quota. Missing usage is unknown, not zero. No automatic monetary-cost estimate. Optional agent_events counts CLI-reported tool completions; the CLI does not report every native tool there.
 
-## Check definitions
+## Retired execution settings
 
-name, argv (string array, no shell), cwd ('{run}' by convention), expected_exit (0), stdout_contains ([]), optional json_equals/artifacts, kind, and generated-check evidence/purpose. At least one result assertion is required. Check names must not collide with host validation names.
+checks, execute_generated_checks and environment are rejected, even when empty/false. Remove them:
+this version performs static and independent source/content review only. check_timeout is also
+retired. No generated-check flags, pending verification or promotion commands are supported.
 
-Macros: {python}, {package}, {run}, {source:ID}, only in check definitions, never runtime skill text. Execute the actual delivered script or explicitly selected example path. No blanket execution of all Python blocks. A mock or syntax check does not establish a real tool run. Configured assertions cannot be silently weakened.
+The configuration is parsed and validated by the program. Relevant guidance, candidate information,
+source indexes and policies are passed to Agent stages; credentials and the full process environment
+are not copied into prompts. Unknown top-level fields are rejected; constraints is free-form guidance.

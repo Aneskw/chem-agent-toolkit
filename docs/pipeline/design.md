@@ -1,57 +1,37 @@
-# Design
+# Workflow
 
-```mermaid
-flowchart TD
- A[Resources and optional guidance] --> B[Acquire, narrowly filter, index and prepare views]
- B --> C[Agent understands major capabilities and reads selectively]
- C --> D[Save concise candidates with source evidence]
- D --> E[Direct file authoring and durable delivery]
- E --> F[Program static checks]
- F --> G[Independent-context source/content and check-plan review]
- G --> H[Applicable authorized checks]
- H -->|Diagnose failures| G
- G -->|Concrete repair| E
- H --> I[Scoped conclusion, relocation and individual adoption]
- C -->|Known material missing| S[Supplement helper and registry]
- E -->|Known material missing| S
- G -->|Known material missing| S
- S --> C
-```
+1. Parse strict configuration; test selected native Agent connection with a small real request.
+2. Acquire/filter resources, retain originals and create optional text/render helpers and indexes.
+3. Discover reusable source-supported capabilities and packaging value without a required task.
+4. Write a concise English Skill, supporting resources when useful, and separate writing basis.
+5. Check package structure, references, syntax and delivery integrity without target execution.
+6. Independently inspect source fidelity, interfaces, inputs/outputs, representative Usage and
+   information value. Send concrete content feedback to the writer. Send record-format errors
+   to the reviewer itself. Re-review changed work, not unchanged repeated material.
+7. Adopt approved pure packages to skills/name. Archive compact evidence/decisions; retain latest
+   unsuccessful drafts, then clean temporary copies according to retention policy.
 
-Codex CLI is the only public execution path. Native file/shell/image tools remain available. The first candidate continues discovery; later candidates have isolated sessions; repairs reuse the candidate session and review has its own session. A continuous session is not permanent memory or guaranteed cost savings.
+A missing local tool environment does not block approval. Essential evidence gaps do. No suitable
+candidate after adequate reading is normal completion; incomplete acquisition is a different result.
+Production has no implicit time/candidate quota. Explicit development limits are recorded stop reasons.
 
-Production has no implicit model time/turn or output-count quota. Development uses explicit presets/overrides. Confirmed no-progress failures can stop; repeated successful reads are not killed by count alone. Original resources and helper views remain available, and known supplements join the same registry. No manual plan edit/approval gate is required. Internal plan records remain for audit and recovery.
+First author can continue the discovery session; other candidates are isolated. Each candidate has
+an independent review session, resumed for corrections. Facts, files and source indexes are durable
+handoffs; neither unrestricted history nor a giant text dump substitutes for source access.
 
-## Candidate and delivery
+Scoped web supplementation stays anchored to supplied research. Source content is untrusted data,
+not instructions. File fingerprints connect actual delivered bytes with content review. Adoption
+protects existing names. Content review does not establish scientific validity or Agent gain.
 
-Agent-facing candidates describe capability/boundary, value, key use path, construction, evidence and gaps. Host constants and compatibility fields are normalized internally. No fixed auxiliary file list or test-command quota at discovery. Candidate records can be saved incrementally; selected saved names must be explicit. One blocked candidate does not block the rest.
+See acceptance.md for review responsibilities and outputs.md for compact records and cleanup.
 
-Author writes actual files and optional check/issue metadata. The finish helper computes hashes and atomically records a completion receipt bound to the candidate/feedback token. Final Agent reply is small. A valid receipt can recover delivery even when the final JSON is missing; mere SKILL.md existence cannot. Binary support files and empty Python package initializers are possible. coverage quotations are not produced or required. Source-supported scope updates and additional candidates can be recorded, reviewed and queued without human approval.
+## Stage guidance
 
-## Checks and feedback
-
-Program checks structure, supported syntax, links, paths and integrity. Review gets the same minimum/packaging standards, original-source access and tool helpers. It reviews test plans before execution and may run approved diagnostics through the shared check helper. Logged checks can be reused when their definitions and exact package files match. Unknown execution conditions are not invented successes.
-
-There is no blanket execution of every code block or script branch. Tests should target actual delivery and a source-supported oracle. Checks run in isolated working directories but current user privileges; no new Docker/server/environment provisioning. Native commands use workspace sandbox plus an execution instruction, not a host filter for every command.
-
-Failures distinguish actual defects, check invocation issues and possible external conditions. A possible missing-module diagnostic remains a failure until review confirms an external prerequisite rather than a missing delivered module. Timeouts are unverified operations. Unavailable runtime alone is not a blocking content defect. ready means applicable review passed with no known blocker, not all tools or science verified; unverified scope stays in records/catalog.
-
-## Recovery and records
-
-Each native turn persists session, non-reasoning events, receipts and result. Source registry and completed deliveries survive incomplete turns. Resume validates sources/specifications, reconciles supplements and reuses finalized files. It re-enters stage boundaries, not exact inference instructions. Historical pre-v5 checkpoints may require a new build with cached resources. Optional rediscover permits changed specifications. No concurrent resume of one run.
-
-One failed candidate does not block others. Scope changes and sources update internal plans; candidate names and library collisions do not overwrite existing skills. Retain input, sources, decision, final checks and necessary diagnostic records. Successful temporary work can be cleaned; failed runs retain recovery material. Cache cleanup is separate.
-
-## Modules
-
-The entry point is `python -m creation_pipeline`. Internal modules use responsibility-based packages; no direct API or tool-disabled model transport is retained. See [code organization](code-organization.md) for the full tree and dependency boundaries.
-
-- pipeline: stage orchestration, partial continuation, scoped conclusion and recovery.
-- models/cli/schemas/records/paths: configuration, commands, Agent result records, durable records and stable paths.
-- resources: acquisition, snapshots, document views, original-file locators and supplements.
-- agent: Codex CLI discovery, native sessions/events and a thin helper command router.
-- generation: candidate decisions, prompts, handoffs, direct-file writing and review coordination.
-- validation: deterministic checks, explicit check execution and recorded Agent diagnostics.
-- artifacts: file manifests, delivery receipts, installation and library adoption.
-
-Deterministic test doubles live only under tests/pipeline/support.py. They simulate Agent decisions and file writes through the same delivery helpers as production; they do not require a second production backend.
+Discovery states a realistic input starting point, main invocation path and promised result rather
+than an API inventory. Writing assumes the execution Agent sees only the delivered package and
+declared inputs, with explicit source/setup entrypoints. Review first reads the actual package,
+then independently verifies source evidence, tracing material data/state transitions and choosing
+deeper checks from that capability's risks. It asks whether the Agent can start, reach the promised
+result, and do so without avoidable reading burden. Feedback is verified rather than obeyed blindly: authors can retain correct files and submit
+source-backed rebuttals, which reviewers reconsider. Fixes replace ambiguity rather than
+continually appending warnings. No extra review-planning call or expanded result schema is required.

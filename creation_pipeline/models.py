@@ -36,8 +36,11 @@ def load_config(path):
         config = yaml.safe_load(raw)
     if not isinstance(config, dict):
         raise ValueError("Configuration must be an object")
-    allowed = {"task", "sources", "model", "limits", "checks", "environment", "intent", "notes", "http_only",
-               "prompt", "constraints", "execution", "network", "execute_generated_checks", "batch", "adoption"}
+    retired = set(config) & {"checks", "environment", "execute_generated_checks"}
+    if retired:
+        raise ValueError("Target execution settings are retired: " + ", ".join(sorted(retired)) + "; use source/content review")
+    allowed = {"task", "sources", "model", "limits", "intent", "notes", "http_only",
+               "prompt", "constraints", "execution", "research_access", "network", "batch", "adoption"}
     unknown = set(config) - allowed
     if unknown:
         raise ValueError(f"Unknown configuration fields: {sorted(unknown)}")
@@ -50,9 +53,11 @@ def load_config(path):
     if not isinstance(config["constraints"], dict):
         raise ValueError("constraints must be an object")
     config.setdefault("network", True)
-    config.setdefault("execute_generated_checks", False)
-    if any(type(config[k]) is not bool for k in ("network", "execute_generated_checks")):
-        raise ValueError("network and execute_generated_checks must be booleans")
+    config.setdefault("research_access", "supplement")
+    if config["research_access"] not in ("supplement", "known_only"):
+        raise ValueError("research_access must be supplement or known_only")
+    if type(config["network"]) is not bool:
+        raise ValueError("network must be boolean")
     for key, defaults in (("batch", {"label": "skills", "tags": []}), ("adoption", {"enabled": True})):
         config.setdefault(key, defaults.copy())
         if not isinstance(config[key], dict) or set(config[key]) - set(defaults):
@@ -110,7 +115,7 @@ def load_config(path):
     limits = {k: None for k in ("model_calls", "candidate_calls", "model_timeout", "total_seconds",
         "discovery_seconds", "agent_events", "max_candidates", "max_builds", "source_bytes",
         "source_total_bytes", "source_files", "package_bytes", "network_requests", "repair_rounds")}
-    limits.update(check_timeout=120, converter_timeout=60, network_timeout=60)
+    limits.update(converter_timeout=60, network_timeout=60)
     # Development is an explicit opt-in preset, never a quality shortcut.
     if profile == "development":
         limits.update(model_calls=8, max_candidates=3, max_builds=1, repair_rounds=2)
@@ -127,23 +132,9 @@ def load_config(path):
     config["limits"] = limits
     if type(config.get("http_only", False)) is not bool:
         raise ValueError("http_only must be a boolean")
-    config.setdefault("checks", [])
-    if not isinstance(config["checks"], list):
-        raise ValueError("checks must be an array")
-    config.setdefault("environment", {"allow": []})
-    environment = config["environment"]
-    if not isinstance(environment, dict) or set(environment) - {"allow"}:
-        raise ValueError("environment supports only an allow list of variable names")
-    if not isinstance(environment.get("allow", []), list) or any(
-            not isinstance(v, str) or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", v)
-            for v in environment.get("allow", [])):
-        raise ValueError("environment.allow must contain variable names, not credential values")
     config.setdefault("intent", "auto")
     if config["intent"] not in ("auto", "direct", "extension"):
         raise ValueError("intent must be auto, direct or extension")
-    for test in config["checks"]:
-        if not isinstance(test, dict) or not isinstance(test.get("candidate"), str) or not test["candidate"]:
-            raise ValueError("Configured checks require a candidate name; autonomous builds should propose checks from sources")
     config["config_path"] = str(path)
     return config
 

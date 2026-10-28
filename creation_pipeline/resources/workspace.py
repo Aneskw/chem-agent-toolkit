@@ -65,13 +65,13 @@ def prepare(sources, work):
             entries.append(entry)
     document = {"sources": sources.index(), "files": entries,
                 "warning": "eN IDs identify source files, not proof of reading. Cite only inspected passages/pages.",
-                "limits": "Snapshots exclude secrets, unsupported formats and files over configured budgets; see omissions.",
+                "limits": "Snapshots exclude secrets, environment/cache material and files over explicit budgets; see omissions.",
                 "rendering": "render_command takes PDF, 1-based page, output prefix. Open the resulting PNG with the image tool."}
     document["helper"] = [__import__("sys").executable, str(PACKAGE_ROOT / "agent/tools.py")]
-    document["commands"] = {"inventory": "inventory --run RUN [--query PATH_SUBSTRING] [--source ID] [--limit N --offset N]", "candidate": "candidate --run RUN --definition CANDIDATE_JSON", "supplement": "supplement --run RUN --url URL|--repo URL|--paper DOI --reason WHY [--ref COMMIT]",
+    document["commands"] = {"inventory": "inventory --run RUN [--query PATH_SUBSTRING] [--source ID] [--limit N --offset N]", "candidate": "candidate --run RUN --definition CANDIDATE_JSON", "supplement": "supplement --run RUN --url URL|--repo URL|--paper DOI --reason WHY [--ref COMMIT] [--related-to ORIGINAL_SOURCE_ID (not eN)]",
+        "register": "register --run RUN --definition JSON_FILE (path,url,reason,related_to,version,representation)",
         "write": "write --package PACKAGE --path RELATIVE --base64 SMALL_UTF8_CHUNK [--append]",
-        "finish": "finish --run RUN --package PACKAGE --token TOKEN [--metadata JSON_FILE]",
-        "check": "check --run RUN --package PACKAGE --definition JSON_FILE"}
+        "finish": "finish --run RUN --package PACKAGE --token TOKEN [--metadata JSON_FILE]"}
     write_json(work / "resources.json", document)
     write_json(work / "source-evidence.json", sources.evidence)
     write_json(work / "resource-state.json", {"config": {k: v for k, v in sources.config.items() if not k.startswith("_")},

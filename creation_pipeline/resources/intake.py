@@ -175,12 +175,15 @@ class Sources:
                 for entry in self.entries.values()]
 
     def validate_evidence(self, evidence):
-        known = {item["id"]: item for item in self.evidence}
+        from creation_pipeline.validation.basis import resolve
+        normalized = []
         for item in evidence:
-            if (not isinstance(item, dict) or item.get("id") not in known or not item.get("claim")
-                    or not known[item["id"]]["excerpt"].strip()):
-                raise ValueError("Invalid evidence reference " + repr(item) + "; use known nonempty evidence IDs (native locators do not prove reading): " + ",".join(known))
-        return [dict(known[item["id"]], claim=item["claim"]) for item in evidence]
+            if not isinstance(item, dict) or not isinstance(item.get("claim"), str) or not item["claim"].strip():
+                raise ValueError("Evidence requires source id/path and a concrete claim")
+            source = resolve(self, item.get("id", item.get("source")))
+            item["id"] = source["id"]
+            normalized.append(dict(source, claim=item["claim"]))
+        return normalized
 
     def compact_evidence(self):
         seen, result = {}, []

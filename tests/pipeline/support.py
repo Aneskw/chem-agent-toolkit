@@ -24,7 +24,7 @@ PLAN = {"name": "add-numbers", "task": "Add two numbers", "scope": "Numeric addi
         "dependencies": [], "files": [{"path": "SKILL.md", "purpose": "Instructions"}],
         "checks": ["2+3=5"], "evidence": [{"id": "e1", "claim": "Tool adds two numbers"}], "gaps": []}
 ARTIFACT = {"files": [{"path": "SKILL.md", "content": MAIN, "purpose": "Instructions"}],
-            "tests": [], "notes": []}
+            "basis": [{"location": "SKILL.md", "claim": "Tool adds numbers", "source": "e1", "locator": "add", "origin": "upstream"}], "notes": []}
 
 
 def write_fixture_files(package, files, max_bytes):
@@ -61,8 +61,7 @@ class ReplayStages:
         write_json(session.work / "active-phase.json", {"phase": phase})
         session.receipts.append({"model": "deterministic-agent-fixture", "phase": phase, "usage": None})
         if phase == "review" and (not self.values or "status" not in self.values[0]):
-            return {"status": "pass", "resolution": "none", "findings": [], "issues_complete": True,
-                    "oracle_changes_verified": False, "execution_gaps": []}
+            return {"status": "pass", "resolution": "none", "findings": []}
         if not self.values:
             raise ModelCallError("No fixture Agent result")
         value = self.values.pop(0)
@@ -73,10 +72,6 @@ class ReplayStages:
             write_json(metadata, {k: v for k, v in value.items() if k not in ("files", "coverage")})
             finish(session.work, package, context["delivery_token"], metadata)
             return {"completed": True, "summary": "Fixture wrote package files"}
-        if phase == "review":
-            value.setdefault("issues_complete", True)
-            value.setdefault("oracle_changes_verified", False)
-            value.setdefault("execution_gaps", [])
-        else:
+        if phase != "review":
             value.setdefault("outcome", "candidates" if value.get("candidates") else "no_suitable_candidates")
         return value

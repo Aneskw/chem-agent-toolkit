@@ -49,17 +49,21 @@ def finish(run, package, token, metadata=None):
     if phase_path.exists() and read_json(phase_path)["phase"] != "author":
         raise ValueError("Only the author stage may finalize runtime packages")
     package = inside(run, package)
+    active = read_json(phase_path) if phase_path.exists() else {}
+    if active.get("output_directory") and package.resolve() != Path(active["output_directory"]).resolve():
+        raise ValueError("Use the exact output_directory from the author context: " + active["output_directory"])
     state = read_json(Path(run) / "resource-state.json")
     data = read_json(inside(run, metadata)) if metadata else {}
-    for key in ("tests", "issues", "notes"):
+    for key in ("basis", "issues", "notes"):
         data.setdefault(key, [])
         if not isinstance(data[key], list):
             raise ValueError(key + " must be an array")
-    for test in data["tests"]:
-        from creation_pipeline.validation.runtime import validate_test
-        validate_test(test)
-        if not test.get("evidence") or not test.get("purpose"):
-            raise ValueError("Checks need source evidence and purpose")
+    if "tests" in data or "verification" in data:
+        raise ValueError("Execution metadata is retired; provide basis/issues/notes")
+    from creation_pipeline.resources.supplements import restore
+    from creation_pipeline.validation.basis import validate_basis
+    sources = restore(run)
+    data["basis"] = validate_basis(data["basis"], sources)
     for issue in data["issues"]:
         if not isinstance(issue, dict) or type(issue.get("blocking")) is not bool or not issue.get("description"):
             raise ValueError("Issues need description and blocking boolean")
@@ -87,6 +91,9 @@ def write_chunk(package, relative, encoded, append=False):
         raise ValueError("Chunk writer requires a registered run workspace")
     inside(registered, root)
     phase = read_json(registered / "active-phase.json").get("phase") if (registered / "active-phase.json").exists() else None
+    active = read_json(registered / "active-phase.json") if (registered / "active-phase.json").exists() else {}
+    if phase == "author" and active.get("output_directory") and root.resolve() != Path(active["output_directory"]).resolve():
+        raise ValueError("Use the exact output_directory: " + active["output_directory"])
     if phase in ("discovery", "review") and root.is_relative_to(registered / "bundle"):
         raise ValueError("This stage must not write official skill files")
     # Package path comes from the supplied run context; symlink escapes are refused.

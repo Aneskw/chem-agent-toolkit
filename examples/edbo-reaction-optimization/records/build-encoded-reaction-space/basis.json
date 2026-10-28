@@ -1,0 +1,62 @@
+[
+  {
+    "location": "SKILL.md / Setup",
+    "locator": "README.md, Installation steps 0–2",
+    "source": "e4",
+    "origin": "upstream",
+    "claim": "The README specifies Python 3.7.5, RDKit, Mordred, and PyTorch 1.3.1 setup.",
+    "source_path": "README.md",
+    "source_id": "code",
+    "sha256": "a35a59ea442e634e66613a728276348d8a161adf1ed57de3766dc64031774c55"
+  },
+  {
+    "location": "SKILL.md / Setup",
+    "locator": "setup.py, setup(name=edbo, version=0.1.0)",
+    "source": "e6",
+    "origin": "upstream",
+    "claim": "The source snapshot declares the EDBO package version as 0.1.0.",
+    "source_path": "setup.py",
+    "source_id": "code",
+    "sha256": "e4a0fa1850efaa1bb18455172ac942a99e56b817fd2d1531f498fdbd4fe29be2"
+  },
+  {
+    "location": "SKILL.md / Prepare and build",
+    "locator": "encode_component lines 128–206; expand_space lines 261–289; reaction_space lines 291–448",
+    "source": "e224",
+    "origin": "upstream",
+    "claim": "reaction_space supports component dictionaries, descriptor matrices, encoding modes, default one-hot encoding, Cartesian expansion, cleanup, decorrelation, and scaling; encode_component implements the documented modes.",
+    "source_path": "edbo/feature_utils.py",
+    "source_id": "code",
+    "sha256": "904ce626b0f9764b666122a8304bc812fbb93efa2e659c73646328382432e17f"
+  },
+  {
+    "location": "SKILL.md / Prepare and build; Read the result",
+    "locator": "Data.__init__, clean, get_experiments, utils.py lines 25–67",
+    "source": "e233",
+    "origin": "upstream",
+    "claim": "The reaction-space builder retains original expanded values in the Data container and stores component index headers; Data.get_experiments retrieves indexed identities by row positions.",
+    "source_path": "edbo/utils.py",
+    "source_id": "code",
+    "sha256": "f6e1926c0292f6be360e60ac51b0b4e5fe2bc0031c8e39901dabe947fe76a16b"
+  },
+  {
+    "location": "SKILL.md / Prepare and build",
+    "locator": "reaction_space lines 291–448",
+    "source": "e224",
+    "origin": "sourced_adaptation",
+    "claim": "The representative snippet combines source-supported inputs and encoding choices and accesses the transformed domain and indexed component identities.",
+    "source_path": "edbo/feature_utils.py",
+    "source_id": "code",
+    "sha256": "904ce626b0f9764b666122a8304bc812fbb93efa2e659c73646328382432e17f"
+  },
+  {
+    "location": "SKILL.md / Read the result",
+    "locator": "encode_component lines 149–200 and 207–240",
+    "source": "e224",
+    "origin": "upstream",
+    "claim": "The skill distinguishes encoded domain data from experimental outcomes; the encoder documents Mordred failure and optional name resolution interactions.",
+    "source_path": "edbo/feature_utils.py",
+    "source_id": "code",
+    "sha256": "904ce626b0f9764b666122a8304bc812fbb93efa2e659c73646328382432e17f"
+  }
+]

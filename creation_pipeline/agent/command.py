@@ -1,5 +1,7 @@
 """Resolve the installed Codex CLI, including Windows npm distributions."""
 import os
+import signal
+import subprocess
 import platform
 import shutil
 from pathlib import Path
@@ -23,3 +25,19 @@ def codex_command():
         if script.exists() and node:
             return [node, str(script)]
     return [executable]
+
+
+def terminate_tree(proc):
+    if os.name == "nt":
+        try:
+            subprocess.run(["taskkill", "/PID", str(proc.pid), "/T", "/F"], capture_output=True, timeout=5)
+        except (subprocess.TimeoutExpired, OSError):
+            pass
+        if proc.poll() is None:
+            proc.kill()
+    else:
+        try:
+            os.killpg(proc.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+    proc.wait(timeout=5)

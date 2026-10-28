@@ -3,7 +3,7 @@
   "skills": [
     {
       "name": "rdkit-recap-terminal-fragments",
-      "path": "2026-10-22-molecular-fragmentation/rdkit-recap-terminal-fragments",
+      "path": "rdkit-recap-terminal-fragments",
       "batch": "2026-10-22-molecular-fragmentation",
       "tags": [
         "molecular-fragmentation"
@@ -70,7 +70,7 @@
     },
     {
       "name": "chembl-structure-checker",
-      "path": "2026-10-23-structure-curation/chembl-structure-checker",
+      "path": "chembl-structure-checker",
       "batch": "2026-10-23-structure-curation",
       "tags": [
         "structure-curation"
@@ -146,6 +146,108 @@
           "repo": "https://github.com/chembl/ChEMBL_Structure_Pipeline.git",
           "resolved_ref": "d252cd22d67674da4fa607b761c5b5a144cfdf07",
           "snapshot_id": "650ff86c5d3decc44afdd70bd6c3081ae29361e955cad03c2079bbfacb3a36a8"
+        }
+      ]
+    },
+    {
+      "name": "build-encoded-reaction-space",
+      "path": "build-encoded-reaction-space",
+      "batch": "2026-10-27-edbo-tool-skills",
+      "tags": [
+        "reaction-optimization"
+      ],
+      "build_id": "20261027T091718-9faa49c9",
+      "scope": "The user supplies the reaction components and, when needed, SMILES strings, compound names that can be resolved, or prepared descriptor matrices. The function performs component encoding, feature cleanup, Cartesian expansion, and optional min–max scaling; resolving invalid or unavailable structures remains input preparation.",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "de5f0850374a6f812f943d0ccc298cd15d79da790b1db1441e0925f082f0596b",
+          "bytes": 4913
+        }
+      ],
+      "acceptance_version": 3,
+      "acceptance_sha256": "5935eb60d9ed0319301eef872f920e95cb436bd51400bca42b175c26417b2f9d",
+      "checks": [
+        {
+          "name": "structure",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "runtime_paths",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "content_review",
+          "status": "pass",
+          "evidence_kind": "source_and_content_review_only"
+        }
+      ],
+      "unverified": [],
+      "agent_efficacy": "not_evaluated",
+      "sources": [
+        {
+          "id": "paper",
+          "url": "https://doyle.chem.ucla.edu/wp-content/uploads/2021/02/58.-Bayesian-reaction-optimization-as-a-tool-for-chemical-synthesis.pdf",
+          "snapshot_id": "9e9ae7505e11de80c0642ee7dc98cb146a3594cbe632de71abcc8c2db7bb6c95"
+        },
+        {
+          "id": "code",
+          "repo": "https://github.com/b-shields/edbo.git",
+          "resolved_ref": "9b41eac3f6d9e520547702fd5b0c7ef6441625a4",
+          "snapshot_id": "b0e5d29be3191934585ac92c903da236af5a20231f91e473b96e81c040618281"
+        }
+      ]
+    },
+    {
+      "name": "pca-doe-initial-batch",
+      "path": "pca-doe-initial-batch",
+      "batch": "2026-10-27-edbo-tool-skills",
+      "tags": [
+        "reaction-optimization"
+      ],
+      "build_id": "20261027T091718-9faa49c9",
+      "scope": "The user supplies a prepared EDBO reaction-space object. Supply component keys from reaction.descriptors in the same builder order as reaction.index_headers, with each key matching its descriptor columns and generated index header. Use every indexed component to retrieve encoded rows.",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "ee211c0fdaa5c076951bdf6197ce00b667339075621da800824ef2f205866d5a",
+          "bytes": 4670
+        }
+      ],
+      "acceptance_version": 3,
+      "acceptance_sha256": "9a3e400bafefc2f4d1b21060ab16f276fc9ea988dfbee86974ce034ff2c00c12",
+      "checks": [
+        {
+          "name": "structure",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "runtime_paths",
+          "status": "pass",
+          "evidence_kind": null
+        },
+        {
+          "name": "content_review",
+          "status": "pass",
+          "evidence_kind": "source_and_content_review_only"
+        }
+      ],
+      "unverified": [],
+      "agent_efficacy": "not_evaluated",
+      "sources": [
+        {
+          "id": "paper",
+          "url": "https://doyle.chem.ucla.edu/wp-content/uploads/2021/02/58.-Bayesian-reaction-optimization-as-a-tool-for-chemical-synthesis.pdf",
+          "snapshot_id": "9e9ae7505e11de80c0642ee7dc98cb146a3594cbe632de71abcc8c2db7bb6c95"
+        },
+        {
+          "id": "code",
+          "repo": "https://github.com/b-shields/edbo.git",
+          "resolved_ref": "9b41eac3f6d9e520547702fd5b0c7ef6441625a4",
+          "snapshot_id": "b0e5d29be3191934585ac92c903da236af5a20231f91e473b96e81c040618281"
         }
       ]
     }

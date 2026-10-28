@@ -6,6 +6,9 @@ from creation_pipeline.resources.supplements import restore
 
 
 def save_candidate(run, definition):
+    phase = Path(run) / "active-phase.json"
+    if phase.exists() and read_json(phase).get("phase") != "discovery":
+        raise ValueError("candidate helper is discovery-only; authors must put candidate_update with reason/evidence and changed scope/task/entrypoint/construction in metadata_path")
     candidate = read_json(inside(run, definition))
     from creation_pipeline.generation.discovery import normalize
     from creation_pipeline.models import validate_plan

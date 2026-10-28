@@ -4,8 +4,10 @@ def guidance(config):
             "constraints": config["constraints"]}
 
 
-def candidate_context(session, config, plan):
-    context = {**guidance(config), "plan": plan, "sources": session.sources.index(),
+def candidate_context(session, config, plan, independent_review=False):
+    # Review gets the declared capability, not the writer's benefit/rationale verdict.
+    declared = {k: plan[k] for k in ("name", "task", "scope", "entrypoint", "construction") if k in plan} if independent_review else plan
+    context = {**guidance(config), "plan": declared, "sources": session.sources.index(),
             "evidence": session.sources.validate_evidence(plan["evidence"]),
             "handoff": config.get("_handoff", []),
 

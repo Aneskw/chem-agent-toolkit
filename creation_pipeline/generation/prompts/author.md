@@ -1,37 +1,38 @@
-Build a usable English skill from the candidate and actual research sources. Follow the
-supplied minimum/packaging rules as semantic constraints, not a chapter template.
-The candidate is a starting point: new evidence may justify narrowing/splitting scope or
-changing support files. Source-supported splits may be recorded as metadata.additional_candidates
-in the concise discovery format; they enter the queue after the current package passes review. Record meaningful scope changes in metadata.candidate_update with
-source evidence and reason; never silently change the promise just to pass a check.
+Write a usable English Skill from this candidate and inspected sources. The supplied minimum
+and packaging standards define the content; they are not a mandatory chapter template.
 
-Keep the normal path, essential prerequisites, I/O and decision-changing caveats in SKILL.md.
-Be minimal but sufficient. Do not force one file, multiple files, scripts or a particular length.
-Use conditional references for long/uncommon details, scripts for necessary reusable processing,
-and assets/examples for useful small inputs. Give actual imports/commands, source acquisition
-and relevant versions. Explain empty/failure outcomes. Never copy a full upstream tree/weights,
-invent scientific behavior, or depend on pipeline cache paths/sibling skills.
+Write for an execution Agent that receives only the final package: it has neither this build
+conversation nor the source workspace. Make essential external tools/resources obtainable through
+explicit official repository/package/service/setup links and source-supported versions. Do not
+leave unbound references such as "the repository" or build-only paths. A compact setup entry is
+better than a dependency-tree copy; do not guess versions or repeat build restrictions in the Skill.
 
-Read originals or obtain specific missing known resources with the helper when necessary.
-Write actual files into output_directory. Use reliable native file tools or small UTF-8 chunks
-(helper write); avoid long Windows shell patch arguments. Preserve fixture bytes. Binary support
-files are allowed when justified and provenance is understood. Remove obsolete partial files.
-Do not leave temporary files in the runtime package. Do not execute programs unless permitted.
+Choose a representative normal path consistent with the candidate's starting inputs and promised
+result. Integrate real invocation code with necessary workflow explanations and output access.
+Complete means no essential gap in that path, not every lifecycle phase or API option. Make
+alternatives/external inputs/handoffs explicit. Use structured fields or small templates where
+clearer; exact numeric output is optional, and fabricated execution results are forbidden.
 
-Save progress as files, not one huge final response. When the package is complete, write
-metadata_path JSON containing tests, issues and notes (arrays; empty is allowed). Checks should
-exercise actual delivered examples/scripts, use source-grounded expected results and relevant
-boundaries; do not invent a check simply to satisfy a template. Each test has name, argv, cwd,
-expected_exit, stdout_contains and/or json_equals/artifacts, evidence, purpose, kind.
-{python},{package},{run},{source:ID} are check-only macros. Explicitly group/select continuous
-examples; do not execute mutually exclusive, illustrative or external-input snippets blindly.
-Lack of a trustworthy oracle or environment is recorded, not hidden by printing desired output.
-User-configured assertions remain unchanged. If source proves an earlier generated oracle wrong,
-record the correction for independent-context review, not output matching.
+Keep content that changes selection, preparation, invocation or output interpretation. Preserve
+high-value defaults, mappings, destructive/state-changing behavior and boundaries; remove generic
+background, obvious explanations and repetition. Use the smallest adequate package and references
+only for useful conditional detail. Source-supported code adaptations/compositions are allowed;
+new glue must not invent research behavior. Independently inspect uncertain behavior in originals.
 
-issues entries need id, description, blocking, resolution. Blocking means a genuine content or
-essential evidence defect, not merely an absent local GPU/dependency. notes record unverified
-execution and other nonduplicated limitations. A written test is not execution evidence.
-Use helper finish with run, output_directory, delivery_token and metadata_path. It snapshots
-file hashes and metadata; this is the durable completion receipt. Final reply is only
-{completed,summary}, never file contents or coverage quotations. Repair only affected work.
+On repair, first verify feedback against the originals. If a finding is mistaken, retain the
+correct behavior and supply a concise source-backed rebuttal in basis/issues rather than inventing
+a workaround. Resolve real defects and affected relationships. Prefer replacing an ambiguous
+passage over appending another warning. Check the repaired path for new inconsistency/redundancy;
+do not silently narrow the capability merely to obtain approval.
+
+Write actual files to output_directory and metadata_path JSON with required basis and optional
+issues/notes arrays. Each basis item has location (delivered file/section), claim, source (registered
+eN or unique source-id/path), locator (inspected function/page/passage), origin (upstream,
+sourced_adaptation, or glue). Group factual justification by meaningful content blocks, not every
+line of ordinary syntax. This writing basis stays outside the Skill and is not private reasoning.
+issues have id, description, blocking and resolution. Do not generate execution tests or proof files.
+
+Use helper finish with run, package=output_directory, token=delivery_token and metadata=metadata_path.
+Its durable receipt completes delivery; return only completed/summary. Source-backed scope changes
+may use candidate_update: changed task/scope/entrypoint/construction fields plus reason/evidence.
+additional_candidates use the discovery schema.

@@ -4,6 +4,7 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
+from creation_pipeline.validation.acceptance import require_ready
 from creation_pipeline.records import has_link, read_json, safe_relative, file_digest
 
 
@@ -35,11 +36,12 @@ def verify_output(output):
 
 
 def install(output, destination):
+    if (Path(output) / "complete.json").exists():
+        return install_archive(output, destination)
     if (Path(output) / "summary.json").exists():
         return install_bundle(output, destination)
     record, package = verify_output(output)
-    if record["status"] != "ready":
-        raise ValueError("Only ready outputs may be installed")
+    require_ready(record)
     target = Path(destination).absolute() / package.name
     if has_link(target) or target.exists():
         raise ValueError("Installation destination exists or contains a linked path")
@@ -83,6 +85,7 @@ def install_bundle(output, destination):
     target.mkdir(parents=True)
     try:
         for entity in ready:
+            require_ready(read_json(safe_relative(Path(output), "records/" + entity["name"] + ".json")))
             relative = "skills/" + entity["name"]
             shutil.copytree(safe_relative(bundle, relative), safe_relative(target, relative))
             if manifest(safe_relative(target, relative)) != manifest(safe_relative(bundle, relative)):
@@ -91,3 +94,58 @@ def install_bundle(output, destination):
         shutil.rmtree(target)
         raise
     return {"installed": str(target), "skills": str(target / "skills"), "build_id": summary["build_id"]}
+
+
+def archive_packages(output):
+    """Resolve compact records without requiring the removed staging bundle."""
+    output = Path(output).absolute()
+    if has_link(output):
+        raise ValueError("Linked archive")
+    summary = read_json(output / "summary.json")
+    packages = []
+    for entity in summary.get("entities", []):
+        name = entity["name"]
+        root = safe_relative(output, "skills/" + name)
+        if not (root / "review.json").exists():
+            continue
+        record = read_json(root / "review.json")
+        record["basis"] = read_json(root / "basis.json")
+        if (root / "package.json").exists():
+            path = Path(read_json(root / "package.json")["path"])
+        else:
+            path = root / ("package" if record["status"] == "ready" else "draft")
+        if path.exists():
+            if manifest(path) != record["files"]:
+                raise ValueError("Archived package changed: " + name)
+            packages.append((record, path))
+    return summary, packages
+
+
+def install_archive(output, destination):
+    summary, packages = archive_packages(output)
+    selected = [(r, p) for r, p in packages if r["status"] == "ready"]
+    if not selected:
+        raise ValueError("No content-approved packages")
+    destination = Path(destination).absolute()
+    if has_link(destination):
+        raise ValueError("Linked destination")
+    # Validate the whole operation before copying; never overwrite existing skills.
+    for record, package in selected:
+        require_ready(record)
+        if safe_relative(destination, record["name"]).exists():
+            raise ValueError("Installation destination exists: " + record["name"])
+    destination.mkdir(parents=True, exist_ok=True)
+    created = []
+    try:
+        for record, package in selected:
+            target = safe_relative(destination, record["name"])
+            created.append(target)
+            shutil.copytree(package, target)
+            if manifest(target) != record["files"]:
+                raise ValueError("Installed files differ")
+    except Exception:
+        for target in created:
+            if target.exists():
+                shutil.rmtree(target)
+        raise
+    return {"installed": [str(p) for p in created], "build_id": summary["build_id"]}

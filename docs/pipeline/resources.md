@@ -1,6 +1,6 @@
 # Resources and known supplements
 
-Sources are retained independently of parser support. Unknown formats and large data/weights are not discarded just because the program cannot interpret them. Default snapshots exclude only narrow internal/environment/cache/credential categories. No general web search, dependency installation or recursive link crawling is provided.
+Sources are retained independently of parser support. Unknown formats and large data/weights are not discarded just because the program cannot interpret them. Default snapshots exclude only narrow internal/environment/cache/credential categories. Scoped supplemental search is available under research_access=supplement; unrelated research discovery, dependency installation and recursive link crawling are out of scope.
 
 ## Preparation
 
@@ -29,4 +29,4 @@ Views are cached with hashes and never replace originals. Structured converters 
 
 The Agent uses the helper listed in resources.json: supplement --run RUN --url URL (or --repo URL / --paper DOI) --reason WHY [--ref REVISION]. It identifies a concrete missing fact, not a vague wish for more background. Success updates provenance, source locators, views and durable registry, and the Agent continues in the same conversation. Duplicate supplements reuse registered material; failures preserve existing sources. Metadata is not a substitute for a PDF that was not obtained.
 
-Known links/identifiers are supported in discovery, authoring and review. Searching for unknown papers/sites remains out of scope. Protected/unavailable resources become localized gaps, not a reason to stop unrelated candidates.
+Discovery, authoring and review share the same access policy. The Agent can locate missing supporting resources using scoped native search when enabled, and register important native-acquired evidence. See [research access](research-access.md). Protected/unavailable resources become localized gaps, not a reason to stop unrelated candidates.

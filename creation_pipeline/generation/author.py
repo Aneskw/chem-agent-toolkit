@@ -3,18 +3,16 @@ from creation_pipeline.paths import ROOT, PROMPTS
 from creation_pipeline.artifacts.package import manifest
 from creation_pipeline.schemas import REVIEW, DELIVERY
 from creation_pipeline.generation.context import candidate_context
-from creation_pipeline.models import ModelCallError
+from creation_pipeline.models import ModelCallError, iterations
 from creation_pipeline.records import digest
 
 
-def author(session, config, plan, staging, feedback=None, previous=None):
+def _author_once(session, config, plan, staging, feedback=None, previous=None):
     instructions = (PROMPTS / "author.md").read_text(encoding="utf-8")
     context = {**candidate_context(session, config, plan),
         "minimum": (ROOT / "docs/skills/minimum.md").read_text(encoding="utf-8"),
         "packaging": (ROOT / "docs/skills/packaging.md").read_text(encoding="utf-8"),
-        "configured_checks": config["checks"], "feedback": feedback or [],
-        "execution_policy": {"generated_checks_enabled": config.get("execute_generated_checks", False)},
-        "previous_artifact": previous}
+        "feedback": feedback or [], "previous_artifact": previous}
     from creation_pipeline.artifacts.delivery import delivered, finish, validate_package
     staging.mkdir(parents=True, exist_ok=True)
     token = digest(json.dumps({"plan": plan, "feedback": feedback or []}, sort_keys=True).encode())
@@ -23,7 +21,6 @@ def author(session, config, plan, staging, feedback=None, previous=None):
         metadata = session.work / "deliveries" / (plan["name"] + "-metadata.json")
         context.update(_phase="author", output_directory=str(staging.resolve()),
             metadata_path=str(metadata), delivery_token=token)
-        instructions += "\nWrite files directly. Save checks/issues/notes as metadata_path JSON (optional if all empty). Use workspace helper finish with run, package, token and metadata. This durable receipt is the delivery; final reply is only completed/summary. The helper computes the file manifest. Do not return content or coverage."
         error = None
         try:
             result = session.stage(instructions, context, schema=DELIVERY)
@@ -38,53 +35,70 @@ def author(session, config, plan, staging, feedback=None, previous=None):
                 raise error
             raise ValueError("Author has not finalized the package; retain existing files and complete delivery")
     validate_package(staging, config["limits"]["package_bytes"])
-    files = []
-    for item in manifest(staging):
-        path = staging / item["path"]
-        f = {"path": item["path"], "purpose": "Delivered capability resource"}
-        if path.suffix.lower() in {".md", ".py", ".txt", ".json", ".yaml", ".yml", ".sh"}:
-            try:
-                f["content"] = path.read_bytes().decode("utf-8")
-            except UnicodeError:
-                f["content"] = "[non-text resource; inspect actual file]"
-        else:
-            f["content"] = "[binary/structured resource; inspect actual file]"
-        files.append(f)
-    return {**saved, "files": files}
+    from creation_pipeline.validation.basis import validate_basis
+    saved["basis"] = validate_basis(saved.get("basis"), session.sources)
+    return {**saved, "files": [{**item, "purpose": "Delivered capability resource"} for item in manifest(staging)]}
+
+
+def author(session, config, plan, staging, feedback=None, previous=None):
+    last = None
+    for _ in iterations(config["limits"]["repair_rounds"]):
+        try:
+            return _author_once(session, config, plan, staging, feedback, previous)
+        except ModelCallError:
+            raise
+        except (ValueError, KeyError, TypeError) as exc:
+            error = str(exc)
+            if error == last:
+                from creation_pipeline.models import IncompleteError
+                raise IncompleteError("Repeated unchanged author delivery error: " + error) from exc
+            last = error
+            feedback = [{"name": "author_delivery", "findings": [error],
+                "action": "Correct only your files/metadata using retained observations; no execution"}]
+    from creation_pipeline.models import IncompleteError
+    raise IncompleteError("Author delivery repair limit reached: " + str(last))
 
 
 def review(session, plan, artifact, checks, config=None):
     instructions = (PROMPTS / "review.md").read_text(encoding="utf-8")
-    import copy
-    stage_schema = copy.deepcopy(REVIEW)
-    stage_schema["properties"]["oracle_changes_verified"] = {"type": "boolean"}
-    stage_schema["required"].append("oracle_changes_verified")
-    stage_schema["properties"]["execution_gaps"] = {"type": "array", "items": {"type": "string"}}
-    stage_schema["required"].append("execution_gaps")
-    instructions += "\nReturn execution_gaps as test names only for confirmed external prerequisite gaps, never missing delivered modules or incorrect results. Return oracle_changes_verified. When oracle_changes exist, independently check each old/new assertion against original sources. True only for justified source-backed corrections, never observed-output matching. Explain the evidence in findings. With no changes return false."
-    result = session.stage(instructions, {"oracle_changes": (config or {}).get("_oracle_changes", []), "_phase": "review",
+    context = {**candidate_context(session, config, plan, independent_review=True), "_phase": "review",
         "minimum": (ROOT / "docs/skills/minimum.md").read_text(encoding="utf-8"),
         "packaging": (ROOT / "docs/skills/packaging.md").read_text(encoding="utf-8"),
-        **candidate_context(session, config, plan), "artifact": artifact, "checks": checks,
-        "evidence": session.sources.validate_evidence(plan["evidence"]),
-        "sources": session.sources.index(), "user_guidance": (config or {}).get("prompt", ""),
-        "constraints": (config or {}).get("constraints", {}),
-        "execution_policy": {"generated_checks_enabled": config.get("execute_generated_checks", False)},
-        "previous_issues": (config or {}).get("_previous_issues", [])}, schema=stage_schema)
-    if not isinstance(result, dict) or result.get("status") not in ("pass", "fail", "not_run"):
-        raise ValueError("Invalid content review response")
-    if not isinstance(result.get("findings"), list):
-        raise ValueError("Review requires findings")
-    if result.get("resolution") not in ("none", "revise_files", "supply_evidence"):
-        raise ValueError("Review must distinguish file repair from missing evidence")
-    if result.get("issues_complete") is False:
-        result.update(status="not_run", resolution="supply_evidence")
-        result["findings"].append("Notes/issues completeness not confirmed")
-    if any(isinstance(f, dict) and f.get("blocking") for f in result["findings"]):
-        result["status"] = "fail"
-        if result["resolution"] == "none":
-            result["resolution"] = "revise_files"
-    if result["resolution"] == "supply_evidence":
-        result["status"] = "not_run"
-    return {"name": "content_review", "required": True, **result,
-            "evidence_kind": "model_review_not_independent_scientific_validation"}
+        "artifact": artifact, "checks": checks}
+    previous_error = None
+    while True:
+        result = session.stage(instructions, context, schema=REVIEW)
+        try:
+            if not isinstance(result, dict) or result.get("status") not in ("pass", "fail", "not_run"):
+                raise ValueError("status must be pass/fail/not_run")
+            if result.get("resolution") not in ("none", "revise_files", "supply_evidence"):
+                raise ValueError("resolution must be none/revise_files/supply_evidence")
+            if not isinstance(result.get("findings"), list):
+                raise ValueError("findings must be an array")
+            for index, finding in enumerate(result["findings"]):
+                if not isinstance(finding, dict) or type(finding.get("blocking")) is not bool:
+                    raise ValueError(f"findings[{index}] requires an object and boolean blocking")
+                for key in ("location", "problem", "evidence", "impact", "action", "category"):
+                    if not isinstance(finding.get(key), str) or not finding[key].strip():
+                        raise ValueError(f"findings[{index}].{key} requires text")
+            blocking = any(f["blocking"] for f in result["findings"])
+            if result["status"] == "fail" and not blocking:
+                raise ValueError("fail requires an actionable blocking finding")
+            if blocking:
+                result["status"] = "fail"
+                if result["resolution"] == "none":
+                    result["resolution"] = "revise_files"
+            if result["resolution"] == "supply_evidence":
+                result["status"] = "not_run"
+            if result["status"] == "pass" and result["resolution"] != "none":
+                raise ValueError("pass requires resolution=none")
+            return {**result, "name": "content_review", "required": True,
+                    "evidence_kind": "source_and_content_review_only"}
+        except (ValueError, TypeError, KeyError) as exc:
+            error = str(exc)
+            if error == previous_error:
+                from creation_pipeline.models import IncompleteError
+                raise IncompleteError("Repeated review record format error: " + error) from exc
+            previous_error = error
+            context = {**context, "previous_review": result, "record_format_error": error,
+                       "correction": "Correct only your review record. Do not change Skill files or repeat broad exploration."}

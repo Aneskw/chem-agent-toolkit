@@ -1,21 +1,40 @@
 # Current status
 
-Version 5.0.0. Verification date: 2026-10-24. This is a scoped capability summary, not a live dashboard.
+Version 7.0.0. Updated 2026-10-27.
 
-| Capability | Evidence |
+| Capability | Checked scope |
 | --- | --- |
-| Agent-only execution, production/development settings | Configuration and public-entry tests; API/Ollama rejected before acquisition |
-| No default source byte/count/extension cutoff | Real pinned EDBO export: 411 files, 55,361,999 bytes, plus 4,945,308-byte PDF; large/unknown/hidden-file regression tests |
-| Known-address supplements and cache | Real EDBO documentation fetch followed by cached reuse; registry/recovery tests |
-| Concise candidates and automatic continuation | Real two-candidate discovery; one built and one explicitly deferred by development setting |
-| Durable direct files and multi-file package | Real SKILL.md plus references/source-notes.md; receipt/final-response recovery and binary-asset tests |
-| Native source/content review | Separate Agent session inspected EDBO implementation, examples and paper; content passed, runtime explicitly unverified |
-| Checks, scoped readiness and library integrity | Deterministic tests for permission, real-example selection, faults, unverified catalog entries, collision and recovery |
+| Native Agent only and connection preflight | Fake-CLI selected-model/transport tests and real local Codex handshake |
+| Source/content acceptance without target execution | Independent review, correct author/reviewer feedback routing, metadata correction and unchanged-work protection |
+| Concise writing requirements | Environment, input/output contracts, representative Usage, source basis and concrete concision feedback |
+| Pure flat adoption and compact archives | Isolated project adoption, idempotence, conflict preservation, archived-package integrity and installation |
+| Retention | 7-day workspace / 30-day cache expiry, active OS locks, pin/unpin, archive failures, safe paths and historical-cache protection |
+| Usage accounting | Per-session cumulative vs incremental counts, counter resets and unknown receipts |
+| Resources and scoped supplements | Retained source/document/native/image-audit and research-policy regressions |
 
-102 engineering tests passed: `python -m unittest discover -s tests -q`. Tests using fake CLI responses validate mechanics, not model quality. `git diff --check` passed. The current code uses responsibility-based subpackages and only native Agent execution; direct API/Ollama and the old host-mediated text request loop have been removed. No new model-quality trial was run for this structural cleanup. Old example materials were removed; examples is reserved for complete build batches. Existing formal skills remain unchanged.
+96 engineering regression tests pass. Compilation and diff whitespace checks pass. Tests exercise
+host mechanics and controlled Agent decisions; they do not establish semantic perfection.
 
-The real local trial used authenticated Codex CLI requesting gpt-6.1-sol, 3 CLI turns and no model time limit. It completed acquisition, discovery, two-file delivery, content review and output verification. The code environment was not installed; EDBO numerical optimization/CSV execution was not performed. ready here means scoped applicable review passed without known blocking defects. It does not mean all tools ran or a scientific result was reproduced. Trial adoption was disabled and no public example was added.
+A real local Codex CLI batch used the original EDBO paper and fixed code snapshot, with the local
+configured model gpt-6-luna. It discovered three candidates and built two under explicit development
+limits: reaction-space encoding and PCA/DOE initial-batch selection. Both packages passed final
+content review and entered skills/. The [curated batch](../../examples/edbo-reaction-optimization/README.md)
+preserves portable input, source locators, discovery, writing basis and review records.
 
-The trial also exposed premature drafting in discovery; the prompt now explicitly stops at candidates and helper finalization is restricted to author phase. This correction has regression coverage; another expensive end-to-end model trial was not run just to remeasure it. Existing image/page capabilities remain; comprehensive DOCX charts/notebook-output vision is not implemented.
+The batch used 13 stage turns and one connection preflight. Developer source inspection challenged
+an incorrect PCA alignment finding and prompted removal of unnecessary overrides; subsequent review
+also corrected descriptor-key selection. This intervention is disclosed in the example and is not
+an autonomous pipeline stage. Approval therefore does not establish unattended review reliability.
+Native web access was used for supplemental documentation. No EDBO installation/execution, actual
+visual-input trial or Agent-benefit benchmark was performed.
 
-Known limits: no autonomous search, servers/Docker/environment provisioning, shared tools/MCP, semantic classification/merging or Agent benefit evaluation. Repository archives are materialized, not a lazy remote weight/data store. Source preparation/format handlers still have real disk/memory and tool-availability constraints. Recovery is stage-level, not crash-proof or concurrent. Execution permission includes Agent instructions and a workspace sandbox, not a host filter on every native command. No controlled cost saving is claimed; reported CLI usage is retained without a billing estimate.
+Review guidance derives risks from each candidate's inputs, main path and promised result rather
+than accumulating tool-specific checklists. Review receives source basis and declared scope without
+the author's benefit verdict. Resource helpers use OS-backed leases, and discovery-only candidate
+updates are rejected outside discovery rather than silently ignored.
+
+Acceptance version 3 means source/content review only. Runtime verification, pending promotion,
+Docker/server provisioning, independent/shared tool layers, direct model API/Ollama, unrestricted
+research discovery, semantic deduplication and Agent-benefit benchmarks are outside this version.
+Native target-execution restrictions are instructions to the Agent, not a general shell allowlist.
+Content review may still miss mistakes; approved does not mean tools were run or scientifically validated.

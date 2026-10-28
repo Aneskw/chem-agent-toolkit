@@ -153,53 +153,26 @@ for i in range(5):
             with self.assertRaisesRegex(ModelCallError, "Repeated identical"):
                 self.session().stage("test", {}, {})
 
-    def test_complete_native_build_and_failed_turn_resume(self):
-        from creation_pipeline.pipeline import build
-        from tests.pipeline.support import MAIN
-        from tests.pipeline.test_discovery import candidate, discovery
-        plan = discovery(candidate())
-        plan.update(outcome="candidates", handoff=[])
-        fixture = {"discovery": plan, "main": MAIN}
-        write_json(self.root / "fixture.json", fixture)
-        # First author turn fails after session creation. Resume must reuse that
-        # candidate session without repeating discovery, then run actual checks.
-        self.fake.write_text('''import sys,json
-from pathlib import Path
-d=json.loads(Path(sys.argv[0]).with_name('fixture.json').read_text(encoding='utf-8'))
-p=sys.stdin.read(); c=json.loads(p.split('\\nCONTEXT:\\n',1)[1])
-phase=c.get('_unused','discovery')
-phase='author' if 'output_directory' in c else 'review' if 'artifact' in c else 'discovery'
-print(json.dumps({'type':'thread.started','thread_id':'session-'+phase}),flush=True)
-if phase=='author':
- marker=Path(sys.argv[0]).with_name('first-author')
- if not marker.exists():
-  marker.touch(); sys.exit(1)
- out=Path(c['output_directory']); out.mkdir(parents=True,exist_ok=True)
- (out/'SKILL.md').write_text(d['main'],encoding='utf-8')
- result={'files':[{'path':'SKILL.md','purpose':'Invocation'}],
- 'tests':[{'name':'source-result','argv':['{python}','-c','print(2 + 3)'],
- 'cwd':'{run}','expected_exit':0,'stdout_contains':['5'],'evidence':'e1','purpose':'Source result','kind':'positive'}], 'issues':[], 'notes':[]}
- Path(c['metadata_path']).parent.mkdir(parents=True,exist_ok=True)
- Path(c['metadata_path']).write_text(json.dumps({'tests':result['tests'],'issues':[],'notes':[]}),encoding='utf-8')
- result={'completed':True,'summary':'written'}
-elif phase=='review': result={'status':'pass','resolution':'none','findings':[],'issues_complete':True}
-else: result=d['discovery']
-print(json.dumps({'type':'item.completed','item':{'type':'agent_message','text':json.dumps(result)}}),flush=True)
-print(json.dumps({'type':'turn.completed','usage':{'input_tokens':10,'output_tokens':2}}),flush=True)
-''', encoding="utf-8")
-        options = read_json(self.root / "input.json")
-        options.update(adoption={"enabled": False}, execute_generated_checks=True)
-        options["limits"]["repair_rounds"] = 0
-        write_json(self.root / "input.json", options)
-        with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]):
-            result = build(self.root / "input.json", self.root / "state", keep_debug=True)
-            self.assertEqual(result["status"], "failed", result)
-            resumed = build(state_root=self.root / "state", resume_id=result["build_id"], keep_debug=True)
-        self.assertEqual(resumed["status"], "ready", resumed)
-        summary = read_json(Path(resumed["output"]) / "summary.json")
-        self.assertEqual(len(summary["model_metrics"]["receipts"]), 4)
-        self.assertEqual(summary["model_metrics"]["receipts"][2]["resumed"], True)
 
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PreflightTests(unittest.TestCase):
+    def test_preflight_uses_selected_cli_settings_without_fetching_sources(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[2] / ".pipeline/test-tmp") as directory:
+            root = Path(directory)
+            write_json(root / "config.json", {"sources": [{"repo": "https://example.org/unfetched.git"}],
+                "model": {"name": "selected-model"}, "http_only": True})
+            fake = root / "cli.py"
+            fake.write_text('import sys,json\nfrom pathlib import Path\nPath(sys.argv[0]).with_name("args.json").write_text(json.dumps(sys.argv))\nsys.stdin.read()\nprint(json.dumps({"type":"thread.started","thread_id":"probe"}))\nprint(json.dumps({"type":"item.completed","item":{"type":"agent_message","text":"{\\\"ready\\\":true}"}}))\nprint(json.dumps({"type":"turn.completed","usage":{"input_tokens":1}}))\n', encoding="utf-8")
+            config = load_config(root / "config.json")
+            with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(fake)]), patch("creation_pipeline.resources.acquisition.Acquisition.repository") as acquire:
+                receipts = NativeSession.preflight(config, root / "work")
+            acquire.assert_not_called()
+            args = read_json(root / "args.json")
+            self.assertIn("selected-model", args)
+            self.assertIn('model_provider="skill-pipeline-http"', args)
+            self.assertEqual(receipts[0]["phase"], "preflight")

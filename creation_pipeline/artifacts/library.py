@@ -5,6 +5,7 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 from creation_pipeline.artifacts.package import manifest
+from creation_pipeline.validation.acceptance import require_ready, ACCEPTANCE_VERSION
 from creation_pipeline.records import read_json, write_json, safe_relative, has_link, sanitized
 
 
@@ -38,6 +39,7 @@ def adopt(output, records, config, destination):
                     if record["status"] != "ready":
                         results.append({"name": name, "status": "not_eligible"})
                         continue
+                    require_ready(record)
                     source = safe_relative(Path(output) / "bundle/skills", name)
                     if manifest(source) != record["files"]:
                         raise ValueError("Changed package before adoption: " + name)
@@ -49,7 +51,7 @@ def adopt(output, records, config, destination):
                     # Also protect unmanaged skills with the same frontmatter name.
                     collision = any(re.search(r"(?m)^name:\s*[\"']?" + re.escape(name) + r"[\"']?\s*$",
                         p.read_text(encoding="utf-8")) for p in root.rglob("SKILL.md"))
-                    target = safe_relative(root, batch + "/" + name)
+                    target = safe_relative(root, name)
                     if collision or target.exists():
                         results.append({"name": name, "status": "conflict"})
                         continue
@@ -64,8 +66,8 @@ def adopt(output, records, config, destination):
                     item = {"name": name, "path": target.relative_to(root).as_posix(), "batch": batch,
                             "tags": config["batch"]["tags"], "build_id": Path(output).name,
                             "scope": record["plan"]["scope"], "files": record["files"],
+                            "acceptance_version": ACCEPTANCE_VERSION, "acceptance_sha256": record["acceptance_sha256"],
                             "checks": [{k: c.get(k) for k in ("name", "status", "evidence_kind")} for c in record["checks"]],
-                            "issues": record.get("issues", []), "notes": record.get("notes", []),
                             "unverified": [{"name": c["name"], "findings": c.get("findings", [])} for c in record["checks"] if c["status"] == "not_run"], "agent_efficacy": "not_evaluated"}
                     doc = read_json(Path(output) / "plan.json")
                     item["sources"] = [{k: s[k] for k in ("id", "url", "repo", "resolved_ref", "snapshot_id") if k in s} for s in doc["sources"]]
@@ -73,7 +75,7 @@ def adopt(output, records, config, destination):
                     active[name] = item
                     results.append({"name": name, "status": "adopted", "path": str(target)})
                 write_json(catalog_path, sanitized(catalog))
-                lines = ["# Skills", "", "Reviewed packages; inspect recorded checks and unverified scope. Agent benefit remains unmeasured.", "",
+                lines = ["# Skills", "", "Skills are reviewed against sources and usage requirements. Target tools are not executed during review. Agent benefit remains unmeasured.", "",
                          "| Skill | Tags | Batch |", "| --- | --- | --- |"]
                 for item in catalog["skills"]:
                     lines.append(f"| [{item['name']}]({item['path']}/SKILL.md) | {', '.join(item['tags'])} | {item['batch']} |")

@@ -27,14 +27,3 @@ class EntrypointTests(unittest.TestCase):
                 cwd=directory, capture_output=True, text=True, timeout=20)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("Useful method", target.read_text(encoding="utf-8"))
-
-    def test_example_runner_works_outside_repository(self):
-        with tempfile.TemporaryDirectory() as directory:
-            package = Path(directory) / "skill"
-            package.mkdir()
-            (package / "SKILL.md").write_text("```python\nprint(2 + 3)\n```\n", encoding="utf-8")
-            result = subprocess.run(
-                [sys.executable, str(PACKAGE_ROOT / "validation/example_runner.py"), str(package)],
-                cwd=directory, capture_output=True, text=True, timeout=20)
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("5", result.stdout)

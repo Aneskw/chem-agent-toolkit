@@ -1,0 +1,98 @@
+{
+  "sources": [
+    {
+      "id": "paper",
+      "url": "https://doyle.chem.ucla.edu/wp-content/uploads/2021/02/58.-Bayesian-reaction-optimization-as-a-tool-for-chemical-synthesis.pdf",
+      "snapshot_id": "9e9ae7505e11de80c0642ee7dc98cb146a3594cbe632de71abcc8c2db7bb6c95",
+      "sha256": "007c91498f3c3ed24b1b3d15c1fef8ec66a469d01ff7100e4c0775134d5dec9d",
+      "file_count": 1,
+      "bytes": 4945308
+    },
+    {
+      "id": "code",
+      "repo": "https://github.com/b-shields/edbo.git",
+      "ref": "9b41eac3f6d9e520547702fd5b0c7ef6441625a4",
+      "resolved_ref": "9b41eac3f6d9e520547702fd5b0c7ef6441625a4",
+      "snapshot_id": "b0e5d29be3191934585ac92c903da236af5a20231f91e473b96e81c040618281",
+      "archive_url": "https://codeload.github.com/b-shields/edbo/zip/9b41eac3f6d9e520547702fd5b0c7ef6441625a4",
+      "acquisition_limitations": [
+        "Submodule contents and Git LFS payloads are not automatically resolved"
+      ],
+      "file_count": 411,
+      "bytes": 55361999
+    }
+  ],
+  "locators": [
+    {
+      "id": "e1",
+      "source": "paper",
+      "path": "document.pdf",
+      "sha256": "007c91498f3c3ed24b1b3d15c1fef8ec66a469d01ff7100e4c0775134d5dec9d",
+      "url": "https://doyle.chem.ucla.edu/wp-content/uploads/2021/02/58.-Bayesian-reaction-optimization-as-a-tool-for-chemical-synthesis.pdf"
+    },
+    {
+      "id": "e4",
+      "source": "code",
+      "path": "README.md",
+      "sha256": "a35a59ea442e634e66613a728276348d8a161adf1ed57de3766dc64031774c55",
+      "url": "https://github.com/b-shields/edbo/blob/9b41eac3f6d9e520547702fd5b0c7ef6441625a4/README.md"
+    },
+    {
+      "id": "e6",
+      "source": "code",
+      "path": "setup.py",
+      "sha256": "e4a0fa1850efaa1bb18455172ac942a99e56b817fd2d1531f498fdbd4fe29be2",
+      "url": "https://github.com/b-shields/edbo/blob/9b41eac3f6d9e520547702fd5b0c7ef6441625a4/setup.py"
+    },
+    {
+      "id": "e220",
+      "source": "code",
+      "path": "edbo/bro.py",
+      "sha256": "a7eb30da1a6db197024cb13b6dc7dd398cb9baa49631059877ee923413b446a0",
+      "url": "https://github.com/b-shields/edbo/blob/9b41eac3f6d9e520547702fd5b0c7ef6441625a4/edbo/bro.py"
+    },
+    {
+      "id": "e221",
+      "source": "code",
+      "path": "edbo/chem_utils.py",
+      "sha256": "1c91749fe6099f5317f6e0d2d140a7c4b9f8dada5a6d6fd2138a35e082b87188",
+      "url": "https://github.com/b-shields/edbo/blob/9b41eac3f6d9e520547702fd5b0c7ef6441625a4/edbo/chem_utils.py"
+    },
+    {
+      "id": "e224",
+      "source": "code",
+      "path": "edbo/feature_utils.py",
+      "sha256": "904ce626b0f9764b666122a8304bc812fbb93efa2e659c73646328382432e17f",
+      "url": "https://github.com/b-shields/edbo/blob/9b41eac3f6d9e520547702fd5b0c7ef6441625a4/edbo/feature_utils.py"
+    },
+    {
+      "id": "e226",
+      "source": "code",
+      "path": "edbo/math_utils.py",
+      "sha256": "1c88937e1de8fdad1607289fe14e15d91a275d5d0dd8c224a6025f158b2d24d8",
+      "url": "https://github.com/b-shields/edbo/blob/9b41eac3f6d9e520547702fd5b0c7ef6441625a4/edbo/math_utils.py"
+    },
+    {
+      "id": "e228",
+      "source": "code",
+      "path": "edbo/objective.py",
+      "sha256": "6528d5a26306641888f478648c818575c16fedc05ec911b00736fc7bbd12f863",
+      "url": "https://github.com/b-shields/edbo/blob/9b41eac3f6d9e520547702fd5b0c7ef6441625a4/edbo/objective.py"
+    },
+    {
+      "id": "e233",
+      "source": "code",
+      "path": "edbo/utils.py",
+      "sha256": "f6e1926c0292f6be360e60ac51b0b4e5fe2bc0031c8e39901dabe947fe76a16b",
+      "url": "https://github.com/b-shields/edbo/blob/9b41eac3f6d9e520547702fd5b0c7ef6441625a4/edbo/utils.py"
+    },
+    {
+      "id": "e234",
+      "source": "code",
+      "path": "examples/DOE/DOE.py",
+      "sha256": "f528bc131c04a6c2fd99bf113ca91905fc1f82f67bcaf871d18892f6e4213992",
+      "url": "https://github.com/b-shields/edbo/blob/9b41eac3f6d9e520547702fd5b0c7ef6441625a4/examples/DOE/DOE.py"
+    }
+  ],
+  "note": "File locators support claim lookup, not proof of correctness. Original inputs are acquired, not redistributed here."
+}
