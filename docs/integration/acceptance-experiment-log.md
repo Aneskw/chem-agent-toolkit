@@ -1,6 +1,13 @@
 # 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 46）
 
 记录日期：2026-10-28
+
+### run47 前置检查补记（2026-10-28）
+
+- 接手 HEAD：`b64d055`；Docker Server `29.8.2`。封套已有未提交修改：原生阶段切回 `codex_cli`。操作者明确选择保留该修改，结构化阶段继续 DeepSeek；不能把 run47 称为全阶段 DeepSeek 批次。
+- 原始全量测试在 Docker 可用时意外进入真实入口关联 CLI 调用，未能完成。诊断栈定位到 `test_author_prompt_update_reuses_discovery_but_rebuilds_files` → `prepare` → `associate` → `model_call.run`。停止相关测试及子进程后修复夹具；这不是 run47，也不是额外业务探针，但违反了免费检查应无模型调用的预期，必须单列披露。CLI 审计仅能证明进程/生命周期已启动，不能据此声称实际计费为零或推算供应商调用数。
+- 修复：`DiscoveryTests`（含其他套件复用的夹具）显式模拟 Docker 不可用，增加禁止真实 Docker 探测及运行时模型调用的回归；两项旧计数去除不该发生的运行时调用。生产代码、验收契约与封套预算未修改。
+- 诊断日志：`E:\Users\27343\Docker\acceptance-run47-preflight-tests.log`；经 `redact()` 保留的关联审计：`E:\Users\27343\Docker\acceptance-run47-preflight-evidence\`；修复后全量回归日志：`E:\Users\27343\Docker\acceptance-run47-preflight-fixed.log`。
 副本：`E:\Users\27343\Docker\chem-agent-toolkit-integration_deepseekapi`
 分支：`pipeline-with-docker`（本地 79 个提交，未合并上游；HEAD 以 `git log --oneline -1` 为准）
 只读基线：`E:\Users\27343\Docker\chem-agent-toolkit-integration` @ `78003de4`

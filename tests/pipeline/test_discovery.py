@@ -29,6 +29,13 @@ def discovery(*entities):
 
 class DiscoveryTests(unittest.TestCase):
     def setUp(self):
+        # Replay covers file delivery, not live Docker/model integration. Keep
+        # this fixture hermetic even when Docker Desktop is running. Several
+        # suites instantiate this case manually, so stop the patch in tearDown.
+        self.host_patch = patch('creation_pipeline.runtime.local.LocalExecutor.host',
+            return_value={'status': 'unavailable', 'gaps': [
+                {'code': 'docker_unavailable', 'detail': 'Offline discovery fixture'}]})
+        self.host_patch.start()
         parent = ROOT / ".pipeline/test-tmp"
         parent.mkdir(parents=True, exist_ok=True)
         self.temp = tempfile.TemporaryDirectory(dir=parent)
@@ -43,7 +50,16 @@ class DiscoveryTests(unittest.TestCase):
         self.state = self.root / "state"
 
     def tearDown(self):
-        self.temp.cleanup()
+        try:
+            self.temp.cleanup()
+        finally:
+            self.host_patch.stop()
+
+    def test_replay_never_probes_docker_or_calls_runtime_model(self):
+        with patch('creation_pipeline.runtime.local.process', side_effect=AssertionError('Live Docker probe')), \
+             patch('creation_pipeline.runtime.model_call.call', side_effect=AssertionError('Live model call')):
+            result, _ = self.run_case(discovery(candidate()), ARTIFACT)
+        self.assertEqual(result['status'], 'blocked')
 
     def run_case(self, *values, **kwargs):
         backend = ReplayStages([response(v) for v in values])
@@ -71,8 +87,9 @@ class DiscoveryTests(unittest.TestCase):
         continued = build(state_root=self.state, plan_path=Path(result["output"]) / "plan.json",
                           _session_factory=ReplayStages([response(ARTIFACT)]))
         self.assertEqual(continued["status"], "blocked", continued)
-        # No second discovery turn; author, review and runtime planning remain.
-        self.assertEqual(continued["model_calls"], 3)
+        # No second discovery turn; Docker is unavailable in this offline
+        # fixture, so only author and review are admitted.
+        self.assertEqual(continued["model_calls"], 2)
 
     def test_snapshot_mutation_rejected_before_model_call(self):
         result, _ = self.run_case(discovery(candidate()), plan_only=True)
@@ -230,9 +247,9 @@ class DiscoveryTests(unittest.TestCase):
     def test_invalid_discovery_repaired_without_reacquiring_sources(self):
         result, _ = self.run_case(discovery(candidate(), candidate()), discovery(candidate()), ARTIFACT)
         self.assertEqual(result['status'], 'blocked')
-        # Two discovery turns, author, review and the runtime planning turn are
-        # all counted; runtime planning is a model call too.
-        self.assertEqual(result['model_calls'], 5)
+        # Two discovery turns, author and review; runtime planning is deferred
+        # without a model call by the offline Docker fixture.
+        self.assertEqual(result['model_calls'], 4)
 
     @isolated_check_regression
     def test_dropping_failed_generated_oracle_cannot_become_ready(self):
