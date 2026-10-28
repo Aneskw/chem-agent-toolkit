@@ -111,8 +111,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 2251,
-          "sha256": "c4ba38400cbe5f671100055e16389de50ed6bfa5b3d162f5bd1ea2eb8e9092ea",
+          "bytes": 1716,
+          "sha256": "898ed64924aa184488408502663cd3a87bc9b2f0c28527d30541b6d3259a4005",
           "upstream_blob": "1682c71d401d0b84548200b3e3cbf7596a2b8b4d"
         }
       ],
@@ -134,10 +134,23 @@
         "removed_files": [],
         "notes": [
           "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
-          "Avoided assuming every homolytic cleavage starts from a neutral parent."
+          "Avoided assuming every homolytic cleavage starts from a neutral parent.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "BDE benchmark task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/bde-weak-bonds/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/bde-weak-bonds/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "check-mismatched-retrosynthesis-with-forward-prediction",
@@ -1822,8 +1835,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 2530,
-          "sha256": "66ed3298ca219d5130b34a0abfb5a9dce96bee0844da83feefa4c4c6640a3d81",
+          "bytes": 2096,
+          "sha256": "e6c207138b9afbb9b67087d2b6f9ba72b85d85f882bc3dfe54af7229e7fa358c",
           "upstream_blob": "7808178db89b521e7ba36fa6ed9d7fca9db216c5"
         }
       ],
@@ -1845,10 +1858,23 @@
         "removed_files": [],
         "notes": [
           "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
-          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Committee uncertainty task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/machine-learning/committee-uncertainty-flagging/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/machine-learning/committee-uncertainty-flagging/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "conformer-ensemble-population",
@@ -1860,8 +1886,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 2530,
-          "sha256": "10032a8a9759900a6aeae52fa69399d187b7fd1e0f1ab455c1a0129fdaf1b323",
+          "bytes": 2118,
+          "sha256": "74d10c76d9d8e3252bd864afe61780071265b67861f700660c563a369f734632",
           "upstream_blob": "846abe5a5b840af0d10c2bb5cecb2a0542ffe30c"
         }
       ],
@@ -1883,10 +1909,23 @@
         "removed_files": [],
         "notes": [
           "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
-          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Conformer benchmark task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/conformer-boltzmann-ranking/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/conformer-boltzmann-ranking/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "construct-retrosynthetic-route-benchmark",
@@ -1976,8 +2015,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 2021,
-          "sha256": "d77cb29c34a8051cb1c3550eadcae7bd048c62c2815321574ddcf7f1d794687f",
+          "bytes": 1604,
+          "sha256": "d0f82654ba9653e75ffe50145517994dc40a8fa9c7a3ca0b25f5de6831d2f455",
           "upstream_blob": "8df1ea579d4c6b6f4096c00c60779d28fce2b728"
         }
       ],
@@ -1998,10 +2037,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Convex-hull benchmark task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/convex-hull-stability/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/convex-hull-stability/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "defect-formation-reference",
@@ -2013,8 +2065,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 2001,
-          "sha256": "f8743db8090124d45cfd19212adb06f1a5dbbb688068008a7d3f643ede2720ed",
+          "bytes": 1600,
+          "sha256": "b4c9aa38efc934dfddcc89b98ebaa19195e6fad6369d59eb2807734b25194633",
           "upstream_blob": "7f9bf9792acb8f7ba131279700d4e0211421029c"
         }
       ],
@@ -2035,10 +2087,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "MgO vacancy task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/mgo-vacancy-energy/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/mgo-vacancy-energy/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "delaney-esol-scaffold-evaluation",
@@ -2173,8 +2238,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 3036,
-          "sha256": "2899565a8e9db2736c924a8475ad7196f5f760afa85f4e33fc144e1a614ed6a7",
+          "bytes": 2615,
+          "sha256": "bbb964d3c0b0900bac14f6c19651bad6ab459e4a46222fc9d7fe20c24aee46f5",
           "upstream_blob": "e90ade49d16cd9aaf8135da7215bc041a583362c"
         }
       ],
@@ -2196,12 +2261,25 @@
         "removed_files": [],
         "notes": [
           "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
-          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": [
           "https://pymatgen.org/pymatgen.analysis"
         ]
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Electrochemical-window task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/electrochemical-window/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/electrochemical-window/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "evaluate-planning-with-depth-pruning-and-set-matching",
@@ -2330,8 +2408,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 2796,
-          "sha256": "be93281f59753e0ace567b693141fa4e9ccb95ef3d7d53a431ac8684e35c016e",
+          "bytes": 2412,
+          "sha256": "d1c07361fadfdaaccb099aefe2066ae5a9f3520e380285c99ca735b19700f0af",
           "upstream_blob": "0d7a81ffcc6b926f4179619a8d98e3d6b9fd7b4d"
         }
       ],
@@ -2353,12 +2431,25 @@
         "removed_files": [],
         "notes": [
           "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
-          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": [
           "https://webbook.nist.gov/chemistry/quant-ir/"
         ]
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "IR matching task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/ir-spectrum-match/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/ir-spectrum-match/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "localretro-single-step-retrosynthesis",
@@ -2574,8 +2665,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 2261,
-          "sha256": "74a0e1297c52628d77951c921ea6e4d1a048fbfbd0de7712c2903d0952bf29c4",
+          "bytes": 1837,
+          "sha256": "1558cdf297175ae6faf6b1eb30f278f549d99b8004ad7ae22b3bc325ea3fe4f1",
           "upstream_blob": "e10efd0e598065c83754d7d56e4adc14fb8cb5c8"
         }
       ],
@@ -2597,10 +2688,23 @@
         "removed_files": [],
         "notes": [
           "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
-          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Docking enrichment task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/docking-microstate-enrichment/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/docking-microstate-enrichment/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "mlip-unit-consistent-error-audit",
@@ -2612,8 +2716,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 1913,
-          "sha256": "8ffba91181a82ffc6e108595e1bb3bf8cf063b9b1d45ea4978f4dc7c8b4fac36",
+          "bytes": 1511,
+          "sha256": "a7b017c8b3565a6ff772d09f2a6616013c5d0a2addcc3c352194bec9fa525347",
           "upstream_blob": "f184e83dba4944aaaceb92cb50304dc4fd6a9739"
         }
       ],
@@ -2634,10 +2738,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "MLIP error task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/machine-learning/mlip-error-benchmark/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/machine-learning/mlip-error-benchmark/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "nmr-kinetics-deconvolution",
@@ -2649,8 +2766,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 2038,
-          "sha256": "d6242a410529360238df5d21ca70d232c385c62bc0e647c6dc3b7c5eb594bfad",
+          "bytes": 1646,
+          "sha256": "37ce97ba614d703a02dd11a5c3f08676254fec6dd45224466b397d1e284460d5",
           "upstream_blob": "bf28998057073e35514a971f894d6591ad229be6"
         }
       ],
@@ -2671,10 +2788,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "NMR kinetics task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/nmr-reaction-kinetics/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/nmr-reaction-kinetics/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "parent-analog-stereo-audit",
@@ -2686,8 +2816,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 1933,
-          "sha256": "6165bf832229d823406756b101fb5a36e5aa142711b5a8c6288ec91a3d9dd27a",
+          "bytes": 1527,
+          "sha256": "7f387bc80beecdc3d3df6cc4f2223c4d1051f299a7842ce371783d13e7cdd79b",
           "upstream_blob": "fdeab9770020876c4a24dc040ab1fc405f5e939d"
         }
       ],
@@ -2708,10 +2838,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Analog diversity task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ecfp-analog-diversity/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ecfp-analog-diversity/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "parent-standardized-lead-triage",
@@ -2723,8 +2866,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 1926,
-          "sha256": "db21eb6f744c7bd8709942a41fef7da2ed26705f4d7ea6f2256a8054aa06121f",
+          "bytes": 1527,
+          "sha256": "17b2b7e8da3405be6a542d82b2ea4f0e5ece980d44ca8a783fd0da46dd1971c2",
           "upstream_blob": "5f46e6a53c89439268c5a28d28606153a60a34f3"
         }
       ],
@@ -2745,10 +2888,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "ADMET lead triage task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/admet-lead-triage/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/admet-lead-triage/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "polymorph-free-energy-comparison",
@@ -2760,8 +2916,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 1954,
-          "sha256": "e0dfd5342f10d018a78804549e4b418a244d967c78ac734457b4f39adec43eab",
+          "bytes": 1537,
+          "sha256": "995480e027b9df366276c2cb688a0d8817af145720aa47afb72c276e73785db0",
           "upstream_blob": "58535742bc1d9614172ba81ba5f76d2f6843f933"
         }
       ],
@@ -2782,10 +2938,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Polymorph free-energy task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/polymorph-free-energy/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/polymorph-free-energy/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "pose-geometry-validity-gate",
@@ -2797,8 +2966,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 1873,
-          "sha256": "ebf0bd751f5557015a4e2d9a00b6243339cab97a42aac353eecdd2c7853ca2a8",
+          "bytes": 1475,
+          "sha256": "fadb0462d4de71d0bf7dcbfd49f6ddb8e9ff1dff173b244ba73090baadb95efd",
           "upstream_blob": "448bab6cbe97706b584d9ba5e1be162e1a42eb94"
         }
       ],
@@ -2819,10 +2988,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Pose quality task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/pose-quality-filter/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/pose-quality-filter/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "potential-consistent-thermochemistry",
@@ -2834,8 +3016,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 2114,
-          "sha256": "58b9a27eb146166ee26be64c203f923a2881237eeb47127c1c2fbb94f08d7c18",
+          "bytes": 1695,
+          "sha256": "9d9d3da293f4243d80a95b937d2092b7cff9f7788847775f9caed178e197b8c1",
           "upstream_blob": "e0072d26b9eb81d611966db9bc6a839fb6755bc7"
         }
       ],
@@ -2856,10 +3038,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Gas thermochemistry task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/gas-thermochemistry-equilibrium/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/gas-thermochemistry-equilibrium/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "predict-class-conditioned-local-retrosynthesis",
@@ -3041,8 +3236,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 2043,
-          "sha256": "3383135ee46b750de4bff8d6ad23eef9043fa95445d381b8068b55e9269e90e5",
+          "bytes": 1644,
+          "sha256": "a5d7f6644d20532aa9d1dcfa6b2c991b1625d4c8d1615e160b68ffc22ad20140",
           "upstream_blob": "d4ff726367a7b8d069005d276553814baa82c1ab"
         }
       ],
@@ -3063,10 +3258,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Lithium QHA task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/li-qha-simulation/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/li-qha-simulation/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "reaction-center-guided-retrosynthesis",
@@ -3128,8 +3336,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 1919,
-          "sha256": "b1fad230d14208123c4cb036058a3be640f67cb523702ba2a2dbb5f9fa340b2a",
+          "bytes": 1514,
+          "sha256": "6fce183f4a8c3dcc6ce35592c6ae3c1f4cab856deeec60d1b6b2b94437f84e0b",
           "upstream_blob": "9bca33f149ff1eafc75204d5e235fc74e42ef172"
         }
       ],
@@ -3150,10 +3358,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Ligand MD stability task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ligand-md-stability/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ligand-md-stability/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "retro-star-retrosynthetic-planning",
@@ -3461,8 +3682,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 2773,
-          "sha256": "c59e57a51d49cbe7a13a66749c712036208908ac508948839904fea7df09ca72",
+          "bytes": 2360,
+          "sha256": "f99858a0e7a170f8befbd8e4e2fea3a2464ade18aad88451db5e5aabcf08bd1b",
           "upstream_blob": "6bac61815d59a45920559d920f05fc23ad4e8e0d"
         }
       ],
@@ -3484,12 +3705,25 @@
         "removed_files": [],
         "notes": [
           "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
-          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": [
           "https://www.rdkit.org/docs/source/rdkit.Chem.rdMolAlign.html"
         ]
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Symmetry redocking task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/symmetry-redocking-rmsd/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/symmetry-redocking-rmsd/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "synthesis-precursor-evidence",
@@ -3501,8 +3735,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 1982,
-          "sha256": "9514208df92425022aefc89fac284c0bbf500aed011eaf46ba5d9303446fa945",
+          "bytes": 1536,
+          "sha256": "8976eeb9fc5d76e9aa434e76f6205219ae11ec527397d7f76f852d4aa8ec0372",
           "upstream_blob": "e3ee09b87abe00c27ad117e3fc4a3b2af9bef1be"
         }
       ],
@@ -3523,10 +3757,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Precursor recommendation task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/synthesis-precursor-recommendation/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/synthesis-precursor-recommendation/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "template-guided-docking-box",
@@ -3538,8 +3785,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 1977,
-          "sha256": "56998ec2527178b193682ce144de61a9ff55f0f4eac0634cc5e7ddae297367a1",
+          "bytes": 1577,
+          "sha256": "36fed99057e54872ec3356dcef138f083befd2ed397369f1251430c3d38423e7",
           "upstream_blob": "0f024d31fe9fe685289fcfee06aa94f951f02718"
         }
       ],
@@ -3560,10 +3807,23 @@
         ],
         "removed_files": [],
         "notes": [
-          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist."
+          "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "Ligand box task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ligand-box-definition/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ligand-box-definition/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "widom-sorbent-screening",
@@ -3575,8 +3835,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 3121,
-          "sha256": "6b8dbd590e82d3b1b67b2e2ca3194ec21b56a1241d01b454ff77140a80d3c821",
+          "bytes": 2731,
+          "sha256": "757542ca02018499dee8622e0478e27672ec5b6233eef3107ef30fb6bffe5bfe",
           "upstream_blob": "ca28a995b8312d67eab042b93419fcf9bd6337ab"
         }
       ],
@@ -3598,10 +3858,23 @@
         "removed_files": [],
         "notes": [
           "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
-          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": []
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "MOF DAC benchmark task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/mof-dac-screening/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/mof-dac-screening/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     },
     {
       "name": "xrd-mixture-phase-quantification",
@@ -3613,8 +3886,8 @@
       "files": [
         {
           "path": "SKILL.md",
-          "bytes": 3049,
-          "sha256": "04bdd54a01d3a3bdbfdc4441247f246785cdd12542358e909b83475a78acc2ad",
+          "bytes": 2641,
+          "sha256": "8ede5bd89d7b3b4778b6c30a559f72b9a7b044013e3b985095f903d4ee62bc4f",
           "upstream_blob": "f9501c0ca9094ad0f9809b8580333bb86aa98c2a"
         }
       ],
@@ -3636,12 +3909,25 @@
         "removed_files": [],
         "notes": [
           "Retained capability-specific method guidance; removed historical confidence/build boilerplate and restrictive tool allowlist.",
-          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations."
+          "Clarified executable arithmetic or declared method prerequisites without fabricating model/tool implementations.",
+          "Moved benchmark task/grader links from runtime instructions to construction_sources; preserved the usage guidance and useful operational references."
         ],
         "consulted_sources": [
           "https://onlinelibrary.wiley.com/iucr/itc/Ha/ch3o9v0001/"
         ]
-      }
+      },
+      "construction_sources": [
+        {
+          "title": "XRD mixture task",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/xrd-mixture-phase-fit/instruction.md",
+          "role": "construction_provenance"
+        },
+        {
+          "title": "test contract",
+          "url": "https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/xrd-mixture-phase-fit/tests/test_outputs.py",
+          "role": "construction_provenance"
+        }
+      ]
     }
   ],
   "excluded_packages": [
@@ -3850,8 +4136,13 @@
       "original_files": 158,
       "current_files": 115,
       "main_bytes_before": 236392,
-      "main_bytes_after": 176575
+      "main_bytes_after": 167453
     },
-    "checks": "66 package metadata/link checks, Python syntax checks, offline regression tests; heavy models and live service outputs not verified."
+    "checks": "66 package metadata/link checks, Python syntax checks, offline regression tests; heavy models and live service outputs not verified.",
+    "runtime_reference_cleanup": {
+      "date": "2026-10-28",
+      "packages": 22,
+      "policy": "Runtime references support actual use; benchmark tasks and graders are construction provenance in catalog, not runtime reading requirements."
+    }
   }
 }

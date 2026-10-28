@@ -4,18 +4,11 @@ description: "Compare near-degenerate polymorphs using free energy rather than s
 license: MIT
 ---
 
-
-
 # Polymorph Free-Energy Comparison
 
 ## Applicability
 
 Use when the energy gap is comparable to vibrational or sampling corrections. State whether the requested quantity is Helmholtz or Gibbs free energy and match the ensemble accordingly.
-
-
-## Reference
-
-[Polymorph free-energy task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/polymorph-free-energy/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/polymorph-free-energy/tests/test_outputs.py).
 
 ## Input & Output
 

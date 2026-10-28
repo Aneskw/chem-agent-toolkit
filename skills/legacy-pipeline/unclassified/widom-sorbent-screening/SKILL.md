@@ -4,18 +4,11 @@ description: "Gate porous sorbent rankings on valid and precise infinite-dilutio
 license: MIT
 ---
 
-
-
 # Widom Sorbent Screening
 
 ## Applicability
 
 Use for low-pressure adsorption screening with Widom insertion. Do not apply an infinite-dilution ranking directly to high-pressure or cyclic process performance.
-
-
-## Reference
-
-[MOF DAC benchmark task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/mof-dac-screening/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/mof-dac-screening/tests/test_outputs.py).
 
 ## Input & Output
 
@@ -32,7 +25,6 @@ Each framework has a traceable sampling-quality verdict; the selected framework 
 ## Matters & Troubleshooting
 
 Flexible frameworks, water, defects, and finite-loading effects are outside rigid infinite-dilution screening.
-
 
 ## Required sampler and ranking record
 

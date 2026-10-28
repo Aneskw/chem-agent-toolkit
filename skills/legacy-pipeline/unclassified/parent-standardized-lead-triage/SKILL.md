@@ -4,18 +4,11 @@ description: "Screen oral-lead candidates on comparable parent structures. Invok
 license: MIT
 ---
 
-
-
 # Parent-Standardized Lead Triage
 
 ## Applicability
 
 Use for comparing physicochemical descriptors across a heterogeneous hit list. Preserve original records so the selected parent can be traced back to its formulation.
-
-
-## Reference
-
-[ADMET lead triage task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/admet-lead-triage/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/admet-lead-triage/tests/test_outputs.py).
 
 ## Input & Output
 

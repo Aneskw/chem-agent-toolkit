@@ -4,18 +4,11 @@ description: "Separate phase identification from quantitative mixture fitting. I
 license: MIT
 ---
 
-
-
 # XRD Mixture Phase Quantification
 
 ## Applicability
 
 Use when a measured pattern may contain multiple crystalline phases. Account for amorphous material or preferred orientation before calling fractions absolute.
-
-
-## Reference
-
-[XRD mixture task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/xrd-mixture-phase-fit/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/xrd-mixture-phase-fit/tests/test_outputs.py).
 
 ## Input & Output
 
@@ -32,7 +25,6 @@ The selected phases explain the major reflections, the modeled fractions are nor
 ## Matters & Troubleshooting
 
 Peak broadening, texture, fluorescence, amorphous content, and near-isostructural phases limit quantitative reliability.
-
 
 ## Quantitative-phase requirements
 

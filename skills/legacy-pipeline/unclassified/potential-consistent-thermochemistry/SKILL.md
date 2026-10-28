@@ -4,18 +4,11 @@ description: "Keep reaction thermochemistry on one model and standard-state scal
 license: MIT
 ---
 
-
-
 # Potential-Consistent Thermochemistry
 
 ## Applicability
 
 Use for model-predicted reaction enthalpy, entropy, free energy, and equilibrium constant. Do not mix energies from one potential with frequencies or elemental references from another without a documented correction.
-
-
-## Reference
-
-[Gas thermochemistry task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/gas-thermochemistry-equilibrium/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/gas-thermochemistry-equilibrium/tests/test_outputs.py).
 
 ## Input & Output
 

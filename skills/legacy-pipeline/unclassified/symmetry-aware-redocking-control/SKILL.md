@@ -4,18 +4,11 @@ description: "Validate redocking with symmetry-corrected in-place RMSD. Invoke f
 license: MIT
 ---
 
-
-
 # Symmetry-Aware Redocking Control
 
 ## Applicability
 
 Use for self-docking controls with chemically equivalent atom mappings. If reference and docking frames differ, align receptors first, not ligands.
-
-
-## Reference
-
-[Symmetry redocking task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/symmetry-redocking-rmsd/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/symmetry-redocking-rmsd/tests/test_outputs.py).
 
 ## Input & Output
 
@@ -32,7 +25,6 @@ Every pose has a symmetry-aware RMSD and the pass/fail gate is computed solely f
 ## Matters & Troubleshooting
 
 Atom-order mismatch, missing hydrogens, tautomer changes, or receptor-frame mismatch require explicit mapping or invalidate the comparison.
-
 
 ## RDKit in-place implementation
 

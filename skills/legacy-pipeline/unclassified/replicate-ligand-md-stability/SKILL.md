@@ -4,18 +4,11 @@ description: "Judge binding-mode persistence across independent MD runs. Invoke 
 license: MIT
 ---
 
-
-
 # Replicate Ligand MD Stability
 
 ## Applicability
 
 Use when multiple trajectories sample the same proposed binding mode. The comparison requires consistent atom mapping and a declared analysis window.
-
-
-## Reference
-
-[Ligand MD stability task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ligand-md-stability/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ligand-md-stability/tests/test_outputs.py).
 
 ## Input & Output
 

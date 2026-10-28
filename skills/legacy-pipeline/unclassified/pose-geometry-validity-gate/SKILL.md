@@ -4,18 +4,11 @@ description: "Reject malformed docked poses before ranking or refinement. Invoke
 license: MIT
 ---
 
-
-
 # Pose Geometry Validity Gate
 
 ## Applicability
 
 Use before interpreting docking scores when output geometries may be corrupted. Distinguish ligand-only checks from protein-ligand interaction checks.
-
-
-## Reference
-
-[Pose quality task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/pose-quality-filter/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/pose-quality-filter/tests/test_outputs.py).
 
 ## Input & Output
 

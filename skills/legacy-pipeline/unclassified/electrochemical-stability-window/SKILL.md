@@ -4,18 +4,11 @@ description: "Derive intrinsic reduction and oxidation limits against a declared
 license: MIT
 ---
 
-
-
 # Electrochemical Stability Window
 
 ## Applicability
 
 Use for thermodynamic decomposition limits under changing lithium chemical potential. Distinguish intrinsic bulk stability from kinetic or passivation-controlled operating windows.
-
-
-## Reference
-
-[Electrochemical-window task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/electrochemical-window/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/electrochemical-window/tests/test_outputs.py).
 
 ## Input & Output
 
@@ -32,7 +25,6 @@ Both limits derive from identified reactions and one reference scale; window wid
 ## Matters & Troubleshooting
 
 An incomplete phase diagram, inconsistent elemental reference, or model error can shift the apparent window markedly.
-
 
 ## Required calculation and voltage convention
 

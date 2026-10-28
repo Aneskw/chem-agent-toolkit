@@ -4,18 +4,11 @@ description: "Compare candidate bond cleavage under radical and ionic mechanisms
 license: MIT
 ---
 
-
-
 # Bond Cleavage Mechanism Ranking
 
 ## Applicability
 
 Use for ranking specified single bonds by homolytic or heterolytic dissociation energy. Do not equate a low dissociation energy with the dominant experimental pathway without accounting for environment and barriers.
-
-
-## Reference
-
-[BDE benchmark task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/bde-weak-bonds/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/bde-weak-bonds/tests/test_outputs.py). Follow the benchmark's chosen potentials only when reproducing that task; otherwise select a method that covers the relevant charged and radical fragments.
 
 ## Input & Output
 

@@ -4,18 +4,11 @@ description: "Separate spectral mixture estimation from kinetic-model fitting. I
 license: MIT
 ---
 
-
-
 # NMR Kinetics Deconvolution
 
 ## Applicability
 
 Use when reactant and product signals overlap or individual peaks are unreliable. The species set and acquisition conditions must be sufficiently known to make spectral unmixing identifiable.
-
-
-## Reference
-
-[NMR kinetics task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/nmr-reaction-kinetics/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/nmr-reaction-kinetics/tests/test_outputs.py).
 
 ## Input & Output
 

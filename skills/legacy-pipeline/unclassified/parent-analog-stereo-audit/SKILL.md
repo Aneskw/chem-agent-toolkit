@@ -4,18 +4,11 @@ description: "Compare analogs after salt removal while preserving stereo distinc
 license: MIT
 ---
 
-
-
 # Parent Analog and Stereo Audit
 
 ## Applicability
 
 Use when a vendor library mixes salts, solvates, and parent structures. Distinguish structural-neighbor ranking from stereochemical equivalence.
-
-
-## Reference
-
-[Analog diversity task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ecfp-analog-diversity/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ecfp-analog-diversity/tests/test_outputs.py).
 
 ## Input & Output
 

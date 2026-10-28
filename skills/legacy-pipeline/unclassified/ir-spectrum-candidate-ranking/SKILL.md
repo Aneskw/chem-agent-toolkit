@@ -4,18 +4,11 @@ description: "Rank candidate compounds against an experimental IR spectrum. Invo
 license: MIT
 ---
 
-
-
 # IR Spectrum Candidate Ranking
 
 ## Applicability
 
 Use when a query spectrum and candidate spectra are available. A SMILES list alone is insufficient unless comparable predicted or measured references can be obtained.
-
-
-## Reference
-
-[IR matching task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/ir-spectrum-match/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/ir-spectrum-match/tests/test_outputs.py).
 
 ## Input & Output
 
@@ -32,7 +25,6 @@ All supplied candidate IDs appear exactly once in a reproducible ranking, with t
 ## Matters & Troubleshooting
 
 Mixtures, solvent bands, baseline errors, phase, and hydrogen bonding can invalidate a neat one-compound match.
-
 
 ## Comparison contract
 

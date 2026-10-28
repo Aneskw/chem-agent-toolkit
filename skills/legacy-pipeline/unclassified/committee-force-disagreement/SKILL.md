@@ -4,18 +4,11 @@ description: "Rank structures for expensive labeling using MLIP committee disagr
 license: MIT
 ---
 
-
-
 # Committee Force Disagreement
 
 ## Applicability
 
 Use when a model committee predicts energies and forces on the same candidate structures. Decide whether models share an energy reference before comparing absolute energies.
-
-
-## Reference
-
-[Committee uncertainty task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/machine-learning/committee-uncertainty-flagging/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/machine-learning/committee-uncertainty-flagging/tests/test_outputs.py).
 
 ## Input & Output
 
@@ -32,7 +25,6 @@ The batch follows the declared uncertainty measure, with one comparable score pe
 ## Matters & Troubleshooting
 
 Committee spread measures disagreement, not calibrated predictive error; force magnitudes and structure size can affect interpretation.
-
 
 ## Computing the declared score
 

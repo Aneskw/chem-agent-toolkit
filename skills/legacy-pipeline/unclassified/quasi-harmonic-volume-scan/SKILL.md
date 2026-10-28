@@ -4,18 +4,11 @@ description: "Guard QHA thermal-expansion estimates against bad volume windows a
 license: MIT
 ---
 
-
-
 # Quasi-Harmonic Volume Scan
 
 ## Applicability
 
 Use for quasi-harmonic thermal expansion when vibrational free energy varies with volume. It does not handle strongly anharmonic phases without additional validation.
-
-
-## Reference
-
-[Lithium QHA task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/li-qha-simulation/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/li-qha-simulation/tests/test_outputs.py).
 
 ## Input & Output
 

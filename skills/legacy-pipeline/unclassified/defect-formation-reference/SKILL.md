@@ -4,18 +4,11 @@ description: "Keep defect and elemental chemical-potential energies on one scale
 license: MIT
 ---
 
-
-
 # Defect Formation Reference
 
 ## Applicability
 
 Use for neutral vacancy formation energies under declared chemical-potential conditions. Charged defects additionally require Fermi-level and finite-size corrections not covered here.
-
-
-## Reference
-
-[MgO vacancy task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/mgo-vacancy-energy/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/mgo-vacancy-energy/tests/test_outputs.py).
 
 ## Input & Output
 

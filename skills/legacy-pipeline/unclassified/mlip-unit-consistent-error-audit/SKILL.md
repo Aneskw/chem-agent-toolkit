@@ -4,18 +4,11 @@ description: "Audit atomistic model errors across energy, force, and stress. Inv
 license: MIT
 ---
 
-
-
 # MLIP Unit-Consistent Error Audit
 
 ## Applicability
 
 Use for atomistic potential evaluation when reference labels and model predictions are paired per structure. Do not silently omit failed structures from aggregate metrics.
-
-
-## Reference
-
-[MLIP error task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/machine-learning/mlip-error-benchmark/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/machine-learning/mlip-error-benchmark/tests/test_outputs.py).
 
 ## Input & Output
 

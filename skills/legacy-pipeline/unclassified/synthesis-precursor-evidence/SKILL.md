@@ -4,18 +4,11 @@ description: "Recommend experimentally reported precursor sets with source-level
 license: MIT
 ---
 
-
-
 # Synthesis Precursor Evidence
 
 ## Applicability
 
 Use when the user asks for previously reported experimental starting-material combinations. A plausible stoichiometric equation alone is not publication evidence.
-
-
-## Reference
-
-[Precursor recommendation task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/synthesis-precursor-recommendation/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/materials-science/synthesis-precursor-recommendation/tests/test_outputs.py).
 
 ## Input & Output
 

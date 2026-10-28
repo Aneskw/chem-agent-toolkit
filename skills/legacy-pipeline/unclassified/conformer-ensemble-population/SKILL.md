@@ -4,18 +4,11 @@ description: "Decide which relaxed conformers matter thermally. Invoke for: rank
 license: MIT
 ---
 
-
-
 # Conformer Ensemble Population
 
 ## Applicability
 
 Use when a single optimized structure may misrepresent a flexible molecule. Distinguish conformers from distinct stereoisomers, protonation states, or tautomers.
-
-
-## Reference
-
-[Conformer benchmark task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/conformer-boltzmann-ranking/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/chemistry/conformer-boltzmann-ranking/tests/test_outputs.py).
 
 ## Input & Output
 
@@ -32,7 +25,6 @@ Populations sum to approximately one, ranks follow increasing energy, and every 
 ## Matters & Troubleshooting
 
 Energy-only Boltzmann weights are not full solution populations; solvent and entropy may change the ordering.
-
 
 ## Population calculation
 

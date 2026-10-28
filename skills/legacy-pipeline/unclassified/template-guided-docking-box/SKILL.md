@@ -4,18 +4,11 @@ description: "Transfer a bound ligand into an apo target before defining a docki
 license: MIT
 ---
 
-
-
 # Template-Guided Docking Box
 
 ## Applicability
 
 Use when a homologous or matched ligand-bound template identifies the likely binding site. If alignment is poor or the pocket rearranges substantially, treat the box as provisional.
-
-
-## Reference
-
-[Ligand box task](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ligand-box-definition/instruction.md) and [test contract](https://github.com/learningmatter-mit/AtomisticSkillsBenchmark/blob/db6116c1833f30cccb65ff78cda175510c3107b6/tasks/drug-discovery/ligand-box-definition/tests/test_outputs.py).
 
 ## Input & Output
 
