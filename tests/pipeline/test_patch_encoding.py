@@ -154,6 +154,26 @@ class NestedTextPatchTests(unittest.TestCase):
     def policy(self, plan_):
         return json.loads(plan_['acceptance_json'])
 
+    def test_check_objects_are_rejected_before_scope_audit(self):
+        policy = dict(self.policy(self.base), checks=[{'id': 'nonempty'}],
+                      operations=[{'id': 'direct-smiles', 'checks': ['nonempty'], 'purposes': ['report']}])
+        seeded = patch(self.base, '/acceptance_json', json.dumps(policy))
+        with self.assertRaises(planner.PlanningError) as caught:
+            patch(seeded, '/acceptance_json/operations/0/checks', json.dumps([{'id': 'nonempty'}]))
+        for expected in ('Operation direct-smiles', 'acceptance_json.checks', 'strings'):
+            self.assertIn(expected, str(caught.exception))
+        # Invalid proposed data never mutates the base used by the next repair.
+        self.assertEqual(self.policy(seeded)['operations'][0]['checks'], ['nonempty'])
+
+    def test_unhashable_nested_contract_fields_are_clean_patch_rejections(self):
+        for field, value in (('purposes', [{}]), ('checks', [{'id': {}}]),
+                             ('operations', [{'id': {}, 'checks': []}]),
+                             ('input_contract', {'status': {}}), ('invalid_input', {})):
+            with self.subTest(field=field):
+                policy = dict(self.policy(self.base), **{field: value})
+                with self.assertRaises(planner.PlanningError):
+                    patch(self.base, '/acceptance_json', json.dumps(policy))
+
     def test_one_policy_purpose_is_edited_without_resending_the_policy(self):
         applied = patch(self.base, '/acceptance_json/purposes/0', json.dumps('operation'))
         policy = self.policy(applied)

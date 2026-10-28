@@ -85,6 +85,19 @@ class ContractTests(unittest.TestCase):
             self.classification({'status': 'required', 'constraint': ' '})
         self.assertIn('must identify the input constraint', str(caught.exception))
 
+    def test_missing_top_level_check_diagnostic_names_reference_and_location(self):
+        policy = {'invalid_input': 'required', 'scope': 'one SMILES', 'purposes': ['computation'],
+                  'source_path': PATH, 'source_quote': 'terminal fragments', 'checks': [],
+                  'operations': [{'id': 'direct-smiles', 'selector': {'args': [{'index': 0}]},
+                      'checks': ['nonempty'], 'purposes': ['computation'],
+                      'source_path': PATH, 'source_quote': 'terminal fragments',
+                      'input_contract': {'status': 'required', 'constraint': 'nonempty'}}]}
+        with self.assertRaises(ValueError) as caught:
+            contracts({'acceptance_json': json.dumps(policy)}, [], self.index, self.root)
+        for expected in ('direct-smiles', 'nonempty', 'TOP-LEVEL', 'not inside input_contract',
+                         'Do not replace these IDs with objects'):
+            self.assertIn(expected, str(caught.exception))
+
     def test_an_unknown_state_is_rejected(self):
         with self.assertRaises(ValueError) as caught:
             self.classification({'status': 'probably'})

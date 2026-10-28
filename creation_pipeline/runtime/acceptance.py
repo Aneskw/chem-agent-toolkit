@@ -317,12 +317,14 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
                                      'declare the operation required')
             elif state == 'required':
                 if not isinstance(selected, list) or not selected or not set(selected) <= checks.keys():
-                    raise ValueError('Operation ' + str(operation.get('id')) + ' is required but names no '
-                                     'checks. Either add a policy check and reference it, e.g. '
-                                     'checks:[{"id":"nonempty","channel":"args","key":0,'
-                                     '"pattern":"(?s).*\\\\S.*","source_path":"<read file>",'
-                                     '"source_quote":"<verbatim text>"}] with a matching rejection case, '
-                                     'or declare that operation none_documented with its recorded evidence')
+                    missing = ([item for item in selected if item not in checks]
+                               if isinstance(selected, list) else [])
+                    raise ValueError('Operation ' + str(operation.get('id')) + ' is required but its '
+                                     'checks do not reference declared policy checks; missing IDs: '
+                                     + ', '.join(missing) + '. Define check objects in the TOP-LEVEL '
+                                     'acceptance_json.checks array, not inside input_contract. Keep '
+                                     'operations[].checks as a list of string IDs, for example ["nonempty"], '
+                                     'and add matching rejection cases. Do not replace these IDs with objects.')
             elif not isinstance(selected, list) or not selected or not set(selected) <= checks.keys():
                 raise ValueError('Each input operation must apply named input checks; no per-case exemptions')
             if (not isinstance(operation.get('purposes'), list) or not operation['purposes']

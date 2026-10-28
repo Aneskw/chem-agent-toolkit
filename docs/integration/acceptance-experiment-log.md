@@ -139,6 +139,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 | 45 | draft | 5 | — | 已修复的 blocking issue 仍被判阻塞 → `classify=draft` 静默停止 |
 | 46 | blocked | 11 | `base_image_unresolved` | **规划全部通过**；`registry-1.docker.io` TLS 超时 |
 | 47 | ready | 8 | —（gaps 为空） | **混合后端执行 12/12 passed**；规划 3 次尝试；本地 digest 兜底、Docker 构建与 pip 安装成功 |
+| 48 | failed | 6 | —（导出前异常） | 原有描述符 skill；第三次规划补丁的 operation checks 对象在作用域审计中触发 TypeError，未到 Docker |
 
 > 第 2–40 行的“停因”是从该轮 `state/outputs/*/records/*.json`、`runtime/*/*/receipt.json` 与 `run<N>.log` 重建的；如果要精确追某一行，直接看该轮目录里的 `run<N>.log` 尾部和 `materials/planning/<n>/rejection.json`。
 
@@ -269,3 +270,7 @@ git -c http.proxy=http://127.0.0.1:7897 push fork upload-v2:upload-pipeline-with
 | 镜像 ID、构建日志、12 条执行记录 | `runtime/candidate-0db42e9bf94ddd230ae29a2db252b2c177c4a722a121599877a07a3e51b18ea1/9494789ada5d4fd49ed00afbb20fe7e6/` |
 
 下一步：无需为了本次混合后端验收再跑一轮。若要证明全阶段 DeepSeek，另行使用新轮次和对应封套；不要复用 run47，也不要把本轮结果外推到未测试的后端组合。没有 push、merge 或创建 PR。
+
+## 11. 操作者追加复查与实验（run48 起）
+
+操作者随后授权代码审查和 1–2 个基于原有 skill 的完整实验。发现并修复真实入口执行绑定漏洞（`6e76924`）；run47 的原始入口未利用此漏洞，修复后当前严格资格复核仍通过。run48 又暴露了规划补丁的嵌套类型审计崩溃，不能将其描述为通过。完整审查范围、反例验证、修复依据和追加实验见 `docker-acceptance-review-20261028.md`。最多执行 run48/run49 两个新批次，不恢复失败轮，不放宽契约。

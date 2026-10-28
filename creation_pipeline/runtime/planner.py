@@ -472,9 +472,42 @@ def _json_field(plan, field):
         raise PlanningError('Plan field %s must stay JSON text, got %s'
                             % (field, type(value).__name__))
     try:
-        return json.loads(value)
-    except ValueError as exc:
+        decoded = json.loads(value)
+        if field == 'acceptance_json':
+            # These nested fields are JSON text, so PLAN_SCHEMA cannot protect
+            # set/dict operations in downgrade and scope auditing (run48).
+            if not isinstance(decoded, dict):
+                raise ValueError('acceptance_json must be an object')
+            def strings(items, where):
+                if not isinstance(items, list) or any(not isinstance(item, str) for item in items):
+                    raise ValueError(where + ' must be a list of strings')
+            strings(decoded.get('purposes', []), 'Acceptance purposes')
+            operations = decoded.get('operations', [])
+            if not isinstance(operations, list) or any(not isinstance(o, dict) for o in operations):
+                raise ValueError('Acceptance operations must be objects')
+            for operation in operations:
+                label = 'Operation ' + str(operation.get('id'))
+                if not isinstance(operation.get('id'), str):
+                    raise ValueError(label + ': id must be a string')
+                strings(operation.get('checks', []), label + ' checks (IDs referencing '
+                        'acceptance_json.checks, not embedded check objects)')
+                strings(operation.get('purposes', []), label + ' purposes')
+            for label, contract in [('Acceptance', decoded.get('input_contract'))] + [
+                    ('Operation ' + str(o.get('id')), o.get('input_contract')) for o in operations]:
+                if contract is not None and (not isinstance(contract, dict)
+                        or not isinstance(contract.get('status'), str)):
+                    raise ValueError(label + ': input_contract needs a string status')
+            if 'invalid_input' in decoded and not isinstance(decoded['invalid_input'], str):
+                raise ValueError('invalid_input must be a string')
+            checks = decoded.get('checks', [])
+            if not isinstance(checks, list) or any(not isinstance(c, dict)
+                    or not isinstance(c.get('id'), str) for c in checks):
+                raise ValueError('acceptance_json.checks must contain check objects with string IDs')
+        return decoded
+    except json.JSONDecodeError as exc:
         raise PlanningError('Plan field %s is not valid JSON: %s' % (field, exc)) from exc
+    except ValueError as exc:
+        raise PlanningError('Plan field %s has invalid contract structure: %s' % (field, exc)) from exc
 
 
 # The plan fields whose schema type is JSON text. Nothing else is coerced: a wrong
@@ -1229,7 +1262,8 @@ def validate_plan(p, index, source, previous_cases=None, anchors=None):
             if test["kind"] in {"candidate", "regression"} or not test["source_paths"]:
                 raise PlanningError("Unsupported behavior oracle cannot be promoted")
             if not any(k in case for k in ("stdout_equals", "stdout_contains", "expected_json_lines", "relation")) and case.get("entrypoint") is None:
-                raise PlanningError("Behavior test requires assertions or explicit test runner")
+                raise PlanningError('Behavior test ' + test['name']
+                                    + ' requires assertions or explicit test runner')
         cases.append(dict(case, **{k: v for k, v in test.items() if k != "case_json"}, origin="model_proposed"))
     if not {"environment", "interface"} <= {c["layer"] for c in cases if c["oracle_status"] == "supported"}:
         raise PlanningError("Environment and interface validation are required")
