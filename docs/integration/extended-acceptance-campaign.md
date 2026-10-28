@@ -24,3 +24,13 @@
 下一轮配置调整：本地后端的兼容映射将 requested `medium` 发成 provider `high`；后续结构化阶段改为 provider `low`，原生阶段仍是 Codex CLI medium。模型、验收断言、每轮 16 次/3600 秒、单次 600 秒上限不变。这是推理设置调整，不是网络恢复、代码缺陷修复或验收降级。旧轮次的 request.json 保留实际 requested/mapped 设置。
 
 轮后回归：561 OK (3 skipped)，三个自检全绿，下一轮配置 `--preflight` 通过且为 0 次模型调用，Docker 29.8.2 可用。日志 `E:\Users\27343\Docker\acceptance-run50-postflight-tests.log`。前置回归另有一次耗时 632 秒但最终通过，重复启动的诊断检查在确认原始回归已通过后被停止，不是失败批次重启。
+
+## run51：内容审阅错误要求未来的 Docker 证据
+
+起点 `2ef2694`，构建 `20261028T225012-feeab5d0`，北京时间 22:50:12–22:59:35，预算计数 3，状态 `draft`，尚未到结构化 low 规划或 Docker。独立审阅确认原脚本、依赖和 fixtures 的哈希一致、来源断言有依据，但将“缺少当前轮 Docker 报告”列为 blocking check，返回 supply_evidence；host 正确保留 not_run，没有伪造内容批准。证据：`E:\Users\27343\Docker\acceptance-descriptors-a-run51-20261028\state\outputs\20261028T225012-feeab5d0\records\chem-rdkit-descriptors.json`。
+
+这造成阶段循环：Docker 准备需内容通过，而审阅先索取 Docker 执行证据。轮后在 `generation/author.py` 的 review execution_policy 中明确 review_scope、deferred_to_bound_docker、runtime_evidence_required_for_content_approval=false 和 content_pass_grants_runtime_qualification=false；review.md 明确整个用户验收要求由后续 runtime gate 执行，内容正确且测试定义正确时，未来未执行只记非阻塞 pending finding，不能因此索取本阶段不可能拥有的证据。错误代码、错误断言、缺少来源或已观察到的错误结果仍阻塞；旧的 supply_evidence verdict 也不会被 host 自动转 pass。必须新轮取得独立审阅和最终 Docker 证据。
+
+新增专项回归验证上述边界，尤其证明内容 pass 后没有 Docker 证据仍 blocked，不能进入 accepted。本轮失败不计成功，也未续跑。
+
+轮后验证：564 OK (3 skipped)，三个自检全绿，Docker 29.8.2 可用；日志 `E:\Users\27343\Docker\acceptance-run51-postflight-tests.log`。新的内容审阅提示仍需后续真实轮次验证，不能据离线回归宣布解决了所有模型行为波动。

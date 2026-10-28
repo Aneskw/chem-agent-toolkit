@@ -36,7 +36,19 @@
       "model_calls": 4,
       "stop_code": "model_timeout",
       "detail": "HTTP 200 stream did not complete within 600s; requested medium was mapped to provider high"
+    },
+    {
+      "status": "draft",
+      "implementation_commit": "2ef2694",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run51-20261028",
+      "build_id": "20261028T225012-feeab5d0",
+      "structured_reasoning": "low",
+      "scenario": "descriptors-a",
+      "run": 51,
+      "model_calls": 3,
+      "stop_code": "content_review_not_run",
+      "detail": "Content reviewer required future Docker execution evidence before allowing the content gate to pass"
     }
   ],
-  "next_run": 51
+  "next_run": 52
 }

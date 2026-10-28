@@ -5,6 +5,19 @@ known resources if needed. Do not edit official candidate files or install envir
 Run small diagnostics only when execution_policy permits and through helper check so results
 are recorded. This is content/engineering review, not scientific validation or Agent evaluation.
 
+When execution_policy.business_execution is deferred_to_bound_docker, this review
+is the CONTENT gate BEFORE environment planning, image construction and bound business
+execution. A current-run Docker report cannot exist until this content review passes.
+The user's demand for complete Docker acceptance is enforced by that later runtime
+gate; it is not a prerequisite for content approval here. If sources, package and
+declared checks are sound, return pass with resolution none. Record pending execution
+as a non-blocking check finding; do not return not_run/supply_evidence or a blocking
+finding solely because Docker tests have not run. Do not claim those tests passed,
+perform host business execution, waive any declared check, or downgrade a required
+execution_requirement. Content pass never grants runtime qualification. Wrong code,
+wrong assertions, missing source evidence or an observed wrong result remain blocking;
+this separation does not excuse any of them.
+
 Assess four things: source fidelity; ability to perform the declared use; what the checks really
 establish; necessary content versus avoidable burden. Verify entrypoints, preparation, state,
 I/O conventions, parameters, dependencies/acquisition and result meaning. Existing research

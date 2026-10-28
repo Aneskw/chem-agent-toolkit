@@ -56,6 +56,14 @@ def author(session, config, plan, staging, feedback=None, previous=None):
 
 def review(session, plan, artifact, checks, config=None):
     instructions = (PROMPTS / "review.md").read_text(encoding="utf-8")
+    execution_policy = {
+        "generated_checks_enabled": config.get("execute_generated_checks", False),
+        "review_scope": "source_fidelity_package_content_and_declared_checks",
+        "business_execution": ("deferred_to_bound_docker" if config.get('_docker_checks')
+                               else "only_when_explicitly_enabled"),
+        "runtime_evidence_required_for_content_approval": False,
+        "content_pass_grants_runtime_qualification": False,
+    }
     import copy
     stage_schema = copy.deepcopy(REVIEW)
     stage_schema["properties"]["oracle_changes_verified"] = {"type": "boolean"}
@@ -86,7 +94,7 @@ def review(session, plan, artifact, checks, config=None):
         "evidence": session.sources.validate_evidence(plan["evidence"]),
         "sources": session.sources.index(), "user_guidance": (config or {}).get("prompt", ""),
         "constraints": (config or {}).get("constraints", {}),
-        "execution_policy": {"generated_checks_enabled": config.get("execute_generated_checks", False)},
+        "execution_policy": execution_policy,
         "previous_issues": (config or {}).get("_previous_issues", [])}, schema=stage_schema)
     if not isinstance(result, dict) or result.get("status") not in ("pass", "fail", "not_run"):
         raise ValueError("Invalid content review response")
