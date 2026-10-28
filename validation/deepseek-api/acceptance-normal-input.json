@@ -35,7 +35,7 @@
     "agent_progress_timeout": null,
     "max_candidates": 1,
     "max_builds": 1,
-    "repair_rounds": 1
+    "repair_rounds": 2
   },
   "runtime_defaults": {
     "options": {
@@ -62,5 +62,5 @@
       "deepseek-api"
     ]
   },
-  "notes": "Operator-authorised envelope for the current debugging rounds: up to 16 admitted model calls per round, 600 s per call, 3600 s per round, api_retries=0 (model-request retries), api_connect_retries=1 (a connection that never opened cannot have reached the model), no fallback, no probe outside the budget, no restart or resume of a failed round. Native discovery/author/review run as single-shot DeepSeek calls (model.backend=deepseek_api) because the Codex CLI account is rate-limited; switching model.backend back to codex_cli restores the CLI turns. Structured association/planning/diagnosis use the DeepSeek API. pin_base_image=true resolves and freezes the base digest."
+  "notes": "Operator-authorised envelope for the current debugging rounds: up to 16 admitted model calls per round, 600 s per call, 3600 s per round, api_retries=1 (one model-request retry after a transport failure), api_connect_retries=1 (a connection that never opened cannot have reached the model), no fallback, no probe outside the budget, no restart or resume of a failed round. repair_rounds=2 allows three author/review candidates because the independent review keeps finding real source-accuracy defects in the documentation; the call budget still caps the round. Native discovery/author/review run as single-shot DeepSeek calls (model.backend=deepseek_api) because the Codex CLI account is rate-limited; switching model.backend back to codex_cli restores the CLI turns. Structured association/planning/diagnosis use the DeepSeek API. pin_base_image=true resolves and freezes the base digest."
 }
