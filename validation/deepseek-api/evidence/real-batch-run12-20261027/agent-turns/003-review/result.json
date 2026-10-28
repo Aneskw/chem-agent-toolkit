@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "resolution": "none",
+  "findings": [
+    {
+      "location": "scripts/recap_fragments.py; artifact.tests",
+      "problem": "Runtime behavior remains unverified; this pass covers source fidelity and engineering review.",
+      "evidence": "Inspected source document.py lines 39–56 supports the exact fragment oracle; lines 110–118 and 231–235 support the empty-result oracle. All four tests invoke the delivered CLI with JSON and exit-code assertions. Existing structure/runtime_paths passes establish no runtime results; generated_checks_enabled=false.",
+      "impact": "The required execution declaration is supported by actual RDKit parsing and decomposition calls, but container compatibility and input-error behavior remain untested. No blocking content defect was found.",
+      "action": "When execution is authorized, run the four existing tests through helper check in the approved Docker environment. Restore the configured helper Python executable, which was unavailable during review.",
+      "blocking": false,
+      "category": "check"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed"
+}

@@ -1,0 +1,6 @@
+{
+  "sources": [{"id": "basecount", "path": "resources", "license": "MIT"}],
+  "prompt": "Discover and package the DNA base-counting CLI as one reusable executable Skill. Preserve the original script and supplied fixture byte-for-byte, using permitted scripts/assets directories. Independently review content and fixed source expectations. Test the final delivered script, integer business counts, invalid input and actual file IO. Never run source or business checks on the host. Do not claim biological/scientific validation beyond literal character counting.",
+  "execution": {"profile": "production"},
+  "batch": {"label": "stage5-fresh-base-count", "tags": ["cpu", "dna"]}
+}

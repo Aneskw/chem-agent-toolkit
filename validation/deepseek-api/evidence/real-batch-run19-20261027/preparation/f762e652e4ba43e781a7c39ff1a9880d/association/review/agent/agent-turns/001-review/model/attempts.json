@@ -1,0 +1,18 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "elapsed_seconds": 0.071,
+      "error": "[WinError 10054] 远程主机强迫关闭了一个现有的连接。",
+      "error_class": "model_connection_failed",
+      "started_seconds": 0.006,
+      "status": "failed"
+    }
+  ],
+  "request_count": 1,
+  "retry_policy": {
+    "configured": 0,
+    "counted_in_total_deadline": true
+  },
+  "sdk_implicit_retries": "none (no SDK used)"
+}

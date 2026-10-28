@@ -1,0 +1,41 @@
+{
+  "kind": "markdown_python",
+  "entry": "SKILL.md",
+  "runtime_entry": "entry/skill.py",
+  "extraction": {
+    "rule": "single-unindented-python-fence-v1",
+    "block_index": 0,
+    "start_byte": 1727,
+    "end_byte": 2486,
+    "start_line": 21,
+    "markdown_sha256": "64bb10fb3c89ab782ffbb860b1f448b51e886fbe6a8a9e914daa4da14dc5e8c8",
+    "code_sha256": "149f7e38732a387cfd54208f085007fcb3b1a7cb20523faae7c377902c6694ec"
+  },
+  "declaration": {
+    "path": "SKILL.md",
+    "block_index": 0,
+    "kind": "markdown_python"
+  },
+  "association": "reviewed",
+  "source_id": "recap",
+  "source_path": "document.py",
+  "source_sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+  "quote": "To get the standard set of RECAP results, use GetLeaves():\n>>> leaves=res.GetLeaves()\n>>> sorted(leaves.keys())\n['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']",
+  "reason": "The delivery SKILL.md code block imports rdkit.Chem.Recap, calls Recap.RecapDecompose(mol), and returns root.GetLeaves(); this matches the inspected upstream rdkit/Chem/Recap.py at commit 237a1d9027c800784afed8788540f38a3aa595f8 (stored as document.py). The quoted source text documents that GetLeaves returns the standard RECAP leaves for the same example used in SKILL.md. Source scope: RDKit's RECAP hierarchy and reaction definitions with default filtering. Delivery scope: a small wrapper adding input type/blank/zero-atom guards and printing sorted JSON keys. Interpreter is Python with RDKit in an authorized Docker container; function input is either a nonblank SMILES string parsed by Chem.MolFromSmiles or an already sanitized Chem.Mol, and the only wrapper argument is `value`. Working directory is the repository root containing SKILL.md and references/UPSTREAM-NOTICES.txt. Output is a dict keyed by unique fragment SMILES from GetLeaves(), represented by a printed JSON array of sorted keys; necessary supports are RDKit modules Chem and Chem.Recap.",
+  "invocation": "Recap.RecapDecompose(mol).GetLeaves()",
+  "entry_sha256": "64bb10fb3c89ab782ffbb860b1f448b51e886fbe6a8a9e914daa4da14dc5e8c8",
+  "files": [
+    {
+      "path": "references/UPSTREAM-NOTICES.txt",
+      "sha256": "43883954b45778b010e4881f17034d752d0a686914fbdb79d87bf6eaa58e5953",
+      "bytes": 3251
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "64bb10fb3c89ab782ffbb860b1f448b51e886fbe6a8a9e914daa4da14dc5e8c8",
+      "bytes": 5105
+    }
+  ],
+  "review_sha256": "ea76f18e1d4b935b93a5fc23cba2eadb94327267fe95a1c110f2b751b5f952ef",
+  "declaration_source": "author_declaration"
+}

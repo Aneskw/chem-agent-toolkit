@@ -1,0 +1,26 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "connected_seconds": 0.093,
+      "elapsed_seconds": 52.517,
+      "error": "Model connection failed while reading the response: OSError",
+      "error_class": "model_stream_interrupted",
+      "http_status": 200,
+      "response_headers": {
+        "content-type": "text/event-stream; charset=utf-8"
+      },
+      "sent_seconds": 0.093,
+      "started_seconds": 0.007,
+      "status": "failed"
+    }
+  ],
+  "detail": {},
+  "error_class": "model_stream_interrupted",
+  "message": "Model connection failed while reading the response: OSError",
+  "request_count": 1,
+  "retry_policy": {
+    "configured": 0,
+    "counted_in_total_deadline": true
+  }
+}

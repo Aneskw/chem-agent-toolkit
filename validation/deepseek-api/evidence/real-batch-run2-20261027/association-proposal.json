@@ -1,0 +1,8 @@
+{
+  "source_id": "recap",
+  "source_path": "document.py",
+  "quote": ">>> from rdkit.Chem import Recap\n>>> m = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\n>>> res = Recap.RecapDecompose(m)",
+  "reason": "Source scope: source_id recap is the inspected pinned RDKit Recap.py content stored as document.py at upstream commit 237a1d9027c800784afed8788540f38a3aa595f8; it defines RecapDecompose, RecapHierarchyNode.GetLeaves and the reaction definitions used by the delivery. It is provenance and an upstream API reference, not an installed RDKit package. Delivery scope: the extracted single Python fence in SKILL.md is an example adapter, not new RECAP chemistry; it imports rdkit.Chem and rdkit.Chem.Recap and defines terminal_fragments(smiles), which validates a nonblank string, parses it, rejects missing or zero-atom molecules, calls Recap.RecapDecompose(mol), then returns root.GetLeaves(). The __main__ path uses Python 3 argparse with an optional positional SMILES, sorts the leaf dictionary keys, and prints JSON to stdout. It has no data-file or working-directory dependency; it requires an already-installed RDKit inside an authorized Docker container and no dependency installation or host execution. The quote is one contiguous source passage showing the exact Recap import and Recap.RecapDecompose call; GetLeaves is the terminal-node retrieval method in the same inspected source.",
+  "invocation": "python recap_example.py [SMILES]",
+  "supported": true
+}

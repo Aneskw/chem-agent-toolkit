@@ -1,0 +1,8 @@
+{
+  "source_id": "recap",
+  "source_path": "document.py",
+  "quote": "To get the standard set of RECAP results, use GetLeaves():\n>>> leaves=res.GetLeaves()\n>>> sorted(leaves.keys())\n['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']",
+  "reason": "The delivery SKILL.md code block imports rdkit.Chem.Recap, calls Recap.RecapDecompose(mol), and returns root.GetLeaves(); this matches the inspected upstream rdkit/Chem/Recap.py at commit 237a1d9027c800784afed8788540f38a3aa595f8 (stored as document.py). The quoted source text documents that GetLeaves returns the standard RECAP leaves for the same example used in SKILL.md. Source scope: RDKit's RECAP hierarchy and reaction definitions with default filtering. Delivery scope: a small wrapper adding input type/blank/zero-atom guards and printing sorted JSON keys. Interpreter is Python with RDKit in an authorized Docker container; function input is either a nonblank SMILES string parsed by Chem.MolFromSmiles or an already sanitized Chem.Mol, and the only wrapper argument is `value`. Working directory is the repository root containing SKILL.md and references/UPSTREAM-NOTICES.txt. Output is a dict keyed by unique fragment SMILES from GetLeaves(), represented by a printed JSON array of sorted keys; necessary supports are RDKit modules Chem and Chem.Recap.",
+  "invocation": "Recap.RecapDecompose(mol).GetLeaves()",
+  "supported": true
+}

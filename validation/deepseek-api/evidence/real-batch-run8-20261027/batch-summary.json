@@ -1,0 +1,23 @@
+{
+  "batch": "run 8",
+  "build_id": "20261027T171821-354e8d22",
+  "status": "failed",
+  "stage": "authoring (before entry association, planning, Docker)",
+  "reason": "Unsupported file role: LICENSES.txt",
+  "model_calls_used": 3,
+  "model_calls_allowed": 8,
+  "provider_stages": {
+    "discovery": "codex_cli",
+    "authoring": "codex_cli",
+    "association": "not_run",
+    "planning": "not_run"
+  },
+  "docker": "not_run",
+  "author_repair_rounds_used": 1,
+  "delivered_files": [
+    "LICENSES.txt",
+    "scripts/terminal_fragments.py",
+    "SKILL.md"
+  ],
+  "note": "Authored package kept a top-level LICENSES.txt (role layout violation) and a check-definition error; the single repair round had only been told about the check error. Fixed offline after the batch."
+}

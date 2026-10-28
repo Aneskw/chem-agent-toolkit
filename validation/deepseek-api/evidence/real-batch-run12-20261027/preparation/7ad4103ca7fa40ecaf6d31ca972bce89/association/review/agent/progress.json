@@ -1,0 +1,40 @@
+{
+  "phase": "review",
+  "receipts": [
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 228159,
+        "cached_input_tokens": 195328,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1863,
+        "reasoning_output_tokens": 121
+      },
+      "prompt_sha256": "7280122bae5226ae6029a4172b3a1911d3d6115001abcf68d4ba076f28767b94",
+      "tool_events": 8,
+      "session_id": "01a17d2f-e828-74e0-bfd6-86fb09a99616",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 107.659,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 5.992,
+        "last_stdout_seconds": 103.772,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    }
+  ]
+}

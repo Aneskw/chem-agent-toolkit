@@ -1,0 +1,31 @@
+{
+  "action": "patch",
+  "requested_files": [],
+  "reason": "Fix operation selector to the documented positional argument token 'smiles' instead of a single case-specific SMILES, remove the unparsable rejection case that lacked a named check, and update coverage gap text accordingly.",
+  "operations": [
+    {
+      "op": "replace",
+      "path": "/acceptance_json/operations/0/selector/args/0/equals",
+      "value_json": "\"smiles\""
+    },
+    {
+      "op": "replace",
+      "path": "/acceptance_json/operations/0/source_path",
+      "value_json": "\"package/scripts/recap_terminal.py\""
+    },
+    {
+      "op": "replace",
+      "path": "/acceptance_json/operations/0/source_quote",
+      "value_json": "\"    parser.add_argument(\\\"smiles\\\", help=\\\"One nonempty molecular SMILES string\\\")\""
+    },
+    {
+      "op": "remove",
+      "path": "/tests/5"
+    },
+    {
+      "op": "replace",
+      "path": "/acceptance_json/coverage/validation_gaps/0",
+      "value_json": "\"Semantic predicates for RDKit parse failure and zero-atom molecules cannot be expressed as full-match regex checks; they remain documented constraints but are not represented as named checks or per-case rejection tests.\""
+    }
+  ]
+}

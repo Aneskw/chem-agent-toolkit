@@ -1,0 +1,24 @@
+{
+  "content": "{\n  \"action\": \"patch\",\n  \"requested_files\": [],\n  \"reason\": \"Replace acceptance source quotes containing ellipses or omitted indentation with exact contiguous quotes from the delivered entry, fixing the reported exact-quotation requirement.\",\n  \"operations\": [\n    {\n      \"op\": \"replace\",\n      \"path\": \"/acceptance_json/source_quote\",\n      \"value_json\": \"\\\"    parser.add_argument(\\\\\\\"smiles\\\\\\\", help=\\\\\\\"One nonempty molecular SMILES string\\\\\\\")\\\\n    args = parser.parse_args()\\\\n    if not args.smiles.strip():\\\\n        return emit_error(\\\\\\\"invalid_input\\\\\\\", \\\\\\\"SMILES must not be blank\\\\\\\", 2)\\\\n    try:\\\\n        from rdkit import Chem\\\\n        from rdkit.Chem import Recap\\\\n    except ImportError as exc:\\\\n        return emit_error(\\\\\\\"runtime_error\\\\\\\", str(exc), 1)\\\\n    try:\\\\n        mol = Chem.MolFromSmiles(args.smiles)\\\\n    except Exception as exc:\\\\n        return emit_error(\\\\\\\"invalid_input\\\\\\\", str(exc), 2)\\\\n    if mol is None:\\\\n        return emit_error(\\\\\\\"invalid_input\\\\\\\", \\\\\\\"SMILES could not be parsed\\\\\\\", 2)\\\\n    if mol.GetNumAtoms() == 0:\\\\n        return emit_error(\\\\\\\"invalid_input\\\\\\\", \\\\\\\"Molecule must contain atoms\\\\\\\", 2)\\\"\"\n    },\n    {\n      \"op\": \"replace\",\n      \"path\": \"/acceptance_json/operations/0/input_contract/source_quote\",\n      \"value_json\": \"\\\"    parser.add_argument(\\\\\\\"smiles\\\\\\\", help=\\\\\\\"One nonempty molecular SMILES string\\\\\\\")\\\\n    args = parser.parse_args()\\\\n    if not args.smiles.strip():\\\\n        return emit_error(\\\\\\\"invalid_input\\\\\\\", \\\\\\\"SMILES must not be blank\\\\\\\", 2)\\\\n    try:\\\\n        from rdkit import Chem\\\\n        from rdkit.Chem import Recap\\\\n    except ImportError as exc:\\\\n        return emit_error(\\\\\\\"runtime_error\\\\\\\", str(exc), 1)\\\\n    try:\\\\n        mol = Chem.MolFromSmiles(args.smiles)\\\\n    except Exception as exc:\\\\n        return emit_error(\\\\\\\"invalid_input\\\\\\\", str(exc), 2)\\\\n    if mol is None:\\\\n        return emit_error(\\\\\\\"invalid_input\\\\\\\", \\\\\\\"SMILES could not be parsed\\\\\\\", 2)\\\\n    if mol.GetNumAtoms() == 0:\\\\n        return emit_error(\\\\\\\"invalid_input\\\\\\\", \\\\\\\"Molecule must contain atoms\\\\\\\", 2)\\\"\"\n    },\n    {\n      \"op\": \"replace\",\n      \"path\": \"/acceptance_json/operations/0/input_contract/checks/0/source_quote\",\n      \"value_json\": \"\\\"    if not args.smiles.strip():\\\\n        return emit_error(\\\\\\\"invalid_input\\\\\\\", \\\\\\\"SMILES must not be blank\\\\\\\", 2)\\\"\"\n    }\n  ]\n}",
+  "finish_reason": "stop",
+  "model": "deepseek-v4-pro",
+  "reasoning_chars": 19723,
+  "request_id": {
+    "source": "body:id",
+    "value": "b9d4a389-398e-4d27-84b1-92edfcd3962a"
+  },
+  "schema_validated": true,
+  "usage": {
+    "completion_tokens": 5236,
+    "completion_tokens_details": {
+      "reasoning_tokens": 4559
+    },
+    "prompt_cache_hit_tokens": 0,
+    "prompt_cache_miss_tokens": 18952,
+    "prompt_tokens": 18952,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 24188
+  }
+}

@@ -1,0 +1,4 @@
+﻿prompt identical: True
+schema identical: True
+fixture identical: True
+frozen file equals the sent prompt (no redaction applied): True

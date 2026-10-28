@@ -1,0 +1,134 @@
+{
+  "completed": true,
+  "summary": "Packaged an RDKit RECAP terminal-fragment skill with a single CLI/Python helper script, BSD license and source notice, plus source-grounded tests for normal, empty, minFragmentSize, ring-only, and invalid-input boundaries. Runtime requires Python and RDKit.",
+  "entry": {
+    "kind": "script",
+    "path": "scripts/recap_leaves.py"
+  },
+  "runtime_requirement": {
+    "status": "required",
+    "reason": "The delivered capability executes Python code that imports rdkit.Chem.Recap and calls RecapDecompose and GetLeaves; a Python environment with RDKit installed is required to produce terminal fragments.",
+    "citations": [
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": ">>> from rdkit import Chem\n>>> from rdkit.Chem import Recap"
+      },
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": "def RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None):"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "SKILL.md",
+      "content": "---\nname: rdkit-recap-terminal-fragments\ndescription: Generate RDKit RECAP terminal molecular fragments from a SMILES using RecapDecompose and GetLeaves. Use when you need the standard leaf fragments of a molecule, not the full RECAP hierarchy or molecular descriptors.\n---\n\n# RDKit RECAP terminal fragments\n\nThis skill retrieves the standard RECAP terminal fragments for one molecule. It wraps\n`rdkit.Chem.Recap.RecapDecompose` and `RecapHierarchyNode.GetLeaves()` and returns\ncanonical SMILES keys with attachment points represented as `*`. It does not calculate\ndescriptors or interpret chemistry.\n\n## Prerequisites\n\nInstall RDKit (the capability was read from the RDKit source at commit\n`237a1d9027c800784afed8788540f38a3aa595f8`; expected compatible with any RDKit build providing\n`rdkit.Chem.Recap`). The helper script requires Python 3.\n\n## Scope and boundary\n\n- `GetLeaves()` returns only terminal leaf nodes, keyed by canonical product SMILES.\n  `root.children` gives immediate children; `root.GetAllChildren()` gives all descendants.\n  For the standard RECAP terminal fragment set, use `GetLeaves()`.\n- A valid empty leaf dictionary means no permitted cleavable bond was found, or all\n  candidate fragments were rejected by the fragment-size filter. This is a normal outcome,\n  not an error.\n- `minFragmentSize` changes rejection logic: with default `0`, products whose dummy-stripped\n  SMILES is `''`, `'C'`, `'CC'`, or `'CCC'` are rejected; with `minFragmentSize > 0`,\n  products are rejected when `explicit_atom_count - dummy_count < minFragmentSize`.\n- `onlyUseReactions` can restrict decomposition to selected reaction indexes:\n  0 urea, 1 amide, 2 ester, 3 amines, 4 cyclic amines, 5 ether, 6 olefin,\n  7 aromatic N-aliphatic C, 8 lactam N-aliphatic C, 9 aromatic C-aromatic C,\n  10 aromatic N-aromatic C, 11 sulphonamide.\n\n## Inputs and outputs\n\n### CLI helper\n\n`scripts/recap_leaves.py` accepts a SMILES string and optional `--min-fragment-size N`.\nIt prints one canonical terminal-fragment SMILES per line, or a JSON array with `--json`.\n\n```text\npython scripts/recap_leaves.py 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'\n*C1CC1\n*c1ccc(OC)cn1\n*c1ccccc1*\n```\n\n```text\npython scripts/recap_leaves.py --json 'CCCOCCC' --min-fragment-size 3\n[\"*CCC\"]\n```\n\nInvalid SMILES prints `error: invalid SMILES: ...` and exits with status 1.\n\n### Python function\n\nUse the same wrapper from your own code when you already have a sanitized RDKit `Mol`:\n\n```text\nfrom rdkit import Chem\nfrom recap_leaves import terminal_fragments  # scripts/recap_leaves.py on sys.path\n\nmol = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\nterminal_fragments(mol)\n# ['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']\n```\n\nThe function raises `ValueError` if `mol` is `None`. It also accepts\n`min_fragment_size` and `only_use_reactions` as keyword arguments, matching\n`RecapDecompose`.\n\n## Result interpretation and checks\n\n- Confirm RDKit parsed the input before decomposition; the CLI wrapper handles invalid\n  SMILES and exits non-zero.\n- Trust the canonical keys from `GetLeaves()`; do not post-process them unless you\n  specifically intend to neutralize or strip attachment points.\n- Empty output is valid and means the molecule had no permitted cleavable fragment under\n  the selected filters. Examples: `CCCOCCC` with default `minFragmentSize=0`, ring-only\n  `C1CCCCO1`, and charged/protonated forms such as `c1ccccc1[n+]1ccccc1` and\n  `C1CC1[NH+]C(=O)CC`.\n- The returned SMILES keys use `*` dummy atoms at cleavage sites, not the original\n  molecule, and do not contain hydrogens by default.\n\nSee `references/LICENSE.txt` for the BSD 3-Clause license and attribution.\n"
+    },
+    {
+      "path": "scripts/recap_leaves.py",
+      "content": "#!/usr/bin/env python3\n\"\"\"Terminal fragments from RDKit RECAP.\n\nReads a SMILES string and prints the canonical SMILES of all terminal RECAP\nleaves, one per line. With --json, prints a JSON array instead.\n\nSource: RDKit rdkit/Chem/Recap.py, commit\n237a1d9027c800784afed8788540f38a3aa595f8 (BSD 3-Clause).\n\"\"\"\nimport argparse\nimport json\n\nfrom rdkit import Chem\nfrom rdkit.Chem import Recap\n\n\ndef terminal_fragments(mol, min_fragment_size=0, only_use_reactions=None):\n    if mol is None:\n        raise ValueError('mol must be a sanitized RDKit Mol')\n    root = Recap.RecapDecompose(\n        mol,\n        minFragmentSize=min_fragment_size,\n        onlyUseReactions=only_use_reactions,\n    )\n    return sorted(root.GetLeaves().keys())\n\n\ndef _parse_smiles(smiles):\n    mol = Chem.MolFromSmiles(smiles)\n    if mol is None:\n        raise ValueError(f'error: invalid SMILES: {smiles!r}')\n    return mol\n\n\ndef main(argv):\n    parser = argparse.ArgumentParser(\n        description='Print RDKit RECAP terminal fragments for one SMILES.'\n    )\n    parser.add_argument('smiles', help='Input SMILES')\n    parser.add_argument(\n        '--min-fragment-size',\n        type=int,\n        default=0,\n        help='Minimum explicit atom count after excluding attachment-point dummy atoms.',\n    )\n    parser.add_argument(\n        '--json',\n        action='store_true',\n        help='Print a JSON array instead of one SMILES per line.',\n    )\n    args = parser.parse_args(argv)\n\n    try:\n        mol = _parse_smiles(args.smiles)\n        fragments = terminal_fragments(mol, args.min_fragment_size)\n    except ValueError as exc:\n        print(str(exc))\n        return 1\n\n    if args.json:\n        print(json.dumps(fragments))\n    else:\n        for smi in fragments:\n            print(smi)\n    return 0\n\n\nif __name__ == '__main__':\n    import sys\n    sys.exit(main(sys.argv[1:]))\n"
+    },
+    {
+      "path": "references/LICENSE.txt",
+      "content": "BSD 3-Clause License\n\nCopyright (c) 2006-2015, Rational Discovery LLC, Greg Landrum, and Julie Penzotti and others\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are met:\n\n1. Redistributions of source code must retain the above copyright notice, this\n   list of conditions and the following disclaimer.\n\n2. Redistributions in binary form must reproduce the above copyright notice,\n   this list of conditions and the following disclaimer in the documentation\n   and/or other materials provided with the distribution.\n\n3. Neither the name of the copyright holder nor the names of its\n   contributors may be used to endorse or promote products derived from\n   this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\"\nAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\nIMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE\nFOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL\nDAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR\nSERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\nCAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,\nOR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\nOF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    {
+      "path": "references/NOTICE.txt",
+      "content": "#\n#  Copyright (c) 2007, Novartis Institutes for BioMedical Research Inc.\n#  All rights reserved.\n#\n# Redistribution and use in source and binary forms, with or without\n# modification, are permitted provided that the following conditions are\n# met:\n#\n#     * Redistributions of source code must retain the above copyright\n#       notice, this list of conditions and the following disclaimer.\n#     * Redistributions in binary form must reproduce the above\n#       copyright notice, this list of conditions and the following\n#       disclaimer in the documentation and/or other materials provided\n#       with the distribution.\n#     * Neither the name of Novartis Institutes for BioMedical Research Inc.\n#       nor the names of its contributors may be used to endorse or promote\n#       products derived from this software without specific prior written permission.\n#\n# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n# \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\n# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\n# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\n# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\n# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT\n# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    }
+  ],
+  "tests": [
+    {
+      "name": "normal-3-terminal-leaves",
+      "argv": [
+        "{python}",
+        "scripts/recap_leaves.py",
+        "--json",
+        "C1CC1Oc1ccccc1-c1ncc(OC)cc1"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 0,
+      "json_equals": [
+        "*C1CC1",
+        "*c1ccc(OC)cn1",
+        "*c1ccccc1*"
+      ],
+      "evidence": "e1",
+      "purpose": "Docstring/test1 in Recap.py shows this SMILES has four immediate children, five GetAllChildren nodes, and three GetLeaves; the terminal keys are sorted by the script. Asserting the exact JSON array verifies terminal-vs-hierarchy interpretation and canonical attachment-point SMILES.",
+      "kind": "source_example"
+    },
+    {
+      "name": "default-empty-ether",
+      "argv": [
+        "{python}",
+        "scripts/recap_leaves.py",
+        "--json",
+        "CCCOCCC"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 0,
+      "json_equals": [],
+      "evidence": "e1",
+      "purpose": "Source test2/testMinFragmentSize expect children=={} and empty leaves for default minFragmentSize=0 because the small ether cleavage products are rejected by the dummy-stripped SMILES filter.",
+      "kind": "source_example"
+    },
+    {
+      "name": "minFragmentSize-3-one-leaf",
+      "argv": [
+        "{python}",
+        "scripts/recap_leaves.py",
+        "--json",
+        "--min-fragment-size",
+        "3",
+        "CCCOCCC"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 0,
+      "json_equals": [
+        "*CCC"
+      ],
+      "evidence": "e1",
+      "purpose": "Source testMinFragmentSize shows RecapDecompose('CCCOCCC', minFragmentSize=3) has one terminal leaf key '*CCC', verifying the size-filter boundary produces a non-empty valid result.",
+      "kind": "source_example"
+    },
+    {
+      "name": "ring-only-empty",
+      "argv": [
+        "{python}",
+        "scripts/recap_leaves.py",
+        "--json",
+        "C1CCCCO1"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 0,
+      "json_equals": [],
+      "evidence": "e1",
+      "purpose": "Source testEtherRxn demonstrates that the cyclic ether C1CCCCO1 has zero terminal leaves; this checks valid empty outcome for a ring-only molecule.",
+      "kind": "source_example"
+    },
+    {
+      "name": "invalid-smiles-rejection",
+      "argv": [
+        "{python}",
+        "scripts/recap_leaves.py",
+        "--json",
+        "not-a-smiles"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 1,
+      "stdout_contains": [
+        "error: invalid SMILES"
+      ],
+      "evidence": "e1",
+      "purpose": "The delivered CLI wrapper parses SMILES before calling RecapDecompose and is documented to reject invalid input. This checks the boundary with an observable diagnostic and non-zero exit.",
+      "kind": "rejection"
+    }
+  ],
+  "issues": [],
+  "notes": [
+    "Generated checks are not executed in this environment; runtime acceptance belongs to Docker validation.",
+    "The delivered helper script was not run here; expected canonical SMILES and empty outcomes are taken from the source unit tests and docstring."
+  ]
+}

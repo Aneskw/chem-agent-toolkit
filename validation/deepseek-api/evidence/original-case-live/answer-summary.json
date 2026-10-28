@@ -1,0 +1,43 @@
+{
+  "run": "20261027T031727Z",
+  "answer_action": "plan",
+  "plan_shape": {
+    "base_image": "python:3.11-slim",
+    "platform": "linux/amd64",
+    "script": "entry/skill.py",
+    "entrypoint": [
+      "python",
+      "/opt/skill/entry/skill.py"
+    ],
+    "dependencies": [
+      "rdkit"
+    ],
+    "steps": 2,
+    "tests": 7,
+    "generated_files": 0,
+    "resource_assessment_status": "unknown",
+    "acceptance_json_keys": [
+      "checks",
+      "constraint",
+      "invalid_input",
+      "operations",
+      "purposes",
+      "scope",
+      "source_path",
+      "source_quote"
+    ]
+  },
+  "test_names": [
+    "env-rdkit-version",
+    "interface-default-example",
+    "behavior-cccoCCC-empty",
+    "behavior-cyclic-sulfonamide-empty",
+    "behavior-sulfonamide-fragments",
+    "behavior-reject-empty-smiles",
+    "metamorphic-equivalent-dipropyl-ether"
+  ],
+  "schema_validation": "passed locally against the saved PLAN_SCHEMA (otherwise no plan would have been returned)",
+  "gate_first_failure": "PlanningError: Unknown fixture fields: stderr_contains; rejection violates and invalid_input_reason belong inside acceptance",
+  "gate_failure_after_removing_the_unknown_field_only": "PlanningError: Behavior test requires assertions or explicit test runner",
+  "conclusion": "the plan is schema-valid but fails the unchanged acceptance-fixture gate on one negative case: an unsupported fixture field, and without it the case has no assertion at all"
+}

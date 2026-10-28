@@ -1,0 +1,33 @@
+{
+  "mode": "run",
+  "started_at": "20261027T025458Z",
+  "timeout_seconds": 600.0,
+  "single_request": true,
+  "retries": 0,
+  "continuation": false,
+  "backend": "deepseek_api",
+  "model_from_configuration_only": true,
+  "frozen": {
+    "prompt_identical": true,
+    "schema_identical": true,
+    "fixture_identical": true,
+    "persisted_equals_sent": true,
+    "prompt_sha256": "93b49f992951cf3353ccc7be5e2eccf8795daf873415335ae1b8bed1bdc9b5dc",
+    "schema_sha256": "7e53e6bed5daeda797cf71f1086b50297fd23b0e8bd12552735ecb542fb50818"
+  },
+  "status": "blocked_config_invalid",
+  "error_class": "model_config_invalid",
+  "reason": "DEEPSEEK_API_KEY is not configured (process environment or repository .env); no request was sent",
+  "elapsed_seconds": 0.035,
+  "guard_invocations": 1,
+  "ledger": {
+    "request_count": 0,
+    "ledgers": []
+  },
+  "request_count": 0,
+  "redaction": {
+    "files_with_redacted_shapes": [],
+    "api_key_recorded": false,
+    "note": "authentication material is never written to disk"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "pass",
+  "resolution": "none",
+  "findings": [
+    {
+      "location": "SKILL.md ## Optional filters",
+      "problem": "The optional-filter example says it restricts to the amide reaction and requires a non-dummy atom count of at least 1 per product, but the code only passes onlyUseReactions=[1]; minFragmentSize is not set, so the default minFragmentSize=0 filter applies instead.",
+      "evidence": "SKILL.md states 'Restrict to the amide reaction (index `1`) and require non-dummy atom count at least 1 per product:' then shows `root = Recap.RecapDecompose(mol, onlyUseReactions=[1])`. In source RecapDecompose, minFragmentSize > 0 is required to use the explicit atom-count filter; otherwise the default small-fragment filter branch runs: `elif pSmi.replace('*', '').replace('()', '') in ('', 'C', 'CC', 'CCC'):`.",
+      "impact": "A reader copying the snippet may believe minFragmentSize=1 is active when it is not. The displayed fragment output is source-supported, but the prose misstates the parameter semantics.",
+      "action": "Either change the example call to `RecapDecompose(mol, onlyUseReactions=[1], minFragmentSize=1)` or change the wording to say the example uses only reaction restriction with default small-fragment filtering.",
+      "blocking": false,
+      "category": "file"
+    },
+    {
+      "location": "SKILL.md ## Capability and boundary / ## Normal path",
+      "problem": "The operational boundary that business execution is permitted only inside a Docker container is not stated in the delivered SKILL.md, even though the normal path is runnable Python code.",
+      "evidence": "The supplied plan says 'require business execution only in Docker,' and the user guidance says 'business execution is permitted only in a Docker container.' SKILL.md only says 'RDKit must already be installed and importable in the execution environment' and then shows `from rdkit import Chem` / `Recap.RecapDecompose(mol)` without a Docker qualifier.",
+      "impact": "An agent following the skill may attempt to install or run RDKit on the host, contrary to the execution policy for this package.",
+      "action": "Add a concise execution-boundary sentence near the prerequisites or normal path, for example: 'Run only inside the approved Docker container; do not install or execute RDKit on the host.' Do not generate a Docker environment.",
+      "blocking": false,
+      "category": "suggestion"
+    },
+    {
+      "location": "artifacts/checks",
+      "problem": "The delivered checks are structural and runtime-path checks only; no executable test covers the normal path in this review. The source file includes upstream unit tests matching the documented outputs, but those tests were not run.",
+      "evidence": "The artifact has `tests: []` and the only checks listed are `structure` and `runtime_paths`, both pass; generated checks are disabled.",
+      "impact": "The normal path is source-supported but not runtime-verified in this review, so RDKit import/version or environment-specific failures would not be detected.",
+      "action": "If permitted, run the normal-path snippet in the Docker environment and assert the expected leaf set; otherwise record this as an execution limitation rather than inferring runtime success from structural checks.",
+      "blocking": false,
+      "category": "check"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed"
+}

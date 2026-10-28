@@ -1,0 +1,17 @@
+{
+  "action": "patch",
+  "requested_files": [],
+  "reason": "Diagnosis: the plan schema requires tests[].case_json to be a JSON *string* (JSON-encoded case text), but in the previous plan the 'behavior-default-example' (index 2) and 'behavior-empty-decomposition' (index 3) cases embedded case_json as JSON objects, so validation failed with \"is not of type 'string'\". Fix: replace both case_json values with properly JSON-encoded strings (value_json holds a JSON string whose content is the case object text, with inner stdout_equals text escaped). No tests are removed or weakened: same args, same expected stdout, same acceptance assertions, same sources. The rejection case (index 4) already used a string case_json and is retained unchanged, as are the environment and interface cases, steps, dependencies and base image.",
+  "operations": [
+    {
+      "op": "replace",
+      "path": "/tests/2/case_json",
+      "value_json": "\"{\\\"args\\\":[\\\"C1CC1Oc1ccccc1-c1ncc(OC)cc1\\\"],\\\"expected_exit\\\":0,\\\"stdout_equals\\\":\\\"{\\\\\\\"fragments\\\\\\\": [\\\\\\\"*C1CC1\\\\\\\", \\\\\\\"*c1ccc(OC)cn1\\\\\\\", \\\\\\\"*c1ccccc1*\\\\\\\"]}\\\",\\\"capture_stdout\\\":true,\\\"output_file\\\":\\\"stdout.txt\\\",\\\"timeout_seconds\\\":60,\\\"acceptance\\\":{\\\"purpose\\\":\\\"computation\\\",\\\"source_path\\\":\\\"sources/recap/document.py\\\",\\\"source_quote\\\":\\\"['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']\\\",\\\"assertion\\\":{\\\"role\\\":\\\"completion\\\",\\\"source_path\\\":\\\"sources/recap/document.py\\\",\\\"source_quote\\\":\\\"['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']\\\",\\\"kind\\\":\\\"stdout_equals\\\",\\\"value\\\":\\\"{\\\\\\\"fragments\\\\\\\": [\\\\\\\"*C1CC1\\\\\\\", \\\\\\\"*c1ccc(OC)cn1\\\\\\\", \\\\\\\"*c1ccccc1*\\\\\\\"]}\\\"}}}\""
+    },
+    {
+      "op": "replace",
+      "path": "/tests/3/case_json",
+      "value_json": "\"{\\\"args\\\":[\\\"CCCOCCC\\\"],\\\"expected_exit\\\":0,\\\"stdout_equals\\\":\\\"{\\\\\\\"fragments\\\\\\\": []}\\\",\\\"capture_stdout\\\":true,\\\"output_file\\\":\\\"stdout.txt\\\",\\\"timeout_seconds\\\":60,\\\"acceptance\\\":{\\\"purpose\\\":\\\"computation\\\",\\\"source_path\\\":\\\"package/SKILL.md\\\",\\\"source_quote\\\":\\\"For the valid input `CCCOCCC`, it is `[]`.\\\",\\\"assertion\\\":{\\\"role\\\":\\\"completion\\\",\\\"source_path\\\":\\\"package/SKILL.md\\\",\\\"source_quote\\\":\\\"An empty dictionary/list is a successful outcome when no descendants survive the decomposition rules.\\\",\\\"kind\\\":\\\"stdout_equals\\\",\\\"value\\\":\\\"{\\\\\\\"fragments\\\\\\\": []}\\\"}}}\""
+    }
+  ]
+}

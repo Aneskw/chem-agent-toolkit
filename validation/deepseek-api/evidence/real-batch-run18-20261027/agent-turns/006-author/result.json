@@ -1,0 +1,98 @@
+{
+  "completed": true,
+  "summary": "Packaged rdkit-recap-terminal-fragments skill with corrected valid-empty guidance: CCCOCCC default empty is now attributed to the built-in small-fragment filter, and C1CC=CC1 is used as the no-reaction-match example. Delivered SKILL.md and references/LICENSE.txt, declared the single Python block as entry, and recorded source-grounded checks, runtime requirement, issues, and notes.",
+  "entry": {
+    "kind": "markdown_python",
+    "path": "SKILL.md",
+    "block_index": 1
+  },
+  "files": [
+    {
+      "path": "SKILL.md",
+      "content": "---\nname: rdkit-recap-terminal-fragments\ndescription: Generate RDKit RECAP terminal molecular fragments from a valid RDKit Mol using RecapDecompose and GetLeaves; select for molecular fragmentation when terminal leaves, not full hierarchy or descriptor calculation, are needed.\n---\n\n# RDKit RECAP terminal fragments\n\n## Capability and boundary\nThis skill invokes the RDKit implementation of the RECAP algorithm from Lewell et al. and returns the terminal fragment set via `RecapHierarchyNode.GetLeaves()`. It fragments molecules only; output indicates algorithm-recognized bond breaks and does not imply synthetic feasibility, bioactivity, or chemical validation beyond the documented RECAP rules.\n\nThe terminal leaves are the standard RECAP result. Use `GetLeaves()`, not `children` (first-level reaction products) or `GetAllChildren()` (all hierarchy nodes), when terminal fragments are desired.\n\n## Prerequisites\n- Python 3 with the `rdkit` package installed, for example with `pip install rdkit` if it is not already available.\n- The source imports `rdkit.Chem` and `rdkit.Chem.rdChemReactions`.\n- A valid RDKit `Mol` object. Normally obtain it with `Chem.MolFromSmiles` and reject `None`.\n\n## Inputs\n- `mol`: a sanitized RDKit `Mol`.\n- Optional arguments to `RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None)`:\n  - `allNodes`: an optional dictionary reused across calls to share hierarchy nodes by canonical input SMILES.\n  - `minFragmentSize`: when greater than 0, discard a product if its non-dummy heavy-atom count is less than this value.\n  - `onlyUseReactions`: if given, an iterable of reaction indices to apply; all other reaction indices are skipped.\n\nEven with default `minFragmentSize=0`, `RecapDecompose` applies a built-in small-fragment filter: a product is discarded when its SMILES, after removing `*` and then `()`, is one of `''`, `'C'`, `'CC'`, or `'CCC'`. This is independent of `minFragmentSize`.\n\n## Outputs\n- `root = Recap.RecapDecompose(mol)` is a `RecapHierarchyNode`.\n- `root.GetLeaves()` returns a `dict` keyed by canonical fragment SMILES.\n- Each key contains `*` dummy atoms at broken bonds; each value is a `RecapHierarchyNode` whose `.mol` is the isolated fragment Mol.\n- The returned dictionary may be empty; see valid empty outcomes below.\n\n## Normal path\nOnly one Python example is executable in this skill:\n\n```python\nfrom rdkit import Chem\nfrom rdkit.Chem import Recap\n\nsmiles = 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'\nmol = Chem.MolFromSmiles(smiles)\nif mol is None:\n    raise ValueError(f'Invalid SMILES: {smiles!r}')\n\nroot = Recap.RecapDecompose(mol)\nleaves = root.GetLeaves()\nfor fragment_smiles, node in leaves.items():\n    fragment_mol = node.mol  # isolated fragment Mol with '*' dummy atoms\n\nprint(sorted(leaves.keys()))\n```\n\nExpected terminal leaf keys for this molecule (from the source doctest):\n`['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']`.\nSort keys before comparing because fragment SMILES order is not guaranteed.\n\n## Result interpretation and checks\n- Success: `leaves` is a dict; each key is a fragment SMILES, and each value's `.mol` is a valid RDKit `Mol`.\n- Direct children: `root.children` gives first-level bond-break products (4 keys for the doctest molecule), not the terminal set.\n- Full hierarchy: `root.GetAllChildren()` includes intermediate nodes (`*c1ccccc1-c1ccc(OC)cn1`, `*c1ccccc1OC1CC1`) that are not terminal fragments.\n- Valid empty `GetLeaves()` outcomes include:\n  - No reaction SMARTS matches the input under the selected/default reaction set, for example `C1CC=CC1` with the default decomposition returns no leaves.\n  - The built-in default small-fragment filter drops all products even though a reaction matches, for example `CCCOCCC` with defaults: the ether reaction matches, but both `*CCC` products are removed by the default small-fragment rule.\n  - `minFragmentSize` filters all products, for example `CCCOCC` with `minFragmentSize=3` returns no leaves.\n  - Charged/protonated forms do not match the documented definitions, for example `c1ccccc1[n+]1ccccc1`.\n- Invalid input: `Chem.MolFromSmiles` returns `None` for unparsable SMILES; pass a valid `Mol`, never `None`, to `RecapDecompose`.\n\n## Reaction filtering\nIndices accepted by `onlyUseReactions` in source order:\n0 urea, 1 amide, 2 ester, 3 amines, 4 cyclic amines, 5 ether, 6 olefin, 7 aromatic N-aliphatic C, 8 lactam N-aliphatic C, 9 aromatic C-aromatic C, 10 aromatic N-aromatic C, 11 sulfonamide.\nIndex 10 is present but comments in the source note it is *not part of the standard RECAP set*; `RecapDecompose` applies it by default unless filtered with `onlyUseReactions`.\n\n## License\nThis skill documents the RDKit `Recap.py` API. RDKit is BSD-3-Clause licensed; see [references/LICENSE.txt](references/LICENSE.txt).\n"
+    },
+    {
+      "path": "references/LICENSE.txt",
+      "content": "BSD 3-Clause License\n\nCopyright (c) 2006-2015, Rational Discovery LLC, Greg Landrum, and Julie Penzotti and others\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are met:\n\n1. Redistributions of source code must retain the above copyright notice, this\n   list of conditions and the following disclaimer.\n\n2. Redistributions in binary form must reproduce the above copyright notice,\n   this list of conditions and the following disclaimer in the documentation\n   and/or other materials provided with the distribution.\n\n3. Neither the name of the copyright holder nor the names of its\n   contributors may be used to endorse or promote products derived from\n   this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\"\nAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\nIMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE\nFOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL\nDAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR\nSERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\nCAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,\nOR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\nOF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    }
+  ],
+  "tests": [
+    {
+      "name": "doctest_leaves",
+      "argv": [
+        "{python}",
+        "-c",
+        "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\nres = Recap.RecapDecompose(m)\nprint(sorted(res.GetLeaves().keys()))"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 0,
+      "stdout_contains": [
+        "['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']"
+      ],
+      "evidence": "e1",
+      "purpose": "Verifies that GetLeaves returns the standard terminal fragments shown in the Recap.py doctest molecule, not children or GetAllChildren.",
+      "kind": "behavior"
+    },
+    {
+      "name": "valid_empty_default",
+      "argv": [
+        "{python}",
+        "-c",
+        "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('CCCOCCC')\nres = Recap.RecapDecompose(m)\nprint(len(res.GetLeaves()))"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 0,
+      "stdout_contains": [
+        "0"
+      ],
+      "evidence": "e1",
+      "purpose": "Checks the source-documented valid empty result for CCCOCCC with default settings: the ether reaction matches, but both '*CCC' products are dropped by the default small-fragment filter.",
+      "kind": "behavior"
+    },
+    {
+      "name": "min_fragment_leaf",
+      "argv": [
+        "{python}",
+        "-c",
+        "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('CCCOCCC')\nres = Recap.RecapDecompose(m, minFragmentSize=3)\nprint(sorted(res.GetLeaves().keys()))"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 0,
+      "stdout_contains": [
+        "['*CCC']"
+      ],
+      "evidence": "e1",
+      "purpose": "Verifies the source-documented minFragmentSize=3 result for CCCOCCC yields one terminal leaf '*CCC'.",
+      "kind": "behavior"
+    }
+  ],
+  "issues": [
+    {
+      "id": "valid-empty-correction",
+      "description": "Earlier draft described the CCCOCCC default empty result as caused by no matching reaction; the ether reaction actually matches and the empty result is caused by the default small-fragment filter.",
+      "blocking": false,
+      "resolution": "SKILL.md now distinguishes default small-fragment filtering from absence of reaction matches and uses C1CC=CC1 for the no-reaction-match example."
+    }
+  ],
+  "notes": [
+    "Runtime execution of the delivered Python block was not performed in this authoring turn because host business execution is restricted to a Docker container; the tests above are source-grounded definitions, not execution evidence.",
+    "The skill documents RECAP fragmentation only; it does not provide synthetic feasibility, bioactivity, or chemical validation beyond the documented RECAP algorithm.",
+    "The source snapshot corresponds to RDKit Recap.py at commit 237a1d9027c800784afed8788540f38a3aa595f8; exact fragment SMILES may differ across RDKit versions."
+  ],
+  "runtime_requirement": {
+    "status": "required",
+    "reason": "The normal path imports rdkit.Chem and rdkit.Chem.rdChemReactions; the rdkit Python package must be installed in the runtime environment.",
+    "citations": [
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": "from rdkit import Chem"
+      },
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": "from rdkit.Chem import rdChemReactions as Reactions"
+      }
+    ]
+  }
+}

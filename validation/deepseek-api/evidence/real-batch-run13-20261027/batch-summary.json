@@ -1,0 +1,41 @@
+{
+  "batch": "run 13",
+  "build_id": "20261027T200753-a864f013",
+  "status": "failed",
+  "started_at": "2026-10-27T12:07:53.838277+00:00",
+  "finished_at": "2026-10-27T12:14:20.206753+00:00",
+  "model_calls_used": 3,
+  "model_calls_allowed": 12,
+  "calls": [
+    {
+      "phase": "discovery",
+      "status": "completed",
+      "model": "gpt-6-astra",
+      "detail": ""
+    },
+    {
+      "phase": "author",
+      "status": "completed",
+      "model": "gpt-6-astra",
+      "detail": ""
+    },
+    {
+      "phase": "review",
+      "status": "failed",
+      "model": "gpt-6-astra",
+      "detail": "Incomplete Agent turn: exit=1; ['You’ve hit your usage limit. Visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 2nd, 2026 1:59 PM.', \"{'message': 'You’ve hit your u"
+    }
+  ],
+  "candidate_error": "Incomplete Agent turn: exit=1; ['You’ve hit your usage limit. Visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 2nd, 2026 1:59 PM.', \"{'message': 'You’ve hit your usage limit. Visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 2nd, 2026 1:59 PM.'}\"]; see E:\\Users\\27343\\Docker\\acceptance-deepseek-run13-20261027\\state\\runs\\202610",
+  "blocker": "external: Codex CLI account usage limit (no code defect)",
+  "stages_reached": {
+    "sources": "passed",
+    "discovery": "completed",
+    "authoring": "completed",
+    "review": "failed on the usage limit",
+    "binding": "not_run",
+    "planning": "not_run",
+    "docker": "not_run"
+  },
+  "note": "The remaining two rounds of this authorisation cannot run while the native CLI account is rate-limited; rerouting discovery/authoring/review to the API provider would be a full model-stage migration and was not authorised."
+}

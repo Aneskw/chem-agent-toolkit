@@ -1,0 +1,11 @@
+{
+  "audit_note": "No request was sent.",
+  "backend": "deepseek_api",
+  "error": "DEEPSEEK_API_KEY is not configured (process environment or repository .env); no request was sent",
+  "error_class": "model_config_invalid",
+  "model_requested": null,
+  "provider": "deepseek",
+  "request_sent": false,
+  "started_at": "2026-10-27T02:54:58Z",
+  "status": "config_invalid"
+}

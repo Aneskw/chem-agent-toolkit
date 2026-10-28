@@ -1,0 +1,41 @@
+{
+  "kind": "script",
+  "entry": "scripts/recap_terminal.py",
+  "runtime_entry": "package/scripts/recap_terminal.py",
+  "declaration": {
+    "kind": "script",
+    "path": "scripts/recap_terminal.py"
+  },
+  "association": "reviewed",
+  "source_id": "recap",
+  "source_path": "document.py",
+  "source_sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+  "quote": "def RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None):",
+  "reason": "The inspected source is RDKit's rdkit/Chem/Recap.py at upstream commit 237a1d9027c800784afed8788540f38a3aa595f8 (SHA256 d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc). Delivery scripts/recap_terminal.py is a Python 3 CLI wrapper around that upstream API: it imports rdkit.Chem and rdkit.Chem.Recap, parses the required --smiles string with Chem.MolFromSmiles, validates it is a nonempty RDKit molecule, calls Recap.RecapDecompose(mol) using defaults, then calls root.GetLeaves(). The in-process function is terminal_leaves(smiles). The working directory is the skill directory inside the permitted Docker container. Invocation is python scripts/recap_terminal.py --smiles '<SMILES>'. Output is one JSON object on stdout with sorted unique fragment SMILES and rdkit_version; no files are written. Necessary support is a Python 3 environment with RDKit providing rdkit.Chem and rdkit.Chem.rdChemReactions; no external data files are needed.",
+  "invocation": "python scripts/recap_terminal.py --smiles 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'",
+  "entry_sha256": "9dbc1cc4901453fd74fa36ea7a53734c9737113fd46e8e27d4547525e6f0b154",
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "sha256": "f8adc41386d75418b72e23b78459a5472f77283b6ab8dd12c03926bbcb8a701f",
+      "bytes": 3271
+    },
+    {
+      "path": "references/source.md",
+      "sha256": "fdccbc44effbf0b12970805f60e5e7402a343f470afb91bfe7761c5449e6e7b4",
+      "bytes": 1995
+    },
+    {
+      "path": "scripts/recap_terminal.py",
+      "sha256": "9dbc1cc4901453fd74fa36ea7a53734c9737113fd46e8e27d4547525e6f0b154",
+      "bytes": 1705
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "dd32dd061699f1ec12c6580a120a686598b45141ecea9bfea86d905e93a77fed",
+      "bytes": 4541
+    }
+  ],
+  "review_sha256": "61d0eaaf698755a39d1198b74c0a5d643ab6feca7af49acff0474a1bf43fd5fc",
+  "declaration_source": "author_declaration"
+}

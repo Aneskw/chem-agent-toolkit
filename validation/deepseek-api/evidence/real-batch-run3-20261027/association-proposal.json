@@ -1,0 +1,8 @@
+{
+  "source_id": "recap",
+  "source_path": "document.py",
+  "quote": "    m = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\n    res = RecapDecompose(m)\n    self.assertTrue(res)\n    self.assertTrue(len(res.children.keys()) == 4)\n    self.assertTrue(len(res.GetAllChildren().keys()) == 5)\n    self.assertTrue(len(res.GetLeaves().keys()) == 3)",
+  "reason": "Source scope: the inspected upstream Recap.py source at the pinned RDKit commit defines and exercises RecapDecompose and GetLeaves; the contiguous quote from test1 shows that same call pair. Delivery scope: the SKILL.md Python block, materialized as runtime_entry entry/skill.py, imports rdkit.Chem.Recap, parses SMILES into an RDKit Mol, calls Recap.RecapDecompose(mol), then GetLeaves(), and sorts the leaf SMILES keys. Interpreter: Python 3 inside the prepared Docker container with a complete RDKit installation, including rdkit.Chem.Recap and reaction support; do not install dependencies or run chemistry on the host. Working directory: the delivery root so entry/skill.py resolves. Arguments/function inputs: the CLI optionally accepts one quoted SMILES argument and otherwise uses the upstream example molecule; fragments_from_smiles accepts a nonempty SMILES string, terminal_fragments accepts a valid sanitized RDKit Mol, and invalid inputs are reported to stderr with exit status 2. Outputs: one JSON object with a fragments list to stdout and no files written; missing RDKit or decomposition failures remain execution failures rather than empty results. Necessary supports: existing Python environment with RDKit, rdkit.Chem.Recap, and its reaction support, with no external molecular dataset required.",
+  "invocation": "python entry/skill.py",
+  "supported": true
+}

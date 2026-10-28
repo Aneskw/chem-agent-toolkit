@@ -1,0 +1,1 @@
+{"type": "object", "properties": {"source_id": {"type": "string"}, "source_path": {"type": "string"}, "quote": {"type": "string"}, "reason": {"type": "string"}, "invocation": {"type": "string"}, "supported": {"type": "boolean"}}, "required": ["source_id", "source_path", "quote", "reason", "invocation", "supported"], "additionalProperties": false}

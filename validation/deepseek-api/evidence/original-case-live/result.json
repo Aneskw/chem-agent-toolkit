@@ -1,0 +1,56 @@
+{
+  "mode": "run",
+  "case": "saved-original-recap-planner-request",
+  "started_at": "20261027T031727Z",
+  "timeout_seconds": 600.0,
+  "single_request": true,
+  "retries": 0,
+  "continuation": false,
+  "backend": "deepseek_api",
+  "case_integrity": {
+    "prompt_matches_original_request": true,
+    "schema_matches_original_request": true,
+    "inventory_rebuilt_from_handoff": true,
+    "binding_matches_delivered_package": true,
+    "historical_plan_passes_unchanged_gates": true,
+    "gate_detail": {
+      "accepted_cases": 8
+    },
+    "prompt_bytes": 45397,
+    "prompt_sha256": "2327f993b744fb8c8b37d157d47a4ed998545c6f83e39c6b8d2261211795b521",
+    "schema_sha256": "67e030bfdf6c8a9690a7b3d3926917834e43e41e602e3b68780d8f20f6147671",
+    "prompt_chars": 45357,
+    "handoff_files": 6
+  },
+  "answer_action": "plan",
+  "status": "plan_rejected",
+  "error_class": null,
+  "reason": "Unknown fixture fields: stderr_contains; rejection violates and invalid_input_reason belong inside acceptance",
+  "elapsed_seconds": 158.536,
+  "ledger": {
+    "request_count": 1,
+    "ledgers": [
+      {
+        "path": "runs\\20261027T031727Z\\model-0\\attempts.json",
+        "request_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "status": "completed",
+            "http_status": 200,
+            "error_class": null,
+            "request_id": {
+              "source": "body:id",
+              "value": "c6842ac2-7d62-4b7d-a67d-152463ca0179"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "request_count": 1,
+  "redaction": {
+    "files_with_redacted_shapes": [],
+    "api_key_recorded": false
+  }
+}

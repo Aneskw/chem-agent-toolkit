@@ -1,0 +1,18 @@
+{
+  "batch": "run11",
+  "build_id": "20261027T191957-78146c53",
+  "status": "blocked",
+  "started_at": "2026-10-27T11:19:57.148931+00:00",
+  "finished_at": "2026-10-27T11:35:41.086686+00:00",
+  "model_calls_used": 8,
+  "model_calls_allowed": 10,
+  "admitted_candidate_calls": 7,
+  "gaps": [
+    {
+      "code": "planning_no_progress",
+      "detail": "Each input operation must apply named input checks; no per-case exemptions",
+      "repair_lane": "environment",
+      "blocker_kind": "unresolved_input"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "run": "real-batch-run4-20261027",
+  "build_id": "20261027T131033-e6ae4374",
+  "code_changes_under_test": {
+    "commit": "1e4112e",
+    "api_model": "deepseek-v4-pro",
+    "policy": "fixture contract examples added; validators unchanged",
+    "note": "neither change was exercised: the batch stopped before planning"
+  },
+  "final_status": "blocked",
+  "stage_status": {
+    "source_preparation": "failed - the Recap.py download was truncated and correctly rejected by the configured SHA-256",
+    "discovery": "failed - only the license source remained, so the agent reported blocked",
+    "authoring": "not_run",
+    "review": "not_run",
+    "entry_association": "not_run",
+    "environment_planning": "not_run",
+    "docker_build": "not_run",
+    "business_acceptance": "not_run",
+    "catalog_promotion": "not_run",
+    "install": "not_run"
+  },
+  "first_blocking_point": {
+    "where": "source acquisition for https://raw.githubusercontent.com/rdkit/rdkit/237a1d.../rdkit/Chem/Recap.py",
+    "detail": "downloaded 11024 bytes with sha256 ff168a136f33a7dab72678650d296e055d1aa294beddef1867a6b00c007214a9; the configuration pins 20,662 bytes and d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+    "pipeline_behaviour": "correct - the acquisition recorded \"Source hash differs from configuration\" and never presented the bytes as source",
+    "classification": "environment/network truncation, not a pipeline or adapter defect"
+  },
+  "secondary_observations": [
+    "codex_models_manager: failed to refresh available models: request timed out (twice)",
+    "the discovery agent also reported that the helper interpreter could not be invoked (interpreter-directory access denied)"
+  ],
+  "ledger": {
+    "application_calls": 1,
+    "budget": 8,
+    "entries": [
+      {
+        "phase": "discovery",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 161.848,
+        "usage": {
+          "input_tokens": 150234,
+          "cached_input_tokens": 128256,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1649,
+          "reasoning_output_tokens": 97
+        }
+      }
+    ],
+    "deepseek_requests": 0
+  },
+  "redaction": {
+    "credential_occurrences_in_run_tree": 0,
+    "credential_recorded": false
+  },
+  "decision": {
+    "rerun": false,
+    "resume": false,
+    "reason": "the batch terminated at discovery; a new real batch needs new authorisation"
+  }
+}

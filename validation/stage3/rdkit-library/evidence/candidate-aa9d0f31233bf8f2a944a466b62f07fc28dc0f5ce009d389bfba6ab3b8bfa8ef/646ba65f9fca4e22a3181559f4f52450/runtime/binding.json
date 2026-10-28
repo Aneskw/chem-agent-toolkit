@@ -1,0 +1,8 @@
+{
+  "entry": "scripts/calc_descriptors.py",
+  "source_id": "rdkit",
+  "source_path": "scripts/calc_descriptors.py",
+  "association": "identical",
+  "entry_sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+  "source_sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e"
+}

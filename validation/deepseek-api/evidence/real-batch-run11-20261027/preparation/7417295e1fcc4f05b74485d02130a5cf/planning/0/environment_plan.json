@@ -1,0 +1,201 @@
+{
+  "entrypoint": [
+    "python",
+    "package/scripts/recap_terminal.py"
+  ],
+  "script": "package/scripts/recap_terminal.py",
+  "base_image": "continuumio/miniconda3:latest",
+  "platform": "linux/amd64",
+  "language": "python",
+  "language_version": "3.11",
+  "source_files": [
+    "package/SKILL.md",
+    "package/references/LICENSE.txt",
+    "package/scripts/recap_terminal.py",
+    "source-identities.json",
+    "sources/license/document.txt",
+    "sources/recap/document.py"
+  ],
+  "dependencies": [
+    {
+      "name": "python",
+      "version": "3.11",
+      "channel": "conda-forge",
+      "evidence": "package/SKILL.md requires Python 3 with rdkit.Chem and rdkit.Chem.Recap; RDKit conda-forge package requires a compatible Python.",
+      "certainty": "inferred"
+    },
+    {
+      "name": "rdkit",
+      "version": "2024.03.5",
+      "channel": "conda-forge",
+      "evidence": "package/SKILL.md requires an existing RDKit distribution and says the standalone module is not the complete dependency; this public conda-forge release provides RDKit.",
+      "certainty": "inferred"
+    }
+  ],
+  "steps": [
+    {
+      "command": "/opt/conda/bin/conda create -n rdkit python=3.11 -y",
+      "purpose": "Create an isolated Python 3.11 environment for RDKit",
+      "evidence": "package/SKILL.md: Use Python 3 with rdkit.Chem and rdkit.Chem.Recap already available in the authorized Docker container."
+    },
+    {
+      "command": "/opt/conda/bin/conda install -n rdkit -c conda-forge rdkit=2024.03.5 -y",
+      "purpose": "Install RDKit into the conda environment",
+      "evidence": "package/SKILL.md: Use an existing RDKit distribution for execution; the standalone module is not the complete dependency."
+    },
+    {
+      "command": "/opt/conda/bin/conda clean -afy",
+      "purpose": "Reduce image size after package installation",
+      "evidence": "Standard conda cleanup after installing dependencies."
+    }
+  ],
+  "build_layout": {
+    "dependency_files": [],
+    "prefix_steps": 0,
+    "reason": "No separate dependency configuration files are required; unchanged source files can be copied before dependency installation."
+  },
+  "environment": [
+    {
+      "name": "PATH",
+      "value": "/opt/conda/envs/rdkit/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    },
+    {
+      "name": "PYTHONUNBUFFERED",
+      "value": "1"
+    }
+  ],
+  "resources": [],
+  "file_io": false,
+  "output_contract": "On success, stdout is one JSON object {\"fragments\": [\"...\"], \"count\": int} and exit 0. On invalid input, stdout is {\"error\":\"invalid_input\",\"message\":\"...\"} and exit 2. On missing RDKit or decomposition exception, stdout is {\"error\":\"runtime_error\",\"message\":\"...\"} and exit 1.",
+  "runtime_network": false,
+  "network_reason": "The tool decomposes SMILES in-process and prints JSON; it makes no network calls at runtime. Network is required only during image build to fetch conda packages.",
+  "choices": [
+    {
+      "choice": "continuumio/miniconda3:latest",
+      "evidence": "Conda base image can create an isolated Python environment and install conda-forge RDKit; SKILL requires RDKit in the Docker container.",
+      "certainty": "inferred"
+    },
+    {
+      "choice": "Python 3.11 conda environment",
+      "evidence": "package/SKILL.md says Use Python 3; RDKit conda-forge packages support Python 3.11.",
+      "certainty": "inferred"
+    },
+    {
+      "choice": "conda-forge rdkit=2024.03.5",
+      "evidence": "package/SKILL.md says an existing RDKit distribution is required; this public release is a compatible RDKit distribution.",
+      "certainty": "inferred"
+    },
+    {
+      "choice": "entrypoint python package/scripts/recap_terminal.py",
+      "evidence": "package/SKILL.md documents: python scripts/recap_terminal.py 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'.",
+      "certainty": "declared"
+    }
+  ],
+  "unresolved": [
+    "CPU and memory requirements for RDKit RECAP decomposition are not stated in the provided source materials; resource_assessment is unknown."
+  ],
+  "unverified_behavior": [
+    "The installed RDKit release is not verified against the pinned upstream commit 237a1d9027c800784afed8788540f38a3aa595f8.",
+    "Behavior of malformed SMILES beyond blank, parse-failure, and zero-atom checks is not exhaustively described by the adapter."
+  ],
+  "acceptance_json": "{\"invalid_input\":\"required\",\"scope\":\"The delivered entry accepts exactly one SMILES argument, decomposes it with RDKit RecapDecompose(defaults), and prints unique terminal leaf fragment SMILES as a JSON object.\",\"purposes\":[\"computation\"],\"constraint\":\"The single SMILES argument must be nonblank and parse to a nonempty RDKit molecule; blank, unparsable, and zero-atom inputs are rejected.\",\"source_path\":\"package/scripts/recap_terminal.py\",\"source_quote\":\"parser.add_argument(\\\"smiles\\\", help=\\\"One nonempty molecular SMILES string\\\")\\n    args = parser.parse_args()\\n    if not args.smiles.strip():\\n        return emit_error(\\\"invalid_input\\\", \\\"SMILES must not be blank\\\", 2)\\n    ...\\n    if mol is None:\\n        return emit_error(\\\"invalid_input\\\", \\\"SMILES could not be parsed\\\", 2)\\n    if mol.GetNumAtoms() == 0:\\n        return emit_error(\\\"invalid_input\\\", \\\"Molecule must contain atoms\\\", 2)\",\"operations\":[{\"id\":\"direct_smiles\",\"selector\":{\"args\":[{\"index\":0,\"equals\":\"C1CC1Oc1ccccc1-c1ncc(OC)cc1\"}]},\"checks\":[\"nonblank_smiles\"],\"purposes\":[\"computation\"],\"require_persistence\":false,\"source_path\":\"package/SKILL.md\",\"source_quote\":\"python scripts/recap_terminal.py 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'\",\"input_contract\":{\"status\":\"required\",\"constraint\":\"The SMILES argument must be nonblank and parse to a nonempty RDKit molecule.\",\"source_path\":\"package/scripts/recap_terminal.py\",\"source_quote\":\"if not args.smiles.strip():\\n        return emit_error(\\\"invalid_input\\\", \\\"SMILES must not be blank\\\", 2)\\n    ...\\n    if mol is None:\\n        return emit_error(\\\"invalid_input\\\", \\\"SMILES could not be parsed\\\", 2)\\n    if mol.GetNumAtoms() == 0:\\n        return emit_error(\\\"invalid_input\\\", \\\"Molecule must contain atoms\\\", 2)\",\"checks\":[{\"id\":\"nonblank_smiles\",\"channel\":\"args\",\"key\":0,\"pattern\":\"^(?!\\\\s*$).+\",\"source_path\":\"package/scripts/recap_terminal.py\",\"source_quote\":\"if not args.smiles.strip():\\n        return emit_error(\\\"invalid_input\\\", \\\"SMILES must not be blank\\\", 2)\"}]}}],\"coverage\":{\"coverage_complete\":false,\"validation_gaps\":[\"Semantic predicates for RDKit parse failure and zero-atom molecules cannot be expressed as full-match regex checks; their documented rejection behavior is asserted by behavior tests but not represented as named checks.\"],\"blockers\":[]}}",
+  "generated_files": [],
+  "tests": [
+    {
+      "name": "environment_probe_rdkit_python",
+      "layer": "environment",
+      "kind": "reference",
+      "source_paths": [
+        "package/SKILL.md"
+      ],
+      "basis": "SKILL prerequisite: Python 3 with rdkit.Chem and rdkit.Chem.Recap already available in the container.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [],
+      "case_json": "{\"entrypoint\":\"python\",\"args\":[\"-c\",\"import rdkit, sys; print('python', sys.version_info[0:2]); print('rdkit', rdkit.__version__)\"],\"expected_exit\":0,\"stdout_contains\":[\"python\",\"rdkit\"]}"
+    },
+    {
+      "name": "interface_valid_smiles_exit_and_json_keys",
+      "layer": "interface",
+      "kind": "reference",
+      "source_paths": [
+        "package/SKILL.md",
+        "package/scripts/recap_terminal.py"
+      ],
+      "basis": "SKILL documents invoking the delivered entry with a valid SMILES and receiving JSON output.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Checks output keys and one fragment substring only; exact fragment correctness is asserted by the behavior test."
+      ],
+      "case_json": "{\"args\":[\"C1CC1Oc1ccccc1-c1ncc(OC)cc1\"],\"expected_exit\":0,\"stdout_contains\":[\"\\\"fragments\\\"\",\"\\\"count\\\"\",\"*C1CC1\"]}"
+    },
+    {
+      "name": "behavior_known_example_exact_output",
+      "layer": "behavior",
+      "kind": "reference",
+      "source_paths": [
+        "package/SKILL.md",
+        "package/scripts/recap_terminal.py"
+      ],
+      "basis": "SKILL example output for C1CC1Oc1ccccc1-c1ncc(OC)cc1.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Installed RDKit release may differ from pinned commit; exact fragment SMILES are the documented example output."
+      ],
+      "case_json": "{\"args\":[\"C1CC1Oc1ccccc1-c1ncc(OC)cc1\"],\"expected_exit\":0,\"stdout_equals\":\"{\\\"fragments\\\": [\\\"*C1CC1\\\", \\\"*c1ccc(OC)cn1\\\", \\\"*c1ccccc1*\\\"], \\\"count\\\": 3}\"}"
+    },
+    {
+      "name": "behavior_empty_result_cccoCCC",
+      "layer": "behavior",
+      "kind": "reference",
+      "source_paths": [
+        "package/SKILL.md",
+        "sources/recap/document.py"
+      ],
+      "basis": "SKILL: CCCOCCC has no accepted decomposition under defaults; source test2 expects children == {}.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Independent input documented by SKILL; empty fragments is a valid result."
+      ],
+      "case_json": "{\"args\":[\"CCCOCCC\"],\"expected_exit\":0,\"stdout_equals\":\"{\\\"fragments\\\": [], \\\"count\\\": 0}\"}"
+    },
+    {
+      "name": "behavior_blank_smiles_rejected",
+      "layer": "behavior",
+      "kind": "reference",
+      "source_paths": [
+        "package/scripts/recap_terminal.py"
+      ],
+      "basis": "Delivered entry rejects blank SMILES with invalid_input exit 2.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [],
+      "case_json": "{\"args\":[\"\"],\"expected_exit\":2,\"stdout_equals\":\"{\\\"error\\\": \\\"invalid_input\\\", \\\"message\\\": \\\"SMILES must not be blank\\\"}\",\"acceptance\":{\"purpose\":\"input_rejection\",\"source_path\":\"package/scripts/recap_terminal.py\",\"source_quote\":\"if not args.smiles.strip():\\n        return emit_error(\\\"invalid_input\\\", \\\"SMILES must not be blank\\\", 2)\",\"assertion\":{\"role\":\"rejection\",\"kind\":\"stdout_equals\",\"value\":\"{\\\"error\\\": \\\"invalid_input\\\", \\\"message\\\": \\\"SMILES must not be blank\\\"}\"},\"violates\":\"nonblank_smiles\",\"invalid_input_reason\":\"The single SMILES argument is blank.\"}}"
+    },
+    {
+      "name": "behavior_unparsable_smiles_rejected",
+      "layer": "behavior",
+      "kind": "reference",
+      "source_paths": [
+        "package/scripts/recap_terminal.py"
+      ],
+      "basis": "Delivered entry rejects unparsable SMILES with invalid_input exit 2.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Semantic parse rejection is not represented as a regex check; behavior asserted directly from the adapter."
+      ],
+      "case_json": "{\"args\":[\"not-a-smiles\"],\"expected_exit\":2,\"stdout_equals\":\"{\\\"error\\\": \\\"invalid_input\\\", \\\"message\\\": \\\"SMILES could not be parsed\\\"}\"}"
+    }
+  ],
+  "resource_assessment": {
+    "status": "unknown",
+    "source_path": "",
+    "source_quote": "",
+    "memory_bytes": 0,
+    "cpus": 0
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "action": "patch",
+  "requested_files": [],
+  "reason": "Fix the case acceptance quotation in the documented normal example: the source quote omitted the backticks around `GetLeaves()` that appear in package/SKILL.md, so it was not an exact quotation from the read source.",
+  "operations": [
+    {
+      "op": "replace",
+      "path": "/tests/2/case_json",
+      "value_json": "{\"args\":[\"C1CC1Oc1ccccc1-c1ncc(OC)cc1\"],\"expected_exit\":0,\"stdout_equals\":\"[\\\"*C1CC1\\\", \\\"*c1ccc(OC)cn1\\\", \\\"*c1ccccc1*\\\"]\",\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"`GetLeaves()` returns terminal descendants keyed by SMILES. Sorting makes output deterministic; duplicate keys are collapsed.\",\"assertion\":{\"role\":\"result\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"`GetLeaves()` returns terminal descendants keyed by SMILES. Sorting makes output deterministic; duplicate keys are collapsed.\",\"kind\":\"json\",\"path\":[0],\"allowed_values\":[\"*C1CC1\"]}}}"
+    }
+  ]
+}

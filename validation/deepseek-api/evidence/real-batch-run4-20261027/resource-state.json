@@ -1,0 +1,143 @@
+{
+  "config": {
+    "sources": [
+      {
+        "id": "recap",
+        "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+        "license": "BSD-3-Clause"
+      },
+      {
+        "id": "license",
+        "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      }
+    ],
+    "prompt": "Discover and package one reusable Skill for RDKit RECAP terminal molecular fragments using RecapDecompose and GetLeaves. Ground the usage, input/output scope, terminal versus full hierarchy interpretation and valid empty results in the provided source. This is molecular fragmentation, not descriptor calculation. Choose appropriate delivery files and document prerequisites and invalid input boundaries. Do not install software or run source/business code on the host; business execution is permitted only in a Docker container. Do not claim chemical or scientific validation beyond the documented algorithm.",
+    "model": {
+      "name": "gpt-6-astra",
+      "transport": "https",
+      "reasoning_effort": "medium",
+      "service_tier": "default",
+      "backend": "codex_cli"
+    },
+    "execution": {
+      "profile": "production",
+      "stop_on_runtime_failure": true,
+      "progress_watch": "observe"
+    },
+    "limits": {
+      "model_calls": 8,
+      "candidate_calls": null,
+      "model_timeout": 600,
+      "total_seconds": 3600,
+      "discovery_seconds": null,
+      "agent_events": null,
+      "agent_progress_timeout": null,
+      "max_candidates": 1,
+      "max_builds": 1,
+      "source_bytes": null,
+      "source_total_bytes": null,
+      "source_files": null,
+      "package_bytes": null,
+      "network_requests": null,
+      "repair_rounds": 1,
+      "check_timeout": 120,
+      "converter_timeout": 60,
+      "network_timeout": 60
+    },
+    "runtime_defaults": {
+      "options": {
+        "backend": "deepseek_api",
+        "api_model": "deepseek-v4-pro",
+        "api_retries": 0,
+        "api_stream": true,
+        "api_max_output_tokens": 65536,
+        "model_timeout": 600,
+        "total_seconds": 2400,
+        "reasoning_effort": "medium",
+        "service_tier": "default",
+        "progress_watch": "observe"
+      }
+    },
+    "batch": {
+      "label": "deepseek-api-normal-creation",
+      "tags": [
+        "chemistry",
+        "recap",
+        "acceptance",
+        "deepseek-api"
+      ]
+    },
+    "notes": "Normal fresh creation on the fixed RECAP case. No runtime binding is pre-filled and the prompt does not require a script entry, so the delivered entry is resolved by the official flow (caller binding absent -> author declaration -> conservative recognition, ambiguity stays refused). Native stages keep the Codex CLI (https, medium, default). runtime_defaults route the structured planner/association/diagnosis calls to the DeepSeek API: api_model is pinned to deepseek-v4-pro (operator-authorised change after run 3, which used deepseek-flash and produced three schema-valid but fixture-invalid plans), api_retries=0, one total deadline per call, streaming with the documented completion marker. model_timeout=600 and limits.total_seconds=3600 bound the batch; the 240 s silence window is observed only (execution.progress_watch=observe).",
+    "constraints": {},
+    "network": true,
+    "execute_generated_checks": false,
+    "draft_only": false,
+    "runtime_requirements": {},
+    "revision_parents": {},
+    "runtime": {},
+    "adoption": {
+      "enabled": true
+    },
+    "checks": [],
+    "environment": {
+      "allow": []
+    },
+    "intent": "auto",
+    "config_path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\acceptance-normal-input.json"
+  },
+  "cache": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run4-20261027\\state\\cache",
+  "sources": [
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "content_type": "text/plain; charset=utf-8",
+      "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run4-20261027\\state\\cache\\snapshots\\f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2\\document.txt",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "license.txt",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      },
+      "original_path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run4-20261027\\state\\cache\\downloads\\daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30\\document.txt",
+      "files": [
+        "document.txt"
+      ],
+      "inventory": [
+        {
+          "path": "document.txt",
+          "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+          "bytes": 1580
+        }
+      ],
+      "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+      "index_truncated": false,
+      "omitted_preview": []
+    }
+  ],
+  "evidence": [
+    {
+      "source": "license",
+      "path": "document.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.txt",
+      "id": "e1"
+    }
+  ],
+  "errors": [
+    {
+      "source": "recap",
+      "error": "Source hash differs from configuration"
+    }
+  ],
+  "network_requests": 2
+}

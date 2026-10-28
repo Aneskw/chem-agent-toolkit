@@ -1,0 +1,181 @@
+{
+  "run": "real-batch-run2-20261027",
+  "build_id": "20261027T120703-159f3350",
+  "codex_cli": {
+    "binary": "C:\\Users\\27343\\AppData\\Local\\OpenAI\\Codex\\bin\\2993767bd1dfb009\\codex.EXE",
+    "version": "codex-cli 0.164.0-alpha.11.1",
+    "code_mode_host_present": true,
+    "path_scope": "process only"
+  },
+  "final_status": "blocked",
+  "stage_status": {
+    "source_preparation": "passed",
+    "discovery": "passed",
+    "authoring": "passed",
+    "independent_content_review": "passed",
+    "entry_association": "passed (DeepSeek, author-declared markdown entry)",
+    "association_independent_review": "passed (Codex, binding_verified=true)",
+    "environment_planning": "failed - DeepSeek SSE connection error while reading the response",
+    "docker_build": "not_run",
+    "business_acceptance": "not_run",
+    "catalog_promotion": "not_run (saved to candidates zone)",
+    "default_query": "not_run",
+    "install": "not_run",
+    "installed_use": "not_run"
+  },
+  "first_blocking_point": {
+    "where": "environment planning, single DeepSeek streaming request",
+    "detail": "HTTP 200 with text/event-stream, then OSError while reading the response after 52.5 s",
+    "error_class": "model_stream_interrupted",
+    "classification": "transport fault (socket error mid-stream); not a schema or semantic rejection",
+    "retries_configured": 0
+  },
+  "binding": {
+    "kind": "markdown_python",
+    "entry": "SKILL.md",
+    "runtime_entry": "entry/skill.py",
+    "declaration_source": "author_declaration",
+    "declaration": {
+      "path": "SKILL.md",
+      "block_index": 0,
+      "kind": "markdown_python"
+    },
+    "association": "reviewed",
+    "source_id": "recap",
+    "source_path": "document.py",
+    "code_sha256": "e5cca3f3c055dee6fb156307e7c4c83e82539d9a68b50c3dfa033652356ba307",
+    "files": [
+      {
+        "path": "references/source-notices.md",
+        "sha256": "37473aa2cdf04c319cb091008b6f22fd9e67beaa126b4744ee156b95b2f4072f",
+        "bytes": 4738
+      },
+      {
+        "path": "SKILL.md",
+        "sha256": "2792eaded33af4ab2f20978b65448b775a3c1e64790abee2d218f013459b2e18",
+        "bytes": 5643
+      }
+    ]
+  },
+  "ledger": {
+    "application_calls": 6,
+    "budget": 8,
+    "entries": [
+      {
+        "phase": "discovery",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 138.314,
+        "usage": {
+          "input_tokens": 104222,
+          "cached_input_tokens": 80128,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3275,
+          "reasoning_output_tokens": 89
+        },
+        "tool_events": 7
+      },
+      {
+        "phase": "author",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 184.614,
+        "usage": {
+          "input_tokens": 381797,
+          "cached_input_tokens": 316032,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 7610,
+          "reasoning_output_tokens": 482
+        },
+        "tool_events": 7
+      },
+      {
+        "phase": "review",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 77.058,
+        "usage": {
+          "input_tokens": 185395,
+          "cached_input_tokens": 147328,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1322,
+          "reasoning_output_tokens": 102
+        },
+        "tool_events": 9
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null,
+        "usage": null,
+        "tool_events": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null,
+        "usage": null,
+        "tool_events": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null,
+        "usage": null,
+        "tool_events": null
+      }
+    ],
+    "deepseek_requests": 2,
+    "deepseek_completed": 1,
+    "deepseek_failed": 1,
+    "cli_internal_reconnects": 0
+  },
+  "fingerprints": {
+    "input_sha256": "6c6636c78ed215d90415a7e0d03446ec3832f158f2496b73d1257c9bc86c6fb6",
+    "association_prompt_sha256": "17d120261166f0b90dffcc3a1c9bd68bbd3544f55ed59d50b357ed51f3d1fbd4",
+    "planning_prompt_sha256": "ebe230def69395af135d9ee70211dacab427a51d366577e5e5ffa6a75a2e1942",
+    "planning_prompt_bytes": 46295
+  },
+  "parameters_sent": {
+    "max_tokens": 65536,
+    "messages_count": 2,
+    "model": "deepseek-flash",
+    "reasoning_effort": "high",
+    "response_format": {
+      "type": "json_object"
+    },
+    "stream": true,
+    "stream_options": {
+      "include_usage": true
+    },
+    "structured_output_mode": "json_object + local JSON Schema validation (the service does not accept a caller JSON Schema)",
+    "temperature": "not sent (has no effect in thinking mode)",
+    "thinking": {
+      "type": "enabled"
+    },
+    "tools": "not sent (tool-free contract; any tool call is rejected)"
+  },
+  "docker": {
+    "available": true,
+    "builds": 0,
+    "images_created": 0
+  },
+  "delivery": {
+    "mode": "normal",
+    "requirement": "required",
+    "execution": "runtime_blocked"
+  },
+  "redaction": {
+    "credential_occurrences_in_run_tree": 0,
+    "credential_recorded": false
+  },
+  "decision": {
+    "rerun": false,
+    "resume": false,
+    "retries_used": 0,
+    "reason": "terminal model transport failure stops the experiment; a new real batch needs new authorisation"
+  }
+}

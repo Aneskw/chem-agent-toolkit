@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "resolution": "none",
+  "findings": [
+    {
+      "location": "deliveries/rdkit-recap-terminal-fragments.json: tests",
+      "problem": "Runtime behavior remains unverified; existing checks establish packaging and path validity only.",
+      "evidence": "Tests invoke the delivered script. Inspected recap/document.py lines 39–56 support the exact positive oracle; lines 110–118 and 231–235 support empty leaves. Blank and malformed cases check adapter boundaries. Execution is disabled by policy. Source lines 146–169 and the delivered script confirm that computation requires execution.",
+      "impact": "No blocking content defect found. Runtime compatibility and parser failure handling are not demonstrated; scientific validity is not established.",
+      "action": "When execution is authorized, run the four existing tests through the helper in the permitted RDKit Docker container before claiming runtime verification.",
+      "blocking": false,
+      "category": "check"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed"
+}

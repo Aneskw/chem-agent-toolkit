@@ -1,0 +1,19 @@
+{
+  "status": "pass",
+  "resolution": "none",
+  "findings": [
+    {
+      "location": "artifact.tests; scripts/recap_fragments.py",
+      "problem": "Runtime behavior remains unverified.",
+      "evidence": "Execution is disabled and no check reports were supplied. Inspected Recap document.py:39-53 confirms the invocation and three-fragment oracle; lines 110-118 and 231-235 confirm the empty-result oracle. The four tests invoke the delivered CLI.",
+      "impact": "Source fidelity and entry binding are supported; installed-RDKit compatibility and CLI error behavior are not runtime-verified.",
+      "action": "Run the four existing tests through the helper when an approved runtime is available. Review records were saved; the configured helper interpreter was unavailable.",
+      "blocking": false,
+      "category": "check"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed",
+  "binding_verified": true
+}

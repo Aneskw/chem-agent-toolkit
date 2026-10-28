@@ -1,6 +1,0 @@
-SMILES,source
-CCN,heldout
-CCC,heldout
-c1ccccc1,heldout
-O=[N+]([O-])c1ccccc1,heldout
-bad-smiles,heldout

@@ -1,0 +1,63 @@
+{
+  "outcome": "candidates",
+  "summary": "Discovered one reusable skill for extracting terminal RECAP molecular fragments from RDKit molecules using rdkit.Chem.Recap.RecapDecompose and RecapHierarchyNode.GetLeaves. The candidate covers terminal leaves versus the full hierarchy, valid empty results, optional minFragmentSize and onlyUseReactions filters, prerequisites, and invalid input boundaries. It does not perform descriptor calculation or claim chemical validation beyond the documented algorithm.",
+  "saved_candidates": [],
+  "candidates": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "capability": "Extract terminal RECAP molecular fragments from an RDKit molecule using rdkit.Chem.Recap.RecapDecompose and RecapHierarchyNode.GetLeaves, including terminal-versus-hierarchy interpretation and valid empty results.",
+      "boundary": "Input must be a sanitized RDKit Mol object; invalid or None SMILES must be checked by the caller before RecapDecompose. Output is a dictionary keyed by canonical fragment SMILES containing '*' dummy atoms; an empty dictionary is a valid result when no reactions apply or products are filtered out. Optional minFragmentSize, onlyUseReactions, and shared allNodes are supported, but no new reaction rules are defined. This is molecular fragmentation, not descriptor calculation. The source includes one non-standard aromatic N-aromatic C rule, so exact standard RECAP compliance is not claimed.",
+      "value": "Removes recurring confusion between children, GetAllChildren, and GetLeaves; explains that empty leaf dictionaries are valid rather than errors; and provides a concise runnable recipe with correct optional filters and invalid-input handling for molecular fragmentation workflows.",
+      "usage_path": "rdkit.Chem.Recap.RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None); rdkit.Chem.Recap.RecapHierarchyNode.GetLeaves(); root.GetAllChildren(); root.children",
+      "construction": "Direct packaging of the existing RDKit Recap API; no algorithm adaptation or new reaction SMARTS. The skill document will present the source-derived recipe and hierarchy semantics, state the rdkit prerequisite, require business execution only in Docker, and retain the BSD 3-Clause license notice. No scientific or chemical validation is claimed beyond the documented algorithm.",
+      "evidence": [
+        {
+          "id": "e1",
+          "claim": "The module docstring identifies the RECAP algorithm from Lewell et al. JCICS 38 511-522 (1998), shows that RecapDecompose returns a RecapHierarchyNode, and demonstrates that GetLeaves returns terminal keys ['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*'] versus four direct children and five GetAllChildren keys."
+        },
+        {
+          "id": "e1",
+          "claim": "RecapDecompose canonicalizes input with Chem.MolToSmiles(mol,1), iterates over precomputed `reactions` from `reactionDefs`, applies `reaction.RunReactants`, attempts Chem.SanitizeMol on products, and filters via `onlyUseReactions`, `minFragmentSize` (explicit atom count minus '*' dummies), and a default rejection of fragments producing '', 'C', 'CC', or 'CCC' after dummy removal."
+        },
+        {
+          "id": "e1",
+          "claim": "RecapHierarchyNode.GetLeaves returns a dictionary keyed by SMILES of leaf terminal nodes, while GetAllChildren returns all descendants and `children` stores immediate products; this is the terminal-versus-full-hierarchy distinction."
+        },
+        {
+          "id": "e1",
+          "claim": "Unit tests test2 (CCCOCCC), testMinFragmentSize, and testSFNetIssue1881803 demonstrate valid empty results: default decomposition of CCCOCCC has children == {}, CCCOCC with minFragmentSize=3 remains empty, and charged/protonated variants give zero leaves."
+        },
+        {
+          "id": "e2",
+          "claim": "The retrieved license.txt is BSD 3-Clause; redistribution of source-derived snippets must retain the copyright notice, conditions, and disclaimer."
+        }
+      ],
+      "gaps": [
+        "Exact atom-count semantics of minFragmentSize are inferred from unit tests rather than prose documentation in Recap.py.",
+        "The source does not enumerate invalid input errors; callers must reject None or unsanitized Mol objects before RecapDecompose.",
+        "No performance or scaling guarantees for large molecules are present in this source.",
+        "The non-standard aromatic nitrogen-aromatic carbon rule should be explicitly noted so downstream users do not assume exact standard RECAP coverage."
+      ],
+      "blocked": false
+    }
+  ],
+  "omitted": [
+    {
+      "capability": "RDKit RECAP full hierarchy traversal as a separate skill",
+      "reason": "Merged into the terminal-fragments candidate because terminal interpretation requires explaining children, GetAllChildren, and GetLeaves together, and the task targets terminal fragments."
+    },
+    {
+      "capability": "Authoring or customizing RECAP reaction SMARTS definitions",
+      "reason": "Out of scope; the candidate only covers existing reactionDefs and selection via onlyUseReactions, not inventing new fragmentation rules."
+    },
+    {
+      "capability": "Fragment descriptor or property calculation",
+      "reason": "Explicitly excluded by the user guidance; this task is molecular fragmentation, not descriptor calculation."
+    }
+  ],
+  "limitations": [
+    "Only rdkit/Chem/Recap.py and license.txt at the pinned commit were inspected; no RDKit installation was executed during discovery.",
+    "Host installation and business execution are not performed; any code execution must occur in a Docker container.",
+    "No chemical or scientific validation is claimed beyond the documented RECAP algorithm as implemented in the inspected source."
+  ]
+}

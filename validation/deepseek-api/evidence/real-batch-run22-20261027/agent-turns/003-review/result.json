@@ -1,0 +1,27 @@
+{
+  "status": "pass",
+  "resolution": "none",
+  "findings": [
+    {
+      "location": "references/LICENSE.txt",
+      "problem": "The delivered license text is the repository-level BSD-3-Clause notice (Rational Discovery LLC, Greg Landrum, and Julie Penzotti), while the inspected rdkit/Chem/Recap.py source file carries its own BSD-3-Clause notice with a 2007 Novartis Institutes copyright. If the skill package is later treated as redistributing or quoting that source file, the file-level notice should also be preserved.",
+      "evidence": "e1 source header says 'Copyright (c) 2007, Novartis Institutes for BioMedical Research Inc.'; e2/delivered references/LICENSE.txt says 'Copyright (c) 2006-2015, Rational Discovery LLC, Greg Landrum, and Julie Penzotti and others'.",
+      "impact": "Attribution may be incomplete for the underlying source file; this does not affect runtime behavior or the documented API.",
+      "action": "Add or reference the file-level Novartis notice alongside the delivered RDKit license, or explicitly state that references/LICENSE.txt is the package-level license only.",
+      "blocking": false,
+      "category": "source"
+    },
+    {
+      "location": "scripts/get_recap_leaves.py",
+      "problem": "The optional --only-use-reactions parser calls parse_reaction_indices manually after argparse parsing, so argparse.ArgumentTypeError is raised outside argparse and produces a traceback for malformed values. Empty string returns [], but the source truthiness check treats an empty onlyUseReactions sequence as all reactions.",
+      "evidence": "parse_reaction_indices returns [] for value.strip() == '' and raises argparse.ArgumentTypeError; main calls it after parser.parse_args. Source RecapDecompose uses 'if onlyUseReactions and rxnIdx not in onlyUseReactions: continue'.",
+      "impact": "Misuse of an optional CLI flag is noisy or ambiguous, but the normal path and source-backed artifact tests are unaffected.",
+      "action": "Use type=parse_reaction_indices or parser.error for clean validation, and reject or explicitly document empty --only-use-reactions values.",
+      "blocking": false,
+      "category": "suggestion"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed"
+}

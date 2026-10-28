@@ -1,0 +1,303 @@
+{
+  "schema_version": 3,
+  "pipeline_version": "5.2.0-stage2",
+  "build_id": "20261027T214844-13efc180",
+  "started_at": "2026-10-27T13:48:44.131366+00:00",
+  "status": "failed",
+  "entities": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "kind": "skill",
+      "status": "failed",
+      "needs": []
+    }
+  ],
+  "errors": [],
+  "agent_efficacy": "not_evaluated_separate_work",
+  "replay": false,
+  "implementation_sha256": "48ddb48ff0bc539bd9089c14ef9ef93b91b01f520fbe223d39e133eb49888c1c",
+  "accepted_plan_sha256": "89f3f5e050bcfc6f5347d0fbab2f590087765890e5f660d22e047ddc4e8aea5e",
+  "revalidated_prompts": [],
+  "source_context_sha256": "aea9fe43432fcdc6c796762a2140a0722ffba86610b8a12444a8eecd8bef855b",
+  "deferred": [],
+  "adoption": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "status": "candidate_saved",
+      "observation_updated": false,
+      "zone": "candidates",
+      "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run21-20261027\\library\\candidates\\rdkit-recap-terminal-fragments"
+    }
+  ],
+  "finished_at": "2026-10-27T13:55:04.474328+00:00",
+  "counts": {
+    "failed": 1
+  },
+  "model_calls": [
+    {
+      "phase": "discovery",
+      "session_key": "discovery",
+      "resumed": false,
+      "model": "deepseek-v4-pro",
+      "status": "completed",
+      "usage": {
+        "prompt_tokens": 10898,
+        "completion_tokens": 5437,
+        "total_tokens": 16335,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4459
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 9490
+      },
+      "prompt_sha256": "fcdee6e8073d4dc9f52796b8fde4def2e30ce678612e0e4243efe8aaf996459a",
+      "tool_events": 0,
+      "elapsed_seconds": 68.62,
+      "response_sha256": "8a4a69fb6ddfc74d2847e6bde29234e2f9746f412ef7f231c6c7ddf6d990974a",
+      "finish_reason": null
+    },
+    {
+      "phase": "author",
+      "session_key": "build:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "deepseek-v4-pro",
+      "status": "completed",
+      "usage": {
+        "prompt_tokens": 14565,
+        "completion_tokens": 15228,
+        "total_tokens": 29793,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 11230
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 13797
+      },
+      "prompt_sha256": "6e0c0f2d1ee3c8393e1bc599b2c57ed504e74d0a79905c914ff21337ee30d42f",
+      "tool_events": 0,
+      "elapsed_seconds": 185.03,
+      "response_sha256": "39c604a73404874544b5a225fc9f649d720bad15ab8971ac6f37000f54ad8f9d",
+      "finish_reason": null,
+      "written_files": [
+        "SKILL.md",
+        "scripts/recap_leaves.py",
+        "references/LICENSE.txt",
+        "references/recap_reactions.md",
+        "references/source_note.md"
+      ]
+    },
+    {
+      "phase": "author",
+      "session_key": "build:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "deepseek-v4-pro",
+      "status": "completed",
+      "usage": {
+        "prompt_tokens": 18608,
+        "completion_tokens": 10931,
+        "total_tokens": 29539,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 7602
+        },
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 16560
+      },
+      "prompt_sha256": "a86999a2113c79ff006864d61620bf6972cddd60ca04d70ddfa7791538648b16",
+      "tool_events": 0,
+      "elapsed_seconds": 121.514,
+      "response_sha256": "4978a5272a27169aa75bca534430c939fc53dae511ffa830c11bb7ece59bb396",
+      "finish_reason": null,
+      "written_files": [
+        "SKILL.md",
+        "scripts/recap_leaves.py",
+        "references/LICENSE.txt",
+        "references/source_note.md"
+      ]
+    }
+  ],
+  "model_metrics": {
+    "calls_attempted": 3,
+    "usage_fully_reported": true,
+    "receipts": [
+      {
+        "phase": "discovery",
+        "session_key": "discovery",
+        "resumed": false,
+        "model": "deepseek-v4-pro",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 10898,
+          "completion_tokens": 5437,
+          "total_tokens": 16335,
+          "prompt_tokens_details": {
+            "cached_tokens": 1408
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 4459
+          },
+          "prompt_cache_hit_tokens": 1408,
+          "prompt_cache_miss_tokens": 9490
+        },
+        "prompt_sha256": "fcdee6e8073d4dc9f52796b8fde4def2e30ce678612e0e4243efe8aaf996459a",
+        "tool_events": 0,
+        "elapsed_seconds": 68.62,
+        "response_sha256": "8a4a69fb6ddfc74d2847e6bde29234e2f9746f412ef7f231c6c7ddf6d990974a",
+        "finish_reason": null
+      },
+      {
+        "phase": "author",
+        "session_key": "build:rdkit-recap-terminal-fragments",
+        "resumed": false,
+        "model": "deepseek-v4-pro",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 14565,
+          "completion_tokens": 15228,
+          "total_tokens": 29793,
+          "prompt_tokens_details": {
+            "cached_tokens": 768
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 11230
+          },
+          "prompt_cache_hit_tokens": 768,
+          "prompt_cache_miss_tokens": 13797
+        },
+        "prompt_sha256": "6e0c0f2d1ee3c8393e1bc599b2c57ed504e74d0a79905c914ff21337ee30d42f",
+        "tool_events": 0,
+        "elapsed_seconds": 185.03,
+        "response_sha256": "39c604a73404874544b5a225fc9f649d720bad15ab8971ac6f37000f54ad8f9d",
+        "finish_reason": null,
+        "written_files": [
+          "SKILL.md",
+          "scripts/recap_leaves.py",
+          "references/LICENSE.txt",
+          "references/recap_reactions.md",
+          "references/source_note.md"
+        ]
+      },
+      {
+        "phase": "author",
+        "session_key": "build:rdkit-recap-terminal-fragments",
+        "resumed": false,
+        "model": "deepseek-v4-pro",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 18608,
+          "completion_tokens": 10931,
+          "total_tokens": 29539,
+          "prompt_tokens_details": {
+            "cached_tokens": 2048
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 7602
+          },
+          "prompt_cache_hit_tokens": 2048,
+          "prompt_cache_miss_tokens": 16560
+        },
+        "prompt_sha256": "a86999a2113c79ff006864d61620bf6972cddd60ca04d70ddfa7791538648b16",
+        "tool_events": 0,
+        "elapsed_seconds": 121.514,
+        "response_sha256": "4978a5272a27169aa75bca534430c939fc53dae511ffa830c11bb7ece59bb396",
+        "finish_reason": null,
+        "written_files": [
+          "SKILL.md",
+          "scripts/recap_leaves.py",
+          "references/LICENSE.txt",
+          "references/source_note.md"
+        ]
+      }
+    ],
+    "monetary_cost": null,
+    "reported_totals": {
+      "total_tokens": 75667,
+      "prompt_tokens": 44071,
+      "completion_tokens": 31596,
+      "prompt_cache_hit_tokens": 4224,
+      "prompt_cache_miss_tokens": 39847
+    }
+  },
+  "discovery_summary": "Discovered one candidate skill for RDKit RECAP terminal molecular fragments based on RecapDecompose and GetLeaves in rdkit/Chem/Recap.py. It captures terminal-vs-hierarchy interpretation, dict-keyed canonical SMILES leaves, and valid empty results for non-cleavable molecules, plus optional minFragmentSize and onlyUseReactions.",
+  "candidate_count": 1,
+  "sources": [
+    {
+      "id": "recap",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "license": "BSD-3-Clause",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "rdkit/Chem/Recap.py",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+      },
+      "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.py"
+      ],
+      "index_preview_truncated": false
+    },
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "license.txt",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      },
+      "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.txt"
+      ],
+      "index_preview_truncated": false
+    }
+  ],
+  "source_errors": [],
+  "evidence": [
+    {
+      "source": "recap",
+      "path": "document.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.py",
+      "id": "e1"
+    },
+    {
+      "source": "license",
+      "path": "document.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.txt",
+      "id": "e2"
+    }
+  ],
+  "temporary_workspace": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run21-20261027\\state\\runs\\20261027T214844-13efc180"
+}

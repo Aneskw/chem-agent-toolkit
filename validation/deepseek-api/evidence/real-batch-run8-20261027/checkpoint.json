@@ -1,0 +1,162 @@
+{
+  "config": {
+    "sources": [
+      {
+        "id": "recap",
+        "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+        "license": "BSD-3-Clause"
+      },
+      {
+        "id": "license",
+        "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      }
+    ],
+    "prompt": "Discover and package one reusable Skill for RDKit RECAP terminal molecular fragments using RecapDecompose and GetLeaves. Ground the usage, input/output scope, terminal versus full hierarchy interpretation and valid empty results in the provided source. This is molecular fragmentation, not descriptor calculation. Choose appropriate delivery files and document prerequisites and invalid input boundaries. Do not install software or run source/business code on the host; business execution is permitted only in a Docker container. Do not claim chemical or scientific validation beyond the documented algorithm.",
+    "model": {
+      "name": "gpt-6-astra",
+      "transport": "https",
+      "reasoning_effort": "medium",
+      "service_tier": "default",
+      "backend": "codex_cli"
+    },
+    "execution": {
+      "profile": "production",
+      "stop_on_runtime_failure": true,
+      "progress_watch": "observe"
+    },
+    "limits": {
+      "model_calls": 8,
+      "candidate_calls": null,
+      "model_timeout": 600,
+      "total_seconds": 3600,
+      "discovery_seconds": null,
+      "agent_events": null,
+      "agent_progress_timeout": null,
+      "max_candidates": 1,
+      "max_builds": 1,
+      "source_bytes": null,
+      "source_total_bytes": null,
+      "source_files": null,
+      "package_bytes": null,
+      "network_requests": null,
+      "repair_rounds": 1,
+      "check_timeout": 120,
+      "converter_timeout": 60,
+      "network_timeout": 60
+    },
+    "runtime_defaults": {
+      "options": {
+        "backend": "deepseek_api",
+        "api_model": "deepseek-v4-pro",
+        "api_retries": 0,
+        "api_stream": true,
+        "api_max_output_tokens": 65536,
+        "model_timeout": 600,
+        "total_seconds": 2400,
+        "reasoning_effort": "medium",
+        "service_tier": "default",
+        "progress_watch": "observe"
+      }
+    },
+    "batch": {
+      "label": "deepseek-api-normal-creation",
+      "tags": [
+        "chemistry",
+        "recap",
+        "acceptance",
+        "deepseek-api"
+      ]
+    },
+    "notes": "Run 8: normal fresh creation on the fixed RECAP case, operator-authorised batch of 8 admitted model calls. No runtime binding is pre-filled and the prompt does not require a script entry, so the delivered entry is resolved by the official flow (caller binding absent -> author declaration -> conservative recognition, ambiguity stays refused). Native stages keep the Codex CLI (https, medium, default). runtime_defaults route the structured planner/association/diagnosis calls to the DeepSeek API: api_model is pinned to deepseek-v4-pro, api_retries=0, one total deadline per call, streaming with the documented completion marker. limits.model_calls=8 covers entry association, association review and planning repair as well; model_timeout=600 per call and limits.total_seconds=3600 bound the batch including build and business acceptance. The 240 s silence window is observed only (execution.progress_watch=observe). Any Docker build or business acceptance failure stops the batch; no restart or resume.",
+    "constraints": {},
+    "network": true,
+    "execute_generated_checks": false,
+    "draft_only": false,
+    "runtime_requirements": {},
+    "revision_parents": {},
+    "runtime": {},
+    "adoption": {
+      "enabled": true
+    },
+    "checks": [],
+    "environment": {
+      "allow": []
+    },
+    "intent": "auto",
+    "config_path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\acceptance-normal-input.json"
+  },
+  "sources": [
+    {
+      "id": "recap",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "license": "BSD-3-Clause",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "content_type": "text/plain; charset=utf-8",
+      "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run8-20261027\\state\\cache\\snapshots\\c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a\\document.py",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "rdkit/Chem/Recap.py",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+      },
+      "original_path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run8-20261027\\state\\cache\\downloads\\d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc\\document.py",
+      "files": [
+        "document.py"
+      ],
+      "inventory": [
+        {
+          "path": "document.py",
+          "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+          "bytes": 20662
+        }
+      ],
+      "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a",
+      "index_truncated": false,
+      "omitted_preview": []
+    },
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "content_type": "text/plain; charset=utf-8",
+      "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run8-20261027\\state\\cache\\snapshots\\f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2\\document.txt",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "license.txt",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      },
+      "original_path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run8-20261027\\state\\cache\\downloads\\daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30\\document.txt",
+      "files": [
+        "document.txt"
+      ],
+      "inventory": [
+        {
+          "path": "document.txt",
+          "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+          "bytes": 1580
+        }
+      ],
+      "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+      "index_truncated": false,
+      "omitted_preview": []
+    }
+  ],
+  "evidence": [],
+  "source_errors": [],
+  "specifications": {
+    "docs/skills/minimum.md": "080c303fc09cd2ce9c592d3065944fef9cd8709c2c5bd0dc19f0d21e32d086a8",
+    "docs/skills/packaging.md": "51baf354d6d78f7c3d0f71e4852754e8d56b596a03fcb9b6946ef93f801879f1",
+    "creation_pipeline/generation/prompts/analyze.md": "5ffa54c74255b406ec4dbac0d24f4577d3208fa9754a292163f20b82439fff35",
+    "creation_pipeline/generation/prompts/author.md": "24dac09557724d0825a09d8de7ddd2fead865af7549f3a143c5547dc2e0f73e2",
+    "creation_pipeline/generation/prompts/review.md": "e6f4857a4a4ac73c32068177532ac7db67d90c4fda972eed6e0e1b1933c38115"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run4-20261027\\state\\cache\\downloads\\ff168a136f33a7dab72678650d296e055d1aa294beddef1867a6b00c007214a9\\document.py",
+  "sha256": "ff168a136f33a7dab72678650d296e055d1aa294beddef1867a6b00c007214a9",
+  "origin": {
+    "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+    "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+    "content_type": "text/plain; charset=utf-8"
+  }
+}

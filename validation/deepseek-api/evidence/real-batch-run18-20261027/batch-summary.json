@@ -1,0 +1,30 @@
+{
+  "batch": "run 18",
+  "build_id": "20261027T211404-ca14f4f2",
+  "status": "blocked",
+  "started_at": "2026-10-27T13:14:04.349604+00:00",
+  "finished_at": "2026-10-27T13:28:21.873695+00:00",
+  "model_calls": 7,
+  "entry_declaration": {
+    "kind": "markdown_python",
+    "path": "SKILL.md",
+    "block_index": 1
+  },
+  "gaps": [
+    {
+      "code": "entry_declaration_missing",
+      "detail": "Declared Markdown block 1 does not exist; SKILL.md has 1 complete block(s)",
+      "repair_lane": "binding",
+      "blocker_kind": "unsupported_contract"
+    }
+  ],
+  "stages": {
+    "discovery": "passed",
+    "authoring": "passed",
+    "review": "passed",
+    "requirement": "passed",
+    "binding": "blocked",
+    "planning": "not_run",
+    "docker": "not_run"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "status": "pass",
+  "resolution": "none",
+  "findings": [
+    {
+      "location": "SKILL.md > Inputs > built-in small-fragment filter",
+      "problem": "The text says the built-in small-fragment filter is independent of minFragmentSize, but the source applies that static filter only in the elif branch when minFragmentSize is not greater than 0.",
+      "evidence": "Source: if minFragmentSize > 0: ... elif pSmi.replace('*', '').replace('()', '') in ('', 'C', 'CC', 'CCC'): ...",
+      "impact": "Users who set minFragmentSize>0 may incorrectly expect the static filter to still apply, changing predicted leaves or empty results.",
+      "action": "Revise the paragraph to state that the static filter applies only when minFragmentSize=0; when minFragmentSize>0 the numeric threshold check is used instead.",
+      "blocking": false,
+      "category": "source"
+    },
+    {
+      "location": "artifact checks / defined behavior tests",
+      "problem": "The three behavior tests are source-backed but were not executed; only packaging checks (structure, runtime_paths) have pass status.",
+      "evidence": "Artifact notes state runtime execution was not performed and the tests are source-grounded definitions, not execution evidence; checks list contains only packaging checks.",
+      "impact": "Runtime behavior remains unverified, though the source assessment can still be completed.",
+      "action": "When execution is permitted, run doctest_leaves, valid_empty_default, and min_fragment_leaf in the Docker container with RDKit to confirm the delivered normal path and empty-result cases.",
+      "blocking": false,
+      "category": "environment"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed"
+}

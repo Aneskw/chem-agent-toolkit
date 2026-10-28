@@ -1,0 +1,52 @@
+{
+  "files": {
+    "package/SKILL.md": {
+      "size": 4121,
+      "sha256": "eb77af97a411325857c7a8725fbd7c9386a34b0c0fd91d12f724f5c883f13cd6"
+    },
+    "package/references/LICENSE.txt": {
+      "size": 3302,
+      "sha256": "defcec084284f50f58d4739749c6c0836beb948b662b6b67d8edee42245ebf4b"
+    },
+    "package/references/sources.md": {
+      "size": 2370,
+      "sha256": "6e98ae68a48ac0b2ea1911258f80c094f1194acf9c55b27e973bd2d9c2822cf9"
+    },
+    "package/scripts/recap_fragments.py": {
+      "size": 1409,
+      "sha256": "44e952b2a2972ab2d9bd19d76733ff424ae7a47525456b97c91abc20f17507ff"
+    },
+    "source-identities.json": {
+      "size": 2069,
+      "sha256": "35ff72297923cc5d5c833d1641877f69ee384096fba9ef42b12ebe52397f59a6"
+    },
+    "sources/license/document.txt": {
+      "size": 1580,
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+    },
+    "sources/recap/document.py": {
+      "size": 20662,
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+    }
+  },
+  "excluded": [],
+  "material_coverage": {
+    "source": [
+      "package/scripts/recap_fragments.py",
+      "sources/recap/document.py"
+    ],
+    "dependencies": [],
+    "installation_docs": [
+      "package/SKILL.md",
+      "package/references/LICENSE.txt",
+      "package/references/sources.md"
+    ],
+    "tests_examples": [],
+    "dockerfile": []
+  },
+  "missing_materials": [
+    "dependencies",
+    "tests_examples",
+    "dockerfile"
+  ]
+}

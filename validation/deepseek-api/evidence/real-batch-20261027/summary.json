@@ -1,0 +1,175 @@
+{
+  "schema_version": 3,
+  "pipeline_version": "5.2.0-stage2",
+  "build_id": "20261027T115058-86fedec3",
+  "started_at": "2026-10-27T03:50:58.021555+00:00",
+  "status": "blocked",
+  "entities": [],
+  "errors": [
+    "Discovery blocked: Discovery was blocked because the native tool host could not start: codex-code-mode-host.exe was missing. No source files were inspected, so no source-grounded candidate was produced or saved."
+  ],
+  "agent_efficacy": "not_evaluated_separate_work",
+  "replay": false,
+  "implementation_sha256": "81867f96bb27139c711df65b8949a2b8c34cf7829ff92017e2d18d5700237fb8",
+  "finished_at": "2026-10-27T03:51:34.389108+00:00",
+  "counts": {},
+  "model_calls": [
+    {
+      "phase": "discovery",
+      "session_key": "discovery",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 42831,
+        "cached_input_tokens": 28288,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 352,
+        "reasoning_output_tokens": 18
+      },
+      "prompt_sha256": "ef9f29735ec36f8e27f273463ea52df84cc9b2fcebebcaa072e2a7b7cf82038d",
+      "tool_events": 2,
+      "session_id": "01a17b7b-a6e8-70c3-a6be-42035fee3185",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 31.362,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 3.911,
+        "last_stdout_seconds": 26.427,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    }
+  ],
+  "model_metrics": {
+    "calls_attempted": 1,
+    "usage_fully_reported": true,
+    "receipts": [
+      {
+        "phase": "discovery",
+        "session_key": "discovery",
+        "resumed": false,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 42831,
+          "cached_input_tokens": 28288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 352,
+          "reasoning_output_tokens": 18
+        },
+        "prompt_sha256": "ef9f29735ec36f8e27f273463ea52df84cc9b2fcebebcaa072e2a7b7cf82038d",
+        "tool_events": 2,
+        "session_id": "01a17b7b-a6e8-70c3-a6be-42035fee3185",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 31.362,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 3.911,
+          "last_stdout_seconds": 26.427,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      }
+    ],
+    "monetary_cost": null,
+    "reported_totals": {
+      "reasoning_output_tokens": 18,
+      "cached_input_tokens": 28288,
+      "cache_write_input_tokens": 0,
+      "input_tokens": 42831,
+      "output_tokens": 352
+    }
+  },
+  "sources": [
+    {
+      "id": "recap",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "license": "BSD-3-Clause",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "rdkit/Chem/Recap.py",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+      },
+      "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.py"
+      ],
+      "index_preview_truncated": false
+    },
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "license.txt",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      },
+      "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.txt"
+      ],
+      "index_preview_truncated": false
+    }
+  ],
+  "source_errors": [],
+  "evidence": [
+    {
+      "source": "recap",
+      "path": "document.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.py",
+      "id": "e1"
+    },
+    {
+      "source": "license",
+      "path": "document.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.txt",
+      "id": "e2"
+    }
+  ],
+  "temporary_workspace": "E:\\Users\\27343\\Docker\\acceptance-deepseek-20261027\\state\\runs\\20261027T115058-86fedec3"
+}

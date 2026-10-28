@@ -1,0 +1,57 @@
+{
+  "backend": "deepseek_api",
+  "deadline_scope": "connect, send, read, stream consumption and all configured retries",
+  "elapsed_seconds": 0.074,
+  "endpoint": {
+    "base_url": "https://api.deepseek.com",
+    "kind": "official",
+    "path": "/chat/completions"
+  },
+  "error": "DeepSeek connection failed: ConnectionResetError",
+  "error_class": "model_connection_failed",
+  "mapped_settings": {
+    "note": "reasoning_effort uses the provider compatibility ladder (minimal->low, medium->high, xhigh->high); the requested and sent values are different and are not claimed to be equivalent",
+    "reasoning_effort_sent": "high",
+    "service_tier": "not supported by this backend; recorded, never sent",
+    "thinking": {
+      "type": "enabled"
+    }
+  },
+  "messages_sha256": "022f61db7a86c094a968f547340c59353cec2937016d9f719ed16459d28653d5",
+  "model": "deepseek-v4-pro",
+  "progress_timeout_seconds": null,
+  "progress_watch": "not applied: keep-alives are not generation progress and the provider closes a request that has not started inference after ten minutes; the total deadline is the only bound",
+  "prompt_bytes": 56516,
+  "prompt_sha256": "1a4aadde555abc782d39e2516b43955f0ca80a29d3f12c7e4cdb6a867a4f9628",
+  "provider": "deepseek",
+  "request_count": 1,
+  "request_params": {
+    "max_tokens": 96000,
+    "messages_count": 2,
+    "model": "deepseek-v4-pro",
+    "reasoning_effort": "high",
+    "response_format": {
+      "type": "json_object"
+    },
+    "stream": true,
+    "stream_options": {
+      "include_usage": true
+    },
+    "structured_output_mode": "json_object + local JSON Schema validation (the service does not accept a caller JSON Schema)",
+    "temperature": "not sent (has no effect in thinking mode)",
+    "thinking": {
+      "type": "enabled"
+    },
+    "tools": "not sent (tool-free contract; any tool call is rejected)"
+  },
+  "requested_settings": {
+    "reasoning_effort": "medium",
+    "service_tier": "default"
+  },
+  "retries": 0,
+  "schema_sha256": "addb3c86b7b2530dbac42810ab40fe02ce46d716490eebff1e60f1bf845f1668",
+  "sdk": "none (stdlib http.client); no implicit SDK retries exist",
+  "started_at": "2026-10-27T13:43:03Z",
+  "status": "failed",
+  "timeout_seconds": 600.0
+}

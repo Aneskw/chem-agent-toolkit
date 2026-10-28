@@ -1,0 +1,61 @@
+{
+  "completed": true,
+  "summary": "Delivered rdkit-recap-terminal-fragments skill with SKILL.md and references for license and reaction indices. No scripts are included; the normal path is a SKILL.md Python snippet.",
+  "files": [
+    {
+      "path": "SKILL.md",
+      "content": "---\nname: rdkit-recap-terminal-fragments\ndescription: Use RDKit Recap.RecapDecompose and RecapHierarchyNode.GetLeaves to get terminal RECAP molecular fragments as dummy-atom SMILES from a parsed RDKit Mol. Select when an agent needs standard RECAP leaf fragments, not the full hierarchy, descriptors, or custom reaction rules.\n---\n\n# RDKit RECAP terminal fragments\n\nUse `rdkit.Chem.Recap` to decompose a parsed molecule and extract the standard RECAP terminal fragments. This is molecular fragmentation, not descriptor calculation, and it does not add new reaction rules or scientific thresholds.\n\n## Prerequisites\n\n- Python package `rdkit` with `rdkit.Chem` importable.\n- A parsed, non-`None` RDKit molecule, normally obtained with `Chem.MolFromSmiles`.\n\n```python\nfrom rdkit import Chem\nfrom rdkit.Chem import Recap\n```\n\n## Normal path\n\n```python\nmol = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\nif mol is None:\n    raise ValueError('could not parse SMILES')\n\nroot = Recap.RecapDecompose(mol)\nleaves = root.GetLeaves()\n\nterminal_smiles = sorted(leaves.keys())\n# ['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']\n\nfirst_leaf = leaves[terminal_smiles[0]]\nleaf_mol = first_leaf.mol          # RDKit Mol for this terminal fragment\nleaf_smiles = first_leaf.smiles    # canonical dummy-atom SMILES\n```\n\n`root.GetLeaves()` returns only terminal leaf nodes; use it instead of `root.children` or `root.GetAllChildren()` when the standard RECAP fragment set is needed.\n\n## Inputs\n\n| Argument | Type | Default | Meaning |\n|---|---|---|---|\n| `mol` | `Chem.Mol` | required | parsed, non-`None` molecule. `RecapDecompose` immediately calls `Chem.MolToSmiles(mol, 1)`; invalid or `None` inputs fail there. Use `Chem.MolFromSmiles` and check for `None`. |\n| `allNodes` | `dict` or `None` | `None` | optional node cache keyed by canonical SMILES. If the input SMILES is already in the cache, `RecapDecompose` returns the cached node before applying new decomposition options. |\n| `minFragmentSize` | `int` | `0` | minimum explicit non-dummy atom count in each fragment product after a cut. Products below the cutoff make that product sequence invalid. |\n| `onlyUseReactions` | iterable of `int` or `None` | `None` | restrict decomposition to zero-based reaction indices in `rdkit.Chem.Recap.reactions`. See `references/reaction_indices.md`. |\n\n## Outputs\n\n`Recap.RecapDecompose` returns a `RecapHierarchyNode`:\n\n- `root.children`: dictionary of direct child SMILES -> `RecapHierarchyNode`.\n- `root.GetAllChildren()`: dictionary of all descendant nodes (the full hierarchy).\n- `root.GetLeaves()`: dictionary of terminal leaf nodes only, keyed by canonical SMILES containing dummy atoms `*`. Each value is a `RecapHierarchyNode` with `.mol` (RDKit `Mol`) and `.smiles`.\n\n`children` can include an intermediate node that is not terminal, as in the source example where `children` has four entries but `GetLeaves()` has three.\n\n## Common options\n\n### `minFragmentSize`\n\nDefault `0` applies the built-in small-fragment filter. A product sequence is rejected if an individual product SMILES, after `pSmi.replace('*', '').replace('()', '')`, is one of `''`, `'C'`, `'CC'`, or `'CCC'`.\n\nWhen `minFragmentSize > 0`, the filter instead rejects a product when:\n\n```text\nexplicit_atom_count - dummy_atom_count < minFragmentSize\n```\n\nwhere explicit atom count is `prod.GetNumAtoms(onlyExplicit=True)` and dummy count is the number of `*` characters in the product SMILES. The default `''/C/CC/CCC` filter is not used in this branch.\n\n### `allNodes`\n\nPass an empty dict to reuse nodes across decompositions:\n\n```python\nallNodes = {}\nres1 = Recap.RecapDecompose(Chem.MolFromSmiles('c1ccccc1-c1ncccc1'), allNodes=allNodes)\nres2 = Recap.RecapDecompose(Chem.MolFromSmiles('COc1ccccc1-c1ncccc1'), allNodes=allNodes)\n```\n\nOnly reuse the same cache when decomposition options are the same. A populated cache returns the existing node for a previously seen input SMILES before applying new `minFragmentSize` or `onlyUseReactions` options.\n\n### `onlyUseReactions`\n\nPass a sequence of zero-based reaction indices:\n\n```python\nroot = Recap.RecapDecompose(mol, onlyUseReactions=[1])   # amide only\nleaves = root.GetLeaves()\n```\n\nSee `references/reaction_indices.md` for the index list.\n\n## Valid empty results\n\nAn empty `leaves` dict is normal and means no terminal fragments survived decomposition. Documented source cases include:\n\n- `CCCOCCC` with default settings: `res.children == {}` (so `GetLeaves()` is empty too).\n- `CCCOCC` with `minFragmentSize=3`: `res.children == {}`.\n- Cyclic or unreactive examples, such as `C1CCCCO1` for ether and `C1CC=CC1` for olefin, produce `len(res.GetLeaves()) == 0`.\n\nDo not treat an empty dict as failure. Inspect input structure and the `onlyUseReactions`/`minFragmentSize` options before concluding that no reaction was found.\n\n## Failure signals\n\n- `Chem.MolFromSmiles` returns `None` for invalid SMILES; passing `None` to `RecapDecompose` will fail when it calls `Chem.MolToSmiles(mol, 1)`.\n- Product fragments are passed to `Chem.SanitizeMol(prod)` inside the decomposition loop, and the loop continues to the next product if sanitization raises an exception. The input molecule is not sanitized by `RecapDecompose`.\n- Reusing a populated `allNodes` cache with a different `minFragmentSize` or `onlyUseReactions` can return the prior cached decomposition for the same input SMILES, not a recomputation. Use a fresh cache per option set.\n\n## License\n\nThe RDKit Recap implementation is BSD-3-Clause licensed. See `references/LICENSE.txt` for the license text.\n\n## Reaction index reference\n\nFor `onlyUseReactions`, see `references/reaction_indices.md` for the zero-based indices and source reaction definitions.\n"
+    },
+    {
+      "path": "references/LICENSE.txt",
+      "content": "BSD 3-Clause License\n\nCopyright (c) 2006-2015, Rational Discovery LLC, Greg Landrum, and Julie Penzotti and others\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are met:\n\n1. Redistributions of source code must retain the above copyright notice, this\n   list of conditions and the following disclaimer.\n\n2. Redistributions in binary form must reproduce the above copyright notice,\n   this list of conditions and the following disclaimer in the documentation\n   and/or other materials provided with the distribution.\n\n3. Neither the name of the copyright holder nor the names of its\n   contributors may be used to endorse or promote products derived from\n   this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\"\nAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\nIMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE\nFOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL\nDAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR\nSERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\nCAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,\nOR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\nOF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    {
+      "path": "references/reaction_indices.md",
+      "content": "# RECAP reaction indices\n\n`onlyUseReactions` accepts zero-based indices into `rdkit.Chem.Recap.reactions`, matching `reactionDefs` in the source module.\n\n| Index | Description |\n| ---: | --- |\n| 0 | urea |\n| 1 | amide |\n| 2 | ester |\n| 3 | amines |\n| 4 | cyclic amines |\n| 5 | ether |\n| 6 | olefin |\n| 7 | aromatic nitrogen - aliphatic carbon |\n| 8 | lactam nitrogen - aliphatic carbon |\n| 9 | aromatic carbon - aromatic carbon |\n| 10 | aromatic nitrogen - aromatic carbon |\n| 11 | sulphonamide |\n\nIndex 10 is marked in the source as not part of the standard RECAP set. To inspect the exact reaction SMARTS, open `rdkit.Chem.Recap.reactionDefs` in Python.\n"
+    }
+  ],
+  "tests": [],
+  "issues": [
+    {
+      "id": "reaction-index-links-fixed",
+      "description": "The previous reaction_indices.md contained raw SMARTS bracket syntax that the structure validator reported as broken or external package links; the file now lists only indices and descriptions.",
+      "blocking": false,
+      "resolution": "Rewrote reaction_indices.md without raw SMARTS; users can inspect rdkit.Chem.Recap.reactionDefs at runtime."
+    },
+    {
+      "id": "no-runtime-execution",
+      "description": "Runtime/Docker acceptance was not executed during authoring; claims are grounded in the provided RDKit source and tests, not in an executed example.",
+      "blocking": false,
+      "resolution": "Recorded in notes; the host pipeline must perform runtime acceptance if it runs business checks."
+    },
+    {
+      "id": "input-boundaries-source-only",
+      "description": "Recap.py does not explicitly check for None or unsanitizable input before Chem.MolToSmiles; SKILL.md documents the immediate MolToSmiles call rather than claiming additional guards.",
+      "blocking": false,
+      "resolution": "Documented as failure signals in SKILL.md."
+    },
+    {
+      "id": "allnodes-cache-option-reuse",
+      "description": "A populated allNodes cache returns a previously seen SMILES before applying new minFragmentSize or onlyUseReactions; users must use fresh caches per option set.",
+      "blocking": false,
+      "resolution": "Documented under allNodes and failure signals in SKILL.md."
+    }
+  ],
+  "notes": [
+    "No runtime or Docker acceptance test was performed during authoring; source-grounded claims are based on the provided Recap.py source and its in-source unittest cases.",
+    "Execution of business code on the current host is not permitted; runtime acceptance will occur in Docker if the pipeline runs it.",
+    "The delivered package has no scripts; the normal path is a SKILL.md Python snippet and no entry declaration is required."
+  ],
+  "runtime_requirement": {
+    "status": "required",
+    "reason": "The skill's normal path imports and calls rdkit.Chem.Recap; execution requires the rdkit Python package.",
+    "citations": [
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": "from rdkit import Chem"
+      }
+    ]
+  }
+}

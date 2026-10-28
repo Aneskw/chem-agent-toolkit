@@ -1,0 +1,74 @@
+{
+  "schema_version": 3,
+  "pipeline_version": "5.2.0-stage2",
+  "build_id": "20261027T202903-4ad6b5e4",
+  "started_at": "2026-10-27T12:29:03.034959+00:00",
+  "status": "failed",
+  "entities": [],
+  "errors": [
+    "Saved API/Ollama runs are not executable in the Agent-only pipeline"
+  ],
+  "agent_efficacy": "not_evaluated_separate_work",
+  "replay": false,
+  "implementation_sha256": "bc978a988fc92694ce8a070dc71b1a5083bf22251838f9ef4b8d767bbdb8b839",
+  "finished_at": "2026-10-27T12:29:06.064080+00:00",
+  "counts": {},
+  "model_calls": [],
+  "model_metrics": {
+    "calls_attempted": 0,
+    "usage_fully_reported": false,
+    "receipts": [],
+    "monetary_cost": null,
+    "reported_totals": null
+  },
+  "sources": [
+    {
+      "id": "recap",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "license": "BSD-3-Clause",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "rdkit/Chem/Recap.py",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+      },
+      "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.py"
+      ],
+      "index_preview_truncated": false
+    },
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "license.txt",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      },
+      "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.txt"
+      ],
+      "index_preview_truncated": false
+    }
+  ],
+  "source_errors": [],
+  "evidence": [],
+  "temporary_workspace": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run14-20261027\\state\\runs\\20261027T202903-4ad6b5e4"
+}

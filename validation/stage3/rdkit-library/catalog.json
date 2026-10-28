@@ -1,0 +1,2923 @@
+{
+  "version": 2,
+  "transaction": "5ac7d7d468834763bfe79a554a85da26",
+  "skills": [
+    {
+      "name": "rdkit-descriptor-delivery",
+      "path": "accepted/rdkit-descriptor-delivery",
+      "zone": "accepted",
+      "candidate_id": "candidate-aa9d0f31233bf8f2a944a466b62f07fc28dc0f5ce009d389bfba6ab3b8bfa8ef",
+      "revision_id": "rev-e728bcf9ca9c02d8a43ef50ae122cee6d776fed7fb82cc3bd0ac01d0b90bb9a4",
+      "evidence": "evidence/candidate-aa9d0f31233bf8f2a944a466b62f07fc28dc0f5ce009d389bfba6ab3b8bfa8ef/646ba65f9fca4e22a3181559f4f52450",
+      "freeze_sha256": "98b2cc65dca64e985aa5f1de4ef598d6f0c6c50c507a199e94645375afaac299",
+      "delivery": {
+        "protocol": 1,
+        "candidate_id": "candidate-aa9d0f31233bf8f2a944a466b62f07fc28dc0f5ce009d389bfba6ab3b8bfa8ef",
+        "revision_id": "rev-e728bcf9ca9c02d8a43ef50ae122cee6d776fed7fb82cc3bd0ac01d0b90bb9a4",
+        "mode": "normal",
+        "inputs": {
+          "candidate": {
+            "name": "rdkit-descriptor-delivery",
+            "task": "Calculate RDKit descriptors",
+            "scope": "CPU single SMILES and line-oriented file inputs, including invalid input rejection",
+            "entrypoint": "scripts/calc_descriptors.py",
+            "evidence": []
+          },
+          "files": [
+            {
+              "path": "scripts/calc_descriptors.py",
+              "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+              "bytes": 1710
+            },
+            {
+              "path": "SKILL.md",
+              "sha256": "9c97e14c2ae620d52e232315e3dc55b95f6c6a7e41eedb2e4d3ebfa4ce6a6c5c",
+              "bytes": 2036
+            }
+          ],
+          "sources": [
+            {
+              "id": "rdkit",
+              "inventory": [
+                {
+                  "path": "examples/input.smi",
+                  "sha256": "fb67841c517bcadbacd16df1e4c099f4254101a04e6fe227672e6ac249fff2a2",
+                  "bytes": 30
+                },
+                {
+                  "path": "references/api.md",
+                  "sha256": "1bcc55aae7b2605beb8affad8bbf28c398f4edf927013d6529b8e9b160231427",
+                  "bytes": 202
+                },
+                {
+                  "path": "references/science.md",
+                  "sha256": "44ddc091c62a6c1ed4dac6951f20d08ea22922b0e59445fd9859fd00fd24338e",
+                  "bytes": 223
+                },
+                {
+                  "path": "requirements.txt",
+                  "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+                  "bytes": 46
+                },
+                {
+                  "path": "scripts/calc_descriptors.py",
+                  "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+                  "bytes": 1710
+                }
+              ],
+              "resolved_ref": "d5b77dc5d91711567af1960530d03739a5c442bf",
+              "repo": "https://github.com/Aneskw/chem-agent-toolkit.git"
+            }
+          ],
+          "requirement": {
+            "status": "required",
+            "reason": "The delivered RDKit script executes descriptor calculations",
+            "citations": [
+              {
+                "source_id": "rdkit",
+                "path": "scripts/calc_descriptors.py",
+                "quote": "from rdkit import Chem"
+              }
+            ]
+          },
+          "bindings": {
+            "version": 2,
+            "payload": {
+              "entry": "scripts/calc_descriptors.py",
+              "source_id": "rdkit",
+              "source_path": "scripts/calc_descriptors.py",
+              "association": "identical",
+              "entry_sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+              "source_sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e"
+            },
+            "sha256": "3c2b05752208e32dc7da7960df4c741af478ce59005410ecd5291ec403a791c3"
+          },
+          "environment": {
+            "version": 2,
+            "payload": {
+              "plan": {
+                "entrypoint": [
+                  "python",
+                  "/opt/skill/package/scripts/calc_descriptors.py"
+                ],
+                "script": "package/scripts/calc_descriptors.py",
+                "base_image": "python:3.11-slim",
+                "platform": "linux/amd64",
+                "language": "Python",
+                "language_version": "3.11",
+                "source_files": [
+                  "package/scripts/calc_descriptors.py",
+                  "sources/rdkit/requirements.txt"
+                ],
+                "dependencies": [
+                  {
+                    "name": "rdkit",
+                    "version": "2024.9.6",
+                    "channel": "pip",
+                    "evidence": "sources/rdkit/requirements.txt: rdkit==2024.9.6",
+                    "certainty": "declared"
+                  },
+                  {
+                    "name": "numpy",
+                    "version": "1.26.4",
+                    "channel": "pip",
+                    "evidence": "sources/rdkit/requirements.txt: numpy==1.26.4",
+                    "certainty": "declared"
+                  },
+                  {
+                    "name": "pillow",
+                    "version": "11.3.0",
+                    "channel": "pip",
+                    "evidence": "sources/rdkit/requirements.txt: pillow==11.3.0",
+                    "certainty": "declared"
+                  }
+                ],
+                "steps": [
+                  {
+                    "command": "python -m pip install --no-cache-dir -r /opt/skill/sources/rdkit/requirements.txt",
+                    "purpose": "Install the exact declared public packages.",
+                    "evidence": "Caller requires exact requirements.txt versions; pip installation is an inferred installation choice."
+                  }
+                ],
+                "build_layout": {
+                  "dependency_files": [
+                    "sources/rdkit/requirements.txt"
+                  ],
+                  "prefix_steps": 1,
+                  "reason": "The installation step requires only the requirements file and base image."
+                },
+                "environment": [
+                  {
+                    "name": "PYTHONDONTWRITEBYTECODE",
+                    "value": "1"
+                  },
+                  {
+                    "name": "PYTHONUNBUFFERED",
+                    "value": "1"
+                  }
+                ],
+                "resources": [],
+                "file_io": true,
+                "output_contract": "One JSON record per input value, containing ok and either computed descriptors or an error. --output writes JSONL to the requested path; otherwise JSONL goes to stdout. All successful records yield exit 0; any rejected record yields exit 2. File tests use /input/rows.smi and /output/results.jsonl.",
+                "runtime_network": false,
+                "network_reason": "Runtime source performs local RDKit calculations and local file IO. Public package downloads are needed only during image construction.",
+                "choices": [
+                  {
+                    "choice": "Use python:3.11-slim with pip.",
+                    "evidence": "The base image is a caller requirement, not an upstream declaration. The supplied requirements file pins three public Python packages.",
+                    "certainty": "inferred"
+                  },
+                  {
+                    "choice": "Use ok=true as the computation completion assertion.",
+                    "evidence": "calculate returns ok=true together with evaluated descriptor expressions. Import errors or descriptor exceptions are not caught and cannot produce that successful record.",
+                    "certainty": "declared"
+                  }
+                ],
+                "unresolved": [
+                  "Full graph-valid SMILES acceptance requires RDKit parsing and cannot reliably be represented by a full-match regex. Checks enforce only the documented necessary nonempty condition; acceptance verification is incomplete.",
+                  "Installation compatibility and runtime behavior remain unexecuted at this stage."
+                ],
+                "unverified_behavior": [
+                  "No upstream tests or reference numerical vectors were supplied.",
+                  "The methane case checks independently derived zero H-bond and rotatable-bond counts, but does not validate molecular weight, logP, TPSA, or general descriptor accuracy.",
+                  "Invalid nonempty SMILES grammar and graph semantics are not comprehensively tested.",
+                  "Descriptors are graph-derived calculations, not experimental measurements or biological, safety, or pharmacokinetic conclusions."
+                ],
+                "acceptance_json": "{\"invalid_input\":\"required\",\"scope\":\"Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.\",\"purposes\":[\"computation\"],\"constraint\":\"Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\\n    if mol is None:\\n        return {\\\"ok\\\": False, \\\"input\\\": text, \\\"error\\\": \\\"Invalid or empty SMILES\\\"}\",\"checks\":[{\"id\":\"direct_nonempty\",\"channel\":\"args\",\"key\":1,\"pattern\":\"(?s).*\\\\S.*\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\"},{\"id\":\"rows_nonempty\",\"channel\":\"input_files\",\"key\":\"rows.smi\",\"argument_index\":1,\"mode\":\"each_line\",\"pattern\":\"(?s).*\\\\S.*\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\"}],\"operations\":[{\"id\":\"direct\",\"selector\":{\"args\":[{\"index\":0,\"equals\":\"--smiles\"}]},\"checks\":[\"direct_nonempty\"],\"purposes\":[\"computation\"],\"require_persistence\":false,\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\"},{\"id\":\"file\",\"selector\":{\"args\":[{\"index\":0,\"equals\":\"--input\"}]},\"checks\":[\"rows_nonempty\"],\"purposes\":[\"computation\"],\"require_persistence\":true,\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\"}]}",
+                "generated_files": [],
+                "tests": [
+                  {
+                    "name": "environment_versions_imports",
+                    "layer": "environment",
+                    "kind": "derived",
+                    "source_paths": [
+                      "sources/rdkit/requirements.txt",
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "Verify pinned distributions and import every RDKit module used by the script; print versions for the audit.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Imports do not establish descriptor correctness."
+                    ],
+                    "case_json": "{\"entrypoint\":\"python\",\"args\":[\"-c\",\"import sys; from importlib.metadata import version; from rdkit import Chem; from rdkit.Chem import Crippen, Descriptors, Lipinski, rdMolDescriptors; import numpy; from PIL import Image; expected={'rdkit':'2024.9.6','numpy':'1.26.4','pillow':'11.3.0'}; actual={k:version(k) for k in expected}; print(sys.version); print(actual); assert actual == expected\"],\"expected_exit\":0,\"timeout_seconds\":60}"
+                  },
+                  {
+                    "name": "interface_help",
+                    "layer": "interface",
+                    "kind": "derived",
+                    "source_paths": [
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "Argparse declares the three supported option names.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Help does not exercise computation."
+                    ],
+                    "case_json": "{\"args\":[\"--help\"],\"expected_exit\":0,\"stdout_contains\":[\"--smiles\",\"--input\",\"--output\"],\"timeout_seconds\":60}"
+                  },
+                  {
+                    "name": "direct_documented_ethanol",
+                    "layer": "behavior",
+                    "kind": "reference",
+                    "source_paths": [
+                      "package/SKILL.md",
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "Execute the documented CCO example. A successful record requires all descriptor expressions to finish.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Completion does not establish numerical accuracy."
+                    ],
+                    "case_json": "{\"args\":[\"--smiles\",\"CCO\"],\"expected_exit\":0,\"expected_json_lines\":[{\"ok\":true}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\",\"assertion\":{\"role\":\"completion\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"ok\"],\"allowed_values\":[true],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"\\\"molecular_weight\\\": round(Descriptors.MolWt(mol), 6),\"}}}"
+                  },
+                  {
+                    "name": "direct_methane_graph_counts",
+                    "layer": "behavior",
+                    "kind": "derived",
+                    "source_paths": [
+                      "sources/rdkit/references/science.md",
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "SMILES C represents methane. Its single carbon graph contains no H-bond donor or acceptor groups and no bond that can be rotatable; independently expect zero for these three counts.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Checks only simple graph counts; no numerical oracle for other descriptors."
+                    ],
+                    "case_json": "{\"args\":[\"--smiles\",\"C\"],\"expected_exit\":0,\"stdout_contains\":[\"\\\"h_bond_donors\\\": 0\",\"\\\"h_bond_acceptors\\\": 0\",\"\\\"rotatable_bonds\\\": 0\"],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"sources/rdkit/references/science.md\",\"source_quote\":\"These are cheminformatics descriptors computed from the input graph.\",\"assertion\":{\"role\":\"completion\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"ok\"],\"allowed_values\":[true],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"\\\"rotatable_bonds\\\": Lipinski.NumRotatableBonds(mol),\"}}}"
+                  },
+                  {
+                    "name": "direct_empty_rejection",
+                    "layer": "behavior",
+                    "kind": "derived",
+                    "source_paths": [
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "Empty input produces the explicit rejection record and exit 2.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Covers empty input, not all invalid SMILES."
+                    ],
+                    "case_json": "{\"args\":[\"--smiles\",\"\"],\"expected_exit\":2,\"expected_json_lines\":[{\"ok\":false,\"input\":\"\",\"error\":\"Invalid or empty SMILES\"}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"input_rejection\",\"violates\":\"direct_nonempty\",\"invalid_input_reason\":\"Empty text has no non-whitespace character.\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return 0 if all(r[\\\"ok\\\"] for r in records) else 2\",\"assertion\":{\"role\":\"rejection\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"error\"],\"allowed_values\":[\"Invalid or empty SMILES\"],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return {\\\"ok\\\": False, \\\"input\\\": text, \\\"error\\\": \\\"Invalid or empty SMILES\\\"}\"}}}"
+                  },
+                  {
+                    "name": "file_normal_persisted",
+                    "layer": "behavior",
+                    "kind": "derived",
+                    "source_paths": [
+                      "package/SKILL.md",
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "Run the documented file form on a valid molecule and require the tool-created output to contain a completed calculation.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Verifies persistence and completion, not all descriptor values."
+                    ],
+                    "case_json": "{\"args\":[\"--input\",\"/input/rows.smi\",\"--output\",\"/output/results.jsonl\"],\"input_files\":{\"rows.smi\":\"CCO\\n\"},\"output_file\":\"results.jsonl\",\"expected_exit\":0,\"expected_json_lines\":[{\"ok\":true}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\",\"assertion\":{\"role\":\"completion\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"ok\"],\"allowed_values\":[true],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"\\\"molecular_weight\\\": round(Descriptors.MolWt(mol), 6),\"}}}"
+                  },
+                  {
+                    "name": "file_mixed_blank_row_rejection",
+                    "layer": "behavior",
+                    "kind": "derived",
+                    "source_paths": [
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "The list comprehension processes every row; a blank middle row yields the explicit error while the overall exit is 2.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Assertion targets the rejected middle row; it does not independently validate surrounding numerical results."
+                    ],
+                    "case_json": "{\"args\":[\"--input\",\"/input/rows.smi\",\"--output\",\"/output/results.jsonl\"],\"input_files\":{\"rows.smi\":\"CCO\\n\\nC\\n\"},\"output_file\":\"results.jsonl\",\"expected_exit\":2,\"expected_json_lines\":[{\"ok\":true},{\"ok\":false,\"input\":\"\",\"error\":\"Invalid or empty SMILES\"},{\"ok\":true}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"input_rejection\",\"violates\":\"rows_nonempty\",\"invalid_input_reason\":\"The second splitlines row is empty and violates the nonempty predicate.\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return 0 if all(r[\\\"ok\\\"] for r in records) else 2\",\"assertion\":{\"role\":\"rejection\",\"kind\":\"jsonl\",\"record_index\":1,\"path\":[\"error\"],\"allowed_values\":[\"Invalid or empty SMILES\"],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return {\\\"ok\\\": False, \\\"input\\\": text, \\\"error\\\": \\\"Invalid or empty SMILES\\\"}\"}}}"
+                  }
+                ],
+                "resource_assessment": {
+                  "status": "complete",
+                  "source_path": "package/scripts/calc_descriptors.py",
+                  "source_quote": "from rdkit import Chem\n    from rdkit.Chem import Crippen, Descriptors, Lipinski, rdMolDescriptors",
+                  "memory_bytes": 1073741824,
+                  "cpus": 1
+                }
+              },
+              "materials": [
+                {
+                  "path": "binding.json",
+                  "sha256": "62598fa07a0c6db65c3f9ae1d31d8aa4ef7dbd5032ccc33a4482e26118722abc",
+                  "bytes": 328
+                },
+                {
+                  "path": "context/.dockerignore",
+                  "sha256": "01d8d0360f02a0c00e236a4eb2a1d8bdf83377acf442eaafad7a136bf14d6bb0",
+                  "bytes": 21
+                },
+                {
+                  "path": "context/Dockerfile",
+                  "sha256": "76ad0715c3777a74f5dd1179c8c97269df676990aa1b96713a58cba317086cd4",
+                  "bytes": 428
+                },
+                {
+                  "path": "context/package/scripts/calc_descriptors.py",
+                  "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+                  "bytes": 1710
+                },
+                {
+                  "path": "context/package/SKILL.md",
+                  "sha256": "9c97e14c2ae620d52e232315e3dc55b95f6c6a7e41eedb2e4d3ebfa4ce6a6c5c",
+                  "bytes": 2036
+                },
+                {
+                  "path": "context/sources/rdkit/requirements.txt",
+                  "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+                  "bytes": 46
+                },
+                {
+                  "path": "locked-tests.json",
+                  "sha256": "f490572d7b3abe409e0e00857c0b471c52a810b4693e9dff645849c336116d57",
+                  "bytes": 27675
+                },
+                {
+                  "path": "plan.json",
+                  "sha256": "fb54016b0d0c431ecab475787217a9a87028b71795acd335c9e2766fafa82420",
+                  "bytes": 13739
+                },
+                {
+                  "path": "proposed-plan.json",
+                  "sha256": "fb54016b0d0c431ecab475787217a9a87028b71795acd335c9e2766fafa82420",
+                  "bytes": 13739
+                },
+                {
+                  "path": "README.md",
+                  "sha256": "d06835f9497d5db5b2c2ad2baa4852e2c85aec994513f39767125cda719e2bca",
+                  "bytes": 220
+                }
+              ],
+              "limits": {
+                "model": null,
+                "max_attempts": null,
+                "total_seconds": null,
+                "model_timeout": 600,
+                "context_chars": null,
+                "max_read_rounds": null,
+                "max_files": null,
+                "max_file_bytes": null,
+                "max_context_bytes": null,
+                "memory": "1g",
+                "cpus": "2",
+                "pids": 128,
+                "build_seconds": 600,
+                "validation_reserve_seconds": 0,
+                "repair_reserve_seconds": 0,
+                "test_seconds": 60,
+                "document_seconds": 180,
+                "pin_base_image": false,
+                "registry_seconds": 120
+              },
+              "resource_inputs": {}
+            },
+            "sha256": "e65d3f1a4172fa6ce176f454b0e66cec3c8b99bfd60d6c522c8884961560c88c"
+          },
+          "acceptance": {
+            "version": 2,
+            "payload": {
+              "cases": [
+                {
+                  "entrypoint": "python",
+                  "args": [
+                    "-c",
+                    "import sys; from importlib.metadata import version; from rdkit import Chem; from rdkit.Chem import Crippen, Descriptors, Lipinski, rdMolDescriptors; import numpy; from PIL import Image; expected={'rdkit':'2024.9.6','numpy':'1.26.4','pillow':'11.3.0'}; actual={k:version(k) for k in expected}; print(sys.version); print(actual); assert actual == expected"
+                  ],
+                  "expected_exit": 0,
+                  "timeout_seconds": 60,
+                  "name": "environment_versions_imports",
+                  "layer": "environment",
+                  "kind": "derived",
+                  "source_paths": [
+                    "sources/rdkit/requirements.txt",
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "Verify pinned distributions and import every RDKit module used by the script; print versions for the audit.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Imports do not establish descriptor correctness."
+                  ],
+                  "origin": "model_proposed"
+                },
+                {
+                  "args": [
+                    "--help"
+                  ],
+                  "expected_exit": 0,
+                  "stdout_contains": [
+                    "--smiles",
+                    "--input",
+                    "--output"
+                  ],
+                  "timeout_seconds": 60,
+                  "name": "interface_help",
+                  "layer": "interface",
+                  "kind": "derived",
+                  "source_paths": [
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "Argparse declares the three supported option names.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Help does not exercise computation."
+                  ],
+                  "origin": "model_proposed"
+                },
+                {
+                  "args": [
+                    "--smiles",
+                    "CCO"
+                  ],
+                  "expected_exit": 0,
+                  "expected_json_lines": [
+                    {
+                      "ok": true
+                    }
+                  ],
+                  "timeout_seconds": 60,
+                  "acceptance": {
+                    "purpose": "computation",
+                    "source_path": "package/SKILL.md",
+                    "source_quote": "The parser requires exactly one of `--smiles` or `--input`.",
+                    "assertion": {
+                      "role": "completion",
+                      "kind": "jsonl",
+                      "record_index": 0,
+                      "path": [
+                        "ok"
+                      ],
+                      "allowed_values": [
+                        true
+                      ],
+                      "source_path": "package/scripts/calc_descriptors.py",
+                      "source_quote": "\"molecular_weight\": round(Descriptors.MolWt(mol), 6),"
+                    }
+                  },
+                  "name": "direct_documented_ethanol",
+                  "layer": "behavior",
+                  "kind": "reference",
+                  "source_paths": [
+                    "package/SKILL.md",
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "Execute the documented CCO example. A successful record requires all descriptor expressions to finish.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Completion does not establish numerical accuracy."
+                  ],
+                  "origin": "model_proposed",
+                  "acceptance_policy": {
+                    "invalid_input": "required",
+                    "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                    "purposes": [
+                      "computation"
+                    ],
+                    "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                    "checks": [
+                      {
+                        "id": "direct_nonempty",
+                        "channel": "args",
+                        "key": 1,
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      },
+                      {
+                        "id": "rows_nonempty",
+                        "channel": "input_files",
+                        "key": "rows.smi",
+                        "argument_index": 1,
+                        "mode": "each_line",
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      }
+                    ],
+                    "operations": [
+                      {
+                        "id": "direct",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--smiles"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "direct_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": false,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      },
+                      {
+                        "id": "file",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--input"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "rows_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": true,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "args": [
+                    "--smiles",
+                    "C"
+                  ],
+                  "expected_exit": 0,
+                  "stdout_contains": [
+                    "\"h_bond_donors\": 0",
+                    "\"h_bond_acceptors\": 0",
+                    "\"rotatable_bonds\": 0"
+                  ],
+                  "timeout_seconds": 60,
+                  "acceptance": {
+                    "purpose": "computation",
+                    "source_path": "sources/rdkit/references/science.md",
+                    "source_quote": "These are cheminformatics descriptors computed from the input graph.",
+                    "assertion": {
+                      "role": "completion",
+                      "kind": "jsonl",
+                      "record_index": 0,
+                      "path": [
+                        "ok"
+                      ],
+                      "allowed_values": [
+                        true
+                      ],
+                      "source_path": "package/scripts/calc_descriptors.py",
+                      "source_quote": "\"rotatable_bonds\": Lipinski.NumRotatableBonds(mol),"
+                    }
+                  },
+                  "name": "direct_methane_graph_counts",
+                  "layer": "behavior",
+                  "kind": "derived",
+                  "source_paths": [
+                    "sources/rdkit/references/science.md",
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "SMILES C represents methane. Its single carbon graph contains no H-bond donor or acceptor groups and no bond that can be rotatable; independently expect zero for these three counts.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Checks only simple graph counts; no numerical oracle for other descriptors."
+                  ],
+                  "origin": "model_proposed",
+                  "acceptance_policy": {
+                    "invalid_input": "required",
+                    "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                    "purposes": [
+                      "computation"
+                    ],
+                    "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                    "checks": [
+                      {
+                        "id": "direct_nonempty",
+                        "channel": "args",
+                        "key": 1,
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      },
+                      {
+                        "id": "rows_nonempty",
+                        "channel": "input_files",
+                        "key": "rows.smi",
+                        "argument_index": 1,
+                        "mode": "each_line",
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      }
+                    ],
+                    "operations": [
+                      {
+                        "id": "direct",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--smiles"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "direct_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": false,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      },
+                      {
+                        "id": "file",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--input"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "rows_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": true,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "args": [
+                    "--smiles",
+                    ""
+                  ],
+                  "expected_exit": 2,
+                  "expected_json_lines": [
+                    {
+                      "ok": false,
+                      "input": "",
+                      "error": "Invalid or empty SMILES"
+                    }
+                  ],
+                  "timeout_seconds": 60,
+                  "acceptance": {
+                    "purpose": "input_rejection",
+                    "violates": "direct_nonempty",
+                    "invalid_input_reason": "Empty text has no non-whitespace character.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "return 0 if all(r[\"ok\"] for r in records) else 2",
+                    "assertion": {
+                      "role": "rejection",
+                      "kind": "jsonl",
+                      "record_index": 0,
+                      "path": [
+                        "error"
+                      ],
+                      "allowed_values": [
+                        "Invalid or empty SMILES"
+                      ],
+                      "source_path": "package/scripts/calc_descriptors.py",
+                      "source_quote": "return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}"
+                    }
+                  },
+                  "name": "direct_empty_rejection",
+                  "layer": "behavior",
+                  "kind": "derived",
+                  "source_paths": [
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "Empty input produces the explicit rejection record and exit 2.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Covers empty input, not all invalid SMILES."
+                  ],
+                  "origin": "model_proposed",
+                  "acceptance_policy": {
+                    "invalid_input": "required",
+                    "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                    "purposes": [
+                      "computation"
+                    ],
+                    "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                    "checks": [
+                      {
+                        "id": "direct_nonempty",
+                        "channel": "args",
+                        "key": 1,
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      },
+                      {
+                        "id": "rows_nonempty",
+                        "channel": "input_files",
+                        "key": "rows.smi",
+                        "argument_index": 1,
+                        "mode": "each_line",
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      }
+                    ],
+                    "operations": [
+                      {
+                        "id": "direct",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--smiles"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "direct_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": false,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      },
+                      {
+                        "id": "file",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--input"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "rows_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": true,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "args": [
+                    "--input",
+                    "/input/rows.smi",
+                    "--output",
+                    "/output/results.jsonl"
+                  ],
+                  "input_files": {
+                    "rows.smi": "CCO\n"
+                  },
+                  "output_file": "results.jsonl",
+                  "expected_exit": 0,
+                  "expected_json_lines": [
+                    {
+                      "ok": true
+                    }
+                  ],
+                  "timeout_seconds": 60,
+                  "acceptance": {
+                    "purpose": "computation",
+                    "source_path": "package/SKILL.md",
+                    "source_quote": "The parser requires exactly one of `--smiles` or `--input`.",
+                    "assertion": {
+                      "role": "completion",
+                      "kind": "jsonl",
+                      "record_index": 0,
+                      "path": [
+                        "ok"
+                      ],
+                      "allowed_values": [
+                        true
+                      ],
+                      "source_path": "package/scripts/calc_descriptors.py",
+                      "source_quote": "\"molecular_weight\": round(Descriptors.MolWt(mol), 6),"
+                    }
+                  },
+                  "name": "file_normal_persisted",
+                  "layer": "behavior",
+                  "kind": "derived",
+                  "source_paths": [
+                    "package/SKILL.md",
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "Run the documented file form on a valid molecule and require the tool-created output to contain a completed calculation.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Verifies persistence and completion, not all descriptor values."
+                  ],
+                  "origin": "model_proposed",
+                  "acceptance_policy": {
+                    "invalid_input": "required",
+                    "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                    "purposes": [
+                      "computation"
+                    ],
+                    "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                    "checks": [
+                      {
+                        "id": "direct_nonempty",
+                        "channel": "args",
+                        "key": 1,
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      },
+                      {
+                        "id": "rows_nonempty",
+                        "channel": "input_files",
+                        "key": "rows.smi",
+                        "argument_index": 1,
+                        "mode": "each_line",
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      }
+                    ],
+                    "operations": [
+                      {
+                        "id": "direct",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--smiles"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "direct_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": false,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      },
+                      {
+                        "id": "file",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--input"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "rows_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": true,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "args": [
+                    "--input",
+                    "/input/rows.smi",
+                    "--output",
+                    "/output/results.jsonl"
+                  ],
+                  "input_files": {
+                    "rows.smi": "CCO\n\nC\n"
+                  },
+                  "output_file": "results.jsonl",
+                  "expected_exit": 2,
+                  "expected_json_lines": [
+                    {
+                      "ok": true
+                    },
+                    {
+                      "ok": false,
+                      "input": "",
+                      "error": "Invalid or empty SMILES"
+                    },
+                    {
+                      "ok": true
+                    }
+                  ],
+                  "timeout_seconds": 60,
+                  "acceptance": {
+                    "purpose": "input_rejection",
+                    "violates": "rows_nonempty",
+                    "invalid_input_reason": "The second splitlines row is empty and violates the nonempty predicate.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "return 0 if all(r[\"ok\"] for r in records) else 2",
+                    "assertion": {
+                      "role": "rejection",
+                      "kind": "jsonl",
+                      "record_index": 1,
+                      "path": [
+                        "error"
+                      ],
+                      "allowed_values": [
+                        "Invalid or empty SMILES"
+                      ],
+                      "source_path": "package/scripts/calc_descriptors.py",
+                      "source_quote": "return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}"
+                    }
+                  },
+                  "name": "file_mixed_blank_row_rejection",
+                  "layer": "behavior",
+                  "kind": "derived",
+                  "source_paths": [
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "The list comprehension processes every row; a blank middle row yields the explicit error while the overall exit is 2.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Assertion targets the rejected middle row; it does not independently validate surrounding numerical results."
+                  ],
+                  "origin": "model_proposed",
+                  "acceptance_policy": {
+                    "invalid_input": "required",
+                    "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                    "purposes": [
+                      "computation"
+                    ],
+                    "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                    "checks": [
+                      {
+                        "id": "direct_nonempty",
+                        "channel": "args",
+                        "key": 1,
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      },
+                      {
+                        "id": "rows_nonempty",
+                        "channel": "input_files",
+                        "key": "rows.smi",
+                        "argument_index": 1,
+                        "mode": "each_line",
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      }
+                    ],
+                    "operations": [
+                      {
+                        "id": "direct",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--smiles"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "direct_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": false,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      },
+                      {
+                        "id": "file",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--input"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "rows_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": true,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "check-configured-delivered-python-entry",
+                  "origin": "authored_check",
+                  "basis": "Explicit configured check",
+                  "layer": "interface",
+                  "kind": "reference",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "source_paths": [],
+                  "limitations": [],
+                  "entrypoint": "python",
+                  "args": [
+                    "/opt/skill/package/scripts/calc_descriptors.py",
+                    "--smiles",
+                    "CCO"
+                  ],
+                  "expected_exit": 0,
+                  "stdout_contains": [],
+                  "json_equals": {
+                    "ok": true,
+                    "canonical_smiles": "CCO"
+                  },
+                  "artifacts": [],
+                  "mapped_check": true,
+                  "workdir": "/opt/skill/package"
+                },
+                {
+                  "name": "check-configured-frozen-source-file-input",
+                  "origin": "authored_check",
+                  "basis": "Explicit configured check",
+                  "layer": "interface",
+                  "kind": "reference",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "source_paths": [],
+                  "limitations": [],
+                  "entrypoint": "python",
+                  "args": [
+                    "/opt/skill/package/scripts/calc_descriptors.py",
+                    "--input",
+                    "/sources/rdkit/examples/input.smi",
+                    "--output",
+                    "/output/check.jsonl"
+                  ],
+                  "expected_exit": 2,
+                  "stdout_contains": [],
+                  "json_equals": {},
+                  "artifacts": [
+                    "check.jsonl"
+                  ],
+                  "mapped_check": true,
+                  "workdir": "/output"
+                },
+                {
+                  "name": "check-configured-nonempty-parser-rejection",
+                  "origin": "authored_check",
+                  "basis": "Explicit configured check",
+                  "layer": "interface",
+                  "kind": "reference",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "source_paths": [],
+                  "limitations": [],
+                  "entrypoint": "python",
+                  "args": [
+                    "/opt/skill/package/scripts/calc_descriptors.py",
+                    "--smiles",
+                    "not-a-smiles"
+                  ],
+                  "expected_exit": 2,
+                  "stdout_contains": [],
+                  "json_equals": {
+                    "ok": false,
+                    "error": "Invalid or empty SMILES"
+                  },
+                  "artifacts": [],
+                  "mapped_check": true,
+                  "workdir": "/output"
+                }
+              ],
+              "policy": {
+                "invalid_input": "required",
+                "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                "purposes": [
+                  "computation"
+                ],
+                "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                "source_path": "package/scripts/calc_descriptors.py",
+                "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                "checks": [
+                  {
+                    "id": "direct_nonempty",
+                    "channel": "args",
+                    "key": 1,
+                    "pattern": "(?s).*\\S.*",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                  },
+                  {
+                    "id": "rows_nonempty",
+                    "channel": "input_files",
+                    "key": "rows.smi",
+                    "argument_index": 1,
+                    "mode": "each_line",
+                    "pattern": "(?s).*\\S.*",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                  }
+                ],
+                "operations": [
+                  {
+                    "id": "direct",
+                    "selector": {
+                      "args": [
+                        {
+                          "index": 0,
+                          "equals": "--smiles"
+                        }
+                      ]
+                    },
+                    "checks": [
+                      "direct_nonempty"
+                    ],
+                    "purposes": [
+                      "computation"
+                    ],
+                    "require_persistence": false,
+                    "source_path": "package/SKILL.md",
+                    "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                  },
+                  {
+                    "id": "file",
+                    "selector": {
+                      "args": [
+                        {
+                          "index": 0,
+                          "equals": "--input"
+                        }
+                      ]
+                    },
+                    "checks": [
+                      "rows_nonempty"
+                    ],
+                    "purposes": [
+                      "computation"
+                    ],
+                    "require_persistence": true,
+                    "source_path": "package/SKILL.md",
+                    "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                  }
+                ]
+              },
+              "author_tests": {
+                "configured": [
+                  {
+                    "name": "delivered-python-entry",
+                    "argv": [
+                      "{python}",
+                      "{package}/scripts/calc_descriptors.py",
+                      "--smiles",
+                      "CCO"
+                    ],
+                    "cwd": "{package}",
+                    "json_equals": {
+                      "ok": true,
+                      "canonical_smiles": "CCO"
+                    }
+                  },
+                  {
+                    "name": "frozen-source-file-input",
+                    "argv": [
+                      "{python}",
+                      "{package}/scripts/calc_descriptors.py",
+                      "--input",
+                      "{source:rdkit}/examples/input.smi",
+                      "--output",
+                      "{run}/check.jsonl"
+                    ],
+                    "expected_exit": 2,
+                    "artifacts": [
+                      "check.jsonl"
+                    ]
+                  },
+                  {
+                    "name": "nonempty-parser-rejection",
+                    "argv": [
+                      "{python}",
+                      "{package}/scripts/calc_descriptors.py",
+                      "--smiles",
+                      "not-a-smiles"
+                    ],
+                    "expected_exit": 2,
+                    "json_equals": {
+                      "ok": false,
+                      "error": "Invalid or empty SMILES"
+                    }
+                  }
+                ],
+                "generated": []
+              }
+            },
+            "sha256": "e9e080647352c8f49ff20cd51a4fd50be596be0f20aba67a00e603860b6bda01"
+          }
+        },
+        "content": {
+          "status": "passed"
+        },
+        "fingerprints": {
+          "files": "927d3d56995d2f4dcb99e82df930c3c825425321c5e7bc2bdab4d8c39882c98b",
+          "sources": "71f53963337cb6c13f2de66c8a895d2fcc95143911a9d9f36dbf6d92a70b2a35",
+          "bindings": "e9d4519ae2d3fc1c5f567b1fd567200460c13ce2a905e8d7f1704e75ddadd625",
+          "environment": "5d6d1d9f88172beb425598c05338cbffd9259e24e83ab15057fddd7b4abbb28c",
+          "acceptance": "785f516df627bf7b45e98d8d18ffa7adace018bb6f7bfaa683c5e88eebd916f5"
+        },
+        "execution": {
+          "status": "not_run",
+          "attempts": [],
+          "reason": "This revision requires fresh bound execution evidence"
+        },
+        "host": {
+          "status": "not_checked",
+          "observed_at": null
+        },
+        "evidence": [],
+        "qualification": {
+          "accepted": false,
+          "reason": "Docker build is not business acceptance"
+        },
+        "parent_revision": "rev-eeaab37dfa83f76fd30bef02c6128644b7722ec33ca9235ae3f85b3cb0d799b2"
+      },
+      "current_qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "current_host": {
+        "observed_at": "2026-10-25T14:23:24.063338+00:00",
+        "backend": "local-docker",
+        "status": "available",
+        "gaps": [],
+        "platform": "linux/x86_64",
+        "memory_bytes": 8115134464,
+        "cpus": 12,
+        "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "server_version": "29.8.2",
+        "docker_status": "available",
+        "resource_gaps": []
+      },
+      "history": [],
+      "batch": {
+        "label": "stage3",
+        "tags": []
+      },
+      "build_id": "stage3-reviewed-real-r4",
+      "unverified": [],
+      "runtime": {
+        "path": "runtime/candidate-aa9d0f31233bf8f2a944a466b62f07fc28dc0f5ce009d389bfba6ab3b8bfa8ef/1ab6302a40a343b1891ed1c5c9a58f16",
+        "files": [
+          {
+            "path": "attempt-start.json",
+            "sha256": "8c9dec293848944faec046642535d9c51d2b2240cb79d72dc783f009a3e7524c",
+            "bytes": 1827
+          },
+          {
+            "path": "build-log.json",
+            "sha256": "465ecc519d7a7eb6c7156d6310a4e2d85c539d391d7795ea2d0616007b02b037",
+            "bytes": 7059
+          },
+          {
+            "path": "execution/case-3316802626c6bf87/results.jsonl",
+            "sha256": "3e93de6d4a075db1e5f0cc3b0f3972e96cbc98873b08efa9ed1e8c17fe214010",
+            "bytes": 452
+          },
+          {
+            "path": "execution/case-a5b0ab2f04c65ed6/check.jsonl",
+            "sha256": "3aea57ce98c36dcf8fed6992b2005d82bc25604ed07d5024cc5cb991578af34d",
+            "bytes": 482
+          },
+          {
+            "path": "execution/case-f0cef04ac9040499/results.jsonl",
+            "sha256": "f015a764ce586515996dde28f9442691f5c466237742ac6fcbe8cb1f6953a47c",
+            "bytes": 198
+          },
+          {
+            "path": "execution/report.json",
+            "sha256": "d08c4cc059b4fc14a481ba4621dbc6a31ce3c074a225efde1c877932d8b3b90c",
+            "bytes": 30851
+          },
+          {
+            "path": "execution/started.json",
+            "sha256": "5a4558d2579b194bf12053dda5b2c0ffcf310678fce966617bcb1346da2e8c7b",
+            "bytes": 1252
+          },
+          {
+            "path": "execution/tests.json",
+            "sha256": "da178f414f0e7d51e9db365d572dac976c77f1d7dc7e2db9a5a4d226f3f42d04",
+            "bytes": 25849
+          },
+          {
+            "path": "image-package/scripts/calc_descriptors.py",
+            "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+            "bytes": 1710
+          },
+          {
+            "path": "image-package/SKILL.md",
+            "sha256": "9c97e14c2ae620d52e232315e3dc55b95f6c6a7e41eedb2e4d3ebfa4ce6a6c5c",
+            "bytes": 2036
+          },
+          {
+            "path": "image.id",
+            "sha256": "c4d1f5293c0fb6ad0c80665a429acaedf6b35cafbd38a03f422a6f2ce4a6bd53",
+            "bytes": 71
+          },
+          {
+            "path": "receipt.json",
+            "sha256": "51f5391427fa09ffbde4b55ce0fb9751f036fdbec36a83503b5cb97538a9a94a",
+            "bytes": 2427
+          }
+        ],
+        "status": "execution_passed",
+        "execution_status": "passed",
+        "image_id": "sha256:7059026027c6da1a1240426f12c07033b6c660f971bff925b1fa87610fcc2a4e",
+        "host": {
+          "observed_at": "2026-10-25T14:23:24.063338+00:00",
+          "backend": "local-docker",
+          "status": "available",
+          "gaps": [],
+          "platform": "linux/x86_64",
+          "memory_bytes": 8115134464,
+          "cpus": 12,
+          "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+          "server_version": "29.8.2",
+          "docker_status": "available",
+          "resource_gaps": []
+        },
+        "gaps": [],
+        "revision_id": "rev-e728bcf9ca9c02d8a43ef50ae122cee6d776fed7fb82cc3bd0ac01d0b90bb9a4",
+        "execution": "execution/report.json",
+        "repair_lane": null,
+        "content_revoked": false
+      },
+      "current_execution": {
+        "status": "passed",
+        "business_acceptance": "passed"
+      },
+      "current_content": {
+        "status": "passed"
+      },
+      "runtime_history": [
+        {
+          "path": "runtime/candidate-aa9d0f31233bf8f2a944a466b62f07fc28dc0f5ce009d389bfba6ab3b8bfa8ef/50dcf4fb843a460abf629c3f8d942e00",
+          "files": [
+            {
+              "path": "attempt-start.json",
+              "sha256": "79a16e6c912fb0d68289bf1c67a2aa50519aef429adbcbc293cec4442e1b37f6",
+              "bytes": 1827
+            },
+            {
+              "path": "build-log.json",
+              "sha256": "b87532b528b9764b8fda805c667074516ec4631c6f76dc01bcadf1fa92c198f6",
+              "bytes": 5492
+            },
+            {
+              "path": "execution/case-3316802626c6bf87/results.jsonl",
+              "sha256": "3e93de6d4a075db1e5f0cc3b0f3972e96cbc98873b08efa9ed1e8c17fe214010",
+              "bytes": 452
+            },
+            {
+              "path": "execution/case-a5b0ab2f04c65ed6/check.jsonl",
+              "sha256": "3aea57ce98c36dcf8fed6992b2005d82bc25604ed07d5024cc5cb991578af34d",
+              "bytes": 482
+            },
+            {
+              "path": "execution/case-f0cef04ac9040499/results.jsonl",
+              "sha256": "f015a764ce586515996dde28f9442691f5c466237742ac6fcbe8cb1f6953a47c",
+              "bytes": 198
+            },
+            {
+              "path": "execution/report.json",
+              "sha256": "85eed8149b1b93a7d76ab9d38f395ee1ce54dc332a24a110dcbd31b47d8708ca",
+              "bytes": 29619
+            },
+            {
+              "path": "execution/started.json",
+              "sha256": "0dbe168919bab0761ba1ebeeb1104508d7b888f5ff7e5d4e69a14760121fc011",
+              "bytes": 1252
+            },
+            {
+              "path": "execution/tests.json",
+              "sha256": "91534e4758261418bcf7bf6e91f97c64aead33f3346c0e930281b5a7ede2067c",
+              "bytes": 24729
+            },
+            {
+              "path": "image-package/scripts/calc_descriptors.py",
+              "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+              "bytes": 1710
+            },
+            {
+              "path": "image-package/SKILL.md",
+              "sha256": "9c97e14c2ae620d52e232315e3dc55b95f6c6a7e41eedb2e4d3ebfa4ce6a6c5c",
+              "bytes": 2036
+            },
+            {
+              "path": "image.id",
+              "sha256": "f408f8f37193604353a262bc9e919b33e0033e83011e9fec3518d1fd8cd40e5f",
+              "bytes": 71
+            },
+            {
+              "path": "receipt.json",
+              "sha256": "79083dcc32a0bb5d3247703251551c7808e00c798abab83dc279ebf476e0b4db",
+              "bytes": 2427
+            }
+          ],
+          "status": "execution_passed",
+          "execution_status": "passed",
+          "image_id": "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+          "host": {
+            "observed_at": "2026-10-25T14:22:07.364575+00:00",
+            "backend": "local-docker",
+            "status": "available",
+            "gaps": [],
+            "platform": "linux/x86_64",
+            "memory_bytes": 8115134464,
+            "cpus": 12,
+            "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+            "server_version": "29.8.2",
+            "docker_status": "available",
+            "resource_gaps": []
+          },
+          "gaps": [],
+          "revision_id": "rev-e728bcf9ca9c02d8a43ef50ae122cee6d776fed7fb82cc3bd0ac01d0b90bb9a4",
+          "execution": "execution/report.json",
+          "repair_lane": null,
+          "content_revoked": false
+        },
+        {
+          "path": "runtime/candidate-aa9d0f31233bf8f2a944a466b62f07fc28dc0f5ce009d389bfba6ab3b8bfa8ef/5bbd05874afd45acbb569e1bbcc553d8",
+          "files": [
+            {
+              "path": "build-log.json",
+              "sha256": "b87532b528b9764b8fda805c667074516ec4631c6f76dc01bcadf1fa92c198f6",
+              "bytes": 5492
+            },
+            {
+              "path": "execution/case-3316802626c6bf87/results.jsonl",
+              "sha256": "3e93de6d4a075db1e5f0cc3b0f3972e96cbc98873b08efa9ed1e8c17fe214010",
+              "bytes": 452
+            },
+            {
+              "path": "execution/case-a5b0ab2f04c65ed6/check.jsonl",
+              "sha256": "3aea57ce98c36dcf8fed6992b2005d82bc25604ed07d5024cc5cb991578af34d",
+              "bytes": 482
+            },
+            {
+              "path": "execution/case-f0cef04ac9040499/results.jsonl",
+              "sha256": "f015a764ce586515996dde28f9442691f5c466237742ac6fcbe8cb1f6953a47c",
+              "bytes": 198
+            },
+            {
+              "path": "execution/report.json",
+              "sha256": "234800deefae51eabafe6d4c667ab952780828ce40f50ead03f46584db3b4487",
+              "bytes": 30851
+            },
+            {
+              "path": "execution/started.json",
+              "sha256": "50d7dab7a64b96feced2be957432769eb3179ea13a7400a09c6356c102dbb113",
+              "bytes": 1252
+            },
+            {
+              "path": "execution/tests.json",
+              "sha256": "a91855ae7c33014b1baeaa6789a56faed030eec3e6ae32de0e07d8d2d15d9900",
+              "bytes": 25849
+            },
+            {
+              "path": "image.id",
+              "sha256": "f408f8f37193604353a262bc9e919b33e0033e83011e9fec3518d1fd8cd40e5f",
+              "bytes": 71
+            },
+            {
+              "path": "receipt.json",
+              "sha256": "79083dcc32a0bb5d3247703251551c7808e00c798abab83dc279ebf476e0b4db",
+              "bytes": 2427
+            }
+          ],
+          "status": "execution_passed",
+          "execution_status": "passed",
+          "image_id": "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+          "host": {
+            "observed_at": "2026-10-25T14:22:59.747960+00:00",
+            "backend": "local-docker",
+            "status": "available",
+            "gaps": [],
+            "platform": "linux/x86_64",
+            "memory_bytes": 8115134464,
+            "cpus": 12,
+            "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+            "server_version": "29.8.2",
+            "docker_status": "available",
+            "resource_gaps": []
+          },
+          "gaps": [],
+          "revision_id": "rev-e728bcf9ca9c02d8a43ef50ae122cee6d776fed7fb82cc3bd0ac01d0b90bb9a4",
+          "execution": "execution/report.json",
+          "repair_lane": null,
+          "content_revoked": false
+        }
+      ]
+    },
+    {
+      "name": "rdkit-wrong-result-probe",
+      "path": "candidates/rdkit-wrong-result-probe",
+      "zone": "candidates",
+      "candidate_id": "candidate-e1a62d733de60f4f1791251c660e6ed8b837210f1c478c851280ab3c5138e9e1",
+      "revision_id": "rev-70e04935d773ed9b84935d72fe124d35393a67e237461eb05c807cafba005f3c",
+      "evidence": "evidence/candidate-e1a62d733de60f4f1791251c660e6ed8b837210f1c478c851280ab3c5138e9e1/127bc0e45a1f4806aa56b4c148d800f8",
+      "freeze_sha256": "f96581ad81a61a250f23dc2b25636ad18d5cb1a07ced20f9d25124645b4e1957",
+      "delivery": {
+        "protocol": 1,
+        "candidate_id": "candidate-e1a62d733de60f4f1791251c660e6ed8b837210f1c478c851280ab3c5138e9e1",
+        "revision_id": "rev-70e04935d773ed9b84935d72fe124d35393a67e237461eb05c807cafba005f3c",
+        "mode": "normal",
+        "inputs": {
+          "candidate": {
+            "name": "rdkit-wrong-result-probe"
+          },
+          "files": [
+            {
+              "path": "scripts/calc_descriptors.py",
+              "sha256": "a46f762e1e5faf0e0c58ce710df84b78abdfca50b05fe0bfb48b429fbe483532",
+              "bytes": 1703
+            },
+            {
+              "path": "SKILL.md",
+              "sha256": "676715abbe80e12e981a70f62e960fd7e1bb735c9087b30d7b0bb1145ec88146",
+              "bytes": 2072
+            }
+          ],
+          "sources": [
+            {
+              "id": "rdkit",
+              "inventory": [
+                {
+                  "path": "examples/input.smi",
+                  "sha256": "fb67841c517bcadbacd16df1e4c099f4254101a04e6fe227672e6ac249fff2a2",
+                  "bytes": 30
+                },
+                {
+                  "path": "references/api.md",
+                  "sha256": "1bcc55aae7b2605beb8affad8bbf28c398f4edf927013d6529b8e9b160231427",
+                  "bytes": 202
+                },
+                {
+                  "path": "references/science.md",
+                  "sha256": "44ddc091c62a6c1ed4dac6951f20d08ea22922b0e59445fd9859fd00fd24338e",
+                  "bytes": 223
+                },
+                {
+                  "path": "requirements.txt",
+                  "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+                  "bytes": 46
+                },
+                {
+                  "path": "scripts/calc_descriptors.py",
+                  "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+                  "bytes": 1710
+                }
+              ],
+              "resolved_ref": "d5b77dc5d91711567af1960530d03739a5c442bf",
+              "repo": "https://github.com/Aneskw/chem-agent-toolkit.git"
+            }
+          ],
+          "requirement": {
+            "status": "required",
+            "reason": "The delivered RDKit script executes descriptor calculations",
+            "citations": [
+              {
+                "source_id": "rdkit",
+                "path": "scripts/calc_descriptors.py",
+                "quote": "from rdkit import Chem"
+              }
+            ]
+          },
+          "bindings": {
+            "version": 2,
+            "payload": {
+              "entry": "scripts/calc_descriptors.py",
+              "source_id": "rdkit",
+              "source_path": "scripts/calc_descriptors.py",
+              "association": "explicit",
+              "reason": "Deliberate fault injection for rejection validation",
+              "quote": "from rdkit import Chem",
+              "entry_sha256": "a46f762e1e5faf0e0c58ce710df84b78abdfca50b05fe0bfb48b429fbe483532",
+              "source_sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e"
+            },
+            "sha256": "3a2f8839503612f457962461cb03ae1c9b45172be0ecfce1c21336fe2cd019d8"
+          },
+          "environment": {
+            "version": 2,
+            "payload": {
+              "plan": {
+                "entrypoint": [
+                  "python",
+                  "/opt/skill/package/scripts/calc_descriptors.py"
+                ],
+                "script": "package/scripts/calc_descriptors.py",
+                "base_image": "python:3.11-slim",
+                "platform": "linux/amd64",
+                "language": "Python",
+                "language_version": "3.11",
+                "source_files": [
+                  "package/scripts/calc_descriptors.py",
+                  "sources/rdkit/requirements.txt"
+                ],
+                "dependencies": [
+                  {
+                    "name": "rdkit",
+                    "version": "2024.9.6",
+                    "channel": "pip",
+                    "evidence": "sources/rdkit/requirements.txt: rdkit==2024.9.6",
+                    "certainty": "declared"
+                  },
+                  {
+                    "name": "numpy",
+                    "version": "1.26.4",
+                    "channel": "pip",
+                    "evidence": "sources/rdkit/requirements.txt: numpy==1.26.4",
+                    "certainty": "declared"
+                  },
+                  {
+                    "name": "pillow",
+                    "version": "11.3.0",
+                    "channel": "pip",
+                    "evidence": "sources/rdkit/requirements.txt: pillow==11.3.0",
+                    "certainty": "declared"
+                  }
+                ],
+                "steps": [
+                  {
+                    "command": "python -m pip install --no-cache-dir -r /opt/skill/sources/rdkit/requirements.txt",
+                    "purpose": "Install the exact declared public packages.",
+                    "evidence": "Caller requires exact requirements.txt versions; pip installation is an inferred installation choice."
+                  }
+                ],
+                "build_layout": {
+                  "dependency_files": [
+                    "sources/rdkit/requirements.txt"
+                  ],
+                  "prefix_steps": 1,
+                  "reason": "The installation step requires only the requirements file and base image."
+                },
+                "environment": [
+                  {
+                    "name": "PYTHONDONTWRITEBYTECODE",
+                    "value": "1"
+                  },
+                  {
+                    "name": "PYTHONUNBUFFERED",
+                    "value": "1"
+                  }
+                ],
+                "resources": [],
+                "file_io": true,
+                "output_contract": "One JSON record per input value, containing ok and either computed descriptors or an error. --output writes JSONL to the requested path; otherwise JSONL goes to stdout. All successful records yield exit 0; any rejected record yields exit 2. File tests use /input/rows.smi and /output/results.jsonl.",
+                "runtime_network": false,
+                "network_reason": "Runtime source performs local RDKit calculations and local file IO. Public package downloads are needed only during image construction.",
+                "choices": [
+                  {
+                    "choice": "Use python:3.11-slim with pip.",
+                    "evidence": "The base image is a caller requirement, not an upstream declaration. The supplied requirements file pins three public Python packages.",
+                    "certainty": "inferred"
+                  },
+                  {
+                    "choice": "Use ok=true as the computation completion assertion.",
+                    "evidence": "calculate returns ok=true together with evaluated descriptor expressions. Import errors or descriptor exceptions are not caught and cannot produce that successful record.",
+                    "certainty": "declared"
+                  }
+                ],
+                "unresolved": [
+                  "Full graph-valid SMILES acceptance requires RDKit parsing and cannot reliably be represented by a full-match regex. Checks enforce only the documented necessary nonempty condition; acceptance verification is incomplete.",
+                  "Installation compatibility and runtime behavior remain unexecuted at this stage."
+                ],
+                "unverified_behavior": [
+                  "No upstream tests or reference numerical vectors were supplied.",
+                  "The methane case checks independently derived zero H-bond and rotatable-bond counts, but does not validate molecular weight, logP, TPSA, or general descriptor accuracy.",
+                  "Invalid nonempty SMILES grammar and graph semantics are not comprehensively tested.",
+                  "Descriptors are graph-derived calculations, not experimental measurements or biological, safety, or pharmacokinetic conclusions."
+                ],
+                "acceptance_json": "{\"invalid_input\":\"required\",\"scope\":\"Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.\",\"purposes\":[\"computation\"],\"constraint\":\"Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\\n    if mol is None:\\n        return {\\\"ok\\\": False, \\\"input\\\": text, \\\"error\\\": \\\"Invalid or empty SMILES\\\"}\",\"checks\":[{\"id\":\"direct_nonempty\",\"channel\":\"args\",\"key\":1,\"pattern\":\"(?s).*\\\\S.*\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\"},{\"id\":\"rows_nonempty\",\"channel\":\"input_files\",\"key\":\"rows.smi\",\"argument_index\":1,\"mode\":\"each_line\",\"pattern\":\"(?s).*\\\\S.*\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\"}],\"operations\":[{\"id\":\"direct\",\"selector\":{\"args\":[{\"index\":0,\"equals\":\"--smiles\"}]},\"checks\":[\"direct_nonempty\"],\"purposes\":[\"computation\"],\"require_persistence\":false,\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\"},{\"id\":\"file\",\"selector\":{\"args\":[{\"index\":0,\"equals\":\"--input\"}]},\"checks\":[\"rows_nonempty\"],\"purposes\":[\"computation\"],\"require_persistence\":true,\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\"}]}",
+                "generated_files": [],
+                "tests": [
+                  {
+                    "name": "environment_versions_imports",
+                    "layer": "environment",
+                    "kind": "derived",
+                    "source_paths": [
+                      "sources/rdkit/requirements.txt",
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "Verify pinned distributions and import every RDKit module used by the script; print versions for the audit.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Imports do not establish descriptor correctness."
+                    ],
+                    "case_json": "{\"entrypoint\":\"python\",\"args\":[\"-c\",\"import sys; from importlib.metadata import version; from rdkit import Chem; from rdkit.Chem import Crippen, Descriptors, Lipinski, rdMolDescriptors; import numpy; from PIL import Image; expected={'rdkit':'2024.9.6','numpy':'1.26.4','pillow':'11.3.0'}; actual={k:version(k) for k in expected}; print(sys.version); print(actual); assert actual == expected\"],\"expected_exit\":0,\"timeout_seconds\":60}"
+                  },
+                  {
+                    "name": "interface_help",
+                    "layer": "interface",
+                    "kind": "derived",
+                    "source_paths": [
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "Argparse declares the three supported option names.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Help does not exercise computation."
+                    ],
+                    "case_json": "{\"args\":[\"--help\"],\"expected_exit\":0,\"stdout_contains\":[\"--smiles\",\"--input\",\"--output\"],\"timeout_seconds\":60}"
+                  },
+                  {
+                    "name": "direct_documented_ethanol",
+                    "layer": "behavior",
+                    "kind": "reference",
+                    "source_paths": [
+                      "package/SKILL.md",
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "Execute the documented CCO example. A successful record requires all descriptor expressions to finish.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Completion does not establish numerical accuracy."
+                    ],
+                    "case_json": "{\"args\":[\"--smiles\",\"CCO\"],\"expected_exit\":0,\"expected_json_lines\":[{\"ok\":true}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\",\"assertion\":{\"role\":\"completion\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"ok\"],\"allowed_values\":[true],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"\\\"molecular_weight\\\": round(Descriptors.MolWt(mol), 6),\"}}}"
+                  },
+                  {
+                    "name": "direct_methane_graph_counts",
+                    "layer": "behavior",
+                    "kind": "derived",
+                    "source_paths": [
+                      "sources/rdkit/references/science.md",
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "SMILES C represents methane. Its single carbon graph contains no H-bond donor or acceptor groups and no bond that can be rotatable; independently expect zero for these three counts.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Checks only simple graph counts; no numerical oracle for other descriptors."
+                    ],
+                    "case_json": "{\"args\":[\"--smiles\",\"C\"],\"expected_exit\":0,\"stdout_contains\":[\"\\\"h_bond_donors\\\": 0\",\"\\\"h_bond_acceptors\\\": 0\",\"\\\"rotatable_bonds\\\": 0\"],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"sources/rdkit/references/science.md\",\"source_quote\":\"These are cheminformatics descriptors computed from the input graph.\",\"assertion\":{\"role\":\"completion\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"ok\"],\"allowed_values\":[true],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"\\\"rotatable_bonds\\\": Lipinski.NumRotatableBonds(mol),\"}}}"
+                  },
+                  {
+                    "name": "direct_empty_rejection",
+                    "layer": "behavior",
+                    "kind": "derived",
+                    "source_paths": [
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "Empty input produces the explicit rejection record and exit 2.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Covers empty input, not all invalid SMILES."
+                    ],
+                    "case_json": "{\"args\":[\"--smiles\",\"\"],\"expected_exit\":2,\"expected_json_lines\":[{\"ok\":false,\"input\":\"\",\"error\":\"Invalid or empty SMILES\"}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"input_rejection\",\"violates\":\"direct_nonempty\",\"invalid_input_reason\":\"Empty text has no non-whitespace character.\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return 0 if all(r[\\\"ok\\\"] for r in records) else 2\",\"assertion\":{\"role\":\"rejection\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"error\"],\"allowed_values\":[\"Invalid or empty SMILES\"],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return {\\\"ok\\\": False, \\\"input\\\": text, \\\"error\\\": \\\"Invalid or empty SMILES\\\"}\"}}}"
+                  },
+                  {
+                    "name": "file_normal_persisted",
+                    "layer": "behavior",
+                    "kind": "derived",
+                    "source_paths": [
+                      "package/SKILL.md",
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "Run the documented file form on a valid molecule and require the tool-created output to contain a completed calculation.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Verifies persistence and completion, not all descriptor values."
+                    ],
+                    "case_json": "{\"args\":[\"--input\",\"/input/rows.smi\",\"--output\",\"/output/results.jsonl\"],\"input_files\":{\"rows.smi\":\"CCO\\n\"},\"output_file\":\"results.jsonl\",\"expected_exit\":0,\"expected_json_lines\":[{\"ok\":true}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\",\"assertion\":{\"role\":\"completion\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"ok\"],\"allowed_values\":[true],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"\\\"molecular_weight\\\": round(Descriptors.MolWt(mol), 6),\"}}}"
+                  },
+                  {
+                    "name": "file_mixed_blank_row_rejection",
+                    "layer": "behavior",
+                    "kind": "derived",
+                    "source_paths": [
+                      "package/scripts/calc_descriptors.py"
+                    ],
+                    "basis": "The list comprehension processes every row; a blank middle row yields the explicit error while the overall exit is 2.",
+                    "oracle_status": "supported",
+                    "tolerance": 0,
+                    "limitations": [
+                      "Assertion targets the rejected middle row; it does not independently validate surrounding numerical results."
+                    ],
+                    "case_json": "{\"args\":[\"--input\",\"/input/rows.smi\",\"--output\",\"/output/results.jsonl\"],\"input_files\":{\"rows.smi\":\"CCO\\n\\nC\\n\"},\"output_file\":\"results.jsonl\",\"expected_exit\":2,\"expected_json_lines\":[{\"ok\":true},{\"ok\":false,\"input\":\"\",\"error\":\"Invalid or empty SMILES\"},{\"ok\":true}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"input_rejection\",\"violates\":\"rows_nonempty\",\"invalid_input_reason\":\"The second splitlines row is empty and violates the nonempty predicate.\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return 0 if all(r[\\\"ok\\\"] for r in records) else 2\",\"assertion\":{\"role\":\"rejection\",\"kind\":\"jsonl\",\"record_index\":1,\"path\":[\"error\"],\"allowed_values\":[\"Invalid or empty SMILES\"],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return {\\\"ok\\\": False, \\\"input\\\": text, \\\"error\\\": \\\"Invalid or empty SMILES\\\"}\"}}}"
+                  }
+                ],
+                "resource_assessment": {
+                  "status": "complete",
+                  "source_path": "package/scripts/calc_descriptors.py",
+                  "source_quote": "from rdkit import Chem\n    from rdkit.Chem import Crippen, Descriptors, Lipinski, rdMolDescriptors",
+                  "memory_bytes": 1073741824,
+                  "cpus": 1
+                }
+              },
+              "materials": [
+                {
+                  "path": "context/.dockerignore",
+                  "sha256": "01d8d0360f02a0c00e236a4eb2a1d8bdf83377acf442eaafad7a136bf14d6bb0",
+                  "bytes": 21
+                },
+                {
+                  "path": "context/Dockerfile",
+                  "sha256": "76ad0715c3777a74f5dd1179c8c97269df676990aa1b96713a58cba317086cd4",
+                  "bytes": 428
+                },
+                {
+                  "path": "context/package/scripts/calc_descriptors.py",
+                  "sha256": "a46f762e1e5faf0e0c58ce710df84b78abdfca50b05fe0bfb48b429fbe483532",
+                  "bytes": 1703
+                },
+                {
+                  "path": "context/package/SKILL.md",
+                  "sha256": "676715abbe80e12e981a70f62e960fd7e1bb735c9087b30d7b0bb1145ec88146",
+                  "bytes": 2072
+                },
+                {
+                  "path": "context/sources/rdkit/requirements.txt",
+                  "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+                  "bytes": 46
+                },
+                {
+                  "path": "locked-tests.json",
+                  "sha256": "f490572d7b3abe409e0e00857c0b471c52a810b4693e9dff645849c336116d57",
+                  "bytes": 27675
+                },
+                {
+                  "path": "plan.json",
+                  "sha256": "fb54016b0d0c431ecab475787217a9a87028b71795acd335c9e2766fafa82420",
+                  "bytes": 13739
+                }
+              ],
+              "limits": {
+                "model": null,
+                "max_attempts": null,
+                "total_seconds": null,
+                "model_timeout": 600,
+                "context_chars": null,
+                "max_read_rounds": null,
+                "max_files": null,
+                "max_file_bytes": null,
+                "max_context_bytes": null,
+                "memory": "1g",
+                "cpus": "2",
+                "pids": 128,
+                "build_seconds": 600,
+                "validation_reserve_seconds": 0,
+                "repair_reserve_seconds": 0,
+                "test_seconds": 60,
+                "document_seconds": 180,
+                "pin_base_image": false,
+                "registry_seconds": 120
+              }
+            },
+            "sha256": "7c37f5c56a2a9fa1b0ffcf59bfefc5f194e73c282dcb165c2ebbdf2ca8dda78e"
+          },
+          "acceptance": {
+            "version": 2,
+            "payload": {
+              "cases": [
+                {
+                  "entrypoint": "python",
+                  "args": [
+                    "-c",
+                    "import sys; from importlib.metadata import version; from rdkit import Chem; from rdkit.Chem import Crippen, Descriptors, Lipinski, rdMolDescriptors; import numpy; from PIL import Image; expected={'rdkit':'2024.9.6','numpy':'1.26.4','pillow':'11.3.0'}; actual={k:version(k) for k in expected}; print(sys.version); print(actual); assert actual == expected"
+                  ],
+                  "expected_exit": 0,
+                  "timeout_seconds": 60,
+                  "name": "environment_versions_imports",
+                  "layer": "environment",
+                  "kind": "derived",
+                  "source_paths": [
+                    "sources/rdkit/requirements.txt",
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "Verify pinned distributions and import every RDKit module used by the script; print versions for the audit.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Imports do not establish descriptor correctness."
+                  ],
+                  "origin": "model_proposed"
+                },
+                {
+                  "args": [
+                    "--help"
+                  ],
+                  "expected_exit": 0,
+                  "stdout_contains": [
+                    "--smiles",
+                    "--input",
+                    "--output"
+                  ],
+                  "timeout_seconds": 60,
+                  "name": "interface_help",
+                  "layer": "interface",
+                  "kind": "derived",
+                  "source_paths": [
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "Argparse declares the three supported option names.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Help does not exercise computation."
+                  ],
+                  "origin": "model_proposed"
+                },
+                {
+                  "args": [
+                    "--smiles",
+                    "CCO"
+                  ],
+                  "expected_exit": 0,
+                  "expected_json_lines": [
+                    {
+                      "ok": true
+                    }
+                  ],
+                  "timeout_seconds": 60,
+                  "acceptance": {
+                    "purpose": "computation",
+                    "source_path": "package/SKILL.md",
+                    "source_quote": "The parser requires exactly one of `--smiles` or `--input`.",
+                    "assertion": {
+                      "role": "completion",
+                      "kind": "jsonl",
+                      "record_index": 0,
+                      "path": [
+                        "ok"
+                      ],
+                      "allowed_values": [
+                        true
+                      ],
+                      "source_path": "package/scripts/calc_descriptors.py",
+                      "source_quote": "\"molecular_weight\": round(Descriptors.MolWt(mol), 6),"
+                    }
+                  },
+                  "name": "direct_documented_ethanol",
+                  "layer": "behavior",
+                  "kind": "reference",
+                  "source_paths": [
+                    "package/SKILL.md",
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "Execute the documented CCO example. A successful record requires all descriptor expressions to finish.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Completion does not establish numerical accuracy."
+                  ],
+                  "origin": "model_proposed",
+                  "acceptance_policy": {
+                    "invalid_input": "required",
+                    "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                    "purposes": [
+                      "computation"
+                    ],
+                    "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                    "checks": [
+                      {
+                        "id": "direct_nonempty",
+                        "channel": "args",
+                        "key": 1,
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      },
+                      {
+                        "id": "rows_nonempty",
+                        "channel": "input_files",
+                        "key": "rows.smi",
+                        "argument_index": 1,
+                        "mode": "each_line",
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      }
+                    ],
+                    "operations": [
+                      {
+                        "id": "direct",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--smiles"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "direct_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": false,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      },
+                      {
+                        "id": "file",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--input"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "rows_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": true,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "args": [
+                    "--smiles",
+                    "C"
+                  ],
+                  "expected_exit": 0,
+                  "stdout_contains": [
+                    "\"h_bond_donors\": 0",
+                    "\"h_bond_acceptors\": 0",
+                    "\"rotatable_bonds\": 0"
+                  ],
+                  "timeout_seconds": 60,
+                  "acceptance": {
+                    "purpose": "computation",
+                    "source_path": "sources/rdkit/references/science.md",
+                    "source_quote": "These are cheminformatics descriptors computed from the input graph.",
+                    "assertion": {
+                      "role": "completion",
+                      "kind": "jsonl",
+                      "record_index": 0,
+                      "path": [
+                        "ok"
+                      ],
+                      "allowed_values": [
+                        true
+                      ],
+                      "source_path": "package/scripts/calc_descriptors.py",
+                      "source_quote": "\"rotatable_bonds\": Lipinski.NumRotatableBonds(mol),"
+                    }
+                  },
+                  "name": "direct_methane_graph_counts",
+                  "layer": "behavior",
+                  "kind": "derived",
+                  "source_paths": [
+                    "sources/rdkit/references/science.md",
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "SMILES C represents methane. Its single carbon graph contains no H-bond donor or acceptor groups and no bond that can be rotatable; independently expect zero for these three counts.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Checks only simple graph counts; no numerical oracle for other descriptors."
+                  ],
+                  "origin": "model_proposed",
+                  "acceptance_policy": {
+                    "invalid_input": "required",
+                    "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                    "purposes": [
+                      "computation"
+                    ],
+                    "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                    "checks": [
+                      {
+                        "id": "direct_nonempty",
+                        "channel": "args",
+                        "key": 1,
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      },
+                      {
+                        "id": "rows_nonempty",
+                        "channel": "input_files",
+                        "key": "rows.smi",
+                        "argument_index": 1,
+                        "mode": "each_line",
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      }
+                    ],
+                    "operations": [
+                      {
+                        "id": "direct",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--smiles"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "direct_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": false,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      },
+                      {
+                        "id": "file",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--input"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "rows_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": true,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "args": [
+                    "--smiles",
+                    ""
+                  ],
+                  "expected_exit": 2,
+                  "expected_json_lines": [
+                    {
+                      "ok": false,
+                      "input": "",
+                      "error": "Invalid or empty SMILES"
+                    }
+                  ],
+                  "timeout_seconds": 60,
+                  "acceptance": {
+                    "purpose": "input_rejection",
+                    "violates": "direct_nonempty",
+                    "invalid_input_reason": "Empty text has no non-whitespace character.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "return 0 if all(r[\"ok\"] for r in records) else 2",
+                    "assertion": {
+                      "role": "rejection",
+                      "kind": "jsonl",
+                      "record_index": 0,
+                      "path": [
+                        "error"
+                      ],
+                      "allowed_values": [
+                        "Invalid or empty SMILES"
+                      ],
+                      "source_path": "package/scripts/calc_descriptors.py",
+                      "source_quote": "return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}"
+                    }
+                  },
+                  "name": "direct_empty_rejection",
+                  "layer": "behavior",
+                  "kind": "derived",
+                  "source_paths": [
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "Empty input produces the explicit rejection record and exit 2.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Covers empty input, not all invalid SMILES."
+                  ],
+                  "origin": "model_proposed",
+                  "acceptance_policy": {
+                    "invalid_input": "required",
+                    "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                    "purposes": [
+                      "computation"
+                    ],
+                    "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                    "checks": [
+                      {
+                        "id": "direct_nonempty",
+                        "channel": "args",
+                        "key": 1,
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      },
+                      {
+                        "id": "rows_nonempty",
+                        "channel": "input_files",
+                        "key": "rows.smi",
+                        "argument_index": 1,
+                        "mode": "each_line",
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      }
+                    ],
+                    "operations": [
+                      {
+                        "id": "direct",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--smiles"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "direct_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": false,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      },
+                      {
+                        "id": "file",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--input"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "rows_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": true,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "args": [
+                    "--input",
+                    "/input/rows.smi",
+                    "--output",
+                    "/output/results.jsonl"
+                  ],
+                  "input_files": {
+                    "rows.smi": "CCO\n"
+                  },
+                  "output_file": "results.jsonl",
+                  "expected_exit": 0,
+                  "expected_json_lines": [
+                    {
+                      "ok": true
+                    }
+                  ],
+                  "timeout_seconds": 60,
+                  "acceptance": {
+                    "purpose": "computation",
+                    "source_path": "package/SKILL.md",
+                    "source_quote": "The parser requires exactly one of `--smiles` or `--input`.",
+                    "assertion": {
+                      "role": "completion",
+                      "kind": "jsonl",
+                      "record_index": 0,
+                      "path": [
+                        "ok"
+                      ],
+                      "allowed_values": [
+                        true
+                      ],
+                      "source_path": "package/scripts/calc_descriptors.py",
+                      "source_quote": "\"molecular_weight\": round(Descriptors.MolWt(mol), 6),"
+                    }
+                  },
+                  "name": "file_normal_persisted",
+                  "layer": "behavior",
+                  "kind": "derived",
+                  "source_paths": [
+                    "package/SKILL.md",
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "Run the documented file form on a valid molecule and require the tool-created output to contain a completed calculation.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Verifies persistence and completion, not all descriptor values."
+                  ],
+                  "origin": "model_proposed",
+                  "acceptance_policy": {
+                    "invalid_input": "required",
+                    "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                    "purposes": [
+                      "computation"
+                    ],
+                    "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                    "checks": [
+                      {
+                        "id": "direct_nonempty",
+                        "channel": "args",
+                        "key": 1,
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      },
+                      {
+                        "id": "rows_nonempty",
+                        "channel": "input_files",
+                        "key": "rows.smi",
+                        "argument_index": 1,
+                        "mode": "each_line",
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      }
+                    ],
+                    "operations": [
+                      {
+                        "id": "direct",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--smiles"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "direct_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": false,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      },
+                      {
+                        "id": "file",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--input"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "rows_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": true,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "args": [
+                    "--input",
+                    "/input/rows.smi",
+                    "--output",
+                    "/output/results.jsonl"
+                  ],
+                  "input_files": {
+                    "rows.smi": "CCO\n\nC\n"
+                  },
+                  "output_file": "results.jsonl",
+                  "expected_exit": 2,
+                  "expected_json_lines": [
+                    {
+                      "ok": true
+                    },
+                    {
+                      "ok": false,
+                      "input": "",
+                      "error": "Invalid or empty SMILES"
+                    },
+                    {
+                      "ok": true
+                    }
+                  ],
+                  "timeout_seconds": 60,
+                  "acceptance": {
+                    "purpose": "input_rejection",
+                    "violates": "rows_nonempty",
+                    "invalid_input_reason": "The second splitlines row is empty and violates the nonempty predicate.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "return 0 if all(r[\"ok\"] for r in records) else 2",
+                    "assertion": {
+                      "role": "rejection",
+                      "kind": "jsonl",
+                      "record_index": 1,
+                      "path": [
+                        "error"
+                      ],
+                      "allowed_values": [
+                        "Invalid or empty SMILES"
+                      ],
+                      "source_path": "package/scripts/calc_descriptors.py",
+                      "source_quote": "return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}"
+                    }
+                  },
+                  "name": "file_mixed_blank_row_rejection",
+                  "layer": "behavior",
+                  "kind": "derived",
+                  "source_paths": [
+                    "package/scripts/calc_descriptors.py"
+                  ],
+                  "basis": "The list comprehension processes every row; a blank middle row yields the explicit error while the overall exit is 2.",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "limitations": [
+                    "Assertion targets the rejected middle row; it does not independently validate surrounding numerical results."
+                  ],
+                  "origin": "model_proposed",
+                  "acceptance_policy": {
+                    "invalid_input": "required",
+                    "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                    "purposes": [
+                      "computation"
+                    ],
+                    "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                    "checks": [
+                      {
+                        "id": "direct_nonempty",
+                        "channel": "args",
+                        "key": 1,
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      },
+                      {
+                        "id": "rows_nonempty",
+                        "channel": "input_files",
+                        "key": "rows.smi",
+                        "argument_index": 1,
+                        "mode": "each_line",
+                        "pattern": "(?s).*\\S.*",
+                        "source_path": "package/scripts/calc_descriptors.py",
+                        "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                      }
+                    ],
+                    "operations": [
+                      {
+                        "id": "direct",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--smiles"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "direct_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": false,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      },
+                      {
+                        "id": "file",
+                        "selector": {
+                          "args": [
+                            {
+                              "index": 0,
+                              "equals": "--input"
+                            }
+                          ]
+                        },
+                        "checks": [
+                          "rows_nonempty"
+                        ],
+                        "purposes": [
+                          "computation"
+                        ],
+                        "require_persistence": true,
+                        "source_path": "package/SKILL.md",
+                        "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "check-configured-delivered-python-entry",
+                  "origin": "authored_check",
+                  "basis": "Explicit configured check",
+                  "layer": "interface",
+                  "kind": "reference",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "source_paths": [],
+                  "limitations": [],
+                  "entrypoint": "python",
+                  "args": [
+                    "/opt/skill/package/scripts/calc_descriptors.py",
+                    "--smiles",
+                    "CCO"
+                  ],
+                  "expected_exit": 0,
+                  "stdout_contains": [],
+                  "json_equals": {
+                    "ok": true,
+                    "canonical_smiles": "CCO"
+                  },
+                  "artifacts": [],
+                  "mapped_check": true,
+                  "workdir": "/opt/skill/package"
+                },
+                {
+                  "name": "check-configured-frozen-source-file-input",
+                  "origin": "authored_check",
+                  "basis": "Explicit configured check",
+                  "layer": "interface",
+                  "kind": "reference",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "source_paths": [],
+                  "limitations": [],
+                  "entrypoint": "python",
+                  "args": [
+                    "/opt/skill/package/scripts/calc_descriptors.py",
+                    "--input",
+                    "/sources/rdkit/examples/input.smi",
+                    "--output",
+                    "/output/check.jsonl"
+                  ],
+                  "expected_exit": 2,
+                  "stdout_contains": [],
+                  "json_equals": {},
+                  "artifacts": [
+                    "check.jsonl"
+                  ],
+                  "mapped_check": true,
+                  "workdir": "/output"
+                },
+                {
+                  "name": "check-configured-nonempty-parser-rejection",
+                  "origin": "authored_check",
+                  "basis": "Explicit configured check",
+                  "layer": "interface",
+                  "kind": "reference",
+                  "oracle_status": "supported",
+                  "tolerance": 0,
+                  "source_paths": [],
+                  "limitations": [],
+                  "entrypoint": "python",
+                  "args": [
+                    "/opt/skill/package/scripts/calc_descriptors.py",
+                    "--smiles",
+                    "not-a-smiles"
+                  ],
+                  "expected_exit": 2,
+                  "stdout_contains": [],
+                  "json_equals": {
+                    "ok": false,
+                    "error": "Invalid or empty SMILES"
+                  },
+                  "artifacts": [],
+                  "mapped_check": true,
+                  "workdir": "/output"
+                }
+              ],
+              "policy": {
+                "invalid_input": "required",
+                "scope": "Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.",
+                "purposes": [
+                  "computation"
+                ],
+                "constraint": "Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.",
+                "source_path": "package/scripts/calc_descriptors.py",
+                "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\n    if mol is None:\n        return {\"ok\": False, \"input\": text, \"error\": \"Invalid or empty SMILES\"}",
+                "checks": [
+                  {
+                    "id": "direct_nonempty",
+                    "channel": "args",
+                    "key": 1,
+                    "pattern": "(?s).*\\S.*",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                  },
+                  {
+                    "id": "rows_nonempty",
+                    "channel": "input_files",
+                    "key": "rows.smi",
+                    "argument_index": 1,
+                    "mode": "each_line",
+                    "pattern": "(?s).*\\S.*",
+                    "source_path": "package/scripts/calc_descriptors.py",
+                    "source_quote": "mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None"
+                  }
+                ],
+                "operations": [
+                  {
+                    "id": "direct",
+                    "selector": {
+                      "args": [
+                        {
+                          "index": 0,
+                          "equals": "--smiles"
+                        }
+                      ]
+                    },
+                    "checks": [
+                      "direct_nonempty"
+                    ],
+                    "purposes": [
+                      "computation"
+                    ],
+                    "require_persistence": false,
+                    "source_path": "package/SKILL.md",
+                    "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                  },
+                  {
+                    "id": "file",
+                    "selector": {
+                      "args": [
+                        {
+                          "index": 0,
+                          "equals": "--input"
+                        }
+                      ]
+                    },
+                    "checks": [
+                      "rows_nonempty"
+                    ],
+                    "purposes": [
+                      "computation"
+                    ],
+                    "require_persistence": true,
+                    "source_path": "package/SKILL.md",
+                    "source_quote": "The parser requires exactly one of `--smiles` or `--input`."
+                  }
+                ]
+              },
+              "author_tests": {
+                "configured": [
+                  {
+                    "name": "delivered-python-entry",
+                    "argv": [
+                      "{python}",
+                      "{package}/scripts/calc_descriptors.py",
+                      "--smiles",
+                      "CCO"
+                    ],
+                    "cwd": "{package}",
+                    "json_equals": {
+                      "ok": true,
+                      "canonical_smiles": "CCO"
+                    }
+                  },
+                  {
+                    "name": "frozen-source-file-input",
+                    "argv": [
+                      "{python}",
+                      "{package}/scripts/calc_descriptors.py",
+                      "--input",
+                      "{source:rdkit}/examples/input.smi",
+                      "--output",
+                      "{run}/check.jsonl"
+                    ],
+                    "expected_exit": 2,
+                    "artifacts": [
+                      "check.jsonl"
+                    ]
+                  },
+                  {
+                    "name": "nonempty-parser-rejection",
+                    "argv": [
+                      "{python}",
+                      "{package}/scripts/calc_descriptors.py",
+                      "--smiles",
+                      "not-a-smiles"
+                    ],
+                    "expected_exit": 2,
+                    "json_equals": {
+                      "ok": false,
+                      "error": "Invalid or empty SMILES"
+                    }
+                  }
+                ],
+                "generated": []
+              }
+            },
+            "sha256": "e9e080647352c8f49ff20cd51a4fd50be596be0f20aba67a00e603860b6bda01"
+          }
+        },
+        "content": {
+          "status": "not_reviewed"
+        },
+        "fingerprints": {
+          "files": "9a24966e174ebed602312579a3d896b8f3541a0857475ad4370df2b6e89b6f11",
+          "sources": "71f53963337cb6c13f2de66c8a895d2fcc95143911a9d9f36dbf6d92a70b2a35",
+          "bindings": "5473d542554502b1f4ecae069b4dd5f6643a48c5a576f9d187717fc401415fed",
+          "environment": "df410bd19b6f62ae763c7c552881a5f2634978f8f526b52d1ceeb1b4f6e8b83c",
+          "acceptance": "785f516df627bf7b45e98d8d18ffa7adace018bb6f7bfaa683c5e88eebd916f5"
+        },
+        "execution": {
+          "status": "not_run",
+          "attempts": [],
+          "reason": "This revision requires fresh bound execution evidence"
+        },
+        "host": {
+          "status": "not_checked",
+          "observed_at": null
+        },
+        "evidence": [],
+        "qualification": {
+          "accepted": false,
+          "reason": "Docker build is not business acceptance"
+        },
+        "parent_revision": "rev-c9731626d365e819a90e665412be9b2569acbd2f98f9af2d8a52def85308d091"
+      },
+      "current_qualification": {
+        "accepted": false,
+        "reason": "Content review has not passed"
+      },
+      "current_host": {
+        "observed_at": "2026-10-25T14:24:32.255630+00:00",
+        "backend": "local-docker",
+        "status": "available",
+        "gaps": [],
+        "platform": "linux/x86_64",
+        "memory_bytes": 8115134464,
+        "cpus": 12,
+        "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "server_version": "29.8.2",
+        "docker_status": "available",
+        "resource_gaps": []
+      },
+      "history": [],
+      "batch": {
+        "label": "stage3-fault",
+        "tags": []
+      },
+      "build_id": "stage3-wrong-result",
+      "unverified": [],
+      "runtime": {
+        "path": "runtime/candidate-e1a62d733de60f4f1791251c660e6ed8b837210f1c478c851280ab3c5138e9e1/a9a1e47e4a064fe18bc6e5e47a381468",
+        "files": [
+          {
+            "path": "attempt-start.json",
+            "sha256": "6b20c7279cb79bbeac7c4f5947741b499af42ac36acc32283c22812fc098146a",
+            "bytes": 1827
+          },
+          {
+            "path": "build-log.json",
+            "sha256": "52afe27c0e04e85814bab35211b976ade2d496742a6243cbf28246b4e292a792",
+            "bytes": 6929
+          },
+          {
+            "path": "execution/case-3316802626c6bf87/results.jsonl",
+            "sha256": "0eff7cda69486b99eac8f44e4dec4748f9d065c4c0b2fdd456eb5a162d3d699f",
+            "bytes": 472
+          },
+          {
+            "path": "execution/case-a5b0ab2f04c65ed6/check.jsonl",
+            "sha256": "3ffdf99a435389223e58d4248ac6c4845773edddfd07938b759bc271404f6e09",
+            "bytes": 494
+          },
+          {
+            "path": "execution/case-f0cef04ac9040499/results.jsonl",
+            "sha256": "26fd26e5f038938277d785c544abd8b513fcdbda4488475e9d0bad8f5203e1c9",
+            "bytes": 207
+          },
+          {
+            "path": "execution/report.json",
+            "sha256": "b90a48939f9c2c969d6cb401d2b77361b9c3679cf79e7d68e23416019f23e22d",
+            "bytes": 29638
+          },
+          {
+            "path": "execution/started.json",
+            "sha256": "5fdcf11474dead83f64e1132d72ad780abdf4d4ae0f9888aa43999cb42e85d2e",
+            "bytes": 1252
+          },
+          {
+            "path": "execution/tests.json",
+            "sha256": "8aef66823811329a00e5aee4b2f6b8a15384c3e38d2110936c92961b4add43ad",
+            "bytes": 24747
+          },
+          {
+            "path": "image-package/scripts/calc_descriptors.py",
+            "sha256": "a46f762e1e5faf0e0c58ce710df84b78abdfca50b05fe0bfb48b429fbe483532",
+            "bytes": 1703
+          },
+          {
+            "path": "image-package/SKILL.md",
+            "sha256": "676715abbe80e12e981a70f62e960fd7e1bb735c9087b30d7b0bb1145ec88146",
+            "bytes": 2072
+          },
+          {
+            "path": "image.id",
+            "sha256": "fc9b0c364a6d15b4b83535140318be4a1f22776e0c87a7ef9f20732012e6542e",
+            "bytes": 71
+          },
+          {
+            "path": "receipt.json",
+            "sha256": "fcf0356ecf0ca0f017e80df515af234edf5dc58939941743b4690518c280c6e5",
+            "bytes": 2427
+          }
+        ],
+        "status": "execution_failed",
+        "execution_status": "execution_failed",
+        "image_id": "sha256:c4de346237d1913431bb5da0ec3600d02db213fa68b74245b6ae7d5066f0a012",
+        "host": {
+          "observed_at": "2026-10-25T14:24:32.255630+00:00",
+          "backend": "local-docker",
+          "status": "available",
+          "gaps": [],
+          "platform": "linux/x86_64",
+          "memory_bytes": 8115134464,
+          "cpus": 12,
+          "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+          "server_version": "29.8.2",
+          "docker_status": "available",
+          "resource_gaps": []
+        },
+        "gaps": [],
+        "revision_id": "rev-70e04935d773ed9b84935d72fe124d35393a67e237461eb05c807cafba005f3c",
+        "execution": "execution/report.json",
+        "repair_lane": "content",
+        "content_revoked": true
+      },
+      "current_execution": {
+        "status": "execution_failed",
+        "business_acceptance": "not_passed"
+      },
+      "current_content": {
+        "status": "failed"
+      }
+    }
+  ]
+}

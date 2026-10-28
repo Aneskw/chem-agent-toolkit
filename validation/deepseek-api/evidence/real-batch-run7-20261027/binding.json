@@ -1,0 +1,36 @@
+{
+  "kind": "script",
+  "entry": "scripts/recap_terminal_fragments.py",
+  "runtime_entry": "package/scripts/recap_terminal_fragments.py",
+  "declaration": {
+    "kind": "script",
+    "path": "scripts/recap_terminal_fragments.py"
+  },
+  "association": "reviewed",
+  "source_id": "recap",
+  "source_path": "document.py",
+  "source_sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+  "quote": "def RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None):",
+  "reason": "Delivered script scripts/recap_terminal_fragments.py is a thin wrapper over the upstream RDKit Recap API from rdkit/Chem/Recap.py at commit 237a1d9027c800784afed8788540f38a3aa595f8. The wrapper imports `from rdkit import Chem` and `from rdkit.Chem import Recap`, then calls `Recap.RecapDecompose(mol)` and returns `sorted(root.GetLeaves().keys())`. Source scope is RDKit's default RECAP implementation: reaction definitions, hierarchy nodes, default minFragmentSize=0 filters, and leaf semantics. Delivery scope is formatting and input guards only; no chemistry transformations are implemented locally. Interpreter is Python 3 with an existing compatible RDKit installation providing `rdkit.Chem`, `rdkit.Chem.Recap`, and `rdkit.Chem.rdChemReactions`, run in the authorized Docker container for this workflow. The CLI accepts one nonblank molecular SMILES string; the library function `terminal_fragments(mol)` accepts a valid, sanitized, nonempty RDKit Mol. The script may be run from the skill directory or by absolute path; no data files or particular working directory are required. Output is a JSON array of sorted unique terminal fragment SMILES on stdout with exit 0. Invalid CLI input exits 2 with a stderr diagnostic and no JSON result. Empty arrays are valid for molecules whose default RECAP decomposition is rejected by upstream product filters, such as `CCCOCCC`. Necessary supports include a compatible RDKit version with compiled dependencies and recording the RDKit version for reproducibility.",
+  "invocation": "python scripts/recap_terminal_fragments.py 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'",
+  "entry_sha256": "655e5edd12444d3d4616ab150bba8804e4e4acbd0938995af7a5422c28f54a87",
+  "files": [
+    {
+      "path": "references/UPSTREAM-NOTICES.txt",
+      "sha256": "d181b5860828ccc39eca1f70a9113505a8f622c48bd14664c8ed77e8243f9233",
+      "bytes": 3368
+    },
+    {
+      "path": "scripts/recap_terminal_fragments.py",
+      "sha256": "655e5edd12444d3d4616ab150bba8804e4e4acbd0938995af7a5422c28f54a87",
+      "bytes": 1253
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "60b75d17f7b1d85cf28b5f5ac2241e0c4328b0c3248cf1b346b4875a9f0da611",
+      "bytes": 4726
+    }
+  ],
+  "review_sha256": "28b3fdcc5ef4848bbb602614dfd68820e527b39b821a1ff792530a079a7ca5b3",
+  "declaration_source": "author_declaration"
+}

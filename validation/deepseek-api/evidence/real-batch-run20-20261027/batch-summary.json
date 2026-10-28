@@ -1,0 +1,11 @@
+{
+  "batch": "run20",
+  "build_id": "20261027T214329-b7a66c63",
+  "status": "failed",
+  "model_calls": 2,
+  "started_at": "2026-10-27T13:43:29.474666+00:00",
+  "finished_at": "2026-10-27T13:45:05.739049+00:00",
+  "errors": [
+    "Invalid evidence reference {'id': 'recap:module-docstring', 'claim': \"The module docstring states: 'Implementation of the RECAP algorithm from Lewell et al. JCICS *38* 511-522 (1998)' and notes results are 'returned as a hierarchy of nodes instead of just as a set of fragments'.\"}; use known nonempty evidence IDs (native locators do not prove reading): e1,e2"
+  ]
+}

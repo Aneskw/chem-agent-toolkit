@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "resolution": "none",
+  "findings": [
+    {
+      "location": "SKILL.md",
+      "problem": "No delivered executable test or runtime check exercises the normal path; available checks are limited to structure and runtime_paths.",
+      "evidence": "The artifact tests list is empty and the reported checks do not run the documented RecapDecompose/GetLeaves example. SKILL.md's instructions nevertheless match the provided RDKit Recap.py source and docstring.",
+      "impact": "Runtime behavior is not independently exercised here, but the documented normal path and output expectations are source-grounded. This does not block source assessment.",
+      "action": "If runtime RDKit becomes available, add a small source-backed check that runs the documented example and asserts sorted(GetLeaves().keys()) equals ['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*'].",
+      "blocking": false,
+      "category": "suggestion"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed"
+}

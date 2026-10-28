@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "resolution": "none",
+  "findings": [
+    {
+      "location": "deliveries/rdkit-recap-terminal-fragments-metadata.json: tests",
+      "problem": "Runtime behavior and installed RDKit compatibility remain unverified; no blocking content defect found.",
+      "evidence": "Tests invoke the delivered CLI. Original document.py lines 38–56 support the expected fragments; lines 110–118 and 231–235 support empty results. Lines 63–64 and 146–169 confirm the required RDKit execution. Existing structure/runtime_paths passes establish no chemistry behavior. Generated checks are disabled.",
+      "impact": "The package faithfully exposes the documented implementation, but this review does not establish runtime or scientific validation.",
+      "action": "When execution is authorized, run the four declared checks in the permitted Docker runtime and retain the reported RDKit version. No package revision is required.",
+      "blocking": false,
+      "category": "check"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed"
+}

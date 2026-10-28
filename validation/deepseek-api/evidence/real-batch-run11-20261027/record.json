@@ -1,0 +1,1161 @@
+{
+  "name": "rdkit-recap-terminal-fragments",
+  "kind": "skill",
+  "plan": {
+    "name": "rdkit-recap-terminal-fragments",
+    "task": "Extract unique terminal molecular fragment SMILES using RDKit RecapDecompose and GetLeaves, with correct interpretation of empty results.",
+    "scope": "One valid nonempty molecule parsed from SMILES. Molecular fragmentation only; excludes descriptors, synthesis feasibility and scientific validation. Preserve '*' attachment atoms. Empty leaves are valid and must not be replaced with the parent molecule. Leaf counts represent unique fragment identities, not multiplicity.",
+    "entrypoint": "Chem.MolFromSmiles(smiles); check parsing and nonempty input; root = Recap.RecapDecompose(mol); leaves = root.GetLeaves(); return sorted(leaves.keys()). Values are hierarchy nodes exposing .mol. Use default parameters and fresh per-call state.",
+    "rationale": "Resolves confusion between immediate children, all descendants and terminal fragments, while keeping input preparation and result interpretation together.",
+    "construction": "Direct packaging of existing RDKit APIs with transparent input checks and deterministic output formatting. Later authoring should document prerequisites, invalid inputs, source examples and attribution. RDKit business execution is permitted only in Docker. No algorithm reimplementation is needed.",
+    "upstream_behavior": "Extract unique terminal molecular fragment SMILES using RDKit RecapDecompose and GetLeaves, with correct interpretation of empty results.",
+    "added_behavior": "source-supported only",
+    "kind": "skill",
+    "needs": [],
+    "selected": true,
+    "priority": 0,
+    "readiness": "callable",
+    "gaps": [
+      "Runtime compatibility remains untested; any later execution must occur in an authorized Docker container with RDKit available.",
+      "The supplied source does not document parser failure behavior. Later input handling must distinguish parsing failures from valid empty fragment results; rejecting empty molecular input is an interface boundary.",
+      "Evidence is pinned to commit 237a1d9027c800784afed8788540f38a3aa595f8; compatibility with another installed version remains unverified."
+    ],
+    "dependencies": [],
+    "files": [
+      {
+        "path": "SKILL.md",
+        "purpose": "Capability instructions"
+      }
+    ],
+    "checks": [],
+    "evidence": [
+      {
+        "id": "e1",
+        "claim": "Inspected document.py, upstream Recap.py, lines 31-56: overview explicitly recommends GetLeaves and demonstrates four immediate children, five descendants and three terminal fragments for C1CC1Oc1ccccc1-c1ncc(OC)cc1."
+      },
+      {
+        "id": "e1",
+        "claim": "Lines 97-118 and 134-138: GetLeaves returns a SMILES-keyed dictionary of terminal descendants, excludes the root and returns an empty dictionary when the root has no children."
+      },
+      {
+        "id": "e1",
+        "claim": "Lines 146-169 and 197-213: RecapDecompose accepts a molecule, immediately serializes it with MolToSmiles, and creates or reuses SMILES-keyed nodes. It contains no SMILES parsing validation layer; allNodes=None creates fresh state."
+      },
+      {
+        "id": "e1",
+        "claim": "Lines 174-195 and testMinFragmentSize, lines 279-302: filtering affects accepted decompositions. CCCOCCC has no children by default but yields one unique '*CCC' leaf with minFragmentSize=3. Terminality therefore depends on the selected rules and filters."
+      },
+      {
+        "id": "e1",
+        "claim": "Tests at lines 223-235 assert the overview example's hierarchy counts and a valid empty decomposition for CCCOCCC. These assertions were inspected, not executed."
+      },
+      {
+        "id": "e1",
+        "claim": "Reaction definitions at lines 66-86 insert '*' attachment atoms; lines 81-82 explicitly identify an aromatic nitrogen–aromatic carbon reaction as outside the standard RECAP set. Describe the RDKit implementation without claiming exact equivalence to the published method."
+      },
+      {
+        "id": "e2",
+        "claim": "Inspected document.txt lines 1-29: BSD-3-Clause redistribution conditions require notices, disclaimer preservation and non-endorsement. Recap.py lines 1-29 also contain its Novartis notice."
+      }
+    ],
+    "method_evidence": []
+  },
+  "status": "blocked",
+  "checks": [
+    {
+      "name": "structure",
+      "status": "pass",
+      "required": true,
+      "findings": []
+    },
+    {
+      "name": "runtime_paths",
+      "status": "pass",
+      "required": true,
+      "findings": []
+    },
+    {
+      "name": "content_review",
+      "required": true,
+      "status": "pass",
+      "resolution": "none",
+      "findings": [
+        {
+          "location": "deliveries/rdkit-recap-terminal-fragments.json: tests",
+          "problem": "Runtime behavior remains unverified; existing checks establish packaging and path validity only.",
+          "evidence": "Tests invoke the delivered script. Inspected recap/document.py lines 39–56 support the exact positive oracle; lines 110–118 and 231–235 support empty leaves. Blank and malformed cases check adapter boundaries. Execution is disabled by policy. Source lines 146–169 and the delivered script confirm that computation requires execution.",
+          "impact": "No blocking content defect found. Runtime compatibility and parser failure handling are not demonstrated; scientific validity is not established.",
+          "action": "When execution is authorized, run the four existing tests through the helper in the permitted RDKit Docker container before claiming runtime verification.",
+          "blocking": false,
+          "category": "check"
+        }
+      ],
+      "oracle_changes_verified": false,
+      "execution_gaps": [],
+      "requirement_assessment": "confirmed",
+      "evidence_kind": "model_review_not_independent_scientific_validation"
+    },
+    {
+      "name": "documented-terminal-fragments",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "valid-empty-decomposition",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "blank-input-boundary",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "malformed-smiles-boundary",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "documented-terminal-fragments",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "valid-empty-decomposition",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "blank-input-boundary",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "malformed-smiles-boundary",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    }
+  ],
+  "repair_rounds": 0,
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "sha256": "4996dbf74e39d431502925cbddac5ad21bf7ea2fbb646a329b5ae6f4a9814989",
+      "bytes": 3356
+    },
+    {
+      "path": "scripts/recap_terminal.py",
+      "sha256": "7e3404393fd795ba85e27db6b70f92143be37ae4b546a124eb0f93c39785b66c",
+      "bytes": 1541
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "6f759c8dbaa4746585e09a1885a9dca8eef182290e89b6174cb18d237d1424c7",
+      "bytes": 4424
+    }
+  ],
+  "repair_history": [],
+  "runtime_requirement": {
+    "status": "required",
+    "reason": "The capability executes RDKit molecule parsing, reaction-based decomposition and terminal hierarchy traversal; static instructions alone do not compute fragments.",
+    "citations": [
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": ">>> res = Recap.RecapDecompose(m)"
+      },
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": "To get the standard set of RECAP results, use GetLeaves():\n>>> leaves=res.GetLeaves()"
+      }
+    ]
+  },
+  "entry_declaration": {
+    "kind": "script",
+    "path": "scripts/recap_terminal.py"
+  },
+  "test_definitions": {
+    "configured": [],
+    "generated": [
+      {
+        "name": "documented-terminal-fragments",
+        "argv": [
+          "{python}",
+          "{package}/scripts/recap_terminal.py",
+          "C1CC1Oc1ccccc1-c1ncc(OC)cc1"
+        ],
+        "cwd": "{package}",
+        "expected_exit": 0,
+        "json_equals": {
+          "fragments": [
+            "*C1CC1",
+            "*c1ccc(OC)cn1",
+            "*c1ccccc1*"
+          ],
+          "count": 3
+        },
+        "evidence": "e1",
+        "purpose": "Exercise the delivered normal path. Recap.py overview lines 39-56 explicitly lists these three GetLeaves keys; test1 lines 223-229 asserts three leaves. Sorting and count are transparent adapter formatting.",
+        "kind": "positive"
+      },
+      {
+        "name": "valid-empty-decomposition",
+        "argv": [
+          "{python}",
+          "{package}/scripts/recap_terminal.py",
+          "CCCOCCC"
+        ],
+        "cwd": "{package}",
+        "expected_exit": 0,
+        "json_equals": {
+          "fragments": [],
+          "count": 0
+        },
+        "evidence": "e1",
+        "purpose": "Recap.py test2 lines 231-235 and testMinFragmentSize lines 279-283 assert no children for CCCOCCC with defaults. GetLeaves lines 110-118 therefore returns an empty dictionary. Confirm success without parent substitution.",
+        "kind": "negative"
+      },
+      {
+        "name": "blank-input-boundary",
+        "argv": [
+          "{python}",
+          "{package}/scripts/recap_terminal.py",
+          " "
+        ],
+        "cwd": "{package}",
+        "expected_exit": 2,
+        "json_equals": {
+          "error": "invalid_input",
+          "message": "SMILES must not be blank"
+        },
+        "evidence": "e1",
+        "purpose": "Check an explicitly added adapter boundary, not an upstream scientific oracle. RecapDecompose lines 146-148 requires a Mol and immediately serializes it; the wrapper rejects blank external input before invoking that API. Do not confuse this rejection with the documented valid empty decomposition.",
+        "kind": "boundary"
+      },
+      {
+        "name": "malformed-smiles-boundary",
+        "argv": [
+          "{python}",
+          "{package}/scripts/recap_terminal.py",
+          "C1"
+        ],
+        "cwd": "{package}",
+        "expected_exit": 2,
+        "stdout_contains": [
+          "\"error\": \"invalid_input\""
+        ],
+        "evidence": "e1",
+        "purpose": "Exercise adapter handling of a failed SMILES parse using an unclosed ring. The source normal path parses before decomposition (lines 39-42), and RecapDecompose lines 146-148 assumes a molecule. This malformed fixture and rejection are engineering boundary checks, not upstream test cases or a claimed source-documented parser diagnostic; runtime confirmation remains pending.",
+        "kind": "boundary"
+      }
+    ]
+  },
+  "issues": [
+    {
+      "id": "helper-unavailable",
+      "description": "The configured helper Python executable could not start during discovery; no python/python3/py executable was found. Native PowerShell writes were used.",
+      "blocking": false,
+      "resolution": "All intended files and metadata are written. Host must invoke the same finish routine with the supplied delivery token to validate and snapshot the delivery. No helper retry was attempted."
+    }
+  ],
+  "notes": [
+    "No generated script, source program or business check was executed. generated_checks_enabled is false; the listed tests are definitions for later authorized review, not execution results.",
+    "Independent content review, source association and Docker runtime acceptance remain pending. Author completion does not establish any of them.",
+    "Existing RDKit in the authorized Docker container is required. No dependencies, Docker environments or services were installed or provisioned. Compatibility with an installed RDKit release is unverified; the evidence is pinned to commit 237a1d9027c800784afed8788540f38a3aa595f8.",
+    "Scope is unchanged from the selected candidate. A single script provides reusable input validation, JSON output and separate failure codes around existing APIs; it adds no fragmentation algorithm or scientific acceptance threshold.",
+    "The malformed-input check tests a documented adapter boundary; the supplied Recap.py does not itself specify parser failure diagnostics. Error-message details are intentionally not asserted.",
+    "The package includes the verbatim repository license and Recap.py copyright notice under references. Source examples and behavior were inspected at the passages cited in SKILL.md and test purposes."
+  ],
+  "additional_candidates": [],
+  "file_purposes": [
+    {
+      "path": "references/LICENSE.txt",
+      "purpose": "Delivered capability resource"
+    },
+    {
+      "path": "scripts/recap_terminal.py",
+      "purpose": "Delivered capability resource"
+    },
+    {
+      "path": "SKILL.md",
+      "purpose": "Delivered capability resource"
+    }
+  ],
+  "model_calls": [
+    {
+      "phase": "author",
+      "session_key": "build:rdkit-recap-terminal-fragments",
+      "resumed": true,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 311162,
+        "cached_input_tokens": 242944,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 7303,
+        "reasoning_output_tokens": 242
+      },
+      "prompt_sha256": "7488ec7bdbc0543f43aa5312bbd8c2d023e56cc9b270066e6ad7f69fb915bd02",
+      "tool_events": 5,
+      "session_id": "01a17d16-b60b-74d2-9f7a-fa74986fde9a",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 143.522,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 3.926,
+        "last_stdout_seconds": 138.596,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    },
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 146945,
+        "cached_input_tokens": 112256,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1436,
+        "reasoning_output_tokens": 90
+      },
+      "prompt_sha256": "0937e08b850df16c85de73cb61759c4203005fee7ab779780f2051e44cc25b64",
+      "tool_events": 7,
+      "session_id": "01a17d1b-2adc-7163-a23a-cefd54d0d92c",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 87.695,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 3.909,
+        "last_stdout_seconds": 83.431,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    }
+  ],
+  "fingerprint": "2ffdc2de8ed3b3e49b65ac80b5412fdd611e79a44e6829f382c00772bc897390",
+  "delivery": {
+    "protocol": 1,
+    "candidate_id": "candidate-0db42e9bf94ddd230ae29a2db252b2c177c4a722a121599877a07a3e51b18ea1",
+    "revision_id": "rev-d222c0638cd362059768ac149e233eb240611a407eeeb7829f821ccdabf18391",
+    "mode": "normal",
+    "inputs": {
+      "candidate": {
+        "name": "rdkit-recap-terminal-fragments",
+        "task": "Extract unique terminal molecular fragment SMILES using RDKit RecapDecompose and GetLeaves, with correct interpretation of empty results.",
+        "scope": "One valid nonempty molecule parsed from SMILES. Molecular fragmentation only; excludes descriptors, synthesis feasibility and scientific validation. Preserve '*' attachment atoms. Empty leaves are valid and must not be replaced with the parent molecule. Leaf counts represent unique fragment identities, not multiplicity.",
+        "entrypoint": "Chem.MolFromSmiles(smiles); check parsing and nonempty input; root = Recap.RecapDecompose(mol); leaves = root.GetLeaves(); return sorted(leaves.keys()). Values are hierarchy nodes exposing .mol. Use default parameters and fresh per-call state.",
+        "rationale": "Resolves confusion between immediate children, all descendants and terminal fragments, while keeping input preparation and result interpretation together.",
+        "construction": "Direct packaging of existing RDKit APIs with transparent input checks and deterministic output formatting. Later authoring should document prerequisites, invalid inputs, source examples and attribution. RDKit business execution is permitted only in Docker. No algorithm reimplementation is needed.",
+        "upstream_behavior": "Extract unique terminal molecular fragment SMILES using RDKit RecapDecompose and GetLeaves, with correct interpretation of empty results.",
+        "added_behavior": "source-supported only",
+        "kind": "skill",
+        "needs": [],
+        "selected": true,
+        "priority": 0,
+        "readiness": "callable",
+        "gaps": [
+          "Runtime compatibility remains untested; any later execution must occur in an authorized Docker container with RDKit available.",
+          "The supplied source does not document parser failure behavior. Later input handling must distinguish parsing failures from valid empty fragment results; rejecting empty molecular input is an interface boundary.",
+          "Evidence is pinned to commit 237a1d9027c800784afed8788540f38a3aa595f8; compatibility with another installed version remains unverified."
+        ],
+        "dependencies": [],
+        "files": [
+          {
+            "path": "SKILL.md",
+            "purpose": "Capability instructions"
+          }
+        ],
+        "checks": [],
+        "evidence": [
+          {
+            "id": "e1",
+            "claim": "Inspected document.py, upstream Recap.py, lines 31-56: overview explicitly recommends GetLeaves and demonstrates four immediate children, five descendants and three terminal fragments for C1CC1Oc1ccccc1-c1ncc(OC)cc1."
+          },
+          {
+            "id": "e1",
+            "claim": "Lines 97-118 and 134-138: GetLeaves returns a SMILES-keyed dictionary of terminal descendants, excludes the root and returns an empty dictionary when the root has no children."
+          },
+          {
+            "id": "e1",
+            "claim": "Lines 146-169 and 197-213: RecapDecompose accepts a molecule, immediately serializes it with MolToSmiles, and creates or reuses SMILES-keyed nodes. It contains no SMILES parsing validation layer; allNodes=None creates fresh state."
+          },
+          {
+            "id": "e1",
+            "claim": "Lines 174-195 and testMinFragmentSize, lines 279-302: filtering affects accepted decompositions. CCCOCCC has no children by default but yields one unique '*CCC' leaf with minFragmentSize=3. Terminality therefore depends on the selected rules and filters."
+          },
+          {
+            "id": "e1",
+            "claim": "Tests at lines 223-235 assert the overview example's hierarchy counts and a valid empty decomposition for CCCOCCC. These assertions were inspected, not executed."
+          },
+          {
+            "id": "e1",
+            "claim": "Reaction definitions at lines 66-86 insert '*' attachment atoms; lines 81-82 explicitly identify an aromatic nitrogen–aromatic carbon reaction as outside the standard RECAP set. Describe the RDKit implementation without claiming exact equivalence to the published method."
+          },
+          {
+            "id": "e2",
+            "claim": "Inspected document.txt lines 1-29: BSD-3-Clause redistribution conditions require notices, disclaimer preservation and non-endorsement. Recap.py lines 1-29 also contain its Novartis notice."
+          }
+        ],
+        "method_evidence": []
+      },
+      "files": [
+        {
+          "path": "references/LICENSE.txt",
+          "sha256": "4996dbf74e39d431502925cbddac5ad21bf7ea2fbb646a329b5ae6f4a9814989",
+          "bytes": 3356
+        },
+        {
+          "path": "scripts/recap_terminal.py",
+          "sha256": "7e3404393fd795ba85e27db6b70f92143be37ae4b546a124eb0f93c39785b66c",
+          "bytes": 1541
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "6f759c8dbaa4746585e09a1885a9dca8eef182290e89b6174cb18d237d1424c7",
+          "bytes": 4424
+        }
+      ],
+      "sources": [
+        {
+          "id": "license",
+          "inventory": [
+            {
+              "path": "document.txt",
+              "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+              "bytes": 1580
+            }
+          ],
+          "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+          "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+          "upstream": {
+            "repo": "https://github.com/rdkit/rdkit",
+            "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+            "path": "license.txt",
+            "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+            "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+          }
+        },
+        {
+          "id": "recap",
+          "inventory": [
+            {
+              "path": "document.py",
+              "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+              "bytes": 20662
+            }
+          ],
+          "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+          "license": "BSD-3-Clause",
+          "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a",
+          "upstream": {
+            "repo": "https://github.com/rdkit/rdkit",
+            "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+            "path": "rdkit/Chem/Recap.py",
+            "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+            "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+          }
+        }
+      ],
+      "requirement": {
+        "status": "required",
+        "reason": "The capability executes RDKit molecule parsing, reaction-based decomposition and terminal hierarchy traversal; static instructions alone do not compute fragments.",
+        "citations": [
+          {
+            "source_id": "recap",
+            "path": "document.py",
+            "quote": ">>> res = Recap.RecapDecompose(m)"
+          },
+          {
+            "source_id": "recap",
+            "path": "document.py",
+            "quote": "To get the standard set of RECAP results, use GetLeaves():\n>>> leaves=res.GetLeaves()"
+          }
+        ]
+      },
+      "bindings": {
+        "version": 2,
+        "payload": {
+          "kind": "script",
+          "entry": "scripts/recap_terminal.py",
+          "runtime_entry": "package/scripts/recap_terminal.py",
+          "declaration": {
+            "kind": "script",
+            "path": "scripts/recap_terminal.py"
+          },
+          "association": "reviewed",
+          "source_id": "recap",
+          "source_path": "document.py",
+          "source_sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+          "quote": "def RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None):\n  \"\"\" returns the recap decomposition for a molecule \"\"\"",
+          "reason": "Source document.py is the inspected upstream rdkit/Chem/Recap.py at commit 237a1d9027c800784afed8788540f38a3aa595f8; it defines RecapHierarchyNode.GetLeaves and RecapDecompose. Delivery scripts/recap_terminal.py is a Python 3 CLI adapter over that API. Invocation from the skill/working directory: `python scripts/recap_terminal.py '<nonempty SMILES>'`. It accepts one positional SMILES argument via argparse, imports `rdkit.Chem` and `rdkit.Chem.Recap`, parses with `Chem.MolFromSmiles`, validates the molecule, then calls `root = Recap.RecapDecompose(mol)` using defaults (allNodes omitted, minFragmentSize=0, onlyUseReactions omitted) and returns `sorted(root.GetLeaves().keys())`. It prints JSON to stdout: success is `{\"fragments\": [...], \"count\": n}` with exit 0; invalid input is `{\"error\": \"invalid_input\", ...}` with exit 2; dependency/runtime/decomposition errors are `{\"error\": \"runtime_error\", ...}` with exit 1. It writes no files. Necessary supports are an RDKit distribution with `rdkit.Chem` and `rdkit.Chem.Recap` available in the Python environment; SKILL.md documents usage and references/LICENSE.txt retains the upstream license.",
+          "invocation": "python scripts/recap_terminal.py 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'",
+          "entry_sha256": "7e3404393fd795ba85e27db6b70f92143be37ae4b546a124eb0f93c39785b66c",
+          "files": [
+            {
+              "path": "references/LICENSE.txt",
+              "sha256": "4996dbf74e39d431502925cbddac5ad21bf7ea2fbb646a329b5ae6f4a9814989",
+              "bytes": 3356
+            },
+            {
+              "path": "scripts/recap_terminal.py",
+              "sha256": "7e3404393fd795ba85e27db6b70f92143be37ae4b546a124eb0f93c39785b66c",
+              "bytes": 1541
+            },
+            {
+              "path": "SKILL.md",
+              "sha256": "6f759c8dbaa4746585e09a1885a9dca8eef182290e89b6174cb18d237d1424c7",
+              "bytes": 4424
+            }
+          ],
+          "review_sha256": "8d4665f8865b366e9e43be3016633477b58e9672e35ccb13885db6046b66e2f7",
+          "declaration_source": "author_declaration"
+        },
+        "sha256": "ac5e339728f80bb518333b4c3ba48388f74889d8c9f02b764b32a45c00d0762e"
+      },
+      "environment": {
+        "version": 2,
+        "payload": {
+          "materials": [
+            {
+              "path": "association/independent-review.json",
+              "sha256": "c19d3c7f35a5662bf8e08b04adaeeb1c5b4cd1da627d6a128da057e12b44b292",
+              "bytes": 3433
+            },
+            {
+              "path": "association/model/attempts.json",
+              "sha256": "5238a05b403ec4367cf942d8a562bc285668201b7ad3ae22a5ef5834e1053c45",
+              "bytes": 839
+            },
+            {
+              "path": "association/model/request.json",
+              "sha256": "b2b152a6af199f252aa948de98d79a19706692ad1679f5b03610dbe8a24d4d0e",
+              "bytes": 2171
+            },
+            {
+              "path": "association/model/response.json",
+              "sha256": "f9e39862eedf0c1cbe305165f0285160996d4c41314e2aa7c798df34a042b8ed",
+              "bytes": 2134
+            },
+            {
+              "path": "association/model/schema.json",
+              "sha256": "dd29823dba2dda04228484b46c2eb303ea1584ee398668e43f874912701e2956",
+              "bytes": 348
+            },
+            {
+              "path": "association/model/stream.json",
+              "sha256": "2e26ab8fd4a8650538b169183ee87f81e49aa7e0ee6912e0d4b5d011044634bc",
+              "bytes": 164
+            },
+            {
+              "path": "association/proposal-prompt.txt",
+              "sha256": "9fe8722096ec3c3d8512f09d9b943e2842eda9e2390b0fe23f5cf2266f9b32b0",
+              "bytes": 35863
+            },
+            {
+              "path": "association/proposal.json",
+              "sha256": "d33c2183b7561450612654a88a7651c50ed96cbf0976d24d5832769c972c9cef",
+              "bytes": 1507
+            },
+            {
+              "path": "association/receipt.json",
+              "sha256": "46afa9f0a0b3f6b7a7b87270ad3325109af554d5fadd87c6ab77f2f7973a11dc",
+              "bytes": 2760
+            },
+            {
+              "path": "association/review/agent/active-phase.json",
+              "sha256": "5e5d8c389b21e3365e0b85035f2d63b95b4539b87c1f3880901a4c11c1007b27",
+              "bytes": 27
+            },
+            {
+              "path": "association/review/agent/agent-state.json",
+              "sha256": "bf8b5f528aac198c5ef21232f5757f19065f1dd67fd7b086d4083bb73af7ba58",
+              "bytes": 1698
+            },
+            {
+              "path": "association/review/agent/agent-turns/001-review/command.json",
+              "sha256": "877b577d33583e5d4af8196a63ead8f690f368ca00878406504d0e5d2764fecb",
+              "bytes": 2111
+            },
+            {
+              "path": "association/review/agent/agent-turns/001-review/events.jsonl",
+              "sha256": "1ab1a53a77f160f877f361dfe1b7c6b04385347208861f82d82bc8f29a1e893f",
+              "bytes": 48218
+            },
+            {
+              "path": "association/review/agent/agent-turns/001-review/image-audit.json",
+              "sha256": "66161c30c65b0654fafe27299083b4e8a83aeec0f6fc2aa82677b785e3130379",
+              "bytes": 75
+            },
+            {
+              "path": "association/review/agent/agent-turns/001-review/prompt.txt",
+              "sha256": "c5bab86a75798a2d247370fda8f3bc10bb88a3480d94ecd0fcd17e3075c1eb2e",
+              "bytes": 32934
+            },
+            {
+              "path": "association/review/agent/agent-turns/001-review/result.json",
+              "sha256": "dc28d05faa7cfd1d95755fabf1ce0617fb589c79088cc89fa2f6b9226ff6a0eb",
+              "bytes": 1083
+            },
+            {
+              "path": "association/review/agent/agent-turns/001-review/schema.json",
+              "sha256": "0cd389c4ee3da96264a8727585ac8abec6e8d81ac6ac29a812c4ce3932048b99",
+              "bytes": 1955
+            },
+            {
+              "path": "association/review/agent/agent-turns/001-review/stderr.log",
+              "sha256": "85eafe0ed9710333eef4fe3433da0fa432875507fe6caed7c220c75fa32905b5",
+              "bytes": 119
+            },
+            {
+              "path": "association/review/agent/progress.json",
+              "sha256": "eccf684e5643f06dab121bbc9c457e722b81a2114bea975ec5102a3f5453e7cb",
+              "bytes": 1276
+            },
+            {
+              "path": "association/review/agent/resource-state.json",
+              "sha256": "849353f3c0c0e986172f4d3cfee628ecf80aa6679e055f6554ce2ecf5cce0951",
+              "bytes": 6015
+            },
+            {
+              "path": "association/review/agent/resources.json",
+              "sha256": "82e5c5869e22c438080157509b5d527fdb9ff91f4a4d7d876681d4fa2a37539c",
+              "bytes": 3605
+            },
+            {
+              "path": "association/review/agent/review-result.json",
+              "sha256": "9f521d701b05ab6561533409f054d047d388cac92613663f3b9d4fb7d08e7b36",
+              "bytes": 1469
+            },
+            {
+              "path": "association/review/agent/source-evidence.json",
+              "sha256": "55fac71dc188d351eb5f0736519056f80da1eb4b8c278c32d5951788a4ba5094",
+              "bytes": 661
+            },
+            {
+              "path": "association/review/agent/work-state.md",
+              "sha256": "c91471fc68fc42ce6869f1be9c225571d322fb6e6d9f25d0a4a65f71a7cf679c",
+              "bytes": 1168
+            },
+            {
+              "path": "association/review/cache/snapshots/c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a/document.py",
+              "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+              "bytes": 20662
+            },
+            {
+              "path": "association/review/cache/snapshots/f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2/document.txt",
+              "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+              "bytes": 1580
+            },
+            {
+              "path": "association/review/config.json",
+              "sha256": "3d7c185277f548fefd90cf3e1a51fd32c98ee1cd0b7bf8394169195d77c8f9de",
+              "bytes": 880
+            },
+            {
+              "path": "association/review/review.json",
+              "sha256": "25a3393d113f847c6a29ea4c16fe6432d1e3d53725f853dd6c6bfea053f8d82c",
+              "bytes": 1207
+            },
+            {
+              "path": "binding.json",
+              "sha256": "730d4ee0dcc7f16b450d2c33a456b0ddb799ad3f71938e12cf0f6636e6a8aed8",
+              "bytes": 2528
+            },
+            {
+              "path": "planning/0/environment_plan.json",
+              "sha256": "ab6b222d1f97803c22846d52238d8004e043d103975765cfdc6ba7e4594cd8aa",
+              "bytes": 11633
+            },
+            {
+              "path": "planning/0/inventory.json",
+              "sha256": "67e207e6aff4e452b30d4f3c52ee6fbcb1d7dfa2c5b13710c8accd21e788244c",
+              "bytes": 1349
+            },
+            {
+              "path": "planning/0/materials.json",
+              "sha256": "bd7ddee6877048867be7aaad19560478ec0e07e3216145d484090807de59c0ba",
+              "bytes": 294
+            },
+            {
+              "path": "planning/0/model-0/attempts.json",
+              "sha256": "26ba14f01721dd12fd72034ca34d249d545aaca313b33c729f69beeedf43bf62",
+              "bytes": 842
+            },
+            {
+              "path": "planning/0/model-0/request.json",
+              "sha256": "6fd815eca8ff49408422b647ed5c6f078ad8a78f5c779813dfbed4861f93ac2e",
+              "bytes": 2172
+            },
+            {
+              "path": "planning/0/model-0/response.json",
+              "sha256": "cefbdc831e21eb07ceb7fef48184769339ca879d7f4441cbd6b2109bad7f8e26",
+              "bytes": 13861
+            },
+            {
+              "path": "planning/0/model-0/schema.json",
+              "sha256": "1e317d31a31089eed9a1a0635e501db33935df44fb0e49b631d8e495f7b65eac",
+              "bytes": 10437
+            },
+            {
+              "path": "planning/0/model-0/stream.json",
+              "sha256": "31c2b876ce7725771976bdd400cea9fb6c39313186620a8da797296f5539074e",
+              "bytes": 167
+            },
+            {
+              "path": "planning/0/prompt-0.txt",
+              "sha256": "b56d022812e7db287280cac2ba733dee6eff07fa3430e4392822c63b2d7637bd",
+              "bytes": 48031
+            },
+            {
+              "path": "planning/0/prompt-provenance-0.json",
+              "sha256": "ba0af002879159b7f79ad794e174245d353833e39b6e38a67e357095121a04f6",
+              "bytes": 689
+            },
+            {
+              "path": "planning/0/receipt-0.json",
+              "sha256": "f310ba1df9ac79d50088fa062763cd1fcf9f07854662d71d29dfb0dac0647b2e",
+              "bytes": 2763
+            },
+            {
+              "path": "planning/0/rejection.json",
+              "sha256": "c232387da2e6330a9c4e71a20f140e29e9312e59a3d2ebb3ac402aa598ae2fbb",
+              "bytes": 12498
+            },
+            {
+              "path": "planning/0/response-0.json",
+              "sha256": "99bf3dc66c46e6965d696dfdbd5fa7f1eca66a578af0f7608265cc14569ff514",
+              "bytes": 12274
+            },
+            {
+              "path": "planning/1/environment_plan.json",
+              "sha256": "5da8c4a8148eefe417b901f312aa2a819b7c3156657dc54b26efb16f1403dab0",
+              "bytes": 12478
+            },
+            {
+              "path": "planning/1/inventory.json",
+              "sha256": "67e207e6aff4e452b30d4f3c52ee6fbcb1d7dfa2c5b13710c8accd21e788244c",
+              "bytes": 1349
+            },
+            {
+              "path": "planning/1/materials.json",
+              "sha256": "bd7ddee6877048867be7aaad19560478ec0e07e3216145d484090807de59c0ba",
+              "bytes": 294
+            },
+            {
+              "path": "planning/1/model-0/attempts.json",
+              "sha256": "57fe80e650bc69fdf757519156abaa5234eb161fcd1912ad94f982e05ebf48ac",
+              "bytes": 840
+            },
+            {
+              "path": "planning/1/model-0/request.json",
+              "sha256": "3b268bfc139ef60c3604052ab1e4c2217f24cde3445b977ec8a628a49f5485de",
+              "bytes": 2171
+            },
+            {
+              "path": "planning/1/model-0/response.json",
+              "sha256": "4b6b795a5d4c11a516df9ac567a682d7ef5cd92fdd9a94dd880c689945a8b769",
+              "bytes": 3299
+            },
+            {
+              "path": "planning/1/model-0/schema.json",
+              "sha256": "94fd551b1e6f6abcd8600ff481e7b9f33c6c4dfd62e43a99b9333d0ceaa80afa",
+              "bytes": 6393
+            },
+            {
+              "path": "planning/1/model-0/stream.json",
+              "sha256": "70d809d5d09cac7a430329743f548761b078dac9085ff4aa7b94b4d2029acc5b",
+              "bytes": 166
+            },
+            {
+              "path": "planning/1/prompt-0.txt",
+              "sha256": "a98a23fe195be654fbb96a6e6f2532065e493b2c0fc7089688ff7764a50bf34f",
+              "bytes": 59720
+            },
+            {
+              "path": "planning/1/prompt-provenance-0.json",
+              "sha256": "f41aa3d28bf2e1310b0396e279bee49c675356462ec5be1a76dc594d6c30206c",
+              "bytes": 702
+            },
+            {
+              "path": "planning/1/receipt-0.json",
+              "sha256": "6880e8ae92841671fe4224e63e2a4fdfbab03337cda23c66cdd1dc0ccb56e107",
+              "bytes": 2757
+            },
+            {
+              "path": "planning/1/rejection.json",
+              "sha256": "9745536f7f2478d8472a5f3f0836ec440758060809917f7c38ea1a8c8e5036d9",
+              "bytes": 13323
+            },
+            {
+              "path": "planning/1/response-0.json",
+              "sha256": "fc48ba97f840b6ee91d447bb4752e1739337db9a04e873845be50123e4e66480",
+              "bytes": 2432
+            },
+            {
+              "path": "planning/2/environment_plan.json",
+              "sha256": "3f58e7eec2e9a1c354c338038abc6efd59211f93ecfb895283bdc8a695c1f4f2",
+              "bytes": 11812
+            },
+            {
+              "path": "planning/2/inventory.json",
+              "sha256": "67e207e6aff4e452b30d4f3c52ee6fbcb1d7dfa2c5b13710c8accd21e788244c",
+              "bytes": 1349
+            },
+            {
+              "path": "planning/2/materials.json",
+              "sha256": "bd7ddee6877048867be7aaad19560478ec0e07e3216145d484090807de59c0ba",
+              "bytes": 294
+            },
+            {
+              "path": "planning/2/model-0/attempts.json",
+              "sha256": "3e75b57132895e3c01ebd831f55fa265c2e78a71894862345d87148a3bd7dbd8",
+              "bytes": 840
+            },
+            {
+              "path": "planning/2/model-0/request.json",
+              "sha256": "50d3285a8a640c75725a1630396bb9766c950c69510ee5f001597803cc26e787",
+              "bytes": 2170
+            },
+            {
+              "path": "planning/2/model-0/response.json",
+              "sha256": "3e35a65c5aec3d0f2cfb5f183acaa0f4b8b50bc62d96e2bb609212cfd9bab21b",
+              "bytes": 1922
+            },
+            {
+              "path": "planning/2/model-0/schema.json",
+              "sha256": "94fd551b1e6f6abcd8600ff481e7b9f33c6c4dfd62e43a99b9333d0ceaa80afa",
+              "bytes": 6393
+            },
+            {
+              "path": "planning/2/model-0/stream.json",
+              "sha256": "1cc2ac0b557e7dc3a89f2c4dafc79457ff8e7691a68978732d054142b47efd01",
+              "bytes": 166
+            },
+            {
+              "path": "planning/2/prompt-0.txt",
+              "sha256": "52aba5cebe34aced828731c324b3c6f7c830871d974edefa24607af5ca74093e",
+              "bytes": 60545
+            },
+            {
+              "path": "planning/2/prompt-provenance-0.json",
+              "sha256": "b3b6df21ebf9433836fc61771ff9d9d79bd172fa3099896370a5aa386a48be88",
+              "bytes": 702
+            },
+            {
+              "path": "planning/2/receipt-0.json",
+              "sha256": "4573f83a5285c27b76c651eb1bd09771bc801eb76be3a71273e982a4b7f0d9bf",
+              "bytes": 2763
+            },
+            {
+              "path": "planning/2/response-0.json",
+              "sha256": "80621b5f6ce99007b931692fb8765dad9a68166988dc244858a5e215ed621538",
+              "bytes": 1251
+            },
+            {
+              "path": "planning/2/scope-delta-0.json",
+              "sha256": "22e8552c3d02ac1c46aa3718bd5396acf9842cad8567647e67421c33f57cceb3",
+              "bytes": 1461
+            }
+          ],
+          "limits": {
+            "model": "gpt-6-astra",
+            "max_attempts": null,
+            "total_seconds": 2400,
+            "model_timeout": 600,
+            "progress_timeout": 240,
+            "progress_watch": "observe",
+            "transport": "https",
+            "reasoning_effort": "medium",
+            "service_tier": "default",
+            "context_chars": null,
+            "max_read_rounds": null,
+            "max_files": null,
+            "max_file_bytes": null,
+            "max_context_bytes": null,
+            "memory": "1g",
+            "cpus": "2",
+            "pids": 128,
+            "build_seconds": 600,
+            "validation_reserve_seconds": 0,
+            "repair_reserve_seconds": 0,
+            "test_seconds": 60,
+            "document_seconds": 180,
+            "pin_base_image": true,
+            "registry_seconds": 120,
+            "backend": "deepseek_api",
+            "api_model": "deepseek-v4-pro",
+            "api_retries": 0,
+            "api_max_output_tokens": 65536,
+            "api_stream": true
+          },
+          "incomplete": true
+        },
+        "sha256": "44c6bb4edf14c46b5645148912f2b8e082f4176d949bf83d11e3426a720ab47a"
+      },
+      "acceptance": {
+        "version": 1,
+        "payload": {
+          "configured": [],
+          "generated": [
+            {
+              "name": "documented-terminal-fragments",
+              "argv": [
+                "{python}",
+                "{package}/scripts/recap_terminal.py",
+                "C1CC1Oc1ccccc1-c1ncc(OC)cc1"
+              ],
+              "cwd": "{package}",
+              "expected_exit": 0,
+              "json_equals": {
+                "fragments": [
+                  "*C1CC1",
+                  "*c1ccc(OC)cn1",
+                  "*c1ccccc1*"
+                ],
+                "count": 3
+              },
+              "evidence": "e1",
+              "purpose": "Exercise the delivered normal path. Recap.py overview lines 39-56 explicitly lists these three GetLeaves keys; test1 lines 223-229 asserts three leaves. Sorting and count are transparent adapter formatting.",
+              "kind": "positive"
+            },
+            {
+              "name": "valid-empty-decomposition",
+              "argv": [
+                "{python}",
+                "{package}/scripts/recap_terminal.py",
+                "CCCOCCC"
+              ],
+              "cwd": "{package}",
+              "expected_exit": 0,
+              "json_equals": {
+                "fragments": [],
+                "count": 0
+              },
+              "evidence": "e1",
+              "purpose": "Recap.py test2 lines 231-235 and testMinFragmentSize lines 279-283 assert no children for CCCOCCC with defaults. GetLeaves lines 110-118 therefore returns an empty dictionary. Confirm success without parent substitution.",
+              "kind": "negative"
+            },
+            {
+              "name": "blank-input-boundary",
+              "argv": [
+                "{python}",
+                "{package}/scripts/recap_terminal.py",
+                " "
+              ],
+              "cwd": "{package}",
+              "expected_exit": 2,
+              "json_equals": {
+                "error": "invalid_input",
+                "message": "SMILES must not be blank"
+              },
+              "evidence": "e1",
+              "purpose": "Check an explicitly added adapter boundary, not an upstream scientific oracle. RecapDecompose lines 146-148 requires a Mol and immediately serializes it; the wrapper rejects blank external input before invoking that API. Do not confuse this rejection with the documented valid empty decomposition.",
+              "kind": "boundary"
+            },
+            {
+              "name": "malformed-smiles-boundary",
+              "argv": [
+                "{python}",
+                "{package}/scripts/recap_terminal.py",
+                "C1"
+              ],
+              "cwd": "{package}",
+              "expected_exit": 2,
+              "stdout_contains": [
+                "\"error\": \"invalid_input\""
+              ],
+              "evidence": "e1",
+              "purpose": "Exercise adapter handling of a failed SMILES parse using an unclosed ring. The source normal path parses before decomposition (lines 39-42), and RecapDecompose lines 146-148 assumes a molecule. This malformed fixture and rejection are engineering boundary checks, not upstream test cases or a claimed source-documented parser diagnostic; runtime confirmation remains pending.",
+              "kind": "boundary"
+            }
+          ]
+        },
+        "sha256": "4ffd00e8e5bce0d8af8bff3662b4681f964b757f9460ed1af6c62e334bd10901"
+      }
+    },
+    "content": {
+      "status": "passed"
+    },
+    "fingerprints": {
+      "files": "7d329a387025c05223aa48754bb2dc21a1763be73783f23b7dc7017a9d8e9bdf",
+      "sources": "fcf3caddc80c62c81d9ff6ab8e8c38d08fb129222432f733587fed143d32d5e4",
+      "bindings": "d21159e24dd88c3b6ed3f9df7c00468ee17e06b44dc12dee692ffcf9ef6c553b",
+      "environment": "740edfddf836619e793ceac169577aab4eb371eb8b754bbfef40a534d37ac117",
+      "acceptance": "c6d9027009bf42f7d5cdd97048b09a8868e3090dda96cf704aba1eca26d53d44"
+    },
+    "execution": {
+      "status": "runtime_blocked",
+      "attempts": [],
+      "reason": "Each input operation must apply named input checks; no per-case exemptions"
+    },
+    "host": {
+      "status": "not_checked",
+      "observed_at": null
+    },
+    "evidence": [],
+    "qualification": {
+      "accepted": false,
+      "reason": "Docker build is not business acceptance"
+    },
+    "parent_revision": "rev-e2c0159c1b3330a68848e648a1cab336cf11011878428baf98bb4f4afe59a715"
+  },
+  "content_status": "passed",
+  "runtime_preparation": {
+    "status": "runtime_blocked",
+    "gaps": [
+      {
+        "code": "planning_no_progress",
+        "detail": "Each input operation must apply named input checks; no per-case exemptions",
+        "repair_lane": "environment",
+        "blocker_kind": "unresolved_input"
+      }
+    ],
+    "model_calls": 5
+  },
+  "durable_evidence": {
+    "path": "evidence/rdkit-recap-terminal-fragments/30577c74eeae4013bce31fde89749ef6",
+    "freeze_sha256": "1dbf61108d62a8a5355963c9c010452448b48c86994422f25c3e526de445862d"
+  },
+  "runtime": {
+    "path": "runtime/candidate-0db42e9bf94ddd230ae29a2db252b2c177c4a722a121599877a07a3e51b18ea1/c096f2c194aa4502a77a4d90ddcb7246",
+    "files": [
+      {
+        "path": "attempt-start.json",
+        "sha256": "d0aff452ca5a9abe7a5b29d8459b8aa695a301bd982e4924cc82b80b0a10effc",
+        "bytes": 1783
+      },
+      {
+        "path": "build-log.json",
+        "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+        "bytes": 4
+      },
+      {
+        "path": "receipt.json",
+        "sha256": "2b930d3838e3f3429f6af77c53578f25fcc19f1f3e27dfed0f603a9831af1cc8",
+        "bytes": 1930
+      }
+    ],
+    "status": "runtime_blocked",
+    "execution_status": "runtime_blocked",
+    "image_id": null,
+    "host": {
+      "status": "not_checked",
+      "observed_at": "2026-10-27T11:35:39.105401+00:00",
+      "gaps": [],
+      "docker_status": "not_checked",
+      "resource_gaps": [
+        "planning_no_progress",
+        "plan_unresolved"
+      ]
+    },
+    "gaps": [
+      {
+        "code": "planning_no_progress",
+        "detail": "Each input operation must apply named input checks; no per-case exemptions",
+        "repair_lane": "environment",
+        "blocker_kind": "unresolved_input"
+      },
+      {
+        "code": "plan_unresolved",
+        "detail": "No validated environment plan",
+        "repair_lane": "environment",
+        "blocker_kind": "unresolved_input"
+      }
+    ],
+    "revision_id": "rev-d222c0638cd362059768ac149e233eb240611a407eeeb7829f821ccdabf18391"
+  },
+  "execution_location": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run11-20261027\\state\\outputs\\20261027T191957-78146c53",
+  "runtime_history_records": []
+}

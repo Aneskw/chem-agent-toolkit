@@ -1,0 +1,142 @@
+{
+  "run": "real-batch-run7-20261027",
+  "build_id": "20261027T144317-9d53eedf",
+  "code": {
+    "commit": "6b468fc",
+    "api_model": "deepseek-v4-pro",
+    "budget": 12,
+    "changes_under_test": [
+      "patch must keep text-typed plan fields as JSON text",
+      "selector-token and patch-encoding policy examples"
+    ]
+  },
+  "final_status": "blocked",
+  "stop_reason": {
+    "code": "plan_unresolved",
+    "detail": "No progress: repeated invalid plan patch: Patched plan schema error: {'args': ['C1CC1Oc1ccccc1-c1ncc(OC)cc1'], 'expected_exit': 0, 'stdout_equals': '[\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]', 'acceptance': {'purpose': 'computation', 'source_path': 'package/SKILL.md', 'source_quote': '- `GetLeaves()"
+  },
+  "stage_status": {
+    "source_preparation": "passed",
+    "discovery": "passed",
+    "authoring": "passed after one repair turn",
+    "independent_content_review": "passed",
+    "entry_association": "passed (DeepSeek v4-pro)",
+    "association_independent_review": "passed",
+    "environment_planning": "failed - the plan failed the acceptance gate, then the model repeated the same invalid patch and the no-progress rule stopped it",
+    "docker_build": "not_run",
+    "business_acceptance": "not_run",
+    "catalog_promotion": "not_run",
+    "install": "not_run"
+  },
+  "planning": [
+    {
+      "attempt": "0",
+      "prompts": 1,
+      "responses": 1,
+      "model_calls": [
+        514.423
+      ],
+      "rejection.json": "Case acceptance requires an exact quotation from read source"
+    },
+    {
+      "attempt": "1",
+      "prompts": 3,
+      "responses": 3,
+      "model_calls": [
+        251.321,
+        268.975,
+        240.835
+      ],
+      "patch-rejection-0.json": "Patched plan schema error: {'args': ['C1CC1Oc1ccccc1-c1ncc(OC)cc1'], 'expected_exit': 0, 'stdout_equals': '[\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]', 'acceptance': {'purpose': 'computation', 'source_path': 'package/SKILL.md', 'source_quote': '`GetLeaves()` returns terminal descendants keyed by SMILES. Sorting makes output de",
+      "patch-rejection-1.json": "Patched plan schema error: {'args': ['C1CC1Oc1ccccc1-c1ncc(OC)cc1'], 'expected_exit': 0, 'stdout_equals': '[\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]', 'acceptance': {'purpose': 'computation', 'source_path': 'package/SKILL.md', 'source_quote': '- `GetLeaves()` returns terminal descendants keyed by SMILES. Sorting makes output ",
+      "note": "three patch rounds, all rejected by the same patched-plan schema error; the third repeated it, so the no-progress rule stopped the attempt"
+    }
+  ],
+  "fix_verified_in_production": "the new patched-plan schema check turned the structured case_json patch into a clean patch rejection (run 6 crashed here with a bare TypeError)",
+  "ledger": {
+    "application_calls": 10,
+    "budget": 12,
+    "entries": [
+      {
+        "phase": "discovery",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 166.38
+      },
+      {
+        "phase": "author",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 247.485
+      },
+      {
+        "phase": "author",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 67.428
+      },
+      {
+        "phase": "review",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 89.143
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null
+      }
+    ],
+    "deepseek_requests": 5
+  },
+  "timing": {
+    "started_at": "2026-10-27T06:43:17.781858+00:00",
+    "finished_at": "2026-10-27T07:18:05.437423+00:00"
+  },
+  "binding": {
+    "kind": "script",
+    "entry": "scripts/recap_terminal_fragments.py",
+    "declaration_source": "author_declaration",
+    "declaration": {
+      "kind": "script",
+      "path": "scripts/recap_terminal_fragments.py"
+    }
+  },
+  "docker": {
+    "builds": 0
+  },
+  "redaction": {
+    "credential_occurrences_in_run_tree": 0
+  }
+}

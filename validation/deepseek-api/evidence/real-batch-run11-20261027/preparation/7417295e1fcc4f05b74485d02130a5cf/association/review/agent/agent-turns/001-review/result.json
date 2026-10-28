@@ -1,0 +1,19 @@
+{
+  "status": "pass",
+  "resolution": "none",
+  "findings": [
+    {
+      "location": "scripts/recap_terminal.py; artifact.tests",
+      "problem": "Runtime compatibility remains unverified; supplied tests have no execution results.",
+      "evidence": "Inspected recap/document.py lines 39–56 supports the exact example output; lines 110–118 and 231–235 supports empty leaves. Lines 146–147 exactly matches the binding quote. The delivered adapter directly invokes these APIs. Generated checks are disabled, and host business execution is prohibited.",
+      "impact": "Source fidelity and invocation are supported, but successful execution against an installed RDKit distribution is not established.",
+      "action": "When Docker execution is authorized, run the four existing tests through helper check and retain results. No candidate revision is required.",
+      "blocking": false,
+      "category": "check"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed",
+  "binding_verified": true
+}

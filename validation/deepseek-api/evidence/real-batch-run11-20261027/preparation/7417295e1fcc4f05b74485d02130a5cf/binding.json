@@ -1,0 +1,36 @@
+{
+  "kind": "script",
+  "entry": "scripts/recap_terminal.py",
+  "runtime_entry": "package/scripts/recap_terminal.py",
+  "declaration": {
+    "kind": "script",
+    "path": "scripts/recap_terminal.py"
+  },
+  "association": "reviewed",
+  "source_id": "recap",
+  "source_path": "document.py",
+  "source_sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+  "quote": "def RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None):\n  \"\"\" returns the recap decomposition for a molecule \"\"\"",
+  "reason": "Source document.py is the inspected upstream rdkit/Chem/Recap.py at commit 237a1d9027c800784afed8788540f38a3aa595f8; it defines RecapHierarchyNode.GetLeaves and RecapDecompose. Delivery scripts/recap_terminal.py is a Python 3 CLI adapter over that API. Invocation from the skill/working directory: `python scripts/recap_terminal.py '<nonempty SMILES>'`. It accepts one positional SMILES argument via argparse, imports `rdkit.Chem` and `rdkit.Chem.Recap`, parses with `Chem.MolFromSmiles`, validates the molecule, then calls `root = Recap.RecapDecompose(mol)` using defaults (allNodes omitted, minFragmentSize=0, onlyUseReactions omitted) and returns `sorted(root.GetLeaves().keys())`. It prints JSON to stdout: success is `{\"fragments\": [...], \"count\": n}` with exit 0; invalid input is `{\"error\": \"invalid_input\", ...}` with exit 2; dependency/runtime/decomposition errors are `{\"error\": \"runtime_error\", ...}` with exit 1. It writes no files. Necessary supports are an RDKit distribution with `rdkit.Chem` and `rdkit.Chem.Recap` available in the Python environment; SKILL.md documents usage and references/LICENSE.txt retains the upstream license.",
+  "invocation": "python scripts/recap_terminal.py 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'",
+  "entry_sha256": "7e3404393fd795ba85e27db6b70f92143be37ae4b546a124eb0f93c39785b66c",
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "sha256": "4996dbf74e39d431502925cbddac5ad21bf7ea2fbb646a329b5ae6f4a9814989",
+      "bytes": 3356
+    },
+    {
+      "path": "scripts/recap_terminal.py",
+      "sha256": "7e3404393fd795ba85e27db6b70f92143be37ae4b546a124eb0f93c39785b66c",
+      "bytes": 1541
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "6f759c8dbaa4746585e09a1885a9dca8eef182290e89b6174cb18d237d1424c7",
+      "bytes": 4424
+    }
+  ],
+  "review_sha256": "8d4665f8865b366e9e43be3016633477b58e9672e35ccb13885db6046b66e2f7",
+  "declaration_source": "author_declaration"
+}

@@ -1,0 +1,41 @@
+{
+  "kind": "markdown_python",
+  "entry": "SKILL.md",
+  "runtime_entry": "entry/skill.py",
+  "extraction": {
+    "rule": "single-unindented-python-fence-v1",
+    "block_index": 0,
+    "start_byte": 1755,
+    "end_byte": 2878,
+    "start_line": 19,
+    "markdown_sha256": "491f45e3ebcee6044deb1c50175086afacc63eac58207c1deca19eac8ed972ef",
+    "code_sha256": "f780692b618f7c7c8109aca3a894722b7eaaf2e179ccac26939e329c495519ad"
+  },
+  "declaration": {
+    "kind": "markdown_python",
+    "path": "SKILL.md",
+    "block_index": 0
+  },
+  "association": "reviewed",
+  "source_id": "recap",
+  "source_path": "document.py",
+  "source_sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+  "quote": "    m = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\n    res = RecapDecompose(m)\n    self.assertTrue(res)\n    self.assertTrue(len(res.children.keys()) == 4)\n    self.assertTrue(len(res.GetAllChildren().keys()) == 5)\n    self.assertTrue(len(res.GetLeaves().keys()) == 3)",
+  "reason": "Source scope: the inspected upstream Recap.py source at the pinned RDKit commit defines and exercises RecapDecompose and GetLeaves; the contiguous quote from test1 shows that same call pair. Delivery scope: the SKILL.md Python block, materialized as runtime_entry entry/skill.py, imports rdkit.Chem.Recap, parses SMILES into an RDKit Mol, calls Recap.RecapDecompose(mol), then GetLeaves(), and sorts the leaf SMILES keys. Interpreter: Python 3 inside the prepared Docker container with a complete RDKit installation, including rdkit.Chem.Recap and reaction support; do not install dependencies or run chemistry on the host. Working directory: the delivery root so entry/skill.py resolves. Arguments/function inputs: the CLI optionally accepts one quoted SMILES argument and otherwise uses the upstream example molecule; fragments_from_smiles accepts a nonempty SMILES string, terminal_fragments accepts a valid sanitized RDKit Mol, and invalid inputs are reported to stderr with exit status 2. Outputs: one JSON object with a fragments list to stdout and no files written; missing RDKit or decomposition failures remain execution failures rather than empty results. Necessary supports: existing Python environment with RDKit, rdkit.Chem.Recap, and its reaction support, with no external molecular dataset required.",
+  "invocation": "python entry/skill.py",
+  "entry_sha256": "491f45e3ebcee6044deb1c50175086afacc63eac58207c1deca19eac8ed972ef",
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "sha256": "fe8b36aa0a1d406e4a405a436905ec54b6f544ee7618a97590057a57c42c3104",
+      "bytes": 3274
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "491f45e3ebcee6044deb1c50175086afacc63eac58207c1deca19eac8ed972ef",
+      "bytes": 5704
+    }
+  ],
+  "review_sha256": "25b9dc71b32a329160c49ab6e057d993fc1d7b5440cb3f91b0f0188b0f679b88",
+  "declaration_source": "author_declaration"
+}

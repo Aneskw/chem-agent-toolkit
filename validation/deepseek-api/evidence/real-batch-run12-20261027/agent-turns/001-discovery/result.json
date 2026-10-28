@@ -1,0 +1,65 @@
+{
+  "outcome": "candidates",
+  "summary": "Discovered one RECAP terminal-fragment skill candidate. Saved discovery details in candidate-discovery.json and progress in work-state.md; no skill package was authored.",
+  "saved_candidates": [],
+  "candidates": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "capability": "Produce unique terminal RECAP fragment SMILES from valid molecular SMILES using RecapDecompose and GetLeaves.",
+      "boundary": "Molecular fragmentation with default settings and an independent hierarchy per input. Preserve attachment markers (*). Exclude descriptors, intermediate fragments, multiplicity counts, and scientific validation. Reject malformed or empty input separately from successful empty results.",
+      "value": "Resolves confusion between immediate children, all descendants, and terminal fragments, including cases where valid molecules yield no accepted fragments.",
+      "usage_path": "In an approved Docker environment with Python and RDKit, parse with Chem.MolFromSmiles, guard failed or empty input, call Recap.RecapDecompose(mol), then obtain sorted(root.GetLeaves().keys()). Leaf values are hierarchy nodes exposing .mol. Leave allNodes omitted for independent inputs.",
+      "construction": "Direct packaging of existing RDKit interfaces with minimal input validation and serialization. Later authoring should document prerequisites, result semantics, invalid-input boundaries, and source attribution. No new algorithm or host execution is needed.",
+      "evidence": [
+        {
+          "id": "e1",
+          "claim": "Inspected document.py, lines 31-56: overview demonstrates parsing, RecapDecompose, and GetLeaves; the example distinguishes four immediate children, five descendants, and three terminal fragments and demonstrates leaf.mol."
+        },
+        {
+          "id": "e1",
+          "claim": "document.py, lines 102-118 and 134-138: GetLeaves returns a SMILES-keyed dictionary of terminal descendants. It excludes the root and returns an empty dictionary when the root has no children."
+        },
+        {
+          "id": "e1",
+          "claim": "document.py, lines 146-158 and 197-213: decomposition accepts an RDKit molecule and maintains nodes keyed by SMILES; shared allNodes introduces cross-call state."
+        },
+        {
+          "id": "e1",
+          "claim": "document.py, lines 180-195, test2 at 231-235, and testMinFragmentSize at 279-302: filtering can produce valid empty results. CCCOCCC has no children by default but yields the unique terminal fragment *CCC with minFragmentSize=3."
+        },
+        {
+          "id": "e1",
+          "claim": "document.py, lines 66-86: reaction definitions implement cleavage with dummy attachment atoms; lines 81-82 explicitly identify one cleavage rule as outside the standard RECAP set."
+        },
+        {
+          "id": "e2",
+          "claim": "Inspected document.txt in full: BSD 3-Clause redistribution requires notice and disclaimer retention and prohibits unauthorized endorsement. e1 lines 1-29 additionally contain the module-specific copyright notice."
+        }
+      ],
+      "gaps": [
+        "RDKit availability and behavior remain unverified in the eventual Docker environment.",
+        "Malformed-input handling is not documented in the supplied module; parse-failure and empty-molecule guards are proposed adapter boundaries."
+      ],
+      "blocked": false
+    }
+  ],
+  "omitted": [
+    {
+      "capability": "Full hierarchy and shared fragment networks",
+      "reason": "Hierarchy interpretation belongs within this candidate; persistent multi-molecule state exceeds the requested terminal-fragment scope."
+    },
+    {
+      "capability": "Reaction selection and fragment-size tuning",
+      "reason": "Optional controls add filtering and index semantics beyond the requested default workflow."
+    },
+    {
+      "capability": "Descriptor calculation",
+      "reason": "The requested capability and inspected implementation concern molecular fragmentation."
+    }
+  ],
+  "limitations": [
+    "Evidence comes from the pinned module, embedded examples and relevant tests, and license; the original paper was not inspected.",
+    "The helper's configured Python executable was unavailable. Records were saved with native PowerShell; no helper registration or finish call occurred.",
+    "No software installation, business-code execution, or chemical validation was performed."
+  ]
+}

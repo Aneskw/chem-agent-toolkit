@@ -1,0 +1,397 @@
+{
+  "schema_version": 3,
+  "pipeline_version": "5.2.0-stage2",
+  "build_id": "20261027T124758-c1682a88",
+  "started_at": "2026-10-27T04:47:58.544249+00:00",
+  "status": "blocked",
+  "entities": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "kind": "skill",
+      "status": "blocked",
+      "needs": []
+    }
+  ],
+  "errors": [],
+  "agent_efficacy": "not_evaluated_separate_work",
+  "replay": false,
+  "implementation_sha256": "b22d5c710104d816305b84c4a44b01e43d47492db5b9979e4d17c7aa1dd229f7",
+  "accepted_plan_sha256": "9808d949f0cdcf26d01ecb93bd62342da0cd9eed96f4e0c5f2f2bec4c1a55360",
+  "revalidated_prompts": [],
+  "source_context_sha256": "1f4fc4a92a13122e2cc95f27a76f103f90870024212a443795f95ec31ed723b2",
+  "deferred": [],
+  "adoption": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "status": "candidate_saved",
+      "observation_updated": false,
+      "zone": "candidates",
+      "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run3-20261027\\library\\candidates\\rdkit-recap-terminal-fragments"
+    }
+  ],
+  "finished_at": "2026-10-27T05:00:35.627823+00:00",
+  "counts": {
+    "blocked": 1
+  },
+  "model_calls": [
+    {
+      "phase": "discovery",
+      "session_key": "discovery",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 103902,
+        "cached_input_tokens": 77568,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2867,
+        "reasoning_output_tokens": 54
+      },
+      "prompt_sha256": "3ea4bb6fd582a4398e9fb583dcde5b19e8260f38042b079056242d7cf81f60be",
+      "tool_events": 5,
+      "session_id": "01a17baf-d4c4-7772-8ba7-cf4d73a8902e",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 120.134,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 3.947,
+        "last_stdout_seconds": 116.264,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    },
+    {
+      "phase": "author",
+      "session_key": "build:rdkit-recap-terminal-fragments",
+      "resumed": true,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 377265,
+        "cached_input_tokens": 309888,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 7151,
+        "reasoning_output_tokens": 564
+      },
+      "prompt_sha256": "9bc69e276508b5ab51b27e9eea4156fd4159a762fb2c6a32ee584017e7db093b",
+      "tool_events": 7,
+      "session_id": "01a17baf-d4c4-7772-8ba7-cf4d73a8902e",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 171.906,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 14.389,
+        "last_stdout_seconds": 169.446,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    },
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 173877,
+        "cached_input_tokens": 139904,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1363,
+        "reasoning_output_tokens": 131
+      },
+      "prompt_sha256": "b1fff1fbf450729fbbdb9ede3846bb3ec2afa75367cf7554468edf7cb1df9a08",
+      "tool_events": 6,
+      "session_id": "01a17bb4-4a56-7413-937f-a3eb76b0d074",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 71.23,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 3.934,
+        "last_stdout_seconds": 68.823,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    }
+  ],
+  "model_metrics": {
+    "calls_attempted": 8,
+    "usage_fully_reported": false,
+    "receipts": [
+      {
+        "phase": "discovery",
+        "session_key": "discovery",
+        "resumed": false,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 103902,
+          "cached_input_tokens": 77568,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2867,
+          "reasoning_output_tokens": 54
+        },
+        "prompt_sha256": "3ea4bb6fd582a4398e9fb583dcde5b19e8260f38042b079056242d7cf81f60be",
+        "tool_events": 5,
+        "session_id": "01a17baf-d4c4-7772-8ba7-cf4d73a8902e",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 120.134,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 3.947,
+          "last_stdout_seconds": 116.264,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      },
+      {
+        "phase": "author",
+        "session_key": "build:rdkit-recap-terminal-fragments",
+        "resumed": true,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 377265,
+          "cached_input_tokens": 309888,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 7151,
+          "reasoning_output_tokens": 564
+        },
+        "prompt_sha256": "9bc69e276508b5ab51b27e9eea4156fd4159a762fb2c6a32ee584017e7db093b",
+        "tool_events": 7,
+        "session_id": "01a17baf-d4c4-7772-8ba7-cf4d73a8902e",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 171.906,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 14.389,
+          "last_stdout_seconds": 169.446,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      },
+      {
+        "phase": "review",
+        "session_key": "review:rdkit-recap-terminal-fragments",
+        "resumed": false,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 173877,
+          "cached_input_tokens": 139904,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1363,
+          "reasoning_output_tokens": 131
+        },
+        "prompt_sha256": "b1fff1fbf450729fbbdb9ede3846bb3ec2afa75367cf7554468edf7cb1df9a08",
+        "tool_events": 6,
+        "session_id": "01a17bb4-4a56-7413-937f-a3eb76b0d074",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 71.23,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 3.934,
+          "last_stdout_seconds": 68.823,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "usage": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "usage": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "usage": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "usage": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "usage": null
+      }
+    ],
+    "monetary_cost": null,
+    "reported_totals": {
+      "output_tokens": 11381,
+      "input_tokens": 655044,
+      "reasoning_output_tokens": 749,
+      "cached_input_tokens": 527360,
+      "cache_write_input_tokens": 0
+    }
+  },
+  "discovery_summary": "Discovered one candidate and saved discovery-record.json. No skill package was authored.",
+  "candidate_count": 1,
+  "sources": [
+    {
+      "id": "recap",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "license": "BSD-3-Clause",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "rdkit/Chem/Recap.py",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+      },
+      "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.py"
+      ],
+      "index_preview_truncated": false
+    },
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "license.txt",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      },
+      "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.txt"
+      ],
+      "index_preview_truncated": false
+    }
+  ],
+  "source_errors": [],
+  "evidence": [
+    {
+      "source": "recap",
+      "path": "document.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.py",
+      "id": "e1"
+    },
+    {
+      "source": "license",
+      "path": "document.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.txt",
+      "id": "e2"
+    }
+  ],
+  "temporary_workspace": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run3-20261027\\state\\runs\\20261027T124758-c1682a88"
+}

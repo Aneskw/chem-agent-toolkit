@@ -1,0 +1,33 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "chunks": 20150,
+      "connected_seconds": 0.194,
+      "connection_close": false,
+      "done_marker": true,
+      "elapsed_seconds": 258.541,
+      "finish_reason": "stop",
+      "http_status": 200,
+      "keepalives": 0,
+      "request_id": {
+        "source": "body:id",
+        "value": "0c7ebec1-be75-4aa1-a790-f08205e34fac"
+      },
+      "response_bytes": 6353404,
+      "response_headers": {
+        "connection": "keep-alive",
+        "content-type": "text/event-stream; charset=utf-8"
+      },
+      "sent_seconds": 0.194,
+      "started_seconds": 0.007,
+      "status": "completed"
+    }
+  ],
+  "request_count": 1,
+  "retry_policy": {
+    "configured": 0,
+    "counted_in_total_deadline": true
+  },
+  "sdk_implicit_retries": "none (no SDK used)"
+}

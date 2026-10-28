@@ -1,0 +1,148 @@
+{
+  "config": {
+    "sources": [
+      {
+        "id": "recap",
+        "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run11-20261027\\state\\cache\\snapshots\\c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a\\document.py"
+      },
+      {
+        "id": "license",
+        "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run11-20261027\\state\\cache\\snapshots\\f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2\\document.txt"
+      }
+    ],
+    "network": false,
+    "prompt": "Independently review the exact delivered files and source-bound execution scope. Do not run host business checks.",
+    "checks": [],
+    "model": {
+      "backend": "codex_cli",
+      "name": "gpt-6-astra",
+      "transport": "https",
+      "reasoning_effort": "medium",
+      "service_tier": "default"
+    },
+    "limits": {
+      "model_calls": null,
+      "candidate_calls": null,
+      "model_timeout": 600,
+      "total_seconds": 2378,
+      "discovery_seconds": null,
+      "agent_events": null,
+      "agent_progress_timeout": null,
+      "max_candidates": null,
+      "max_builds": null,
+      "source_bytes": null,
+      "source_total_bytes": null,
+      "source_files": null,
+      "package_bytes": null,
+      "network_requests": null,
+      "repair_rounds": null,
+      "check_timeout": 120,
+      "converter_timeout": 60,
+      "network_timeout": 60
+    },
+    "notes": "",
+    "constraints": {},
+    "execute_generated_checks": false,
+    "draft_only": false,
+    "runtime_requirements": {},
+    "revision_parents": {},
+    "runtime": {},
+    "runtime_defaults": {},
+    "batch": {
+      "label": "skills",
+      "tags": []
+    },
+    "adoption": {
+      "enabled": true
+    },
+    "execution": {
+      "profile": "production",
+      "stop_on_runtime_failure": false,
+      "progress_watch": "terminate"
+    },
+    "environment": {
+      "allow": []
+    },
+    "intent": "auto",
+    "config_path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run11-20261027\\state\\runs\\20261027T191957-78146c53\\runtime-preparation\\rdkit-recap-terminal-fragments\\7417295e1fcc4f05b74485d02130a5cf\\materials\\association\\review\\config.json"
+  },
+  "cache": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run11-20261027\\state\\runs\\20261027T191957-78146c53\\runtime-preparation\\rdkit-recap-terminal-fragments\\7417295e1fcc4f05b74485d02130a5cf\\materials\\association\\review\\cache",
+  "sources": [
+    {
+      "id": "recap",
+      "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run11-20261027\\state\\runs\\20261027T191957-78146c53\\runtime-preparation\\rdkit-recap-terminal-fragments\\7417295e1fcc4f05b74485d02130a5cf\\materials\\association\\review\\cache\\snapshots\\c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a\\document.py",
+      "original_path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run11-20261027\\state\\cache\\snapshots\\c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a\\document.py",
+      "files": [
+        "document.py"
+      ],
+      "inventory": [
+        {
+          "path": "document.py",
+          "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+          "bytes": 20662
+        }
+      ],
+      "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "rdkit/Chem/Recap.py",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+      }
+    },
+    {
+      "id": "license",
+      "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run11-20261027\\state\\runs\\20261027T191957-78146c53\\runtime-preparation\\rdkit-recap-terminal-fragments\\7417295e1fcc4f05b74485d02130a5cf\\materials\\association\\review\\cache\\snapshots\\f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2\\document.txt",
+      "original_path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run11-20261027\\state\\cache\\snapshots\\f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2\\document.txt",
+      "files": [
+        "document.txt"
+      ],
+      "inventory": [
+        {
+          "path": "document.txt",
+          "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+          "bytes": 1580
+        }
+      ],
+      "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "license.txt",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "source": "recap",
+      "path": "document.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.py",
+      "id": "e1"
+    },
+    {
+      "source": "license",
+      "path": "document.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.txt",
+      "id": "e2"
+    }
+  ],
+  "errors": [],
+  "network_requests": 0
+}

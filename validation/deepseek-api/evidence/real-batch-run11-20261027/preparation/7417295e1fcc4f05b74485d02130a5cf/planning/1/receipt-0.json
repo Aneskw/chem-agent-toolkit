@@ -1,0 +1,90 @@
+{
+  "backend": "deepseek_api",
+  "provider": "deepseek",
+  "model": "deepseek-v4-pro",
+  "usage": {
+    "prompt_tokens": 18952,
+    "completion_tokens": 5236,
+    "total_tokens": 24188,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 4559
+    },
+    "prompt_cache_hit_tokens": 0,
+    "prompt_cache_miss_tokens": 18952
+  },
+  "tool_events": [],
+  "stream_notices": [],
+  "elapsed_seconds": 63.744,
+  "prompt_sha256": "8afd81127cc26cc9fb5cacab55d8ab1d5611bf7b2824144892c8f1170ec7a87e",
+  "schema_sha256": "650a9a3c6d61c7d963c281d8cdf6c8fc4ec3b8fc6d003723bd96ec55246d2e9b",
+  "messages_sha256": "cb9eb88603d26d8ee12dd54791044c24f8b0bf2f73f6c554a820af70cd010edc",
+  "response_sha256": "44d6ae42477167085f57cfededf1fed352c8f6009ef80062962bfdf30aa7ee4d",
+  "endpoint": {
+    "base_url": "https://api.deepseek.com",
+    "path": "/chat/completions",
+    "kind": "official"
+  },
+  "request_params": {
+    "model": "deepseek-v4-pro",
+    "stream": true,
+    "max_tokens": 65536,
+    "response_format": "json_object",
+    "thinking": {
+      "type": "enabled"
+    },
+    "reasoning_effort_sent": "high",
+    "reasoning_effort_requested": "medium",
+    "service_tier_requested": "default"
+  },
+  "mapping": {
+    "reasoning_effort": "reasoning_effort uses the provider compatibility ladder (minimal->low, medium->high, xhigh->high); the requested and sent values are different and are not claimed to be equivalent",
+    "service_tier": "not supported by this backend; recorded, never sent"
+  },
+  "request_id": {
+    "value": "b9d4a389-398e-4d27-84b1-92edfcd3962a",
+    "source": "body:id"
+  },
+  "request_count": 1,
+  "requests": [
+    {
+      "attempt": 1,
+      "started_seconds": 0.008,
+      "connected_seconds": 0.397,
+      "sent_seconds": 0.398,
+      "http_status": 200,
+      "connection_close": false,
+      "response_headers": {
+        "content-type": "text/event-stream; charset=utf-8",
+        "connection": "keep-alive"
+      },
+      "status": "completed",
+      "finish_reason": "stop",
+      "elapsed_seconds": 63.742,
+      "response_bytes": 1652486,
+      "keepalives": 0,
+      "chunks": 5238,
+      "done_marker": true,
+      "request_id": {
+        "value": "b9d4a389-398e-4d27-84b1-92edfcd3962a",
+        "source": "body:id"
+      }
+    }
+  ],
+  "completion": {
+    "status": "completed",
+    "finish_reason": "stop",
+    "done_marker": true,
+    "chunks": 5238,
+    "keepalives": 0,
+    "schema_validated": true,
+    "schema_mode": "local jsonschema"
+  },
+  "retry_policy": {
+    "configured": 0,
+    "sdk_implicit_retries": "none",
+    "counted_in_total_deadline": true
+  }
+}

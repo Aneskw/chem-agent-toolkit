@@ -1,0 +1,65 @@
+{
+  "outcome": "candidates",
+  "summary": "Discovered one RECAP terminal-fragment candidate and saved candidate-discovery.json. Discovery only; no skill package was authored.",
+  "saved_candidates": [],
+  "candidates": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "capability": "Extract unique terminal molecular fragments using RDKit RecapDecompose and GetLeaves.",
+      "boundary": "Valid RDKit molecules, optionally parsed from SMILES. Molecular fragmentation only; no descriptors, synthetic feasibility assessment, or scientific validation. Parsing failures must remain distinct from successful empty results.",
+      "value": "Clarifies terminal versus intermediate fragments, SMILES-keyed uniqueness, dummy attachment markers, and valid empty output.",
+      "usage_path": "In an already provisioned Docker container with Python and RDKit, parse with Chem.MolFromSmiles and reject failed parsing. Call root = Recap.RecapDecompose(mol), then leaves = root.GetLeaves(). Present sorted(leaves.keys()); access molecules through leaves[smi].mol. Preserve '*' markers. root.children contains immediate children; root.GetAllChildren() contains all descendants. GetLeaves excludes the root and returns {} when it has no children.",
+      "construction": "Direct packaging of existing RDKit interfaces, source-linked interpretation, prerequisites, and examples. Any wrapper should provide only parsing, input checks, and serialization. No new fragmentation algorithm is needed. Future business execution must occur only in Docker.",
+      "evidence": [
+        {
+          "id": "e1",
+          "claim": "Inspected document.py lines 31-56: overview and example demonstrate MolFromSmiles -> RecapDecompose -> GetLeaves, distinguishing 4 immediate children, 5 descendants, and 3 terminal fragments; leaf.mol exposes the molecule."
+        },
+        {
+          "id": "e1",
+          "claim": "Inspected document.py lines 97-118 and 134-138: GetLeaves traverses children and returns terminal nodes in a SMILES-keyed dictionary. A root without children returns {}; keys represent unique fragments, not occurrence counts."
+        },
+        {
+          "id": "e1",
+          "claim": "Inspected document.py lines 146-213: RecapDecompose consumes a molecule, creates the hierarchy, and defaults to independent allNodes state. It provides no explicit malformed-input parsing contract."
+        },
+        {
+          "id": "e1",
+          "claim": "Inspected document.py lines 180-195, 231-235, and 279-293: default filtering rejects certain small products; CCCOCCC validly has no children. With minFragmentSize=3, the test expects its unique leaf '*CCC'. Empty output therefore need not indicate invalid input."
+        },
+        {
+          "id": "e1",
+          "claim": "Inspected document.py lines 63-86: dependencies include Chem and rdChemReactions; reaction definitions introduce '*' endpoints. Lines 81-82 identify an aromatic nitrogen–aromatic carbon rule as outside the standard RECAP set."
+        },
+        {
+          "id": "e2",
+          "claim": "Inspected the entire document.txt license: BSD 3-Clause redistribution conditions require retained notices and disclaimers and restrict endorsement. document.py lines 1-29 additionally carry Novartis notices."
+        }
+      ],
+      "gaps": [
+        "Runtime behavior and RDKit availability were not tested.",
+        "The supplied module does not specify malformed-SMILES, zero-atom, or disconnected-input policies; the author stage must explicitly define its input contract.",
+        "Docker prerequisites and RDKit version compatibility remain for author-stage verification."
+      ],
+      "blocked": false
+    }
+  ],
+  "omitted": [
+    {
+      "capability": "Full hierarchy exploration and shared fragment networks",
+      "reason": "Necessary hierarchy interpretation is merged into the terminal-fragment candidate; network construction exceeds its scope."
+    },
+    {
+      "capability": "Reaction customization and fragment-size tuning",
+      "reason": "Default behavior is the requested focus; size filtering is included only to explain output semantics."
+    },
+    {
+      "capability": "Descriptors and scientific validation",
+      "reason": "Outside the requested scope and unsupported by the inspected resources."
+    }
+  ],
+  "limitations": [
+    "The helper's configured Python executable was unavailable; the discovery record was saved using native PowerShell instead of helper registration.",
+    "No dependencies were installed and no molecular code was executed."
+  ]
+}

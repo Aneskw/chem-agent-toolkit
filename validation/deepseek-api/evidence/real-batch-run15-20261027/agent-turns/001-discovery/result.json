@@ -1,0 +1,66 @@
+{
+  "outcome": "candidates",
+  "summary": "Inspected the provided RDKit Recap.py source. RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None) returns a RecapHierarchyNode; GetLeaves() returns terminal fragments as a dictionary keyed by canonical SMILES, with dummy '*' atoms at cut sites. Empty results are valid for molecules with no applicable cut or when minFragmentSize filters all fragments. One reusable candidate skill was selected for terminal molecular fragments using RecapDecompose and GetLeaves.",
+  "saved_candidates": [],
+  "candidates": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "capability": "Decompose a sanitized RDKit molecule using RDKit's RecapDecompose and return terminal RECAP molecular fragments via GetLeaves, with clear interpretation of leaf nodes versus the full hierarchy and valid empty results.",
+      "boundary": "Uses only rdkit.Chem.Recap from RDKit and requires a valid sanitized RDKit Mol object as input; no network access, descriptor calculation, or additional chemistry validation is performed. Output fragments retain dummy '*' atoms at cut sites and are keyed by canonical SMILES. Optional minFragmentSize and onlyUseReactions filters are included, but no algorithm changes are made.",
+      "value": "Removes recurring difficulty in choosing between GetLeaves and GetAllChildren, interpreting terminal versus full hierarchy results, recognizing the dummy-atom '*' convention, and handling valid empty results. Provides a concise reproducible workflow for terminal molecular fragments and documents optional filtering parameters.",
+      "usage_path": "from rdkit import Chem; from rdkit.Chem import Recap; mol = Chem.MolFromSmiles(smiles); hierarchy = Recap.RecapDecompose(mol); leaves = hierarchy.GetLeaves(); fragments = {smi: node.mol for smi, node in leaves.items()}. Optional: Recap.RecapDecompose(mol, allNodes={}, minFragmentSize=N, onlyUseReactions=[...])",
+      "construction": "Direct packaging of the documented RecapDecompose/GetLeaves workflow from the provided Recap.py source into a reusable skill. It includes prerequisite RDKit checks, input SMILES parsing and sanitization validation, leaf-only retrieval, dummy-atom convention explanation, and empty-result/minFragmentSize/onlyUseReactions behavior. No modification to the RECAP algorithm or reaction definitions is introduced.",
+      "evidence": [
+        {
+          "id": "recap",
+          "claim": "RecapDecompose is defined with signature RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None), and the RecapHierarchyNode class provides GetAllChildren, GetLeaves, and getUltimateParents."
+        },
+        {
+          "id": "recap",
+          "claim": "The docstring example for 'C1CC1Oc1ccccc1-c1ncc(OC)cc1' shows root sorted children keys have 4 items, GetAllChildren keys have 5 items, while GetLeaves keys are the 3 terminal fragments '*C1CC1', '*c1ccc(OC)cn1', and '*c1ccccc1*'; leaf.mol is a Chem Mol."
+        },
+        {
+          "id": "recap",
+          "claim": "Reaction definitions produce fragments with dummy '*' atoms; for example the amide reaction outputs '*[C:1]=[O:2]' and '*[#7:3]', and resulting leaf keys contain '*...' SMILES such as '*C(=O)C1CC1'."
+        },
+        {
+          "id": "recap",
+          "claim": "Empty results are valid: test2 uses RecapDecompose('CCCOCCC') and asserts res.children == {}; testMinFragmentSize uses 'CCCOCC' with minFragmentSize=3 and asserts children == {}, while 'CCCOCCC' with minFragmentSize=3 yields one leaf key '*CCC'."
+        },
+        {
+          "id": "recap",
+          "claim": "minFragmentSize is enforced by counting explicit atoms minus dummy atoms: if nats - nDummies < minFragmentSize, the product sequence is disqualified."
+        },
+        {
+          "id": "recap",
+          "claim": "onlyUseReactions filters reactionDefs by integer indices; testAmideRxn uses onlyUseReactions=[1] to demonstrate amide-specific decomposition and includes cases where len(GetLeaves()) == 0, such as 'C1CC1C(=O)CC1OC1'."
+        },
+        {
+          "id": "recap",
+          "claim": "RecapDecompose starts by calling Chem.MolToSmiles(mol, 1), so the input must be a valid sanitized RDKit Mol object; a None or unparseable molecule would fail at this first step unless the caller checks MolFromSmiles first."
+        }
+      ],
+      "gaps": [
+        "No local RDKit runtime is available in this discovery stage to execute the workflow and verify beyond the provided unit-test assertions.",
+        "The source does not document explicit handling for None or invalid Mol inputs; the packaging must defensively check Chem.MolFromSmiles and sanitize before calling RecapDecompose.",
+        "Only the provided Recap.py source and license.txt were available; broader RDKit documentation and cross-version reaction compatibility were not inspected."
+      ],
+      "blocked": false
+    }
+  ],
+  "omitted": [
+    {
+      "capability": "Full RDKit RECAP hierarchy traversal as a separate skill",
+      "reason": "User guidance targets terminal fragments via GetLeaves; hierarchy interpretation is documented within the selected candidate to avoid a redundant package."
+    },
+    {
+      "capability": "Descriptor calculation",
+      "reason": "Explicitly out of scope per user guidance; this is molecular fragmentation, not descriptor calculation."
+    }
+  ],
+  "limitations": [
+    "Evidence is based solely on the provided Recap.py source and license.txt; no external validation, execution, or repository inspection beyond these texts was performed.",
+    "The skill does not include descriptor calculation or scientific/chemical validation beyond the documented RECAP algorithm.",
+    "RDKit must be installed and execution performed in a Docker container because business code execution is not permitted on the host."
+  ]
+}

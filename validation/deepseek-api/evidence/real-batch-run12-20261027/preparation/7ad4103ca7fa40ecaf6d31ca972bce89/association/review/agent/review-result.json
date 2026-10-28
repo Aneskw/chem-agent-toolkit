@@ -1,0 +1,21 @@
+{
+    "status":  "pass",
+    "resolution":  "none",
+    "findings":  [
+                     {
+                         "location":  "artifact.tests; scripts/recap_fragments.py",
+                         "problem":  "Runtime behavior remains unverified; the four tests are definitions, not execution results.",
+                         "evidence":  "Execution policy disables generated checks and no check reports were supplied. Recap source document.py:39-53 supplies the exact normal-path oracle; lines 110-118 and 231-235 support the empty-result oracle. Invalid-input assertions test added adapter guards, not published RECAP results.",
+                         "impact":  "Static review supports the implementation and test design, but does not establish installed-RDKit compatibility or actual CLI error behavior.",
+                         "action":  "When an approved runtime is available, run the four existing delivered-CLI tests through the helper; no additional environment installation or test expansion is required for this review.",
+                         "blocking":  false,
+                         "category":  "check"
+                     }
+                 ],
+    "oracle_changes_verified":  false,
+    "execution_gaps":  [
+
+                       ],
+    "requirement_assessment":  "confirmed",
+    "binding_verified":  true
+}

@@ -1,0 +1,205 @@
+{
+  "schema_version": 3,
+  "pipeline_version": "5.2.0-stage2",
+  "build_id": "20261027T214329-b7a66c63",
+  "started_at": "2026-10-27T13:43:29.474666+00:00",
+  "status": "failed",
+  "entities": [],
+  "errors": [
+    "Invalid evidence reference {'id': 'recap:module-docstring', 'claim': \"The module docstring states: 'Implementation of the RECAP algorithm from Lewell et al. JCICS *38* 511-522 (1998)' and notes results are 'returned as a hierarchy of nodes instead of just as a set of fragments'.\"}; use known nonempty evidence IDs (native locators do not prove reading): e1,e2"
+  ],
+  "agent_efficacy": "not_evaluated_separate_work",
+  "replay": false,
+  "implementation_sha256": "bdc12601c2dc403284df20456675eaec89d2663afabcfad63ee07d5b60b1642a",
+  "finished_at": "2026-10-27T13:45:05.739049+00:00",
+  "counts": {},
+  "model_calls": [
+    {
+      "phase": "discovery",
+      "session_key": "discovery",
+      "resumed": false,
+      "model": "deepseek-v4-pro",
+      "status": "completed",
+      "usage": {
+        "prompt_tokens": 10787,
+        "completion_tokens": 3648,
+        "total_tokens": 14435,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2407
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 9379
+      },
+      "prompt_sha256": "50cf53012d8cb1e0fb6e2b89b142899be4c4fc8a0a89f475ab1c5bc197509861",
+      "tool_events": 0,
+      "elapsed_seconds": 50.339,
+      "response_sha256": "cd490f1130076dddb8f165274a8f9d9cf4e35f1375fc2e57724ab15d0a5ab1a9",
+      "finish_reason": null
+    },
+    {
+      "phase": "discovery",
+      "session_key": "discovery",
+      "resumed": false,
+      "model": "deepseek-v4-pro",
+      "status": "completed",
+      "usage": {
+        "prompt_tokens": 12332,
+        "completion_tokens": 3423,
+        "total_tokens": 15755,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2164
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 10924
+      },
+      "prompt_sha256": "84f680b90f81c01163c0e7eebabf461fafcd62431ed88c42c06e81c894bc5c12",
+      "tool_events": 0,
+      "elapsed_seconds": 39.654,
+      "response_sha256": "7590cba9d8888ecaf2fa4d74da3675e015e4885955d7c44f9c06acc4922aa842",
+      "finish_reason": null
+    }
+  ],
+  "model_metrics": {
+    "calls_attempted": 2,
+    "usage_fully_reported": true,
+    "receipts": [
+      {
+        "phase": "discovery",
+        "session_key": "discovery",
+        "resumed": false,
+        "model": "deepseek-v4-pro",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 10787,
+          "completion_tokens": 3648,
+          "total_tokens": 14435,
+          "prompt_tokens_details": {
+            "cached_tokens": 1408
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2407
+          },
+          "prompt_cache_hit_tokens": 1408,
+          "prompt_cache_miss_tokens": 9379
+        },
+        "prompt_sha256": "50cf53012d8cb1e0fb6e2b89b142899be4c4fc8a0a89f475ab1c5bc197509861",
+        "tool_events": 0,
+        "elapsed_seconds": 50.339,
+        "response_sha256": "cd490f1130076dddb8f165274a8f9d9cf4e35f1375fc2e57724ab15d0a5ab1a9",
+        "finish_reason": null
+      },
+      {
+        "phase": "discovery",
+        "session_key": "discovery",
+        "resumed": false,
+        "model": "deepseek-v4-pro",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 12332,
+          "completion_tokens": 3423,
+          "total_tokens": 15755,
+          "prompt_tokens_details": {
+            "cached_tokens": 1408
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2164
+          },
+          "prompt_cache_hit_tokens": 1408,
+          "prompt_cache_miss_tokens": 10924
+        },
+        "prompt_sha256": "84f680b90f81c01163c0e7eebabf461fafcd62431ed88c42c06e81c894bc5c12",
+        "tool_events": 0,
+        "elapsed_seconds": 39.654,
+        "response_sha256": "7590cba9d8888ecaf2fa4d74da3675e015e4885955d7c44f9c06acc4922aa842",
+        "finish_reason": null
+      }
+    ],
+    "monetary_cost": null,
+    "reported_totals": {
+      "prompt_cache_hit_tokens": 2816,
+      "total_tokens": 30190,
+      "completion_tokens": 7071,
+      "prompt_tokens": 23119,
+      "prompt_cache_miss_tokens": 20303
+    }
+  },
+  "sources": [
+    {
+      "id": "recap",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "license": "BSD-3-Clause",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "rdkit/Chem/Recap.py",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+      },
+      "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.py"
+      ],
+      "index_preview_truncated": false
+    },
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "license.txt",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      },
+      "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.txt"
+      ],
+      "index_preview_truncated": false
+    }
+  ],
+  "source_errors": [],
+  "evidence": [
+    {
+      "source": "recap",
+      "path": "document.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.py",
+      "id": "e1"
+    },
+    {
+      "source": "license",
+      "path": "document.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.txt",
+      "id": "e2"
+    }
+  ],
+  "temporary_workspace": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run20-20261027\\state\\runs\\20261027T214329-b7a66c63"
+}

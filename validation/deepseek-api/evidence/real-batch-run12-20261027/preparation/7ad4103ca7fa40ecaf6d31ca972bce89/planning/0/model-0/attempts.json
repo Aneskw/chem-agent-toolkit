@@ -1,0 +1,29 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "connected_seconds": 0.054,
+      "connection_close": false,
+      "detail": {
+        "schema_path": "plan/acceptance_json"
+      },
+      "elapsed_seconds": 387.87,
+      "error": "The answer does not satisfy the caller JSON Schema at plan/acceptance_json: {'invalid_input': True, 'scope': 'Single CLI operation decomposes one molecular SMILES with RDKit RECAP into sorted unique terminal fragment SMILES.', 'purposes': ['computation'], 'constraint': 'One nonempty molecular SMILES; blank input or an SMILES that RDKit cannot parse into a nonempty molecule ",
+      "error_class": "model_schema_mismatch",
+      "http_status": 200,
+      "response_headers": {
+        "connection": "keep-alive",
+        "content-type": "text/event-stream; charset=utf-8"
+      },
+      "sent_seconds": 0.055,
+      "started_seconds": 0.005,
+      "status": "failed"
+    }
+  ],
+  "request_count": 1,
+  "retry_policy": {
+    "configured": 0,
+    "counted_in_total_deadline": true
+  },
+  "sdk_implicit_retries": "none (no SDK used)"
+}

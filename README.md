@@ -1,88 +1,38 @@
-# Chem Agent Toolkit
+# Research Skill Creation Pipeline — integrated workflow
 
-A repository of chemistry agent resources and research-stage procedural skill candidates.
+The partner native Agent pipeline remains the single creation flow. Versioned delivery contracts and a durable accepted/candidates library connect to local Linux/amd64 Docker dependency building and migrated business execution acceptance.
 
-## Current status
+Normal builds accept independently reviewed, source-supported reading-only skills. Executable skills additionally require current Docker evidence against their locked tests and actual delivered entry. Unknown requirements do not bypass execution. Explicit drafts never qualify for formal delivery.
 
-The repository provides a unified directory layout and runnable database, tool,
-and model packages. These packages are **atomic resources**, even when their
-installation entry file is called `SKILL.md`. Passing a script or preflight
-test does not establish that its instructions change an agent's choices. A
-research-level chemical skill must encode decisions extracted from a paper and
-its implementation, then show a useful effect in matched agent tasks.
+```text
+python -m creation_pipeline build sources.json
+python -m creation_pipeline build sources.json --draft-only
+python -m creation_pipeline library skills
+python -m creation_pipeline library skills --include-candidates
+python -m creation_pipeline install skills --name my-skill --destination ./installed
+python -m creation_pipeline runtime-build skills --candidate my-skill
+python -m creation_pipeline runtime-validate skills --candidate my-skill
+python -m creation_pipeline runtime-prepare skills --candidate my-skill --spec runtime-spec.json
+python -m creation_pipeline runtime-inspect skills --candidate my-skill
+python -m creation_pipeline runtime-resume skills --candidate my-skill
+python -m creation_pipeline runtime-relocate moved-library --candidate my-skill --revalidate
+python -m creation_pipeline runtime-import native-output moved-library --candidate my-skill
+```
 
-## Atomic resource catalog
+Use `--library-dir` to select a different persistent library, `--no-adopt` for output-only trials, and `--keep-debug` to retain temporary work. Failed/unqualified candidates retain recovery material. Library evidence is independent of temporary runs and caches.
 
-| Package | Category | Resource test status |
-| --- | --- | --- |
-| `localretro-single-step-retrosynthesis` | models-skills/open-models | verified for smoke examples |
-| `retroprime-two-stage-retrosynthesis` | models-skills/open-models | verified for smoke examples |
-| `wln-build-molecular-graph` | models-skills/open-models | verified preprocessing subskill |
-| `retroxpert-evaluate-bond-disconnection` | models-skills/open-models | blocked_resources |
-| `localtransform-forward-prediction` | models-skills/open-models | blocked_resources |
-| `chem-openbabel-convert` | tools-skills/openbabel | interface and preflight |
-| `chem-openmm-md` | tools-skills/openmm | preflight; dependency required |
-| `chem-chembl-activity` | databases-skills/chembl | executable query; network required |
-| `chem-uspto50k-split` | databases-skills/uspto50k | executable validator; data required |
-| `chem-reinvent` | models-skills/open-models | preflight; upstream install required |
-| `chem-genmol` | models-skills/open-models | preflight; checkpoint required |
-| `chem-diffdock-nim` | models-skills/nim | preflight; endpoint and files required |
-| `chem-reaction-atommap-audit` | tools-skills/rdkit | tested mapped-input structural check |
-| `chem-retro-candidate-evaluation` | tools-skills/rdkit | tested exact-match and optional round-trip scorer |
-| `localretro-template-library-preflight` | models-skills/open-models | tested resource and training-schema preflight |
-| `retroprime-inference-preflight` | models-skills/open-models | tested script, weight and input preflight |
+Python 3.11+, Git and authenticated Codex CLI are required for live generation. Runtime plan validation requires an already available `jsonschema`; local image building requires Docker with a Linux/amd64 engine. The integration never installs host packages. Candidate software is installed only by Docker build steps. Production retains no hidden aggregate time/turn/read quota; explicit caller limits and operation timeouts remain effective.
 
-## Use
+Read the [fresh-source example](examples/base-count/README.md), [stage-five results and limits](docs/integration/stage-five.md), [implementation architecture](docs/pipeline/integrated-flow.mmd), [recovery and relocation protocol](docs/pipeline/runtime-recovery.md), [stage-four verification record](docs/integration/stage-four.md), [execution protocol](docs/pipeline/docker-execution.md) and [stage-three record](docs/integration/stage-three.md). Earlier stage documents describe their recorded baselines where not superseded. `ready` requires formal qualification; `built` never grants it.
 
-Copy or symlink a resource directory into an agent's installation directory
-when a task needs it. The `verified` labels below refer only to documented
-execution checks. No package in this table has yet demonstrated a causal
-improvement in agent task quality or token use.
+Engineering tests: `python -m unittest discover -s tests -q`. Deterministic model fixtures test mechanisms, not real model quality, Docker execution or scientific validity. Historical skills and approval records are not automatically admitted to the integrated library.
 
-## Directory conventions
+This copy adds an opt-in [DeepSeek API backend](docs/integration/deepseek-api-backend.md) for the structured, tool-free model calls only (entry association, runtime planning, contract diagnosis). Discovery, authoring and independent review keep the Codex CLI transport. The backend is selected per candidate with `runtime.<candidate>.options.backend=deepseek_api`; it is never a fallback, the model name is read from configuration and never guessed, and credentials stay in the git-ignored `.env`. See `validation/deepseek-api/` for the acceptance configuration, the frozen planner prompt/schema and the single-request check.
 
-- `skills/`: flat legacy CLI/agent installation entries for resource packages;
-  directory membership is not a research acceptance decision.
-- `databases-skills/`: database and dataset skills for PubChem, ChEMBL, and USPTO-50K validation.
-- `tools-skills/`: toolkit skills for RDKit, Open Babel, and OpenMM.
-- `models-skills/`: model skills for the five reaction models, REINVENT, GenMol, and DiffDock NIM.
-- `workflows/`: future composition-level workflows.
-- `.claude-plugin/`: plugin marketplace metadata.
+The [contract consistency and automatic repair follow-up](docs/integration/contract-repair.md)
+separates normal creation, historical oracle repair and deliberate fault injection.
+Unknown business failures require source diagnosis; they do not automatically prove
+defective Skill code. Existing runtime recovery can propose and independently review
+a versioned source-backed contract correction before full Docker revalidation.
 
-## Evidence and method
-
-The [creation pipeline](creation_pipeline/README.md) accepts general paper PDFs
-and pinned Git repositories, then extracts cited decision candidates with the
-locally authenticated Codex CLI. The
-[three-arm protocol](evaluation/decision_gain/PROTOCOL.md) compares no skill,
-the complete source text, and generated skills on paired held-out decisions.
-Its `plan` command validates the design without making model calls.
-
-当前模型驱动容器化入口统一为 [creation_pipeline/run_pipeline.py](creation_pipeline/README.md)，最终源码交付见 `deliverables/`。创建、归档及严格执行验收分别报告。
-
-`source-2026.10.23-r3.1` 默认按实际需求验收：纯文本候选有依据地免 Docker，工具候选自动构建并验证；缺绑定或需求不明阻塞。仅生成草稿须显式 `--draft-only`。详见 [交付指南](creation_pipeline/DELIVERY.md)。
-
-Git 保存源码、测试、配置示例及[验收摘要](reports/DELIVERY-ACCEPTANCE.md)。本地 `deliverables/`、`validation/` 和运行日志不纳入版本控制；交付 ZIP 与详细证据应作为单独发布附件上传，源码仓库克隆后不自带这些附件。
-
-`creation_pipeline_resource_v2/` 是另一个资源恢复研究模块，保留其独立功能，不属于本次容器化交付入口。其静态检查不代表下载、推理或 agent 效果已经验证。
-
-Paper snapshots, repository evidence, run logs, and format notes are kept in the project archive. Each skill's `reference` section points to a pinned source. A verified status means only that the stated execution checks passed.
-
-## Paper decision-rule case study
-
-The [non-LocalRetro case study](evaluation/method_decisions/RUN_THIS.md) shows
-the complete research workflow on paper `LJMZ9IL6`: locked PDF source →
-source-cited method draft → positive/negative task proposals → human-reviewed
-answers → paired no-skill/with-skill agent runs. Run the commands in that guide
-to reproduce the case locally. The source PDF is downloaded and hash-checked;
-the saved model response fixture is included for deterministic replay.
-
-`creation_pipeline/run_pipeline.py --draft-eval-tasks` adds optional automatic
-task **proposals** for each method candidate. Review their chemistry, novelty,
-applicability and gold answers before scoring. The [case study results](evaluation/method_decisions/RESULTS.md)
-show that the selected confidence/abstention candidate did **not** improve the
-agent in this small pilot; successful extraction is not evidence of agent value.
-
-## Candidate counts
-
-Numbers such as 9/10 are counts of valid reactant candidates returned by one model inference, not counts of skills or successful experiments. A request for `top_k=10` can yield fewer valid candidates after invalid, duplicate, and placeholder outputs are removed.
+The [final independent acceptance review](docs/integration/final-acceptance.md) records current fixes, mechanism regression and outstanding live acceptance blockers. Historical recovery success is not a successful uninterrupted fresh creation.

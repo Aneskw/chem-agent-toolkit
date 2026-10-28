@@ -1,0 +1,22 @@
+{
+  "action": "patch",
+  "requested_files": [],
+  "reason": "Replace acceptance source quotes containing ellipses or omitted indentation with exact contiguous quotes from the delivered entry, fixing the reported exact-quotation requirement.",
+  "operations": [
+    {
+      "op": "replace",
+      "path": "/acceptance_json/source_quote",
+      "value_json": "\"    parser.add_argument(\\\"smiles\\\", help=\\\"One nonempty molecular SMILES string\\\")\\n    args = parser.parse_args()\\n    if not args.smiles.strip():\\n        return emit_error(\\\"invalid_input\\\", \\\"SMILES must not be blank\\\", 2)\\n    try:\\n        from rdkit import Chem\\n        from rdkit.Chem import Recap\\n    except ImportError as exc:\\n        return emit_error(\\\"runtime_error\\\", str(exc), 1)\\n    try:\\n        mol = Chem.MolFromSmiles(args.smiles)\\n    except Exception as exc:\\n        return emit_error(\\\"invalid_input\\\", str(exc), 2)\\n    if mol is None:\\n        return emit_error(\\\"invalid_input\\\", \\\"SMILES could not be parsed\\\", 2)\\n    if mol.GetNumAtoms() == 0:\\n        return emit_error(\\\"invalid_input\\\", \\\"Molecule must contain atoms\\\", 2)\""
+    },
+    {
+      "op": "replace",
+      "path": "/acceptance_json/operations/0/input_contract/source_quote",
+      "value_json": "\"    parser.add_argument(\\\"smiles\\\", help=\\\"One nonempty molecular SMILES string\\\")\\n    args = parser.parse_args()\\n    if not args.smiles.strip():\\n        return emit_error(\\\"invalid_input\\\", \\\"SMILES must not be blank\\\", 2)\\n    try:\\n        from rdkit import Chem\\n        from rdkit.Chem import Recap\\n    except ImportError as exc:\\n        return emit_error(\\\"runtime_error\\\", str(exc), 1)\\n    try:\\n        mol = Chem.MolFromSmiles(args.smiles)\\n    except Exception as exc:\\n        return emit_error(\\\"invalid_input\\\", str(exc), 2)\\n    if mol is None:\\n        return emit_error(\\\"invalid_input\\\", \\\"SMILES could not be parsed\\\", 2)\\n    if mol.GetNumAtoms() == 0:\\n        return emit_error(\\\"invalid_input\\\", \\\"Molecule must contain atoms\\\", 2)\""
+    },
+    {
+      "op": "replace",
+      "path": "/acceptance_json/operations/0/input_contract/checks/0/source_quote",
+      "value_json": "\"    if not args.smiles.strip():\\n        return emit_error(\\\"invalid_input\\\", \\\"SMILES must not be blank\\\", 2)\""
+    }
+  ]
+}

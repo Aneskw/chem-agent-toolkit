@@ -1,0 +1,21 @@
+{
+    "status":  "pass",
+    "resolution":  "none",
+    "findings":  [
+                     {
+                         "location":  "scripts/recap_terminal.py; artifact.tests",
+                         "problem":  "Runtime behavior remains unverified; the four supplied tests are definitions, not execution results.",
+                         "evidence":  "Generated checks are disabled and host business execution is prohibited. Source recap/document.py lines 39-56 gives the exact normal-path leaf SMILES; lines 110-118 and 231-235 support empty leaves. The supplied script calls these APIs directly, and the tests invoke that script. Malformed-input handling is an adapter check, not a source parser oracle.",
+                         "impact":  "Static review supports the implementation and documented outputs, but does not establish installed RDKit compatibility or successful CLI execution.",
+                         "action":  "When authorized Docker execution is available, run the four existing tests through helper check and retain the results; no additional environment installation or candidate revision is required for this review.",
+                         "blocking":  false,
+                         "category":  "check"
+                     }
+                 ],
+    "oracle_changes_verified":  false,
+    "execution_gaps":  [
+
+                       ],
+    "requirement_assessment":  "confirmed",
+    "binding_verified":  true
+}

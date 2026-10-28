@@ -1,0 +1,66 @@
+{
+  "outcome": "candidates",
+  "summary": "Inspected the supplied RDKit Recap.py source and BSD-3-Clause license. RECAP terminal fragment retrieval is well-scoped as a reusable skill: a sanitized RDKit Mol is decomposed with the documented predefined bond-cleavage SMARTS; root.children, GetAllChildren(), and GetLeaves() have distinct meanings, and valid empty leaf sets are common for chains, rings, protonated/charged forms, and default small-fragment filtering. One candidate packages terminal leaf retrieval with input validation, boundary notes, and examples grounded in the source's embedded tests.",
+  "saved_candidates": [],
+  "candidates": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "capability": "Decompose a sanitized RDKit molecule into RECAP terminal fragments using rdkit.Chem.Recap.RecapDecompose and root.GetLeaves(), returning terminal leaf nodes keyed by canonical SMILES with attachment points represented as '*' atoms.",
+      "boundary": "Input is an already parsed and sanitized RDKit Mol from a valid SMILES; callers must handle invalid/None Mol before calling. Output is the standard terminal leaf dictionary; immediate children and full descendants via root.children or root.GetAllChildren() are not the primary terminal result. A valid empty leaf dictionary is expected when no permitted cleavable bond exists, including ring-only molecules, charged/protonated forms, and cases rejected by the small-fragment filter.",
+      "value": "Removes confusion between immediate children, all descendants, and terminal leaves by documenting that GetLeaves() returns only leaf nodes keyed by canonical product SMILES. It covers '*' dummy labels, canonical keys, default small-fragment rejection, and minFragmentSize/onlyUseReactions controls, so users can obtain standard RECAP terminal fragments without reading RDKit source or misinterpreting hierarchy nodes as terminal fragments.",
+      "usage_path": "from rdkit import Chem; from rdkit.Chem import Recap; mol = Chem.MolFromSmiles(smiles); if mol is None: raise/handle invalid input; root = Recap.RecapDecompose(mol); leaves = root.GetLeaves()  # dict SMILES -> RecapHierarchyNode; list(leaves.keys()) are terminal fragment SMILES. Optional controls: RecapDecompose(mol, minFragmentSize=N, onlyUseReactions={...}).",
+      "construction": "Direct packaging of the existing rdkit.Chem.Recap API from the provided source; no new algorithm or research extension. Delivery would include a SKILL.md focused on terminal-fragment retrieval, examples extracted from source-embedded unit tests, BSD-3-Clause attribution, and a compatible RDKit environment prerequisite. No runtime package is authored at this discovery stage.",
+      "evidence": [
+        {
+          "id": "e1",
+          "claim": "RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None) returns a RecapHierarchyNode and uses canonical MolToSmiles(mol,1) as its registry key; it repeatedly applies the predefined reactionDefs SMARTS reactions and stores node children keyed by product SMILES."
+        },
+        {
+          "id": "e1",
+          "claim": "RecapHierarchyNode.GetLeaves() returns a dictionary keyed by SMILES of leaf nodes, descending recursively only into non-terminal children via _gacRecurse(res, terminalOnly=True); GetAllChildren() returns all descendants, not just terminal leaves."
+        },
+        {
+          "id": "e1",
+          "claim": "reactionDefs defines 12 bond-cleavage SMARTS: urea, amide, ester, amines, cyclic amines, ether, olefin, aromatic N-aliphatic C, lactam N-aliphatic C, aromatic C-aromatic C, aromatic N-aromatic C (noted as not part of the standard RECAP set), and sulphonamide."
+        },
+        {
+          "id": "e1",
+          "claim": "With minFragmentSize=0 (default), products whose dummy-stripped SMILES equals '', 'C', 'CC', or 'CCC' are rejected; with minFragmentSize>0, products are rejected when explicit atom count minus '*' dummy count is below minFragmentSize."
+        },
+        {
+          "id": "e1",
+          "claim": "Embedded unittest tests demonstrate valid empty leaves for default decomposition of 'CCCOCCC', ring-only cases such as 'C1CCCCO1', and charged/protonated cases including 'c1ccccc1[n+]1ccccc1' and 'C1CC1[NH+]C(=O)CC'; the example 'C1CC1Oc1ccccc1-c1ncc(OC)cc1' yields three terminal leaves, and 'CCCOCCC' with minFragmentSize=3 yields one leaf rather than empty."
+        },
+        {
+          "id": "e2",
+          "claim": "The retrieved RDKit license is BSD 3-Clause, copyright 2006-2015 Rational Discovery LLC, Greg Landrum, Julie Penzotti and others, permitting redistribution with copyright notice, conditions, and disclaimer."
+        }
+      ],
+      "gaps": [
+        "Runtime behavior was not executed in this discovery environment; exact installed-RDKit version and canonical SMILES for all examples should be validated inside the Docker delivery container.",
+        "Boundary behaviors rely on the source file's embedded unittests, not independent acceptance test runs.",
+        "The source is a fixed commit snapshot; the RDKit version installed for the skill may differ from the snapshot."
+      ],
+      "blocked": false
+    }
+  ],
+  "omitted": [
+    {
+      "capability": "RDKit descriptor calculations or other Chem modules",
+      "reason": "User guidance explicitly states this is molecular fragmentation, not descriptor calculation."
+    },
+    {
+      "capability": "Authoring new RECAP fragmentation SMARTS or algorithm modifications",
+      "reason": "Research extensions must reproduce the existing documented algorithm; altering chemical cleavage rules is outside this skill."
+    },
+    {
+      "capability": "Full hierarchy navigation as a standalone skill",
+      "reason": "Merged into the terminal-fragments candidate because it uses the same RecapHierarchyNode interface and the examples distinguish leaves from children/descendants."
+    }
+  ],
+  "limitations": [
+    "No runtime execution in this discovery environment; claims are grounded in the provided file text and its self-tests.",
+    "Only one candidate is returned due max_candidates=1; child/allNodes/reaction-subset capabilities are merged into this terminal-fragment candidate rather than split.",
+    "Only the supplied Recap.py and license.txt snapshots were inspected; no other RDKit documentation or web lookup was performed."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "sources": [
+    {
+      "id": "recap",
+      "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run11-20261027\\state\\cache\\snapshots\\c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a\\document.py"
+    },
+    {
+      "id": "license",
+      "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run11-20261027\\state\\cache\\snapshots\\f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2\\document.txt"
+    }
+  ],
+  "network": false,
+  "prompt": "Independently review the exact delivered files and source-bound execution scope. Do not run host business checks.",
+  "checks": [],
+  "model": {
+    "backend": "codex_cli",
+    "name": "gpt-6-astra",
+    "transport": "https",
+    "reasoning_effort": "medium",
+    "service_tier": "default"
+  },
+  "limits": {
+    "model_timeout": 600,
+    "total_seconds": 2378
+  }
+}

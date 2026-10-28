@@ -1,0 +1,18 @@
+{
+  "batch": "run12",
+  "build_id": "20261027T193932-92618ce4",
+  "status": "blocked",
+  "started_at": "2026-10-27T11:39:32.679347+00:00",
+  "finished_at": "2026-10-27T11:55:54.121897+00:00",
+  "model_calls_used": 6,
+  "model_calls_allowed": 10,
+  "admitted_candidate_calls": 5,
+  "gaps": [
+    {
+      "code": "model_schema_mismatch",
+      "detail": "The answer does not satisfy the caller JSON Schema at plan/acceptance_json: {'invalid_input': True, 'scope': 'Single CLI operation decomposes one molecular SMILES with RDKit RECAP into sorted unique terminal fragment SMILES.', 'purposes': ['computation'], 'constraint': 'One nonempty molecular SMILES; blank input or an SMILES that RDKit cannot parse into a nonempty molecule ",
+      "repair_lane": "environment",
+      "blocker_kind": "model_transport"
+    }
+  ]
+}

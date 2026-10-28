@@ -1,0 +1,9 @@
+{
+  "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run4-20261027\\state\\cache\\downloads\\daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30\\document.txt",
+  "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+  "origin": {
+    "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+    "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+    "content_type": "text/plain; charset=utf-8"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "sources": [
+    {
+      "id": "recap",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "license": "BSD-3-Clause"
+    },
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+    }
+  ],
+  "prompt": "Discover and package one reusable Skill for RDKit RECAP terminal molecular fragments using RecapDecompose and GetLeaves. Ground the usage, input/output scope, terminal versus full hierarchy interpretation and valid empty results in the provided source. This is molecular fragmentation, not descriptor calculation. Choose appropriate delivery files and document prerequisites and invalid input boundaries. Do not install software or run source/business code on the host; business execution is permitted only in a Docker container. Do not claim chemical or scientific validation beyond the documented algorithm. The delivered package must contain the executable entry at exactly scripts/terminal_fragments.py; the acceptance binds that path, and a package without it cannot be bound.",
+  "model": {
+    "name": "gpt-6-astra",
+    "transport": "https",
+    "reasoning_effort": "medium",
+    "service_tier": "default"
+  },
+  "execution": {
+    "profile": "production",
+    "stop_on_runtime_failure": true,
+    "progress_watch": "observe"
+  },
+  "limits": {
+    "model_calls": 8,
+    "model_timeout": 600,
+    "total_seconds": 3600,
+    "agent_progress_timeout": null,
+    "max_candidates": 1,
+    "max_builds": 1,
+    "repair_rounds": 1
+  },
+  "runtime": {
+    "rdkit-recap-terminal-fragments": {
+      "binding": {
+        "entry": "scripts/terminal_fragments.py",
+        "association": "explicit",
+        "source_id": "recap",
+        "source_path": "document.py",
+        "quote": ">>> res = Recap.RecapDecompose(m)",
+        "reason": "The delivered terminal-fragment script is a thin wrapper over the source-documented API: it parses SMILES with Chem.MolFromSmiles, calls Recap.RecapDecompose on the molecule and collects root.GetLeaves(), which is exactly the call sequence documented in the pinned Recap.py docstring. The source itself performs no SMILES validation, so the wrapper adds an explicit invalid-input boundary instead of borrowing upstream behaviour."
+      },
+      "options": {
+        "backend": "deepseek_api",
+        "api_model": null,
+        "api_retries": 0,
+        "api_stream": true,
+        "api_max_output_tokens": 65536,
+        "model_timeout": 600,
+        "total_seconds": 1800,
+        "reasoning_effort": "medium",
+        "service_tier": "default",
+        "progress_watch": "observe"
+      }
+    }
+  },
+  "batch": {
+    "label": "deepseek-api-acceptance",
+    "tags": [
+      "chemistry",
+      "recap",
+      "acceptance",
+      "deepseek-api"
+    ]
+  },
+  "notes": "Acceptance configuration for this copy. It reproduces the finalized explicit-script-binding case (source set, prompt, execution profile, limits and the binding object copied verbatim from validation/final-acceptance-review/input-batch-4.json) and adds only provider configuration. model.backend stays codex_cli: discovery, authoring and independent review keep the Codex CLI transport and are NOT migrated. runtime.<candidate>.options.backend=deepseek_api switches only the structured model_call stages - entry association, runtime planning and contract diagnosis - to the DeepSeek chat completions API. api_model is null on purpose: the DeepSeek model identifier is read from DEEPSEEK_MODEL / .env and is never guessed, and the Codex model name above is never sent to the API provider. api_retries=0 and api_stream=true keep exactly one request per admitted call; one request is bounded by model_timeout=600 and the stage by total_seconds=1800. reasoning_effort=medium is requested; DeepSeek maps it to high, which is recorded in the receipt as a compatibility mapping rather than an equivalence. service_tier has no DeepSeek equivalent: it is recorded and never sent. Dependency of the restored binding: the authored candidate must deliver scripts/terminal_fragments.py exactly, otherwise runtime preparation stops deterministically at binding_unresolved without a model call; that is a real risk for a fresh creation and is recorded in the migration report."
+}

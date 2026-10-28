@@ -1,0 +1,95 @@
+{
+  "review": {
+    "name": "content_review",
+    "required": true,
+    "status": "pass",
+    "resolution": "none",
+    "findings": [
+      {
+        "location": "scripts/recap_terminal.py; artifact.tests",
+        "problem": "Runtime compatibility remains unverified; supplied tests have no execution results.",
+        "evidence": "Inspected recap/document.py lines 39–56 supports the exact example output; lines 110–118 and 231–235 supports empty leaves. Lines 146–147 exactly matches the binding quote. The delivered adapter directly invokes these APIs. Generated checks are disabled, and host business execution is prohibited.",
+        "impact": "Source fidelity and invocation are supported, but successful execution against an installed RDKit distribution is not established.",
+        "action": "When Docker execution is authorized, run the four existing tests through helper check and retain results. No candidate revision is required.",
+        "blocking": false,
+        "category": "check"
+      }
+    ],
+    "oracle_changes_verified": false,
+    "execution_gaps": [],
+    "requirement_assessment": "confirmed",
+    "binding_verified": true,
+    "evidence_kind": "model_review_not_independent_scientific_validation"
+  },
+  "receipts": [
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 250148,
+        "cached_input_tokens": 217472,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1769,
+        "reasoning_output_tokens": 100
+      },
+      "prompt_sha256": "303e384de0fd54125ad60f63a333741c28e1e1609906ffddf39e089aeff47e79",
+      "tool_events": 9,
+      "session_id": "01a17d1c-d56f-73d1-8a95-aa0747a5711c",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 114.884,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 3.406,
+        "last_stdout_seconds": 109.49,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "sha256": "4996dbf74e39d431502925cbddac5ad21bf7ea2fbb646a329b5ae6f4a9814989",
+      "bytes": 3356
+    },
+    {
+      "path": "scripts/recap_terminal.py",
+      "sha256": "7e3404393fd795ba85e27db6b70f92143be37ae4b546a124eb0f93c39785b66c",
+      "bytes": 1541
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "6f759c8dbaa4746585e09a1885a9dca8eef182290e89b6174cb18d237d1424c7",
+      "bytes": 4424
+    }
+  ],
+  "source_files": {
+    "recap": [
+      {
+        "path": "document.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+        "bytes": 20662
+      }
+    ],
+    "license": [
+      {
+        "path": "document.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+        "bytes": 1580
+      }
+    ]
+  },
+  "oracle_changes": []
+}

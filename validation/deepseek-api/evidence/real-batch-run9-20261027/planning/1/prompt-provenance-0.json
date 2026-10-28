@@ -1,0 +1,13 @@
+{
+  "base_kind": "rejected_candidate",
+  "prompt_sha256": "1b5365e565d9de561fe358783675926fe4d8ee4d966eeb727546ed03845568bb",
+  "prompt_bytes": 62182,
+  "schema_sha256": "0ac6d7fa716f9b93debb0389cd672ed0876cde5e29221a10e3836357afe06d74",
+  "schema_bytes": 6407,
+  "policy_sha256": "c1b9ef48a97e2e1578d00cf0e893de95bfff7ec9e20400a3af0b143b13dc4820",
+  "policy_bytes": 13170,
+  "acceptance_spec_sha256": "453d0c0c9af563ac02e7b32b957c4fb438c20e855ae9f9f13bf73bf0179e9af9",
+  "acceptance_spec_bytes": 5731,
+  "input_contract_spec_sha256": "2403220c13052060553007d909a03ff1869c10b7a41248bbf9b922a52f4dce34",
+  "generated_by": "creation_pipeline.runtime.planner current code (no frozen copy)"
+}

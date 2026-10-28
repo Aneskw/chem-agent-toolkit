@@ -1,0 +1,13 @@
+[
+  {
+    "source": "license",
+    "path": "document.txt",
+    "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+    "start": 1,
+    "end": 0,
+    "offset": 0,
+    "kind": "source_locator",
+    "excerpt": "Source locator only; not a record of model reading: document.txt",
+    "id": "e1"
+  }
+]

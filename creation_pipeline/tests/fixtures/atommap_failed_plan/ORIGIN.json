@@ -1,5 +1,0 @@
-{
-  "plan_sha256": "91ca445141651e187d26f05b1eea4fbe7ade864ab8b7a57ad25eb18a421e273d",
-  "original": "E:\\Users\\27343\\Docker\\chem-agent-toolkit_newpipeline\\validation\\final-v2-atommap-20261023-live-01\\chem-agent-toolkit-source-2026.10.23\\creation_pipeline\\runs\\final-v2-atommap-20261023-live-01\\drafts-v03\\audit-and-gate-mapped-reactions\\runtime\\tools\\atommap-audit\\environment_plan.json",
-  "scope": "Immutable reference of actual failed planning; never execution success evidence"
-}

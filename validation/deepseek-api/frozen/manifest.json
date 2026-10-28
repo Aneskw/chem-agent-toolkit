@@ -1,0 +1,38 @@
+{
+  "source_commit": "78003de47c8bee93c705cd3a2098ee1f90646aae",
+  "generated_by": "validation/deepseek-api/verify_planner.py freeze",
+  "planner_policy_sha256": "d8d212f377f2320775ec44ac8bde84c16d5f54b0659fe9ca2daaa113db2d453e",
+  "prompt_sha256": "60f1021b367c1e6d3ff826cd1927c75a43c5bd282470ba37ba4a0ac36757c467",
+  "prompt_bytes": 15814,
+  "persisted_prompt_equals_sent_prompt": true,
+  "schema_sha256": "db2834c1c43c750369f89603f5d1dc3c41a04f4c27b2a11184448b0b229c8a08",
+  "fixture_files": {
+    "package/README.md": "6f0883f8335f09de4e74b2a089d1a7f446a22356815d28e21eb82cdf2818094e",
+    "package/tool.py": "117705254fcec40fb35bd3e15f1aa9082d0bf3866b341d1eba7993596e9b64fd",
+    "sources/tool/README.md": "6a0a4b8fd5164a4f14055ac2438d3039420984edd4609c2341f54cef3e7d15f7",
+    "sources/tool/tool.py": "117705254fcec40fb35bd3e15f1aa9082d0bf3866b341d1eba7993596e9b64fd"
+  },
+  "binding": {
+    "kind": "script",
+    "entry": "tool.py",
+    "runtime_entry": "package/tool.py"
+  },
+  "script": "package/tool.py",
+  "constraints": [
+    "Invoke the unchanged delivered package entry, not only the upstream tool.",
+    "The delivered tool has no third-party dependency; keep the image minimal."
+  ],
+  "options": {
+    "model": null,
+    "api_model": null,
+    "backend": "deepseek_api",
+    "model_timeout": 600,
+    "total_seconds": 600,
+    "api_retries": 0,
+    "api_max_output_tokens": 65536,
+    "api_stream": true,
+    "reasoning_effort": "medium",
+    "progress_watch": "observe",
+    "max_read_rounds": 1
+  }
+}

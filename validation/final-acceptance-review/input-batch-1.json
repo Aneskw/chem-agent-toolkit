@@ -1,0 +1,45 @@
+{
+  "sources": [
+    {
+      "id": "recap",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "license": "BSD-3-Clause"
+    },
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+    }
+  ],
+  "prompt": "Discover and package one reusable Skill for RDKit RECAP terminal molecular fragments using RecapDecompose and GetLeaves. Ground the usage, input/output scope, terminal versus full hierarchy interpretation and valid empty results in the provided source. This is molecular fragmentation, not descriptor calculation. Choose appropriate delivery files and document prerequisites and invalid input boundaries. Do not install software or run source/business code on the host; business execution is permitted only in a Docker container. Do not claim chemical or scientific validation beyond the documented algorithm.",
+  "model": {
+    "name": "gpt-6-astra",
+    "transport": "https",
+    "reasoning_effort": "medium",
+    "service_tier": "default"
+  },
+  "execution": {
+    "profile": "production",
+    "stop_on_runtime_failure": true,
+    "progress_watch": "observe"
+  },
+  "limits": {
+    "model_calls": 8,
+    "model_timeout": 600,
+    "total_seconds": 3600,
+    "agent_progress_timeout": null,
+    "max_candidates": 1,
+    "max_builds": 1,
+    "repair_rounds": 1
+  },
+  "batch": {
+    "label": "acceptance-batch-1-normal-create",
+    "tags": [
+      "chemistry",
+      "recap",
+      "acceptance"
+    ]
+  },
+  "notes": "Single-case normal build. One candidate, one build. Host model calls are capped at 8 for the whole batch, including independent review, repairs and failed attempts. Per-call hard cap 600s; execution.progress_watch=observe reaches the planner through a normal build; the 240s silence budget is recorded and never terminates by itself; the whole batch is capped at total_seconds=3600. Transport pinned to Responses-over-HTTPS, reasoning medium, service tier default for every model stage (discovery, author, review, association, planning). execution.stop_on_runtime_failure stops the batch on the first Docker build or business-acceptance failure: no contract correction, no second build."
+}

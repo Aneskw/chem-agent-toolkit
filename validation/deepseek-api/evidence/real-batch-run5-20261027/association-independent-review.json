@@ -1,0 +1,90 @@
+{
+  "review": {
+    "name": "content_review",
+    "required": true,
+    "status": "pass",
+    "resolution": "none",
+    "findings": [
+      {
+        "location": "artifact.tests / execution_policy",
+        "problem": "Runtime behavior remains unverified.",
+        "evidence": "The five tests invoke delivered code. Expected fragments and empty outcomes match recap/document.py lines 38–56, 110–118, 231–235 and 471–474. No check results were supplied; generated checks are disabled.",
+        "impact": "Source fidelity and entry binding are verified, but installed-RDKit behavior and wrapper guards have not been executed. No external prerequisite failure was confirmed.",
+        "action": "When execution is authorized, run the existing five checks in the prepared Docker container and record the RDKit version.",
+        "blocking": false,
+        "category": "check"
+      }
+    ],
+    "oracle_changes_verified": false,
+    "execution_gaps": [],
+    "requirement_assessment": "confirmed",
+    "binding_verified": true,
+    "evidence_kind": "model_review_not_independent_scientific_validation"
+  },
+  "receipts": [
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 421713,
+        "cached_input_tokens": 383104,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3591,
+        "reasoning_output_tokens": 176
+      },
+      "prompt_sha256": "31783cf068002f35b28958762dc385859b94c609485042fa83ce74872416da87",
+      "tool_events": 14,
+      "session_id": "01a17bdb-78b9-7e01-ac32-0b1b49d80499",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 181.971,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 3.965,
+        "last_stdout_seconds": 174.78,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "references/UPSTREAM-NOTICES.txt",
+      "sha256": "43883954b45778b010e4881f17034d752d0a686914fbdb79d87bf6eaa58e5953",
+      "bytes": 3251
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "64bb10fb3c89ab782ffbb860b1f448b51e886fbe6a8a9e914daa4da14dc5e8c8",
+      "bytes": 5105
+    }
+  ],
+  "source_files": {
+    "recap": [
+      {
+        "path": "document.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+        "bytes": 20662
+      }
+    ],
+    "license": [
+      {
+        "path": "document.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+        "bytes": 1580
+      }
+    ]
+  },
+  "oracle_changes": []
+}

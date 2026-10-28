@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "acceptance_version": 2,
+  "request": {
+    "candidate_id": "candidate-e1a62d733de60f4f1791251c660e6ed8b837210f1c478c851280ab3c5138e9e1",
+    "revision_id": "rev-70e04935d773ed9b84935d72fe124d35393a67e237461eb05c807cafba005f3c",
+    "package_fingerprint": "9a24966e174ebed602312579a3d896b8f3541a0857475ad4370df2b6e89b6f11",
+    "source_fingerprint": "71f53963337cb6c13f2de66c8a895d2fcc95143911a9d9f36dbf6d92a70b2a35",
+    "binding_fingerprint": "5473d542554502b1f4ecae069b4dd5f6643a48c5a576f9d187717fc401415fed",
+    "environment_fingerprint": "df410bd19b6f62ae763c7c552881a5f2634978f8f526b52d1ceeb1b4f6e8b83c",
+    "acceptance_fingerprint": "785f516df627bf7b45e98d8d18ffa7adace018bb6f7bfaa683c5e88eebd916f5",
+    "freeze_sha256": "f96581ad81a61a250f23dc2b25636ad18d5cb1a07ced20f9d25124645b4e1957",
+    "executor_kind": "local-docker",
+    "target_id": "local"
+  },
+  "started_at": "2026-10-25T14:24:16.894533+00:00",
+  "status": "runtime_blocked",
+  "cases": [],
+  "image_id": "sha256:c4de346237d1913431bb5da0ec3600d02db213fa68b74245b6ae7d5066f0a012",
+  "tag": "chem-integrated:70e04935d773ed9b84935d72-464b14de",
+  "build_receipt_sha256": "fcf0356ecf0ca0f017e80df515af234edf5dc58939941743b4690518c280c6e5"
+}

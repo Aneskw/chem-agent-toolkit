@@ -1,0 +1,5 @@
+{
+  "error_class": "model_config_invalid",
+  "message": "DEEPSEEK_API_KEY is not configured (process environment or repository .env); no request was sent",
+  "request_sent": false
+}

@@ -2,43 +2,15 @@
 __pycache__/
 .pytest_cache/
 *.pyc
-.venv-eval/
-.venv-runtime/
-.publication-transactions/
-evaluation/public_benchmarks/cache/
-evaluation/public_benchmarks/runs/
-creation_pipeline/cache/
-creation_pipeline/runs/
-creation_pipeline/acquired/
-creation_pipeline/intakes/
-creation_pipeline_resource_v2/cache/
-creation_pipeline_resource_v2/runs/
-creation_pipeline_resource_v2/acquired/
-creation_pipeline_resource_v2/intakes/
-evaluation/targeted/results/
-evaluation/decision_gain/results/
-evaluation/decision_gain/materials.json
-
-# Local environments, secrets and verification scratch space
-.venv/
-.venv-*/
-venv/
+.pipeline/
+.venv*/
+evaluation/**/cache/
+evaluation/**/runs/
+evaluation/**/results/
+validation/**/tmp/
+# Local credentials and run evidence are never committed.
 .env
 .env.*
 !.env.example
-auth.json
-credentials.json
-*.pem
-*.key
-/validation/
-/audit-check.log
-
-# Release archives and generated outputs are published separately from source.
-/deliverables/
-/creation_pipeline/results/
-/skills/generated/
-/tools-skills/generated/
-
-# Retain curated reports; one-off local audit scripts/logs are not source.
-/reports/*
-!/reports/DELIVERY-ACCEPTANCE.md
+validation/**/runs/
+validation/**/real/

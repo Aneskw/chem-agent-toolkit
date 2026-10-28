@@ -1,0 +1,327 @@
+{
+  "schema_version": 3,
+  "pipeline_version": "5.2.0-stage2",
+  "build_id": "20261027T200753-a864f013",
+  "started_at": "2026-10-27T12:07:53.838277+00:00",
+  "status": "failed",
+  "entities": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "kind": "skill",
+      "status": "failed",
+      "needs": []
+    }
+  ],
+  "errors": [],
+  "agent_efficacy": "not_evaluated_separate_work",
+  "replay": false,
+  "implementation_sha256": "3be3f9fe8c3044898513814ff9b1bdf9bfea35dce2e2c10a564361ab4caaca3c",
+  "accepted_plan_sha256": "5b39c9601c56529e3a933d288f2e037e9aa8913300912d8a309478812145afe4",
+  "revalidated_prompts": [],
+  "source_context_sha256": "2bdba238e3d94d0ded500fad38af9e81a2fdcfee12f20cd880433e35d2e3e20a",
+  "deferred": [],
+  "adoption": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "status": "candidate_saved",
+      "observation_updated": false,
+      "zone": "candidates",
+      "path": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run13-20261027\\library\\candidates\\rdkit-recap-terminal-fragments"
+    }
+  ],
+  "finished_at": "2026-10-27T12:14:20.206753+00:00",
+  "counts": {
+    "failed": 1
+  },
+  "model_calls": [
+    {
+      "phase": "discovery",
+      "session_key": "discovery",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 106225,
+        "cached_input_tokens": 65536,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3144,
+        "reasoning_output_tokens": 40
+      },
+      "prompt_sha256": "1a4bdea014ca2c53395d9a14c9d5e0a61eb75f2373ec73df9e89ebd8d59fb86a",
+      "tool_events": 7,
+      "session_id": "01a17d42-957b-77c2-9656-95e8ce614e1e",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 148.379,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 3.945,
+        "last_stdout_seconds": 141.868,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    },
+    {
+      "phase": "author",
+      "session_key": "build:rdkit-recap-terminal-fragments",
+      "resumed": true,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 339068,
+        "cached_input_tokens": 259456,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 8163,
+        "reasoning_output_tokens": 438
+      },
+      "prompt_sha256": "b1b6abaebc01211d4fd5b6b0c3a6095979b36dc7eb9f9ee6db0ea920fa96902f",
+      "tool_events": 6,
+      "session_id": "01a17d42-957b-77c2-9656-95e8ce614e1e",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 209.957,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 6.026,
+        "last_stdout_seconds": 206.232,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    },
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "failed",
+      "usage": null,
+      "prompt_sha256": "f1d09d715b211b389e15812dab6f90224f8a0ebebea6531571a20ca9f850d1be",
+      "tool_events": 2,
+      "session_id": "01a17d48-0df9-78b2-aef4-01864abf360f",
+      "error": "Incomplete Agent turn: exit=1; ['You’ve hit your usage limit. Visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 2nd, 2026 1:59 PM.', \"{'message': 'You’ve hit your usage limit. Visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 2nd, 2026 1:59 PM.'}\"]; see E:\\Users\\27343\\Docker\\acceptance-deepseek-run13-20261027\\state\\runs\\20261027T200753-a864f013\\agent-turns\\003-review",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 23.292,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 3.954,
+        "last_stdout_seconds": 20.146,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    }
+  ],
+  "model_metrics": {
+    "calls_attempted": 3,
+    "usage_fully_reported": false,
+    "receipts": [
+      {
+        "phase": "discovery",
+        "session_key": "discovery",
+        "resumed": false,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 106225,
+          "cached_input_tokens": 65536,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3144,
+          "reasoning_output_tokens": 40
+        },
+        "prompt_sha256": "1a4bdea014ca2c53395d9a14c9d5e0a61eb75f2373ec73df9e89ebd8d59fb86a",
+        "tool_events": 7,
+        "session_id": "01a17d42-957b-77c2-9656-95e8ce614e1e",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 148.379,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 3.945,
+          "last_stdout_seconds": 141.868,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      },
+      {
+        "phase": "author",
+        "session_key": "build:rdkit-recap-terminal-fragments",
+        "resumed": true,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 339068,
+          "cached_input_tokens": 259456,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 8163,
+          "reasoning_output_tokens": 438
+        },
+        "prompt_sha256": "b1b6abaebc01211d4fd5b6b0c3a6095979b36dc7eb9f9ee6db0ea920fa96902f",
+        "tool_events": 6,
+        "session_id": "01a17d42-957b-77c2-9656-95e8ce614e1e",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 209.957,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 6.026,
+          "last_stdout_seconds": 206.232,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      },
+      {
+        "phase": "review",
+        "session_key": "review:rdkit-recap-terminal-fragments",
+        "resumed": false,
+        "model": "gpt-6-astra",
+        "status": "failed",
+        "usage": null,
+        "prompt_sha256": "f1d09d715b211b389e15812dab6f90224f8a0ebebea6531571a20ca9f850d1be",
+        "tool_events": 2,
+        "session_id": "01a17d48-0df9-78b2-aef4-01864abf360f",
+        "error": "Incomplete Agent turn: exit=1; ['You’ve hit your usage limit. Visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 2nd, 2026 1:59 PM.', \"{'message': 'You’ve hit your usage limit. Visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 2nd, 2026 1:59 PM.'}\"]; see E:\\Users\\27343\\Docker\\acceptance-deepseek-run13-20261027\\state\\runs\\20261027T200753-a864f013\\agent-turns\\003-review",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 23.292,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 3.954,
+          "last_stdout_seconds": 20.146,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      }
+    ],
+    "monetary_cost": null,
+    "reported_totals": {
+      "reasoning_output_tokens": 478,
+      "cache_write_input_tokens": 0,
+      "input_tokens": 445293,
+      "cached_input_tokens": 324992,
+      "output_tokens": 11307
+    }
+  },
+  "discovery_summary": "Discovered one candidate and saved candidate-discovery.json and work-state.md. Discovery only; no skill package authored.",
+  "candidate_count": 1,
+  "sources": [
+    {
+      "id": "recap",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "license": "BSD-3-Clause",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "rdkit/Chem/Recap.py",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+      },
+      "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.py"
+      ],
+      "index_preview_truncated": false
+    },
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "license.txt",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      },
+      "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.txt"
+      ],
+      "index_preview_truncated": false
+    }
+  ],
+  "source_errors": [],
+  "evidence": [
+    {
+      "source": "recap",
+      "path": "document.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.py",
+      "id": "e1"
+    },
+    {
+      "source": "license",
+      "path": "document.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.txt",
+      "id": "e2"
+    }
+  ],
+  "temporary_workspace": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run13-20261027\\state\\runs\\20261027T200753-a864f013"
+}

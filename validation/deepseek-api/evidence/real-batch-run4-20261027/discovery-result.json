@@ -1,0 +1,16 @@
+{
+  "outcome": "blocked",
+  "summary": "Saved discovery status to work-state.md. Only the BSD license could be inspected; RECAP behavior could not be grounded in source.",
+  "saved_candidates": [],
+  "candidates": [],
+  "omitted": [
+    {
+      "capability": "RDKit RECAP terminal molecular fragments using RecapDecompose and GetLeaves",
+      "reason": "Recap.py was rejected due to a configured hash mismatch. The license alone cannot substantiate invocation, terminal versus full hierarchy interpretation, empty results, or invalid-input boundaries."
+    }
+  ],
+  "limitations": [
+    "The supplied helper interpreter could not be invoked; interpreter-directory access was denied, preventing approved supplemental retrieval.",
+    "No business code was executed. No skill or runtime package was authored."
+  ]
+}

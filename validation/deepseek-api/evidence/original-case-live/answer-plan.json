@@ -1,0 +1,204 @@
+{
+  "action": "plan",
+  "requested_files": [],
+  "reason": "Plans a portable CPU-only image for the delivered entry/skill.py using a public Python base and pip-installed RDKit; no additional source reads are needed because the entrypoint, dependency statement, license, and upstream RECAP source/tests are already in materials.",
+  "plan": {
+    "entrypoint": [
+      "python",
+      "/opt/skill/entry/skill.py"
+    ],
+    "script": "entry/skill.py",
+    "base_image": "python:3.11-slim",
+    "platform": "linux/amd64",
+    "language": "python",
+    "language_version": "3.11",
+    "source_files": [
+      "entry/skill.py",
+      "package/SKILL.md",
+      "package/references/LICENSE.txt",
+      "source-identities.json",
+      "sources/license/document.txt",
+      "sources/recap/document.py"
+    ],
+    "dependencies": [
+      {
+        "name": "rdkit",
+        "version": "2024.3.5",
+        "channel": "pip",
+        "evidence": "Use Python with RDKit already available, including `rdkit.Chem`, `rdkit.Chem.Recap` and reaction support.",
+        "certainty": "inferred"
+      }
+    ],
+    "steps": [
+      {
+        "command": "pip install --no-cache-dir rdkit==2024.3.5",
+        "purpose": "Install RDKit Python bindings including Chem, Recap, and rdChemReactions from a public wheel.",
+        "evidence": "Use Python with RDKit already available, including `rdkit.Chem`, `rdkit.Chem.Recap` and reaction support."
+      },
+      {
+        "command": "python -c \"import rdkit; print(rdkit.__version__)\"",
+        "purpose": "Fail the build early if the installed RDKit cannot be imported and record the release in the build log.",
+        "evidence": "Record `rdkit.__version__` when reporting reproducibility."
+      }
+    ],
+    "build_layout": {
+      "dependency_files": [],
+      "prefix_steps": 0,
+      "reason": "No repository dependency file is needed; RDKit is installed by pip from the base image in the first RUN step, and source files are only needed at runtime."
+    },
+    "environment": [],
+    "resources": [],
+    "file_io": false,
+    "output_contract": "Prints one JSON array to stdout: sorted unique terminal-fragment SMILES, preserving '*' dummy atoms. An empty array [] is a successful result. No output files are written. Invalid input or dependency/decomposition failures exit nonzero with diagnostics potentially on stderr.",
+    "runtime_network": false,
+    "network_reason": "RDKit is installed at image build time; runtime needs no network or external data.",
+    "choices": [
+      {
+        "choice": "Use python:3.11-slim as the public base image and install RDKit from PyPI.",
+        "evidence": "Use Python with RDKit already available, including `rdkit.Chem`, `rdkit.Chem.Recap` and reaction support.",
+        "certainty": "inferred"
+      },
+      {
+        "choice": "Pin rdkit==2024.3.5 as a tentative reproducible release.",
+        "evidence": "No minimum release or compatibility across releases is established here.",
+        "certainty": "inferred"
+      },
+      {
+        "choice": "Run the unchanged delivered script at entry/skill.py with python as the container entrypoint.",
+        "evidence": "Invoke the unchanged delivered package entry, not only the upstream tool.",
+        "certainty": "declared"
+      }
+    ],
+    "unresolved": [
+      "The exact RDKit release is not specified by upstream; the pip pin 2024.3.5 is a tentative portability choice.",
+      "RDKit wheel availability for python:3.11-slim must be confirmed at build time.",
+      "Whether all behaviors of the cited upstream commit match RDKit 2024.3.5 is not independently verified."
+    ],
+    "unverified_behavior": [
+      "Successful RECAP decomposition does not establish synthetic feasibility or chemical/scientific validity.",
+      "Exact behavior for arbitrary invalid SMILES and parser exception text is not exhaustively specified; only the documented empty-argument rejection is asserted.",
+      "No independent implementation or external dataset was used as a correctness oracle.",
+      "Over-argument rejection is documented in the entrypoint guard but is not covered by a reliable regex input check."
+    ],
+    "acceptance_json": "{\"invalid_input\":\"required\",\"scope\":\"CLI invocation of entry/skill.py with zero arguments (documented default) or exactly one nonempty SMILES argument; stdout is the sorted unique RECAP terminal-fragment SMILES JSON array.\",\"purposes\":[\"computation\"],\"constraint\":\"The entrypoint accepts no arguments (using the documented default SMILES) or one nonempty SMILES argument; it parses with RDKit default sanitization and calls Recap.RecapDecompose(mol) with default allNodes, minFragmentSize, and onlyUseReactions.\",\"source_path\":\"entry/skill.py\",\"source_quote\":\"smiles = sys.argv[1] if len(sys.argv) == 2 else 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'\",\"checks\":[{\"id\":\"smiles_arg_nonempty\",\"channel\":\"args\",\"key\":0,\"pattern\":\"^.*\\\\S.*$\",\"source_path\":\"entry/skill.py\",\"source_quote\":\"if len(sys.argv) > 2 or not smiles.strip():\"}],\"operations\":[{\"id\":\"default-example\",\"selector\":{\"args\":[]},\"checks\":[],\"purposes\":[\"computation\"],\"require_persistence\":false,\"source_path\":\"entry/skill.py\",\"source_quote\":\"smiles = sys.argv[1] if len(sys.argv) == 2 else 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'\"},{\"id\":\"explicit-smiles\",\"selector\":{\"args\":[{\"index\":0,\"present\":true}]},\"checks\":[\"smiles_arg_nonempty\"],\"purposes\":[\"computation\"],\"require_persistence\":false,\"source_path\":\"entry/skill.py\",\"source_quote\":\"if len(sys.argv) > 2 or not smiles.strip():\"}]}",
+    "generated_files": [],
+    "tests": [
+      {
+        "name": "env-rdkit-version",
+        "layer": "environment",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md"
+        ],
+        "basis": "Import RDKit and print rdkit.__version__ to capture the installed release, as SKILL.md requests version recording for reproducibility.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "The exact release is not fixed by upstream; this probe only confirms import and reports the installed version."
+        ],
+        "case_json": "{\"args\":[\"-c\",\"import rdkit; print(rdkit.__version__)\"],\"entrypoint\":\"python\",\"expected_exit\":0,\"stdout_contains\":[\"2024.\"]}"
+      },
+      {
+        "name": "interface-default-example",
+        "layer": "interface",
+        "kind": "reference",
+        "source_paths": [
+          "entry/skill.py",
+          "package/SKILL.md",
+          "sources/recap/document.py"
+        ],
+        "basis": "SKILL.md documents zero-argument invocation with the default SMILES and the exact sorted terminal-fragment keys from the upstream RECAP docstring.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "The value is from the cited RDKit implementation and docstring, not from an independent chemistry oracle."
+        ],
+        "case_json": "{\"args\":[],\"expected_exit\":0,\"stdout_equals\":\"[\\\"*C1CC1\\\", \\\"*c1ccc(OC)cn1\\\", \\\"*c1ccccc1*\\\"]\",\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"sources/recap/document.py\",\"source_quote\":\"['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']\",\"assertion\":{\"role\":\"completion\",\"kind\":\"stdout_equals\",\"value\":\"[\\\"*C1CC1\\\", \\\"*c1ccc(OC)cn1\\\", \\\"*c1ccccc1*\\\"]\",\"source_path\":\"sources/recap/document.py\",\"source_quote\":\"['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']\"}}}"
+      },
+      {
+        "name": "behavior-cccoCCC-empty",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md",
+          "sources/recap/document.py"
+        ],
+        "basis": "SKILL.md and upstream test2 document CCCOCCC as a successful decomposition with no children and therefore no terminal leaves.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "This checks a documented empty result, not general chemical correctness."
+        ],
+        "case_json": "{\"args\":[\"CCCOCCC\"],\"expected_exit\":0,\"stdout_equals\":\"[]\",\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"`CCCOCCC` returns no fragments under default settings\",\"assertion\":{\"role\":\"completion\",\"kind\":\"stdout_equals\",\"value\":\"[]\",\"source_path\":\"sources/recap/document.py\",\"source_quote\":\"self.assertTrue(res.children == {})\"}}}"
+      },
+      {
+        "name": "behavior-cyclic-sulfonamide-empty",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "sources/recap/document.py"
+        ],
+        "basis": "The upstream sulfonamide test explicitly asserts successful decomposition with zero leaves for C1CNS(=O)(=O)CC1.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "This checks a documented empty result, not general chemical correctness."
+        ],
+        "case_json": "{\"args\":[\"C1CNS(=O)(=O)CC1\"],\"expected_exit\":0,\"stdout_equals\":\"[]\",\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"sources/recap/document.py\",\"source_quote\":\"self.assertTrue(len(res.GetLeaves()) == 0)\",\"assertion\":{\"role\":\"completion\",\"kind\":\"stdout_equals\",\"value\":\"[]\",\"source_path\":\"sources/recap/document.py\",\"source_quote\":\"self.assertTrue(len(res.GetLeaves()) == 0)\"}}}"
+      },
+      {
+        "name": "behavior-sulfonamide-fragments",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "sources/recap/document.py"
+        ],
+        "basis": "The upstream sulfonamide test asserts two leaves whose keys are *NCCC and *S(=O)(=O)CC; sorting gives the asserted JSON array.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "The exact JSON serialization is adapter behavior; the chemistry expectation is from the upstream test."
+        ],
+        "case_json": "{\"args\":[\"CCCNS(=O)(=O)CC\"],\"expected_exit\":0,\"stdout_equals\":\"[\\\"*NCCC\\\", \\\"*S(=O)(=O)CC\\\"]\",\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"sources/recap/document.py\",\"source_quote\":\"    self.assertTrue(len(res.GetLeaves()) == 2)\\n    ks = res.GetLeaves().keys()\\n    self.assertTrue('*NCCC' in ks)\\n    self.assertTrue('*S(=O)(=O)CC' in ks)\",\"assertion\":{\"role\":\"completion\",\"kind\":\"stdout_equals\",\"value\":\"[\\\"*NCCC\\\", \\\"*S(=O)(=O)CC\\\"]\",\"source_path\":\"sources/recap/document.py\",\"source_quote\":\"    self.assertTrue(len(res.GetLeaves()) == 2)\\n    ks = res.GetLeaves().keys()\\n    self.assertTrue('*NCCC' in ks)\\n    self.assertTrue('*S(=O)(=O)CC' in ks)\"}}}"
+      },
+      {
+        "name": "behavior-reject-empty-smiles",
+        "layer": "behavior",
+        "kind": "derived",
+        "source_paths": [
+          "entry/skill.py"
+        ],
+        "basis": "The delivered entrypoint contains an explicit nonempty-SMILES guard and raises SystemExit with this documented diagnostic.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "Only the empty-argument rejection is asserted; arbitrary malformed SMILES parsing behavior is not exhaustively specified."
+        ],
+        "case_json": "{\"args\":[\"\"],\"expected_exit\":1,\"stderr_contains\":[\"Provide exactly one nonempty SMILES argument, or no arguments for the example.\"],\"acceptance\":{\"purpose\":\"input_rejection\",\"source_path\":\"entry/skill.py\",\"source_quote\":\"raise SystemExit('Provide exactly one nonempty SMILES argument, or no arguments for the example.')\",\"violates\":\"smiles_arg_nonempty\",\"invalid_input_reason\":\"The single SMILES argument is empty.\",\"assertion\":{\"role\":\"rejection\",\"kind\":\"stderr_contains\",\"value\":\"Provide exactly one nonempty SMILES argument, or no arguments for the example.\",\"source_path\":\"entry/skill.py\",\"source_quote\":\"raise SystemExit('Provide exactly one nonempty SMILES argument, or no arguments for the example.')\"}}}"
+      },
+      {
+        "name": "metamorphic-equivalent-dipropyl-ether",
+        "layer": "behavior",
+        "kind": "metamorphic",
+        "source_paths": [
+          "package/SKILL.md",
+          "sources/recap/document.py"
+        ],
+        "basis": "CCCOCCC and O(CCC)CCC are equivalent SMILES for dipropyl ether; RDKit canonicalization should make their RECAP terminal results identical, and the documented result is empty.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "This checks invariance under equivalent SMILES, not absolute fragment correctness."
+        ],
+        "case_json": "{\"relation\":{\"type\":\"equal_stdout\",\"runs\":[{\"args\":[\"CCCOCCC\"]},{\"args\":[\"O(CCC)CCC\"]}]},\"expected_exit\":0,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"`CCCOCCC` returns no fragments under default settings\",\"assertion\":{\"role\":\"completion\",\"kind\":\"stdout_equals\",\"value\":\"[]\",\"source_path\":\"sources/recap/document.py\",\"source_quote\":\"self.assertTrue(res.children == {})\"}}}"
+      }
+    ],
+    "resource_assessment": {
+      "status": "unknown",
+      "source_path": "package/SKILL.md",
+      "source_quote": "No external dataset is needed.",
+      "memory_bytes": 2147483648,
+      "cpus": 1
+    }
+  }
+}

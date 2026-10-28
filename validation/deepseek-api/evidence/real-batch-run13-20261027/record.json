@@ -1,0 +1,530 @@
+{
+  "name": "rdkit-recap-terminal-fragments",
+  "kind": "skill",
+  "plan": {
+    "name": "rdkit-recap-terminal-fragments",
+    "task": "Extract unique terminal RECAP fragment SMILES and optionally corresponding RDKit molecule objects.",
+    "scope": "Molecular fragmentation using RDKit defaults. Terminal results exclude the root and intermediate fragments. Successful empty results are valid and must remain distinct from invalid inputs or execution failures. No scientific validation or synthetic-feasibility claims.",
+    "entrypoint": "With RDKit available inside an authorized Docker container, parse SMILES with Chem.MolFromSmiles and reject failed parsing before calling root = Recap.RecapDecompose(mol). Obtain leaves = root.GetLeaves(); sorted(leaves) supplies unique fragment SMILES and leaves[smi].mol supplies molecule objects. Preserve * atoms and valid empty collections; use independent default allNodes state.",
+    "rationale": "Clarifies terminal versus full hierarchy results, preserves dummy attachment atoms, explains deduplication, and prevents replacing empty results with the parent molecule.",
+    "construction": "Direct packaging of existing APIs with concise instructions and source references; optional minimal validation and serialization glue requires no new algorithm. Later authoring should document RDKit prerequisites, Docker-only execution, invalid-input handling, source revision, and unsupported normalization assumptions. Retain applicable BSD notices if redistributing source.",
+    "upstream_behavior": "Extract unique terminal RECAP fragment SMILES and optionally corresponding RDKit molecule objects.",
+    "added_behavior": "source-supported only",
+    "kind": "skill",
+    "needs": [],
+    "selected": true,
+    "priority": 0,
+    "readiness": "callable",
+    "gaps": [
+      "Runtime availability and RDKit version remain unverified; execution is permitted only in Docker.",
+      "Supplied sources do not define entry policies for empty SMILES, disconnected structures, or unusual molecule objects. Authoring should explicitly define conservative boundaries without attributing them to RECAP."
+    ],
+    "dependencies": [],
+    "files": [
+      {
+        "path": "SKILL.md",
+        "purpose": "Capability instructions"
+      }
+    ],
+    "checks": [],
+    "evidence": [
+      {
+        "id": "e1",
+        "claim": "Inspected document.py, upstream Recap.py, lines 31-56: the overview and example distinguish four immediate children, five total descendants, and three terminal leaves; leaf.mol exposes an RDKit Mol."
+      },
+      {
+        "id": "e1",
+        "claim": "Inspected document.py lines 97-118 and 134-138: GetLeaves collects terminal descendants into a SMILES-keyed dictionary, excludes the root, and returns {} when the root has no children."
+      },
+      {
+        "id": "e1",
+        "claim": "Inspected document.py lines 146-169 and 197-213: RecapDecompose accepts a molecule, immediately calls MolToSmiles, constructs the hierarchy, and optionally reuses allNodes state. It contains no SMILES input-validation interface."
+      },
+      {
+        "id": "e1",
+        "claim": "Inspected document.py lines 180-195 and tests at 231-235, 279-302: default filtering leaves CCCOCCC without children. minFragmentSize=3 instead produces one unique *CCC leaf; this setting changes the filtering branch."
+      },
+      {
+        "id": "e1",
+        "claim": "Inspected document.py lines 66-86: reaction definitions introduce * attachment atoms and explicitly identify an aromatic nitrogen–aromatic carbon rule as outside the standard RECAP set."
+      },
+      {
+        "id": "e2",
+        "claim": "Inspected document.txt BSD clauses 1-3 and disclaimer: redistribution requires retained notices and prohibits unauthorized endorsement. The module also carries its own notice at document.py lines 1-29."
+      }
+    ],
+    "method_evidence": []
+  },
+  "status": "failed",
+  "checks": [],
+  "repair_rounds": 0,
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "sha256": "0e04823cb04a0b71535a4cfdee8ef97fc233b8a775ac885f4846d9e4a8a9f124",
+      "bytes": 3248
+    },
+    {
+      "path": "references/source.md",
+      "sha256": "aa118a9045174ccb5bbf9fc00883ed9c2a517a9ff4630d4e5ad611946b0623f4",
+      "bytes": 2556
+    },
+    {
+      "path": "scripts/terminal_fragments.py",
+      "sha256": "e02dce5ea6d72637e4ab74374ffda3559897984521d881f8d154adf888c05dbf",
+      "bytes": 1275
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "c1e54e02879d3dcb22d138bc4a1005e775b32931a6089b3961b0d3090b1d220d",
+      "bytes": 4229
+    }
+  ],
+  "repair_history": [],
+  "runtime_requirement": {
+    "status": "required",
+    "citations": [
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": ">>> from rdkit import Chem"
+      },
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": ">>> from rdkit.Chem import Recap"
+      },
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": ">>> res = Recap.RecapDecompose(m)"
+      },
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": ">>> leaves=res.GetLeaves()"
+      }
+    ],
+    "reason": "The capability executes RDKit parsing, reaction-based decomposition and terminal-node traversal; producing molecular fragments requires a Python/RDKit runtime. Host business execution is prohibited; runtime acceptance is deferred to Docker."
+  },
+  "entry_declaration": {
+    "kind": "script",
+    "path": "scripts/terminal_fragments.py"
+  },
+  "test_definitions": {
+    "configured": [],
+    "generated": [
+      {
+        "name": "documented-terminal-fragments",
+        "cwd": "{package}",
+        "purpose": "Recap.py lines 38-56 give the exact three sorted terminal SMILES; test1 at 223-229 distinguishes their count from four immediate children and five total descendants. Exercise the actual delivered CLI and confirm terminal rather than intermediate output.",
+        "kind": "positive",
+        "expected_exit": 0,
+        "evidence": "e1",
+        "stdout_contains": [
+          "{\"fragments\": [\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]}"
+        ],
+        "argv": [
+          "{python}",
+          "{package}/scripts/terminal_fragments.py",
+          "C1CC1Oc1ccccc1-c1ncc(OC)cc1"
+        ]
+      },
+      {
+        "name": "valid-empty-default-result",
+        "cwd": "{package}",
+        "purpose": "test2 at 231-235 and testMinFragmentSize at 279-288 assert no children for CCCOCCC with defaults. GetLeaves at 110-118 returns an empty dictionary when there are no children; the CLI must serialize this as successful empty output, without inserting the root.",
+        "kind": "boundary",
+        "expected_exit": 0,
+        "evidence": "e1",
+        "stdout_contains": [
+          "{\"fragments\": []}"
+        ],
+        "argv": [
+          "{python}",
+          "{package}/scripts/terminal_fragments.py",
+          "CCCOCCC"
+        ]
+      },
+      {
+        "name": "reject-unclosed-ring-input",
+        "cwd": "{package}",
+        "purpose": "Recap.py lines 39-42 parse before decomposition, and lines 146-148 require a molecule. This test covers the explicitly added wrapper guard on malformed input, not an upstream chemical oracle; exact parser diagnostics are not asserted.",
+        "kind": "negative",
+        "expected_exit": 2,
+        "evidence": "e1",
+        "stdout_contains": [
+          "{\"error\": \"SMILES did not produce a nonempty RDKit molecule\"}"
+        ],
+        "argv": [
+          "{python}",
+          "{package}/scripts/terminal_fragments.py",
+          "C1CC"
+        ]
+      },
+      {
+        "name": "reject-blank-input",
+        "cwd": "{package}",
+        "purpose": "Recap.py lines 146-148 expect a molecule and do not supply entry validation. This check exercises the documented mechanical wrapper boundary for blank text, distinguishes rejection from valid empty leaves, and makes no claim that RECAP itself mandates this policy.",
+        "kind": "negative",
+        "expected_exit": 2,
+        "evidence": "e1",
+        "stdout_contains": [
+          "{\"error\": \"SMILES must be a nonempty string\"}"
+        ],
+        "argv": [
+          "{python}",
+          "{package}/scripts/terminal_fragments.py",
+          " "
+        ]
+      }
+    ]
+  },
+  "issues": [
+    {
+      "description": "The supplied helper executable could not start in discovery because its configured Python interpreter is missing. No repeat attempt was made.",
+      "blocking": false,
+      "id": "helper-unavailable",
+      "resolution": "All intended package files and metadata were written using native PowerShell. Host must invoke the same finish routine using delivery token e12f95e1ccaf763fe506530a1bc24bc4d42d99b70049a5ceafeffa8635e3d3e9 to produce the completion receipt."
+    }
+  ],
+  "notes": [
+    "No generated checks or source/business programs were executed; generated_checks_enabled is false and business execution is Docker-only. Test definitions are not execution evidence.",
+    "Python/RDKit installation, runtime version compatibility and parser failure behavior remain unverified in the eventual container. No dependency installation or environment generation was performed.",
+    "Source evidence identifies an exact RDKit commit, not a known release version. No scientific adequacy or experimental validity is established.",
+    "The CLI emits SMILES only; the same delivered module exposes terminal_leaves for callers needing RDKit node.mol objects. Guards and sorting are transparent interface glue, not a new fragmentation method.",
+    "Independent content review and host-controlled Docker runtime acceptance remain pending. Host finalization is needed; no durable completion receipt has been generated."
+  ],
+  "additional_candidates": [],
+  "file_purposes": [
+    {
+      "path": "references/LICENSE.txt",
+      "purpose": "Delivered capability resource"
+    },
+    {
+      "path": "references/source.md",
+      "purpose": "Delivered capability resource"
+    },
+    {
+      "path": "scripts/terminal_fragments.py",
+      "purpose": "Delivered capability resource"
+    },
+    {
+      "path": "SKILL.md",
+      "purpose": "Delivered capability resource"
+    }
+  ],
+  "error": "Incomplete Agent turn: exit=1; ['You’ve hit your usage limit. Visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 2nd, 2026 1:59 PM.', \"{'message': 'You’ve hit your usage limit. Visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 2nd, 2026 1:59 PM.'}\"]; see E:\\Users\\27343\\Docker\\acceptance-deepseek-run13-20261027\\state\\runs\\20261027T200753-a864f013\\agent-turns\\003-review",
+  "stopped_reason": "Model execution stopped; no file-repair retry",
+  "model_calls": [
+    {
+      "phase": "author",
+      "session_key": "build:rdkit-recap-terminal-fragments",
+      "resumed": true,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 339068,
+        "cached_input_tokens": 259456,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 8163,
+        "reasoning_output_tokens": 438
+      },
+      "prompt_sha256": "b1b6abaebc01211d4fd5b6b0c3a6095979b36dc7eb9f9ee6db0ea920fa96902f",
+      "tool_events": 6,
+      "session_id": "01a17d42-957b-77c2-9656-95e8ce614e1e",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 209.957,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 6.026,
+        "last_stdout_seconds": 206.232,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    },
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "failed",
+      "usage": null,
+      "prompt_sha256": "f1d09d715b211b389e15812dab6f90224f8a0ebebea6531571a20ca9f850d1be",
+      "tool_events": 2,
+      "session_id": "01a17d48-0df9-78b2-aef4-01864abf360f",
+      "error": "Incomplete Agent turn: exit=1; ['You’ve hit your usage limit. Visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 2nd, 2026 1:59 PM.', \"{'message': 'You’ve hit your usage limit. Visit https://chatgpt.com/settings/usage to purchase more credits or try again at Nov 2nd, 2026 1:59 PM.'}\"]; see E:\\Users\\27343\\Docker\\acceptance-deepseek-run13-20261027\\state\\runs\\20261027T200753-a864f013\\agent-turns\\003-review",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 23.292,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 3.954,
+        "last_stdout_seconds": 20.146,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    }
+  ],
+  "fingerprint": "30238de758e5431aa01cf08986e586661b4e7789a10b365fdfac7239f8e4a2d2",
+  "delivery": {
+    "protocol": 1,
+    "candidate_id": "candidate-0db42e9bf94ddd230ae29a2db252b2c177c4a722a121599877a07a3e51b18ea1",
+    "revision_id": "rev-796e446e708513eb3387de718de36a03fa331b05dbb79469de55f3f6437047a4",
+    "mode": "normal",
+    "inputs": {
+      "candidate": {
+        "name": "rdkit-recap-terminal-fragments",
+        "task": "Extract unique terminal RECAP fragment SMILES and optionally corresponding RDKit molecule objects.",
+        "scope": "Molecular fragmentation using RDKit defaults. Terminal results exclude the root and intermediate fragments. Successful empty results are valid and must remain distinct from invalid inputs or execution failures. No scientific validation or synthetic-feasibility claims.",
+        "entrypoint": "With RDKit available inside an authorized Docker container, parse SMILES with Chem.MolFromSmiles and reject failed parsing before calling root = Recap.RecapDecompose(mol). Obtain leaves = root.GetLeaves(); sorted(leaves) supplies unique fragment SMILES and leaves[smi].mol supplies molecule objects. Preserve * atoms and valid empty collections; use independent default allNodes state.",
+        "rationale": "Clarifies terminal versus full hierarchy results, preserves dummy attachment atoms, explains deduplication, and prevents replacing empty results with the parent molecule.",
+        "construction": "Direct packaging of existing APIs with concise instructions and source references; optional minimal validation and serialization glue requires no new algorithm. Later authoring should document RDKit prerequisites, Docker-only execution, invalid-input handling, source revision, and unsupported normalization assumptions. Retain applicable BSD notices if redistributing source.",
+        "upstream_behavior": "Extract unique terminal RECAP fragment SMILES and optionally corresponding RDKit molecule objects.",
+        "added_behavior": "source-supported only",
+        "kind": "skill",
+        "needs": [],
+        "selected": true,
+        "priority": 0,
+        "readiness": "callable",
+        "gaps": [
+          "Runtime availability and RDKit version remain unverified; execution is permitted only in Docker.",
+          "Supplied sources do not define entry policies for empty SMILES, disconnected structures, or unusual molecule objects. Authoring should explicitly define conservative boundaries without attributing them to RECAP."
+        ],
+        "dependencies": [],
+        "files": [
+          {
+            "path": "SKILL.md",
+            "purpose": "Capability instructions"
+          }
+        ],
+        "checks": [],
+        "evidence": [
+          {
+            "id": "e1",
+            "claim": "Inspected document.py, upstream Recap.py, lines 31-56: the overview and example distinguish four immediate children, five total descendants, and three terminal leaves; leaf.mol exposes an RDKit Mol."
+          },
+          {
+            "id": "e1",
+            "claim": "Inspected document.py lines 97-118 and 134-138: GetLeaves collects terminal descendants into a SMILES-keyed dictionary, excludes the root, and returns {} when the root has no children."
+          },
+          {
+            "id": "e1",
+            "claim": "Inspected document.py lines 146-169 and 197-213: RecapDecompose accepts a molecule, immediately calls MolToSmiles, constructs the hierarchy, and optionally reuses allNodes state. It contains no SMILES input-validation interface."
+          },
+          {
+            "id": "e1",
+            "claim": "Inspected document.py lines 180-195 and tests at 231-235, 279-302: default filtering leaves CCCOCCC without children. minFragmentSize=3 instead produces one unique *CCC leaf; this setting changes the filtering branch."
+          },
+          {
+            "id": "e1",
+            "claim": "Inspected document.py lines 66-86: reaction definitions introduce * attachment atoms and explicitly identify an aromatic nitrogen–aromatic carbon rule as outside the standard RECAP set."
+          },
+          {
+            "id": "e2",
+            "claim": "Inspected document.txt BSD clauses 1-3 and disclaimer: redistribution requires retained notices and prohibits unauthorized endorsement. The module also carries its own notice at document.py lines 1-29."
+          }
+        ],
+        "method_evidence": []
+      },
+      "files": [
+        {
+          "path": "references/LICENSE.txt",
+          "sha256": "0e04823cb04a0b71535a4cfdee8ef97fc233b8a775ac885f4846d9e4a8a9f124",
+          "bytes": 3248
+        },
+        {
+          "path": "references/source.md",
+          "sha256": "aa118a9045174ccb5bbf9fc00883ed9c2a517a9ff4630d4e5ad611946b0623f4",
+          "bytes": 2556
+        },
+        {
+          "path": "scripts/terminal_fragments.py",
+          "sha256": "e02dce5ea6d72637e4ab74374ffda3559897984521d881f8d154adf888c05dbf",
+          "bytes": 1275
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "c1e54e02879d3dcb22d138bc4a1005e775b32931a6089b3961b0d3090b1d220d",
+          "bytes": 4229
+        }
+      ],
+      "sources": [
+        {
+          "id": "license",
+          "inventory": [
+            {
+              "path": "document.txt",
+              "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+              "bytes": 1580
+            }
+          ],
+          "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+          "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+          "upstream": {
+            "repo": "https://github.com/rdkit/rdkit",
+            "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+            "path": "license.txt",
+            "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+            "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+          }
+        },
+        {
+          "id": "recap",
+          "inventory": [
+            {
+              "path": "document.py",
+              "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+              "bytes": 20662
+            }
+          ],
+          "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+          "license": "BSD-3-Clause",
+          "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a",
+          "upstream": {
+            "repo": "https://github.com/rdkit/rdkit",
+            "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+            "path": "rdkit/Chem/Recap.py",
+            "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+            "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+          }
+        }
+      ],
+      "requirement": {
+        "status": "unknown",
+        "reason": "Execution requirement not confirmed by independent review",
+        "citations": []
+      },
+      "bindings": {
+        "version": 1,
+        "payload": null,
+        "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+      },
+      "environment": {
+        "version": 1,
+        "payload": null,
+        "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+      },
+      "acceptance": {
+        "version": 1,
+        "payload": {
+          "configured": [],
+          "generated": [
+            {
+              "name": "documented-terminal-fragments",
+              "cwd": "{package}",
+              "purpose": "Recap.py lines 38-56 give the exact three sorted terminal SMILES; test1 at 223-229 distinguishes their count from four immediate children and five total descendants. Exercise the actual delivered CLI and confirm terminal rather than intermediate output.",
+              "kind": "positive",
+              "expected_exit": 0,
+              "evidence": "e1",
+              "stdout_contains": [
+                "{\"fragments\": [\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]}"
+              ],
+              "argv": [
+                "{python}",
+                "{package}/scripts/terminal_fragments.py",
+                "C1CC1Oc1ccccc1-c1ncc(OC)cc1"
+              ]
+            },
+            {
+              "name": "valid-empty-default-result",
+              "cwd": "{package}",
+              "purpose": "test2 at 231-235 and testMinFragmentSize at 279-288 assert no children for CCCOCCC with defaults. GetLeaves at 110-118 returns an empty dictionary when there are no children; the CLI must serialize this as successful empty output, without inserting the root.",
+              "kind": "boundary",
+              "expected_exit": 0,
+              "evidence": "e1",
+              "stdout_contains": [
+                "{\"fragments\": []}"
+              ],
+              "argv": [
+                "{python}",
+                "{package}/scripts/terminal_fragments.py",
+                "CCCOCCC"
+              ]
+            },
+            {
+              "name": "reject-unclosed-ring-input",
+              "cwd": "{package}",
+              "purpose": "Recap.py lines 39-42 parse before decomposition, and lines 146-148 require a molecule. This test covers the explicitly added wrapper guard on malformed input, not an upstream chemical oracle; exact parser diagnostics are not asserted.",
+              "kind": "negative",
+              "expected_exit": 2,
+              "evidence": "e1",
+              "stdout_contains": [
+                "{\"error\": \"SMILES did not produce a nonempty RDKit molecule\"}"
+              ],
+              "argv": [
+                "{python}",
+                "{package}/scripts/terminal_fragments.py",
+                "C1CC"
+              ]
+            },
+            {
+              "name": "reject-blank-input",
+              "cwd": "{package}",
+              "purpose": "Recap.py lines 146-148 expect a molecule and do not supply entry validation. This check exercises the documented mechanical wrapper boundary for blank text, distinguishes rejection from valid empty leaves, and makes no claim that RECAP itself mandates this policy.",
+              "kind": "negative",
+              "expected_exit": 2,
+              "evidence": "e1",
+              "stdout_contains": [
+                "{\"error\": \"SMILES must be a nonempty string\"}"
+              ],
+              "argv": [
+                "{python}",
+                "{package}/scripts/terminal_fragments.py",
+                " "
+              ]
+            }
+          ]
+        },
+        "sha256": "9f503687829a91057a1a23cbb273e92a2f9ff753a4994a2242bfb5d49ae0c76b"
+      }
+    },
+    "content": {
+      "status": "failed"
+    },
+    "fingerprints": {
+      "files": "afce933375868a772d4266d689e2b6a0d2d65b9875431bb38ee7f225256ad535",
+      "sources": "fcf3caddc80c62c81d9ff6ab8e8c38d08fb129222432f733587fed143d32d5e4",
+      "bindings": "19d351464aa44bd8c6f0345a89f82dc37e22af3a80db6af55483d36052c0f14e",
+      "environment": "19d351464aa44bd8c6f0345a89f82dc37e22af3a80db6af55483d36052c0f14e",
+      "acceptance": "e8cc491f633b7235288d7c9cb6ff28feb4ccd4c87c912854b0ed5d2e6fdbd21d"
+    },
+    "execution": {
+      "status": "not_run",
+      "attempts": [],
+      "reason": "Execution evidence is recorded separately after final freeze"
+    },
+    "host": {
+      "status": "not_checked",
+      "observed_at": null
+    },
+    "evidence": [],
+    "qualification": {
+      "accepted": false,
+      "reason": "Content review has not passed"
+    }
+  },
+  "content_status": "failed",
+  "durable_evidence": {
+    "path": "evidence/rdkit-recap-terminal-fragments/8e7a5bf25ef043b0833b91db5b27bcce",
+    "freeze_sha256": "4c3c41a022c26326afbede3c7da23d7ecfe74e9880b93264e31d55699785d598"
+  },
+  "runtime_history_records": []
+}

@@ -1,0 +1,222 @@
+{
+  "rejected_plan": {
+    "entrypoint": [
+      "python",
+      "/opt/skill/bin/recap"
+    ],
+    "script": "entry/skill.py",
+    "base_image": "continuumio/miniconda3:latest",
+    "platform": "linux/amd64",
+    "language": "Python",
+    "language_version": "3.11",
+    "source_files": [
+      "entry/skill.py",
+      "package/SKILL.md",
+      "package/references/UPSTREAM-NOTICES.txt",
+      "source-identities.json",
+      "sources/license/document.txt",
+      "sources/recap/document.py"
+    ],
+    "dependencies": [
+      {
+        "name": "rdkit",
+        "version": "2024.09.2",
+        "channel": "conda-forge",
+        "evidence": "package/SKILL.md requires RDKit with Chem and Chem.Recap; no released version is documented.",
+        "certainty": "inferred"
+      },
+      {
+        "name": "python",
+        "version": "3.11",
+        "channel": "conda-forge",
+        "evidence": "base continuumio/miniconda3 provides Python; python=3.11 is installed explicitly in the RDKit conda step.",
+        "certainty": "inferred"
+      }
+    ],
+    "steps": [
+      {
+        "command": "conda install -y -c conda-forge python=3.11 rdkit=2024.09.2 && conda clean -afy",
+        "purpose": "Install RDKit and Python 3.11 in the base Conda environment.",
+        "evidence": "package/SKILL.md: Run Python with RDKit (including Chem and Chem.Recap) already available in an authorized Docker container."
+      },
+      {
+        "command": "python -c \"import rdkit, rdkit.Chem, rdkit.Chem.Recap; print('rdkit version', rdkit.__version__)\"",
+        "purpose": "Verify RDKit imports and expose the resolved version in build logs.",
+        "evidence": "package/SKILL.md: Record rdkit.__version__ with results."
+      }
+    ],
+    "build_layout": {
+      "dependency_files": [],
+      "prefix_steps": 0,
+      "reason": "No source/install configuration files are needed before copying the unchanged source tree; dependency installation is performed after all source files are copied."
+    },
+    "environment": [
+      {
+        "name": "PATH",
+        "value": "/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      },
+      {
+        "name": "PYTHONUNBUFFERED",
+        "value": "1"
+      },
+      {
+        "name": "LANG",
+        "value": "C.UTF-8"
+      }
+    ],
+    "resources": [],
+    "file_io": false,
+    "output_contract": "For each valid nonblank SMILES CLI argument, the configured wrapper prints a JSON array of sorted unique terminal fragment SMILES. The delivered entry/skill.py __main__ prints the documented default example array.",
+    "runtime_network": false,
+    "network_reason": "RDKit is installed during image build; runtime tests execute the local conda-installed package without network access.",
+    "choices": [
+      {
+        "choice": "Use continuumio/miniconda3 and conda-forge to install a pinned RDKit binary package.",
+        "evidence": "package/SKILL.md requires RDKit but gives no install channel; conda-forge is a standard prebuilt source for RDKit.",
+        "certainty": "inferred"
+      },
+      {
+        "choice": "Pin Python 3.11 and rdkit 2024.09.2 for a reproducible environment.",
+        "evidence": "The source pins an upstream commit but no release range; version selection is an inferred compatibility choice.",
+        "certainty": "inferred"
+      },
+      {
+        "choice": "Configure CLI entrypoint as /opt/skill/bin/recap, a generated launcher that imports the unchanged delivered entry/skill.py and forwards its first argument.",
+        "evidence": "user_constraints require invoking the unchanged delivered package entry; the generated launcher does not alter business code.",
+        "certainty": "declared"
+      },
+      {
+        "choice": "Keep file_io false and use stdout JSON as the only result channel.",
+        "evidence": "package/SKILL.md continuous example prints json.dumps(sorted(leaves)) and no file output is documented.",
+        "certainty": "declared"
+      }
+    ],
+    "unresolved": [
+      "No RDKit release version is documented by the source; the selected 2024.09.2 is an inferred compatibility pin."
+    ],
+    "unverified_behavior": [
+      "The tool exposes the RDKit RECAP implementation, not an independent synthesis/validity checker; fragment scientific interpretation is not established.",
+      "SMILES parseability and chemistry-specific rejection behavior are enforced by RDKit and wrapper exceptions; they cannot be fully captured as a regex input check."
+    ],
+    "acceptance_json": "{\"invalid_input\":\"required\",\"scope\":\"The configured CLI wrapper accepts one nonblank SMILES argument and prints sorted terminal fragment SMILES. The delivered entry/skill.py __main__ prints the documented default example. Parse and type errors are rejected.\",\"purposes\":[\"computation\"],\"constraint\":\"Exactly one nonblank SMILES argument for the CLI operation; the delivered main operation accepts no arguments.\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"Supply a nonblank SMILES string or a valid, already sanitized RDKit `Chem.Mol`. The guard below rejects failed parses, wrong input types and zero-atom molecules.\",\"checks\":[{\"id\":\"nonempty_smiles_arg\",\"channel\":\"args\",\"key\":0,\"pattern\":\"^.+$\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"Supply a nonblank SMILES string or a valid, already sanitized RDKit `Chem.Mol`.\"}],\"limitation\":\"The regex check rejects empty arguments only; whitespace-only and parse-invalid SMILES are rejected by the delivered function but are not expressed as regex checks.\",\"operations\":[{\"id\":\"cli_smiles\",\"selector\":{\"args\":[{\"index\":0,\"pattern\":\"^.+$\"}]},\"checks\":[\"nonempty_smiles_arg\"],\"purposes\":[\"computation\"],\"require_persistence\":false,\"source_path\":\"package/SKILL.md\",\"source_quote\":\"Supply a nonblank SMILES string or a valid, already sanitized RDKit `Chem.Mol`.\"},{\"id\":\"delivered_main\",\"selector\":{\"args\":[]},\"checks\":[],\"purposes\":[\"computation\"],\"require_persistence\":false,\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The source example expects `['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']`.\"}]}",
+    "generated_files": [
+      {
+        "path": "bin/recap",
+        "content": "import sys, json\nsys.path.insert(0, '/opt/skill/entry')\nimport skill\nif len(sys.argv) != 2:\n    print('Expected one SMILES argument', file=sys.stderr)\n    raise SystemExit(1)\nleaves = skill.terminal_fragments(sys.argv[1])\nprint(json.dumps(sorted(leaves)))\n"
+      }
+    ],
+    "tests": [
+      {
+        "name": "environment-probe-rdkit-version",
+        "layer": "environment",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md"
+        ],
+        "basis": "package/SKILL.md requires RDKit and says record rdkit.__version__.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"entrypoint\": \"python\", \"args\": [\"-c\", \"import rdkit; print('rdkit.__version__=', rdkit.__version__)\"], \"expected_exit\": 0, \"stdout_contains\": [\"rdkit.__version__=\"]}"
+      },
+      {
+        "name": "direct-delivered-entry-example",
+        "layer": "interface",
+        "kind": "reference",
+        "source_paths": [
+          "entry/skill.py",
+          "package/SKILL.md"
+        ],
+        "basis": "package/SKILL.md continuous example and entry/skill.py __main__.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"entrypoint\": \"python\", \"args\": [\"/opt/skill/entry/skill.py\"], \"expected_exit\": 0, \"stdout_contains\": [\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"], \"acceptance\": {\"purpose\": \"computation\", \"source_path\": \"package/SKILL.md\", \"source_quote\": \"The source example expects `['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']`.\", \"assertion\": {\"role\": \"result\", \"source_path\": \"package/SKILL.md\", \"source_quote\": \"The source example expects `['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']`.\", \"kind\": \"json\", \"path\": [0], \"allowed_values\": [\"*C1CC1\"]}}}"
+      },
+      {
+        "name": "wrapper-default-terminal-fragments",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md",
+          "sources/recap/document.py"
+        ],
+        "basis": "Documented example: RecapDecompose(...).GetLeaves() has three terminal fragments; wrapper prints sorted keys.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"args\": [\"C1CC1Oc1ccccc1-c1ncc(OC)cc1\"], \"expected_exit\": 0, \"stdout_contains\": [\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"], \"acceptance\": {\"purpose\": \"computation\", \"source_path\": \"package/SKILL.md\", \"source_quote\": \"The source example expects `['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']`.\", \"assertion\": {\"role\": \"result\", \"source_path\": \"package/SKILL.md\", \"source_quote\": \"The source example expects `['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']`.\", \"kind\": \"json\", \"path\": [0], \"allowed_values\": [\"*C1CC1\"]}}}"
+      },
+      {
+        "name": "wrapper-cyclic-ether-valid-empty",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "sources/recap/document.py"
+        ],
+        "basis": "Upstream testEtherRxn asserts zero leaves for C1CCCCO1.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"args\": [\"C1CCCCO1\"], \"expected_exit\": 0, \"stdout_equals\": \"[]\", \"acceptance\": {\"purpose\": \"computation\", \"source_path\": \"sources/recap/document.py\", \"source_quote\": \"The source tests give `C1CCCCO1` and `CCCOCCC` as default empty cases.\", \"assertion\": {\"role\": \"result\", \"source_path\": \"sources/recap/document.py\", \"source_quote\": \"The source tests give `C1CCCCO1` and `CCCOCCC` as default empty cases.\", \"kind\": \"stdout_equals\", \"value\": \"[]\"}}}"
+      },
+      {
+        "name": "wrapper-default-filter-valid-empty",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "sources/recap/document.py"
+        ],
+        "basis": "Upstream test2 and testMinFragmentSize assert no default children for CCCOCCC, so GetLeaves is empty.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"args\": [\"CCCOCCC\"], \"expected_exit\": 0, \"stdout_equals\": \"[]\", \"acceptance\": {\"purpose\": \"computation\", \"source_path\": \"sources/recap/document.py\", \"source_quote\": \"The source tests give `C1CCCCO1` and `CCCOCCC` as default empty cases.\", \"assertion\": {\"role\": \"result\", \"source_path\": \"sources/recap/document.py\", \"source_quote\": \"The source tests give `C1CCCCO1` and `CCCOCCC` as default empty cases.\", \"kind\": \"stdout_equals\", \"value\": \"[]\"}}}"
+      },
+      {
+        "name": "wrapper-ether-reaction-fragments",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "sources/recap/document.py"
+        ],
+        "basis": "Upstream testEtherRxn asserts two leaves for C1CC1OC1OC1.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"args\": [\"C1CC1OC1OC1\"], \"expected_exit\": 0, \"stdout_contains\": [\"*C1CC1\", \"*C1CO1\"], \"acceptance\": {\"purpose\": \"computation\", \"source_path\": \"sources/recap/document.py\", \"source_quote\": \"m = Chem.MolFromSmiles('C1CC1OC1OC1')\", \"assertion\": {\"role\": \"result\", \"source_path\": \"sources/recap/document.py\", \"source_quote\": \"m = Chem.MolFromSmiles('C1CC1OC1OC1')\", \"kind\": \"json\", \"path\": [0], \"allowed_values\": [\"*C1CC1\"]}}}"
+      },
+      {
+        "name": "wrapper-blank-smiles-rejection",
+        "layer": "interface",
+        "kind": "reference",
+        "source_paths": [
+          "entry/skill.py",
+          "package/SKILL.md"
+        ],
+        "basis": "package/SKILL.md documents blank SMILES rejection; entry/skill.py raises ValueError.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"args\": [\"\"], \"expected_exit\": 1, \"acceptance\": {\"purpose\": \"input_rejection\", \"source_path\": \"package/SKILL.md\", \"source_quote\": \"Supply a nonblank SMILES string or a valid, already sanitized RDKit `Chem.Mol`. The guard below rejects failed parses, wrong input types and zero-atom molecules.\", \"violates\": \"nonempty_smiles_arg\", \"invalid_input_reason\": \"SMILES must not be blank\", \"assertion\": {\"role\": \"rejection\", \"source_path\": \"package/SKILL.md\", \"source_quote\": \"The guard below rejects failed parses, wrong input types and zero-atom molecules.\", \"kind\": \"stderr_contains\", \"value\": \"ValueError: SMILES must not be blank\"}}}"
+      }
+    ],
+    "resource_assessment": {
+      "status": "unknown",
+      "source_path": "package/SKILL.md",
+      "source_quote": "Run Python with RDKit (including `Chem` and `Chem.Recap`) already available in an authorized Docker container.",
+      "memory_bytes": 0,
+      "cpus": 0
+    }
+  },
+  "read_files": [
+    "entry/skill.py",
+    "source-identities.json",
+    "package/SKILL.md",
+    "package/references/UPSTREAM-NOTICES.txt",
+    "sources/license/document.txt",
+    "sources/recap/document.py"
+  ],
+  "source_fingerprint": "37790ddd94152b00c072f47daa1142a2ceeabd12205cad51255cfb168f55a4d7",
+  "diagnostic": "Operation selector must match a literal documented invocation token"
+}

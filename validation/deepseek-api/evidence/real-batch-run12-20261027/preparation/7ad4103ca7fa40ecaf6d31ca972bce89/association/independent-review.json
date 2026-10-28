@@ -1,0 +1,100 @@
+{
+  "review": {
+    "name": "content_review",
+    "required": true,
+    "status": "pass",
+    "resolution": "none",
+    "findings": [
+      {
+        "location": "artifact.tests; scripts/recap_fragments.py",
+        "problem": "Runtime behavior remains unverified.",
+        "evidence": "Execution is disabled and no check reports were supplied. Inspected Recap document.py:39-53 confirms the invocation and three-fragment oracle; lines 110-118 and 231-235 confirm the empty-result oracle. The four tests invoke the delivered CLI.",
+        "impact": "Source fidelity and entry binding are supported; installed-RDKit compatibility and CLI error behavior are not runtime-verified.",
+        "action": "Run the four existing tests through the helper when an approved runtime is available. Review records were saved; the configured helper interpreter was unavailable.",
+        "blocking": false,
+        "category": "check"
+      }
+    ],
+    "oracle_changes_verified": false,
+    "execution_gaps": [],
+    "requirement_assessment": "confirmed",
+    "binding_verified": true,
+    "evidence_kind": "model_review_not_independent_scientific_validation"
+  },
+  "receipts": [
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 228159,
+        "cached_input_tokens": 195328,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1863,
+        "reasoning_output_tokens": 121
+      },
+      "prompt_sha256": "7280122bae5226ae6029a4172b3a1911d3d6115001abcf68d4ba076f28767b94",
+      "tool_events": 8,
+      "session_id": "01a17d2f-e828-74e0-bfd6-86fb09a99616",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 107.659,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 5.992,
+        "last_stdout_seconds": 103.772,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "sha256": "defcec084284f50f58d4739749c6c0836beb948b662b6b67d8edee42245ebf4b",
+      "bytes": 3302
+    },
+    {
+      "path": "references/sources.md",
+      "sha256": "6e98ae68a48ac0b2ea1911258f80c094f1194acf9c55b27e973bd2d9c2822cf9",
+      "bytes": 2370
+    },
+    {
+      "path": "scripts/recap_fragments.py",
+      "sha256": "44e952b2a2972ab2d9bd19d76733ff424ae7a47525456b97c91abc20f17507ff",
+      "bytes": 1409
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "eb77af97a411325857c7a8725fbd7c9386a34b0c0fd91d12f724f5c883f13cd6",
+      "bytes": 4121
+    }
+  ],
+  "source_files": {
+    "recap": [
+      {
+        "path": "document.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+        "bytes": 20662
+      }
+    ],
+    "license": [
+      {
+        "path": "document.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+        "bytes": 1580
+      }
+    ]
+  },
+  "oracle_changes": []
+}

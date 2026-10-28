@@ -1,0 +1,41 @@
+{
+  "kind": "markdown_python",
+  "entry": "SKILL.md",
+  "runtime_entry": "entry/skill.py",
+  "extraction": {
+    "rule": "single-unindented-python-fence-v1",
+    "block_index": 0,
+    "start_byte": 2364,
+    "end_byte": 3157,
+    "start_line": 23,
+    "markdown_sha256": "2792eaded33af4ab2f20978b65448b775a3c1e64790abee2d218f013459b2e18",
+    "code_sha256": "e5cca3f3c055dee6fb156307e7c4c83e82539d9a68b50c3dfa033652356ba307"
+  },
+  "declaration": {
+    "path": "SKILL.md",
+    "block_index": 0,
+    "kind": "markdown_python"
+  },
+  "association": "reviewed",
+  "source_id": "recap",
+  "source_path": "document.py",
+  "source_sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+  "quote": ">>> from rdkit.Chem import Recap\n>>> m = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\n>>> res = Recap.RecapDecompose(m)",
+  "reason": "Source scope: source_id recap is the inspected pinned RDKit Recap.py content stored as document.py at upstream commit 237a1d9027c800784afed8788540f38a3aa595f8; it defines RecapDecompose, RecapHierarchyNode.GetLeaves and the reaction definitions used by the delivery. It is provenance and an upstream API reference, not an installed RDKit package. Delivery scope: the extracted single Python fence in SKILL.md is an example adapter, not new RECAP chemistry; it imports rdkit.Chem and rdkit.Chem.Recap and defines terminal_fragments(smiles), which validates a nonblank string, parses it, rejects missing or zero-atom molecules, calls Recap.RecapDecompose(mol), then returns root.GetLeaves(). The __main__ path uses Python 3 argparse with an optional positional SMILES, sorts the leaf dictionary keys, and prints JSON to stdout. It has no data-file or working-directory dependency; it requires an already-installed RDKit inside an authorized Docker container and no dependency installation or host execution. The quote is one contiguous source passage showing the exact Recap import and Recap.RecapDecompose call; GetLeaves is the terminal-node retrieval method in the same inspected source.",
+  "invocation": "python recap_example.py [SMILES]",
+  "entry_sha256": "2792eaded33af4ab2f20978b65448b775a3c1e64790abee2d218f013459b2e18",
+  "files": [
+    {
+      "path": "references/source-notices.md",
+      "sha256": "37473aa2cdf04c319cb091008b6f22fd9e67beaa126b4744ee156b95b2f4072f",
+      "bytes": 4738
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "2792eaded33af4ab2f20978b65448b775a3c1e64790abee2d218f013459b2e18",
+      "bytes": 5643
+    }
+  ],
+  "review_sha256": "3abb54edea74085593b37bf84788336cb9eb97b8330412bbf9d4043da75092f8",
+  "declaration_source": "author_declaration"
+}

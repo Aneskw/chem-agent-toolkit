@@ -1,0 +1,112 @@
+{
+  "completed": true,
+  "summary": "Packaged a source-grounded skill for RDKit RECAP terminal fragments with a thin CLI entry script, SKILL.md, and BSD-3-Clause license text in references/. Documented terminal vs hierarchy interpretation, valid empty results, optional controls and invalid boundaries. Source-derived tests are supplied as definitions only; the author did not execute business code in this environment.",
+  "entry": {
+    "kind": "script",
+    "path": "scripts/recap_leaves.py"
+  },
+  "files": [
+    {
+      "path": "SKILL.md",
+      "content": "---\nname: rdkit-recap-terminal-fragments\ndescription: Decompose an RDKit molecule into RECAP terminal molecular fragments and return terminal leaf fragments as canonical SMILES with '*' attachment points. Use for standard RECAP terminal fragmentation, not descriptor calculation or full hierarchy traversal.\n---\n\n# RDKit RECAP terminal fragments\n\nPrerequisites:\n- Python 3.8+ and an RDKit installation where `from rdkit import Chem` works.\n- The examples below come from the RDKit `rdkit/Chem/Recap.py` source at commit `237a1d9027c800784afed8788540f38a3aa595f8`; canonical SMILES can differ slightly across RDKit versions, so confirm outputs in the target environment.\n\nInput and output:\n- Input: a single SMILES string on the command line. The script parses it with `Chem.MolFromSmiles` and sanitizes it before calling `Recap.RecapDecompose`. A pre-sanitized RDKit `Mol` can also be passed directly when using the Python API; the caller must handle a `None`/invalid mol first.\n- Output: one JSON object, `{\"leaves\": [<terminal fragment SMILES>, ...]}`. The list is sorted lexicographically; each key is the canonical product SMILES from RDKit with attachment points represented as `*` atoms. This is molecular fragmentation, not descriptor calculation.\n\nNormal path:\n```bash\npython scripts/recap_leaves.py 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'\n```\n```text\n{\"leaves\": [\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]}\n```\n\nDirect API equivalent (shown for completeness; do not use as the package entry):\n```text\nfrom rdkit import Chem\nfrom rdkit.Chem import Recap\n\nmol = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\nroot = Recap.RecapDecompose(mol)\nleaves = root.GetLeaves()   # dict SMILES -> RecapHierarchyNode\nprint(sorted(leaves.keys()))\n```\n\nBoundary: terminal vs hierarchy:\n- `RecapDecompose` returns `RecapHierarchyNode`.\n- `root.children` are immediate children; `root.GetAllChildren()` returns all descendants; only `root.GetLeaves()` returns terminal leaves. For the example above, immediate children count is 4, all descendants count is 5, terminal leaves count is 3. Use GetLeaves for standard RECAP terminal fragments.\n\nValid empty results:\n- A valid empty result is `{\"leaves\": []}`, exit 0.\n- This occurs when no permitted cleavable bond exists or all products are rejected by the small-fragment filter. Source examples include `CCCOCCC` default (no children), `C1CCCCO1` (ring-only ether has no leaves), and protonated forms such as `c1ccccc1[n+]1ccccc1`.\n- The default small-fragment filter rejects products whose dummy-stripped SMILES is `''`, `'C'`, `'CC'`, or `'CCC'`. With `--min-fragment-size N`, it rejects products whose explicit atom count minus `*` dummy count is below N.\n\nOptional controls:\n- `--min-fragment-size N`: e.g. `CCCOCCC` with `--min-fragment-size 3` yields `{\"leaves\": [\"*CCC\"]}`.\n- `--only-use-reactions 1,2`: comma-separated reaction-definition indices. Reaction 0 urea, 1 amide, 2 ester, 3 amines, 4 cyclic amines, 5 ether, 6 olefin, 7 aromatic N-aliphatic C, 8 lactam N-aliphatic C, 9 aromatic C-aromatic C, 10 aromatic N-aromatic C (not standard), 11 sulphonamide.\n\nFailure signals:\n- Exit 0 means decomposition completed, including empty leaves. Exit 2 means invalid SMILES or an RDKit error; the output is `{\"error\": \"<message>\"}`. Do not interpret error output as fragments.\n- Execution and successful fragmentation are not chemical validation. The results are the documented RECAP algorithm outputs.\n\nLicense:\n- RDKit is BSD 3-Clause. See `references/LICENSE.txt`.\n"
+    },
+    {
+      "path": "references/LICENSE.txt",
+      "content": "BSD 3-Clause License\n\nCopyright (c) 2006-2015, Rational Discovery LLC, Greg Landrum, and Julie Penzotti and others\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are met:\n\n1. Redistributions of source code must retain the above copyright notice, this\n   list of conditions and the following disclaimer.\n\n2. Redistributions in binary form must reproduce the above copyright notice,\n   this list of conditions and the following disclaimer in the documentation\n   and/or other materials provided with the distribution.\n\n3. Neither the name of the copyright holder nor the names of its\n   contributors may be used to endorse or promote products derived from\n   this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\"\nAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\nIMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\nDISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE\nFOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL\nDAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR\nSERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER\nCAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,\nOR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\nOF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n"
+    },
+    {
+      "path": "scripts/recap_leaves.py",
+      "content": "#!/usr/bin/env python3\n'''Return RDKit RECAP terminal leaf fragments for a SMILES string.\n\nThis is a thin command-line wrapper around rdkit.Chem.Recap.RecapDecompose and\nRecapHierarchyNode.GetLeaves. Input is a single SMILES string. Output is a JSON\nobject::\n\n    {\"leaves\": [\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]}\n\nA valid empty decomposition is::\n\n    {\"leaves\": []}\n\nExit status:\n    0 after successful decomposition (including empty leaves)\n    2 on invalid input or an RDKit error\n'''\n\nimport argparse\nimport json\nimport sys\nfrom typing import List, Optional\n\nfrom rdkit import Chem\nfrom rdkit.Chem import Recap\n\n\ndef terminal_leaves(\n    smiles: str,\n    min_fragment_size: int = 0,\n    only_use_reactions: Optional[List[int]] = None,\n) -> List[str]:\n    '''Return sorted terminal leaf SMILES for *smiles*.'''\n    mol = Chem.MolFromSmiles(smiles)\n    if mol is None:\n        raise ValueError('invalid SMILES: {!r}'.format(smiles))\n\n    if only_use_reactions is not None:\n        only_use_reactions = set(only_use_reactions)\n\n    root = Recap.RecapDecompose(\n        mol,\n        minFragmentSize=min_fragment_size,\n        onlyUseReactions=only_use_reactions,\n    )\n    return sorted(root.GetLeaves().keys())\n\n\ndef build_parser() -> argparse.ArgumentParser:\n    parser = argparse.ArgumentParser(\n        description='Return RDKit RECAP terminal leaf fragments for a SMILES string.'\n    )\n    parser.add_argument('smiles', help='input SMILES string')\n    parser.add_argument(\n        '--min-fragment-size',\n        type=int,\n        default=0,\n        help='minimum explicit atom count after removing * dummy atoms (default: 0)',\n    )\n    parser.add_argument(\n        '--only-use-reactions',\n        default='',\n        help='comma-separated reaction-definition indices to use (default: all)',\n    )\n    return parser\n\n\ndef main(argv: List[str]) -> int:\n    parser = build_parser()\n    args = parser.parse_args(argv)\n\n    only_use_reactions = None\n    if args.only_use_reactions.strip():\n        try:\n            only_use_reactions = [\n                int(x.strip()) for x in args.only_use_reactions.split(',') if x.strip()\n            ]\n        except ValueError as exc:\n            print(\n                json.dumps(\n                    {'error': 'invalid --only-use-reactions value: {!s}'.format(exc)},\n                    sort_keys=True,\n                )\n            )\n            return 2\n\n    try:\n        leaves = terminal_leaves(\n            args.smiles,\n            min_fragment_size=args.min_fragment_size,\n            only_use_reactions=only_use_reactions,\n        )\n    except Exception as exc:\n        print(json.dumps({'error': str(exc)}, sort_keys=True))\n        return 2\n\n    print(json.dumps({'leaves': leaves}, sort_keys=True))\n    return 0\n\n\nif __name__ == '__main__':\n    sys.exit(main(sys.argv[1:]))\n"
+    }
+  ],
+  "tests": [
+    {
+      "name": "normal-three-terminal-leaves",
+      "argv": [
+        "{python}",
+        "scripts/recap_leaves.py",
+        "C1CC1Oc1ccccc1-c1ncc(OC)cc1"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 0,
+      "json_equals": {
+        "leaves": [
+          "*C1CC1",
+          "*c1ccc(OC)cn1",
+          "*c1ccccc1*"
+        ]
+      },
+      "evidence": "e1",
+      "purpose": "Terminal leaves only: the source docstring example sorted(leaves.keys()) returns exactly these three keys while GetAllChildren has five nodes.",
+      "kind": "delivered_script"
+    },
+    {
+      "name": "valid-empty-default-ether",
+      "argv": [
+        "{python}",
+        "scripts/recap_leaves.py",
+        "CCCOCCC"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 0,
+      "json_equals": {
+        "leaves": []
+      },
+      "evidence": "e1",
+      "purpose": "Source test2 asserts res.children == {} for CCCOCCC, so terminal GetLeaves returns an empty dictionary; the script reports an empty leaves list as a valid successful result.",
+      "kind": "delivered_script"
+    },
+    {
+      "name": "ring-only-empty",
+      "argv": [
+        "{python}",
+        "scripts/recap_leaves.py",
+        "C1CCCCO1"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 0,
+      "json_equals": {
+        "leaves": []
+      },
+      "evidence": "e1",
+      "purpose": "Source testEtherRxn asserts len(res.GetLeaves()) == 0 for the ring-only C1CCCCO1; no cleavable acyclic ether bond survives.",
+      "kind": "delivered_script"
+    },
+    {
+      "name": "min-fragment-size-control",
+      "argv": [
+        "{python}",
+        "scripts/recap_leaves.py",
+        "--min-fragment-size",
+        "3",
+        "CCCOCCC"
+      ],
+      "cwd": "{package}",
+      "expected_exit": 0,
+      "json_equals": {
+        "leaves": [
+          "*CCC"
+        ]
+      },
+      "evidence": "e1",
+      "purpose": "Source testMinFragmentSize asserts CCCOCCC with minFragmentSize=3 returns one leaf with key '*CCC'; the script forwards the option.",
+      "kind": "delivered_script"
+    }
+  ],
+  "issues": [],
+  "notes": [
+    "Execution was not performed by the author in this environment; the supplied tests are definitions, not execution evidence.",
+    "Invalid SMILES handling is wrapper-level. The inspected upstream source file does not contain a direct invalid-SMILES oracle, so that boundary is documented in SKILL.md but not included as a source-derived check."
+  ],
+  "runtime_requirement": {
+    "status": "required",
+    "reason": "The delivered entry script imports rdkit and executes RDKit RECAP decomposition; execution requires a Python environment with RDKit installed.",
+    "citations": [
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": "from rdkit import Chem\nfrom rdkit.Chem import rdChemReactions as Reactions"
+      }
+    ]
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "check": "stage-2 full-acceptance launch conditions",
+  "checked_at": "2026-10-27T03:12Z",
+  "copy": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi",
+  "source_directory_untouched": true,
+  "git": {
+    "branch": "integration/deepseek-api-backend",
+    "head": "55893da",
+    "clean": true,
+    "commits": ["58917da", "43a69ce", "8d6bc7b", "d61362f", "55893da"]
+  },
+  "stage1": {
+    "offline_regression": {"command": "python -m unittest discover -s tests -q",
+                           "result": "386 tests OK (3 skipped, POSIX-only)"},
+    "small_real_planner_verification": {"result": "blocked_config_invalid",
+                                        "requests_sent": 0,
+                                        "reason": "DEEPSEEK_API_KEY not configured"},
+    "original_case_verification": {"offline_check": "passed (prompt 2327f993..., schema 67e030bf..., inventory rebuilt, binding matched, historical plan passes the unchanged gates with 8 cases)",
+                                   "live_run": "not executed - it was conditioned on a complete DeepSeek configuration"},
+    "planner_uses_deepseek_api": {"evidence": "runtime.<candidate>.options.backend=deepseek_api configured; model_call dispatches on backend; offline planner routing test asserts the API request and that the Codex model name is never sent"},
+    "native_session_uses_codex_cli": {"evidence": "discovery/author/review still use NativeSession -> codex_command(); model.backend is still required to be codex_cli"}
+  },
+  "providers": {
+    "deepseek": {
+      "credential_present": false,
+      "model_configured": false,
+      "endpoint": "https://api.deepseek.com (default, official)",
+      "checked_sources": [
+        "process environment: no DEEPSEEK_API_KEY, no DEEPSEEK_MODEL",
+        "E:\\Users\\27343\\Docker\\.env (absent)",
+        "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\.env (absent)",
+        "workspace tree depth 3: only .env.example (template, no values)"
+      ],
+      "not_used_as_substitute": [
+        "ANTHROPIC_* variables (harness routing to the Anthropic-compatible endpoint; they carry no API key and their model aliases are harness names)",
+        "~/.codex/auth.json (OpenAI/ChatGPT auth for the Codex CLI, not a DeepSeek credential)"
+      ]
+    },
+    "codex_cli": {
+      "available": true,
+      "discovered_at": "C:\\Users\\27343\\.codex\\.sandbox-bin\\codex.exe",
+      "version": "codex-cli 0.159.2",
+      "usable_via_process_path_only": true,
+      "path_addition_for_this_process": "C:\\Users\\27343\\.codex\\.sandbox-bin",
+      "resolver_result": "codex_command() -> ['C:\\\\Users\\\\27343\\\\.codex\\\\.sandbox-bin\\\\codex.EXE']",
+      "isolation_check": "isolated_options('https','medium','default') built 40 arguments and isolated the two configured MCP servers without touching user configuration",
+      "required_flags_present": ["--ephemeral", "--skip-git-repo-check", "--sandbox",
+                                 "--output-schema", "--json", "--model", "-c"],
+      "auth": {"auth_mode": "chatgpt", "tokens_present": true,
+               "openai_api_key_present": false,
+               "validity_exercised": false,
+               "why_not": "probing the credential would consume a model call"},
+      "previous_blocker_resolved": "the PATH junction ...\\Programs\\OpenAI\\Codex\\bin still points at a missing target, but a real codex.exe exists under ~/.codex/.sandbox-bin and resolves when only that directory is added to this process's PATH"
+    }
+  },
+  "docker": {"available": true, "server_version": "29.8.2", "os_type": "linux",
+             "architecture": "x86_64"},
+  "prepared_input": {
+    "path": "validation/deepseek-api/acceptance-input.json",
+    "sources_model_execution_limits_binding_identical_to_finalized_case": true,
+    "finalized_case": "validation/final-acceptance-review/input-batch-4.json (source repo, read-only)",
+    "added_business_field": "prompt now requires the delivered entry at exactly scripts/terminal_fragments.py, matching the fixed binding",
+    "provider_fields_added": ["backend", "api_model", "api_retries", "api_stream",
+                              "api_max_output_tokens", "model_timeout", "total_seconds",
+                              "reasoning_effort", "service_tier", "progress_watch"],
+    "changes_beyond_provider_and_binding_alignment": "batch label and notes only"
+  },
+  "pre_batch_original_case_run": {
+    "executed": true,
+    "when": "2026-10-27T03:17Z",
+    "requests": 1,
+    "http_status": 200,
+    "elapsed_seconds": 158.536,
+    "request_id": "c6842ac2-7d62-4b7d-a67d-152463ca0179",
+    "model": "deepseek-flash",
+    "endpoint": "https://api.deepseek.com/chat/completions",
+    "parameters_sent": {"stream": true, "response_format": "json_object",
+                        "max_tokens": 65536, "thinking": {"type": "enabled"},
+                        "reasoning_effort": "high", "requested_reasoning_effort": "medium",
+                        "service_tier": "recorded, not sent"},
+    "transport": "passed (documented completion marker, local PLAN_SCHEMA validation)",
+    "answer_action": "plan",
+    "verdict": "plan_rejected",
+    "gate_failure": "Unknown fixture fields: stderr_contains; rejection violates and invalid_input_reason belong inside acceptance",
+    "gate_failure_after_removing_that_field_only": "Behavior test requires assertions or explicit test runner",
+    "evidence": "validation/deepseek-api/evidence/original-case-live/",
+    "counted_in_batch_budget": false
+  },
+  "decision": {
+    "batch_started": false,
+    "model_calls": 1,
+    "docker_builds": 0,
+    "business_cases_run": 0,
+    "queries_or_installations_run": 0,
+    "first_blocking_point": "the pre-batch plan semantic gate rejected DeepSeek's one-shot plan on one negative case, so the full acceptance batch was not started; the next decision belongs to the operator (allow a repair round inside the batch, or require a conforming fixture in one shot)",
+    "condition_that_was_checked": "the deepseek_api stage ran for real and produced a schema-valid plan; it did not pass the unchanged acceptance-fixture gate",
+    "reason_not_partial": "starting the batch after a failed pre-batch gate would replace the fixed case with an unreviewed retry and could not produce the required evidence",
+    "next_step": "decide whether the negative case should be repaired within the batch (production allows a repair round) or whether the planner must produce a conforming fixture in one shot; either way the batch needs a fresh, owner-approved launch"
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "schema_version": 3,
+  "pipeline_version": "5.2.0-stage2",
+  "build_id": "20261027T131033-e6ae4374",
+  "started_at": "2026-10-27T05:10:33.867645+00:00",
+  "status": "blocked",
+  "entities": [],
+  "errors": [
+    "Discovery blocked: Saved discovery status to work-state.md. Only the BSD license could be inspected; RECAP behavior could not be grounded in source."
+  ],
+  "agent_efficacy": "not_evaluated_separate_work",
+  "replay": false,
+  "implementation_sha256": "fde59fc5b09d0fd7c3de97ca93ce2d292a096533793f517a9548bf2a5d780b38",
+  "finished_at": "2026-10-27T05:13:18.265999+00:00",
+  "counts": {},
+  "model_calls": [
+    {
+      "phase": "discovery",
+      "session_key": "discovery",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 150234,
+        "cached_input_tokens": 128256,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1649,
+        "reasoning_output_tokens": 97
+      },
+      "prompt_sha256": "417ca169331409ff094431cf920961b5f2def88d1e9f091e2856fcffa93f2f77",
+      "tool_events": 9,
+      "session_id": "01a17bc4-7c12-7051-8e0f-5ff957e47608",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 161.848,
+      "stream_notices": [
+        "Reconnecting... 1/5 (stream disconnected before completion: error sending request)",
+        "Reconnecting... 2/5 (stream disconnected before completion: error sending request)",
+        "Reconnecting... 1/5 (stream disconnected before completion: error sending request)"
+      ],
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 6.018,
+        "last_stdout_seconds": 158.003,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    }
+  ],
+  "model_metrics": {
+    "calls_attempted": 1,
+    "usage_fully_reported": true,
+    "receipts": [
+      {
+        "phase": "discovery",
+        "session_key": "discovery",
+        "resumed": false,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 150234,
+          "cached_input_tokens": 128256,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1649,
+          "reasoning_output_tokens": 97
+        },
+        "prompt_sha256": "417ca169331409ff094431cf920961b5f2def88d1e9f091e2856fcffa93f2f77",
+        "tool_events": 9,
+        "session_id": "01a17bc4-7c12-7051-8e0f-5ff957e47608",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 161.848,
+        "stream_notices": [
+          "Reconnecting... 1/5 (stream disconnected before completion: error sending request)",
+          "Reconnecting... 2/5 (stream disconnected before completion: error sending request)",
+          "Reconnecting... 1/5 (stream disconnected before completion: error sending request)"
+        ],
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 6.018,
+          "last_stdout_seconds": 158.003,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      }
+    ],
+    "monetary_cost": null,
+    "reported_totals": {
+      "cached_input_tokens": 128256,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1649,
+      "input_tokens": 150234,
+      "reasoning_output_tokens": 97
+    }
+  },
+  "sources": [
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "requested_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "resolved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "content_type": "text/plain; charset=utf-8",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "license.txt",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      },
+      "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+      "index_truncated": false,
+      "omitted_preview": [],
+      "files": [
+        "document.txt"
+      ],
+      "index_preview_truncated": false
+    }
+  ],
+  "source_errors": [
+    {
+      "source": "recap",
+      "error": "Source hash differs from configuration"
+    }
+  ],
+  "evidence": [
+    {
+      "source": "license",
+      "path": "document.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "start": 1,
+      "end": 0,
+      "offset": 0,
+      "kind": "source_locator",
+      "excerpt": "Source locator only; not a record of model reading: document.txt",
+      "id": "e1"
+    }
+  ],
+  "temporary_workspace": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run4-20261027\\state\\runs\\20261027T131033-e6ae4374"
+}

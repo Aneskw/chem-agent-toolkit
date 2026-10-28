@@ -1,4 +1,0 @@
-This review procedure uses only reading and reasoning over supplied text; no command, API, script, model execution or external asset is required.
-Read the supplied review request and identify whether it asks only for a summary of the supplied document.
-If the request asks for external facts or execution, stop and explain that this text-only scope is insufficient; otherwise summarize the supplied claims.
-Check that every sentence in the summary is supported by the supplied document and that no execution or external verification is claimed.

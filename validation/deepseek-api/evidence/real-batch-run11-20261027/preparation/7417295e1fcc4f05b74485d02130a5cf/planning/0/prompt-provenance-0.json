@@ -1,0 +1,13 @@
+{
+  "base_kind": "none",
+  "prompt_sha256": "81b2236b28b201bbfa40f2273294cd1bc947eabdf99be50257e735fd9fdd5a66",
+  "prompt_bytes": 47872,
+  "schema_sha256": "141f8b010ef82bc921e1e2989444632f25d5ab304148e042059d67eb3e0cbbfc",
+  "schema_bytes": 10437,
+  "policy_sha256": "dad26cf5fabc2271f9efcc71fbacd3fcde3338d2fa4c6ce4ff64cc050d303e2e",
+  "policy_bytes": 12062,
+  "acceptance_spec_sha256": "453d0c0c9af563ac02e7b32b957c4fb438c20e855ae9f9f13bf73bf0179e9af9",
+  "acceptance_spec_bytes": 5731,
+  "input_contract_spec_sha256": "2403220c13052060553007d909a03ff1869c10b7a41248bbf9b922a52f4dce34",
+  "generated_by": "creation_pipeline.runtime.planner current code (no frozen copy)"
+}

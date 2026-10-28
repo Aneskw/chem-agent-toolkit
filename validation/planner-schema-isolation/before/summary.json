@@ -1,0 +1,71 @@
+{
+  "acceptance_spec_chars": 3889,
+  "identity": {
+    "base_image_is_acceptance": true,
+    "requested_items_is_acceptance": true,
+    "patch_value_is_acceptance": true
+  },
+  "plan": {
+    "bytes": 151668,
+    "sha256": "67e030bfdf6c8a9690a7b3d3926917834e43e41e602e3b68780d8f20f6147671",
+    "description_paths": [
+      "/properties/requested_files/items/description",
+      "/properties/reason/description",
+      "/properties/plan/properties/entrypoint/items/description",
+      "/properties/plan/properties/script/description",
+      "/properties/plan/properties/base_image/description",
+      "/properties/plan/properties/language/description",
+      "/properties/plan/properties/language_version/description",
+      "/properties/plan/properties/source_files/items/description",
+      "/properties/plan/properties/dependencies/items/properties/name/description",
+      "/properties/plan/properties/dependencies/items/properties/version/description",
+      "/properties/plan/properties/dependencies/items/properties/channel/description",
+      "/properties/plan/properties/dependencies/items/properties/evidence/description",
+      "/properties/plan/properties/steps/items/properties/command/description",
+      "/properties/plan/properties/steps/items/properties/purpose/description",
+      "/properties/plan/properties/steps/items/properties/evidence/description",
+      "/properties/plan/properties/build_layout/properties/dependency_files/items/description",
+      "/properties/plan/properties/build_layout/properties/reason/description",
+      "/properties/plan/properties/environment/items/properties/name/description",
+      "/properties/plan/properties/environment/items/properties/value/description",
+      "/properties/plan/properties/resources/items/properties/description/description",
+      "/properties/plan/properties/resources/items/properties/evidence/description",
+      "/properties/plan/properties/output_contract/description",
+      "/properties/plan/properties/network_reason/description",
+      "/properties/plan/properties/choices/items/properties/choice/description",
+      "/properties/plan/properties/choices/items/properties/evidence/description",
+      "/properties/plan/properties/unresolved/items/description",
+      "/properties/plan/properties/unverified_behavior/items/description",
+      "/properties/plan/properties/acceptance_json/description",
+      "/properties/plan/properties/generated_files/items/properties/path/description",
+      "/properties/plan/properties/generated_files/items/properties/content/description",
+      "/properties/plan/properties/tests/items/properties/name/description",
+      "/properties/plan/properties/tests/items/properties/source_paths/items/description",
+      "/properties/plan/properties/tests/items/properties/basis/description",
+      "/properties/plan/properties/tests/items/properties/limitations/items/description",
+      "/properties/plan/properties/tests/items/properties/case_json/description",
+      "/properties/plan/properties/resource_assessment/properties/source_path/description",
+      "/properties/plan/properties/resource_assessment/properties/source_quote/description"
+    ],
+    "acceptance_spec_occurrences": 37,
+    "constraints_sha256": "a2b99fc31b817f4050db25685c758fb7fed0ead5038164f831200c2fbe695586"
+  },
+  "patch": {
+    "bytes": 20438,
+    "sha256": "c7945f5627748b338cde56c5a5b77eb88ce381bd8906599a140c764d3323d792",
+    "description_paths": [
+      "/properties/requested_files/items/description",
+      "/properties/reason/description",
+      "/properties/operations/items/properties/path/description",
+      "/properties/operations/items/properties/value_json/description",
+      "/description"
+    ],
+    "acceptance_spec_occurrences": 5,
+    "constraints_sha256": "6cafda85d984e3568aabe6eb90d0bec96d93766ecdadc10db9cd4d04ad904e77"
+  },
+  "fourth_schema": {
+    "path": "validation\\final-single-retry\\run-snapshot\\state\\runs\\20261026T163755-8844c416\\runtime-preparation\\rdkit-recap-terminal-fragments\\ec03b83616df43a7960b49cb27c6c77b\\materials\\planning\\0\\model-0\\schema.json",
+    "sha256": "67e030bfdf6c8a9690a7b3d3926917834e43e41e602e3b68780d8f20f6147671",
+    "equals_current": true
+  }
+}

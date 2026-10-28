@@ -1,0 +1,61 @@
+{
+  "outcome": "candidates",
+  "summary": "Discovered one reusable skill grounded in the supplied RDKit Recap.py source: generate RECAP terminal molecular fragments via RecapDecompose and GetLeaves, and interpret leaf nodes versus the full hierarchy and valid empty results. Evidence is drawn from the module docstring, method signatures, and unittest cases, with no algorithm changes or extra scientific claims.",
+  "saved_candidates": [],
+  "candidates": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "capability": "Generate RDKit RECAP terminal molecular fragments from a sanitizable RDKit molecule using RecapDecompose followed by GetLeaves, and interpret SMILES-keyed leaf nodes versus the full decomposition hierarchy.",
+      "boundary": "Input: one sanitizable RDKit Mol, normally produced from Chem.MolFromSmiles. Output: a dictionary keyed by canonical fragment SMILES whose dummy '*' atoms mark cleaved bonds; each value is a RecapHierarchyNode with a .mol attribute. This covers only terminal fragments via GetLeaves, not GetAllChildren traversal, and only the built-in reaction SMARTS. It is molecular fragmentation, not descriptor calculation, and claims no chemical or scientific validity beyond the documented Lewell et al. algorithm.",
+      "value": "Removes recurring confusion between GetAllChildren, which returns the full decomposition hierarchy, and GetLeaves, which returns terminal fragments. Documents dummy-star fragment keys, valid empty children/leaves when no documented bond is cleaved, minFragmentSize filtering, and onlyUseReactions selection.",
+      "usage_path": "from rdkit import Chem; from rdkit.Chem import Recap; mol = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1'); root = Recap.RecapDecompose(mol, minFragmentSize=0, onlyUseReactions=None); leaves = root.GetLeaves(); for smi, node in leaves.items(): fragment_mol = node.mol",
+      "construction": "Direct packaging and documentation of the upstream RDKit Recap.py interface and unittest behavior. The skill supplies concise prerequisites, invocation, result interpretation, and invalid-input boundaries from the source; no algorithm changes, new SMARTS, thresholds, URLs, or acceptance policies are introduced.",
+      "evidence": [
+        {
+          "id": "recap:module-docstring",
+          "claim": "The module docstring states: 'Implementation of the RECAP algorithm from Lewell et al. JCICS *38* 511-522 (1998)' and notes results are 'returned as a hierarchy of nodes instead of just as a set of fragments'."
+        },
+        {
+          "id": "recap:docstring-example",
+          "claim": "The docstring example shows sorted(res.GetAllChildren().keys()) containing five entries while sorted(res.GetLeaves().keys()) returns ['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*'], demonstrating terminal leaves versus the full hierarchy."
+        },
+        {
+          "id": "recap:getleaves-method",
+          "claim": "RecapHierarchyNode.GetLeaves 'returns a dictionary, keyed by SMILES, of leaf (terminal) nodes' and includes a child only when 'not len(child.children)'; otherwise it recurses with terminalOnly=True."
+        },
+        {
+          "id": "recap:signature",
+          "claim": "RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None) returns the root RecapHierarchyNode and uses Chem.MolToSmiles(mol, 1) at entry; allNodes provides a shared node cache, minFragmentSize filters small fragments, and onlyUseReactions restricts the built-in reaction set by index."
+        },
+        {
+          "id": "recap:empty-valid-tests",
+          "claim": "test2 with 'CCCOCCC' asserts res.children == {}, and testMinFragmentSize shows minFragmentSize=3 yields {'*CCC'} as leaves for 'CCCOCCC' while 'CCCOCC' returns children == {}, documenting valid empty decomposition results and the size cutoff."
+        }
+      ],
+      "gaps": [
+        "Exact canonical fragment SMILES can vary with RDKit version and ring perception; the source examples are representative rather than guaranteed public keys across versions.",
+        "The source assumes Chem.MolToSmiles(mol, 1) succeeds at entry; it does not fully document behavior for a non-sanitizable or invalid Mol beyond catching exceptions during product sanitization and continuing."
+      ],
+      "blocked": false
+    }
+  ],
+  "omitted": [
+    {
+      "capability": "RECAP full hierarchy traversal such as GetAllChildren and getUltimateParents as a separate skill",
+      "reason": "Covered as interpretation context within the terminal-fragment candidate; a separate skill would duplicate upstream usage and risk fragment-versus-hierarchy confusion."
+    },
+    {
+      "capability": "Descriptor calculation from RECAP fragments",
+      "reason": "Explicitly out of scope because RECAP is molecular fragmentation, not descriptor calculation."
+    },
+    {
+      "capability": "Defining custom RECAP reaction SMARTS or extending the bundled reaction set",
+      "reason": "onlyUseReactions selects among the built-in reaction SMARTS; adding new cleavage rules would require algorithm design outside the documented source."
+    }
+  ],
+  "limitations": [
+    "Inspection used only the provided rdkit/Chem/Recap.py snapshot and license.txt; no installed RDKit runtime or external examples were executed.",
+    "RDKit is an assumed local prerequisite; a missing installation is an execution limitation, not a reason to block this candidate.",
+    "Claims stay within the documented RECAP algorithm and bundled SMARTS; they do not assert chemical or scientific validation beyond that documentation."
+  ]
+}

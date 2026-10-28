@@ -1,0 +1,93 @@
+{
+  "review": {
+    "name": "content_review",
+    "required": true,
+    "status": "pass",
+    "resolution": "none",
+    "findings": [
+      {
+        "location": "artifact.tests / execution_policy",
+        "problem": "Runtime behavior remains unverified.",
+        "evidence": "No execution reports were supplied; generated checks are disabled. Tests call the delivered code. Recap document.py lines 39–56 support the positive oracle; lines 110–118 and 231–235 support the empty result.",
+        "impact": "Source fidelity and callable entry binding are verified, but successful container execution is not established.",
+        "action": "When execution is authorized, run the three existing tests in the prepared RDKit container and retain results.",
+        "blocking": false,
+        "category": "check"
+      }
+    ],
+    "oracle_changes_verified": false,
+    "execution_gaps": [],
+    "requirement_assessment": "confirmed",
+    "binding_verified": true,
+    "evidence_kind": "model_review_not_independent_scientific_validation"
+  },
+  "receipts": [
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 295927,
+        "cached_input_tokens": 263936,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2504,
+        "reasoning_output_tokens": 165
+      },
+      "prompt_sha256": "044262ae5e5e672ad683bb3f33e6b014a663d76c9a23a432d7f44583383705b0",
+      "tool_events": 12,
+      "session_id": "01a17bb5-f6e6-74a0-b04c-a1ca35366f93",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 131.624,
+      "stream_notices": [
+        "Reconnecting... 1/5 (stream disconnected before completion: Transport error: network error: error decoding response body)"
+      ],
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 5.977,
+        "last_stdout_seconds": 129.06,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "sha256": "fe8b36aa0a1d406e4a405a436905ec54b6f544ee7618a97590057a57c42c3104",
+      "bytes": 3274
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "491f45e3ebcee6044deb1c50175086afacc63eac58207c1deca19eac8ed972ef",
+      "bytes": 5704
+    }
+  ],
+  "source_files": {
+    "recap": [
+      {
+        "path": "document.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+        "bytes": 20662
+      }
+    ],
+    "license": [
+      {
+        "path": "document.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+        "bytes": 1580
+      }
+    ]
+  },
+  "oracle_changes": []
+}

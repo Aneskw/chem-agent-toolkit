@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "resolution": "none",
+  "findings": [
+    {
+      "location": "deliveries/rdkit-recap-terminal-fragments-metadata.json: tests",
+      "problem": "Runtime behavior remains unverified; this is a nonblocking verification limit.",
+      "evidence": "The four tests invoke the delivered CLI. Original recap/document.py lines 38–56 support the exact terminal fragments; lines 110–118 and 231–235 support the empty result. Invalid-input assertions check explicit adapter behavior. Generated execution is disabled; reported structure/runtime_paths passes establish neither molecular results nor error handling.",
+      "impact": "Source fidelity and static implementation support the capability, but no runtime or scientific validation is established. Required execution is confirmed by source lines 146–169 and scripts/recap_fragments.py lines 19–22.",
+      "action": "When execution is authorized, run the four existing checks in the approved Docker environment and record the installed RDKit version. No package revision is required.",
+      "blocking": false,
+      "category": "check"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed"
+}

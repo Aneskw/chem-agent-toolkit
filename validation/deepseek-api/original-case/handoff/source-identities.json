@@ -1,0 +1,52 @@
+[
+  {
+    "id": "recap",
+    "inventory": [
+      {
+        "path": "document.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+        "bytes": 20662
+      }
+    ],
+    "snapshot_fingerprint": "a2f98d70307b9a47187ad7b58070db37f4fe04b2452fca13402eae5dded89896",
+    "upstream": {
+      "repo": "https://github.com/rdkit/rdkit",
+      "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+      "path": "rdkit/Chem/Recap.py",
+      "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+    },
+    "carrier_repository": null,
+    "legacy_reference": {
+      "value": null,
+      "meaning": "Not verified as an upstream version unless accompanied by upstream/repo provenance"
+    },
+    "repo": null,
+    "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py"
+  },
+  {
+    "id": "license",
+    "inventory": [
+      {
+        "path": "document.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+        "bytes": 1580
+      }
+    ],
+    "snapshot_fingerprint": "a75377ec570f1e0d4f65101149783ebb2d30d0cad8da7418d0cdaf274604c1cb",
+    "upstream": {
+      "repo": "https://github.com/rdkit/rdkit",
+      "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+      "path": "license.txt",
+      "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+    },
+    "carrier_repository": null,
+    "legacy_reference": {
+      "value": null,
+      "meaning": "Not verified as an upstream version unless accompanied by upstream/repo provenance"
+    },
+    "repo": null,
+    "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt"
+  }
+]

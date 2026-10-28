@@ -1,0 +1,4 @@
+{
+  "completed": true,
+  "summary": "Repaired and saved the test metadata; package code and expected results are unchanged. No business checks were executed. The helper remains unavailable, so host finalization is needed."
+}

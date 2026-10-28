@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "backend": "local-docker",
+  "request": {
+    "candidate_id": "candidate-aa9d0f31233bf8f2a944a466b62f07fc28dc0f5ce009d389bfba6ab3b8bfa8ef",
+    "revision_id": "rev-e728bcf9ca9c02d8a43ef50ae122cee6d776fed7fb82cc3bd0ac01d0b90bb9a4",
+    "package_fingerprint": "927d3d56995d2f4dcb99e82df930c3c825425321c5e7bc2bdab4d8c39882c98b",
+    "source_fingerprint": "71f53963337cb6c13f2de66c8a895d2fcc95143911a9d9f36dbf6d92a70b2a35",
+    "binding_fingerprint": "e9d4519ae2d3fc1c5f567b1fd567200460c13ce2a905e8d7f1704e75ddadd625",
+    "environment_fingerprint": "5d6d1d9f88172beb425598c05338cbffd9259e24e83ab15057fddd7b4abbb28c",
+    "acceptance_fingerprint": "785f516df627bf7b45e98d8d18ffa7adace018bb6f7bfaa683c5e88eebd916f5",
+    "freeze_sha256": "98b2cc65dca64e985aa5f1de4ef598d6f0c6c50c507a199e94645375afaac299",
+    "executor_kind": "local-docker",
+    "target_id": "local"
+  },
+  "started_at": "2026-10-25T14:23:05.538666+00:00",
+  "status": "prepared",
+  "execution_status": "not_run",
+  "business_acceptance": "not_run",
+  "image_id": null,
+  "host": {
+    "observed_at": "2026-10-25T14:23:06.020760+00:00",
+    "backend": "local-docker",
+    "status": "available",
+    "gaps": [],
+    "platform": "linux/x86_64",
+    "memory_bytes": 8115134464,
+    "cpus": 12,
+    "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+    "server_version": "29.8.2",
+    "docker_status": "available",
+    "resource_gaps": []
+  },
+  "gaps": [],
+  "planning_limitations": [
+    "Full graph-valid SMILES acceptance requires RDKit parsing and cannot reliably be represented by a full-match regex. Checks enforce only the documented necessary nonempty condition; acceptance verification is incomplete.",
+    "Installation compatibility and runtime behavior remain unexecuted at this stage."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "content": "{\n  \"source_id\": \"recap\",\n  \"source_path\": \"document.py\",\n  \"quote\": \"def RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None):\\n  \\\"\\\"\\\" returns the recap decomposition for a molecule \\\"\\\"\\\"\\n  mSmi = Chem.MolToSmiles(mol, 1)\",\n  \"reason\": \"The inspected source document.py is the RDKit RECAP implementation from upstream rdkit/Chem/Recap.py at commit 237a1d9027c800784afed8788540f38a3aa595f8. It defines RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None) and RecapHierarchyNode.GetLeaves, which the delivered scripts/recap_leaves.py imports as rdkit.Chem.Recap and calls. The delivered entry is a Python 3 CLI wrapper; default invocation is python scripts/recap_leaves.py '<smiles>' from the delivery root. It parses the SMILES argument with Chem.MolFromSmiles, converts optional comma-separated --only-use-reactions indices to a set, passes --min-fragment-size and only_use_reactions to Recap.RecapDecompose, then returns sorted(root.GetLeaves().keys()) as JSON {\\\"leaves\\\": [...]}. Working directory must contain scripts/recap_leaves.py, and RDKit must be installed. Exit status is 0 on successful decomposition including empty leaves, or 2 on invalid SMILES or RDKit errors with JSON {\\\"error\\\": ...}.\",\n  \"invocation\": \"python scripts/recap_leaves.py 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'\",\n  \"supported\": true\n}",
+  "finish_reason": "stop",
+  "model": "deepseek-v4-pro",
+  "reasoning_chars": 5448,
+  "request_id": {
+    "source": "body:id",
+    "value": "ef7ae2ce-3839-4fa8-8cd4-af291a0ec6ac"
+  },
+  "schema_validated": true,
+  "usage": {
+    "completion_tokens": 1707,
+    "completion_tokens_details": {
+      "reasoning_tokens": 1318
+    },
+    "prompt_cache_hit_tokens": 384,
+    "prompt_cache_miss_tokens": 11570,
+    "prompt_tokens": 11954,
+    "prompt_tokens_details": {
+      "cached_tokens": 384
+    },
+    "total_tokens": 13661
+  }
+}

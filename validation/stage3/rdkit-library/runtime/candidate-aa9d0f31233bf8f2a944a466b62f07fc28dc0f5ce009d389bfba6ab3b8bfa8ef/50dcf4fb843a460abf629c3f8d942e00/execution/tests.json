@@ -1,0 +1,733 @@
+{
+  "cases": [
+    {
+      "name": "environment_versions_imports",
+      "origin": "model_proposed",
+      "basis": "Verify pinned distributions and import every RDKit module used by the script; print versions for the audit.",
+      "status": "passed",
+      "layer": "environment",
+      "kind": "derived",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [
+        "sources/rdkit/requirements.txt",
+        "package/scripts/calc_descriptors.py"
+      ],
+      "limitations": [
+        "Imports do not establish descriptor correctness."
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "skillnet-v2-8e9ce65cf51e47dbb9529007300aeadf",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--user",
+        "10001:10001",
+        "--pids-limit",
+        "128",
+        "--memory",
+        "1g",
+        "--cpus",
+        "2",
+        "--tmpfs",
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "--label",
+        "skillnet.scope=70b31ecd690349ef864fd909fb1f9d07",
+        "--workdir",
+        "/opt/skill",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\stage3-reviewed-real-r4\\evidence\\final\\sources,target=/sources,readonly",
+        "--entrypoint",
+        "python",
+        "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+        "-c",
+        "import sys; from importlib.metadata import version; from rdkit import Chem; from rdkit.Chem import Crippen, Descriptors, Lipinski, rdMolDescriptors; import numpy; from PIL import Image; expected={'rdkit':'2024.9.6','numpy':'1.26.4','pillow':'11.3.0'}; actual={k:version(k) for k in expected}; print(sys.version); print(actual); assert actual == expected"
+      ],
+      "exit_code": 0,
+      "stdout": "3.11.17 (main, Oct 21 2026, 01:07:38) [GCC 14.2.0]\n{'rdkit': '2024.9.6', 'numpy': '1.26.4', 'pillow': '11.3.0'}\n",
+      "stderr": "",
+      "cleanup": {
+        "command": [
+          "docker",
+          "rm",
+          "--force",
+          "skillnet-v2-8e9ce65cf51e47dbb9529007300aeadf"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "output_artifacts": {
+        "directory": "case-fb871b16110408f9",
+        "files": {},
+        "omitted": [],
+        "byte_limit": null
+      }
+    },
+    {
+      "name": "interface_help",
+      "origin": "model_proposed",
+      "basis": "Argparse declares the three supported option names.",
+      "status": "passed",
+      "layer": "interface",
+      "kind": "derived",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [
+        "package/scripts/calc_descriptors.py"
+      ],
+      "limitations": [
+        "Help does not exercise computation."
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "skillnet-v2-1d43662c7973483ba96e1727989f5816",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--user",
+        "10001:10001",
+        "--pids-limit",
+        "128",
+        "--memory",
+        "1g",
+        "--cpus",
+        "2",
+        "--tmpfs",
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "--label",
+        "skillnet.scope=70b31ecd690349ef864fd909fb1f9d07",
+        "--workdir",
+        "/opt/skill",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\stage3-reviewed-real-r4\\evidence\\final\\sources,target=/sources,readonly",
+        "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "usage: calc_descriptors.py [-h] (--smiles SMILES | --input INPUT)\n                           [--output OUTPUT]\n\noptions:\n  -h, --help       show this help message and exit\n  --smiles SMILES\n  --input INPUT\n  --output OUTPUT\n",
+      "stderr": "",
+      "cleanup": {
+        "command": [
+          "docker",
+          "rm",
+          "--force",
+          "skillnet-v2-1d43662c7973483ba96e1727989f5816"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "output_artifacts": {
+        "directory": "case-20fa831ffd97a187",
+        "files": {},
+        "omitted": [],
+        "byte_limit": null
+      }
+    },
+    {
+      "name": "direct_documented_ethanol",
+      "origin": "model_proposed",
+      "basis": "Execute the documented CCO example. A successful record requires all descriptor expressions to finish.",
+      "status": "passed",
+      "layer": "behavior",
+      "kind": "reference",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [
+        "package/SKILL.md",
+        "package/scripts/calc_descriptors.py"
+      ],
+      "limitations": [
+        "Completion does not establish numerical accuracy."
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "skillnet-v2-5326b68ad56d4a0fb9797ee671362ae1",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--user",
+        "10001:10001",
+        "--pids-limit",
+        "128",
+        "--memory",
+        "1g",
+        "--cpus",
+        "2",
+        "--tmpfs",
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "--label",
+        "skillnet.scope=70b31ecd690349ef864fd909fb1f9d07",
+        "--workdir",
+        "/opt/skill",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\stage3-reviewed-real-r4\\evidence\\final\\sources,target=/sources,readonly",
+        "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+        "--smiles",
+        "CCO"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"ok\": true, \"input\": \"CCO\", \"canonical_smiles\": \"CCO\", \"descriptors\": {\"molecular_weight\": 46.069, \"logp\": -0.0014, \"tpsa\": 20.23, \"h_bond_donors\": 1, \"h_bond_acceptors\": 1, \"rotatable_bonds\": 0}}\n",
+      "stderr": "",
+      "cleanup": {
+        "command": [
+          "docker",
+          "rm",
+          "--force",
+          "skillnet-v2-5326b68ad56d4a0fb9797ee671362ae1"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "output_artifacts": {
+        "directory": "case-0d9a563345b19683",
+        "files": {},
+        "omitted": [],
+        "byte_limit": null
+      }
+    },
+    {
+      "name": "direct_methane_graph_counts",
+      "origin": "model_proposed",
+      "basis": "SMILES C represents methane. Its single carbon graph contains no H-bond donor or acceptor groups and no bond that can be rotatable; independently expect zero for these three counts.",
+      "status": "passed",
+      "layer": "behavior",
+      "kind": "derived",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [
+        "sources/rdkit/references/science.md",
+        "package/scripts/calc_descriptors.py"
+      ],
+      "limitations": [
+        "Checks only simple graph counts; no numerical oracle for other descriptors."
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "skillnet-v2-e8605789fd304adf912af863e9aeb4b9",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--user",
+        "10001:10001",
+        "--pids-limit",
+        "128",
+        "--memory",
+        "1g",
+        "--cpus",
+        "2",
+        "--tmpfs",
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "--label",
+        "skillnet.scope=70b31ecd690349ef864fd909fb1f9d07",
+        "--workdir",
+        "/opt/skill",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\stage3-reviewed-real-r4\\evidence\\final\\sources,target=/sources,readonly",
+        "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+        "--smiles",
+        "C"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"ok\": true, \"input\": \"C\", \"canonical_smiles\": \"C\", \"descriptors\": {\"molecular_weight\": 16.043, \"logp\": 0.6361, \"tpsa\": 0.0, \"h_bond_donors\": 0, \"h_bond_acceptors\": 0, \"rotatable_bonds\": 0}}\n",
+      "stderr": "",
+      "cleanup": {
+        "command": [
+          "docker",
+          "rm",
+          "--force",
+          "skillnet-v2-e8605789fd304adf912af863e9aeb4b9"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "output_artifacts": {
+        "directory": "case-12802a8544c1c4a9",
+        "files": {},
+        "omitted": [],
+        "byte_limit": null
+      }
+    },
+    {
+      "name": "direct_empty_rejection",
+      "origin": "model_proposed",
+      "basis": "Empty input produces the explicit rejection record and exit 2.",
+      "status": "passed",
+      "layer": "behavior",
+      "kind": "derived",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [
+        "package/scripts/calc_descriptors.py"
+      ],
+      "limitations": [
+        "Covers empty input, not all invalid SMILES."
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "skillnet-v2-c253ff8783b54ff38eaba7cf54ce07f8",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--user",
+        "10001:10001",
+        "--pids-limit",
+        "128",
+        "--memory",
+        "1g",
+        "--cpus",
+        "2",
+        "--tmpfs",
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "--label",
+        "skillnet.scope=70b31ecd690349ef864fd909fb1f9d07",
+        "--workdir",
+        "/opt/skill",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\stage3-reviewed-real-r4\\evidence\\final\\sources,target=/sources,readonly",
+        "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+        "--smiles",
+        ""
+      ],
+      "exit_code": 2,
+      "stdout": "{\"ok\": false, \"input\": \"\", \"error\": \"Invalid or empty SMILES\"}\n",
+      "stderr": "",
+      "cleanup": {
+        "command": [
+          "docker",
+          "rm",
+          "--force",
+          "skillnet-v2-c253ff8783b54ff38eaba7cf54ce07f8"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "output_artifacts": {
+        "directory": "case-7d3bcb0ef796fcc1",
+        "files": {},
+        "omitted": [],
+        "byte_limit": null
+      }
+    },
+    {
+      "name": "file_normal_persisted",
+      "origin": "model_proposed",
+      "basis": "Run the documented file form on a valid molecule and require the tool-created output to contain a completed calculation.",
+      "status": "passed",
+      "layer": "behavior",
+      "kind": "derived",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [
+        "package/SKILL.md",
+        "package/scripts/calc_descriptors.py"
+      ],
+      "limitations": [
+        "Verifies persistence and completion, not all descriptor values."
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "skillnet-v2-39783a194d554ab6a6c00de1289fe3e6",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--user",
+        "10001:10001",
+        "--pids-limit",
+        "128",
+        "--memory",
+        "1g",
+        "--cpus",
+        "2",
+        "--tmpfs",
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "--label",
+        "skillnet.scope=70b31ecd690349ef864fd909fb1f9d07",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\test-temp\\skillnet-fixture-8mg9mh4_\\input,target=/input,readonly",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\test-temp\\skillnet-fixture-8mg9mh4_\\output,target=/output",
+        "--workdir",
+        "/opt/skill",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\stage3-reviewed-real-r4\\evidence\\final\\sources,target=/sources,readonly",
+        "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+        "--input",
+        "/input/rows.smi",
+        "--output",
+        "/output/results.jsonl"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "cleanup": {
+        "command": [
+          "docker",
+          "rm",
+          "--force",
+          "skillnet-v2-39783a194d554ab6a6c00de1289fe3e6"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "persisted_output": "{\"ok\": true, \"input\": \"CCO\", \"canonical_smiles\": \"CCO\", \"descriptors\": {\"molecular_weight\": 46.069, \"logp\": -0.0014, \"tpsa\": 20.23, \"h_bond_donors\": 1, \"h_bond_acceptors\": 1, \"rotatable_bonds\": 0}}\n",
+      "output_artifacts": {
+        "directory": "case-f0cef04ac9040499",
+        "files": {
+          "results.jsonl": {
+            "bytes": 198,
+            "sha256": "f015a764ce586515996dde28f9442691f5c466237742ac6fcbe8cb1f6953a47c"
+          }
+        },
+        "omitted": [],
+        "byte_limit": null
+      }
+    },
+    {
+      "name": "file_mixed_blank_row_rejection",
+      "origin": "model_proposed",
+      "basis": "The list comprehension processes every row; a blank middle row yields the explicit error while the overall exit is 2.",
+      "status": "passed",
+      "layer": "behavior",
+      "kind": "derived",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [
+        "package/scripts/calc_descriptors.py"
+      ],
+      "limitations": [
+        "Assertion targets the rejected middle row; it does not independently validate surrounding numerical results."
+      ],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "skillnet-v2-88f06341050b4983b793be680268f230",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--user",
+        "10001:10001",
+        "--pids-limit",
+        "128",
+        "--memory",
+        "1g",
+        "--cpus",
+        "2",
+        "--tmpfs",
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "--label",
+        "skillnet.scope=70b31ecd690349ef864fd909fb1f9d07",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\test-temp\\skillnet-fixture-pg4jsf_k\\input,target=/input,readonly",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\test-temp\\skillnet-fixture-pg4jsf_k\\output,target=/output",
+        "--workdir",
+        "/opt/skill",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\stage3-reviewed-real-r4\\evidence\\final\\sources,target=/sources,readonly",
+        "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+        "--input",
+        "/input/rows.smi",
+        "--output",
+        "/output/results.jsonl"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "",
+      "cleanup": {
+        "command": [
+          "docker",
+          "rm",
+          "--force",
+          "skillnet-v2-88f06341050b4983b793be680268f230"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "persisted_output": "{\"ok\": true, \"input\": \"CCO\", \"canonical_smiles\": \"CCO\", \"descriptors\": {\"molecular_weight\": 46.069, \"logp\": -0.0014, \"tpsa\": 20.23, \"h_bond_donors\": 1, \"h_bond_acceptors\": 1, \"rotatable_bonds\": 0}}\n{\"ok\": false, \"input\": \"\", \"error\": \"Invalid or empty SMILES\"}\n{\"ok\": true, \"input\": \"C\", \"canonical_smiles\": \"C\", \"descriptors\": {\"molecular_weight\": 16.043, \"logp\": 0.6361, \"tpsa\": 0.0, \"h_bond_donors\": 0, \"h_bond_acceptors\": 0, \"rotatable_bonds\": 0}}\n",
+      "output_artifacts": {
+        "directory": "case-3316802626c6bf87",
+        "files": {
+          "results.jsonl": {
+            "bytes": 452,
+            "sha256": "3e93de6d4a075db1e5f0cc3b0f3972e96cbc98873b08efa9ed1e8c17fe214010"
+          }
+        },
+        "omitted": [],
+        "byte_limit": null
+      }
+    },
+    {
+      "name": "check-configured-delivered-python-entry",
+      "origin": "authored_check",
+      "basis": "Explicit configured check",
+      "status": "passed",
+      "layer": "interface",
+      "kind": "reference",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [],
+      "limitations": [],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "skillnet-v2-a289d774b4314ab7846ccd97138eb7cf",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--user",
+        "10001:10001",
+        "--pids-limit",
+        "128",
+        "--memory",
+        "1g",
+        "--cpus",
+        "2",
+        "--tmpfs",
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "--label",
+        "skillnet.scope=70b31ecd690349ef864fd909fb1f9d07",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\test-temp\\skillnet-fixture-3_14z8s1\\output,target=/output",
+        "--workdir",
+        "/opt/skill/package",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\stage3-reviewed-real-r4\\evidence\\final\\sources,target=/sources,readonly",
+        "--entrypoint",
+        "python",
+        "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+        "/opt/skill/package/scripts/calc_descriptors.py",
+        "--smiles",
+        "CCO"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"ok\": true, \"input\": \"CCO\", \"canonical_smiles\": \"CCO\", \"descriptors\": {\"molecular_weight\": 46.069, \"logp\": -0.0014, \"tpsa\": 20.23, \"h_bond_donors\": 1, \"h_bond_acceptors\": 1, \"rotatable_bonds\": 0}}\n",
+      "stderr": "",
+      "cleanup": {
+        "command": [
+          "docker",
+          "rm",
+          "--force",
+          "skillnet-v2-a289d774b4314ab7846ccd97138eb7cf"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "output_artifacts": {
+        "directory": "case-ca9477938c221ecf",
+        "files": {},
+        "omitted": [],
+        "byte_limit": null
+      }
+    },
+    {
+      "name": "check-configured-frozen-source-file-input",
+      "origin": "authored_check",
+      "basis": "Explicit configured check",
+      "status": "passed",
+      "layer": "interface",
+      "kind": "reference",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [],
+      "limitations": [],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "skillnet-v2-9d8459850ab64b49972fd2b488d454fc",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--user",
+        "10001:10001",
+        "--pids-limit",
+        "128",
+        "--memory",
+        "1g",
+        "--cpus",
+        "2",
+        "--tmpfs",
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "--label",
+        "skillnet.scope=70b31ecd690349ef864fd909fb1f9d07",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\test-temp\\skillnet-fixture-3diab5bq\\output,target=/output",
+        "--workdir",
+        "/output",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\stage3-reviewed-real-r4\\evidence\\final\\sources,target=/sources,readonly",
+        "--entrypoint",
+        "python",
+        "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+        "/opt/skill/package/scripts/calc_descriptors.py",
+        "--input",
+        "/sources/rdkit/examples/input.smi",
+        "--output",
+        "/output/check.jsonl"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "[14:22:03] SMILES Parse Error: syntax error while parsing: not-a-smiles\n[14:22:03] SMILES Parse Error: check for mistakes around position 3:\n[14:22:03] not-a-smiles\n[14:22:03] ~~^\n[14:22:03] SMILES Parse Error: Failed parsing SMILES 'not-a-smiles' for input: 'not-a-smiles'\n",
+      "cleanup": {
+        "command": [
+          "docker",
+          "rm",
+          "--force",
+          "skillnet-v2-9d8459850ab64b49972fd2b488d454fc"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "output_artifacts": {
+        "directory": "case-a5b0ab2f04c65ed6",
+        "files": {
+          "check.jsonl": {
+            "bytes": 482,
+            "sha256": "3aea57ce98c36dcf8fed6992b2005d82bc25604ed07d5024cc5cb991578af34d"
+          }
+        },
+        "omitted": [],
+        "byte_limit": null
+      }
+    },
+    {
+      "name": "check-configured-nonempty-parser-rejection",
+      "origin": "authored_check",
+      "basis": "Explicit configured check",
+      "status": "passed",
+      "layer": "interface",
+      "kind": "reference",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [],
+      "limitations": [],
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "skillnet-v2-e4bc115ee7b24cf5b933951f290d6dbb",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges",
+        "--user",
+        "10001:10001",
+        "--pids-limit",
+        "128",
+        "--memory",
+        "1g",
+        "--cpus",
+        "2",
+        "--tmpfs",
+        "/tmp:rw,noexec,nosuid,size=64m",
+        "--label",
+        "skillnet.scope=70b31ecd690349ef864fd909fb1f9d07",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\test-temp\\skillnet-fixture-t3a33bkz\\output,target=/output",
+        "--workdir",
+        "/output",
+        "--mount",
+        "type=bind,source=E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration\\.pipeline\\stage3-reviewed-real-r4\\evidence\\final\\sources,target=/sources,readonly",
+        "--entrypoint",
+        "python",
+        "sha256:8effcaeefe67b53e03cbee30eaa31392e845296277693c2e2fb3df17ce7fbe17",
+        "/opt/skill/package/scripts/calc_descriptors.py",
+        "--smiles",
+        "not-a-smiles"
+      ],
+      "exit_code": 2,
+      "stdout": "{\"ok\": false, \"input\": \"not-a-smiles\", \"error\": \"Invalid or empty SMILES\"}\n",
+      "stderr": "[14:22:05] SMILES Parse Error: syntax error while parsing: not-a-smiles\n[14:22:05] SMILES Parse Error: check for mistakes around position 3:\n[14:22:05] not-a-smiles\n[14:22:05] ~~^\n[14:22:05] SMILES Parse Error: Failed parsing SMILES 'not-a-smiles' for input: 'not-a-smiles'\n",
+      "cleanup": {
+        "command": [
+          "docker",
+          "rm",
+          "--force",
+          "skillnet-v2-e4bc115ee7b24cf5b933951f290d6dbb"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "output_artifacts": {
+        "directory": "case-c3426753754d78e1",
+        "files": {},
+        "omitted": [],
+        "byte_limit": null
+      }
+    }
+  ]
+}

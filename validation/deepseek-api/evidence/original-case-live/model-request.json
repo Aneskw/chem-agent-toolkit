@@ -1,0 +1,55 @@
+{
+  "backend": "deepseek_api",
+  "deadline_scope": "connect, send, read, stream consumption and all configured retries",
+  "elapsed_seconds": 158.477,
+  "endpoint": {
+    "base_url": "https://api.deepseek.com",
+    "kind": "official",
+    "path": "/chat/completions"
+  },
+  "mapped_settings": {
+    "note": "reasoning_effort uses the provider compatibility ladder (minimal->low, medium->high, xhigh->high); the requested and sent values are different and are not claimed to be equivalent",
+    "reasoning_effort_sent": "high",
+    "service_tier": "not supported by this backend; recorded, never sent",
+    "thinking": {
+      "type": "enabled"
+    }
+  },
+  "messages_sha256": "d065c56129383e6b9bf89751fc9ffccb3feec735958b85c1938996b84238392e",
+  "model": "deepseek-flash",
+  "progress_timeout_seconds": 240,
+  "progress_watch": "not applied: keep-alives are not generation progress and the provider closes a request that has not started inference after ten minutes; the total deadline is the only bound",
+  "prompt_bytes": 45397,
+  "prompt_sha256": "2327f993b744fb8c8b37d157d47a4ed998545c6f83e39c6b8d2261211795b521",
+  "provider": "deepseek",
+  "request_count": 1,
+  "request_params": {
+    "max_tokens": 65536,
+    "messages_count": 2,
+    "model": "deepseek-flash",
+    "reasoning_effort": "high",
+    "response_format": {
+      "type": "json_object"
+    },
+    "stream": true,
+    "stream_options": {
+      "include_usage": true
+    },
+    "structured_output_mode": "json_object + local JSON Schema validation (the service does not accept a caller JSON Schema)",
+    "temperature": "not sent (has no effect in thinking mode)",
+    "thinking": {
+      "type": "enabled"
+    },
+    "tools": "not sent (tool-free contract; any tool call is rejected)"
+  },
+  "requested_settings": {
+    "reasoning_effort": "medium",
+    "service_tier": null
+  },
+  "retries": 0,
+  "schema_sha256": "83d99a4e724ce2a4c22fb227ace3f9d4ef65205e3aaccdddaa91056651ce3139",
+  "sdk": "none (stdlib http.client); no implicit SDK retries exist",
+  "started_at": "2026-10-27T03:17:28Z",
+  "status": "completed",
+  "timeout_seconds": 600.0
+}

@@ -1,0 +1,832 @@
+{
+  "name": "rdkit-recap-terminal-fragments",
+  "kind": "skill",
+  "plan": {
+    "name": "rdkit-recap-terminal-fragments",
+    "task": "Generate standard RECAP terminal molecular fragments from an RDKit molecule via Recap.RecapDecompose and root.GetLeaves(); interpret terminal leaves versus the full hierarchy children/GetAllChildren and recognize valid empty results.",
+    "scope": "Accepts a valid RDKit Mol object, normally from Chem.MolFromSmiles with successful parsing. Invalid SMILES that return None must be rejected before calling RecapDecompose. Output is a dictionary keyed by canonical fragment SMILES with '*' dummy atoms at broken bonds, mapping to RecapHierarchyNode objects whose .mol is the fragment. An empty dictionary from GetLeaves is a valid outcome when no reaction SMARTS matches, fragments fail minFragmentSize, or charged/protonated variants do not match the documented definitions. This is molecular fragmentation only; it does not imply synthetic feasibility, bioactivity, or chemical validation beyond the documented RECAP algorithm.",
+    "entrypoint": "from rdkit import Chem; from rdkit.Chem import Recap; mol = Chem.MolFromSmiles(smiles); if mol is None: reject invalid input; root = Recap.RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None); leaves = root.GetLeaves(); for smi, node in leaves.items(): node.mol is the fragment Mol. Use root.children for direct children and root.GetAllChildren() for non-terminal hierarchy; only leaves are the standard terminal fragment set.",
+    "rationale": "Removes a recurring confusion between terminal fragments (GetLeaves) and the full hierarchy (children/GetAllChildren), and prevents treating an empty leaf set as error. Concise guidance covers the real interfaces, dummy-atom SMILES keys, minFragmentSize and onlyUseReactions.",
+    "construction": "Direct packaging of the existing public RDKit Recap.py API. No reaction definitions, algorithm, or scientific thresholds are invented or modified. Delivery documents the current RecapDecompose/GetLeaves semantics, prerequisites, and invalid-input boundaries, with examples grounded in the source.",
+    "upstream_behavior": "Generate standard RECAP terminal molecular fragments from an RDKit molecule via Recap.RecapDecompose and root.GetLeaves(); interpret terminal leaves versus the full hierarchy children/GetAllChildren and recognize valid empty results.",
+    "added_behavior": "source-supported only",
+    "kind": "skill",
+    "needs": [],
+    "selected": true,
+    "priority": 0,
+    "readiness": "callable",
+    "gaps": [
+      "No runtime RDKit execution was performed in this discovery turn because host business execution is restricted to a Docker container; exact leaf keys should be confirmed during authoring with the installed RDKit version.",
+      "The evidence focuses on Recap.py and its embedded tests; broader RDKit reaction/canonicalization internals were not exhaustively inspected."
+    ],
+    "dependencies": [],
+    "files": [
+      {
+        "path": "SKILL.md",
+        "purpose": "Capability instructions"
+      }
+    ],
+    "checks": [],
+    "evidence": [
+      {
+        "id": "e1",
+        "claim": "document.py module docstring states the implementation of the RECAP algorithm from Lewell et al. returns results as a hierarchy of nodes; the example shows RecapDecompose(m), sorted(res.children.keys()), sorted(res.GetAllChildren().keys()), and says 'To get the standard set of RECAP results, use GetLeaves()', with leaf.mol available."
+      },
+      {
+        "id": "e1",
+        "claim": "RecapHierarchyNode.GetLeaves returns a dictionary keyed by SMILES of leaf (terminal) nodes; it adds a child only if the child has no children, otherwise recurses with terminalOnly=True. GetAllChildren uses terminalOnly=False. This is the exact terminal/full-hierarchy contrast in the source."
+      },
+      {
+        "id": "e1",
+        "claim": "RecapDecompose is defined as RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None); onlyUseReactions filters reaction indices, and minFragmentSize drops products whose non-dummy heavy atom count is below the threshold."
+      },
+      {
+        "id": "e1",
+        "claim": "Embedded unittest testMinFragmentSize shows empty results are valid: CCCOCCC gives res.children == {} with default settings, while with minFragmentSize=3 it gives one leaf '*CCC'; CCCOCC with minFragmentSize=3 also gives res.children == {}."
+      },
+      {
+        "id": "e1",
+        "claim": "Embedded tests testAmideRxn, testEsterRxn, and testSFNetIssue1881803 document zero leaves for molecules where the selected reaction does not match or charged/protonated variants do not match, e.g. C1CC1C(=O)CC1OC1 with onlyUseReactions=[1] and c1ccccc1[n+]1ccccc1 yield len(res.GetLeaves()) == 0."
+      },
+      {
+        "id": "e2",
+        "claim": "license document.txt contains the BSD 3-Clause License for RDKit, permitting redistribution with conditions; the skill packages guidance around this API and can include source-derived snippets under that license."
+      }
+    ],
+    "method_evidence": []
+  },
+  "status": "blocked",
+  "checks": [
+    {
+      "name": "structure",
+      "status": "pass",
+      "required": true,
+      "findings": []
+    },
+    {
+      "name": "runtime_paths",
+      "status": "pass",
+      "required": true,
+      "findings": []
+    },
+    {
+      "name": "content_review",
+      "required": true,
+      "status": "pass",
+      "resolution": "none",
+      "findings": [
+        {
+          "location": "SKILL.md > Inputs > built-in small-fragment filter",
+          "problem": "The text says the built-in small-fragment filter is independent of minFragmentSize, but the source applies that static filter only in the elif branch when minFragmentSize is not greater than 0.",
+          "evidence": "Source: if minFragmentSize > 0: ... elif pSmi.replace('*', '').replace('()', '') in ('', 'C', 'CC', 'CCC'): ...",
+          "impact": "Users who set minFragmentSize>0 may incorrectly expect the static filter to still apply, changing predicted leaves or empty results.",
+          "action": "Revise the paragraph to state that the static filter applies only when minFragmentSize=0; when minFragmentSize>0 the numeric threshold check is used instead.",
+          "blocking": false,
+          "category": "source"
+        },
+        {
+          "location": "artifact checks / defined behavior tests",
+          "problem": "The three behavior tests are source-backed but were not executed; only packaging checks (structure, runtime_paths) have pass status.",
+          "evidence": "Artifact notes state runtime execution was not performed and the tests are source-grounded definitions, not execution evidence; checks list contains only packaging checks.",
+          "impact": "Runtime behavior remains unverified, though the source assessment can still be completed.",
+          "action": "When execution is permitted, run doctest_leaves, valid_empty_default, and min_fragment_leaf in the Docker container with RDKit to confirm the delivered normal path and empty-result cases.",
+          "blocking": false,
+          "category": "environment"
+        }
+      ],
+      "oracle_changes_verified": false,
+      "execution_gaps": [],
+      "requirement_assessment": "confirmed",
+      "evidence_kind": "model_review_not_independent_scientific_validation"
+    },
+    {
+      "name": "doctest_leaves",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "valid_empty_default",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "min_fragment_leaf",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "doctest_leaves",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "valid_empty_default",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    },
+    {
+      "name": "min_fragment_leaf",
+      "status": "not_run",
+      "required": false,
+      "origin": "generated",
+      "findings": [
+        "Deferred to bound Docker execution"
+      ],
+      "executor": "docker"
+    }
+  ],
+  "repair_rounds": 1,
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "bytes": 1580
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "24ea902eabf00f412117a341a00ef895d31627a84635ea501ecce9287bb97556",
+      "bytes": 4782
+    }
+  ],
+  "repair_history": [
+    {
+      "attempt": 0,
+      "checks": [
+        {
+          "name": "structure",
+          "status": "pass",
+          "required": true,
+          "findings": []
+        },
+        {
+          "name": "runtime_paths",
+          "status": "pass",
+          "required": true,
+          "findings": []
+        },
+        {
+          "name": "content_review",
+          "required": true,
+          "status": "fail",
+          "resolution": "revise_files",
+          "findings": [
+            {
+              "location": "SKILL.md > Inputs > minFragmentSize; SKILL.md > Result interpretation and checks > Valid empty result",
+              "problem": "The valid-empty guidance misattributes the default empty result for CCCOCCC to 'no defined reaction SMARTS matches'. The ether reaction actually matches, and the empty result is caused by the built-in default small-fragment filter dropping both '*CCC' products, not by a missing reaction match. The Inputs wording similarly understates the default filter as removing only 'trivial dummy-only/branch artifacts'.",
+              "evidence": "Recap.py reactionDefs includes the ether reaction '[#6:1]-!@[O;+0]-!@[#6:2]>>[#6:1]*.*[#6:2]'. RecapDecompose's default branch contains 'elif pSmi.replace(\"*\",\"\").replace(\"()\",\"\") in (\"\", \"C\", \"CC\", \"CCC\"): seqOk=False'. The embedded testMinFragmentSize demonstrates that CCCOCCC with defaults gives res.children == {} and with minFragmentSize=3 gives one '*CCC' leaf.",
+              "impact": "This is a central interpretation error in the skill's promised valid-empty explanation. Users may infer the wrong remediation or misunderstand that small terminal residues are filtered even when minFragmentSize=0, undermining correct use of GetLeaves.",
+              "action": "Correct the valid-empty bullet to state that the ether reaction matches CCCOCCC but both '*CCC' products are removed by the default small-fragment rule; use a genuinely non-matching example for the no-reaction-match case, and revise the Inputs wording to say the default filter drops non-dummy heavy-atom counts of 0, 1, 2, or 3, not only dummy-only/branch artifacts.",
+              "blocking": true,
+              "category": "file"
+            }
+          ],
+          "oracle_changes_verified": false,
+          "execution_gaps": [],
+          "requirement_assessment": "confirmed",
+          "evidence_kind": "model_review_not_independent_scientific_validation"
+        }
+      ],
+      "generated_tests": [
+        {
+          "name": "doctest_leaves",
+          "argv": [
+            "{python}",
+            "-c",
+            "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\nres = Recap.RecapDecompose(m)\nprint(sorted(res.GetLeaves().keys()))"
+          ],
+          "cwd": "{package}",
+          "expected_exit": 0,
+          "stdout_contains": [
+            "['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']"
+          ],
+          "evidence": "e1",
+          "purpose": "Verifies that GetLeaves returns the standard terminal fragments shown in the Recap.py doctest molecule, not children or GetAllChildren.",
+          "kind": "behavior"
+        },
+        {
+          "name": "valid_empty_default",
+          "argv": [
+            "{python}",
+            "-c",
+            "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('CCCOCCC')\nres = Recap.RecapDecompose(m)\nprint(len(res.GetLeaves()))"
+          ],
+          "cwd": "{package}",
+          "expected_exit": 0,
+          "stdout_contains": [
+            "0"
+          ],
+          "evidence": "e1",
+          "purpose": "Checks the source-documented valid empty result for CCCOCCC with default minFragmentSize=0.",
+          "kind": "behavior"
+        },
+        {
+          "name": "min_fragment_leaf",
+          "argv": [
+            "{python}",
+            "-c",
+            "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('CCCOCCC')\nres = Recap.RecapDecompose(m, minFragmentSize=3)\nprint(sorted(res.GetLeaves().keys()))"
+          ],
+          "cwd": "{package}",
+          "expected_exit": 0,
+          "stdout_contains": [
+            "['*CCC']"
+          ],
+          "evidence": "e1",
+          "purpose": "Verifies the source-documented minFragmentSize=3 result for CCCOCCC yields one terminal leaf '*CCC'.",
+          "kind": "behavior"
+        }
+      ]
+    }
+  ],
+  "runtime_requirement": {
+    "status": "required",
+    "reason": "The normal path imports rdkit.Chem and rdkit.Chem.rdChemReactions; the rdkit Python package must be installed in the runtime environment.",
+    "citations": [
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": "from rdkit import Chem"
+      },
+      {
+        "source_id": "recap",
+        "path": "document.py",
+        "quote": "from rdkit.Chem import rdChemReactions as Reactions"
+      }
+    ]
+  },
+  "entry_declaration": {
+    "kind": "markdown_python",
+    "path": "SKILL.md",
+    "block_index": 1
+  },
+  "test_definitions": {
+    "configured": [],
+    "generated": [
+      {
+        "name": "doctest_leaves",
+        "argv": [
+          "{python}",
+          "-c",
+          "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\nres = Recap.RecapDecompose(m)\nprint(sorted(res.GetLeaves().keys()))"
+        ],
+        "cwd": "{package}",
+        "expected_exit": 0,
+        "stdout_contains": [
+          "['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']"
+        ],
+        "evidence": "e1",
+        "purpose": "Verifies that GetLeaves returns the standard terminal fragments shown in the Recap.py doctest molecule, not children or GetAllChildren.",
+        "kind": "behavior"
+      },
+      {
+        "name": "valid_empty_default",
+        "argv": [
+          "{python}",
+          "-c",
+          "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('CCCOCCC')\nres = Recap.RecapDecompose(m)\nprint(len(res.GetLeaves()))"
+        ],
+        "cwd": "{package}",
+        "expected_exit": 0,
+        "stdout_contains": [
+          "0"
+        ],
+        "evidence": "e1",
+        "purpose": "Checks the source-documented valid empty result for CCCOCCC with default settings: the ether reaction matches, but both '*CCC' products are dropped by the default small-fragment filter.",
+        "kind": "behavior"
+      },
+      {
+        "name": "min_fragment_leaf",
+        "argv": [
+          "{python}",
+          "-c",
+          "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('CCCOCCC')\nres = Recap.RecapDecompose(m, minFragmentSize=3)\nprint(sorted(res.GetLeaves().keys()))"
+        ],
+        "cwd": "{package}",
+        "expected_exit": 0,
+        "stdout_contains": [
+          "['*CCC']"
+        ],
+        "evidence": "e1",
+        "purpose": "Verifies the source-documented minFragmentSize=3 result for CCCOCCC yields one terminal leaf '*CCC'.",
+        "kind": "behavior"
+      }
+    ]
+  },
+  "issues": [
+    {
+      "id": "valid-empty-correction",
+      "description": "Earlier draft described the CCCOCCC default empty result as caused by no matching reaction; the ether reaction actually matches and the empty result is caused by the default small-fragment filter.",
+      "blocking": false,
+      "resolution": "SKILL.md now distinguishes default small-fragment filtering from absence of reaction matches and uses C1CC=CC1 for the no-reaction-match example."
+    }
+  ],
+  "notes": [
+    "Runtime execution of the delivered Python block was not performed in this authoring turn because host business execution is restricted to a Docker container; the tests above are source-grounded definitions, not execution evidence.",
+    "The skill documents RECAP fragmentation only; it does not provide synthetic feasibility, bioactivity, or chemical validation beyond the documented RECAP algorithm.",
+    "The source snapshot corresponds to RDKit Recap.py at commit 237a1d9027c800784afed8788540f38a3aa595f8; exact fragment SMILES may differ across RDKit versions."
+  ],
+  "additional_candidates": [],
+  "file_purposes": [
+    {
+      "path": "references/LICENSE.txt",
+      "purpose": "Delivered capability resource"
+    },
+    {
+      "path": "SKILL.md",
+      "purpose": "Delivered capability resource"
+    }
+  ],
+  "model_calls": [
+    {
+      "phase": "author",
+      "session_key": "build:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "deepseek-v4-pro",
+      "status": "completed",
+      "usage": {
+        "prompt_tokens": 15208,
+        "completion_tokens": 17034,
+        "total_tokens": 32242,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 14686
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 15208
+      },
+      "prompt_sha256": "7672938e4910bdc2b1ca2a25038847635c79433b1fa5561a5da508bd0d9ec4f0",
+      "tool_events": 0,
+      "elapsed_seconds": 196.492,
+      "response_sha256": "750b16f2b0fbd85d6a86f5296f645a5a5bfa78ce32df842674f86409740639d8",
+      "finish_reason": null,
+      "written_files": [
+        "SKILL.md",
+        "references/LICENSE.txt"
+      ]
+    },
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "deepseek-v4-pro",
+      "status": "completed",
+      "usage": {
+        "prompt_tokens": 16925,
+        "completion_tokens": 8899,
+        "total_tokens": 25824,
+        "prompt_tokens_details": {
+          "cached_tokens": 1280
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 8508
+        },
+        "prompt_cache_hit_tokens": 1280,
+        "prompt_cache_miss_tokens": 15645
+      },
+      "prompt_sha256": "a2eb315b3f1325dea1ea0382cd3fac3125030acd2be60efc21f3906142925f15",
+      "tool_events": 0,
+      "elapsed_seconds": 130.758,
+      "response_sha256": "173da0f3dd714e730d729f34b91bebc77eeb00ad6d846c995d1bcad700d7fb05",
+      "finish_reason": null
+    },
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "deepseek-v4-pro",
+      "status": "completed",
+      "usage": {
+        "prompt_tokens": 17362,
+        "completion_tokens": 4664,
+        "total_tokens": 22026,
+        "prompt_tokens_details": {
+          "cached_tokens": 1280
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4201
+        },
+        "prompt_cache_hit_tokens": 1280,
+        "prompt_cache_miss_tokens": 16082
+      },
+      "prompt_sha256": "d47302738c561b9f1d0da69556989b63b33ab03d12e0b5001a64e0453d9280f6",
+      "tool_events": 0,
+      "elapsed_seconds": 66.11,
+      "response_sha256": "4907074617d542977897629a12a7b2ec436356d87facea8734f0e61fa2b312dd",
+      "finish_reason": null
+    },
+    {
+      "phase": "author",
+      "session_key": "build:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "deepseek-v4-pro",
+      "status": "completed",
+      "usage": {
+        "prompt_tokens": 18167,
+        "completion_tokens": 9597,
+        "total_tokens": 27764,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 6771
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 17399
+      },
+      "prompt_sha256": "ee6446c72461579571b3d115805a29704c03dd219b24e45f6a7958b220550238",
+      "tool_events": 0,
+      "elapsed_seconds": 107.996,
+      "response_sha256": "ae76a36dcadee3589ef1b94ebdc715831b899fe0fff446517ac78622ae296b59",
+      "finish_reason": null,
+      "written_files": [
+        "SKILL.md",
+        "references/LICENSE.txt"
+      ]
+    },
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "deepseek-v4-pro",
+      "status": "completed",
+      "usage": {
+        "prompt_tokens": 17160,
+        "completion_tokens": 18221,
+        "total_tokens": 35381,
+        "prompt_tokens_details": {
+          "cached_tokens": 1280
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 17811
+        },
+        "prompt_cache_hit_tokens": 1280,
+        "prompt_cache_miss_tokens": 15880
+      },
+      "prompt_sha256": "16fa5fcf5b3dee804b0ed59c64392914e728cfb4839e02bd9d280b28fbac2ac2",
+      "tool_events": 0,
+      "elapsed_seconds": 260.945,
+      "response_sha256": "0b682cef359c4cafd1cf7ad13b9f2e7284a7df66ad934e40bd8d67c2886529ea",
+      "finish_reason": null
+    }
+  ],
+  "fingerprint": "6c3673e0635f2e7a32764a9bc4d64e18ad70bba490adc462eb543d164ddb4917",
+  "delivery": {
+    "protocol": 1,
+    "candidate_id": "candidate-0db42e9bf94ddd230ae29a2db252b2c177c4a722a121599877a07a3e51b18ea1",
+    "revision_id": "rev-f4913e5b340885a319a05fd7661b17d7ee37b63c42aaf49cb5aa61655a2a2225",
+    "mode": "normal",
+    "inputs": {
+      "candidate": {
+        "name": "rdkit-recap-terminal-fragments",
+        "task": "Generate standard RECAP terminal molecular fragments from an RDKit molecule via Recap.RecapDecompose and root.GetLeaves(); interpret terminal leaves versus the full hierarchy children/GetAllChildren and recognize valid empty results.",
+        "scope": "Accepts a valid RDKit Mol object, normally from Chem.MolFromSmiles with successful parsing. Invalid SMILES that return None must be rejected before calling RecapDecompose. Output is a dictionary keyed by canonical fragment SMILES with '*' dummy atoms at broken bonds, mapping to RecapHierarchyNode objects whose .mol is the fragment. An empty dictionary from GetLeaves is a valid outcome when no reaction SMARTS matches, fragments fail minFragmentSize, or charged/protonated variants do not match the documented definitions. This is molecular fragmentation only; it does not imply synthetic feasibility, bioactivity, or chemical validation beyond the documented RECAP algorithm.",
+        "entrypoint": "from rdkit import Chem; from rdkit.Chem import Recap; mol = Chem.MolFromSmiles(smiles); if mol is None: reject invalid input; root = Recap.RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None); leaves = root.GetLeaves(); for smi, node in leaves.items(): node.mol is the fragment Mol. Use root.children for direct children and root.GetAllChildren() for non-terminal hierarchy; only leaves are the standard terminal fragment set.",
+        "rationale": "Removes a recurring confusion between terminal fragments (GetLeaves) and the full hierarchy (children/GetAllChildren), and prevents treating an empty leaf set as error. Concise guidance covers the real interfaces, dummy-atom SMILES keys, minFragmentSize and onlyUseReactions.",
+        "construction": "Direct packaging of the existing public RDKit Recap.py API. No reaction definitions, algorithm, or scientific thresholds are invented or modified. Delivery documents the current RecapDecompose/GetLeaves semantics, prerequisites, and invalid-input boundaries, with examples grounded in the source.",
+        "upstream_behavior": "Generate standard RECAP terminal molecular fragments from an RDKit molecule via Recap.RecapDecompose and root.GetLeaves(); interpret terminal leaves versus the full hierarchy children/GetAllChildren and recognize valid empty results.",
+        "added_behavior": "source-supported only",
+        "kind": "skill",
+        "needs": [],
+        "selected": true,
+        "priority": 0,
+        "readiness": "callable",
+        "gaps": [
+          "No runtime RDKit execution was performed in this discovery turn because host business execution is restricted to a Docker container; exact leaf keys should be confirmed during authoring with the installed RDKit version.",
+          "The evidence focuses on Recap.py and its embedded tests; broader RDKit reaction/canonicalization internals were not exhaustively inspected."
+        ],
+        "dependencies": [],
+        "files": [
+          {
+            "path": "SKILL.md",
+            "purpose": "Capability instructions"
+          }
+        ],
+        "checks": [],
+        "evidence": [
+          {
+            "id": "e1",
+            "claim": "document.py module docstring states the implementation of the RECAP algorithm from Lewell et al. returns results as a hierarchy of nodes; the example shows RecapDecompose(m), sorted(res.children.keys()), sorted(res.GetAllChildren().keys()), and says 'To get the standard set of RECAP results, use GetLeaves()', with leaf.mol available."
+          },
+          {
+            "id": "e1",
+            "claim": "RecapHierarchyNode.GetLeaves returns a dictionary keyed by SMILES of leaf (terminal) nodes; it adds a child only if the child has no children, otherwise recurses with terminalOnly=True. GetAllChildren uses terminalOnly=False. This is the exact terminal/full-hierarchy contrast in the source."
+          },
+          {
+            "id": "e1",
+            "claim": "RecapDecompose is defined as RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None); onlyUseReactions filters reaction indices, and minFragmentSize drops products whose non-dummy heavy atom count is below the threshold."
+          },
+          {
+            "id": "e1",
+            "claim": "Embedded unittest testMinFragmentSize shows empty results are valid: CCCOCCC gives res.children == {} with default settings, while with minFragmentSize=3 it gives one leaf '*CCC'; CCCOCC with minFragmentSize=3 also gives res.children == {}."
+          },
+          {
+            "id": "e1",
+            "claim": "Embedded tests testAmideRxn, testEsterRxn, and testSFNetIssue1881803 document zero leaves for molecules where the selected reaction does not match or charged/protonated variants do not match, e.g. C1CC1C(=O)CC1OC1 with onlyUseReactions=[1] and c1ccccc1[n+]1ccccc1 yield len(res.GetLeaves()) == 0."
+          },
+          {
+            "id": "e2",
+            "claim": "license document.txt contains the BSD 3-Clause License for RDKit, permitting redistribution with conditions; the skill packages guidance around this API and can include source-derived snippets under that license."
+          }
+        ],
+        "method_evidence": []
+      },
+      "files": [
+        {
+          "path": "references/LICENSE.txt",
+          "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+          "bytes": 1580
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "24ea902eabf00f412117a341a00ef895d31627a84635ea501ecce9287bb97556",
+          "bytes": 4782
+        }
+      ],
+      "sources": [
+        {
+          "id": "license",
+          "inventory": [
+            {
+              "path": "document.txt",
+              "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+              "bytes": 1580
+            }
+          ],
+          "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+          "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2",
+          "upstream": {
+            "repo": "https://github.com/rdkit/rdkit",
+            "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+            "path": "license.txt",
+            "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+            "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+          }
+        },
+        {
+          "id": "recap",
+          "inventory": [
+            {
+              "path": "document.py",
+              "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+              "bytes": 20662
+            }
+          ],
+          "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+          "license": "BSD-3-Clause",
+          "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a",
+          "upstream": {
+            "repo": "https://github.com/rdkit/rdkit",
+            "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+            "path": "rdkit/Chem/Recap.py",
+            "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+            "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+          }
+        }
+      ],
+      "requirement": {
+        "status": "required",
+        "reason": "The normal path imports rdkit.Chem and rdkit.Chem.rdChemReactions; the rdkit Python package must be installed in the runtime environment.",
+        "citations": [
+          {
+            "source_id": "recap",
+            "path": "document.py",
+            "quote": "from rdkit import Chem"
+          },
+          {
+            "source_id": "recap",
+            "path": "document.py",
+            "quote": "from rdkit.Chem import rdChemReactions as Reactions"
+          }
+        ]
+      },
+      "bindings": {
+        "version": 1,
+        "payload": null,
+        "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+      },
+      "environment": {
+        "version": 2,
+        "payload": {
+          "materials": [],
+          "limits": {
+            "model": "gpt-6-astra",
+            "max_attempts": null,
+            "total_seconds": 2400,
+            "model_timeout": 600,
+            "progress_timeout": 240,
+            "progress_watch": "observe",
+            "transport": "https",
+            "reasoning_effort": "medium",
+            "service_tier": "default",
+            "context_chars": null,
+            "max_read_rounds": null,
+            "max_files": null,
+            "max_file_bytes": null,
+            "max_context_bytes": null,
+            "memory": "1g",
+            "cpus": "2",
+            "pids": 128,
+            "build_seconds": 600,
+            "validation_reserve_seconds": 0,
+            "repair_reserve_seconds": 0,
+            "test_seconds": 60,
+            "document_seconds": 180,
+            "pin_base_image": true,
+            "registry_seconds": 120,
+            "backend": "deepseek_api",
+            "api_model": "deepseek-v4-pro",
+            "api_retries": 0,
+            "api_max_output_tokens": 65536,
+            "api_stream": true,
+            "native_model": {
+              "backend": "deepseek_api",
+              "name": "gpt-6-astra",
+              "api_model": "deepseek-v4-pro",
+              "transport": "https",
+              "reasoning_effort": "medium",
+              "service_tier": "default"
+            }
+          },
+          "incomplete": true
+        },
+        "sha256": "d42c3874fffad7978976c9511515c29e3af4aac6efaaba282ef4936ef9f0d47d"
+      },
+      "acceptance": {
+        "version": 1,
+        "payload": {
+          "configured": [],
+          "generated": [
+            {
+              "name": "doctest_leaves",
+              "argv": [
+                "{python}",
+                "-c",
+                "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\nres = Recap.RecapDecompose(m)\nprint(sorted(res.GetLeaves().keys()))"
+              ],
+              "cwd": "{package}",
+              "expected_exit": 0,
+              "stdout_contains": [
+                "['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']"
+              ],
+              "evidence": "e1",
+              "purpose": "Verifies that GetLeaves returns the standard terminal fragments shown in the Recap.py doctest molecule, not children or GetAllChildren.",
+              "kind": "behavior"
+            },
+            {
+              "name": "valid_empty_default",
+              "argv": [
+                "{python}",
+                "-c",
+                "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('CCCOCCC')\nres = Recap.RecapDecompose(m)\nprint(len(res.GetLeaves()))"
+              ],
+              "cwd": "{package}",
+              "expected_exit": 0,
+              "stdout_contains": [
+                "0"
+              ],
+              "evidence": "e1",
+              "purpose": "Checks the source-documented valid empty result for CCCOCCC with default settings: the ether reaction matches, but both '*CCC' products are dropped by the default small-fragment filter.",
+              "kind": "behavior"
+            },
+            {
+              "name": "min_fragment_leaf",
+              "argv": [
+                "{python}",
+                "-c",
+                "from rdkit import Chem\nfrom rdkit.Chem import Recap\nm = Chem.MolFromSmiles('CCCOCCC')\nres = Recap.RecapDecompose(m, minFragmentSize=3)\nprint(sorted(res.GetLeaves().keys()))"
+              ],
+              "cwd": "{package}",
+              "expected_exit": 0,
+              "stdout_contains": [
+                "['*CCC']"
+              ],
+              "evidence": "e1",
+              "purpose": "Verifies the source-documented minFragmentSize=3 result for CCCOCCC yields one terminal leaf '*CCC'.",
+              "kind": "behavior"
+            }
+          ]
+        },
+        "sha256": "8dd20a1cf7c13e24f223d1544dda30ca59e05d92b3bd823ab55d0683150b99ab"
+      }
+    },
+    "content": {
+      "status": "passed"
+    },
+    "fingerprints": {
+      "files": "bcf102f93f761ee217d1dec45f3245bd40dffe49261a352cbd783d44cf315e7d",
+      "sources": "fcf3caddc80c62c81d9ff6ab8e8c38d08fb129222432f733587fed143d32d5e4",
+      "bindings": "19d351464aa44bd8c6f0345a89f82dc37e22af3a80db6af55483d36052c0f14e",
+      "environment": "dd9eb2aa43d03618cdfa8e83a6892e84716b8636c66576c2050d641cc84c2df6",
+      "acceptance": "f054d66e246599b2e00d100e29b375382fc083db6f7fe3bc63e409c0762d3eb0"
+    },
+    "execution": {
+      "status": "runtime_blocked",
+      "attempts": [],
+      "reason": "Declared Markdown block 1 does not exist; SKILL.md has 1 complete block(s)"
+    },
+    "host": {
+      "status": "not_checked",
+      "observed_at": null
+    },
+    "evidence": [],
+    "qualification": {
+      "accepted": false,
+      "reason": "Docker build is not business acceptance"
+    },
+    "parent_revision": "rev-4a6a9baa1d5abb8f1bdc84243f4e8dd8129644c67b1c118e57e61f5f943a9c18"
+  },
+  "content_status": "passed",
+  "runtime_preparation": {
+    "status": "runtime_blocked",
+    "gaps": [
+      {
+        "code": "entry_declaration_missing",
+        "detail": "Declared Markdown block 1 does not exist; SKILL.md has 1 complete block(s)",
+        "repair_lane": "binding",
+        "blocker_kind": "unsupported_contract"
+      }
+    ],
+    "model_calls": 0
+  },
+  "durable_evidence": {
+    "path": "evidence/rdkit-recap-terminal-fragments/2ee1370cfe054afba626e3eeafb481e7",
+    "freeze_sha256": "9d77e3ecdef97b2ab5e3550490e3391fb16f30cc06e166e118fa721a074d7f41"
+  },
+  "runtime": {
+    "path": "runtime/candidate-0db42e9bf94ddd230ae29a2db252b2c177c4a722a121599877a07a3e51b18ea1/39cafaf71a354fac9066a79dd271c46e",
+    "files": [
+      {
+        "path": "attempt-start.json",
+        "sha256": "3531e8a22ff988c9117691f944448c49499c353b662f4d23897feedcee48fe41",
+        "bytes": 1793
+      },
+      {
+        "path": "build-log.json",
+        "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+        "bytes": 4
+      },
+      {
+        "path": "receipt.json",
+        "sha256": "e1787f4a69c9b5d13adbe2ff106eb3921e704175a491586a0b8b9e148c028580",
+        "bytes": 1940
+      }
+    ],
+    "status": "runtime_blocked",
+    "execution_status": "runtime_blocked",
+    "image_id": null,
+    "host": {
+      "status": "not_checked",
+      "observed_at": "2026-10-27T13:28:21.514610+00:00",
+      "gaps": [],
+      "docker_status": "not_checked",
+      "resource_gaps": [
+        "entry_declaration_missing",
+        "plan_unresolved"
+      ]
+    },
+    "gaps": [
+      {
+        "code": "entry_declaration_missing",
+        "detail": "Declared Markdown block 1 does not exist; SKILL.md has 1 complete block(s)",
+        "repair_lane": "binding",
+        "blocker_kind": "unsupported_contract"
+      },
+      {
+        "code": "plan_unresolved",
+        "detail": "No validated environment plan",
+        "repair_lane": "environment",
+        "blocker_kind": "unresolved_input"
+      }
+    ],
+    "revision_id": "rev-f4913e5b340885a319a05fd7661b17d7ee37b63c42aaf49cb5aa61655a2a2225"
+  },
+  "execution_location": "E:\\Users\\27343\\Docker\\acceptance-deepseek-run18-20261027\\state\\outputs\\20261027T211404-ca14f4f2",
+  "runtime_history_records": []
+}

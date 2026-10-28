@@ -1,0 +1,24 @@
+{
+  "content": "{\n  \"source_id\": \"recap\",\n  \"source_path\": \"rdkit/Chem/Recap.py\",\n  \"quote\": \"def RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None):\\n  \\\"\\\"\\\" returns the recap decomposition for a molecule \\\"\\\"\\\"\\n  mSmi = Chem.MolToSmiles(mol, 1)\",\n  \"reason\": \"Supported. The delivered entry scripts/recap_fragments.py wraps the inspected upstream RDKit module rdkit/Chem/Recap.py at commit 237a1d9027c800784afed8788540f38a3aa595f8. The script imports rdkit.Chem.Recap, parses the SMILES with Chem.MolFromSmiles, calls Recap.RecapDecompose(mol), then returns sorted(root.GetLeaves().keys()); the quoted upstream function signature establishes that exact API. The adapter adds blank/zero-atom guards, JSON serialization and error labels, but does not reimplement chemistry. Run under Python 3 in an RDKit-enabled container. From the skill directory, the one positional argument is a single quoted SMILES string; an absolute script path can be used from another working directory. The script writes no files, prints one JSON object to stdout, exits 0 for successful decomposition (including empty fragment lists) and 2 for empty_input, invalid_smiles, empty_molecule, or argparse errors. RDKit compiled dependencies must be available; no external data or model weights are required.\",\n  \"invocation\": \"python scripts/recap_fragments.py 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'\",\n  \"supported\": true\n}",
+  "finish_reason": "stop",
+  "model": "deepseek-v4-pro",
+  "reasoning_chars": 26936,
+  "request_id": {
+    "source": "body:id",
+    "value": "1a1c44c2-7d34-4b20-8566-b8145a6826f5"
+  },
+  "schema_validated": true,
+  "usage": {
+    "completion_tokens": 6910,
+    "completion_tokens_details": {
+      "reasoning_tokens": 6535
+    },
+    "prompt_cache_hit_tokens": 384,
+    "prompt_cache_miss_tokens": 11921,
+    "prompt_tokens": 12305,
+    "prompt_tokens_details": {
+      "cached_tokens": 384
+    },
+    "total_tokens": 19215
+  }
+}

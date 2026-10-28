@@ -1,0 +1,90 @@
+{
+  "review": {
+    "name": "content_review",
+    "required": true,
+    "status": "pass",
+    "resolution": "none",
+    "findings": [
+      {
+        "location": "artifact.tests",
+        "problem": "Runtime behavior remains unverified.",
+        "evidence": "Execution is disabled and no check reports were supplied. Tests call the delivered code; recap/document.py lines 39–56 support the terminal-fragment oracle, and lines 110–118 plus 231–235 support the empty-result oracle.",
+        "impact": "Source fidelity and entry binding are verified, but runtime success is not established.",
+        "action": "When execution is authorized, run the supplied checks in the designated container and record the installed RDKit version. No package revision is required.",
+        "blocking": false,
+        "category": "check"
+      }
+    ],
+    "oracle_changes_verified": false,
+    "execution_gaps": [],
+    "requirement_assessment": "confirmed",
+    "binding_verified": true,
+    "evidence_kind": "model_review_not_independent_scientific_validation"
+  },
+  "receipts": [
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 292214,
+        "cached_input_tokens": 228096,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2579,
+        "reasoning_output_tokens": 169
+      },
+      "prompt_sha256": "e0ae40214efdeaf57f4e3808d16943cabe9793f21a49207be1919f0d5c1bf27d",
+      "tool_events": 12,
+      "session_id": "01a17b90-b918-7931-9458-c02f93bc2828",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 180.191,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 8.1,
+        "last_stdout_seconds": 177.097,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "references/source-notices.md",
+      "sha256": "37473aa2cdf04c319cb091008b6f22fd9e67beaa126b4744ee156b95b2f4072f",
+      "bytes": 4738
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "2792eaded33af4ab2f20978b65448b775a3c1e64790abee2d218f013459b2e18",
+      "bytes": 5643
+    }
+  ],
+  "source_files": {
+    "recap": [
+      {
+        "path": "document.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+        "bytes": 20662
+      }
+    ],
+    "license": [
+      {
+        "path": "document.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+        "bytes": 1580
+      }
+    ]
+  },
+  "oracle_changes": []
+}

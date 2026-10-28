@@ -1,0 +1,18 @@
+{
+  "status": "fail",
+  "resolution": "revise_files",
+  "findings": [
+    {
+      "location": "SKILL.md > Result interpretation and checks > Valid empty result",
+      "problem": "The valid-empty guidance says CCCOCCC with default settings is empty because no defined reaction SMARTS matches. The RECAP ether SMARTS does match CCCOCCC; the empty result is caused by the default small-fragment filter dropping both resulting '*CCC' products.",
+      "evidence": "Recap.py reactionDefs includes the ether reaction '[#6:1]-!@[O;+0]-!@[#6:2]>>[#6:1]*.*[#6:2]', and RecapDecompose's default branch has 'elif pSmi.replace(\"*\",\"\").replace(\"()\",\"\") in (\"\", \"C\", \"CC\", \"CCC\"): seqOk=False'. The source testMinFragmentSize shows CCCOCCC default gives res.children == {} and minFragmentSize=3 gives the '*CCC' leaf, demonstrating the reaction matches and the default small-fragment rule removes the products.",
+      "impact": "This misrepresents a central valid-empty outcome. A user may change the wrong parameter or fail to understand that small terminal residues such as '*CCC' are filtered by default even when minFragmentSize=0, undermining the skill's promise to interpret empty leaf sets correctly.",
+      "action": "Correct the bullet to state the ether reaction matches CCCOCCC but both products are '*CCC' and are dropped by the default small-fragment rule; reserve 'no reaction SMARTS matches' for an example that actually has no match, and align the Inputs wording that currently calls this only 'dummy-only/branch artifacts'.",
+      "blocking": true,
+      "category": "file"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed"
+}

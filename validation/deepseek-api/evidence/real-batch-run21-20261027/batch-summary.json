@@ -1,0 +1,14 @@
+{
+  "batch": "run21",
+  "build_id": "20261027T214844-13efc180",
+  "status": "failed",
+  "model_calls": 3,
+  "started_at": "2026-10-27T13:48:44.131366+00:00",
+  "finished_at": "2026-10-27T13:55:04.474328+00:00",
+  "errors": [],
+  "gaps": null,
+  "entry_declaration": {
+    "kind": "script",
+    "path": "scripts/recap_leaves.py"
+  }
+}

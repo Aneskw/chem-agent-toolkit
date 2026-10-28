@@ -1,0 +1,18 @@
+{
+  "status": "fail",
+  "resolution": "revise_files",
+  "findings": [
+    {
+      "location": "SKILL.md > Inputs > minFragmentSize; SKILL.md > Result interpretation and checks > Valid empty result",
+      "problem": "The valid-empty guidance misattributes the default empty result for CCCOCCC to 'no defined reaction SMARTS matches'. The ether reaction actually matches, and the empty result is caused by the built-in default small-fragment filter dropping both '*CCC' products, not by a missing reaction match. The Inputs wording similarly understates the default filter as removing only 'trivial dummy-only/branch artifacts'.",
+      "evidence": "Recap.py reactionDefs includes the ether reaction '[#6:1]-!@[O;+0]-!@[#6:2]>>[#6:1]*.*[#6:2]'. RecapDecompose's default branch contains 'elif pSmi.replace(\"*\",\"\").replace(\"()\",\"\") in (\"\", \"C\", \"CC\", \"CCC\"): seqOk=False'. The embedded testMinFragmentSize demonstrates that CCCOCCC with defaults gives res.children == {} and with minFragmentSize=3 gives one '*CCC' leaf.",
+      "impact": "This is a central interpretation error in the skill's promised valid-empty explanation. Users may infer the wrong remediation or misunderstand that small terminal residues are filtered even when minFragmentSize=0, undermining correct use of GetLeaves.",
+      "action": "Correct the valid-empty bullet to state that the ether reaction matches CCCOCCC but both '*CCC' products are removed by the default small-fragment rule; use a genuinely non-matching example for the no-reaction-match case, and revise the Inputs wording to say the default filter drops non-dummy heavy-atom counts of 0, 1, 2, or 3, not only dummy-only/branch artifacts.",
+      "blocking": true,
+      "category": "file"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed"
+}

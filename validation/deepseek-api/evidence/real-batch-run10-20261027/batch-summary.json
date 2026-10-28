@@ -1,0 +1,18 @@
+{
+  "batch": "run10",
+  "build_id": "20261027T190606-63ec7fc1",
+  "status": "blocked",
+  "started_at": "2026-10-27T11:06:06.427633+00:00",
+  "finished_at": "2026-10-27T11:15:11.029088+00:00",
+  "model_calls_used": 4,
+  "model_calls_allowed": 10,
+  "admitted_candidate_calls": 3,
+  "gaps": [
+    {
+      "code": "binding_unresolved",
+      "detail": "Association lacks a verified exact source citation and invocation",
+      "repair_lane": "binding",
+      "blocker_kind": "unresolved_input"
+    }
+  ]
+}

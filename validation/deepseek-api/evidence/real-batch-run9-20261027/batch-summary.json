@@ -1,0 +1,169 @@
+{
+  "batch": "run 9",
+  "build_id": "20261027T183705-770487a9",
+  "status": "blocked",
+  "started_at": "2026-10-27T10:37:05.618944+00:00",
+  "finished_at": "2026-10-27T10:56:05.112763+00:00",
+  "model_calls_used": [
+    {
+      "phase": "discovery",
+      "session_key": "discovery",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 108816,
+        "cached_input_tokens": 92160,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3358,
+        "reasoning_output_tokens": 62
+      },
+      "prompt_sha256": "1f0d8029b887cf54c6dc9e0a58e5a1deb73270ca45ff8ae024461c9bdcc1bcb5",
+      "tool_events": 7,
+      "session_id": "01a17cef-6ec1-7b71-abaf-a8e6b4c14b01",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 143.071,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 4.004,
+        "last_stdout_seconds": 139.103,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    },
+    {
+      "phase": "author",
+      "session_key": "build:rdkit-recap-terminal-fragments",
+      "resumed": true,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 394662,
+        "cached_input_tokens": 346880,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 8363,
+        "reasoning_output_tokens": 394
+      },
+      "prompt_sha256": "491def585fb7422dd6daf13f78db7b2c4c6709fb302f0ea6880e9b9e48661438",
+      "tool_events": 7,
+      "session_id": "01a17cef-6ec1-7b71-abaf-a8e6b4c14b01",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 190.79,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 6.064,
+        "last_stdout_seconds": 187.159,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    },
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "gpt-6-astra",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 151152,
+        "cached_input_tokens": 115840,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1248,
+        "reasoning_output_tokens": 97
+      },
+      "prompt_sha256": "84cc55888daa73d22c68242f6a93d3efde5a8860dd9462e1c2278d23f2540bd1",
+      "tool_events": 9,
+      "session_id": "01a17cf4-87ab-7640-97f7-01319cb415b3",
+      "stream_threads_finished": true,
+      "elapsed_seconds": 76.384,
+      "progress_observation": {
+        "watchdog": "observe_only",
+        "progress_timeout_seconds": null,
+        "max_silence_seconds": 3.956,
+        "last_stdout_seconds": 72.665,
+        "observe_seconds": 240,
+        "progress_limit_exceeded": false,
+        "window_meaning": "exceeded the local output window; nothing is known about the model",
+        "process_activity_seen": true,
+        "counters_available": true
+      },
+      "image_audit": {
+        "status": "available",
+        "view_calls": [],
+        "image_results": 0
+      }
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    },
+    {
+      "phase": "runtime_planning",
+      "model": "gpt-6-astra",
+      "status": "attempted",
+      "usage": null
+    }
+  ],
+  "model_calls_allowed": 8,
+  "stages": {
+    "sources": "passed",
+    "discovery": "passed (turn 1, codex_cli)",
+    "authoring": "passed (turn 2, codex_cli)",
+    "content_review": "passed (turn 3, codex_cli)",
+    "entry_binding": "passed as author declaration",
+    "planning_round_1": "rejected semantically",
+    "planning_round_2": "model_schema_mismatch",
+    "docker": "not_run",
+    "business_acceptance": "not_run",
+    "adoption": "candidate_saved",
+    "install": "not_run"
+  },
+  "binding": {
+    "kind": "script",
+    "entry": "scripts/recap_terminal.py",
+    "association": "reviewed",
+    "declaration_source": "author_declaration"
+  },
+  "planning_round_1_rejection": "Each input operation must apply named input checks; no per-case exemptions",
+  "planning_round_2_error": "The answer does not satisfy the caller JSON Schema at operations/1: 'value_json' is a required property",
+  "gaps": [
+    {
+      "code": "model_schema_mismatch",
+      "detail": "The answer does not satisfy the caller JSON Schema at operations/1: 'value_json' is a required property",
+      "repair_lane": "environment",
+      "blocker_kind": "model_transport"
+    }
+  ],
+  "note": "First real DeepSeek planning call in this architecture produced a semantically rejected plan (required input without named checks); the repair round then failed local schema validation because value_json was required for a remove operation. That protocol defect is fixed offline after the batch; no second batch was run."
+}

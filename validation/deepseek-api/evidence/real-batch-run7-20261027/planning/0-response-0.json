@@ -1,0 +1,158 @@
+{
+  "action": "plan",
+  "requested_files": [],
+  "reason": "The supplied package provides the delivered RDKit RECAP terminal-fragments CLI script, its SKILL contract, upstream source, and license. The plan installs RDKit from PyPI into a Python 3.11 slim base, leaves the delivered script unchanged, and validates the documented normal, negative, and blank-input behavior with supported oracles while preserving the upstream tests.",
+  "plan": {
+    "entrypoint": [
+      "python",
+      "/opt/skill/scripts/recap_terminal_fragments.py"
+    ],
+    "script": "package/scripts/recap_terminal_fragments.py",
+    "base_image": "python:3.11-slim",
+    "platform": "linux/amd64",
+    "language": "python",
+    "language_version": "3.11",
+    "source_files": [
+      "package/scripts/recap_terminal_fragments.py",
+      "package/SKILL.md",
+      "package/references/UPSTREAM-NOTICES.txt"
+    ],
+    "dependencies": [
+      {
+        "name": "rdkit",
+        "version": "unspecified",
+        "channel": "pypi",
+        "evidence": "package/scripts/recap_terminal_fragments.py imports rdkit; package/SKILL.md requires Python 3 with RDKit installed",
+        "certainty": "inferred"
+      }
+    ],
+    "steps": [
+      {
+        "command": "python -m pip install --no-cache-dir rdkit",
+        "purpose": "Install the RDKit Python package required by the delivered entrypoint",
+        "evidence": "package/SKILL.md: Use Python 3 with RDKit installed"
+      },
+      {
+        "command": "python -c \"import rdkit, rdkit.Chem; from rdkit.Chem import Recap, rdChemReactions; print('rdkit', rdkit.__version__)\"",
+        "purpose": "Verify RDKit imports including rdkit.Chem.Recap and rdkit.Chem.rdChemReactions",
+        "evidence": "package/SKILL.md: including `rdkit.Chem`, `rdkit.Chem.Recap` and `rdkit.Chem.rdChemReactions`"
+      }
+    ],
+    "build_layout": {
+      "dependency_files": [],
+      "prefix_steps": 0,
+      "reason": "No source-only build prefix is required; the pip install is independent of source file ordering and the runtime script is copied before all steps."
+    },
+    "environment": [],
+    "resources": [],
+    "file_io": false,
+    "output_contract": "stdout is a JSON array of sorted unique terminal RECAP leaf SMILES; the tool creates no output files.",
+    "runtime_network": false,
+    "network_reason": "The CLI performs local RDKit decomposition and requires no network at runtime.",
+    "choices": [
+      {
+        "choice": "Use python:3.11-slim as the base image",
+        "evidence": "package/SKILL.md requires Python 3 with RDKit installed and no OS-specific dependencies are documented",
+        "certainty": "inferred"
+      },
+      {
+        "choice": "Install rdkit from PyPI via python -m pip install --no-cache-dir rdkit",
+        "evidence": "package/scripts/recap_terminal_fragments.py imports rdkit; package/SKILL.md says use an existing compatible RDKit installation",
+        "certainty": "inferred"
+      },
+      {
+        "choice": "Use the unchanged delivered script as the container entrypoint",
+        "evidence": "user_constraints: Invoke the unchanged delivered package entry, not only the upstream tool; package/SKILL.md normal invocation uses python scripts/recap_terminal_fragments.py",
+        "certainty": "declared"
+      }
+    ],
+    "unresolved": [
+      "Exact RDKit pip version installed at build time is not pinned; package/SKILL.md states no released-version equivalence has been verified for upstream commit 237a1d9027c800784afed8788540f38a3aa595f8."
+    ],
+    "unverified_behavior": [
+      "The scientific correctness of RECAP fragment SMILES for arbitrary molecules is not independently verified; tests use upstream documented and source examples only.",
+      "The stderr diagnostic content for rejected blank input is not asserted because case_json has no stderr assertion; only exit code 2 and empty stdout are checked."
+    ],
+    "acceptance_json": "{\"invalid_input\":\"required\",\"scope\":\"The delivered CLI accepts exactly one positional nonblank molecular SMILES, parses it with Chem.MolFromSmiles, and writes a sorted JSON array of unique terminal RECAP leaf SMILES to stdout. Blank or unparseable input exits 2 with stderr diagnostic and no result JSON.\",\"purposes\":[\"computation\"],\"constraint\":\"args[0] must be a nonblank SMILES string; parsing must yield a nonempty RDKit molecule\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The command accepts one nonblank molecular SMILES string. It parses with `Chem.MolFromSmiles` using normal sanitization and rejects failed parsing or a zero-atom molecule.\",\"checks\":[{\"id\":\"smiles_nonblank\",\"channel\":\"args\",\"key\":0,\"pattern\":\"^.+\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The command accepts one nonblank molecular SMILES string.\"}],\"limitation\":\"SMILES parse success and sanitization cannot be expressed as a reliable full-match regex, so acceptance checks cover only the non-empty-argument constraint; parse-failure behavior is exercised as a documented interface rejection case.\"}",
+    "generated_files": [],
+    "tests": [
+      {
+        "name": "recap_env_rdkit_import",
+        "layer": "environment",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md"
+        ],
+        "basis": "SKILL requires Python 3 with RDKit installed including rdkit.Chem.Recap and rdkit.Chem.rdChemReactions.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"entrypoint\":\"python\",\"args\":[\"-c\",\"import rdkit; print('rdkit import OK')\"],\"expected_exit\":0,\"stdout_contains\":[\"rdkit import OK\"]}"
+      },
+      {
+        "name": "recap_interface_help",
+        "layer": "interface",
+        "kind": "reference",
+        "source_paths": [
+          "package/scripts/recap_terminal_fragments.py"
+        ],
+        "basis": "The delivered script uses argparse and prints a usage message for --help.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"args\":[\"--help\"],\"expected_exit\":0,\"stdout_contains\":[\"usage:\"]}"
+      },
+      {
+        "name": "recap_normal_documented_example",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md",
+          "sources/recap/document.py",
+          "package/scripts/recap_terminal_fragments.py"
+        ],
+        "basis": "SKILL normal invocation and the upstream test1/doctest example produce exactly three terminal RECAP leaves.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"args\":[\"C1CC1Oc1ccccc1-c1ncc(OC)cc1\"],\"expected_exit\":0,\"stdout_equals\":\"[\\\"*C1CC1\\\", \\\"*c1ccc(OC)cn1\\\", \\\"*c1ccccc1*\\\"]\",\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"GetLeaves() returns terminal descendants keyed by SMILES. Sorting makes output deterministic; duplicate keys are collapsed.\",\"assertion\":{\"role\":\"result\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"GetLeaves() returns terminal descendants keyed by SMILES. Sorting makes output deterministic; duplicate keys are collapsed.\",\"kind\":\"json\",\"path\":[0],\"allowed_values\":[\"*C1CC1\"]}}}"
+      },
+      {
+        "name": "recap_negative_empty_CCCOCCC",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md",
+          "sources/recap/document.py",
+          "package/scripts/recap_terminal_fragments.py"
+        ],
+        "basis": "SKILL independent negative example and upstream test2 show default RECAP filters reject CCCOCCC decomposition to leaves.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"args\":[\"CCCOCCC\"],\"expected_exit\":0,\"stdout_equals\":\"[]\",\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"An empty array is valid.\",\"assertion\":{\"role\":\"result\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"An empty array is valid.\",\"kind\":\"stdout_equals\",\"value\":\"[]\"}}}"
+      },
+      {
+        "name": "recap_interface_blank_rejection",
+        "layer": "interface",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md",
+          "package/scripts/recap_terminal_fragments.py"
+        ],
+        "basis": "SKILL documents that invalid CLI input exits 2 with a diagnostic on stderr and no result JSON.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"args\":[\"\"],\"expected_exit\":2,\"stdout_equals\":\"\",\"acceptance\":{\"purpose\":\"input_rejection\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"Invalid CLI input exits 2 with a diagnostic on stderr and no result JSON.\",\"assertion\":{\"role\":\"rejection\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"Invalid CLI input exits 2 with a diagnostic on stderr and no result JSON.\",\"kind\":\"stdout_equals\",\"value\":\"\"},\"violates\":\"smiles_nonblank\",\"invalid_input_reason\":\"args[0] is blank\"}}"
+      }
+    ],
+    "resource_assessment": {
+      "status": "unknown",
+      "source_path": "package/SKILL.md",
+      "source_quote": "The script path may also be absolute; no data files or particular working directory are required.",
+      "memory_bytes": 0,
+      "cpus": 0
+    }
+  }
+}

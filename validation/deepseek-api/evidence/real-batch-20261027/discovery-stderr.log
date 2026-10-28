@@ -1,0 +1,2 @@
+2026-10-27T03:51:13.353181Z ERROR codex_core::tools::router: error=failed to spawn code-mode host C:\Users\27343\.codex\.sandbox-bin\codex-code-mode-host.exe: 系统找不到指定的文件。 (os error 2)
+2026-10-27T03:51:20.835330Z ERROR codex_core::tools::router: error=failed to spawn code-mode host C:\Users\27343\.codex\.sandbox-bin\codex-code-mode-host.exe: 系统找不到指定的文件。 (os error 2)

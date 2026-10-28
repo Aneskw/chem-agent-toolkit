@@ -1,0 +1,18 @@
+{
+  "batch": "run16",
+  "build_id": "20261027T203941-9893656a",
+  "status": "blocked",
+  "started_at": "2026-10-27T12:39:41.304409+00:00",
+  "finished_at": "2026-10-27T12:54:03.477649+00:00",
+  "model_calls": 5,
+  "gaps": [
+    {
+      "code": "requirements_unknown",
+      "detail": "Invalid execution requirement",
+      "repair_lane": "requirement",
+      "blocker_kind": "unresolved_input"
+    }
+  ],
+  "error": null,
+  "requirement": "unknown"
+}

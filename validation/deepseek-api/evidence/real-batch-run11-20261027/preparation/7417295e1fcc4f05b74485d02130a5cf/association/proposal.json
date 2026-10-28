@@ -1,0 +1,8 @@
+{
+  "source_id": "recap",
+  "source_path": "document.py",
+  "quote": "def RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None):\n  \"\"\" returns the recap decomposition for a molecule \"\"\"",
+  "reason": "Source document.py is the inspected upstream rdkit/Chem/Recap.py at commit 237a1d9027c800784afed8788540f38a3aa595f8; it defines RecapHierarchyNode.GetLeaves and RecapDecompose. Delivery scripts/recap_terminal.py is a Python 3 CLI adapter over that API. Invocation from the skill/working directory: `python scripts/recap_terminal.py '<nonempty SMILES>'`. It accepts one positional SMILES argument via argparse, imports `rdkit.Chem` and `rdkit.Chem.Recap`, parses with `Chem.MolFromSmiles`, validates the molecule, then calls `root = Recap.RecapDecompose(mol)` using defaults (allNodes omitted, minFragmentSize=0, onlyUseReactions omitted) and returns `sorted(root.GetLeaves().keys())`. It prints JSON to stdout: success is `{\"fragments\": [...], \"count\": n}` with exit 0; invalid input is `{\"error\": \"invalid_input\", ...}` with exit 2; dependency/runtime/decomposition errors are `{\"error\": \"runtime_error\", ...}` with exit 1. It writes no files. Necessary supports are an RDKit distribution with `rdkit.Chem` and `rdkit.Chem.Recap` available in the Python environment; SKILL.md documents usage and references/LICENSE.txt retains the upstream license.",
+  "invocation": "python scripts/recap_terminal.py 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'",
+  "supported": true
+}

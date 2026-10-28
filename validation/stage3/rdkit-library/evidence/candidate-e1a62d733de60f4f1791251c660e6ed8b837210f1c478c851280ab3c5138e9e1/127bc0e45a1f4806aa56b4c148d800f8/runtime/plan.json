@@ -1,0 +1,209 @@
+{
+  "entrypoint": [
+    "python",
+    "/opt/skill/package/scripts/calc_descriptors.py"
+  ],
+  "script": "package/scripts/calc_descriptors.py",
+  "base_image": "python:3.11-slim",
+  "platform": "linux/amd64",
+  "language": "Python",
+  "language_version": "3.11",
+  "source_files": [
+    "package/scripts/calc_descriptors.py",
+    "sources/rdkit/requirements.txt"
+  ],
+  "dependencies": [
+    {
+      "name": "rdkit",
+      "version": "2024.9.6",
+      "channel": "pip",
+      "evidence": "sources/rdkit/requirements.txt: rdkit==2024.9.6",
+      "certainty": "declared"
+    },
+    {
+      "name": "numpy",
+      "version": "1.26.4",
+      "channel": "pip",
+      "evidence": "sources/rdkit/requirements.txt: numpy==1.26.4",
+      "certainty": "declared"
+    },
+    {
+      "name": "pillow",
+      "version": "11.3.0",
+      "channel": "pip",
+      "evidence": "sources/rdkit/requirements.txt: pillow==11.3.0",
+      "certainty": "declared"
+    }
+  ],
+  "steps": [
+    {
+      "command": "python -m pip install --no-cache-dir -r /opt/skill/sources/rdkit/requirements.txt",
+      "purpose": "Install the exact declared public packages.",
+      "evidence": "Caller requires exact requirements.txt versions; pip installation is an inferred installation choice."
+    }
+  ],
+  "build_layout": {
+    "dependency_files": [
+      "sources/rdkit/requirements.txt"
+    ],
+    "prefix_steps": 1,
+    "reason": "The installation step requires only the requirements file and base image."
+  },
+  "environment": [
+    {
+      "name": "PYTHONDONTWRITEBYTECODE",
+      "value": "1"
+    },
+    {
+      "name": "PYTHONUNBUFFERED",
+      "value": "1"
+    }
+  ],
+  "resources": [],
+  "file_io": true,
+  "output_contract": "One JSON record per input value, containing ok and either computed descriptors or an error. --output writes JSONL to the requested path; otherwise JSONL goes to stdout. All successful records yield exit 0; any rejected record yields exit 2. File tests use /input/rows.smi and /output/results.jsonl.",
+  "runtime_network": false,
+  "network_reason": "Runtime source performs local RDKit calculations and local file IO. Public package downloads are needed only during image construction.",
+  "choices": [
+    {
+      "choice": "Use python:3.11-slim with pip.",
+      "evidence": "The base image is a caller requirement, not an upstream declaration. The supplied requirements file pins three public Python packages.",
+      "certainty": "inferred"
+    },
+    {
+      "choice": "Use ok=true as the computation completion assertion.",
+      "evidence": "calculate returns ok=true together with evaluated descriptor expressions. Import errors or descriptor exceptions are not caught and cannot produce that successful record.",
+      "certainty": "declared"
+    }
+  ],
+  "unresolved": [
+    "Full graph-valid SMILES acceptance requires RDKit parsing and cannot reliably be represented by a full-match regex. Checks enforce only the documented necessary nonempty condition; acceptance verification is incomplete.",
+    "Installation compatibility and runtime behavior remain unexecuted at this stage."
+  ],
+  "unverified_behavior": [
+    "No upstream tests or reference numerical vectors were supplied.",
+    "The methane case checks independently derived zero H-bond and rotatable-bond counts, but does not validate molecular weight, logP, TPSA, or general descriptor accuracy.",
+    "Invalid nonempty SMILES grammar and graph semantics are not comprehensively tested.",
+    "Descriptors are graph-derived calculations, not experimental measurements or biological, safety, or pharmacokinetic conclusions."
+  ],
+  "acceptance_json": "{\"invalid_input\":\"required\",\"scope\":\"Unchanged CPU descriptor CLI: direct --smiles and line-oriented --input with persisted --output.\",\"purposes\":[\"computation\"],\"constraint\":\"Inputs must be nonempty after stripping whitespace and parse as SMILES. Regex checks cover the nonempty requirement only; full SMILES validity requires semantic parsing, making input-domain verification incomplete.\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\\n    if mol is None:\\n        return {\\\"ok\\\": False, \\\"input\\\": text, \\\"error\\\": \\\"Invalid or empty SMILES\\\"}\",\"checks\":[{\"id\":\"direct_nonempty\",\"channel\":\"args\",\"key\":1,\"pattern\":\"(?s).*\\\\S.*\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\"},{\"id\":\"rows_nonempty\",\"channel\":\"input_files\",\"key\":\"rows.smi\",\"argument_index\":1,\"mode\":\"each_line\",\"pattern\":\"(?s).*\\\\S.*\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"mol = Chem.MolFromSmiles(text.strip()) if text.strip() else None\"}],\"operations\":[{\"id\":\"direct\",\"selector\":{\"args\":[{\"index\":0,\"equals\":\"--smiles\"}]},\"checks\":[\"direct_nonempty\"],\"purposes\":[\"computation\"],\"require_persistence\":false,\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\"},{\"id\":\"file\",\"selector\":{\"args\":[{\"index\":0,\"equals\":\"--input\"}]},\"checks\":[\"rows_nonempty\"],\"purposes\":[\"computation\"],\"require_persistence\":true,\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\"}]}",
+  "generated_files": [],
+  "tests": [
+    {
+      "name": "environment_versions_imports",
+      "layer": "environment",
+      "kind": "derived",
+      "source_paths": [
+        "sources/rdkit/requirements.txt",
+        "package/scripts/calc_descriptors.py"
+      ],
+      "basis": "Verify pinned distributions and import every RDKit module used by the script; print versions for the audit.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Imports do not establish descriptor correctness."
+      ],
+      "case_json": "{\"entrypoint\":\"python\",\"args\":[\"-c\",\"import sys; from importlib.metadata import version; from rdkit import Chem; from rdkit.Chem import Crippen, Descriptors, Lipinski, rdMolDescriptors; import numpy; from PIL import Image; expected={'rdkit':'2024.9.6','numpy':'1.26.4','pillow':'11.3.0'}; actual={k:version(k) for k in expected}; print(sys.version); print(actual); assert actual == expected\"],\"expected_exit\":0,\"timeout_seconds\":60}"
+    },
+    {
+      "name": "interface_help",
+      "layer": "interface",
+      "kind": "derived",
+      "source_paths": [
+        "package/scripts/calc_descriptors.py"
+      ],
+      "basis": "Argparse declares the three supported option names.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Help does not exercise computation."
+      ],
+      "case_json": "{\"args\":[\"--help\"],\"expected_exit\":0,\"stdout_contains\":[\"--smiles\",\"--input\",\"--output\"],\"timeout_seconds\":60}"
+    },
+    {
+      "name": "direct_documented_ethanol",
+      "layer": "behavior",
+      "kind": "reference",
+      "source_paths": [
+        "package/SKILL.md",
+        "package/scripts/calc_descriptors.py"
+      ],
+      "basis": "Execute the documented CCO example. A successful record requires all descriptor expressions to finish.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Completion does not establish numerical accuracy."
+      ],
+      "case_json": "{\"args\":[\"--smiles\",\"CCO\"],\"expected_exit\":0,\"expected_json_lines\":[{\"ok\":true}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\",\"assertion\":{\"role\":\"completion\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"ok\"],\"allowed_values\":[true],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"\\\"molecular_weight\\\": round(Descriptors.MolWt(mol), 6),\"}}}"
+    },
+    {
+      "name": "direct_methane_graph_counts",
+      "layer": "behavior",
+      "kind": "derived",
+      "source_paths": [
+        "sources/rdkit/references/science.md",
+        "package/scripts/calc_descriptors.py"
+      ],
+      "basis": "SMILES C represents methane. Its single carbon graph contains no H-bond donor or acceptor groups and no bond that can be rotatable; independently expect zero for these three counts.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Checks only simple graph counts; no numerical oracle for other descriptors."
+      ],
+      "case_json": "{\"args\":[\"--smiles\",\"C\"],\"expected_exit\":0,\"stdout_contains\":[\"\\\"h_bond_donors\\\": 0\",\"\\\"h_bond_acceptors\\\": 0\",\"\\\"rotatable_bonds\\\": 0\"],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"sources/rdkit/references/science.md\",\"source_quote\":\"These are cheminformatics descriptors computed from the input graph.\",\"assertion\":{\"role\":\"completion\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"ok\"],\"allowed_values\":[true],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"\\\"rotatable_bonds\\\": Lipinski.NumRotatableBonds(mol),\"}}}"
+    },
+    {
+      "name": "direct_empty_rejection",
+      "layer": "behavior",
+      "kind": "derived",
+      "source_paths": [
+        "package/scripts/calc_descriptors.py"
+      ],
+      "basis": "Empty input produces the explicit rejection record and exit 2.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Covers empty input, not all invalid SMILES."
+      ],
+      "case_json": "{\"args\":[\"--smiles\",\"\"],\"expected_exit\":2,\"expected_json_lines\":[{\"ok\":false,\"input\":\"\",\"error\":\"Invalid or empty SMILES\"}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"input_rejection\",\"violates\":\"direct_nonempty\",\"invalid_input_reason\":\"Empty text has no non-whitespace character.\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return 0 if all(r[\\\"ok\\\"] for r in records) else 2\",\"assertion\":{\"role\":\"rejection\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"error\"],\"allowed_values\":[\"Invalid or empty SMILES\"],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return {\\\"ok\\\": False, \\\"input\\\": text, \\\"error\\\": \\\"Invalid or empty SMILES\\\"}\"}}}"
+    },
+    {
+      "name": "file_normal_persisted",
+      "layer": "behavior",
+      "kind": "derived",
+      "source_paths": [
+        "package/SKILL.md",
+        "package/scripts/calc_descriptors.py"
+      ],
+      "basis": "Run the documented file form on a valid molecule and require the tool-created output to contain a completed calculation.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Verifies persistence and completion, not all descriptor values."
+      ],
+      "case_json": "{\"args\":[\"--input\",\"/input/rows.smi\",\"--output\",\"/output/results.jsonl\"],\"input_files\":{\"rows.smi\":\"CCO\\n\"},\"output_file\":\"results.jsonl\",\"expected_exit\":0,\"expected_json_lines\":[{\"ok\":true}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The parser requires exactly one of `--smiles` or `--input`.\",\"assertion\":{\"role\":\"completion\",\"kind\":\"jsonl\",\"record_index\":0,\"path\":[\"ok\"],\"allowed_values\":[true],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"\\\"molecular_weight\\\": round(Descriptors.MolWt(mol), 6),\"}}}"
+    },
+    {
+      "name": "file_mixed_blank_row_rejection",
+      "layer": "behavior",
+      "kind": "derived",
+      "source_paths": [
+        "package/scripts/calc_descriptors.py"
+      ],
+      "basis": "The list comprehension processes every row; a blank middle row yields the explicit error while the overall exit is 2.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Assertion targets the rejected middle row; it does not independently validate surrounding numerical results."
+      ],
+      "case_json": "{\"args\":[\"--input\",\"/input/rows.smi\",\"--output\",\"/output/results.jsonl\"],\"input_files\":{\"rows.smi\":\"CCO\\n\\nC\\n\"},\"output_file\":\"results.jsonl\",\"expected_exit\":2,\"expected_json_lines\":[{\"ok\":true},{\"ok\":false,\"input\":\"\",\"error\":\"Invalid or empty SMILES\"},{\"ok\":true}],\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"input_rejection\",\"violates\":\"rows_nonempty\",\"invalid_input_reason\":\"The second splitlines row is empty and violates the nonempty predicate.\",\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return 0 if all(r[\\\"ok\\\"] for r in records) else 2\",\"assertion\":{\"role\":\"rejection\",\"kind\":\"jsonl\",\"record_index\":1,\"path\":[\"error\"],\"allowed_values\":[\"Invalid or empty SMILES\"],\"source_path\":\"package/scripts/calc_descriptors.py\",\"source_quote\":\"return {\\\"ok\\\": False, \\\"input\\\": text, \\\"error\\\": \\\"Invalid or empty SMILES\\\"}\"}}}"
+    }
+  ],
+  "resource_assessment": {
+    "status": "complete",
+    "source_path": "package/scripts/calc_descriptors.py",
+    "source_quote": "from rdkit import Chem\n    from rdkit.Chem import Crippen, Descriptors, Lipinski, rdMolDescriptors",
+    "memory_bytes": 1073741824,
+    "cpus": 1
+  }
+}

@@ -1,5 +1,7 @@
-# Source manifests and regression provenance hash these files byte-for-byte.
-# Preserve their supplied bytes on every platform, including core.autocrlf=true.
-tools-skills/rdkit/chem-rdkit-descriptors/** -text whitespace=cr-at-eol
-creation_pipeline/tests/fixtures/** -text whitespace=cr-at-eol
-creation_pipeline/examples/text-review.txt -text whitespace=cr-at-eol
+# Preserve validated package bytes and catalog hashes on every checkout.
+skills/** -text whitespace=cr-at-eol
+skills/README.md text eol=lf
+skills/catalog.json text eol=lf
+validation/** -text whitespace=cr-at-eol
+examples/dilution/resources/** -text whitespace=cr-at-eol
+examples/base-count/resources/** -text whitespace=cr-at-eol

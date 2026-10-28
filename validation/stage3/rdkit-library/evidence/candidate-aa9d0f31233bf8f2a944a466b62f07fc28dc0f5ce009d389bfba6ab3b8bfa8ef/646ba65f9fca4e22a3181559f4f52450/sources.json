@@ -1,0 +1,33 @@
+[
+  {
+    "id": "rdkit",
+    "path": "sources/rdkit",
+    "inventory": [
+      {
+        "path": "examples/input.smi",
+        "sha256": "fb67841c517bcadbacd16df1e4c099f4254101a04e6fe227672e6ac249fff2a2",
+        "bytes": 30
+      },
+      {
+        "path": "references/api.md",
+        "sha256": "1bcc55aae7b2605beb8affad8bbf28c398f4edf927013d6529b8e9b160231427",
+        "bytes": 202
+      },
+      {
+        "path": "references/science.md",
+        "sha256": "44ddc091c62a6c1ed4dac6951f20d08ea22922b0e59445fd9859fd00fd24338e",
+        "bytes": 223
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+        "bytes": 46
+      },
+      {
+        "path": "scripts/calc_descriptors.py",
+        "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+        "bytes": 1710
+      }
+    ]
+  }
+]

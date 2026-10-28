@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "resolution": "none",
+  "findings": [
+    {
+      "location": "artifact.tests",
+      "problem": "The four delivered_script tests are definitions only; no recorded run results are shown for the current review, so the runtime JSON outputs are not directly observed.",
+      "evidence": "artifact.notes states: 'Execution was not performed by the author in this environment; the supplied tests are definitions, not execution evidence.' artifact.tests contain expected_exit and json_equals oracles, but no actual exit codes or outputs are recorded.",
+      "impact": "Source-grounded oracles are present, but canonical SMILES from the actual installed RDKit version are not directly confirmed; a version-dependent output change would not be caught by the current checks.",
+      "action": "Run the four delivered_script tests through the permitted Docker/helper check and record their actual exit codes and JSON output before final sign-off.",
+      "blocking": false,
+      "category": "check"
+    }
+  ],
+  "oracle_changes_verified": false,
+  "execution_gaps": [],
+  "requirement_assessment": "confirmed"
+}

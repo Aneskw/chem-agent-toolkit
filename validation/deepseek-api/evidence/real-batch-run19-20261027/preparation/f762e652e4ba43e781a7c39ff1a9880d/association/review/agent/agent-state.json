@@ -1,0 +1,17 @@
+{
+  "sessions": {},
+  "completed": {},
+  "receipts": [
+    {
+      "phase": "review",
+      "session_key": "review:rdkit-recap-terminal-fragments",
+      "resumed": false,
+      "model": "deepseek-v4-pro",
+      "status": "failed",
+      "usage": null,
+      "prompt_sha256": "1a4aadde555abc782d39e2516b43955f0ca80a29d3f12c7e4cdb6a867a4f9628",
+      "tool_events": 0,
+      "error": "DeepSeek connection failed: ConnectionResetError"
+    }
+  ]
+}

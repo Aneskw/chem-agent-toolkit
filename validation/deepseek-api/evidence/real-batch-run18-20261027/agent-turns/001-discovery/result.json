@@ -1,0 +1,61 @@
+{
+  "outcome": "candidates",
+  "summary": "Discovered one reusable skill for generating RDKit RECAP terminal molecular fragments with RecapDecompose and GetLeaves. The source is the RDKit Recap.py implementation plus its BSD-3-Clause license. The skill removes confusion between the full hierarchy (RecapHierarchyNode.children and GetAllChildren) and the standard terminal fragment set (GetLeaves), documents valid empty results, and explains minFragmentSize and onlyUseReactions filtering. It directly packages the existing public API and does not invent new chemistry.",
+  "saved_candidates": [],
+  "candidates": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "capability": "Generate standard RECAP terminal molecular fragments from an RDKit molecule using Recap.RecapDecompose and root.GetLeaves(), interpret terminal versus full hierarchy results, and handle valid empty leaf sets.",
+      "boundary": "Accepts a valid RDKit Mol object, normally parsed from a SMILES string with Chem.MolFromSmiles; invalid SMILES producing None is out of scope and should be rejected before calling RecapDecompose. Outputs a dictionary keyed by canonical fragment SMILES containing RDKit Mol fragment objects, with '*' dummy atoms marking broken bonds. Empty leaves or empty children are valid results when no RECAP-definition bond is cleaved, when fragments fail size filters, or when charged/protonated variants do not match the documented reaction SMARTS. This is molecular fragmentation only; it does not imply synthetic feasibility, bioactivity, or any chemical validation beyond the documented algorithm.",
+      "value": "Removes a recurring usability difficulty: users often confuse RecapHierarchyNode.children or GetAllChildren with the standard RECAP fragment set, and may incorrectly treat empty GetLeaves results as an error. The skill provides concise guidance to call RecapDecompose, retrieve terminal fragments with GetLeaves, understand the dummy-atom-labeled SMILES keys, and correctly use minFragmentSize and onlyUseReactions while avoiding the false assumption that every molecule produces fragments.",
+      "usage_path": "from rdkit import Chem; from rdkit.Chem import Recap; mol = Chem.MolFromSmiles(smiles); if mol is None: handle invalid input; root = Recap.RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None); leaves = root.GetLeaves(); fragment_smiles = sorted(leaves.keys()); each leaves[key].mol is the fragment Mol.",
+      "construction": "Direct packaging of the existing public RDKit Recap API. No algorithm, reaction definitions, or scientific thresholds are being invented or modified. The skill will document the current Recap.py interfaces and result semantics, and will include examples grounded in the source. Delivery files should include a SKILL.md with prerequisites and invalid-input boundaries; no runtime package implementation is written at discovery time.",
+      "evidence": [
+        {
+          "id": "recap",
+          "claim": "Recap.py module docstring states that the RECAP algorithm from Lewell et al. is implemented and results are returned as a hierarchy of nodes; the example shows RecapDecompose(m), res.children keys, GetAllChildren keys, and GetLeaves keys to get the standard set of RECAP results."
+        },
+        {
+          "id": "recap",
+          "claim": "RecapHierarchyNode.GetLeaves returns a dictionary keyed by SMILES of leaf/terminal nodes using _gacRecurse with terminalOnly=True, while GetAllChildren uses terminalOnly=False; leaf nodes are those with no children."
+        },
+        {
+          "id": "recap",
+          "claim": "RecapDecompose is defined with signature RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None); when onlyUseReactions is provided, only reaction indices in that sequence are run."
+        },
+        {
+          "id": "recap",
+          "claim": "The embedded unittest testMinFragmentSize demonstrates valid empty results: CCCOCCC yields res.children == {} with default settings, but with minFragmentSize=3 yields one leaf '*CCC'; CCCOCC with minFragmentSize=3 yields res.children == {}."
+        },
+        {
+          "id": "recap",
+          "claim": "Multiple embedded tests such as testAmideRxn show zero leaves for molecules where no applicable amide cleavage occurs, e.g. C1CC1C(=O)CC1OC1 and C1CCC(=O)NC1 with onlyUseReactions=[1], and testSFNetIssue1881803 shows charged variants such as c1ccccc1[n+]1ccccc1 yield zero leaves."
+        }
+      ],
+      "gaps": [
+        "No runtime RDKit execution was performed in this discovery turn; the host policy limits business execution to a Docker container, so exact output keys should be confirmed in the author stage with the installed RDKit version.",
+        "The evidence focuses on the Recap.py source and its embedded tests; other RDKit reaction setup and version-specific canonicalization details were not exhaustively inspected."
+      ],
+      "blocked": false
+    }
+  ],
+  "omitted": [
+    {
+      "capability": "RECAP full hierarchy navigation and ancestor traversal using GetAllChildren and getUltimateParents",
+      "reason": "The user requested terminal molecular fragments; hierarchy-versus-terminal interpretation is merged into this skill rather than packaged as a separate capability."
+    },
+    {
+      "capability": "RDKit descriptor calculation or other cheminformatics utility skills",
+      "reason": "Out of scope: the user explicitly stated this is molecular fragmentation, not descriptor calculation."
+    },
+    {
+      "capability": "Custom RDKit reaction SMARTS editing or adding new RECAP reaction definitions",
+      "reason": "The source supports only documented invocation choices such as minFragmentSize and onlyUseReactions; creating or modifying reaction definitions is not requested and would move beyond the grounded existing API."
+    }
+  ],
+  "limitations": [
+    "Business execution on the host is not permitted; validation is based on source inspection and the embedded unittest documentation, not an executed RDKit test suite.",
+    "RDKit must be available in the execution environment; a missing local dependency is an execution limitation, not a packaging blocker.",
+    "Canonical fragment SMILES keys and exact fragment forms may vary slightly by RDKit version; the skill should note that outputs are keyed by the molecular canonical SMILES of that installed version."
+  ]
+}

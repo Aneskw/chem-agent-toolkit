@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "revision_id": "rev-e728bcf9ca9c02d8a43ef50ae122cee6d776fed7fb82cc3bd0ac01d0b90bb9a4",
+  "files": [
+    {
+      "path": "package/scripts/calc_descriptors.py",
+      "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+      "bytes": 1710
+    },
+    {
+      "path": "package/SKILL.md",
+      "sha256": "9c97e14c2ae620d52e232315e3dc55b95f6c6a7e41eedb2e4d3ebfa4ce6a6c5c",
+      "bytes": 2036
+    },
+    {
+      "path": "record.json",
+      "sha256": "a1477f99714fd4e45aa930b719e50b094ba60879e8988c571d39c55b6f6bd3fa",
+      "bytes": 66108
+    },
+    {
+      "path": "runtime/binding.json",
+      "sha256": "62598fa07a0c6db65c3f9ae1d31d8aa4ef7dbd5032ccc33a4482e26118722abc",
+      "bytes": 328
+    },
+    {
+      "path": "runtime/context/.dockerignore",
+      "sha256": "01d8d0360f02a0c00e236a4eb2a1d8bdf83377acf442eaafad7a136bf14d6bb0",
+      "bytes": 21
+    },
+    {
+      "path": "runtime/context/Dockerfile",
+      "sha256": "76ad0715c3777a74f5dd1179c8c97269df676990aa1b96713a58cba317086cd4",
+      "bytes": 428
+    },
+    {
+      "path": "runtime/context/package/scripts/calc_descriptors.py",
+      "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+      "bytes": 1710
+    },
+    {
+      "path": "runtime/context/package/SKILL.md",
+      "sha256": "9c97e14c2ae620d52e232315e3dc55b95f6c6a7e41eedb2e4d3ebfa4ce6a6c5c",
+      "bytes": 2036
+    },
+    {
+      "path": "runtime/context/sources/rdkit/requirements.txt",
+      "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+      "bytes": 46
+    },
+    {
+      "path": "runtime/locked-tests.json",
+      "sha256": "f490572d7b3abe409e0e00857c0b471c52a810b4693e9dff645849c336116d57",
+      "bytes": 27675
+    },
+    {
+      "path": "runtime/plan.json",
+      "sha256": "fb54016b0d0c431ecab475787217a9a87028b71795acd335c9e2766fafa82420",
+      "bytes": 13739
+    },
+    {
+      "path": "runtime/proposed-plan.json",
+      "sha256": "fb54016b0d0c431ecab475787217a9a87028b71795acd335c9e2766fafa82420",
+      "bytes": 13739
+    },
+    {
+      "path": "runtime/README.md",
+      "sha256": "d06835f9497d5db5b2c2ad2baa4852e2c85aec994513f39767125cda719e2bca",
+      "bytes": 220
+    },
+    {
+      "path": "sources/rdkit/examples/input.smi",
+      "sha256": "fb67841c517bcadbacd16df1e4c099f4254101a04e6fe227672e6ac249fff2a2",
+      "bytes": 30
+    },
+    {
+      "path": "sources/rdkit/references/api.md",
+      "sha256": "1bcc55aae7b2605beb8affad8bbf28c398f4edf927013d6529b8e9b160231427",
+      "bytes": 202
+    },
+    {
+      "path": "sources/rdkit/references/science.md",
+      "sha256": "44ddc091c62a6c1ed4dac6951f20d08ea22922b0e59445fd9859fd00fd24338e",
+      "bytes": 223
+    },
+    {
+      "path": "sources/rdkit/requirements.txt",
+      "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+      "bytes": 46
+    },
+    {
+      "path": "sources/rdkit/scripts/calc_descriptors.py",
+      "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+      "bytes": 1710
+    },
+    {
+      "path": "sources.json",
+      "sha256": "2bf02349c13f900ce754a4dc7f8ee9f014a43cdfab467fef4b8de0d00c6dadaa",
+      "bytes": 935
+    }
+  ]
+}

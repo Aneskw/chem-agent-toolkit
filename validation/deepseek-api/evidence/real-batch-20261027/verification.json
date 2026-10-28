@@ -1,0 +1,136 @@
+{
+  "run": "real-batch-20261027",
+  "copy": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi",
+  "source_directory": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration",
+  "source_baseline_commit": "78003de47c8bee93c705cd3a2098ee1f90646aae",
+  "work_directory": "E:\\Users\\27343\\Docker\\acceptance-deepseek-20261027",
+  "build_id": "20261027T115058-86fedec3",
+  "started_at": "2026-10-27T03:50:58.021555+00:00",
+  "finished_at": "2026-10-27T03:51:34.389108+00:00",
+  "final_status": "blocked",
+  "stage_status": {
+    "source_preparation": "passed (2 URLs fetched, SHA-256 matched, upstream + snapshot identity recorded)",
+    "discovery": "failed - native tool host could not start",
+    "authoring": "not_run",
+    "independent_review": "not_run",
+    "entry_association": "not_run",
+    "environment_planning": "not_run",
+    "docker_build": "not_run",
+    "business_acceptance": "not_run",
+    "catalog_promotion": "not_run",
+    "default_query": "not_run",
+    "install": "not_run",
+    "installed_use_verification": "not_run"
+  },
+  "first_blocking_point": {
+    "where": "discovery turn 1, inside the Codex CLI tool router",
+    "detail": "failed to spawn code-mode host C:\\\\Users\\\\27343\\\\.codex\\\\.sandbox-bin\\\\codex-code-mode-host.exe: os error 2",
+    "classification": "environment defect (incomplete Codex CLI installation), not a pipeline or DeepSeek code defect",
+    "source": "discovery-stderr.log, discovery-events.jsonl"
+  },
+  "providers": {
+    "codex_cli": {
+      "binary": "C:\\Users\\27343\\.codex\\.sandbox-bin\\codex.exe",
+      "version": "codex-cli 0.159.2",
+      "transport": "https",
+      "model": "gpt-6-astra",
+      "reasoning_effort": "medium",
+      "service_tier": "default",
+      "path_addition": "process-only"
+    },
+    "deepseek_api": {
+      "endpoint": "https://api.deepseek.com/chat/completions",
+      "kind": "official",
+      "model": "deepseek-flash",
+      "api_retries": 0,
+      "stream": true,
+      "reasoning_effort_sent": "high (requested medium)",
+      "service_tier": "recorded, not sent",
+      "calls_made": 0
+    }
+  },
+  "ledger": {
+    "application_calls": 1,
+    "budget": 8,
+    "entries": [
+      {
+        "phase": "discovery",
+        "provider": "codex_cli",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 31.362,
+        "usage": {
+          "input_tokens": 42831,
+          "cached_input_tokens": 28288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 352,
+          "reasoning_output_tokens": 18
+        },
+        "tool_events": 2,
+        "session_id": "01a17b7b-a6e8-70c3-a6be-42035fee3185",
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "max_silence_seconds": 3.911,
+          "progress_limit_exceeded": false
+        }
+      }
+    ],
+    "deepseek_requests": 0,
+    "cli_internal_reconnects": 0,
+    "note": "one application-level call was admitted and the provider reported usage; it produced only an error tool event, no candidate"
+  },
+  "fingerprints": {
+    "input_sha256": "6c6636c78ed215d90415a7e0d03446ec3832f158f2496b73d1257c9bc86c6fb6",
+    "prompt_sha256": "348cb7398e3737b1ba77f2405dc9682ec59262aaac752fa5504669b18753e837",
+    "discovery_prompt_sha256": "ef9f29735ec36f8e27f273463ea52df84cc9b2fcebebcaa072e2a7b7cf82038d"
+  },
+  "sources": [
+    {
+      "id": "recap",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+      "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "rdkit/Chem/Recap.py",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/rdkit/Chem/Recap.py",
+        "sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc"
+      },
+      "snapshot_id": "c8deb983e957de5326573257b980b77d485eddc2e97edf421f4819234321808a"
+    },
+    {
+      "id": "license",
+      "url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+      "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30",
+      "upstream": {
+        "repo": "https://github.com/rdkit/rdkit",
+        "commit": "237a1d9027c800784afed8788540f38a3aa595f8",
+        "path": "license.txt",
+        "retrieved_url": "https://raw.githubusercontent.com/rdkit/rdkit/237a1d9027c800784afed8788540f38a3aa595f8/license.txt",
+        "sha256": "daeb8d194502cbcf34c05c39541a0d02be65bc9bada5b891c1974cd24e9fca30"
+      },
+      "snapshot_id": "f31079031c5a3b9634df747170bf388e8c2da9d44d810cc7dd074996b49e81b2"
+    }
+  ],
+  "artifacts": {
+    "entities": 0,
+    "adoption": null,
+    "skill_md": null
+  },
+  "docker": {
+    "available": true,
+    "server": "29.8.2 linux/x86_64",
+    "builds": 0
+  },
+  "redaction": {
+    "credential_occurrences_in_run_tree": 0,
+    "credential_recorded": false,
+    "note": "the .env is never copied into evidence"
+  },
+  "decision": {
+    "batch_rerun": false,
+    "resume": false,
+    "next_real_experiment_requires_authorisation": true,
+    "reason": "the stop rule for a terminal native-stage failure applies"
+  }
+}

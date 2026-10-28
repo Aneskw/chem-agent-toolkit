@@ -1,0 +1,187 @@
+{
+  "action": "plan",
+  "requested_files": [],
+  "reason": "Full plan for the delivered RDKit RECAP terminal-fragments CLI, using Python 3.11 and PyPI RDKit; source materials specify the unchanged script entrypoint and supported fragment examples.",
+  "plan": {
+    "entrypoint": [
+      "python",
+      "/opt/skill/package/scripts/recap_terminal.py"
+    ],
+    "script": "package/scripts/recap_terminal.py",
+    "base_image": "python:3.11-slim",
+    "platform": "linux/amd64",
+    "language": "python",
+    "language_version": "3.11",
+    "source_files": [
+      "package/scripts/recap_terminal.py"
+    ],
+    "dependencies": [
+      {
+        "name": "rdkit",
+        "version": "latest",
+        "channel": "pypi",
+        "evidence": "package/SKILL.md: \"Use an existing Python 3 environment with RDKit, including `rdkit.Chem` and `rdkit.Chem.rdChemReactions`.\"",
+        "certainty": "inferred"
+      }
+    ],
+    "steps": [
+      {
+        "command": "python -m pip install --no-cache-dir rdkit",
+        "purpose": "Install RDKit Python package into the base image.",
+        "evidence": "package/SKILL.md: \"Use an existing Python 3 environment with RDKit, including `rdkit.Chem` and `rdkit.Chem.rdChemReactions`.\""
+      }
+    ],
+    "build_layout": {
+      "dependency_files": [],
+      "prefix_steps": 1,
+      "reason": "The RDKit installation step requires only the Python base image; source_files are copied after this prefix."
+    },
+    "environment": [],
+    "resources": [],
+    "file_io": false,
+    "output_contract": "Single-line stdout JSON. Success: {\"fragments\":[...],\"rdkit_version\":\"...\"}; invalid input exits 2 with {\"error\":\"invalid_input\",\"message\":\"...\"}; missing dependency or decomposition failure exits 1 with JSON error. No files are produced.",
+    "runtime_network": false,
+    "network_reason": "No runtime network is required; RDKit installation uses the Docker build network only.",
+    "choices": [
+      {
+        "choice": "Use python:3.11-slim as base image",
+        "evidence": "package/SKILL.md requires an existing Python 3 environment with RDKit; no non-Python build tools are documented.",
+        "certainty": "inferred"
+      },
+      {
+        "choice": "Install RDKit from PyPI with `python -m pip install rdkit`",
+        "evidence": "package/SKILL.md says to use an existing Python 3 environment with RDKit including `rdkit.Chem` and `rdkit.Chem.rdChemReactions`, but does not specify a channel.",
+        "certainty": "inferred"
+      },
+      {
+        "choice": "Set container entrypoint to `python /opt/skill/package/scripts/recap_terminal.py`",
+        "evidence": "package/SKILL.md: \"The single executable entry is [scripts/recap_terminal.py](scripts/recap_terminal.py).\"",
+        "certainty": "declared"
+      }
+    ],
+    "unresolved": [
+      "The installed RDKit version is not pinned by the source materials; the build step installs the current PyPI release, and the source-derived examples are validated against the reported installed version."
+    ],
+    "unverified_behavior": [
+      "RECAP fragment output does not establish synthetic feasibility or scientific validity.",
+      "No supported RDKit release range has been experimentally established."
+    ],
+    "acceptance_json": "{\"invalid_input\":\"required\",\"scope\":\"Direct CLI operation `--smiles` computing unique terminal RDKit RECAP fragments from a single SMILES string.\",\"purposes\":[\"computation\"],\"constraint\":\"The `--smiles` option is required and its value must be a nonempty SMILES string that parses to a nonempty RDKit molecule.\",\"source_path\":\"package/scripts/recap_terminal.py\",\"source_quote\":\"parser.add_argument(\\\"--smiles\\\", required=True, help=\\\"One input SMILES string\\\")\",\"operations\":[{\"id\":\"direct\",\"selector\":{\"args\":[{\"index\":0,\"equals\":\"--smiles\"}]},\"input_contract\":{\"status\":\"required\",\"constraint\":\"Requires `--smiles` and a nonempty value. RDKit parse validity to a nonempty molecule is a stated rejection behavior but is not regex-modeled in this contract.\",\"checks\":[{\"id\":\"required_smiles_flag\",\"channel\":\"args\",\"key\":0,\"pattern\":\"^--smiles$\",\"source_path\":\"package/scripts/recap_terminal.py\",\"source_quote\":\"parser.add_argument(\\\"--smiles\\\", required=True, help=\\\"One input SMILES string\\\")\"},{\"id\":\"nonempty_smiles\",\"channel\":\"args\",\"key\":1,\"pattern\":\".+\",\"source_path\":\"package/scripts/recap_terminal.py\",\"source_quote\":\"SMILES must be a nonempty string\"}]},\"purposes\":[\"computation\"],\"require_persistence\":false,\"source_path\":\"package/scripts/recap_terminal.py\",\"source_quote\":\"parser.add_argument(\\\"--smiles\\\", required=True, help=\\\"One input SMILES string\\\")\"}],\"coverage\":{\"coverage_complete\":false,\"validation_gaps\":[\"The RDKit parse-to-nonempty-molecule constraint cannot be expressed as a full-match regex and is not a named check; it is exercised by an observed invalid-input test only.\",\"The non-string input path is unreachable through the string-array CLI runner, so only blank-string rejection is checked.\"],\"blockers\":[]}}",
+    "generated_files": [],
+    "tests": [
+      {
+        "name": "environment_probe_rdkit_modules",
+        "layer": "environment",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md"
+        ],
+        "basis": "Prerequisites and input: Use an existing Python 3 environment with RDKit, including rdkit.Chem and rdkit.Chem.rdChemReactions.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "The probe does not pin an RDKit version; it only checks importability."
+        ],
+        "case_json": "{\"entrypoint\":\"python\",\"args\":[\"-c\",\"import rdkit, json; from rdkit import Chem; from rdkit.Chem import Recap; print(json.dumps({'rdkit_version': rdkit.rdBase.rdkitVersion, 'has_chem': hasattr(Chem, 'MolFromSmiles'), 'has_recap': hasattr(Recap, 'RecapDecompose')}))\"],\"expected_exit\":0,\"stdout_contains\":[\"rdkit_version\"]}"
+      },
+      {
+        "name": "interface_help_lists_smiles",
+        "layer": "interface",
+        "kind": "reference",
+        "source_paths": [
+          "package/scripts/recap_terminal.py"
+        ],
+        "basis": "parser.add_argument(\"--smiles\", required=True, help=\"One input SMILES string\")",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "Help text may vary with argparse/Python minor version."
+        ],
+        "case_json": "{\"args\":[\"--help\"],\"expected_exit\":0,\"stdout_contains\":[\"--smiles\"]}"
+      },
+      {
+        "name": "computes_example_terminal_fragments",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md"
+        ],
+        "basis": "Normal path example: python scripts/recap_terminal.py --smiles 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'; fragments must be [\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"] in sorted order.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "rdkit_version is not asserted because source says installed version varies."
+        ],
+        "case_json": "{\"args\":[\"--smiles\",\"C1CC1Oc1ccccc1-c1ncc(OC)cc1\"],\"expected_exit\":0,\"stdout_contains\":[\"fragments\",\"*C1CC1\",\"*c1ccc(OC)cn1\",\"*c1ccccc1*\"],\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"Successful stdout is one JSON object with `fragments` (a sorted list of unique SMILES) and `rdkit_version` (the installed version).\",\"assertion\":{\"role\":\"completion\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"For the example, `fragments` must be:\",\"kind\":\"json\",\"path\":[\"fragments\"],\"allowed_values\":[\"*C1CC1\",\"*c1ccc(OC)cn1\",\"*c1ccccc1*\"]}}}"
+      },
+      {
+        "name": "empty_decomposition_is_successful_computation",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md"
+        ],
+        "basis": "Interpretation and failure outcomes: `CCCOCCC` yields `fragments: []` with defaults. This is a successful empty decomposition, not invalid input.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "Only the fragments value is asserted; rdkit_version is intentionally unpinned."
+        ],
+        "case_json": "{\"args\":[\"--smiles\",\"CCCOCCC\"],\"expected_exit\":0,\"stdout_contains\":[\"fragments\",\"[]\"],\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"`CCCOCCC` yields `fragments: []` with defaults. This is a successful empty decomposition, not invalid input; never replace it with the original molecule.\",\"assertion\":{\"role\":\"completion\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"`CCCOCCC` yields `fragments: []` with defaults. This is a successful empty decomposition, not invalid input; never replace it with the original molecule.\",\"kind\":\"json\",\"path\":[\"fragments\"],\"allowed_values\":[]}}}"
+      },
+      {
+        "name": "reject_blank_smiles_value",
+        "layer": "interface",
+        "kind": "reference",
+        "source_paths": [
+          "package/scripts/recap_terminal.py",
+          "package/SKILL.md"
+        ],
+        "basis": "The adapter rejects blank strings; invalid input exits 2 with a JSON error of invalid_input on stdout.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"args\":[\"--smiles\",\"\"],\"expected_exit\":2,\"stdout_contains\":[\"invalid_input\",\"SMILES must be a nonempty string\"],\"acceptance\":{\"purpose\":\"input_rejection\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The adapter rejects blank strings, parsing failure and zero-atom molecules. Invalid input exits 2 with a JSON `error` of `invalid_input` on stdout.\",\"violates\":\"nonempty_smiles\",\"invalid_input_reason\":\"The `--smiles` value is an empty string.\",\"assertion\":{\"role\":\"rejection\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"Invalid input exits 2 with a JSON `error` of `invalid_input` on stdout.\",\"kind\":\"json\",\"path\":[\"error\"],\"allowed_values\":[\"invalid_input\"]}}}"
+      },
+      {
+        "name": "reject_missing_required_smiles_flag",
+        "layer": "interface",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md",
+          "package/scripts/recap_terminal.py"
+        ],
+        "basis": "Wrong CLI arguments use argparse's stderr usage message and exit 2.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "argparse writes to stderr; stdout is expected empty."
+        ],
+        "case_json": "{\"args\":[],\"expected_exit\":2,\"stdout_equals\":\"\",\"acceptance\":{\"purpose\":\"input_rejection\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"Wrong CLI arguments use argparse's stderr usage message and exit 2.\",\"violates\":\"required_smiles_flag\",\"invalid_input_reason\":\"The required `--smiles` argument is missing.\",\"assertion\":{\"role\":\"rejection\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"Wrong CLI arguments use argparse's stderr usage message and exit 2.\",\"kind\":\"stdout_equals\",\"value\":\"\"}}}"
+      },
+      {
+        "name": "unparseable_smiles_reports_invalid_input",
+        "layer": "interface",
+        "kind": "regression",
+        "source_paths": [
+          "package/scripts/recap_terminal.py",
+          "package/SKILL.md"
+        ],
+        "basis": "Invalid input exits 2 with a JSON error of invalid_input on stdout; parsing failure is explicitly a ValueError boundary.",
+        "oracle_status": "regression",
+        "tolerance": 0,
+        "limitations": [
+          "No named regex check models RDKit parse validity; this case documents observed invalid-input behavior."
+        ],
+        "case_json": "{\"args\":[\"--smiles\",\"not_a_smiles\"],\"expected_exit\":2,\"stdout_contains\":[\"invalid_input\"]}"
+      }
+    ],
+    "resource_assessment": {
+      "status": "complete",
+      "source_path": "package/SKILL.md",
+      "source_quote": "No external data files are needed.",
+      "memory_bytes": 1073741824,
+      "cpus": 1
+    }
+  }
+}

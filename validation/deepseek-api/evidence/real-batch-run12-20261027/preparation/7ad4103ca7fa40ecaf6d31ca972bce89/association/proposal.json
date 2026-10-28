@@ -1,0 +1,8 @@
+{
+  "source_id": "recap",
+  "source_path": "document.py",
+  "quote": ">>> from rdkit import Chem\n>>> from rdkit.Chem import Recap\n>>> m = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\n>>> res = Recap.RecapDecompose(m)",
+  "reason": "The delivered entry is scripts/recap_fragments.py, a thin glue script that imports the installed RDKit `Chem` module and `Recap` from `rdkit.Chem`, then parses one SMILES and invokes the upstream RDKit RECAP implementation (`rdkit/Chem/Recap.py`, commit 237a1d9027c800784afed8788540f38a3aa595f8). Source document.py is the inspected snapshot of that upstream module; the quoted doctest shows the same import and `Recap.RecapDecompose(m)` call used by the delivery. The script's chain is: `Chem.MolFromSmiles(smiles)`, `root = Recap.RecapDecompose(mol)`, and `sorted(root.GetLeaves().keys())`, leaving `allNodes`, `minFragmentSize`, and `onlyUseReactions` at upstream defaults. It is run with the Python interpreter in the skill directory inside the approved RDKit container, accepting one required argument `--smiles` (a nonempty molecular SMILES string), and prints JSON on stdout: successful results as `{\"fragments\": [\"...\"]}`; invalid input or zero-atom parse as `invalid_input` with exit status 2; import/decomposition failures as `runtime_error` with exit status 1. No input file is mutated and no output file is written. Necessary supports are Python 3 with RDKit providing `rdkit.Chem` and `rdkit.Chem.Recap`; the package does not install dependencies or provision an environment.",
+  "invocation": "python scripts/recap_fragments.py --smiles 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'",
+  "supported": true
+}

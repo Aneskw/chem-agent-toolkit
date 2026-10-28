@@ -1,0 +1,385 @@
+{
+  "cases": [
+    {
+      "entrypoint": "python",
+      "args": [
+        "-c",
+        "import sys,json,importlib.metadata,rdkit; from rdkit import Chem; from rdkit.Chem import Recap,rdChemReactions; assert Recap.reactions and all(r is not None for r in Recap.reactions); print(json.dumps({'python':sys.version,'rdkit':rdkit.__version__,'numpy':importlib.metadata.version('numpy'),'Pillow':importlib.metadata.version('Pillow')}))"
+      ],
+      "expected_exit": 0,
+      "timeout_seconds": 60,
+      "name": "environment-versions-and-reactions",
+      "layer": "environment",
+      "kind": "derived",
+      "source_paths": [
+        "package/SKILL.md",
+        "entry/skill.py"
+      ],
+      "basis": "Import all required modules, verify reaction initialization, and record runtime package versions.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Import and initialization success do not establish chemical correctness."
+      ],
+      "origin": "model_proposed"
+    },
+    {
+      "args": [
+        "C1CC1Oc1ccccc1-c1ncc(OC)cc1"
+      ],
+      "expected_exit": 0,
+      "stdout_equals": "[\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]",
+      "timeout_seconds": 60,
+      "acceptance": {
+        "purpose": "computation",
+        "source_path": "package/SKILL.md",
+        "source_quote": "Stdout is a JSON array of unique terminal-fragment SMILES, sorted for stable presentation.",
+        "assertion": {
+          "role": "completion",
+          "kind": "stdout_equals",
+          "value": "[\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]",
+          "source_path": "package/SKILL.md",
+          "source_quote": "The default example returns `[\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]` (source lines 38–56)."
+        }
+      },
+      "name": "delivered-entry-terminal-fragments",
+      "layer": "interface",
+      "kind": "reference",
+      "source_paths": [
+        "entry/skill.py",
+        "package/SKILL.md",
+        "sources/recap/document.py"
+      ],
+      "basis": "The upstream demonstration gives exact terminal keys; the adapter sorts and JSON-serializes those keys.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Tests one representative molecule against the supplied implementation's documented result."
+      ],
+      "origin": "model_proposed",
+      "acceptance_policy": {
+        "invalid_input": "required",
+        "scope": "Unchanged CLI accepting zero arguments for the documented example or one nonempty SMILES argument, with default RECAP parameters. No file-input form or Mol-object CLI form.",
+        "purposes": [
+          "computation"
+        ],
+        "constraint": "A supplied argument must contain non-whitespace text and parse with default sanitization to a nonempty molecule. Zero arguments selects the documented default. The regex checks only the nonempty-text component; molecular validity and argument cardinality lack a reliable predicate in the available check schema, leaving acceptance incomplete.",
+        "source_path": "package/SKILL.md",
+        "source_quote": "Input is one nonempty SMILES string parsed with normal RDKit sanitization.",
+        "checks": [
+          {
+            "id": "nonempty_text",
+            "channel": "args",
+            "key": 0,
+            "pattern": "(?s).*\\S.*",
+            "source_path": "entry/skill.py",
+            "source_quote": "if len(sys.argv) > 2 or not smiles.strip():"
+          }
+        ]
+      }
+    },
+    {
+      "args": [
+        "CCCOCCC"
+      ],
+      "expected_exit": 0,
+      "stdout_equals": "[]",
+      "timeout_seconds": 60,
+      "acceptance": {
+        "purpose": "computation",
+        "source_path": "package/SKILL.md",
+        "source_quote": "`CCCOCCC` returns no fragments under default settings; the source also explicitly tests zero leaves for `C1CNS(=O)(=O)CC1`.",
+        "assertion": {
+          "role": "completion",
+          "kind": "stdout_equals",
+          "value": "[]",
+          "source_path": "package/SKILL.md",
+          "source_quote": "Failed parsing, absent RDKit, or decomposition exceptions are failures, not empty fragment sets."
+        }
+      },
+      "name": "delivered-entry-valid-empty",
+      "layer": "behavior",
+      "kind": "reference",
+      "source_paths": [
+        "package/SKILL.md",
+        "sources/recap/document.py"
+      ],
+      "basis": "The documented default-filter example has no retained terminal descendants; an empty array is a completed calculation.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "An empty result does not establish absence of potentially cleavable bonds."
+      ],
+      "origin": "model_proposed",
+      "acceptance_policy": {
+        "invalid_input": "required",
+        "scope": "Unchanged CLI accepting zero arguments for the documented example or one nonempty SMILES argument, with default RECAP parameters. No file-input form or Mol-object CLI form.",
+        "purposes": [
+          "computation"
+        ],
+        "constraint": "A supplied argument must contain non-whitespace text and parse with default sanitization to a nonempty molecule. Zero arguments selects the documented default. The regex checks only the nonempty-text component; molecular validity and argument cardinality lack a reliable predicate in the available check schema, leaving acceptance incomplete.",
+        "source_path": "package/SKILL.md",
+        "source_quote": "Input is one nonempty SMILES string parsed with normal RDKit sanitization.",
+        "checks": [
+          {
+            "id": "nonempty_text",
+            "channel": "args",
+            "key": 0,
+            "pattern": "(?s).*\\S.*",
+            "source_path": "entry/skill.py",
+            "source_quote": "if len(sys.argv) > 2 or not smiles.strip():"
+          }
+        ]
+      }
+    },
+    {
+      "args": [
+        "   "
+      ],
+      "expected_exit": 1,
+      "timeout_seconds": 60,
+      "acceptance": {
+        "purpose": "input_rejection",
+        "violates": "nonempty_text",
+        "invalid_input_reason": "The argument contains only whitespace.",
+        "source_path": "entry/skill.py",
+        "source_quote": "if len(sys.argv) > 2 or not smiles.strip():",
+        "assertion": {
+          "role": "rejection",
+          "kind": "stderr_contains",
+          "value": "Provide exactly one nonempty SMILES argument, or no arguments for the example.",
+          "source_path": "entry/skill.py",
+          "source_quote": "raise SystemExit('Provide exactly one nonempty SMILES argument, or no arguments for the example.')"
+        }
+      },
+      "name": "delivered-entry-reject-blank",
+      "layer": "interface",
+      "kind": "derived",
+      "source_paths": [
+        "entry/skill.py"
+      ],
+      "basis": "Whitespace fails the explicit strip guard. SystemExit with a diagnostic string exits with status 1.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Covers the explicit text guard, not the entire SMILES grammar."
+      ],
+      "origin": "model_proposed",
+      "acceptance_policy": {
+        "invalid_input": "required",
+        "scope": "Unchanged CLI accepting zero arguments for the documented example or one nonempty SMILES argument, with default RECAP parameters. No file-input form or Mol-object CLI form.",
+        "purposes": [
+          "computation"
+        ],
+        "constraint": "A supplied argument must contain non-whitespace text and parse with default sanitization to a nonempty molecule. Zero arguments selects the documented default. The regex checks only the nonempty-text component; molecular validity and argument cardinality lack a reliable predicate in the available check schema, leaving acceptance incomplete.",
+        "source_path": "package/SKILL.md",
+        "source_quote": "Input is one nonempty SMILES string parsed with normal RDKit sanitization.",
+        "checks": [
+          {
+            "id": "nonempty_text",
+            "channel": "args",
+            "key": 0,
+            "pattern": "(?s).*\\S.*",
+            "source_path": "entry/skill.py",
+            "source_quote": "if len(sys.argv) > 2 or not smiles.strip():"
+          }
+        ]
+      }
+    },
+    {
+      "entrypoint": "python",
+      "args": [
+        "/opt/skill/sources/recap/document.py"
+      ],
+      "expected_exit": 0,
+      "timeout_seconds": 60,
+      "name": "upstream-original-unittest",
+      "layer": "behavior",
+      "kind": "reference",
+      "source_paths": [
+        "sources/recap/document.py"
+      ],
+      "basis": "Execute the entire supplied upstream unittest suite without altering assertions.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Tests the supplied Recap implementation using installed RDKit primitives, not exclusively the installed Recap module."
+      ],
+      "origin": "model_proposed"
+    },
+    {
+      "entrypoint": "python",
+      "args": [
+        "-c",
+        "import os,pathlib,sys; os.chdir('/opt/skill/package'); text=pathlib.Path('SKILL.md').read_text(encoding='utf-8'); code=text.split('```python'+chr(10),1)[1].split('```',1)[0]; sys.argv=['terminal_fragments.py']+sys.argv[1:]; exec(compile(code,'SKILL.md:normal-path','exec'))"
+      ],
+      "expected_exit": 0,
+      "stdout_contains": [
+        "[\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]"
+      ],
+      "timeout_seconds": 60,
+      "name": "documented-terminal-fragments",
+      "layer": "behavior",
+      "kind": "reference",
+      "source_paths": [
+        "package/SKILL.md",
+        "sources/recap/document.py"
+      ],
+      "basis": "Preserve the caller's locked author check by extracting and executing the actual Markdown Python block with default arguments.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Author test runner; not a substitute for direct delivered-entry testing."
+      ],
+      "origin": "model_proposed"
+    },
+    {
+      "entrypoint": "python",
+      "args": [
+        "-c",
+        "import os,pathlib,sys; os.chdir('/opt/skill/package'); text=pathlib.Path('SKILL.md').read_text(encoding='utf-8'); code=text.split('```python'+chr(10),1)[1].split('```',1)[0]; sys.argv=['terminal_fragments.py']+sys.argv[1:]; exec(compile(code,'SKILL.md:normal-path','exec'))",
+        "CCCOCCC"
+      ],
+      "expected_exit": 0,
+      "stdout_contains": [
+        "[]"
+      ],
+      "timeout_seconds": 60,
+      "name": "default-filter-valid-empty",
+      "layer": "behavior",
+      "kind": "reference",
+      "source_paths": [
+        "package/SKILL.md",
+        "sources/recap/document.py"
+      ],
+      "basis": "Preserve the locked Markdown author check for the documented default-filter empty result.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Author test runner with the original expected output retained."
+      ],
+      "origin": "model_proposed"
+    },
+    {
+      "entrypoint": "python",
+      "args": [
+        "-c",
+        "import os,pathlib,sys; os.chdir('/opt/skill/package'); text=pathlib.Path('SKILL.md').read_text(encoding='utf-8'); code=text.split('```python'+chr(10),1)[1].split('```',1)[0]; sys.argv=['terminal_fragments.py']+sys.argv[1:]; exec(compile(code,'SKILL.md:normal-path','exec'))",
+        "C1CNS(=O)(=O)CC1"
+      ],
+      "expected_exit": 0,
+      "stdout_contains": [
+        "[]"
+      ],
+      "timeout_seconds": 60,
+      "name": "cyclic-sulfonamide-valid-empty",
+      "layer": "behavior",
+      "kind": "reference",
+      "source_paths": [
+        "package/SKILL.md",
+        "sources/recap/document.py"
+      ],
+      "basis": "Preserve the locked Markdown author check for the source's cyclic sulfonamide zero-leaf result.",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "limitations": [
+        "Author test runner with the original expected output retained."
+      ],
+      "origin": "model_proposed"
+    },
+    {
+      "name": "check-generated-documented-terminal-fragments",
+      "origin": "authored_check",
+      "basis": "Execute the single continuous Python block delivered in SKILL.md. Recap.py lines 38–56 give these exact sorted terminal keys; lines 223–229 confirm three leaves rather than four immediate or five total children.",
+      "layer": "interface",
+      "kind": "reference",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [],
+      "limitations": [],
+      "entrypoint": "python",
+      "args": [
+        "-c",
+        "import pathlib, sys; text = pathlib.Path('SKILL.md').read_text(encoding='utf-8'); code = text.split('```python\\n', 1)[1].split('```', 1)[0]; sys.argv = ['terminal_fragments.py'] + sys.argv[1:]; exec(compile(code, 'SKILL.md:normal-path', 'exec'))"
+      ],
+      "expected_exit": 0,
+      "stdout_contains": [
+        "[\"*C1CC1\", \"*c1ccc(OC)cn1\", \"*c1ccccc1*\"]"
+      ],
+      "json_equals": {},
+      "artifacts": [],
+      "mapped_check": true,
+      "workdir": "/opt/skill/package"
+    },
+    {
+      "name": "check-generated-default-filter-valid-empty",
+      "origin": "authored_check",
+      "basis": "Execute the delivered example with CCCOCCC. Recap.py test2 lines 231–235 and testMinFragmentSize lines 279–283 assert no children; GetLeaves lines 110–118 consequently returns an empty dictionary.",
+      "layer": "interface",
+      "kind": "reference",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [],
+      "limitations": [],
+      "entrypoint": "python",
+      "args": [
+        "-c",
+        "import pathlib, sys; text = pathlib.Path('SKILL.md').read_text(encoding='utf-8'); code = text.split('```python\\n', 1)[1].split('```', 1)[0]; sys.argv = ['terminal_fragments.py'] + sys.argv[1:]; exec(compile(code, 'SKILL.md:normal-path', 'exec'))",
+        "CCCOCCC"
+      ],
+      "expected_exit": 0,
+      "stdout_contains": [
+        "[]"
+      ],
+      "json_equals": {},
+      "artifacts": [],
+      "mapped_check": true,
+      "workdir": "/opt/skill/package"
+    },
+    {
+      "name": "check-generated-cyclic-sulfonamide-valid-empty",
+      "origin": "authored_check",
+      "basis": "Execute the delivered example on the source test at Recap.py lines 574–577, which explicitly asserts successful decomposition with zero leaves.",
+      "layer": "interface",
+      "kind": "reference",
+      "oracle_status": "supported",
+      "tolerance": 0,
+      "source_paths": [],
+      "limitations": [],
+      "entrypoint": "python",
+      "args": [
+        "-c",
+        "import pathlib, sys; text = pathlib.Path('SKILL.md').read_text(encoding='utf-8'); code = text.split('```python\\n', 1)[1].split('```', 1)[0]; sys.argv = ['terminal_fragments.py'] + sys.argv[1:]; exec(compile(code, 'SKILL.md:normal-path', 'exec'))",
+        "C1CNS(=O)(=O)CC1"
+      ],
+      "expected_exit": 0,
+      "stdout_contains": [
+        "[]"
+      ],
+      "json_equals": {},
+      "artifacts": [],
+      "mapped_check": true,
+      "workdir": "/opt/skill/package"
+    }
+  ],
+  "policy": {
+    "invalid_input": "required",
+    "scope": "Unchanged CLI accepting zero arguments for the documented example or one nonempty SMILES argument, with default RECAP parameters. No file-input form or Mol-object CLI form.",
+    "purposes": [
+      "computation"
+    ],
+    "constraint": "A supplied argument must contain non-whitespace text and parse with default sanitization to a nonempty molecule. Zero arguments selects the documented default. The regex checks only the nonempty-text component; molecular validity and argument cardinality lack a reliable predicate in the available check schema, leaving acceptance incomplete.",
+    "source_path": "package/SKILL.md",
+    "source_quote": "Input is one nonempty SMILES string parsed with normal RDKit sanitization.",
+    "checks": [
+      {
+        "id": "nonempty_text",
+        "channel": "args",
+        "key": 0,
+        "pattern": "(?s).*\\S.*",
+        "source_path": "entry/skill.py",
+        "source_quote": "if len(sys.argv) > 2 or not smiles.strip():"
+      }
+    ]
+  }
+}

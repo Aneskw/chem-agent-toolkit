@@ -1,0 +1,11 @@
+{
+  "provider": "deepseek_api",
+  "phase": "discovery",
+  "model": "deepseek-v4-pro",
+  "effective_timeout_seconds": 600,
+  "schema_sha256": "99477ee8e087a2cca4565b5367f3f648712215fed3573897ee445a198224dd06",
+  "ledger": {
+    "call_index": 1,
+    "limit": 12
+  }
+}

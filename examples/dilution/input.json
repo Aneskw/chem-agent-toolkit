@@ -1,0 +1,6 @@
+{
+  "sources": [{"id": "dilution", "path": "resources", "license": "MIT"}],
+  "prompt": "Discover and package the reusable ideal dilution calculator as one executable Skill. Read the actual source and documentation; preserve dilution.py unchanged as the delivered executable and include source-provided input fixtures. Document precise units, assumptions, invalid inputs, and file IO. Independently review the actual files. Runtime must verify the real delivered entry, scalar business results, invalid input and file IO using the preexisting source contract. Do not execute source programs on the host.",
+  "execution": {"profile": "production"},
+  "batch": {"label": "stage5-fresh-dilution", "tags": ["cpu", "dilution"]}
+}

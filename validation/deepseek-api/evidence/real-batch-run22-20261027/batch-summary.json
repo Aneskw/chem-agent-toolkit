@@ -1,0 +1,21 @@
+{
+  "batch": "run22",
+  "build_id": "20261027T215854-bce89554",
+  "status": "blocked",
+  "model_calls": 3,
+  "started_at": "2026-10-27T13:58:54.491531+00:00",
+  "finished_at": "2026-10-27T14:06:03.496891+00:00",
+  "errors": [],
+  "gaps": [
+    {
+      "code": "requirements_unknown",
+      "detail": "'e1'",
+      "repair_lane": "requirement",
+      "blocker_kind": "unresolved_input"
+    }
+  ],
+  "entry_declaration": {
+    "kind": "script",
+    "path": "scripts/get_recap_leaves.py"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "outcome": "candidates",
+  "summary": "Discovered one source-grounded candidate and saved recap-candidate.json plus work-state.md. Discovery only; no skill package authored.",
+  "saved_candidates": [],
+  "candidates": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "capability": "Extract unique terminal molecular fragments with RDKit RecapDecompose and GetLeaves.",
+      "boundary": "Molecular fragmentation, not descriptor calculation or chemical validation. Accept valid RDKit molecules or successfully parsed SMILES; distinguish invalid input from valid empty results. Use the supplied implementation’s default rules.",
+      "value": "Resolves terminal-versus-intermediate hierarchy semantics, SMILES-keyed deduplication, attachment markers, and empty results without reimplementing chemistry.",
+      "usage_path": "Require Python and RDKit in an authorized Docker environment. Parse textual input with Chem.MolFromSmiles and check success. Call root = Recap.RecapDecompose(mol), then leaves = root.GetLeaves(). Return sorted(leaves.keys()) for deterministic unique fragment SMILES; leaves[smi].mol exposes fragment molecules. Preserve '*' attachment markers. Empty leaves are valid and must not be replaced by the parent. root.children contains immediate children; root.GetAllChildren() includes intermediate descendants.",
+      "construction": "Direct packaging of existing APIs and documented examples, with transparent input-checking and serialization glue if needed. The author stage can use concise instructions and a provenance reference; a script is optional. Document RDKit prerequisites, Docker-only execution, invalid-input boundaries and applicable BSD notices. No new algorithm is needed.",
+      "evidence": [
+        {
+          "id": "e1",
+          "claim": "Inspected document.py, upstream Recap.py, lines 31-56: overview identifies the RECAP method and demonstrates four immediate children, five total descendants and three terminal leaves; leaf.mol provides a molecule."
+        },
+        {
+          "id": "e1",
+          "claim": "Lines 102-118 and 134-138: GetLeaves returns a SMILES-keyed dictionary of terminal descendants. It starts from children, so a root without children returns {}, not itself; keys deduplicate fragment structures."
+        },
+        {
+          "id": "e1",
+          "claim": "Lines 146-169 and 197-213: RecapDecompose expects a molecule, initializes fresh allNodes state by default, processes reaction products recursively and reuses nodes by SMILES. Shared allNodes may return a previously cached root."
+        },
+        {
+          "id": "e1",
+          "claim": "Lines 174-195 describe small-fragment filtering. test2, lines 231-235, asserts empty children for CCCOCCC. Combined with GetLeaves, this establishes a valid empty terminal result. Lines 279-293 show minFragmentSize=3 changes CCCOCCC to one unique '*CCC' leaf."
+        },
+        {
+          "id": "e1",
+          "claim": "Lines 66-86 define reactions with '*' attachment markers. Lines 81-82 explicitly identify an aromatic nitrogen–aromatic carbon rule as outside the standard RECAP set, limiting claims of exact published-algorithm equivalence."
+        },
+        {
+          "id": "e1",
+          "claim": "testAmideRxn, lines 304-337, demonstrates both two-leaf and zero-leaf results with onlyUseReactions=[1]. Lines 164-166 show zero-based selection and that an empty selection does not disable all reactions."
+        },
+        {
+          "id": "e2",
+          "claim": "Inspected document.txt, lines 1-29: BSD-3-Clause redistribution conditions require notices, conditions and disclaimer retention and prohibit endorsement. Recap.py lines 1-29 also contain a separate Novartis copyright notice."
+        }
+      ],
+      "gaps": [
+        "Examples and tests were inspected statically; runtime verification must occur in an authorized Docker container.",
+        "The supplied module does not specify all SMILES parser failure modes. Blank, malformed and non-string input checks should be explicit adapter boundaries.",
+        "The author stage must select its delivery interface and verify the available RDKit version against the pinned-source examples."
+      ],
+      "blocked": false
+    }
+  ],
+  "omitted": [
+    {
+      "capability": "Full hierarchy exploration and shared multi-molecule fragment graphs",
+      "reason": "Explain their distinction within the terminal-fragment skill; separate graph workflows exceed the requested scope."
+    },
+    {
+      "capability": "Custom reaction selection and fragment-size tuning",
+      "reason": "Useful contextual caveats, but unnecessary for the requested default terminal-fragment capability."
+    }
+  ],
+  "limitations": [
+    "The configured helper Python executable was unavailable. Records were saved with native PowerShell and JSON parsing checked, but helper validation could not run.",
+    "No business code was executed, dependencies installed, SKILL.md written, or finish invoked."
+  ]
+}

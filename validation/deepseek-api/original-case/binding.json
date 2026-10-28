@@ -1,0 +1,35 @@
+{
+  "kind": "markdown_python",
+  "entry": "SKILL.md",
+  "runtime_entry": "entry/skill.py",
+  "extraction": {
+    "rule": "single-unindented-python-fence-v1",
+    "block_index": 0,
+    "start_byte": 1427,
+    "end_byte": 2052,
+    "start_line": 17,
+    "markdown_sha256": "cc8c5dbc551207474175833096591e98f201d67d443a1dce9a8b4fe19eab3ed2",
+    "code_sha256": "0dae36e3478d6800028515d325c95124eb66106115cefc70c87f98a62fc3ef91"
+  },
+  "association": "reviewed",
+  "source_id": "recap",
+  "source_path": "document.py",
+  "source_sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+  "quote": ">>> from rdkit import Chem\n>>> from rdkit.Chem import Recap\n>>> m = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\n>>> res = Recap.RecapDecompose(m)",
+  "reason": "Supported by the supplied source: the delivered SKILL.md Python fence, identified as runtime entry entry/skill.py, imports the same API and calls Recap.RecapDecompose(mol), followed by root.GetLeaves(). The source explicitly states: \"To get the standard set of RECAP results, use GetLeaves():\" and defines its result as a dictionary keyed by SMILES of terminal nodes. Source scope is rdkit/Chem/Recap.py in https://github.com/rdkit/rdkit at upstream commit 237a1d9027c800784afed8788540f38a3aa595f8, supplied as document.py; this is upstream provenance, not a carrier commit. Delivery scope is a CLI adapter extracted from SKILL.md plus references/LICENSE.txt, not a bundled RDKit implementation. Input validation, argument handling, sorting and JSON serialization belong to the adapter. The broader upstream API supports hierarchy state, size filtering and reaction selection; the delivered executable uses defaults only. This establishes the API relationship from text, not execution or compatibility across RDKit releases.",
+  "invocation": "Use a Python 3 interpreter with installed RDKit, including rdkit.Chem, rdkit.Chem.Recap and rdChemReactions support; json and sys are standard-library dependencies. Inside an authorized Docker container, from the delivery root containing the extracted entry/skill.py, invoke python entry/skill.py with zero arguments or one quoted nonempty SMILES argument. Zero arguments selects C1CC1Oc1ccccc1-c1ncc(OC)cc1. The Markdown's terminal_fragments.py name is a documented save-as alternative, not the identified runtime path. No particular working directory is required by the code beyond resolving the script path, and no external dataset is needed. Chem.MolFromSmiles parses the string with default sanitization; a nonempty Mol is passed to RecapDecompose(mol), leaving allNodes=None, minFragmentSize=0 and onlyUseReactions=None. GetLeaves() returns a SMILES-to-node dictionary; stdout receives its sorted unique keys as a JSON array, preserving dummy-atom '*'. No output files are written. Empty terminal results are valid; invalid inputs and uncaught dependency/decomposition failures terminate unsuccessfully, with diagnostics potentially on stderr. An existing sanitized Mol is usable through the documented API workflow, not as a CLI argument. A standalone Recap.py does not replace installed RDKit. Retain the supplied license notices; record rdkit.__version__ for reproducibility, since no minimum release is established.",
+  "entry_sha256": "cc8c5dbc551207474175833096591e98f201d67d443a1dce9a8b4fe19eab3ed2",
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "sha256": "4338b3468c33eae2b83b281a59678f6c23cfba9fff4609a5bae1c3e647fc573d",
+      "bytes": 3227
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "cc8c5dbc551207474175833096591e98f201d67d443a1dce9a8b4fe19eab3ed2",
+      "bytes": 5584
+    }
+  ],
+  "review_sha256": "36e4e47f24ba03832e61ae095a87516ac5d9f6625dcd36761ef20008a48aed69"
+}

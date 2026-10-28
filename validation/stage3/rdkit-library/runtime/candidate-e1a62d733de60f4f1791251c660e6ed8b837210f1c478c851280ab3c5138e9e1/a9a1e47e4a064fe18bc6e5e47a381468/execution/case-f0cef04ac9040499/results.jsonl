@@ -1,0 +1,1 @@
+{"ok": true, "input": "CCO", "canonical_smiles": "WRONG_RESULT", "descriptors": {"molecular_weight": 46.069, "logp": -0.0014, "tpsa": 20.23, "h_bond_donors": 1, "h_bond_acceptors": 1, "rotatable_bonds": 0}}

@@ -1,0 +1,165 @@
+{
+  "run": "real-batch-run5-20261027",
+  "build_id": "20261027T132055-4fec03af",
+  "code": {
+    "commit": "43d0eb6",
+    "api_model": "deepseek-v4-pro",
+    "policy": "fixture contract examples (capture_stdout/output_file, case_json text, behavior assertions)"
+  },
+  "final_status": "blocked",
+  "stage_status": {
+    "source_preparation": "passed (both URLs complete, SHA-256 matched)",
+    "discovery": "passed",
+    "authoring": "passed after one repair turn (file-role fix)",
+    "independent_content_review": "passed",
+    "entry_association": "passed (DeepSeek v4-pro, author-declared markdown entry)",
+    "association_independent_review": "passed",
+    "environment_planning": "failed - plan rejected on acceptance.operations selector; the patch reply was itself malformed; budget exhausted on the next round",
+    "docker_build": "not_run",
+    "business_acceptance": "not_run",
+    "catalog_promotion": "not_run",
+    "install": "not_run"
+  },
+  "planning_rounds": [
+    {
+      "round": "0",
+      "model_status": "completed",
+      "elapsed_seconds": 505.085,
+      "response_bytes": 13781,
+      "rejected": true,
+      "accepted_plan": true,
+      "diagnostic": "Operation selector must match a literal documented invocation token",
+      "answer_action": "plan"
+    },
+    {
+      "round": "1",
+      "model_status": "completed",
+      "elapsed_seconds": 203.718,
+      "response_bytes": 10358,
+      "rejected": false,
+      "accepted_plan": false,
+      "patch_diagnostic": "Invalid plan patch /output_contract: Expecting value: line 1 column 1 (char 0)",
+      "answer_action": "patch"
+    }
+  ],
+  "previously_violated_rules": {
+    "capture_stdout_with_output_file": "not violated in this run",
+    "case_json_is_json_text": "not violated in this run",
+    "behavior_test_assertions": "not violated in this run"
+  },
+  "ledger": {
+    "application_calls": 8,
+    "budget": 8,
+    "entries": [
+      {
+        "phase": "discovery",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 167.488,
+        "usage": {
+          "input_tokens": 200612,
+          "cached_input_tokens": 170624,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3880,
+          "reasoning_output_tokens": 81
+        }
+      },
+      {
+        "phase": "author",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 500.39,
+        "usage": {
+          "input_tokens": 506100,
+          "cached_input_tokens": 432256,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 8393,
+          "reasoning_output_tokens": 751
+        }
+      },
+      {
+        "phase": "author",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 91.938,
+        "usage": {
+          "input_tokens": 675160,
+          "cached_input_tokens": 596608,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 9297,
+          "reasoning_output_tokens": 768
+        }
+      },
+      {
+        "phase": "review",
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "elapsed_seconds": 81.456,
+        "usage": {
+          "input_tokens": 214238,
+          "cached_input_tokens": 178688,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1346,
+          "reasoning_output_tokens": 134
+        }
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null,
+        "usage": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null,
+        "usage": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null,
+        "usage": null
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "gpt-6-astra",
+        "status": "attempted",
+        "elapsed_seconds": null,
+        "usage": null
+      }
+    ],
+    "deepseek_requests": 3,
+    "deepseek_completed": 3
+  },
+  "timing": {
+    "started_at": "2026-10-27T05:20:55.651519+00:00",
+    "finished_at": "2026-10-27T05:50:41.502697+00:00"
+  },
+  "binding": {
+    "kind": "markdown_python",
+    "entry": "SKILL.md",
+    "declaration_source": "author_declaration",
+    "declaration": {
+      "path": "SKILL.md",
+      "block_index": 0,
+      "kind": "markdown_python"
+    },
+    "code_sha256": "149f7e38732a387cfd54208f085007fcb3b1a7cb20523faae7c377902c6694ec"
+  },
+  "docker": {
+    "builds": 0
+  },
+  "redaction": {
+    "credential_occurrences_in_run_tree": 0,
+    "credential_recorded": false
+  },
+  "decision": {
+    "rerun": false,
+    "resume": false,
+    "reason": "budget exhausted after a semantic rejection and a malformed patch; a new real batch needs new authorisation"
+  }
+}

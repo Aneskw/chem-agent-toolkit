@@ -1,0 +1,41 @@
+{
+  "kind": "script",
+  "entry": "scripts/recap_fragments.py",
+  "runtime_entry": "package/scripts/recap_fragments.py",
+  "declaration": {
+    "kind": "script",
+    "path": "scripts/recap_fragments.py"
+  },
+  "association": "reviewed",
+  "source_id": "recap",
+  "source_path": "document.py",
+  "source_sha256": "d4f9b96945c2c92c095d758a7f460360dc1a73fb75831bfdb8482f8f9aaec3fc",
+  "quote": ">>> from rdkit import Chem\n>>> from rdkit.Chem import Recap\n>>> m = Chem.MolFromSmiles('C1CC1Oc1ccccc1-c1ncc(OC)cc1')\n>>> res = Recap.RecapDecompose(m)",
+  "reason": "The delivered entry is scripts/recap_fragments.py, a thin glue script that imports the installed RDKit `Chem` module and `Recap` from `rdkit.Chem`, then parses one SMILES and invokes the upstream RDKit RECAP implementation (`rdkit/Chem/Recap.py`, commit 237a1d9027c800784afed8788540f38a3aa595f8). Source document.py is the inspected snapshot of that upstream module; the quoted doctest shows the same import and `Recap.RecapDecompose(m)` call used by the delivery. The script's chain is: `Chem.MolFromSmiles(smiles)`, `root = Recap.RecapDecompose(mol)`, and `sorted(root.GetLeaves().keys())`, leaving `allNodes`, `minFragmentSize`, and `onlyUseReactions` at upstream defaults. It is run with the Python interpreter in the skill directory inside the approved RDKit container, accepting one required argument `--smiles` (a nonempty molecular SMILES string), and prints JSON on stdout: successful results as `{\"fragments\": [\"...\"]}`; invalid input or zero-atom parse as `invalid_input` with exit status 2; import/decomposition failures as `runtime_error` with exit status 1. No input file is mutated and no output file is written. Necessary supports are Python 3 with RDKit providing `rdkit.Chem` and `rdkit.Chem.Recap`; the package does not install dependencies or provision an environment.",
+  "invocation": "python scripts/recap_fragments.py --smiles 'C1CC1Oc1ccccc1-c1ncc(OC)cc1'",
+  "entry_sha256": "44e952b2a2972ab2d9bd19d76733ff424ae7a47525456b97c91abc20f17507ff",
+  "files": [
+    {
+      "path": "references/LICENSE.txt",
+      "sha256": "defcec084284f50f58d4739749c6c0836beb948b662b6b67d8edee42245ebf4b",
+      "bytes": 3302
+    },
+    {
+      "path": "references/sources.md",
+      "sha256": "6e98ae68a48ac0b2ea1911258f80c094f1194acf9c55b27e973bd2d9c2822cf9",
+      "bytes": 2370
+    },
+    {
+      "path": "scripts/recap_fragments.py",
+      "sha256": "44e952b2a2972ab2d9bd19d76733ff424ae7a47525456b97c91abc20f17507ff",
+      "bytes": 1409
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "eb77af97a411325857c7a8725fbd7c9386a34b0c0fd91d12f724f5c883f13cd6",
+      "bytes": 4121
+    }
+  ],
+  "review_sha256": "f6f67d30649fd80d71f8204c7cd140a49cd8a9c8cae34c48da64be45cf5e91cd",
+  "declaration_source": "author_declaration"
+}

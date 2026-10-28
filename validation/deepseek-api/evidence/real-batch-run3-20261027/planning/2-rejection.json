@@ -1,0 +1,196 @@
+{
+  "rejected_plan": {
+    "entrypoint": [
+      "python",
+      "entry/skill.py"
+    ],
+    "script": "entry/skill.py",
+    "base_image": "python:3.11-slim-bookworm",
+    "platform": "linux/amd64",
+    "language": "python",
+    "language_version": "3.11",
+    "source_files": [
+      "entry/skill.py",
+      "package/SKILL.md",
+      "package/references/LICENSE.txt",
+      "source-identities.json",
+      "sources/license/document.txt",
+      "sources/recap/document.py"
+    ],
+    "dependencies": [
+      {
+        "name": "rdkit",
+        "version": "2024.3.5",
+        "channel": "pip",
+        "evidence": "SKILL.md requires an existing Python environment with RDKit, including rdkit.Chem.Recap and its reaction support, and says to use a complete RDKit installation and record its version. The supplied source does not declare an exact release; 2024.3.5 is a tentative reproducibility pin.",
+        "certainty": "inferred"
+      }
+    ],
+    "steps": [
+      {
+        "command": "apt-get update && apt-get install -y --no-install-recommends libxrender1 libxext6 && rm -rf /var/lib/apt/lists/*",
+        "purpose": "Install inferred runtime shared libraries commonly needed by RDKit binary wheels.",
+        "evidence": "The source does not declare system libraries; this is a packaging precaution for the selected RDKit wheel, not a source-declared requirement."
+      },
+      {
+        "command": "pip install --no-cache-dir rdkit==2024.3.5",
+        "purpose": "Install a complete RDKit distribution including rdkit.Chem.Recap.",
+        "evidence": "SKILL.md prerequisites: use an existing Python environment with RDKit, including rdkit.Chem.Recap and its reaction support; use a complete RDKit installation and record its version."
+      },
+      {
+        "command": "python -c \"from rdkit import Chem; from rdkit.Chem import Recap; print('rdkit-ready')\"",
+        "purpose": "Verify that RDKit and the RECAP module import in the built image.",
+        "evidence": "SKILL.md states the environment must include rdkit.Chem.Recap and its reaction support."
+      }
+    ],
+    "build_layout": {
+      "dependency_files": [],
+      "prefix_steps": 0,
+      "reason": "No source-derived installation configuration files are needed; explicit apt and pip installation steps run after the full source copy."
+    },
+    "environment": [
+      {
+        "name": "PYTHONUNBUFFERED",
+        "value": "1"
+      },
+      {
+        "name": "PYTHONDONTWRITEBYTECODE",
+        "value": "1"
+      }
+    ],
+    "resources": [],
+    "file_io": false,
+    "output_contract": "python entry/skill.py [SMILES] prints exactly one JSON object to stdout of the form {\"fragments\": [sorted unique terminal RECAP fragment SMILES]}. With no SMILES it uses the documented default molecule C1CC1Oc1ccccc1-c1ncc(OC)cc1. Successful decomposition exits 0 even when fragments is empty; blank or malformed input is rejected via argparse to stderr with exit status 2. No output files are written.",
+    "runtime_network": false,
+    "network_reason": "Runtime is offline. Build-time network is used only for apt and PyPI installation of RDKit; no runtime downloads, services, credentials, weights, or datasets are required.",
+    "choices": [
+      {
+        "choice": "Use python:3.11-slim-bookworm as the base image.",
+        "evidence": "The delivered entry is Python and requires an existing Python environment with RDKit; the supplied source does not prescribe a base image.",
+        "certainty": "inferred"
+      },
+      {
+        "choice": "Install RDKit from PyPI rather than compiling the pinned Recap.py source.",
+        "evidence": "SKILL.md says to use a complete RDKit installation and not to install that file alone; the pinned Recap.py is reference source for the implementation.",
+        "certainty": "inferred"
+      },
+      {
+        "choice": "Pin rdkit==2024.3.5.",
+        "evidence": "SKILL.md explicitly states the supplied source does not establish a release-number requirement; the pin is a tentative reproducibility choice and the runtime probe records the actual version.",
+        "certainty": "inferred"
+      },
+      {
+        "choice": "Install libxrender1 and libxext6 before the RDKit wheel.",
+        "evidence": "This is an inferred wheel-runtime precaution; the source does not declare system packages.",
+        "certainty": "inferred"
+      }
+    ],
+    "unresolved": [
+      "Exact RDKit release is not declared by the supplied source; rdkit==2024.3.5 is a tentative pin.",
+      "Whether libxrender1/libxext6 are strictly required by the selected RDKit wheel is not declared in the supplied source."
+    ],
+    "unverified_behavior": [
+      "Scientific validity of RECAP fragments against the original paper was not independently verified; cases reproduce documented RDKit behavior.",
+      "Nondefault RecapDecompose options such as minFragmentSize, onlyUseReactions, and shared allNodes are outside the CLI contract and are not covered.",
+      "Malformed nonblank SMILES rejection is documented, but only blank-input rejection is encoded as a regex-violating rejection case."
+    ],
+    "acceptance_json": "{\"invalid_input\":\"not_applicable\",\"scope\":\"Direct CLI invocation of the unchanged entry/skill.py with an optional positional SMILES argument; one JSON object on stdout; no file IO.\",\"purposes\":[\"computation\"],\"constraint\":\"When a positional SMILES argument is supplied it must contain at least one non-whitespace character; blank or whitespace-only input is rejected with exit status 2.\",\"source_path\":\"entry/skill.py\",\"source_quote\":\"if not isinstance(smiles, str) or not smiles.strip():\",\"checks\":[{\"id\":\"nonblank-smiles\",\"channel\":\"args\",\"key\":0,\"pattern\":\".*\\\\S.*\",\"source_path\":\"entry/skill.py\",\"source_quote\":\"if not isinstance(smiles, str) or not smiles.strip():\"}]}",
+    "generated_files": [],
+    "tests": [
+      {
+        "name": "environment-rdkit-import",
+        "layer": "environment",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md"
+        ],
+        "basis": "RDKit, including rdkit.Chem.Recap, must be importable; the probe records Python and RDKit versions for audit.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "The printed RDKit version is not fixed because the supplied source does not declare a release requirement."
+        ],
+        "case_json": "{\"entrypoint\":\"python\",\"args\":[\"-c\",\"import sys, rdkit; print(sys.version.split()[0]); print(rdkit.__version__)\"],\"expected_exit\":0,\"timeout_seconds\":30}"
+      },
+      {
+        "name": "interface-help",
+        "layer": "interface",
+        "kind": "reference",
+        "source_paths": [
+          "entry/skill.py"
+        ],
+        "basis": "The delivered argparse CLI documents its description and help path.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [],
+        "case_json": "{\"args\":[\"--help\"],\"expected_exit\":0,\"stdout_contains\":[\"Get terminal RECAP fragments\"],\"timeout_seconds\":30}"
+      },
+      {
+        "name": "behavior-default-example",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "sources/recap/document.py",
+          "package/SKILL.md",
+          "entry/skill.py"
+        ],
+        "basis": "The pinned Recap.py doctest and SKILL.md document the default molecule's sorted leaf SMILES; entry/skill.py serializes them as one JSON object.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "Exact stdout formatting is asserted because the CLI prints one json.dumps object."
+        ],
+        "case_json": "{\"args\":[\"C1CC1Oc1ccccc1-c1ncc(OC)cc1\"],\"expected_exit\":0,\"stdout_equals\":\"{\\\"fragments\\\": [\\\"*C1CC1\\\", \\\"*c1ccc(OC)cn1\\\", \\\"*c1ccccc1*\\\"]}\",\"capture_stdout\":true,\"output_file\":\"stdout.txt\",\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"sources/recap/document.py\",\"source_quote\":\"['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']\",\"assertion\":{\"role\":\"completion\",\"source_path\":\"sources/recap/document.py\",\"source_quote\":\"['*C1CC1', '*c1ccc(OC)cn1', '*c1ccccc1*']\",\"kind\":\"stdout_equals\",\"value\":\"{\\\"fragments\\\": [\\\"*C1CC1\\\", \\\"*c1ccc(OC)cn1\\\", \\\"*c1ccccc1*\\\"]}\"}}}"
+      },
+      {
+        "name": "behavior-empty-decomposition",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md",
+          "sources/recap/document.py"
+        ],
+        "basis": "SKILL.md states CCCOCCC yields an empty list; test2 in Recap.py confirms no default children and GetLeaves consequently returns no leaves.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "Empty list is a successful computation result, not an error."
+        ],
+        "case_json": "{\"args\":[\"CCCOCCC\"],\"expected_exit\":0,\"stdout_equals\":\"{\\\"fragments\\\": []}\",\"capture_stdout\":true,\"output_file\":\"stdout.txt\",\"timeout_seconds\":60,\"acceptance\":{\"purpose\":\"computation\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"For the valid input `CCCOCCC`, it is `[]`.\",\"assertion\":{\"role\":\"completion\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"An empty dictionary/list is a successful outcome when no descendants survive the decomposition rules.\",\"kind\":\"stdout_equals\",\"value\":\"{\\\"fragments\\\": []}\"}}}"
+      },
+      {
+        "name": "rejection-blank-smiles",
+        "layer": "behavior",
+        "kind": "reference",
+        "source_paths": [
+          "package/SKILL.md",
+          "entry/skill.py"
+        ],
+        "basis": "The delivered validator rejects blank SMILES and argparse exits 2 with a stderr diagnostic.",
+        "oracle_status": "supported",
+        "tolerance": 0,
+        "limitations": [
+          "Only blank argument rejection is covered; malformed nonblank SMILES is documented but not encoded as a full-match regex check."
+        ],
+        "case_json": "{\"args\":[\"\"],\"expected_exit\":2,\"timeout_seconds\":30,\"acceptance\":{\"purpose\":\"input_rejection\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"The CLI reports validation errors to stderr with exit status 2.\",\"violates\":\"nonblank-smiles\",\"invalid_input_reason\":\"The supplied positional SMILES is an empty string, so it fails the documented nonblank input safeguard.\",\"assertion\":{\"role\":\"rejection\",\"source_path\":\"package/SKILL.md\",\"source_quote\":\"Missing or malformed molecular input and zero-atom molecules are rejected\",\"kind\":\"stderr_contains\",\"value\":\"Expected nonempty molecular SMILES\"}}}"
+      }
+    ],
+    "resource_assessment": {
+      "status": "unknown",
+      "source_path": "package/SKILL.md",
+      "source_quote": "No external molecular dataset is required.",
+      "memory_bytes": 2147483648,
+      "cpus": 1
+    }
+  },
+  "read_files": [
+    "entry/skill.py",
+    "source-identities.json",
+    "package/SKILL.md",
+    "package/references/LICENSE.txt",
+    "sources/license/document.txt",
+    "sources/recap/document.py"
+  ],
+  "source_fingerprint": "bd87b1b7eef5c01679f77da72e0e8e0b17b33215608c85042b157decec368a97",
+  "diagnostic": "Behavior test requires assertions or explicit test runner"
+}

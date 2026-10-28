@@ -1,0 +1,29 @@
+{
+  "attempts": [
+    {
+      "attempt": 1,
+      "connected_seconds": 0.353,
+      "connection_close": false,
+      "detail": {
+        "schema_path": "operations/1"
+      },
+      "elapsed_seconds": 117.819,
+      "error": "The answer does not satisfy the caller JSON Schema at operations/1: 'value_json' is a required property",
+      "error_class": "model_schema_mismatch",
+      "http_status": 200,
+      "response_headers": {
+        "connection": "keep-alive",
+        "content-type": "text/event-stream; charset=utf-8"
+      },
+      "sent_seconds": 0.354,
+      "started_seconds": 0.005,
+      "status": "failed"
+    }
+  ],
+  "request_count": 1,
+  "retry_policy": {
+    "configured": 0,
+    "counted_in_total_deadline": true
+  },
+  "sdk_implicit_retries": "none (no SDK used)"
+}

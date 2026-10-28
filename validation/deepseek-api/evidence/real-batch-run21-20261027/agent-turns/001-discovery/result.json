@@ -1,0 +1,54 @@
+{
+  "outcome": "candidates",
+  "summary": "Discovered one candidate skill for RDKit RECAP terminal molecular fragments based on RecapDecompose and GetLeaves in rdkit/Chem/Recap.py. It captures terminal-vs-hierarchy interpretation, dict-keyed canonical SMILES leaves, and valid empty results for non-cleavable molecules, plus optional minFragmentSize and onlyUseReactions.",
+  "saved_candidates": [],
+  "candidates": [
+    {
+      "name": "rdkit-recap-terminal-fragments",
+      "capability": "Decompose an RDKit molecule into terminal RECAP fragments using RecapDecompose and GetLeaves, and distinguish terminal leaf fragments from the full hierarchy of intermediate nodes.",
+      "boundary": "Input is a pre-built RDKit Mol object; output is a RecapHierarchyNode tree whose leaves are accessed as a dictionary keyed by canonical SMILES. Handles valid empty leaves for molecules with no matching RECAP cleavage, and non-terminal nodes are only accessible via hierarchy methods. This is molecular fragmentation, not descriptor calculation or chemical validation.",
+      "value": "Concise packaging of the existing RDKit API removes confusion between GetLeaves and GetAllChildren, explains dict-keyed leaf nodes, valid empty results, and minFragmentSize/onlyUseReactions, and avoids misinterpreting root or hierarchy nodes as final fragments.",
+      "usage_path": "from rdkit import Chem; from rdkit.Chem import Recap; mol=Chem.MolFromSmiles('...'); root=Recap.RecapDecompose(mol, allNodes=None, minFragmentSize=0, onlyUseReactions=None); leaves=root.GetLeaves(); full=root.GetAllChildren(); hierarchy=root.children",
+      "construction": "Direct packaging of the documented RDKit Chem.Recap implementation and its built-in doctests/unit tests; no algorithm modification. Delivery files should include a skill guide, examples, and a Docker-based validation harness; runtime prerequisite is RDKit.",
+      "evidence": [
+        {
+          "id": "e1",
+          "claim": "Module docstring documents the RECAP algorithm from Lewell et al. and demonstrates RecapDecompose(m) returning a RecapHierarchyNode; res.GetAllChildren().keys() includes the full hierarchy while res.GetLeaves().keys() returns only terminal leaves."
+        },
+        {
+          "id": "e1",
+          "claim": "RecapHierarchyNode.GetLeaves is documented as returning a dictionary, keyed by SMILES, of leaf (terminal) nodes, while GetAllChildren returns a dictionary, keyed by SMILES, of children; this is the terminal-versus-hierarchy distinction."
+        },
+        {
+          "id": "e1",
+          "claim": "In test2, RecapDecompose(Chem.MolFromSmiles('CCCOCCC')) returns a truthy node with res.children == {}; testMinFragmentSize also shows RecapDecompose('CCCOCC', minFragmentSize=3) has empty children, establishing empty results as valid when no fragment passes."
+        },
+        {
+          "id": "e2",
+          "claim": "The license source is BSD 3-Clause, permitting redistribution and use with conditions; this supports packaging the existing RDKit Recap code and examples."
+        }
+      ],
+      "gaps": [
+        "Exact exception type for invalid or None Mol inputs is not specified in the provided source; examples assume a valid Mol from Chem.MolFromSmiles.",
+        "No RDKit version string is present in the snapshot; packaging must state the supported RDKit version and install prerequisites.",
+        "Health of SMARTS reactions is only documented by the unit tests; no independent chemical validation beyond the documented RECAP algorithm is claimed."
+      ],
+      "blocked": false
+    }
+  ],
+  "omitted": [
+    {
+      "capability": "RDKit descriptor calculation from RECAP fragments",
+      "reason": "Excluded because the requested skill is molecular fragmentation; descriptor calculation is a separate capability."
+    },
+    {
+      "capability": "Standalone full-hierarchy traversal skill",
+      "reason": "Merged into the same candidate because terminal leaves must be interpreted against the hierarchy and the source exposes them together."
+    }
+  ],
+  "limitations": [
+    "Inspection is limited to the provided Recap.py and license sources; no live RDKit execution was performed.",
+    "The candidate does not validate scientific or medicinal-chemistry claims beyond the documented RECAP algorithm.",
+    "RDKit installation and Docker runtime prerequisites must be documented during authoring; this discovery only records the capability."
+  ]
+}

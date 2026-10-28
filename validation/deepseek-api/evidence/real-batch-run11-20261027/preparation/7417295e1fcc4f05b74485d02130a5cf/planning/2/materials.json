@@ -1,0 +1,13 @@
+{
+  "read": [
+    "package/scripts/recap_terminal.py",
+    "source-identities.json",
+    "package/SKILL.md",
+    "package/references/LICENSE.txt",
+    "sources/license/document.txt",
+    "sources/recap/document.py"
+  ],
+  "not_read": [],
+  "omissions": {},
+  "used_chars": 33566
+}
