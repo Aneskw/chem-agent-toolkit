@@ -17,9 +17,18 @@ def business_args(tool, case):
 
 
 def operation_matches(operation, args):
-    return args is not None and all(
-        item['index'] < len(args) and args[item['index']] == item['equals']
-        for item in operation['selector']['args'])
+    """Index/equals tokens, or presence only for a positional invocation."""
+    if args is None:
+        return False
+    selectors = (operation.get('selector') or {}).get('args') or []
+    if not selectors:
+        return False
+    for item in selectors:
+        if item['index'] >= len(args):
+            return False
+        if 'equals' in item and args[item['index']] != item['equals']:
+            return False
+    return True
 
 
 def input_check(case, check, args):
@@ -129,7 +138,10 @@ def acceptance_coverage(tool, cases, observations=None):
         for rejected, failing in rejected_normals[:3]:
             if failing is None:
                 coverage_reasons.append('Normal case ' + rejected['name'] + ' matches no single declared '
-                                        'operation route; a normal case must select exactly one operation')
+                                        'operation route; a normal case must select exactly one operation. '
+                                        'If this invocation has no literal token at that position, declare the '
+                                        'operation with a presence-only selector {args:[{index:<n>}]} and keep '
+                                        'exactly one operation')
                 continue
             coverage_reasons.append('Normal case ' + rejected['name'] + ' fails declared input check '
                                     + ', '.join(check_label(check) for check in failing)

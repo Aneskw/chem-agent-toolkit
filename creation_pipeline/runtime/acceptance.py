@@ -258,8 +258,17 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
             if not isinstance(selectors, list) or not selectors:
                 raise ValueError('Operation applicability needs actual argument index/equals selectors')
             for item in selectors:
-                if (set(item) != {'index', 'equals'} or type(item['index']) is not int or item['index'] < 0
-                        or not isinstance(item['equals'], str) or not item['equals']
+                if not isinstance(item, dict) or type(item.get('index')) is not int or item['index'] < 0:
+                    raise ValueError('Operation selector needs a non-negative integer argument index')
+                if set(item) == {'index'}:
+                    # A positional invocation carries no literal token, so presence is the only
+                    # honest predicate. It cannot tell forms apart, so it requires one operation.
+                    if len(operations) != 1:
+                        raise ValueError('A presence-only selector matches any value at that index, so it is '
+                                         'valid only when the policy declares exactly one operation; add the '
+                                         'literal index/equals token that distinguishes the other forms')
+                    continue
+                if (set(item) != {'index', 'equals'} or not isinstance(item['equals'], str) or not item['equals']
                         or item['equals'] not in operation['source_quote']):
                     raise ValueError('Operation selector must match a literal documented invocation token')
             selected = operation.get('checks')

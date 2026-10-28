@@ -751,6 +751,10 @@ purposes:["computation"], require_persistence:false, source_path, source_quote},
 purposes:["operation"], require_persistence:true, source_path, source_quote}].
 These are generic schema examples, NOT flags to copy: use the real documented
 invocation tokens, which must occur in the operation's source_quote.
+A positional invocation names no literal token, so a single operation may instead
+use selector: {args: [{index: 0}]} (presence only, no equals): it accepts any value
+at that index and is only valid when the policy declares exactly one operation.
+Use index+equals whenever the documented invocation does carry a token.
 Each check is used only by its named operations. args keys index the forwarded
 business arguments (excluding executable/script). input_files checks use key as
 fixture filename and argument_index pointing to its actual /input/filename argv;

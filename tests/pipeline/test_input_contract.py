@@ -290,6 +290,60 @@ class CoverageTests(unittest.TestCase):
         self.assertTrue(result['complete'], result)
 
 
+class PositionalSelectorTests(unittest.TestCase):
+    """A positional invocation carries no literal token to select on.
+
+    Run 43 declared one operation with selector {index:0, equals:"smiles"}; the value at
+    that index is the caller's SMILES, so no case could ever match the route and every
+    normal case was reported as unmatched. Presence is the honest predicate there.
+    """
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        make_source(self.root)
+        self.index = {'files': {PATH: {'sha256': material(PATH, self.root)['sha256']}},
+                      'read_files': [PATH]}
+
+    def operation(self, operation_id, selector):
+        return {'id': operation_id, 'selector': {'args': selector}, 'checks': ['nonempty'],
+                'purposes': ['computation'], 'require_persistence': False,
+                'input_contract': {'status': 'required', 'constraint': 'nonempty SMILES'},
+                'source_path': PATH, 'source_quote': 'terminal fragments'}
+
+    def policy(self, operations):
+        return {'invalid_input': 'required', 'scope': 'one positional SMILES argument',
+                'purposes': ['computation'], 'source_path': PATH,
+                'source_quote': 'terminal fragments', 'constraint': 'nonempty SMILES',
+                'checks': [check()], 'operations': operations}
+
+    def tool(self, policy):
+        return {'entrypoint': ['python', '/opt/skill/entry/skill.py'], 'behavior': {'file_io': False},
+                'acceptance_version': 2, 'acceptance_policy': policy, 'input_anchors': {}}
+
+    def test_a_positional_operation_may_declare_presence_only(self):
+        policy = self.policy([self.operation('direct', [{'index': 0}])])
+        contracts({'acceptance_json': json.dumps(policy)}, [], self.index, self.root)
+        result = acceptance_coverage(self.tool(policy),
+                                     [case('ok', 'computation', ['CCO'], 0),
+                                      case('blank', 'input_rejection', ['  '], 2, violates='nonempty')])
+        self.assertTrue(result['coverage_complete'], result)
+        self.assertEqual(result['operations']['direct']['normal_cases'], ['ok'])
+
+    def test_a_presence_only_selector_is_refused_for_two_operations(self):
+        policy = self.policy([self.operation('a', [{'index': 0}]), self.operation('b', [{'index': 1}])])
+        with self.assertRaises(ValueError) as caught:
+            contracts({'acceptance_json': json.dumps(policy)}, [], self.index, self.root)
+        self.assertIn('exactly one operation', str(caught.exception))
+
+    def test_a_literal_token_still_has_to_be_quoted_from_source(self):
+        policy = self.policy([self.operation('direct', [{'index': 0, 'equals': '--smiles'}])])
+        with self.assertRaises(ValueError) as caught:
+            contracts({'acceptance_json': json.dumps(policy)}, [], self.index, self.root)
+        self.assertIn('literal documented invocation token', str(caught.exception))
+
+
 class AnchorTests(unittest.TestCase):
     def record(self, author_tests=None, requirement=None):
         return {'delivery': {'inputs': {
