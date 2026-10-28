@@ -64,3 +64,15 @@
 另一个未被隐藏的覆盖问题：最终正常文件用例提供 valid.txt，而声明检查绑定 input.txt；离线覆盖校验明确列出两者，仍拒绝，必须由新规划正确绑定实际文件。不得据本轮离线修复声称文件场景已通过。专项 61 项通过；全量回归与三个自检在本轮收尾记录。
 
 轮后验证：568 OK (3 skipped)，三个自检全绿，Docker 29.8.2 可用；日志 `E:\Users\27343\Docker\acceptance-run53-postflight-tests.log`。freeze 顺序已执行。下一轮保持同一描述符义务、后端与预算，使用新目录。
+
+## run54：业务全部通过，版本探针误用模块展示字符串
+
+起点 `4a9b946`，构建 `20261029T002439-7dbd378a`，北京时间 2026-10-29 00:24:39–00:46:27，预算计数 6（三个原生阶段、三次规划），最终 failed。规划 prepared、固定基础镜像 digest、构建成功，image.id 为 `sha256:08f26bae40350181c1aa4cd38cf598b6c4527e42948245c55d39e23741b9d340`。来源与原脚本保持不变。
+
+执行报告 15 条记录中 14 passed：乙醇计算、非法/空白输入拒绝、原始和混合文件持久化、合法文件写出均通过。唯一失败 environment_python_rdkit_versions：执行 `import rdkit; print(rdkit.__version__)` 得到 2024.09.6，计划的 stdout_equals 却从 requirements pin 写成 2024.9.6。未修改锁定测试或旧报告，仍记整轮失败。receipt 仍描述 built 阶段、gaps 为空；实际失败应以 record.runtime.execution_status 和 execution/report.json 为准，不能捏造 gaps 停止码。
+
+失败后只在同一绑定镜像读取标准库发行包元数据（禁网、不运行化学业务、不调用模型、不恢复批次）：rdkit=2024.9.6、numpy=1.26.4、pillow=11.3.0，见根目录 dependency-metadata-diagnosis.json。这说明依赖安装满足原 pins，失败来自探针的版本字符串 oracle。轮后模型说明改为查询 importlib.metadata 的发行包版本，按发布版本语义比较；不同版本仍必须失败，不删除版本检查、不修改通用精确输出比较器，也不注入固定通过字符串。
+
+本轮证据：`E:\Users\27343\Docker\acceptance-descriptors-a-run54-20261029\`。旧轮不计四项新成功，必须新开一轮得到所有记录 passed 和独立审计通过。
+
+轮后：568 OK (3 skipped)，三个自检全绿；日志 `E:\Users\27343\Docker\acceptance-run54-postflight-tests.log`。独立审计拒绝原轮（batch_not_ready、not_all_cases_passed、current_qualification_failed），业务场景额外检查无缺项，见 acceptance-audit.json。本轮 registry 解析成功，基础镜像固定为 `python@sha256:94a8fee35252d06ab75856f15f12c7bae67b10e8a6da93c7fded82b2610926cd`，resolved_from=registry；不能将此前网络不可达当成本轮失败原因。

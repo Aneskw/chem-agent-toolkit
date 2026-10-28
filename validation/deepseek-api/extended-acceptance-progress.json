@@ -72,7 +72,19 @@
       "model_calls": 12,
       "stop_code": "planning_no_progress",
       "detail": "Repeated unnamed empty outcome assertion for persisted_output_success; individual missing assertion citations consumed earlier repairs"
+    },
+    {
+      "run": 54,
+      "scenario": "descriptors-a",
+      "status": "failed",
+      "implementation_commit": "4a9b946",
+      "structured_reasoning": "low",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run54-20261029",
+      "build_id": "20261029T002439-7dbd378a",
+      "model_calls": 6,
+      "stop_code": "execution_failed",
+      "detail": "14/15 cases passed; environment probe compared rdkit.__version__ 2024.09.6 lexically to distribution pin 2024.9.6; no failed business case"
     }
   ],
-  "next_run": 54
+  "next_run": 55
 }
