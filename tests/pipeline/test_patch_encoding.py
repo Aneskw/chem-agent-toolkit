@@ -28,6 +28,14 @@ class TextFieldEncodingTests(unittest.TestCase):
     def setUp(self):
         self.base = plan()
 
+    def test_incomplete_resource_replacement_names_schema_object_and_keeps_base(self):
+        before = copy.deepcopy(self.base)
+        with self.assertRaises(planner.PlanningError) as caught:
+            patch(self.base, '/resource_assessment', json.dumps({'status': 'unknown'}))
+        self.assertIn('/plan/resource_assessment', str(caught.exception))
+        self.assertIn("'source_path' is a required property", str(caught.exception))
+        self.assertEqual(self.base, before)
+
     def test_case_json_accepts_the_object_form_and_stores_text(self):
         applied = patch(self.base, '/tests/0/case_json', json.dumps(CASE))
         stored = applied['tests'][0]['case_json']

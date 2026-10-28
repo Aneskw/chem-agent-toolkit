@@ -84,7 +84,19 @@
       "model_calls": 6,
       "stop_code": "execution_failed",
       "detail": "14/15 cases passed; environment probe compared rdkit.__version__ 2024.09.6 lexically to distribution pin 2024.9.6; no failed business case"
+    },
+    {
+      "run": 55,
+      "scenario": "descriptors-a",
+      "status": "blocked",
+      "implementation_commit": "25ad422",
+      "structured_reasoning": "low",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run55-20261029",
+      "build_id": "20261029T005455-544251ee",
+      "model_calls": 7,
+      "stop_code": "plan_unresolved",
+      "detail": "Resource assessment source quote has an extra digest character; repeated partial replacement misses required source_path and schema rejection omitted its JSON path"
     }
   ],
-  "next_run": 55
+  "next_run": 56
 }

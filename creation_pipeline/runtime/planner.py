@@ -26,6 +26,13 @@ class PlanningError(ValueError):
     pass
 
 
+def schema_problem(error):
+    """Locate a schema failure in the actual plan/patch, including missing fields."""
+    pointer = '/' + '/'.join(str(part).replace('~', '~0').replace('/', '~1')
+                             for part in error.absolute_path)
+    return pointer + ': ' + str(error.message)[:300]
+
+
 class AcceptancePlanError(PlanningError):
     def __init__(self, diagnostics):
         self.diagnostics = diagnostics
@@ -254,7 +261,7 @@ def patch_plan(base, answer, locked, required=None):
     """
     import jsonschema
     try:jsonschema.validate(answer,PATCH_SCHEMA)
-    except jsonschema.ValidationError as exc:raise PlanningError('Patch schema error: '+exc.message) from exc
+    except jsonschema.ValidationError as exc:raise PlanningError('Patch schema error: '+schema_problem(exc)) from exc
     if not 1 <= len(answer['operations']) <= 128:
         raise PlanningError('Patch needs 1..128 operations')
     result=copy.deepcopy(base)
@@ -292,7 +299,7 @@ def patch_plan(base, answer, locked, required=None):
         jsonschema.validate({"action": "plan", "requested_files": [], "reason": "",
                              "plan": copy.deepcopy(result)}, PLAN_SCHEMA)
     except jsonschema.ValidationError as exc:
-        raise PlanningError('Patched plan schema error: ' + str(exc.message)[:300]) from exc
+        raise PlanningError('Patched plan schema error: ' + schema_problem(exc)) from exc
     # External obligations are anchored before any promise is compared, so a repair
     # can never trade scope it does not own for an easier plan.
     _require_scope(result, base, required)
@@ -666,8 +673,9 @@ weight or service outside this entrypoint's scope may be unavailable without
 blocking execution; keep available=false and explain the scope with source
 evidence. Never mark an actually needed resource optional to pass validation.
 resource_assessment states whether the requirement is known: status=complete needs
-source_path and source_quote quoting the read source; status=unknown needs no
-quotation but must name what is undetermined in unresolved. unknown blocks Docker
+source_path and source_quote quoting the read source; status=unknown still keeps
+all schema-required fields (source_path/source_quote may be empty strings), needs
+no quotation, but must name what is undetermined in unresolved. unknown blocks Docker
 execution, so it is the honest answer, never a shortcut past validation.
 Actively propose environment probes, interface cases and behavior tests. Try
 original tests/examples, independently derived tiny cases, justified metamorphic
@@ -1180,10 +1188,10 @@ def validate_plan(p, index, source, previous_cases=None, anchors=None):
         compatible=copy.deepcopy(p)
         jsonschema.validate({"action": "plan", "requested_files": [], "reason": "", "plan": compatible}, PLAN_SCHEMA)
     except jsonschema.ValidationError as exc:
-        raise PlanningError("Plan schema error: " + exc.message) from exc
+        raise PlanningError("Plan schema error: " + schema_problem(exc)) from exc
     if p["platform"] != "linux/amd64":
         raise PlanningError("Only Linux amd64 CPU is supported")
-    from .acceptance import grounded
+    from .acceptance import grounding_problem
     assessment = p['resource_assessment']
     if assessment.get('status') == 'unknown':
         # An undetermined requirement is stated honestly instead of being dressed up
@@ -1192,10 +1200,12 @@ def validate_plan(p, index, source, previous_cases=None, anchors=None):
         if not [item for item in p['unresolved'] if str(item).strip()]:
             raise PlanningError('status=unknown must state the undetermined resource requirement '
                                 'in unresolved; it blocks Docker execution until it becomes complete')
-    elif not grounded(assessment, index, source):
-        raise PlanningError('status=complete needs an exact quotation from a read source; '
+    elif problem := grounding_problem(assessment, index, source):
+        raise PlanningError('resource_assessment status=complete needs an exact quotation from a read source: '
+                            + problem + '; '
                             'when the requirement genuinely cannot be determined, use '
-                            'status=unknown with a concrete unresolved reason instead')
+                            'status=unknown with a concrete unresolved reason instead, keeping all '
+                            'required fields (source_path/source_quote may be empty strings)')
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._/@:+-]*", p["base_image"]):
         raise PlanningError("Invalid base image reference")
     # Exec-form ENTRYPOINT is JSON, not a shell/Dockerfile interpolation. Python

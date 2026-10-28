@@ -33,8 +33,9 @@ weight or service outside this entrypoint's scope may be unavailable without
 blocking execution; keep available=false and explain the scope with source
 evidence. Never mark an actually needed resource optional to pass validation.
 resource_assessment states whether the requirement is known: status=complete needs
-source_path and source_quote quoting the read source; status=unknown needs no
-quotation but must name what is undetermined in unresolved. unknown blocks Docker
+source_path and source_quote quoting the read source; status=unknown still keeps
+all schema-required fields (source_path/source_quote may be empty strings), needs
+no quotation, but must name what is undetermined in unresolved. unknown blocks Docker
 execution, so it is the honest answer, never a shortcut past validation.
 Actively propose environment probes, interface cases and behavior tests. Try
 original tests/examples, independently derived tiny cases, justified metamorphic

@@ -1,4 +1,4 @@
-# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 54）
+# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 55）
 
 记录日期：2026-10-28
 
@@ -89,7 +89,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 
 ---
 
-## 3. 全量结果表（run 2 – run 54，共 53 轮；另有 4 次前置的 `final-acceptance-*` 批次）
+## 3. 全量结果表（run 2 – run 55，共 54 轮；另有 4 次前置的 `final-acceptance-*` 批次）
 
 `calls` 是本次构建实际计入预算的调用数；`stop code` 取自该轮 `runtime/<candidate>/<env>/receipt.json` 的 `gaps[0]`。带 “—” 的行在当时没有写出 receipt（崩溃/中断/早期阶段失败），原因栏取自 `records/*.json` 或该轮 `run<N>.log`。
 
@@ -148,6 +148,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 | 52 | blocked | 6 | `planning_no_progress` | 内容审阅通过，low 规划三次均完成；blank_line 引文拼接但诊断泛化，重复拒绝；已改为具名聚合诊断并补有效性谓词/文件绑定示例 |
 | 53 | blocked | 12 | `planning_no_progress` | 多个用例断言缺独立来源逐个被拒，后反复出现未具名空文本结果；最终 persisted_output_success 未断言写出文件内容，尚未到 Docker；轮后集中反馈独立用例错误 |
 | 54 | failed | 6 | `execution_failed`（record） | prepared、固定 digest、Docker 构建成功；14/15 passed，唯一失败是环境探针把 rdkit.__version__ 的 2024.09.6 与发行包 pin 2024.9.6 字面比较；业务与文件用例均通过 |
+| 55 | blocked | 7 | `plan_unresolved` | 入口路径修正后，resource_assessment 引文 digest 多一个字符；两次不完整对象补丁缺 source_path，schema 错误不带对象路径；轮后补具名引文及 JSON Pointer 诊断 |
 
 > 第 2–40 行的“停因”是从该轮 `state/outputs/*/records/*.json`、`runtime/*/*/receipt.json` 与 `run<N>.log` 重建的；如果要精确追某一行，直接看该轮目录里的 `run<N>.log` 尾部和 `materials/planning/<n>/rejection.json`。
 

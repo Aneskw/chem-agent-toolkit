@@ -76,3 +76,13 @@
 本轮证据：`E:\Users\27343\Docker\acceptance-descriptors-a-run54-20261029\`。旧轮不计四项新成功，必须新开一轮得到所有记录 passed 和独立审计通过。
 
 轮后：568 OK (3 skipped)，三个自检全绿；日志 `E:\Users\27343\Docker\acceptance-run54-postflight-tests.log`。独立审计拒绝原轮（batch_not_ready、not_all_cases_passed、current_qualification_failed），业务场景额外检查无缺项，见 acceptance-audit.json。本轮 registry 解析成功，基础镜像固定为 `python@sha256:94a8fee35252d06ab75856f15f12c7bae67b10e8a6da93c7fded82b2610926cd`，resolved_from=registry；不能将此前网络不可达当成本轮失败原因。
+
+## run55：资源评估引文与缺字段补丁反馈仍不够具体
+
+起点 `25ad422`，构建 `20261029T005455-544251ee`，北京时间 00:54:55–01:05:26，blocked、预算计数 7，没有构建或业务执行。首个计划漏掉脚本路径中的 package/，入口绑定门禁正确拒绝并给出完整路径，随后已修复。resource_assessment 复制原 Dockerfile FROM 行时在 digest 后多了一个字符，逐字来源校验拒绝；旧反馈没指名资源评估字段，也没指出引用文件/引文。两次对象替换补丁试图修改状态，但未保留 source_path 等 schema 必需字段；`Patched plan schema error: 'source_path' is a required property` 又未给对象路径，最终 plan_unresolved 停止。
+
+轮后只改诊断与已有模型说明：resource_assessment 使用 grounding_problem，指名字段、未匹配路径及引文首行；所有计划/补丁 schema 错误附带 JSON Pointer，原始两条补丁现在明确指出 `/plan/resource_assessment`。unknown 状态仍必须保留 schema 字段（不需引文时可为空字符串），必须描述 unresolved，且仍阻塞 Docker，不用它规避资源义务。新增回归证明同一坏引文和缺字段补丁仍被拒，原计划不被就地改写。
+
+原始材料离线重放 `E:\Users\27343\Docker\acceptance-descriptors-a-run55-20261029\resource-diagnostic-replay.json`，0 次模型调用、无业务执行。专项 55 项通过，随后执行全量和三个自检。
+
+轮后：570 OK (3 skipped)，三个自检全绿，日志 `E:\Users\27343\Docker\acceptance-run55-postflight-tests.log`。本轮已停止，不恢复旧状态。另有静态复查发现只读文件输入/JSON stdout 与全局工具写文件门禁冲突，已留纯门禁复现，下一项独立修复会保留真实写文件工具的义务，不能用切换场景或删检查绕开。

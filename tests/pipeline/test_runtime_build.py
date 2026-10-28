@@ -203,6 +203,20 @@ class RuntimeBuildTests(unittest.TestCase):
             result = LocalExecutor().preflight(request)
         self.assertEqual({g['code'] for g in result['gaps']}, {'resource_missing', 'resource_mount_unresolved', 'resources_unknown'})
 
+    def test_resource_assessment_bad_quote_names_field_path_and_quote_without_model(self):
+        p = plan()
+        p['resource_assessment']['source_quote'] = 'FROM fabricated@sha256:wrong'
+        with patch.object(LocalExecutor, 'host', return_value=HOST), \
+             patch.object(planner, 'plan', side_effect=AssertionError('No model call')):
+            prepare(self.record, self.package, self.sources, self.root / 'bad-resource-quote',
+                    {'plan': p}, LocalExecutor())
+        result = self.record['runtime_preparation']
+        self.assertEqual(result['status'], 'runtime_blocked')
+        detail = result['gaps'][0]['detail']
+        for expected in ('resource_assessment', PATH, 'FROM fabricated@sha256:wrong',
+                         'does not occur verbatim', 'keeping all required fields'):
+            self.assertIn(expected, detail)
+
     def test_actual_build_failure_is_separate_and_keeps_lock(self):
         request = self.prepared()
         with patch.object(LocalExecutor, 'host', return_value=HOST), patch('creation_pipeline.runtime.local.process', return_value={'exit_code': 1, 'stdout': '', 'stderr': 'build failed'}):
