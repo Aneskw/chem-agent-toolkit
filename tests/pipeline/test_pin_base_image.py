@@ -43,7 +43,20 @@ class ResolveTests(unittest.TestCase):
                 patch('creation_pipeline.runtime.local.process', side_effect=fake):
             pin = executor.resolve_base_image('python:3.11-slim', 30)
         self.assertEqual(pin, {'reference': 'python:3.11-slim', 'repository': 'python',
-                               'digest': DIGEST, 'repo_digest': 'python@' + DIGEST})
+                               'digest': DIGEST, 'repo_digest': 'python@' + DIGEST,
+                               'resolved_from': 'registry'})
+
+    def test_an_unreachable_registry_reuses_a_cached_digest(self):
+        """Run 46: docker hub timed out, yet the cached image carried the same identity."""
+        def fake(args, timeout=60, cwd=None):
+            if args[:2] == ['docker', 'pull']:
+                return {'exit_code': 1, 'stdout': '',
+                        'stderr': 'Head "https://registry-1.docker.io/...": TLS handshake timeout'}
+            return {'exit_code': 0, 'stdout': json.dumps(['python@' + DIGEST]), 'stderr': ''}
+        with patch('creation_pipeline.runtime.local.process', side_effect=fake):
+            pin = LocalExecutor().resolve_base_image('python:3.11-slim', 30)
+        self.assertEqual(pin['repo_digest'], 'python@' + DIGEST)
+        self.assertEqual(pin['resolved_from'], 'local_cache')
 
     def test_a_failed_pull_blocks_instead_of_using_the_tag(self):
         def fake(args, timeout=60, cwd=None):

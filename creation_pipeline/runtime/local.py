@@ -91,14 +91,28 @@ class LocalExecutor:
         Pulling first makes the resolved identity an observed fact rather than a tag
         that can move between builds. Failure blocks preparation: pinning that is not
         verified would read as a reproducibility guarantee the build does not have.
+        A registry that this network cannot reach does not invalidate an identity that is
+        already local: the repository digest of a cached image is the same observed fact,
+        and the record states that it came from the local cache instead of the registry.
         """
         from .preparation import RuntimeBlocked
         pull = process(['docker', 'pull', reference], max(1, int(timeout)))
         if pull['exit_code'] != 0:
+            cached = self._local_base_image(reference, min(max(1, int(timeout)), 60))
+            if cached:
+                return dict(cached, resolved_from='local_cache')
             raise RuntimeBlocked('base_image_unresolved',
-                                 'Base image could not be pulled: ' + redact(pull['stderr'])[-300:], 'environment')
-        info = process(['docker', 'image', 'inspect', reference, '--format', '{{json .RepoDigests}}'],
-                       min(max(1, int(timeout)), 60))
+                                 'Base image could not be pulled and has no cached repository digest: '
+                                 + redact(pull['stderr'])[-300:], 'environment')
+        pinned = self._local_base_image(reference, min(max(1, int(timeout)), 60))
+        if not pinned:
+            raise RuntimeBlocked('base_image_unresolved',
+                                 'Base image has no verifiable repository digest: ' + str(reference), 'environment')
+        return dict(pinned, resolved_from='registry')
+
+    def _local_base_image(self, reference, timeout):
+        """The repository digest an already-present image records, if it has one."""
+        info = process(['docker', 'image', 'inspect', reference, '--format', '{{json .RepoDigests}}'], timeout)
         try:
             digests = json.loads(info['stdout']) if info['exit_code'] == 0 else None
         except ValueError:
@@ -108,8 +122,7 @@ class LocalExecutor:
                        if str(item).startswith(repo + '@') and re.fullmatch(r'sha256:[0-9a-f]{64}', str(item).split('@', 1)[1])),
                       None)
         if not digest:
-            raise RuntimeBlocked('base_image_unresolved',
-                                 'Base image has no verifiable repository digest: ' + str(reference), 'environment')
+            return None
         return {'reference': str(reference), 'repository': repo, 'digest': digest,
                 'repo_digest': repo + '@' + digest}
 
