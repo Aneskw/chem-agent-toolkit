@@ -1,4 +1,4 @@
-# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 46）
+# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 47）
 
 记录日期：2026-10-28
 
@@ -17,9 +17,9 @@
 
 ## 0. 一句话结论
 
-验收链路本身**已经证明可用**（第 36 轮：Docker 构建成功，执行报告 8 条记录 7 通过），规划器在**诊断改成指名对象**之后也**已经能一次通过全部门禁**（第 46 轮：4 次尝试、4 条不同诊断、最终 `prepared`）。当前唯一未通的环节是**本机到 Docker Hub（以及可能的 PyPI）的网络**：第 46 轮停在 `base_image_unresolved`（`registry-1.docker.io` TLS handshake timeout），对应的本地 digest 兜底修复（`6097fb5`）**还没有被真实批次验证**。
+**run47 已取得混合后端端到端执行通过的证据**：`ready`、8 次计入预算的调用、规划 `prepared`、本地 digest 兜底生效、Docker 构建成功、执行报告 12/12 `passed`（含真实计算与空串/空白/畸形 SMILES 拒绝）。轮后回归与自检结果见 §10。
 
-**验收尚未端到端通过。** 不要把这个状态描述成“全链路已通过”。
+原生发现/编写/审阅及独立关联审阅按操作者本次选择使用 Codex CLI，结构化关联/规划使用 DeepSeek；**不能称为全阶段 DeepSeek 通过**。前置测试意外启动真实 CLI 的隔离缺陷及修复见上方补记；不能声称整个会话严格零额外调用。以下 run46 的网络风险与交接计划保留为历史记录，以 §10 的本轮证据为准。
 
 ---
 
@@ -138,6 +138,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 | 44 | blocked | 8 | `plan_unresolved` | grounding 报错不指名用例 → 模型重复请求材料 |
 | 45 | draft | 5 | — | 已修复的 blocking issue 仍被判阻塞 → `classify=draft` 静默停止 |
 | 46 | blocked | 11 | `base_image_unresolved` | **规划全部通过**；`registry-1.docker.io` TLS 超时 |
+| 47 | ready | 8 | —（gaps 为空） | **混合后端执行 12/12 passed**；规划 3 次尝试；本地 digest 兜底、Docker 构建与 pip 安装成功 |
 
 > 第 2–40 行的“停因”是从该轮 `state/outputs/*/records/*.json`、`runtime/*/*/receipt.json` 与 `run<N>.log` 重建的；如果要精确追某一行，直接看该轮目录里的 `run<N>.log` 尾部和 `materials/planning/<n>/rejection.json`。
 
@@ -244,3 +245,27 @@ git -c http.proxy=http://127.0.0.1:7897 push fork upload-v2:upload-pipeline-with
 - 不要在失败轮上 restart/resume；不要在同一轮里改代码；
 - 不要 push/merge 上游；不要打印或复制密钥；不要动只读源仓库；
 - 不要把“规划通过”说成“验收通过”——业务验收要求该轮执行报告全部 `passed`（历史最好 8 条 7 通过）。
+
+## 10. run47：混合后端完整执行证据（2026-10-28）
+
+- 本轮开始前代码提交 `4118c0d`（测试隔离修复），封套保留操作者已有的 `codex_cli` 原生阶段修改，未扩大 16 次 / 3600 秒预算。只启动一次，不续跑、不重启、轮内未改代码。
+- 构建 `20261028T192922-04c5c49e`，北京时间 19:29:22–20:04:04，约 34 分 42 秒。状态 `ready`，计入预算 8 次：发现、编写、内容审阅、结构化关联、独立关联审阅、规划 3 次。`summary.model_metrics` 的结构化阶段 usage 未合并，不能将其 reported_totals 当完整成本；详细回执在冻结证据中。
+- 规划诊断依次为 `Input policy requires scope and an exact quotation from read source`、`Outcome assertion role must match the promised purpose: completion [documented-terminal-fragments]`，第三次通过，`prepared`、材料冻结。第一条诊断仍不指名对象，但本轮已自行修复通过，未为此改契约。
+- `base-image.json`：`python:3.11-slim-bookworm` → `python@sha256:0a310eeecf4e1f5a0743f9a6520c90c88d089c903ca5fd283f501e3a805f5f89`，`resolved_from=local_cache`。这是 `6097fb5` 的真实批次验证；与之前 `python:3.11-slim` 的缓存摘要不同。
+- 构建镜像 `sha256:8163966a3054bf23b595847e9bd82ae0cca99e087181654b05c88c631339f70f`；pip 安装成功，容器实测 RDKit `2026.09.1`。未改 Docker Desktop 代理设置，也不据此宣称 Docker Hub 直连已恢复。
+- `execution/report.json`：12 条记录全部 `passed`，7 条规划用例 + 5 条作者检查。真实计算 `documented-terminal-fragments` 输出 3 个文档片段；`valid-empty-decomposition` 输出空列表与 count 0；空白、空串、`C1CC` 均 exit 2 并输出 `invalid_input`。环境、接口、行为验证全部通过，`acceptance.complete=true`、`coverage_complete=true`、无 gaps/blockers。`scientific_correctness=not_evaluated`。
+- 原始构建 `receipt.json` 保留 `built` / `not_run`，其含义是构建时尚未业务执行；最终结论来自后续 `execution/report.json` 与记录中的 `runtime.status=execution_passed`，不能只读构建回执推断未执行。
+- 轮前及轮后全量回归均为 **555 OK (3 skipped)**（增加 1 条隔离回归）；三个提示契约自检全部通过，无提示/schema 变更，无需重新 freeze。轮后日志：`E:\Users\27343\Docker\acceptance-run47-postflight-tests.log`。额外只读复核 `artifacts.evidence.verify` 验证冻结指纹通过，12 条记录及真实计算/空串拒绝断言全部通过，简明审计：`E:\Users\27343\Docker\acceptance-deepseek-run47-20261028\acceptance-audit.json`。
+- 五项完成标准（prepared+固定 digest、image.id、业务全 passed 且含真实计算与拒绝、离线与自检全绿、本文更新）均已有证据；此结论限于本轮混合后端配置。前置隔离事故意味着整个会话不满足“零额外真实调用”的实验纪律，不能将本轮管线内的 8 次计数当作整个会话的供应商请求总量。
+- 成功后 `state/runs/<id>` 已被流水线清理；拒绝记录和模型回执已冻结到输出 `evidence/.../runtime/`，不应再从已删除的 runs 目录找证据。
+
+证据根目录：`E:\Users\27343\Docker\acceptance-deepseek-run47-20261028\state\outputs\20261028T192922-04c5c49e`。
+
+| 证据 | 相对上述根目录的路径 |
+| --- | --- |
+| 状态、调用与时间 | `summary.json` |
+| 规划状态与最终执行状态 | `records/rdkit-recap-terminal-fragments.json` |
+| digest、冻结计划、完整规划拒绝、模型回执 | `evidence/rdkit-recap-terminal-fragments/b7b153af827c4167aa016d2430cfd44e/runtime/` |
+| 镜像 ID、构建日志、12 条执行记录 | `runtime/candidate-0db42e9bf94ddd230ae29a2db252b2c177c4a722a121599877a07a3e51b18ea1/9494789ada5d4fd49ed00afbb20fe7e6/` |
+
+下一步：无需为了本次混合后端验收再跑一轮。若要证明全阶段 DeepSeek，另行使用新轮次和对应封套；不要复用 run47，也不要把本轮结果外推到未测试的后端组合。没有 push、merge 或创建 PR。

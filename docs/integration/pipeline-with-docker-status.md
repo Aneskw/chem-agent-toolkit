@@ -1,6 +1,8 @@
 # 现状报告：pipeline + Docker（DeepSeek 副本）
 
 日期：2026-10-28
+
+**最新结果（run47）**：按操作者选择，原生阶段使用 Codex CLI，结构化阶段使用 DeepSeek；该混合配置已得到 `ready`、8 次调用、规划 `prepared`、本地 digest 固定、Docker 构建成功和业务执行 12/12 `passed` 的证据（含真实计算与非法输入拒绝）。详见 `acceptance-experiment-log.md` §10。以下分析保留 run46 的历史背景，不能据此覆盖最新结果；也不能将 run47 表述为全阶段 DeepSeek 通过。前置离线测试曾意外进入真实 CLI，已修复夹具隔离并单列披露。
 副本：`E:\Users\27343\Docker\chem-agent-toolkit-integration_deepseekapi`
 分支：`pipeline-with-docker`（源自 `integration/deepseek-api-backend`，本地提交，未合并上游）
 源目录（只读基线）：`chem-agent-toolkit-integration` @ `78003de4`
