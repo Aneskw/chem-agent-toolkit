@@ -57,6 +57,25 @@ class DeliveryProtocolTests(unittest.TestCase):
         record = read_json(Path(result["output"]) / "records/add-numbers.json")
         return result, record
 
+    def test_a_resolved_blocking_issue_does_not_stop_delivery(self):
+        artifact = text_artifact()
+        artifact["issues"] = [{"id": "empty-result", "blocking": True,
+                               "description": "The empty-result bullet omitted the default filter",
+                               "resolution": "Rewrote the bullet and the worked atom count"}]
+        result, record = self.run_text(artifact)
+        self.assertEqual(result["status"], "ready")
+        names = [report["name"] for report in record["checks"]]
+        self.assertNotIn("blocking_issues", names)
+        self.assertIn("resolved_blocking_issues", names)
+
+    def test_an_unresolved_blocking_issue_stops_delivery_and_names_itself(self):
+        artifact = text_artifact()
+        artifact["issues"] = [{"id": "base-image", "blocking": True,
+                               "description": "Cannot determine which base image the tool needs"}]
+        result, record = self.run_text(artifact)
+        self.assertEqual(result["status"], "draft")
+        self.assertIn("blocking_issues", record.get("stopped_reason", ""))
+
     def test_text_accepted_and_installable(self):
         result, record = self.run_text()
         self.assertEqual(result["status"], "ready")

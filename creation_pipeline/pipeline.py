@@ -175,9 +175,19 @@ def _candidate(session, config, entity, bundle, work, allow_generated, initial_f
                 issues = artifact.get("issues", [])
                 if not isinstance(issues, list) or any(not isinstance(i, dict) or type(i.get("blocking")) is not bool for i in issues):
                     raise ValueError("Invalid structured issues")
-                if any(i["blocking"] for i in issues):
+                # A blocking issue that this round closed is a record of the repair, not an
+                # obstacle: run 45 stopped as "draft" because a resolved issue still blocked
+                # delivery. The independent review remains the judge of the delivered files.
+                def resolved(issue):
+                    return isinstance(issue.get('resolution'), str) and bool(issue['resolution'].strip())
+                if any(i["blocking"] and not resolved(i) for i in issues):
                     reports.append({"name": "blocking_issues", "status": "not_run", "required": True,
-                                    "findings": [i["description"] for i in issues if i["blocking"]]})
+                                    "findings": [i["description"] for i in issues if i["blocking"] and not resolved(i)]})
+                closed = [i for i in issues if i["blocking"] and resolved(i)]
+                if closed:
+                    reports.append({"name": "resolved_blocking_issues", "status": "pass", "required": False,
+                                    "findings": [str(i.get("description")) + ' -> ' + str(i['resolution'])
+                                                 for i in closed]})
                 current_tests = {t["name"]: t for t in artifact["tests"]}
                 changed = [name for name, oracle in failed_oracles.items()
                     if name not in current_tests or oracle != {k: current_tests[name].get(k) for k in
@@ -207,6 +217,12 @@ def _candidate(session, config, entity, bundle, work, allow_generated, initial_f
                 if reviewed:
                     record['test_definitions']['reviewed'] = list(reviewed.values())
                 if record["status"] != "failed":
+                    if record["status"] != "ready":
+                        # A silent "draft" hid run 45's real stop; name the checks that never ran.
+                        record["stopped_reason"] = ("Delivery stopped on required checks that did not run: "
+                                                    + (", ".join(r["name"] for r in reports
+                                                                 if r.get("required") and r.get("status") == "not_run")
+                                                       or "none named"))
                     record.pop("error", None)
                     break
                 record["repair_history"].append({"attempt": attempt, "checks": reports,
