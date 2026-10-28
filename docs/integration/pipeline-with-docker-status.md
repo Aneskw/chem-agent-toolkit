@@ -20,8 +20,10 @@
 | 提示协议自检 | `verify_prompt_contract.py` 检查 POLICY / schema description / 冻结副本逐项一致；`verify_acceptance_prompt.py` 记录发送指纹 | `a8fad7f`、`d569bb0` |
 | 交付与审查语义 | 作者声明的入口、块索引（含 1-based 单块可见归一化）、上游路径别名、作者检查进入规划上下文、许可证意见不影响绑定判定 | `2bebb12`、`4b1c535` 等 |
 | 健壮性 | 非法 policy 字段类型、非法正则、缺失操作 check 等均为**可修复的计划拒绝**，不再让整批崩溃 | `6808ab1`、`fe9017f` |
+| 诊断可操作性 | 覆盖率拒绝指名用例/check/pattern，grounding 拒绝指名用例与未读路径或首行引文；位置参数允许 presence-only selector | `fe4921e`、`0e230b5`、`eaeec1a` |
+| 交付状态语义 | 带 `resolution` 的 blocking issue 记为已修复；非 `ready` 停止时写明未运行的必需检查；拉取失败时复用本地 RepoDigest | `cf39db4`、`6097fb5` |
 
-离线回归：`python -m unittest discover -s tests -q` → **544 OK (3 skipped)**。
+离线回归：`python -m unittest discover -s tests -q` → **554 OK (3 skipped)**。
 
 ## 2. 已经被真实实验证实的部分
 
@@ -40,20 +42,25 @@
 
 其余轮次（13–39）的失败几乎都发生在规划阶段，且每次只暴露一个契约缺口。
 
-### 2.1 第 41 次运行（恢复验收后的第一轮，11 次调用）
+### 2.1 第 41–46 轮：从“协议没走通”到“规划全部通过、卡在环境网络”
 
-阶段推进正常：来源获取 → 发现（2 次）→ 编写（1 次）→ 独立审阅（1 次）→ 入口绑定 → 环境规划（4 次尝试 + 1 次补丁重试）。规划的**前三次尝试每轮都向前推进一格**：
+恢复验收后连续跑了六轮（每轮一个独立授权批次，失败即停、不重启不续跑）。每一轮暴露的都不是重复缺陷，而是下一层：
 
-1. `invalid_input must equal the declared input contract: required`（用例字段与声明不一致）；
-2. 修正后触发 next gate：`required needs at least one named check with a matching rejection case`；
-3. 补上具名 check 后进入覆盖率门禁，报出 4 条原因；
-4. 第四次尝试先提交了一个手写转义的补丁（`/tests/8` 的 `case_json` 转义坏掉，整包补丁被拒），第二次补丁合法并被应用（测试从 8 条增到 10 条）。
+| 轮次 | 调用 | 停在哪 | 门禁说了什么 | 据此做的修复 |
+| --- | --- | --- | --- | --- |
+| 41 | 11 | 规划，`planning_no_progress` | 4 条通用覆盖率原因，且与上一轮逐字相同 | 覆盖率诊断指名用例、check id 与 pattern，并说明 check 是有效性谓词（`fe4921e`） |
+| 42 | 5 | 编写/审阅，`failed` | 独立审阅连续两轮各发现真实文档缺陷（默认小片段过滤路径未写、`nats-nDummies` 算成 2） | 候选轮次 1→2（`ad428ee`），仍守 16 次调用封套 |
+| 43 | 8 | 规划，`planning_no_progress` | 只声明一个 operation，selector 却写 `equals:"smiles"`，任何用例都配不上 | 位置参数允许 presence-only selector（`eaeec1a`） |
+| 44 | 8 | 规划，`plan_unresolved` | `Case acceptance requires a verbatim quotation` 不指名用例；模型只能重复请求材料 | grounding 诊断指名用例、未读路径、首行引文，并提示环境探针不得带 acceptance（`0e230b5`） |
+| 45 | 5 | 编写，`draft` | 作者把“已修复”的 blocking issue 写进 issues，`blocking_issues` 仍 `not_run` → `classify=draft` → 静默停止 | 带 `resolution` 的 blocking issue 记为已修复记录；非 `ready` 停止时写出未运行的必需检查（`cf39db4`） |
+| 46 | 11 | **规划全部通过**，`base_image_unresolved` | `registry-1.docker.io` TLS handshake timeout，而本机已有同名镜像的 RepoDigest | 拉取失败时复用本地 RepoDigest 并标注 `resolved_from=local_cache`（`6097fb5`） |
 
-但仍然 `blocked`，停止码 `planning_no_progress`：第四次尝试的覆盖率诊断与第三次**逐字相同**，被“同一诊断重复即停止”的防浪费规则终止。
+第 46 轮是**恢复验收后第一次通过全部规划门禁**：4 次规划尝试，每次诊断都不同（`required 输入策略必须指明约束` → `invalid_input 必须等于按 operation 的聚合状态` → `required 但无具名 check` → 通过），最终 `prepared`、材料冻结、产出 6 条验收用例与 `python:3.11-slim` / `pip install -r requirements.txt` 的环境计划。它随后停在 `pin_base_image` 的**环境网络**上，而不是协议上。
 
-**根因不是模型没改，而是门禁没有说清改什么**：计划里 `documented_invalid_smiles_c1cc` 这个 check 的 pattern 是 `^C1CC$`——它只匹配**无效**输入。而 `required` 下的 check 是**有效性谓词**（每个正常用例都必须满足），于是所有正常用例都被它判为不满足 → `positive` 为空 → 覆盖率一次性冒出 4 条通用原因（无正常输入、purpose 未覆盖、缺拒绝、缺可直接调用的用法用例）。模型看到的是“缺用例”，于是继续加用例，永远修不到那个写反的谓词。
+这一节的结论很重要：**规划器并非不可救**。第 41 轮之前，30 多轮里绝大多数失败都伴随“诊断不指名对象”，模型只能盲修；把诊断改成指名（并且允许位置参数这种真实存在的调用形态）之后，第 46 轮一次性走完了 8 组契约。剩下的瓶颈是 Docker Hub / PyPI 的连通性。
 
-已修复（`fe4921e`）：覆盖率诊断现在指名**具体用例 + 具体 check + pattern**，并说明“check 是有效性谓词、无效输入必须**不满足** `acceptance.violates` 指名的那个谓词”，同时新增“拒绝用例声明的谓词把它自己匹配上了（谓词写反）”“`violates` 指向未声明的 check”两类具名诊断。判定语义不变（仍是不通过），只是把可执行的修复方向放进拒绝文本——而拒绝文本就是下一次修复的提示词。
+`6097fb5` 只做了离线验证（新增 1 个单测，`554 OK (3 skipped)`），**还没有真实批次确认**：下一轮若 Docker 构建阶段又因容器内 `pip install` 无外网失败，那就是 PyPI 侧的网络问题，需要在 Docker Desktop 里配置代理（`127.0.0.1:7897`）而不是继续改代码。
+
 
 
 ## 3. 当前卡点：planner 的困境（重点）
@@ -92,6 +99,11 @@
 | 35 | 引文非逐字（换行差异） | 证据严格性 |
 | 39 | 正则含中置全局旗标 → `re.PatternError` 崩溃 | 类型健壮性 |
 | 41 | 有效性谓词写反（check 只匹配无效输入）→ 4 条通用覆盖率原因、修不到点 | 契约语义 + 诊断可操作性 |
+| 42 | 两轮独立审阅各发现真实文档缺陷（默认过滤路径、原子数算错） | 内容质量 / 候选轮次预算 |
+| 43 | 位置参数却用 `equals:"smiles"` 当 selector，任何用例都配不上 | 协议缺口（位置参数无法被选择） |
+| 44 | grounding 报错不指名用例，模型只能重复请求材料 → `plan_unresolved` | 诊断可操作性 |
+| 45 | 已修复的 blocking issue 仍被视为阻塞 → `draft` 静默停止 | 状态语义 |
+| 46 | 规划全部通过，`pin_base_image` 因 Docker Hub TLS 超时失败 | 环境网络（非协议） |
 | 22/16 | 引用用证据定位符 `e1` 当 `source_id`；`runtime_requirement` 返回字符串 | 字段语义 |
 
 以上每一项都已被**离线修复并加入回归**，但这也说明：模型并不是“不会写计划”，而是**难以在一次回答里同时命中 8 组精确契约**。
@@ -105,18 +117,19 @@
 
 ## 4. 最小剩余工作
 
-1. 用修复后的诊断重跑一轮真实实验（16 次调用封套，`api_retries=1`、`api_connect_retries=1`）；
-2. 若仍卡在规划，且失败形态仍是“补丁里手写转义 `case_json` 坏掉”（第 26/29/31/41 轮共 4 次），则让修复轮支持**整份计划替换**（原生 JSON 值，不经过转义），而不是把补丁作为唯一入口；
-3. 若诊断指名后仍反复一轮修一个契约，再实现“**一次收集所有 gate 错误**”（当前覆盖率门禁已聚合，其余门禁仍是 fail-fast）；
-4. 规划通过后，重点观察 `pin_base_image` 与业务验收：第 36 轮已证明 Docker 与验收链路本身可用，剩余问题集中在“交付代码是否实现其文档承诺的拒绝行为”。
+1. 再跑一轮真实批次，确认 `6097fb5` 的本地 digest 兜底真的把 `pin_base_image` 放过去；这是唯一还没被真实运行验证的修复；
+2. 若 Docker 构建再失败，先看是不是**容器内** `pip install` 没有外网（PyPI 侧）：那是环境问题，应在 Docker Desktop 里配置代理 `127.0.0.1:7897`，不要继续改代码；
+3. 规划已不再是一轮一坑：第 46 轮连续修了 4 次就把 8 组契约全部命中。若后续仍反复，优先做“一次收集所有 gate 错误”（当前覆盖率门禁已聚合，其余仍是 fail-fast），其次把规划拆成环境/契约/用例三段；
+4. 业务验收：第 36 轮已证明 Docker 与验收链路可用（5/6 通过），剩余问题是“交付代码是否实现其文档承诺的拒绝行为”，第 42 轮的审阅发现表明内容质量门禁是有效的。
 
 ## 5. 复现
 
 ```powershell
 cd E:\Users\27343\Docker\chem-agent-toolkit-integration_deepseekapi
-python -m unittest discover -s tests -q                      # 544 OK (3 skipped)
+python -m unittest discover -s tests -q                      # 554 OK (3 skipped)
 python validation/deepseek-api/verify_prompt_contract.py     # 提示与校验器一致性
 python validation/deepseek-api/verify_acceptance_prompt.py check
+python validation/deepseek-api/verify_planner.py check
 python -m creation_pipeline build validation/deepseek-api/acceptance-normal-input.json `
   --state-dir <new>\state --library-dir <new>\library
 ```
@@ -126,5 +139,6 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 - 仓库内 `validation/deepseek-api/evidence/real-batch-run{2..22}-20261027/`（该区间已随提交入库，每轮 prompt/response/report/receipt，凭据形状命中 0）；
 - 第 23 轮起每轮产物在副本外的同级目录 `E:\Users\27343\Docker\acceptance-deepseek-run<N>-<date>\`（`state/` 审计目录 + `run<N>.log`），未入库以免把运行时状态塞进仓库；
 - 第 36 轮目录 `acceptance-deepseek-run36-20261028` 内含**首次成功 Docker 构建**的 `image.id`（`sha256:42fc066e5…`）、`build-log.json` 与 22 KB 的业务验收 `execution/report.json`；
-- 第 41 轮目录 `acceptance-deepseek-run41-20261028` 内含四份 `materials/planning/<n>/rejection.json`，可以逐字看到本节 §2.1 的四次诊断。
+- 第 41/43/44/46 轮目录内的 `materials/planning/<n>/rejection.json` 与 `runtime/<candidate>/<env>/receipt.json` 可以逐字核对本节 §2.1 的每一次诊断与停止码；第 46 轮的 `base-image` 失败记录是 `base_image_unresolved :: ... TLS handshake timeout`。
+
 
