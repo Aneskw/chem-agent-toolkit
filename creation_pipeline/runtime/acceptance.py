@@ -169,19 +169,40 @@ def quote_matches(text, quote):
     return None
 
 
-def grounded(record, index, source):
+def grounding_problem(record, index, source):
+    """Why a citation is not grounded, in the words a repair needs.
+
+    A bare "not grounded" tells the planner nothing it can act on, so it repeats the same
+    citation until the no-progress rule stops the round (run 44). The reason names the
+    unread path or quotes the first line that does not occur in the material.
+    """
     if not isinstance(record, dict):
-        return False
+        return 'the citation is not an object'
     path, quote = record.get('source_path'), record.get('source_quote')
-    if path not in index.get('read_files', index['files']):
-        return False
+    readable = index.get('read_files', index['files'])
+    if not path:
+        return 'source_path is missing'
+    if path not in readable:
+        listed = ', '.join(sorted(str(name) for name in readable)[:6]) or 'the read materials'
+        return 'source_path ' + str(path) + ' is not read material; quote one of ' + listed
     target = (Path(source) / path).resolve()
     if not target.exists() and (path.startswith('entry/') or path == 'source-identities.json'):
         # Frozen deterministic materials live outside the delivery/source trees.
         target = (Path(source) / 'runtime/context' / path).resolve()
     if not target.is_relative_to(Path(source).resolve()) or not target.is_file():
-        return False
-    return quote_matches(target.read_text(encoding='utf-8'), quote) is not None
+        return 'source_path ' + str(path) + ' is not a readable file in the source tree'
+    if not isinstance(quote, str) or not quote.strip():
+        return 'source_quote is empty'
+    if quote_matches(target.read_text(encoding='utf-8'), quote) is None:
+        first = quote.strip().splitlines()[0][:100]
+        return ('source_quote does not occur verbatim in ' + str(path)
+                + ' (whitespace differences are tolerated, wording changes are not); '
+                  'the quote starts: ' + json.dumps(first))
+    return None
+
+
+def grounded(record, index, source):
+    return grounding_problem(record, index, source) is None
 
 
 def contracts(plan, cases, index, source, *, check_consistency=True):
@@ -251,8 +272,12 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
             raise ValueError('Acceptance operations must be objects')
         used, names = set(), set()
         for operation in operations:
-            if not grounded(operation, index, source) or not operation.get('id') or operation['id'] in names:
+            if not operation.get('id') or operation['id'] in names:
                 raise ValueError('Operations require unique IDs and read source evidence')
+            operation_problem = grounding_problem(operation, index, source)
+            if operation_problem:
+                raise ValueError('Operation ' + str(operation.get('id')) + ' needs read source evidence: '
+                                 + operation_problem)
             names.add(operation['id'])
             selectors = operation.get('selector', {}).get('args')
             if not isinstance(selectors, list) or not selectors:
@@ -317,16 +342,23 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
         contract = case.get('acceptance')
         if contract is None:
             continue
-        if not grounded(contract, index, source):
-            raise ValueError('Case acceptance requires a verbatim quotation from read source')
+        label = ' [' + str(case.get('name')) + ']'
+        problem = grounding_problem(contract, index, source)
+        if problem:
+            hint = ('; this case is an environment probe, and a probe must not carry a business '
+                    'acceptance contract at all, so remove acceptance from it'
+                    if case.get('layer') == 'environment' or case.get('relation') else '')
+            raise ValueError('Case acceptance requires a verbatim quotation from read source'
+                             + label + ': ' + problem + hint)
         if contract.get('purpose') not in {'computation', 'operation', 'report', 'input_rejection'}:
-            raise ValueError('Unknown acceptance purpose')
+            raise ValueError('Unknown acceptance purpose' + label + ': ' + repr(contract.get('purpose')))
         assertion = contract.get('assertion')
-        if not isinstance(assertion, dict) or not grounded(assertion, index, source):
-            raise ValueError('Result assertion must have source evidence')
+        assertion_problem = grounding_problem(assertion, index, source)
+        if assertion_problem:
+            raise ValueError('Result assertion must have source evidence' + label + ': ' + assertion_problem)
         required_role = {'computation': 'completion', 'operation': 'result', 'report': 'report', 'input_rejection': 'rejection'}[contract['purpose']]
         if assertion.get('role') != required_role:
-            raise ValueError('Outcome assertion role must match the promised purpose: ' + required_role)
+            raise ValueError('Outcome assertion role must match the promised purpose: ' + required_role + label)
         kind = assertion.get('kind')
         if kind in {'json', 'jsonl'}:
             if kind == 'jsonl' and (type(assertion.get('record_index')) is not int or assertion['record_index'] < 0):
@@ -342,9 +374,9 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
         else:
             raise ValueError('Outcome assertion must be json/jsonl or asserted text; exit code alone is insufficient')
         if case.get('relation'):
-            raise ValueError('Acceptance outcome requires a direct invocation, not a relation')
+            raise ValueError('Acceptance outcome requires a direct invocation, not a relation' + label)
         if contract['purpose'] == 'input_rejection' and (not contract.get('violates') or not contract.get('invalid_input_reason')):
-            raise ValueError('Rejection requires an identified constraint and explanation of the actual invalid input')
+            raise ValueError('Rejection requires an identified constraint and explanation of the actual invalid input' + label)
         # Policy is part of each locked case, so repair cannot change applicability.
         case['acceptance_policy'] = policy
     conflicts = consistency(cases) if check_consistency else []

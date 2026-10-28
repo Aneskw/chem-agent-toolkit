@@ -344,6 +344,63 @@ class PositionalSelectorTests(unittest.TestCase):
         self.assertIn('literal documented invocation token', str(caught.exception))
 
 
+class GroundingDiagnosticTests(unittest.TestCase):
+    """An ungrounded citation has to say which case and which quote failed.
+
+    Run 44 was stopped by "Case acceptance requires a verbatim quotation from read source"
+    with no case name: the model could not tell that the offending contract belonged to an
+    environment probe, repeated the citation, and the round ended as planning_no_progress.
+    """
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        make_source(self.root)
+        self.index = {'files': {PATH: {'sha256': material(PATH, self.root)['sha256']}},
+                      'read_files': [PATH]}
+
+    def policy(self):
+        return {'invalid_input': 'required', 'scope': 'one nonempty SMILES argument',
+                'purposes': ['computation'], 'source_path': PATH,
+                'source_quote': 'terminal fragments', 'constraint': 'nonempty SMILES',
+                'checks': [check()]}
+
+    def assert_rejected(self, cases):
+        with self.assertRaises(ValueError) as caught:
+            contracts({'acceptance_json': json.dumps(self.policy())}, cases, self.index, self.root)
+        return str(caught.exception)
+
+    def test_an_ungrounded_case_quote_names_the_case_and_the_quoted_line(self):
+        bad = case('ok', 'computation', ['CCO'], 0)
+        bad['acceptance']['source_quote'] = 'word for word this never appears'
+        message = self.assert_rejected([bad])
+        self.assertIn('Case acceptance requires a verbatim quotation from read source [ok]', message)
+        self.assertIn('does not occur verbatim', message)
+        self.assertIn('word for word this never appears', message)
+
+    def test_an_unread_source_path_lists_the_read_materials(self):
+        bad = case('ok', 'computation', ['CCO'], 0)
+        bad['acceptance']['source_path'] = 'sources/never-read.md'
+        message = self.assert_rejected([bad])
+        self.assertIn('is not read material', message)
+        self.assertIn(PATH, message)
+
+    def test_an_environment_probe_is_told_to_drop_its_acceptance(self):
+        probe = case('probe', 'computation', ['-c', 'import sys'], 0)
+        probe['layer'] = 'environment'
+        probe['acceptance']['source_path'] = ''
+        message = self.assert_rejected([probe])
+        self.assertIn('[probe]', message)
+        self.assertIn('source_path is missing', message)
+        self.assertIn('environment probe', message)
+        self.assertIn('remove acceptance', message)
+
+    def test_a_grounded_case_still_passes(self):
+        contracts({'acceptance_json': json.dumps(self.policy())},
+                  [case('ok', 'computation', ['CCO'], 0)], self.index, self.root)
+
+
 class AnchorTests(unittest.TestCase):
     def record(self, author_tests=None, requirement=None):
         return {'delivery': {'inputs': {

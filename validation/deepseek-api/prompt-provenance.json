@@ -11,7 +11,7 @@
   "frozen_fixture": {
     "prompt_bytes": 15814,
     "prompt_sha256": "60f1021b367c1e6d3ff826cd1927c75a43c5bd282470ba37ba4a0ac36757c467",
-    "schema_sha256": "db2834c1c43c750369f89603f5d1dc3c41a04f4c27b2a11184448b0b229c8a08",
+    "schema_sha256": "99f90542c9935e1a29ddd1caa6c784bc45ccfbaae07b2323552c8abe300e5bd5",
     "status": "frozen",
     "used_by": "validation/deepseek-api/verify_planner.py only"
   },
