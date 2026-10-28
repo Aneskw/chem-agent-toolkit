@@ -256,6 +256,27 @@ def acceptance_coverage(tool, cases, observations=None):
         operation_coverage[operation['id']] = {'normal_cases': [c['name'] for c in normal],
                                                'invalid_input': state, 'missing': missing}
         coverage_reasons.extend('Operation ' + operation['id'] + ' missing ' + item for item in missing)
+        if not normal:
+            # A different operation may already have a good normal case. The
+            # global "no positive" diagnostic then never explains this route's
+            # rejected fixtures (run49: blank.smi versus one-valid.smi).
+            for candidate, failing in rejected_normals:
+                args = business_args(tool, candidate)
+                if not operation_matches(operation, args) or not failing:
+                    continue
+                for check in failing:
+                    detail = check_label(check)
+                    if check['channel'] == 'input_files':
+                        supplied = candidate.get('input_files', {})
+                        if check['key'] not in supplied:
+                            detail += (' requires input_files[' + repr(check['key']) + '], but this case supplies '
+                                       + repr(sorted(supplied)) + '; use the same fixture filename in normal '
+                                         'and rejection cases, or correct the declared binding')
+                        elif 'argument_index' in check and input_check(candidate, check, args) is None:
+                            detail += (' requires args[' + str(check['argument_index']) + '] == '
+                                       + repr('/input/' + check['key']) + '; correct this case argument binding')
+                    coverage_reasons.append('Operation ' + operation['id'] + ' normal case '
+                                            + candidate['name'] + ' is excluded by input check ' + detail)
     # file_io remains a persistence obligation independently of which example is selected.
     if tool.get('behavior', {}).get('file_io') and not any(c.get('output_file') and not c.get('capture_stdout') for c in positive):
         coverage_reasons.append('No grounded normal persisted-output case for declared file IO')

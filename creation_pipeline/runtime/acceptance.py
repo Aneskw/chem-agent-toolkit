@@ -330,7 +330,10 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
             if (not isinstance(operation.get('purposes'), list) or not operation['purposes']
                     or any(not isinstance(item, str) for item in operation['purposes'])
                     or not set(operation['purposes']) <= set(policy['purposes'])):
-                raise ValueError('Operation business purposes must belong to declared scope')
+                raise ValueError('Operation ' + str(operation.get('id'))
+                                 + ' business purposes must belong to declared scope; operation='
+                                 + json.dumps(operation.get('purposes')) + ', scope='
+                                 + json.dumps(policy['purposes']))
             if type(operation.get('require_persistence', False)) is not bool:
                 raise ValueError('require_persistence must be boolean')
             used.update(selected)

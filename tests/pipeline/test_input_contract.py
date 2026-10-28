@@ -636,6 +636,33 @@ class CoverageDiagnosticTests(unittest.TestCase):
         self.assertTrue([r for r in result['reasons'] if 'declares no acceptance.violates' in r],
                         result['reasons'])
 
+    def test_file_binding_diagnostic_survives_a_good_direct_operation(self):
+        rows = dict(check('rows'), channel='input_files', key='blank.smi',
+                    argument_index=1, mode='each_line')
+        policy = self.policy([check('text', key=1), rows])
+        policy['operations'] = [
+            {'id': 'direct', 'selector': {'args': [{'index': 0, 'equals': '--smiles'}]},
+             'checks': ['text'], 'purposes': ['computation'], 'require_persistence': False},
+            {'id': 'file', 'selector': {'args': [{'index': 0, 'equals': '--input'}]},
+             'checks': ['rows'], 'purposes': ['computation'], 'require_persistence': True}]
+        cases = [case('direct-ok', 'computation', ['--smiles', 'CCO'], 0),
+                 case('direct-bad', 'input_rejection', ['--smiles', ''], 2, violates='text'),
+                 case('file-one-valid', 'computation', ['--input', '/input/one-valid.smi'], 0),
+                 case('file-blank', 'input_rejection', ['--input', '/input/blank.smi'], 2, violates='rows')]
+        cases[2].update(input_files={'one-valid.smi': 'CCO\n'}, output_file='valid.jsonl')
+        cases[3].update(input_files={'blank.smi': '\nCCO\n'}, output_file='invalid.jsonl')
+        tool = self.tool(policy); tool['behavior']['file_io'] = True
+        result = acceptance_coverage(tool, cases)
+        self.assertFalse(result['complete'])
+        diagnostic = '\n'.join(result['reasons'])
+        for value in ('Operation file normal case file-one-valid', 'rows', 'blank.smi', 'one-valid.smi'):
+            self.assertIn(value, diagnostic)
+        cases[2]['input_files'] = {'blank.smi': 'CCO\n'}
+        result = acceptance_coverage(tool, cases)
+        self.assertIn("requires args[1] == '/input/blank.smi'", '\n'.join(result['reasons']))
+        cases[2]['args'][1] = '/input/blank.smi'
+        self.assertTrue(acceptance_coverage(tool, cases)['complete'])
+
 
 def _PLAN_FIXTURE():
     from tests.pipeline.test_runtime_build import plan

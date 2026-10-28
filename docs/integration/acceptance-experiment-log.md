@@ -1,4 +1,4 @@
-# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 47）
+# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 49）
 
 记录日期：2026-10-28
 
@@ -16,6 +16,8 @@
 ---
 
 ## 0. 一句话结论
+
+**追加复查（run48/49）未取得新的端到端通过**：run48 暴露并已修复规划补丁的类型审计崩溃；run49 停在文件 fixture 绑定/覆盖诊断，未到 Docker，轮后已补具名诊断。run47 的单轮成功证据仍成立，但不能将它外推成全部 skill 场景稳定成功。最新详情见 §11 及 `docker-acceptance-review-20261028.md`。
 
 **run47 已取得混合后端端到端执行通过的证据**：`ready`、8 次计入预算的调用、规划 `prepared`、本地 digest 兜底生效、Docker 构建成功、执行报告 12/12 `passed`（含真实计算与空串/空白/畸形 SMILES 拒绝）。轮后回归与自检结果见 §10。
 
@@ -87,7 +89,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 
 ---
 
-## 3. 全量结果表（run 2 – run 46，共 45 轮；另有 4 次前置的 `final-acceptance-*` 批次）
+## 3. 全量结果表（run 2 – run 49，共 48 轮；另有 4 次前置的 `final-acceptance-*` 批次）
 
 `calls` 是本次构建实际计入预算的调用数；`stop code` 取自该轮 `runtime/<candidate>/<env>/receipt.json` 的 `gaps[0]`。带 “—” 的行在当时没有写出 receipt（崩溃/中断/早期阶段失败），原因栏取自 `records/*.json` 或该轮 `run<N>.log`。
 
@@ -140,6 +142,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 | 46 | blocked | 11 | `base_image_unresolved` | **规划全部通过**；`registry-1.docker.io` TLS 超时 |
 | 47 | ready | 8 | —（gaps 为空） | **混合后端执行 12/12 passed**；规划 3 次尝试；本地 digest 兜底、Docker 构建与 pip 安装成功 |
 | 48 | failed | 6 | —（导出前异常） | 原有描述符 skill；第三次规划补丁的 operation checks 对象在作用域审计中触发 TypeError，未到 Docker |
+| 49 | blocked | 8 | `planning_no_progress` | 同一描述符来源；检查绑定 blank.smi，正常文件用例使用 one-valid.smi，诊断未指明具体排除原因而反复缺覆盖；未到 Docker |
 
 > 第 2–40 行的“停因”是从该轮 `state/outputs/*/records/*.json`、`runtime/*/*/receipt.json` 与 `run<N>.log` 重建的；如果要精确追某一行，直接看该轮目录里的 `run<N>.log` 尾部和 `materials/planning/<n>/rejection.json`。
 
