@@ -123,6 +123,48 @@ class ContractTests(unittest.TestCase):
         errors = input_check_problems(dict(check('bad_path'), source_path={'path': PATH}), self.index, self.root)
         self.assertIn('Input check bad_path: source_path must be a string', errors)
 
+    def test_case_diagnostics_collect_independent_missing_citations_and_empty_file_outcome(self):
+        policy = {'invalid_input': 'required', 'constraint': 'nonempty SMILES',
+                  'scope': 'one SMILES', 'purposes': ['computation', 'operation'],
+                  'source_path': PATH, 'source_quote': 'terminal fragments', 'checks': [check()]}
+        cases = [case(name, 'input_rejection', [''], 2, 'nonempty')
+                 for name in ('invalid', 'empty', 'whitespace', 'blank_file')]
+        for item in cases:
+            item['acceptance']['assertion'].pop('source_path')
+        persisted = case('persisted_output_success', 'operation', ['CCO'], 0)
+        persisted['output_file'] = 'valid.jsonl'
+        persisted['acceptance']['assertion']['value'] = ''
+        cases.append(persisted)
+        with self.assertRaises(ValueError) as caught:
+            contracts({'acceptance_json': json.dumps(policy)}, cases, self.index, self.root)
+        message = str(caught.exception)
+        for name in ('invalid', 'empty', 'whitespace', 'blank_file', 'persisted_output_success'):
+            self.assertIn('Case ' + name + ':', message)
+        self.assertEqual(message.count('Result assertion must have source evidence'), 4)
+        self.assertIn('actual JSON/JSONL content', message)
+        # Fixing citations alone does not make the empty outcome valid.
+        for item in cases[:-1]:
+            item['acceptance']['assertion']['source_path'] = PATH
+        with self.assertRaisesRegex(ValueError, 'Outcome text must be nonempty'):
+            contracts({'acceptance_json': json.dumps(policy)}, cases, self.index, self.root)
+        persisted['acceptance']['assertion'].update(kind='jsonl', record_index=0,
+                                                   path=['ok'], allowed_values=[True])
+        self.assertEqual(contracts({'acceptance_json': json.dumps(policy)}, cases,
+                                   self.index, self.root)['checks'], [check()])
+
+    def test_case_non_string_purpose_or_assertion_kind_is_named_rejection(self):
+        policy = {'invalid_input': 'required', 'constraint': 'nonempty SMILES',
+                  'scope': 'one SMILES', 'purposes': ['computation'],
+                  'source_path': PATH, 'source_quote': 'terminal fragments', 'checks': [check()]}
+        bad_purpose = case('bad_purpose', 'computation', ['CCO'], 0)
+        bad_purpose['acceptance']['purpose'] = {'bad': True}
+        bad_kind = case('bad_kind', 'computation', ['CCO'], 0)
+        bad_kind['acceptance']['assertion']['kind'] = {'bad': True}
+        with self.assertRaises(ValueError) as caught:
+            contracts({'acceptance_json': json.dumps(policy)}, [bad_purpose, bad_kind], self.index, self.root)
+        self.assertIn('Case bad_purpose: Unknown acceptance purpose', str(caught.exception))
+        self.assertIn('Case bad_kind: Outcome assertion must', str(caught.exception))
+
     def test_a_recorded_absence_is_accepted_only_with_a_bound_confirmation(self):
         self.assertEqual(self.classification(self.absent()), 'none_documented')
         for field in ('reason', 'scope', 'limitation', 'checked', 'review'):

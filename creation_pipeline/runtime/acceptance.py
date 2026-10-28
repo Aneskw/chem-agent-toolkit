@@ -369,48 +369,64 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
             for check in checks.values():
                 if check['channel'] == 'input_files' and (type(check.get('argument_index')) is not int or check['argument_index'] < 0):
                     raise ValueError('File checks must bind fixture content to its /input/path argument_index')
+    case_errors = []
     for case in cases:
-        contract = case.get('acceptance')
-        if contract is None:
-            continue
-        label = ' [' + str(case.get('name')) + ']'
-        problem = grounding_problem(contract, index, source)
-        if problem:
-            hint = ('; this case is an environment probe, and a probe must not carry a business '
-                    'acceptance contract at all, so remove acceptance from it'
-                    if case.get('layer') == 'environment' or case.get('relation') else '')
-            raise ValueError('Case acceptance requires a verbatim quotation from read source'
-                             + label + ': ' + problem + hint)
-        if contract.get('purpose') not in {'computation', 'operation', 'report', 'input_rejection'}:
-            raise ValueError('Unknown acceptance purpose' + label + ': ' + repr(contract.get('purpose')))
-        assertion = contract.get('assertion')
-        assertion_problem = grounding_problem(assertion, index, source)
-        if assertion_problem:
-            raise ValueError('Result assertion must have source evidence' + label + ': ' + assertion_problem)
-        required_role = {'computation': 'completion', 'operation': 'result', 'report': 'report', 'input_rejection': 'rejection'}[contract['purpose']]
-        if assertion.get('role') != required_role:
-            raise ValueError('Outcome assertion role must match the promised purpose: ' + required_role + label)
-        kind = assertion.get('kind')
-        if kind in {'json', 'jsonl'}:
-            if kind == 'jsonl' and (type(assertion.get('record_index')) is not int or assertion['record_index'] < 0):
-                raise ValueError('JSONL outcome requires a nonnegative record_index')
-            if not isinstance(assertion.get('path'), list) or not assertion['path'] or not all(isinstance(p, (str, int)) for p in assertion['path']):
-                raise ValueError('JSON outcome assertion requires a nonempty field path')
-            values = assertion.get('allowed_values')
-            if not isinstance(values, list) or not values or any(isinstance(v, (dict, list)) for v in values):
-                raise ValueError('JSON outcome assertion requires scalar allowed_values')
-        elif kind in {'stdout_equals', 'stderr_contains'}:
-            if not isinstance(assertion.get('value'), str) or not assertion['value'].strip():
-                raise ValueError('Outcome text must be nonempty')
-        else:
-            raise ValueError('Outcome assertion must be json/jsonl or asserted text; exit code alone is insufficient')
-        if case.get('relation'):
-            raise ValueError('Acceptance outcome requires a direct invocation, not a relation' + label)
-        if contract['purpose'] == 'input_rejection' and (not contract.get('violates') or not contract.get('invalid_input_reason')):
-            raise ValueError('Rejection requires an identified constraint and explanation of the actual invalid input' + label)
-        # Policy is part of each locked case, so repair cannot change applicability.
-        case['acceptance_policy'] = policy
+        try:
+            _case_contract(case, policy, index, source)
+        except ValueError as exc:
+            case_errors.append('Case ' + str(case.get('name')) + ': ' + str(exc))
+    if case_errors:
+        remaining = len(case_errors) - 20
+        raise ValueError('Case acceptance errors: ' + '; '.join(case_errors[:20])
+                         + (f'; {remaining} further case errors omitted' if remaining > 0 else ''))
     conflicts = consistency(cases) if check_consistency else []
     if conflicts:
         raise ContractConflict(conflicts)
     return policy
+
+
+def _case_contract(case, policy, index, source):
+    """Validate one case without allowing another case's failure to hide its errors."""
+    contract = case.get('acceptance')
+    if contract is None:
+        return
+    label = ' [' + str(case.get('name')) + ']'
+    problem = grounding_problem(contract, index, source)
+    if problem:
+        hint = ('; this case is an environment probe, and a probe must not carry a business '
+                'acceptance contract at all, so remove acceptance from it'
+                if case.get('layer') == 'environment' or case.get('relation') else '')
+        raise ValueError('Case acceptance requires a verbatim quotation from read source'
+                         + label + ': ' + problem + hint)
+    if (not isinstance(contract.get('purpose'), str)
+            or contract['purpose'] not in {'computation', 'operation', 'report', 'input_rejection'}):
+        raise ValueError('Unknown acceptance purpose' + label + ': ' + repr(contract.get('purpose')))
+    assertion = contract.get('assertion')
+    assertion_problem = grounding_problem(assertion, index, source)
+    if assertion_problem:
+        raise ValueError('Result assertion must have source evidence' + label + ': ' + assertion_problem)
+    required_role = {'computation': 'completion', 'operation': 'result', 'report': 'report', 'input_rejection': 'rejection'}[contract['purpose']]
+    if assertion.get('role') != required_role:
+        raise ValueError('Outcome assertion role must match the promised purpose: ' + required_role + label)
+    kind = assertion.get('kind')
+    if isinstance(kind, str) and kind in {'json', 'jsonl'}:
+        if kind == 'jsonl' and (type(assertion.get('record_index')) is not int or assertion['record_index'] < 0):
+            raise ValueError('JSONL outcome requires a nonnegative record_index')
+        if not isinstance(assertion.get('path'), list) or not assertion['path'] or not all(isinstance(p, (str, int)) for p in assertion['path']):
+            raise ValueError('JSON outcome assertion requires a nonempty field path')
+        values = assertion.get('allowed_values')
+        if not isinstance(values, list) or not values or any(isinstance(v, (dict, list)) for v in values):
+            raise ValueError('JSON outcome assertion requires scalar allowed_values')
+    elif isinstance(kind, str) and kind in {'stdout_equals', 'stderr_contains'}:
+        if not isinstance(assertion.get('value'), str) or not assertion['value'].strip():
+            raise ValueError('Outcome text must be nonempty' + label
+                             + '; for tool-written output_file, assert its actual JSON/JSONL '
+                             'content with kind=json/jsonl, not empty stdout')
+    else:
+        raise ValueError('Outcome assertion must be json/jsonl or asserted text; exit code alone is insufficient')
+    if case.get('relation'):
+        raise ValueError('Acceptance outcome requires a direct invocation, not a relation' + label)
+    if contract['purpose'] == 'input_rejection' and (not contract.get('violates') or not contract.get('invalid_input_reason')):
+        raise ValueError('Rejection requires an identified constraint and explanation of the actual invalid input' + label)
+    # Policy is part of each locked case, so repair cannot change applicability.
+    case['acceptance_policy'] = policy

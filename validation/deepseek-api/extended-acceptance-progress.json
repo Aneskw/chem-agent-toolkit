@@ -9,7 +9,7 @@
   "backend_scope": "Codex CLI native stages plus DeepSeek structured stages",
   "scenarios": {
     "descriptors-a": {
-      "status": "pending",
+      "status": "pending_retry",
       "successful_run": null
     },
     "descriptors-b": {
@@ -60,7 +60,19 @@
       "model_calls": 6,
       "stop_code": "planning_no_progress",
       "detail": "Repeated generic input-check grounding rejection; offline replay names blank_line and its stitched source quotation"
+    },
+    {
+      "status": "blocked",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run53-20261028",
+      "scenario": "descriptors-a",
+      "run": 53,
+      "implementation_commit": "b0c9392",
+      "structured_reasoning": "low",
+      "build_id": "20261028T234828-c6871646",
+      "model_calls": 12,
+      "stop_code": "planning_no_progress",
+      "detail": "Repeated unnamed empty outcome assertion for persisted_output_success; individual missing assertion citations consumed earlier repairs"
     }
   ],
-  "next_run": 53
+  "next_run": 54
 }

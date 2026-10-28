@@ -771,6 +771,13 @@ documented diagnostic value. For JSONL, use kind=jsonl, record_index (zero-based
 line index), path=[field,...], allowed_values=[scalar,...]; expected_json_lines
 can additionally assert all row results. Include a mixed valid/invalid multi-row
 fixture for documented line-oriented input, asserting the rejected row diagnostic.
+The assertion needs its OWN source_path and contiguous source_quote; these fields
+are not inherited from the parent acceptance object. Repeat the citation explicitly
+when both rely on the same evidence. For a tool-written output_file, JSON/JSONL
+assertions read that retained file, so assert its business records using kind=jsonl
+and record_index, not the empty stdout caused by --output. Empty or whitespace-only
+text is never a business outcome assertion. Set output_file to the actual filename
+written under /output and leave capture_stdout false for tool-written files.
 A computation completion
 assertion MUST distinguish completed calculations from infrastructure/runtime
 failures, based on source semantics, NOT merely schema/version/report existence.
