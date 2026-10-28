@@ -451,6 +451,68 @@ class DowngradeTests(unittest.TestCase):
         self.assertEqual(delta['input_states'], {'tool': ['required', 'none_documented']})
 
 
+class CoverageDiagnosticTests(unittest.TestCase):
+    """A rejected plan must name the check that a repair has to change.
+
+    Run 41 stopped on four generic coverage reasons while the actual defect was a single
+    inverted predicate: the "invalid example" check matched only the rejected value, so
+    every valid case failed it and no rejection was demonstrated. The corrective instruction
+    has to travel in the rejection text, because that text is the repair prompt.
+    """
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        make_source(self.root)
+
+    def policy(self, checks):
+        return {'invalid_input': 'required', 'scope': 'one nonempty SMILES argument',
+                'purposes': ['computation'], 'source_path': PATH,
+                'source_quote': 'terminal fragments', 'constraint': 'nonempty SMILES',
+                'checks': checks}
+
+    def tool(self, policy):
+        return {'entrypoint': ['python', '/opt/skill/entry/skill.py'], 'behavior': {'file_io': False},
+                'acceptance_version': 2, 'acceptance_policy': policy, 'input_anchors': {}}
+
+    def test_a_normal_case_rejected_by_an_inverted_predicate_names_that_check(self):
+        result = acceptance_coverage(self.tool(self.policy([check(), dict(check('rejected_value'), pattern='C1CC')])),
+                                     [case('ok', 'computation', ['CCO'], 0),
+                                      case('bad', 'input_rejection', ['C1CC'], 2, violates='rejected_value')])
+        self.assertFalse(result['coverage_complete'])
+        detail = [r for r in result['reasons'] if r.startswith('Normal case ok fails declared input check')]
+        self.assertEqual(len(detail), 1, result['reasons'])
+        self.assertIn('rejected_value', detail[0])
+        self.assertIn('inverted', detail[0])
+
+    def test_a_rejection_that_matches_its_own_predicate_is_reported_as_inverted(self):
+        result = acceptance_coverage(self.tool(self.policy([dict(check('only_bad'), pattern='C1CC')])),
+                                     [case('ok', 'computation', ['CCO'], 0),
+                                      case('bad', 'input_rejection', ['C1CC'], 2, violates='only_bad')])
+        self.assertFalse(result['coverage_complete'])
+        detail = [r for r in result['reasons'] if 'declares acceptance.violates=only_bad' in r]
+        self.assertEqual(len(detail), 1, result['reasons'])
+        self.assertIn('invert it rather than matching it', detail[0])
+
+    def test_a_rejection_naming_an_undeclared_check_lists_the_declared_ones(self):
+        result = acceptance_coverage(self.tool(self.policy([check()])),
+                                     [case('ok', 'computation', ['CCO'], 0),
+                                      case('bad', 'input_rejection', ['  '], 2, violates='missing_check')])
+        self.assertFalse(result['coverage_complete'])
+        detail = [r for r in result['reasons'] if 'is not a declared check id' in r]
+        self.assertEqual(len(detail), 1, result['reasons'])
+        self.assertIn('nonempty', detail[0])
+
+    def test_a_missing_violates_names_the_obligation(self):
+        result = acceptance_coverage(self.tool(self.policy([check()])),
+                                     [case('ok', 'computation', ['CCO'], 0),
+                                      case('bad', 'input_rejection', ['  '], 2)])
+        self.assertFalse(result['coverage_complete'])
+        self.assertTrue([r for r in result['reasons'] if 'declares no acceptance.violates' in r],
+                        result['reasons'])
+
+
 def _PLAN_FIXTURE():
     from tests.pipeline.test_runtime_build import plan
     p = plan()

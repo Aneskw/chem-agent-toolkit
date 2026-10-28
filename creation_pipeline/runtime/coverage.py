@@ -37,6 +37,14 @@ def input_check(case, check, args):
     return bool(values) and all(re.fullmatch(check['pattern'], item) is not None for item in values)
 
 
+def check_label(check):
+    """Name a check the way the plan does, so a rejection can be repaired directly."""
+    if not isinstance(check, dict):
+        return str(check)
+    return (str(check.get('id')) + ' (' + str(check.get('channel')) + '[' + str(check.get('key'))
+            + '] ~ ' + str(check.get('pattern')) + ')')
+
+
 def _statuses(policy, operations):
     """Invalid-input classification per scope unit: one operation, or the whole tool."""
     if operations:
@@ -92,9 +100,18 @@ def acceptance_coverage(tool, cases, observations=None):
         return [check for check in checks if check['id'] in matched[0]['checks']]
     def accepts(case, check):
         return input_check(case, check, business_args(tool, case))
+    def failing_checks(case):
+        """Checks a normal case does not satisfy; None when it matches no single route."""
+        selected = applicable(case)
+        if selected is None:
+            return None
+        return [check for check in selected if accepts(case, check) is not True]
     def valid(case):
         selected = applicable(case)
         return selected is not None and all(accepts(case, check) is True for check in selected)
+    # Keep the rejected normal inputs: the reason a valid case is not counted is the one
+    # repair instruction the planner can act on, so it must not collapse into a generic line.
+    rejected_normals = [(c, failing_checks(c)) for c in positive if not valid(c)]
     positive = [c for c in positive if valid(c)]
     completed_negative = [c for c in direct if c['acceptance']['purpose'] in {'computation', 'operation', 'report'}
                           and c.get('expected_exit', 0) != 0 and valid(c)]
@@ -109,6 +126,37 @@ def acceptance_coverage(tool, cases, observations=None):
                 and all(outcome(case) != outcome(normal) for normal in positive))
     if not positive:
         coverage_reasons.append('No grounded normal input with a result assertion')
+        for rejected, failing in rejected_normals[:3]:
+            if failing is None:
+                coverage_reasons.append('Normal case ' + rejected['name'] + ' matches no single declared '
+                                        'operation route; a normal case must select exactly one operation')
+                continue
+            coverage_reasons.append('Normal case ' + rejected['name'] + ' fails declared input check '
+                                    + ', '.join(check_label(check) for check in failing)
+                                    + '; a check under input_contract required is a validity predicate, so it '
+                                      'must accept every valid input and the documented invalid input must fail '
+                                      'the one named in acceptance.violates. A predicate that matches only the '
+                                      'invalid example is inverted: express validity (for example a negative '
+                                      'assertion in the pattern) instead of matching the rejected value')
+    required_units = any(state == 'required' for state in statuses.values())
+    if required_units:
+        for rejected in negative:
+            declared_id = rejected['acceptance'].get('violates')
+            match = next((check for check in checks
+                          if isinstance(check, dict) and check.get('id') == declared_id), None)
+            if declared_id is None:
+                coverage_reasons.append('Rejection case ' + rejected['name'] + ' declares no acceptance.violates; '
+                                        'name the check whose predicate this documented invalid input fails')
+            elif match is None:
+                coverage_reasons.append('Rejection case ' + rejected['name'] + ' declares acceptance.violates='
+                                        + str(declared_id) + ', which is not a declared check id; name one of '
+                                        + (', '.join(str(check.get('id')) for check in checks
+                                                     if isinstance(check, dict)) or 'the declared checks'))
+            elif accepts(rejected, match) is True:
+                coverage_reasons.append('Rejection case ' + rejected['name'] + ' declares acceptance.violates='
+                                        + str(declared_id) + ' but its own input matches that predicate ('
+                                        + check_label(match) + '); the predicate must reject this documented '
+                                          'invalid input, so invert it rather than matching it')
     purposes = policy.get('purposes')
     if (not isinstance(purposes, list) or not purposes
             or not set(purposes) <= {c['acceptance']['purpose'] for c in positive}):
