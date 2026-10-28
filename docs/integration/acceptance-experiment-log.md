@@ -1,4 +1,4 @@
-# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 49）
+# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 50）
 
 记录日期：2026-10-28
 
@@ -89,7 +89,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 
 ---
 
-## 3. 全量结果表（run 2 – run 49，共 48 轮；另有 4 次前置的 `final-acceptance-*` 批次）
+## 3. 全量结果表（run 2 – run 50，共 49 轮；另有 4 次前置的 `final-acceptance-*` 批次）
 
 `calls` 是本次构建实际计入预算的调用数；`stop code` 取自该轮 `runtime/<candidate>/<env>/receipt.json` 的 `gaps[0]`。带 “—” 的行在当时没有写出 receipt（崩溃/中断/早期阶段失败），原因栏取自 `records/*.json` 或该轮 `run<N>.log`。
 
@@ -143,6 +143,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 | 47 | ready | 8 | —（gaps 为空） | **混合后端执行 12/12 passed**；规划 3 次尝试；本地 digest 兜底、Docker 构建与 pip 安装成功 |
 | 48 | failed | 6 | —（导出前异常） | 原有描述符 skill；第三次规划补丁的 operation checks 对象在作用域审计中触发 TypeError，未到 Docker |
 | 49 | blocked | 8 | `planning_no_progress` | 同一描述符来源；检查绑定 blank.smi，正常文件用例使用 one-valid.smi，诊断未指明具体排除原因而反复缺覆盖；未到 Docker |
+| 50 | blocked | 4 | `model_timeout` | 描述符 A；原生三阶段完成，首次 DeepSeek 规划流在 600 秒内未结束（HTTP 200）；未到 Docker |
 
 > 第 2–40 行的“停因”是从该轮 `state/outputs/*/records/*.json`、`runtime/*/*/receipt.json` 与 `run<N>.log` 重建的；如果要精确追某一行，直接看该轮目录里的 `run<N>.log` 尾部和 `materials/planning/<n>/rejection.json`。
 
@@ -277,3 +278,7 @@ git -c http.proxy=http://127.0.0.1:7897 push fork upload-v2:upload-pipeline-with
 ## 11. 操作者追加复查与实验（run48 起）
 
 操作者随后授权代码审查和 1–2 个基于原有 skill 的完整实验。发现并修复真实入口执行绑定漏洞（`6e76924`）；run47 的原始入口未利用此漏洞，修复后当前严格资格复核仍通过。run48 又暴露了规划补丁的嵌套类型审计崩溃，不能将其描述为通过。完整审查范围、反例验证、修复依据和追加实验见 `docker-acceptance-review-20261028.md`。最多执行 run48/run49 两个新批次，不恢复失败轮，不放宽契约。
+
+## 12. 再次授权的四场景验收（run50 起，进行中）
+
+操作者在 run49 后明确授权：两轮描述符文件实验先调试到通过，再以两个典型场景验收，遇错修复后新开轮次重跑。此新授权取代 §11 的两个批次数量限制；仍不允许恢复失败轮、放宽断言或推送上游。计划为两个独立描述符成功批次、原子映射审计、ASE XYZ 几何检查；当前成功数 0/4。具体封套、结果与后续配置调整见 `extended-acceptance-campaign.md`，进度机器记录为 `validation/deepseek-api/extended-acceptance-progress.json`。

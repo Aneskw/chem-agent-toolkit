@@ -1,14 +1,42 @@
 {
   "authorization_date": "2026-10-28",
   "target_successful_independent_batches": 4,
-  "per_run_limits": {"model_calls": 16, "model_timeout": 600, "total_seconds": 3600},
+  "per_run_limits": {
+    "model_calls": 16,
+    "model_timeout": 600,
+    "total_seconds": 3600
+  },
   "backend_scope": "Codex CLI native stages plus DeepSeek structured stages",
   "scenarios": {
-    "descriptors-a": {"status": "pending", "successful_run": null},
-    "descriptors-b": {"status": "pending", "successful_run": null},
-    "atommap": {"status": "pending", "successful_run": null},
-    "geometry": {"status": "pending", "successful_run": null}
+    "descriptors-a": {
+      "status": "pending",
+      "successful_run": null
+    },
+    "descriptors-b": {
+      "status": "pending",
+      "successful_run": null
+    },
+    "atommap": {
+      "status": "pending",
+      "successful_run": null
+    },
+    "geometry": {
+      "status": "pending",
+      "successful_run": null
+    }
   },
-  "attempts": [],
-  "next_run": 50
+  "attempts": [
+    {
+      "scenario": "descriptors-a",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run50-20261028",
+      "run": 50,
+      "implementation_commit": "7f80b5a",
+      "build_id": "20261028T221546-0b900804",
+      "status": "blocked",
+      "model_calls": 4,
+      "stop_code": "model_timeout",
+      "detail": "HTTP 200 stream did not complete within 600s; requested medium was mapped to provider high"
+    }
+  ],
+  "next_run": 51
 }

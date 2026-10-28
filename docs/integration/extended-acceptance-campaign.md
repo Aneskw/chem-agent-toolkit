@@ -14,3 +14,13 @@
 完成必须同时有：规划 prepared 与固定 digest、构建 image.id、对应场景业务断言全部通过（不是只看 ready）、冻结证据完整、轮后全量离线回归与三个自检全绿。阶段预算计数不能冒充供应商 HTTP 请求总数。
 
 进度保存在 `validation/deepseek-api/extended-acceptance-progress.json`，每轮结束后更新实际结果与证据路径。run47 的旧成功可用于回归参考，不能替代本轮四项新的独立成功。
+
+## run50：描述符 A，模型流超时
+
+实现起点 `7f80b5a`，构建 `20261028T221546-0b900804`，北京时间 2026-10-28 22:15:46–22:37:45。发现、编写、独立审阅完成，首次结构化规划 HTTP 200、连接约 0.23 秒，但接收约 8.3 MB SSE 数据后仍未在 600 秒内完成，停止于 `model_timeout`；预算计数 4，没有镜像或业务执行。没有重启/恢复本轮。
+
+证据：`E:\Users\27343\Docker\acceptance-descriptors-a-run50-20261028\`，包含旧封套 `input-envelope.json`、summary、记录、receipt 与 `model-0/attempts.json`。不能将收到字节数当作已完成计划或完整 token 用量。
+
+下一轮配置调整：本地后端的兼容映射将 requested `medium` 发成 provider `high`；后续结构化阶段改为 provider `low`，原生阶段仍是 Codex CLI medium。模型、验收断言、每轮 16 次/3600 秒、单次 600 秒上限不变。这是推理设置调整，不是网络恢复、代码缺陷修复或验收降级。旧轮次的 request.json 保留实际 requested/mapped 设置。
+
+轮后回归：561 OK (3 skipped)，三个自检全绿，下一轮配置 `--preflight` 通过且为 0 次模型调用，Docker 29.8.2 可用。日志 `E:\Users\27343\Docker\acceptance-run50-postflight-tests.log`。前置回归另有一次耗时 632 秒但最终通过，重复启动的诊断检查在确认原始回归已通过后被停止，不是失败批次重启。

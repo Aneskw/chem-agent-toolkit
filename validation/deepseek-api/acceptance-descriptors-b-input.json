@@ -38,7 +38,7 @@
       "pin_base_image": true,
       "model_timeout": 600,
       "total_seconds": 2400,
-      "reasoning_effort": "medium",
+      "reasoning_effort": "low",
       "service_tier": "default",
       "progress_watch": "observe",
       "api_connect_retries": 1
@@ -53,6 +53,6 @@
       "docker"
     ]
   },
-  "notes": "Operator authorised iterative debugging and fresh independent reruns on 2026-10-28 until two descriptor file experiments and two additional typical scenarios pass. Each run retains 16 admitted stage calls, 600 seconds per call, 3600 seconds total, pin_base_image=true; no resume/restart of failed runs, no weakening contracts, no upstream push. Native stages use Codex CLI, structured stages DeepSeek. Preserve every failed run and fix offline before a new run.",
+  "notes": "Operator authorised iterative debugging and fresh independent reruns on 2026-10-28 until two descriptor file experiments and two additional typical scenarios pass. Each run retains 16 admitted stage calls, 600 seconds per call, 3600 seconds total, pin_base_image=true; no resume/restart of failed runs, no weakening contracts, no upstream push. Native stages use Codex CLI, structured stages DeepSeek. Preserve every failed run and fix offline before a new run. After run50 provider-high stream timeout, structured reasoning is low; native reasoning remains medium. No timeout/call-budget/acceptance change.",
   "network": false
 }
