@@ -131,7 +131,12 @@ numeric components where needed; still reject a different pinned release. Do not
 infer a literal module.__version__ string from requirements.txt, remove the version
 check, or substitute a constant string for the installed metadata.
 Use /input (read-only), /output (persistent), /tmp (writable) for file IO. Include
-a passing persisted-output case when file_io=true. Case names must be unique.
+a passing persisted-output case when file_io=true. The default requires a file
+actually written by the business tool. Only when caller constraints supply an
+independently reviewed read_only_stdout source contract, retain the stdout report
+with output_file and capture_stdout=true while exercising actual /input fixtures.
+Do not invent output flags or write capabilities. The planner cannot grant itself
+this exception through acceptance_json or output_contract. Case names must be unique.
 Include a representative supported test calling the configured tool entrypoint
 directly with real input, not only help/version or independent checker code.
 For file tools that direct case needs input_files. The portable runner can save

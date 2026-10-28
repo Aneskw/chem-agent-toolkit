@@ -72,6 +72,21 @@ def review(session, plan, artifact, checks, config=None):
     stage_schema["required"].append("execution_gaps")
     stage_schema["properties"]["requirement_assessment"] = {"type": "string", "enum": ["confirmed", "unknown", "conflict"]}
     stage_schema["required"].append("requirement_assessment")
+    execution_requirement = (config or {}).get('runtime_requirements', {}).get(
+        plan['name'], artifact.get('runtime_requirement'))
+    if isinstance(execution_requirement, dict) and 'file_output' in execution_requirement:
+        stage_schema['properties']['file_output_assessment'] = {
+            'type': 'string', 'enum': ['confirmed', 'unknown', 'conflict']}
+        stage_schema['required'].append('file_output_assessment')
+        instructions += ('\nIndependently assess execution_requirement.file_output against the actual '
+            'upstream documentation AND delivered code. Return file_output_assessment=confirmed only '
+            'when the cited read_only_stdout contract is exact, inputs are read-only and the business '
+            'tool reports on stdout without a promised tool-written output. A documented output-file '
+            'flag or write obligation conflicts with this mode: return conflict, even if some tests use '
+            'stdout. Never infer absence of a write obligation from omitted tests or proposer claims. '
+            'Otherwise return unknown. Content approval still requires the declared read-only scope '
+            'and original script to be correct; runtime must later exercise actual file input, retain '
+            'the stdout report and verify its business content in Docker.')
     if (config or {}).get('_binding_review') is not None:
         stage_schema['properties']['binding_verified'] = {'type': 'boolean'}
         stage_schema['required'].append('binding_verified')
@@ -86,7 +101,7 @@ def review(session, plan, artifact, checks, config=None):
     instructions += "\nIndependently assess the supplied execution_requirement against actual source and delivered behavior. Return requirement_assessment=confirmed only when status and citations support it without conflicting execution needs. Missing declaration is unknown. An empty test list is never proof that execution is unnecessary."
     instructions += "\nReturn execution_gaps as test names only for confirmed external prerequisite gaps, never missing delivered modules or incorrect results. Return oracle_changes_verified. When oracle_changes exist, independently check each old/new assertion against original sources. True only for justified source-backed corrections, never observed-output matching. Explain the evidence in findings. With no changes return false."
     result = session.stage(instructions, {"oracle_changes": (config or {}).get("_oracle_changes", []), "_phase": "review",
-        "execution_requirement": (config or {}).get("runtime_requirements", {}).get(plan["name"], artifact.get("runtime_requirement")),
+        "execution_requirement": execution_requirement,
         "authored_execution_requirement": artifact.get("runtime_requirement"),
         "minimum": (ROOT / "docs/skills/minimum.md").read_text(encoding="utf-8"),
         "packaging": (ROOT / "docs/skills/packaging.md").read_text(encoding="utf-8"),

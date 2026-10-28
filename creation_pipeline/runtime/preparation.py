@@ -115,8 +115,13 @@ def input_anchors(record, requirements=()):
         basis.append('the delivered interface declares rejection checks: ' + ', '.join(rejected))
     if matches:
         basis.append('the stated requirement asks for invalid-input verification: ' + ', '.join(matches))
-    return {'rejection_checks': rejected, 'requirement_matches': matches,
-            'forbids_none_documented': bool(rejected or matches), 'basis': '; '.join(basis)}
+    result = {'rejection_checks': rejected, 'requirement_matches': matches,
+              'forbids_none_documented': bool(rejected or matches), 'basis': '; '.join(basis)}
+    # This is a source-cited requirement confirmed BEFORE planning, never a knob
+    # the planner may add to its own acceptance policy to avoid a write test.
+    if required.get('status') == 'required' and 'file_output' in required:
+        result['file_output'] = copy.deepcopy(required['file_output'])
+    return result
 
 
 def merged_anchors(record, requirements=()):
@@ -126,12 +131,16 @@ def merged_anchors(record, requirements=()):
     old = previous.get('input_anchors') if isinstance(previous, dict) else None
     if not isinstance(old, dict):
         return fresh
+    if old.get('file_output') != fresh.get('file_output'):
+        raise RuntimeBlocked('file_output_contract_changed',
+                             'Repair cannot change the independently reviewed file-output contract', 'contract')
     rejected = sorted(set(fresh['rejection_checks']) | set(old.get('rejection_checks') or []))
     matches = sorted(set(fresh['requirement_matches']) | set(old.get('requirement_matches') or []))
     basis = '; '.join(item for item in (old.get('basis'), fresh['basis']) if item)
-    return {'rejection_checks': rejected, 'requirement_matches': matches,
-            'forbids_none_documented': bool(rejected or matches or old.get('forbids_none_documented')),
-            'basis': basis}
+    fresh.update(rejection_checks=rejected, requirement_matches=matches,
+                 forbids_none_documented=bool(rejected or matches or old.get('forbids_none_documented')),
+                 basis=basis)
+    return fresh
 
 
 def none_documented_units(policy):
@@ -423,6 +432,14 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
                     raise RuntimeBlocked("explicit_budget", "Explicit runtime time limit reached")
                 planning_opts["total_seconds"] = max(1, int(remaining))
             entry_constraints = list(spec.get('constraints', []))
+            if anchors.get('file_output', {}).get('mode') == 'read_only_stdout':
+                entry_constraints.append('Independently reviewed source contract: file input is read-only '
+                    'and business results are JSON/stdout, not tool-written output. Set file_io=true, '
+                    'exercise real /input fixtures, retain a normal report with output_file plus '
+                    'capture_stdout=true and assert its business contents. Do not invent an output flag '
+                    'or a tool-written artifact. Operation require_persistence=true still demands a '
+                    'real tool-written file and cannot be satisfied by captured stdout. Contract: '
+                    + json.dumps(anchors['file_output'], ensure_ascii=False))
             if binding.get('kind') == 'markdown_python':
                 entry_constraints += ['entry/skill.py is the exact unchanged Python block extracted from package/SKILL.md; '
                     'do not generate or alter business code. Invocation contract: ' + binding['invocation'],

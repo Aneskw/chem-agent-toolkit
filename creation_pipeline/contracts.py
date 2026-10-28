@@ -42,10 +42,25 @@ def requirement(proposal, entries, review):
     if proposal["status"] == "unknown":
         return dict(unknown, reason=proposal.get("reason") or unknown["reason"])
     try:
-        if not isinstance(proposal.get("reason"), str) or not proposal["reason"].strip() or not proposal.get("citations"):
+        if (not isinstance(proposal.get("reason"), str) or not proposal["reason"].strip()
+                or not isinstance(proposal.get('citations'), list) or not proposal['citations']
+                or any(not isinstance(citation, dict) for citation in proposal['citations'])):
             raise ValueError("Requirement needs a reason and exact source citations")
+        citations = list(proposal['citations'])
+        if 'file_output' in proposal:
+            output = proposal['file_output']
+            if (proposal['status'] != 'required' or not isinstance(output, dict)
+                    or set(output) != {'mode', 'reason', 'citations'}
+                    or output.get('mode') != 'read_only_stdout'
+                    or not isinstance(output.get('reason'), str) or not output['reason'].strip()
+                    or not isinstance(output.get('citations'), list) or not output['citations']
+                    or any(not isinstance(citation, dict) for citation in output['citations'])):
+                raise ValueError('file_output requires read_only_stdout, reason and exact source citations')
+            if review.get('file_output_assessment') != 'confirmed':
+                raise ValueError('Read-only stdout file contract not confirmed by independent review')
+            citations += output['citations']
         by_id = {e["id"]: e for e in entries}
-        for citation in proposal["citations"]:
+        for citation in citations:
             source_id = citation.get("source_id")
             if source_id not in by_id:
                 # An evidence locator (e1) is not a source id; say so instead of

@@ -277,9 +277,16 @@ def acceptance_coverage(tool, cases, observations=None):
                                        + repr('/input/' + check['key']) + '; correct this case argument binding')
                     coverage_reasons.append('Operation ' + operation['id'] + ' normal case '
                                             + candidate['name'] + ' is excluded by input check ' + detail)
-    # file_io remains a persistence obligation independently of which example is selected.
-    if tool.get('behavior', {}).get('file_io') and not any(c.get('output_file') and not c.get('capture_stdout') for c in positive):
-        coverage_reasons.append('No grounded normal persisted-output case for declared file IO')
+    # The default still requires a file written by the business tool. Only a
+    # source-cited, independently reviewed requirement frozen before planning
+    # permits retaining stdout for an explicitly read-only file-input tool.
+    if tool.get('behavior', {}).get('file_io'):
+        if anchors.get('file_output', {}).get('mode') == 'read_only_stdout':
+            if not any(c.get('input_files') and c.get('output_file') and c.get('capture_stdout') for c in positive):
+                coverage_reasons.append('Reviewed read-only file IO requires a grounded normal /input '
+                                        'fixture and a retained stdout report with output_file and capture_stdout=true')
+        elif not any(c.get('output_file') and not c.get('capture_stdout') for c in positive):
+            coverage_reasons.append('No grounded normal persisted-output case for declared file IO')
     if observations is not None:
         passed = {c['name'] for c in observations if c['status'] == 'passed'}
         required = positive + negative + completed_negative

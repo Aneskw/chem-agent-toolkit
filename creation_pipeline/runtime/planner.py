@@ -739,7 +739,12 @@ numeric components where needed; still reject a different pinned release. Do not
 infer a literal module.__version__ string from requirements.txt, remove the version
 check, or substitute a constant string for the installed metadata.
 Use /input (read-only), /output (persistent), /tmp (writable) for file IO. Include
-a passing persisted-output case when file_io=true. Case names must be unique.
+a passing persisted-output case when file_io=true. The default requires a file
+actually written by the business tool. Only when caller constraints supply an
+independently reviewed read_only_stdout source contract, retain the stdout report
+with output_file and capture_stdout=true while exercising actual /input fixtures.
+Do not invent output flags or write capabilities. The planner cannot grant itself
+this exception through acceptance_json or output_contract. Case names must be unique.
 Include a representative supported test calling the configured tool entrypoint
 directly with real input, not only help/version or independent checker code.
 For file tools that direct case needs input_files. The portable runner can save
@@ -828,6 +833,10 @@ Environment probes and upstream test runners are NOT user business operations
 and must not carry business acceptance contracts. They still run as tests.
 Declared purposes must be covered by actual business entrypoint cases. File IO
 requires a normal persisted-output test independently of example selection.
+The sole exception is a read_only_stdout contract independently reviewed before
+planning and supplied in caller constraints: a normal file-input case must retain
+and assert its stdout report. This never satisfies an operation's declared
+require_persistence=true, which always requires an actual tool-written file.
 Incomplete contracts are rejected BEFORE locking with structured feedback; fix
 the stated conflict within budget, preserve promised operations and upstream tests.
 """
@@ -1303,6 +1312,8 @@ def validate_plan(p, index, source, previous_cases=None, anchors=None):
         raise PlanningError("Record attempted behavior verification and unresolved scope")
     if p["file_io"] and not any(c.get("output_file") for c in cases):
         raise PlanningError("File IO requires a persistence test")
+    if (anchors or {}).get('file_output', {}).get('mode') == 'read_only_stdout' and not p['file_io']:
+        raise PlanningError('Reviewed read_only_stdout contract requires file_io=true and actual /input fixtures')
     from .acceptance import contracts, consistency, ContractConflict
     policy = contracts(p, cases, index, source, check_consistency=False)
     if previous_cases is not None:

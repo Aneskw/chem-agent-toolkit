@@ -1,11 +1,11 @@
 {
   "source_commit": "78003de47c8bee93c705cd3a2098ee1f90646aae",
   "generated_by": "validation/deepseek-api/verify_planner.py freeze",
-  "planner_policy_sha256": "bd17cbde23b1b6a0f4466c31c1be0ff3157e9d05206f5645846dac38e7019dee",
-  "prompt_sha256": "4a85f7f0a76789bbb37ed2b36220c3d495072348e07de6f4dc92aef19cdb446b",
-  "prompt_bytes": 16449,
+  "planner_policy_sha256": "294b1e4b8aface8b0c3c0c6942cfe9ef87c65a07f8374b0ec8cdd52570ca6e75",
+  "prompt_sha256": "73e0adf0b38e83b771c95ac79b50c7d5b394d30d0700188e5ce7ea11166c0be2",
+  "prompt_bytes": 16860,
   "persisted_prompt_equals_sent_prompt": true,
-  "schema_sha256": "06a21407b341df0c92a4f3f019d0b878dd2c2214b3848c5833a36a1133b8eb90",
+  "schema_sha256": "361c982c03f8bd802dcd25d54e8cea666c79e2a76a1779930504d43517a1820b",
   "fixture_files": {
     "package/README.md": "6f0883f8335f09de4e74b2a089d1a7f446a22356815d28e21eb82cdf2818094e",
     "package/tool.py": "117705254fcec40fb35bd3e15f1aa9082d0bf3866b341d1eba7993596e9b64fd",

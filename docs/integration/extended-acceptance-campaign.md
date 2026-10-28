@@ -86,3 +86,17 @@
 原始材料离线重放 `E:\Users\27343\Docker\acceptance-descriptors-a-run55-20261029\resource-diagnostic-replay.json`，0 次模型调用、无业务执行。专项 55 项通过，随后执行全量和三个自检。
 
 轮后：570 OK (3 skipped)，三个自检全绿，日志 `E:\Users\27343\Docker\acceptance-run55-postflight-tests.log`。本轮已停止，不恢复旧状态。另有静态复查发现只读文件输入/JSON stdout 与全局工具写文件门禁冲突，已留纯门禁复现，下一项独立修复会保留真实写文件工具的义务，不能用切换场景或删检查绕开。
+
+## 代码复查：只读文件输入与工具写文件义务分开验证
+
+原 ASE skill 的 SKILL.md 明确：Stdout is JSON，Input files are never changed；入口只有 --request，没有 --output。执行器需要 file_io=true 才允许 /input 只读挂载，但旧覆盖门禁又一律要求业务工具自己写出文件，且不允许捕获 stdout 计作文件证据。这使真实只读文件工具无法同时满足来源契约和通用门禁。纯门禁复现：`E:\Users\27343\Docker\acceptance-review-20261028\readonly-file-coverage-before.json`，没有模型或业务执行，不是新的付费实验。
+
+新增可选执行要求 file_output={mode:read_only_stdout, reason, citations}。只有原始来源逐字引文有效、独立内容审阅另行返回 file_output_assessment=confirmed，且主执行要求也确认后，host 才冻结这一事实并交给规划器；缺引文、unknown/conflict、自证审阅、其他模式一律不能获得此路径。ASE 封套提供原文并接受上述审阅，不硬编码审阅结果。writer 默认规则不变，规划器 acceptance_json 中声明相同字段也无效。
+
+只读路径仍要求 file_io=true、实际 /input fixture、正常业务结果与拒绝覆盖、退出后保留并断言 stdout 报告（output_file + capture_stdout=true）；输入继续以 readonly 挂载，镜像根目录继续只读。任一 operation 的 require_persistence=true 仍只能由工具实际写文件满足，不能由此例外豁免。修复不能改变已冻结的文件输出契约。没有修改原工具脚本、删用例、变弱科学断言或把 stdout 伪称为工具写出的结构文件。
+
+新增机制回归覆盖逐字来源、独立确认、配置/规划权限边界、旧 writer 和 operation 的实际写出要求、真实输入/保留报告/拒绝用例缺项仍失败，以及修复不能改换 scope。它们不是 ASE 业务通过证据；几何场景仍须完整新批次并通过独立审计。
+
+旧 run47 当前只读复核：覆盖仍 complete，镜像本身仍存在，但其 `python@sha256:0a310eeecf4e1f5a0743f9a6520c90c88d089c903ca5fd283f501e3a805f5f89` 已不在本机缓存，当前资格校验返回 base_image_unavailable，不能再称“当前复核通过”。这不是新覆盖规则拒绝了 writer，也不是重新执行业务；历史冻结报告保持原样。详见 `E:\Users\27343\Docker\acceptance-review-20261028\run47-after-readonly-contract-audit.json` 与 run47-current-resource-diagnosis.json。新批次必须在当前环境重新满足全部门禁。
+
+本项轮间修复验证：579 OK (3 skipped)，三个自检全绿，ASE 封套 --preflight 配置有效且 0 模型调用；日志 `E:\Users\27343\Docker\acceptance-readonly-contract-regression.log`。尚未运行 ASE 业务，不宣称只读新路径端到端通过。下一真实轮仍按原顺序验证描述符 A。

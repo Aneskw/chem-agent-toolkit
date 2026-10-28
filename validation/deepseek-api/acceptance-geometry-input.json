@@ -6,7 +6,7 @@
       "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit_newpipeline\\tools-skills\\ASE\\chem-structure-check"
     }
   ],
-  "prompt": "Discover and package one executable Skill using the supplied read-only XYZ structure checker as source material. Preserve scripts/check_structure.py byte-for-byte and its documented --request JSON-file CLI and JSON stdout behavior. Use ASE==3.26.0 as documented. Require complete bound Docker acceptance with a genuine coordinate-distance calculation on a small two-atom XYZ fixture with source/API-grounded geometry_checks, including a known target distance and meaningful geometry_checks value/coverage assertions. Also verify a structure whose requested geometry constraint fails while inspection itself correctly completes: status success and exit 0 can coexist with passed:false and an error finding. Treat this as a completed inspection result, not an infrastructure failure or invalid request. Verify rejection of an invalid request with documented exit 2 and error.code, and input-file immutability. Do not invent a tool output-file flag or claim an output structure is written; this tool reports on stdout and explicitly does not modify structures. Preserve documented input/path/one-based-index semantics. Old source credibility claims are not current evidence. Do not weaken assertions, change source code, or delete a failed case. Do not install dependencies or execute business/geometry code on the host; execution is permitted only in Docker. Do not claim physical or transition-state validation. Use a concrete two-He XYZ with atoms at (0,0,0) and (0,0,2): the source/API distance check must report 2.0 angstrom. Use target 2.0 for the passing geometry constraint and target 3.0 with a small tolerance for a completed inspection whose geometry check fails.",
+  "prompt": "Discover and package one executable Skill using the supplied read-only XYZ structure checker as source material. Preserve scripts/check_structure.py byte-for-byte and its documented --request JSON-file CLI and JSON stdout behavior. Use ASE==3.26.0 as documented. Require complete bound Docker acceptance with a genuine coordinate-distance calculation on a small two-atom XYZ fixture with source/API-grounded geometry_checks, including a known target distance and meaningful geometry_checks value/coverage assertions. Also verify a structure whose requested geometry constraint fails while inspection itself correctly completes: status success and exit 0 can coexist with passed:false and an error finding. Treat this as a completed inspection result, not an infrastructure failure or invalid request. Verify rejection of an invalid request with documented exit 2 and error.code, and input-file immutability. Do not invent a tool output-file flag or claim an output structure is written; this tool reports on stdout and explicitly does not modify structures. Preserve documented input/path/one-based-index semantics. Old source credibility claims are not current evidence. Do not weaken assertions, change source code, or delete a failed case. Do not install dependencies or execute business/geometry code on the host; execution is permitted only in Docker. Do not claim physical or transition-state validation. Use a concrete two-He XYZ with atoms at (0,0,0) and (0,0,2): the source/API distance check must report 2.0 angstrom. Use target 2.0 for the passing geometry constraint and target 3.0 with a small tolerance for a completed inspection whose geometry check fails. Keep the Skill name chem-structure-check so the configured execution requirement is independently reviewed. The supplied read_only_stdout requirement is subject to source/code review before planning; retain and assert the stdout report for actual read-only file input. Do not use this mode to waive any documented tool-written output obligation.",
   "model": {
     "name": "gpt-6-astra",
     "transport": "https",
@@ -54,5 +54,29 @@
     ]
   },
   "notes": "Operator authorised iterative debugging and fresh independent reruns on 2026-10-28 until two descriptor file experiments and two additional typical scenarios pass. Each run retains 16 admitted stage calls, 600 seconds per call, 3600 seconds total, pin_base_image=true; no resume/restart of failed runs, no weakening contracts, no upstream push. Native stages use Codex CLI, structured stages DeepSeek. Preserve every failed run and fix offline before a new run. After run50 provider-high stream timeout, structured reasoning is low; native reasoning remains medium. No timeout/call-budget/acceptance change.",
-  "network": false
+  "network": false,
+  "runtime_requirements": {
+    "chem-structure-check": {
+      "status": "required",
+      "reason": "Real coordinate-distance inspection, completed failed geometry constraint and invalid-request rejection need bound Docker execution. Inputs are read-only and the report is JSON stdout.",
+      "citations": [
+        {
+          "source_id": "existing_structure",
+          "path": "SKILL.md",
+          "quote": "Stdout is JSON. Exit 0 / `status:\"success\"` means the checks ran, even if the structure failed. Exit 2 = request/file error; 3 = missing dependency. Input files are never changed."
+        }
+      ],
+      "file_output": {
+        "mode": "read_only_stdout",
+        "reason": "The source explicitly reports JSON stdout, never modifies input files and provides no tool output-file flag.",
+        "citations": [
+          {
+            "source_id": "existing_structure",
+            "path": "SKILL.md",
+            "quote": "Stdout is JSON. Exit 0 / `status:\"success\"` means the checks ran, even if the structure failed. Exit 2 = request/file error; 3 = missing dependency. Input files are never changed."
+          }
+        ]
+      }
+    }
+  }
 }
