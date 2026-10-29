@@ -108,7 +108,19 @@
       "model_calls": 9,
       "stop_code": "planning_no_progress",
       "detail": "Legacy behavior precheck ignored supported acceptance.assertion, induced sh/cat wrappers, then rejected correct direct invocations again"
+    },
+    {
+      "run": 57,
+      "scenario": "descriptors-a",
+      "status": "blocked",
+      "implementation_commit": "61912bc",
+      "structured_reasoning": "low",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run57-20261029",
+      "build_id": "20261029T103716-f6ce994f",
+      "model_calls": 5,
+      "stop_code": "planning_no_progress",
+      "detail": "Correct argv but plan.script empty; old binding diagnostic hid script field and generic prompt called script optional"
     }
   ],
-  "next_run": 57
+  "next_run": 58
 }

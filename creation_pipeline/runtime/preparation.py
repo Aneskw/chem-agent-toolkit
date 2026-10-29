@@ -190,7 +190,14 @@ def validate_bound_entrypoint(p, binding):
     entry = runtime_path(binding)
     target = '/opt/skill/' + entry
     argv = p.get('entrypoint') or []
-    valid = p.get('script') == entry and bool(argv)
+    if p.get('script') != entry:
+        raise RuntimeBlocked('entry_mismatch',
+            'plan.script must equal the bound context-relative script ' + repr(entry)
+            + '; received plan.script=' + repr(p.get('script')) + ', entrypoint='
+            + json.dumps(argv, ensure_ascii=False) + '. The script field cannot be empty or use '
+              'an installed CLI name in this bound-script pipeline. Correct plan.script even '
+              'when entrypoint already names the right file; do not change the business script.', 'binding')
+    valid = bool(argv)
     if valid and argv[0] != target:
         executable = argv[0].rsplit('/', 1)[-1]
         flags = []
@@ -239,7 +246,9 @@ def propose(source, binding, audit, opts, constraints=None, locked=None, feedbac
     from .entry import runtime_path
     for number in attempts:
         p, index, _ = planner.plan(source, {"script": runtime_path(binding),
-            "constraints": ["Invoke the unchanged delivered package entry, not only the upstream tool. "
+            "constraints": ["Set plan.script to exactly the supplied context-relative script field "
+                            "(including package/ or entry/); it cannot be empty for this bound-script pipeline. "
+                            "Invoke the unchanged delivered package entry, not only the upstream tool. "
                             "ENTRYPOINT must execute that script directly, or use a supported Python/shell "
                             "interpreter followed by the script path. Python standalone flags such as -u "
                             "are allowed; inline code (-c), module execution (-m), and command wrappers "

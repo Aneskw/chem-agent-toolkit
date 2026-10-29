@@ -112,3 +112,13 @@
 首轮全量 583 项有 1 个错误：新增业务入口校验把一条旧环境元数据探针也当成业务调用。环境层本来不计入 business_args/业务覆盖，修正为只对非环境业务契约执行入口绑定；业务包装仍拒绝。旧全量失败日志保留在 `E:\Users\27343\Docker\acceptance-run56-postflight-tests.log`，修正后专项 115 项通过（2 skipped），另存完整重跑为 acceptance-run56-postflight-fixed-tests.log。三个自检已绿；2026-10-29 上午免费检查发现 Docker 未运行，已按前置约定启动 Desktop，待 daemon 就绪再开下一轮，不恢复 run56。
 
 修正后全量完成：583 OK (3 skipped)，三个自检全绿。操作者随后确认手动开启 Docker；以 daemon 实际版本响应为下一轮启动条件，不把 Desktop 进程存在当作引擎可用。修复提交后仍先运行描述符 A 的全新独立轮。
+
+## run57：argv 正确，但空 script 被遗漏在入口诊断中
+
+起点 `61912bc`，构建 `20261029T103716-f6ce994f`，北京时间 10:37:16–10:59:48，blocked、预算计数 5（3 原生、2 规划），停止码 planning_no_progress，未构建/执行业务。Docker 29.8.2 已确认可用。两版 entrypoint 都是正确的 python + /opt/skill/package/scripts/calc_descriptors.py，但两版 plan.script 均为空。旧入口校验实际检查 script 与 argv 两个条件，拒绝文本却只显示 argv，使反馈看似自相矛盾。通用 planner 提示仍说 script 可选、安装型 CLI 可留空，未明确调用方已绑定脚本时的必填规则。
+
+轮后拆开诊断：先指名 plan.script、实际空字符串及期望的 package/scripts/calc_descriptors.py，说明 argv 已正确也要修正此字段；argv 的脚本操作数校验保持不变。调用方约束与通用提示都明确：提供了绑定脚本时，script 必须是同一 context-relative 路径且列入 source_files；只有没有绑定脚本的通用安装型 CLI 可留空。未改 schema 的 read 请求占位能力，也未自动填入模型缺失值。
+
+原始两版重放 `E:\Users\27343\Docker\acceptance-descriptors-a-run57-20261029\bound-script-diagnostic-replay.json` 仍拒绝，0 次模型调用、无业务执行。回归覆盖空字段、缺 package 前缀、误填容器绝对路径均具名拒绝，只有改为正确相对路径才通过该门禁。专项 36 项通过，随后执行全量与三个自检。
+
+轮后：584 OK (3 skipped)，三个自检全绿，日志 `E:\Users\27343\Docker\acceptance-run57-postflight-tests.log`。下一轮保持描述符 A 的来源、业务义务、混合后端和预算，创建全新 state/library，不恢复 run57。

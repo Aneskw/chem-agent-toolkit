@@ -140,6 +140,19 @@ class RuntimeBuildTests(unittest.TestCase):
             p = plan(); p['entrypoint'] = argv
             validate_bound_entrypoint(p, {'entry': 'main.py'})
 
+    def test_correct_argv_does_not_hide_empty_or_wrong_plan_script_in_diagnostic(self):
+        from creation_pipeline.runtime.preparation import validate_bound_entrypoint
+        for script in ('', 'main.py', '/opt/skill/package/main.py'):
+            p = plan(); p['script'] = script
+            with self.assertRaises(RuntimeBlocked) as caught:
+                validate_bound_entrypoint(p, {'entry': 'main.py'})
+            for text in ('plan.script', "'package/main.py'", 'received plan.script=' + repr(script),
+                         'even when entrypoint already names the right file'):
+                self.assertIn(text, str(caught.exception))
+            self.assertEqual(caught.exception.code, 'entry_mismatch')
+            p['script'] = 'package/main.py'
+            validate_bound_entrypoint(p, {'entry': 'main.py'})
+
     def test_unknown_and_ambiguous_block_without_model_or_docker(self):
         for unknown in (False, True):
             record = copy.deepcopy(self.record)

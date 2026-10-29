@@ -652,8 +652,11 @@ build_layout.prefix_steps: a contiguous prefix needing ONLY dependency_files
 (selected source/install configuration) and the base image. Use 0 if uncertain.
 Remaining source follows that prefix. Never reorder steps or infer from shell.
 Steps are Docker RUN shell commands. No Docker directives inside commands.
-script is an optional repository file, not the installed executable name. Leave it
-empty for a package-installed CLI, or include that exact script in source_files.
+script is a repository/context-relative file, not the installed executable name.
+When the caller supplies a bound script, plan.script MUST equal that exact path
+(including package/ or entry/), even if entrypoint already names the correct file;
+never leave script empty in that case, and include it in source_files. Only when
+no caller-bound script is supplied may a package-installed CLI leave script empty.
 The index omits hashes/repeated lists in this prompt only; full inventory and
 omitted/unread records remain in audit files. Files absent from materials are unread.
 Request only needed installation/entry/test evidence within read_budget. Do not
