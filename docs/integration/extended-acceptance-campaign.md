@@ -132,3 +132,11 @@
 下一轮环境选择：四个新场景封套均增加调用方 constraints，明确 plan.base_image 使用该缓存的 Python 3.11 bookworm 标签，保持 pin_base_image=true，由 executor 再解析并冻结实际 digest。原始来源只读；不修改来源 Dockerfile，不替换原业务脚本、依赖 pins 或验收义务，不改代理。此次仅环境选择和实验记录变更，无生产提示/schema 改动。
 
 轮后：584 OK (3 skipped)，三个自检全绿，免费配置检查 configuration_valid / 0 次模型调用。日志 E:\Users\27343\Docker\acceptance-run58-postflight-tests.log。下一轮 run59 使用新目录，不恢复 run58。
+
+## run59：描述符 A 完整通过
+
+起点 `5a06a97`，构建 `20261029T120012-92debd3f`，北京时间 12:00:12–12:13:27，ready，预算计数 5。prepared、冻结验证和当前严格资格均通过，基础镜像 python:3.11-slim-bookworm 固定为 python@sha256:94a8fee35252d06ab75856f15f12c7bae67b10e8a6da93c7fded82b2610926cd，本轮 resolved_from=registry，不能据此推断网络始终稳定。
+
+镜像 sha256:83bbc6b5e2b1b009f5e04564aef26092f8e4c086714946363a6b0e7bbcc87df9；执行报告 15/15 passed。独立审计确认原 calc_descriptors.py 字节一致且是真实执行入口，乙醇 MW 46.069、供/受体各 1，空串与非法 SMILES 拒绝，合法文件实际输出，以及混合文件拒绝后继续处理有效行；退出后的输出文件仍在。绑定镜像标准库元数据检查确认 rdkit 2024.9.6、numpy 1.26.4、pillow 11.3.0，无宿主业务执行或额外模型调用。
+
+证据根 E:\Users\27343\Docker\acceptance-descriptors-a-run59-20261029，独立结论 acceptance-audit.json；summary/records/frozen evidence/runtime execution report 均在 state/outputs/20261029T120012-92debd3f。轮后 584 OK (3 skipped)，三个自检全绿，日志 acceptance-run59-postflight-tests.log。此轮计描述符 A 成功，四项扩展目标为 1/4；继续全新描述符 B，再原子映射与几何场景，不能将本轮外推成所有场景通过。

@@ -9,8 +9,8 @@
   "backend_scope": "Codex CLI native stages plus DeepSeek structured stages",
   "scenarios": {
     "descriptors-a": {
-      "status": "pending",
-      "successful_run": null
+      "status": "passed",
+      "successful_run": 59
     },
     "descriptors-b": {
       "status": "pending",
@@ -132,7 +132,19 @@
       "model_calls": 7,
       "stop_code": "base_image_unresolved",
       "detail": "Planning validations converged on third proposal; historical source Dockerfile digest absent locally, registry TLS timeout. No prepared/build/business result."
+    },
+    {
+      "run": 59,
+      "scenario": "descriptors-a",
+      "status": "ready",
+      "implementation_commit": "5a06a97",
+      "structured_reasoning": "low",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run59-20261029",
+      "build_id": "20261029T120012-92debd3f",
+      "model_calls": 5,
+      "stop_code": null,
+      "detail": "Independent scenario audit passed, 15/15 execution records passed, 584 tests OK (3 skipped), three self-checks green."
     }
   ],
-  "next_run": 59
+  "next_run": 60
 }
