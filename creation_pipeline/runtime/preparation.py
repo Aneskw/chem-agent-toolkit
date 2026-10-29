@@ -246,13 +246,18 @@ def propose(source, binding, audit, opts, constraints=None, locked=None, feedbac
     from .entry import runtime_path
     for number in attempts:
         p, index, _ = planner.plan(source, {"script": runtime_path(binding),
+            "container_script": "/opt/skill/" + runtime_path(binding),
             "constraints": ["Set plan.script to exactly the supplied context-relative script field "
                             "(including package/ or entry/); it cannot be empty for this bound-script pipeline. "
                             "Invoke the unchanged delivered package entry, not only the upstream tool. "
                             "ENTRYPOINT must execute that script directly, or use a supported Python/shell "
                             "interpreter followed by the script path. Python standalone flags such as -u "
                             "are allowed; inline code (-c), module execution (-m), and command wrappers "
-                            "cannot substitute for executing the bound script."] + (constraints or [])},
+                            "cannot substitute for executing the bound script. "
+                            "The script field is context-relative, but the executable/script operand "
+                            "in plan.entrypoint must be the supplied container_script absolute path: "
+                            + "/opt/skill/" + runtime_path(binding) + ". Do not copy the relative script "
+                            "field into the entrypoint array."] + (constraints or [])},
             Path(audit) / str(number), opts, deadline, feedback=feedback, previous=previous, call_guard=call_guard,
             required=required)
         try:
@@ -291,10 +296,24 @@ def render(source, target, plan, cases, base_image_pin=None):
     if prefix:
         lines += ["COPY " + json.dumps([n, "./" + n]) for n in plan["build_layout"]["dependency_files"]]
         lines += ["RUN " + s["command"] for s in plan["steps"][:prefix]]
+    from .shared_environment import describe
+    descriptor = describe(target, plan, base_image_pin, '\n'.join(lines) + '\n')
+    if descriptor:
+        write_json(target.parent / 'shared-environment.json', descriptor)
     lines += ["COPY . ./"] + ["RUN " + s["command"] for s in plan["steps"][prefix:]]
     lines += ["USER 10001:10001", "ENTRYPOINT " + json.dumps(plan["entrypoint"])]
     (target / "Dockerfile").write_text("\n".join(lines) + "\n", encoding="utf-8")
     (target / ".dockerignore").write_text("__pycache__/\n*.pyc\n", encoding="utf-8")
+
+
+NATIVE_CHECK_MAPPING_POLICY = (
+    'All configured/generated/reviewed native checks are automatically mapped later, with their original '
+    'argv and assertions, into independent container cases. The compact declaration is a preview of '
+    'obligations, not executable source; argv_preview may be truncated. Do not reconstruct or rewrite '
+    'native check programs from previews or add guessed replacements to plan.tests. Every original '
+    'check remains mandatory and unchanged. Provide the source-grounded direct normal and rejection '
+    'cases required by the planner gate; automatic native mapping does not waive that coverage. '
+    'Additional validators need their own source-backed purpose, not an imitation of a preview.')
 
 
 def declared_checks(payload, limit=40):
@@ -309,10 +328,11 @@ def declared_checks(payload, limit=40):
         for test in (definitions.get(origin) or []):
             if not isinstance(test, dict) or len(result) >= limit:
                 continue
-            result.append({'origin': origin, 'name': test.get('name'),
+            result.append({'origin': origin, 'name': test.get('name'), 'preview_only': True,
+                           'automatically_mapped': True,
                            'expected_exit': test.get('expected_exit', 0),
                            'purpose': test.get('purpose'),
-                           'argv': [str(item)[:120] for item in (test.get('argv') or [])][:8]})
+                           'argv_preview': [str(item)[:120] for item in (test.get('argv') or [])][:8]})
     return result
 
 
@@ -362,11 +382,13 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
     target.mkdir(parents=True)
     result = {"status": "runtime_blocked", "gaps": [], "model_calls": 0}
     def counted_call_guard():
+        ticket = None
         if call_guard is not None:
-            call_guard()
+            ticket = call_guard()
         # Count admitted invocation attempts, including failed transports, not
         # only successful planner receipts. Entry association uses models too.
         result['model_calls'] += 1
+        return ticket
     binding = None
     opts = planner.options(spec.get("options", {}))
     # The association review is an independent model stage like discovery/review, so
@@ -449,6 +471,7 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
                     'or a tool-written artifact. Operation require_persistence=true still demands a '
                     'real tool-written file and cannot be satisfied by captured stdout. Contract: '
                     + json.dumps(anchors['file_output'], ensure_ascii=False))
+            entry_constraints.append(NATIVE_CHECK_MAPPING_POLICY)
             if binding.get('kind') == 'markdown_python':
                 entry_constraints += ['entry/skill.py is the exact unchanged Python block extracted from package/SKILL.md; '
                     'do not generate or alter business code. Invocation contract: ' + binding['invocation'],

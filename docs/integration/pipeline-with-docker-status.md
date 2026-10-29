@@ -1,4 +1,4 @@
-> 2026-10-29 更新：混合后端四场景扩展验收已完成（run59/62/64/65，15+16+22+11=64 条执行记录全 passed），各轮 prepared/digest/image.id/独立审计及轮后回归、自检均有证据；当前 584 OK (3 skipped)。以下早期 planner 困境保留为历史分析；最新详情见 [扩展验收记录](extended-acceptance-campaign.md)，结果索引 validation/deepseek-api/extended-acceptance-results.json。此结论不等于全阶段 DeepSeek 验收。
+> 2026-10-29 最新：混合后端五批次验收完成（run59/62/64/65/74，72/72 passed），最新 647 OK (3 skipped)、三个自检全绿。冻结 bundle、当前镜像和五个正式库资格均核验通过；[当前结论与证据](current-acceptance-20261029.md)，机器索引 validation/deepseek-api/current-acceptance-results.json。共享依赖环境已实现且可显式跨工作副本共用，精确 ToolArtifact resolver 已设计但未实现。以下早期 planner 困境及各历史更新保留原范围，不代表所有 Skill 或全阶段 DeepSeek 已验证。
 
 # 现状报告：pipeline + Docker（DeepSeek 副本）
 

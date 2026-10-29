@@ -28,6 +28,29 @@ class TextFieldEncodingTests(unittest.TestCase):
     def setUp(self):
         self.base = plan()
 
+    def test_rejected_draft_bad_legacy_state_can_be_repaired_to_required(self):
+        policy = json.loads(self.base['acceptance_json'])
+        policy['invalid_input'] = True
+        self.base['acceptance_json'] = json.dumps(policy)
+        before = copy.deepcopy(self.base)
+        applied = patch(self.base, '/acceptance_json/invalid_input', '"required"')
+        self.assertEqual(json.loads(applied['acceptance_json'])['invalid_input'], 'required')
+        self.assertEqual(self.base, before)
+
+    def test_malformed_legacy_state_cannot_become_unreviewed_waiver(self):
+        policy = json.loads(self.base['acceptance_json'])
+        policy.pop('input_contract', None)
+        policy['invalid_input'] = {'bad': True}
+        self.base['acceptance_json'] = json.dumps(policy)
+        with self.assertRaisesRegex(planner.PlanningError, 'cannot downgrade'):
+            patch(self.base, '/acceptance_json/invalid_input', '"not_applicable"')
+
+    def test_bad_state_still_rejected_in_result_and_locked_plan(self):
+        with self.assertRaisesRegex(planner.PlanningError, '/acceptance_json/invalid_input'):
+            patch(self.base, '/acceptance_json/invalid_input', 'true')
+        with self.assertRaisesRegex(planner.PlanningError, 'locked tests'):
+            patch(self.base, '/acceptance_json/invalid_input', '"required"', locked=True)
+
     def test_incomplete_resource_replacement_names_schema_object_and_keeps_base(self):
         before = copy.deepcopy(self.base)
         with self.assertRaises(planner.PlanningError) as caught:

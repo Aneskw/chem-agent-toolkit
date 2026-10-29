@@ -52,6 +52,19 @@ required status needs at least one citation. Checks should
 exercise actual delivered examples/scripts, use source-grounded expected results and relevant
 boundaries; do not invent a check simply to satisfy a template. Each test has name, argv, cwd,
 expected_exit, stdout_contains and/or json_equals/artifacts, evidence, purpose, kind.
+The optional candidate field is caller routing metadata. These are the supported
+native-check fields (also supplied in execution_policy).
+Unknown fields are rejected; planner case fields such as stdout_equals, input_files,
+output_file, acceptance and timeout_seconds are not native-check fields. Preserve
+each intended constraint through supported assertions or the self-contained check
+program; never remove a user/source-backed assertion merely to pass validation.
+Every check runs independently in a fresh container and output directory. No check
+can read a previous check's /output files. Read packaged/source fixtures or prepare
+inputs within the check; /input files are not implicit in native declarations.
+For artifact or before/after validation, produce and validate its own artifact in
+that check. Preserve all assertions, fixture bytes and line endings. Compute hashes
+from actual bytes, not reconstructed/newline-normalized text. Supplementary checks
+do not replace a direct business entry check.
 json_equals is an OBJECT mapping a dotted field/index path into the parsed stdout JSON to
 its exact expected value, for example {"leaves": ["*CCO"]}, {"count": 0} or {"0": "*CCC"}
 for a top-level JSON array. It is never the whole JSON value: an array or scalar there is

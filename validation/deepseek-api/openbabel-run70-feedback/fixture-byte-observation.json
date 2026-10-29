@@ -1,0 +1,11 @@
+{
+  "scope": "Historical byte/contract observations, not current acceptance",
+  "build_id": "20261029T175137-a863b54c",
+  "original_fixture_utf8": "CCO\r\n",
+  "original_fixture_hex": "43434f0d0a",
+  "original_fixture_sha256": "c5e96abe1a2a1a49fb241ad828857e5a325c2a96507679183aea685134e2c3c3",
+  "failed_plan_fixture_utf8": "CCO\n",
+  "failed_plan_fixture_hex": "43434f0a",
+  "failed_plan_fixture_sha256": "5c9aa2a3024d56c903d547798cbd04ff743433ba0950dbfd8e19238e40651172",
+  "preservation_requirement": "Compare byte-identical inputs; do not normalize line endings or substitute a new expected hash."
+}

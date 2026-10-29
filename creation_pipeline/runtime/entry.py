@@ -340,8 +340,8 @@ def associate(record, package, sources, audit, opts, guard=None, deadline=None, 
         raise EntryError('unsafe_binding_source', 'Credential-like source material cannot enter association prompts', kind='unresolved_input')
     (audit / 'proposal-prompt.txt').write_text(prompt, encoding='utf-8')
     timeout, _ = limits()
-    if guard:
-        guard()
+    from .accounting import admit, observe
+    ticket = admit(guard, 'entry_association', opts.get('backend','codex_cli'), backend_model(opts))
     proposal, receipt = model_call.call(prompt, schema, backend_model(opts), timeout=timeout, audit_dir=audit / 'model',
                                         transport=opts.get('transport', 'default'),
                                         progress_watch=opts.get('progress_watch', 'terminate'),
@@ -349,6 +349,7 @@ def associate(record, package, sources, audit, opts, guard=None, deadline=None, 
                                         tier=opts.get('service_tier'),
                                         backend=opts.get('backend', 'codex_cli'),
                                         api_options=planner_options(opts))
+    observe(ticket, receipt)
     import jsonschema
     try:
         jsonschema.validate(proposal, schema)

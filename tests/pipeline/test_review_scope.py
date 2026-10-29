@@ -28,6 +28,9 @@ class ReviewScopeTests(unittest.TestCase):
         self.assertIn('"business_execution": "deferred_to_bound_docker"', prompt)
         self.assertIn('"runtime_evidence_required_for_content_approval": false', prompt)
         self.assertIn('Docker report cannot exist until this content review passes', prompt)
+        self.assertIn('"cross_check_state_shared": false', prompt)
+        author_prompt = next(p for p in fixture.last_backend.prompts if '"_phase": "author"' in p)
+        self.assertIn('"cross_check_state_shared": false', author_prompt)
 
     def review_answer(self, answer):
         session = SimpleNamespace(stage=Mock(return_value=copy.deepcopy(answer)),

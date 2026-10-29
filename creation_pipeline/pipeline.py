@@ -503,9 +503,11 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                                 or len(session.receipts) - config['_candidate_start'] >= bound(config["limits"]["candidate_calls"])
                                 or time.monotonic() >= config["_deadline"]):
                             raise RuntimeBlocked("explicit_budget", "Explicit run model/time limit reached")
-                        call = {"phase": "runtime_planning", "model": session.model_name, "status": "attempted", "usage": None}
+                        call = {"phase": "runtime_model", "model": None, "backend": None,
+                                "status": "attempted", "usage": None}
                         session.receipts.append(call)
                         entity_record.setdefault("model_calls", []).append(call)
+                        return call
                     materials = prepare(entity_record, bundle / "skills" / name, sources.manifest(),
                                         work / "runtime-preparation" / name / uuid.uuid4().hex, runtime_spec, executor, runtime_call_guard)
                     # Final freeze is distinct from the author's durable completion receipt.
@@ -641,6 +643,7 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
     record["model_calls"] = this_build
     record["model_metrics"] = {"calls_attempted": len(receipts), "usage_fully_reported": bool(receipts) and all(r.get("usage") for r in receipts),
                                "receipts": receipts, "monetary_cost": None}
+    record['model_metrics']['usage_scope'] = 'Admitted-call receipts; API usage covers the final response, not necessarily all provider retry requests or monetary cost'
     usages = [r["usage"] for r in receipts if isinstance(r.get("usage"), dict)]
     usage_keys = {k for u in usages for k, v in u.items() if type(v) is int}
     record["model_metrics"]["reported_totals"] = {k: sum(u.get(k, 0) for u in usages if type(u.get(k, 0)) is int)

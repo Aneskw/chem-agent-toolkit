@@ -10,7 +10,16 @@ public base (pip, apt/system packages, Conda, source compilation are supported).
 Workdir /opt/skill receives unchanged source_files before steps, except
 build_layout.prefix_steps: a contiguous prefix needing ONLY dependency_files
 (selected source/install configuration) and the base image. Use 0 if uncertain.
+Prefer the longest source-independent installation prefix whose inputs are known.
+For pip install -r requirements.txt, list that exact dependency file and include
+the install step in prefix_steps when it reads no other source. Inline pip/apt
+installs may have dependency_files=[] and prefix_steps>0. 'The full source could
+be copied first' is not a reason to use zero: doing so couples dependency rebuilds
+to skill prose and test fixtures. Keep steps that read delivered code after COPY;
+never move such steps into the environment prefix merely to increase cache hits.
 Remaining source follows that prefix. Never reorder steps or infer from shell.
+UTF-8 material preserves original newlines: copy exact fixture text including CRLF
+when a byte hash is asserted. Do not replace it with newline-normalized text.
 Steps are Docker RUN shell commands. No Docker directives inside commands.
 script is a repository/context-relative file, not the installed executable name.
 When the caller supplies a bound script, plan.script MUST equal that exact path
@@ -102,6 +111,10 @@ covered), validation_gaps (behavior with no contract basis) and blockers (a stat
 obligation without a verifiable contract) separately; a blocker is never replaced by
 a recorded gap. A repair may correct a draft classification only with this recorded
 evidence; a locked acceptance contract stays as it is.
+Required argument/flag presence is not a nonempty-value constraint. For example
+argparse required=True requires the flag, but does not reject an empty string value.
+Do not infer extra value rejections without an explicit source-backed check/error
+path or recorded execution evidence. Preserve actual documented obligations.
 Fixture contract rules. The validators are exact; a near miss is rejected as a plan
 error, not repaired silently. Executable examples of each rule follow this policy.
 - In a FULL PLAN return case_json and acceptance_json as JSON OBJECTS: the validator

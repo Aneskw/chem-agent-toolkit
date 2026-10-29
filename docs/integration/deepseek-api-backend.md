@@ -1,5 +1,18 @@
 # DeepSeek API backend for the structured model calls
 
+**Current scope update (2026-10-29):** the table and original verification below
+describe the initial structured-only implementation. Current code additionally
+supports opt-in `model.backend=deepseek_api` for discovery, authoring and review
+through `creation_pipeline/agent/api_provider.py` and `NativeSession._api_stage`:
+one bounded completion returns structured records/files, followed by the existing
+host finalization and validation. It does not emulate the CLI tool loop. The
+structured backend remains separately selected under runtime options; neither
+backend is an automatic fallback. The active acceptance campaign explicitly uses
+Codex CLI native stages plus DeepSeek structured stages. Four successful scenarios
+do not establish all-DeepSeek end-to-end acceptance. See
+[current campaign](extended-acceptance-campaign.md) and
+[the additional Open Babel experiment](planner-openbabel-experiment.md).
+
 This document describes the opt-in DeepSeek backend added in this copy of the
 repository. It records exactly which model stages move to the API, which stay on
 the Codex CLI, the protocol the implementation is written against, and the limits

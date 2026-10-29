@@ -1,0 +1,161 @@
+{
+  "scope": "Completed Open Babel batches after environment sharing was introduced (run69-run74), not whole-session spending",
+  "source": "Saved frozen provider receipts, build receipts and execution reports; no model/Docker/business calls",
+  "admitted_calls": 38,
+  "shared_environment_build_invocations": 2,
+  "shared_environment_hits": 4,
+  "thin_images_built": 6,
+  "interpretation": "Build invocations do not prove package installation ran: Docker layer caching may also have applied. No baseline speedup/disk saving, vendor retry-total tokens or monetary cost inferred.",
+  "rows": [
+    {
+      "run": 69,
+      "build_id": "20261029T170755-17414ef3",
+      "status": "failed",
+      "admitted_calls": 10,
+      "native_stage_calls": 3,
+      "successful_structured_receipts": 7,
+      "structured_receipt_models": [
+        "deepseek-v4-pro"
+      ],
+      "reported_structured_final_response_prompt_tokens": 91196,
+      "reported_structured_final_response_completion_tokens": 43765,
+      "reported_structured_elapsed_seconds": 754.062,
+      "reported_native_elapsed_seconds": 501.457,
+      "shared_environment_status": "built",
+      "recipe_key": "b369a43e272b110de7f2e8fddd5b3bf4de03f7965b351344de814244870c9663",
+      "environment_image_id": "sha256:cb50e4d0a1d0bb065ddcf409067c8dfe698d4f0b6c6b90bd62824f1e4beed56d",
+      "thin_image_id": "sha256:2bac54c1475697736028fcee02f37f594e0d2201837d38352be00b785dbdb792",
+      "passed": 6,
+      "total": 9,
+      "failed_cases": [
+        "normal-file-conversion",
+        "bound-ethanol-acceptance",
+        "empty-output-path-rejection"
+      ]
+    },
+    {
+      "run": 70,
+      "build_id": "20261029T175137-a863b54c",
+      "status": "failed",
+      "admitted_calls": 4,
+      "native_stage_calls": 3,
+      "successful_structured_receipts": 1,
+      "structured_receipt_models": [
+        "deepseek-v4-pro"
+      ],
+      "reported_structured_final_response_prompt_tokens": 15337,
+      "reported_structured_final_response_completion_tokens": 24169,
+      "reported_structured_elapsed_seconds": 336.835,
+      "reported_native_elapsed_seconds": 564.422,
+      "shared_environment_status": "hit",
+      "recipe_key": "b369a43e272b110de7f2e8fddd5b3bf4de03f7965b351344de814244870c9663",
+      "environment_image_id": "sha256:cb50e4d0a1d0bb065ddcf409067c8dfe698d4f0b6c6b90bd62824f1e4beed56d",
+      "thin_image_id": "sha256:4c8912d335c0b4865f8d064a853e0214d5be9c652827761c156da817dcc9059c",
+      "passed": 5,
+      "total": 11,
+      "failed_cases": [
+        "real-obabel-environment-and-input-baseline",
+        "normal-file-conversion",
+        "input-and-entry-preservation",
+        "check-generated-real-obabel-environment-and-input-baseline",
+        "check-generated-retained-ethanol-structure",
+        "check-generated-input-and-entry-preservation"
+      ]
+    },
+    {
+      "run": 71,
+      "build_id": "20261029T183610-192d1953",
+      "status": "failed",
+      "admitted_calls": 7,
+      "native_stage_calls": 3,
+      "successful_structured_receipts": 4,
+      "structured_receipt_models": [
+        "deepseek-v4-pro"
+      ],
+      "reported_structured_final_response_prompt_tokens": 82964,
+      "reported_structured_final_response_completion_tokens": 34071,
+      "reported_structured_elapsed_seconds": 356.136,
+      "reported_native_elapsed_seconds": 554.398,
+      "shared_environment_status": "built",
+      "recipe_key": "27ec05ccc4a1fe0992848949f137739a0ce0d5bb49fb3cbbe5873a555b79f1eb",
+      "environment_image_id": "sha256:4edfe724d5d68c9b45e4908b5b4fd6d58666fdb09f1aa4b6a8d914bd170831d5",
+      "thin_image_id": "sha256:c560f20869ee268c8c5c2a45d8aa1fd967bdaa0c3e683ecd5442f8adb7e1026c",
+      "passed": 11,
+      "total": 12,
+      "failed_cases": [
+        "normal-direct-entry"
+      ]
+    },
+    {
+      "run": 72,
+      "build_id": "20261029T190019-038f4841",
+      "status": "failed",
+      "admitted_calls": 5,
+      "native_stage_calls": 3,
+      "successful_structured_receipts": 2,
+      "structured_receipt_models": [
+        "deepseek-v4-pro"
+      ],
+      "reported_structured_final_response_prompt_tokens": 41541,
+      "reported_structured_final_response_completion_tokens": 26078,
+      "reported_structured_elapsed_seconds": 279.999,
+      "reported_native_elapsed_seconds": 627.976,
+      "shared_environment_status": "hit",
+      "recipe_key": "b369a43e272b110de7f2e8fddd5b3bf4de03f7965b351344de814244870c9663",
+      "environment_image_id": "sha256:cb50e4d0a1d0bb065ddcf409067c8dfe698d4f0b6c6b90bd62824f1e4beed56d",
+      "thin_image_id": "sha256:72d13e10ccb191c751b9aa86c44df840509af9378ac230be7154c806bd1da8c6",
+      "passed": 9,
+      "total": 11,
+      "failed_cases": [
+        "native-real-obabel-and-baseline",
+        "native-retained-ethanol-structure"
+      ]
+    },
+    {
+      "run": 73,
+      "build_id": "20261029T192234-686f929a",
+      "status": "failed",
+      "admitted_calls": 6,
+      "native_stage_calls": 3,
+      "successful_structured_receipts": 3,
+      "structured_receipt_models": [
+        "deepseek-v4-pro"
+      ],
+      "reported_structured_final_response_prompt_tokens": 66144,
+      "reported_structured_final_response_completion_tokens": 21953,
+      "reported_structured_elapsed_seconds": 250.945,
+      "reported_native_elapsed_seconds": 565.452,
+      "shared_environment_status": "hit",
+      "recipe_key": "b369a43e272b110de7f2e8fddd5b3bf4de03f7965b351344de814244870c9663",
+      "environment_image_id": "sha256:cb50e4d0a1d0bb065ddcf409067c8dfe698d4f0b6c6b90bd62824f1e4beed56d",
+      "thin_image_id": "sha256:ce98766b5c5595a9d1df9da82978758caa51f92f820080697b9b4d8f56cb55ad",
+      "passed": 8,
+      "total": 9,
+      "failed_cases": [
+        "unknown-output-format-rejection"
+      ]
+    },
+    {
+      "run": 74,
+      "build_id": "20261029T194522-1929c499",
+      "status": "ready",
+      "admitted_calls": 6,
+      "native_stage_calls": 3,
+      "successful_structured_receipts": 3,
+      "structured_receipt_models": [
+        "deepseek-v4-pro"
+      ],
+      "reported_structured_final_response_prompt_tokens": 67816,
+      "reported_structured_final_response_completion_tokens": 21268,
+      "reported_structured_elapsed_seconds": 274.678,
+      "reported_native_elapsed_seconds": 603.332,
+      "shared_environment_status": "hit",
+      "recipe_key": "b369a43e272b110de7f2e8fddd5b3bf4de03f7965b351344de814244870c9663",
+      "environment_image_id": "sha256:cb50e4d0a1d0bb065ddcf409067c8dfe698d4f0b6c6b90bd62824f1e4beed56d",
+      "thin_image_id": "sha256:a65227fdd4f7f501348dffa9653b4b50bea320362ffa4604ee4ec338e4100f1a",
+      "passed": 8,
+      "total": 8,
+      "failed_cases": []
+    }
+  ]
+}

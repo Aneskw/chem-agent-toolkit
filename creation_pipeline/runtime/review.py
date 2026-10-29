@@ -46,8 +46,15 @@ def review_snapshot(record, package, sources, work, *, proposed_plan=None, corre
     if call_guard:
         stage = session.stage
         def guarded_stage(*args, **kwargs):
-            call_guard()
-            return stage(*args, **kwargs)
+            from .accounting import admit, observe
+            ticket = admit(call_guard, 'independent_runtime_review', backend,
+                           api_model if backend == 'deepseek_api' else model)
+            before = len(session.receipts)
+            try:
+                return stage(*args, **kwargs)
+            finally:
+                if len(session.receipts) > before:
+                    observe(ticket, session.receipts[-1])
         session.stage = guarded_stage
     plan = copy.deepcopy(record['plan'])
     plan['evidence'] = [{'id': e['id'], 'claim': 'Inspect the original source for this delivered capability'} for e in material.evidence]

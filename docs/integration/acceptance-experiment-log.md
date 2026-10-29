@@ -1,6 +1,6 @@
-# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 65）
+# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 74）
 
-记录日期：2026-10-28
+记录日期：2026-10-28–2026-10-29（逐轮时间见记录）
 
 ### run47 前置检查补记（2026-10-28）
 
@@ -9,25 +9,27 @@
 - 修复：`DiscoveryTests`（含其他套件复用的夹具）显式模拟 Docker 不可用，增加禁止真实 Docker 探测及运行时模型调用的回归；两项旧计数去除不该发生的运行时调用。生产代码、验收契约与封套预算未修改。
 - 诊断日志：`E:\Users\27343\Docker\acceptance-run47-preflight-tests.log`；经 `redact()` 保留的关联审计：`E:\Users\27343\Docker\acceptance-run47-preflight-evidence\`；修复后全量回归日志：`E:\Users\27343\Docker\acceptance-run47-preflight-fixed.log`。
 副本：`E:\Users\27343\Docker\chem-agent-toolkit-integration_deepseekapi`
-分支：`pipeline-with-docker`（本地 79 个提交，未合并上游；HEAD 以 `git log --oneline -1` 为准）
+分支：`pipeline-with-docker`（本次后续修复仅本地提交；HEAD 以 `git log --oneline -1` 为准）
 只读基线：`E:\Users\27343\Docker\chem-agent-toolkit-integration` @ `78003de4`
 配套文档：`docs/integration/pipeline-with-docker-status.md`（现状与卡点分析）、`docs/integration/next-agent-prompt.md`（交接提示词）
 
 ---
 
-## 0. 一句话结论
+## 0. 当前结论（截至 run74）
 
-**当前四场景扩展验收通过（截至 run65，4/4）**：描述符 A run59 15/15、描述符 B run62 16/16、原子映射 run64 22/22、ASE 几何 run65 11/11，共 64 条执行记录 passed。四轮各有 prepared、固定 digest、image.id、独立场景审计与轮后全量/三个自检绿。当前全量 584 OK (3 skipped)。结论限于 Codex CLI 原生阶段 + DeepSeek 结构化阶段和这些场景；详情见 extended-acceptance-campaign.md，机器索引 extended-acceptance-results.json。
+**当前混合后端五批次验收通过，共 72 条执行记录 passed。** 描述符 A run59 15/15、描述符 B run62 16/16、原子映射 run64 22/22、ASE 几何 run65 11/11、Open Babel run74 8/8。各轮 prepared、固定 digest、image.id、冻结完整性和当前严格资格均有证据。同主机共享范围扩展后的最新组合回归 **647 OK (3 skipped)**，三个自检全绿。五个正式库条目当前均 accepted，机器索引为 validation/deepseek-api/current-acceptance-results.json，完整结论见 current-acceptance-20261029.md。
 
-**追加复查（run48/49）未取得新的端到端通过**：run48 暴露并已修复规划补丁的类型审计崩溃；run49 停在文件 fixture 绑定/覆盖诊断，未到 Docker，轮后已补具名诊断。run47 的单轮成功证据仍成立，但不能将它外推成全部 skill 场景稳定成功。最新详情见 §11 及 `docker-acceptance-review-20261028.md`。
+Open Babel run74 已实际使用共享依赖环境、正则正例预检、完整原生检查及正确结构化回执汇总。此前失败轮不恢复、不改判成功；原生未知字段忽略漏洞在轮后修复，全部 30 项已验收原生声明与原锁定映射在新实现下保持一致。详情见 planner-openbabel-experiment.md。最新原始证据根 E:\Users\27343\Docker\acceptance-openbabel-run74-20261029。
 
-**run47 已取得混合后端端到端执行通过的证据**：`ready`、8 次计入预算的调用、规划 `prepared`、本地 digest 兜底生效、Docker 构建成功、执行报告 12/12 `passed`（含真实计算与空串/空白/畸形 SMILES 拒绝）。轮后回归与自检结果见 §10。
+共享依赖环境、薄工具镜像与每任务隔离已实现并经真实 Docker 两工具、失败隔离和并发试验验证。精确 ToolArtifact resolver 只有设计、尚未实现；不能声称所有 Skills 共一个可变环境、已跳过环境模型、自动兼容合并或跨主机制品发布。设计见 shared-tool-layer-current-design.md。
 
-原生发现/编写/审阅及独立关联审阅按操作者本次选择使用 Codex CLI，结构化关联/规划使用 DeepSeek；**不能称为全阶段 DeepSeek 通过**。前置测试意外启动真实 CLI 的隔离缺陷及修复见上方补记；不能声称整个会话严格零额外调用。以下 run46 的网络风险与交接计划保留为历史记录，以 §10 的本轮证据为准。
+共享同键等待已合入 2c1313c：由原先 fail-fast busy 改为原构建时限内等待、完整记录重新核验后 hit，不额外开启模型或预算。取消/过期不删除他人锁，崩溃锁不强抢；另补准备耗尽预算后禁止启动薄构建。新增四项回归，组合 647 OK (3 skipped) 和三个自检全绿，日志 shared-environment-wait-combined-tests-20261029.log。真实线程争用 shared-environment-wait-20261029-01、双 checkout/双进程争用 shared-registry-concurrent-checkouts-20261029-01 均为 1 次环境构建、2 次薄构建，两个原请求自动完成；真实当前 Open Babel 重建 shared-runtime-rebuild-compatibility-20261029-03 为环境 hit、1 次薄构建、8/8。以上均 0 模型；重验不增加五批次 72 条原生成计数。
+
+结论限于 Codex CLI 原生阶段 + DeepSeek 结构化阶段及上述场景；不等于全阶段 DeepSeek、所有 Skill 首次自动成功或独立科学有效性证明。run47 前置免费测试曾意外启动真实 CLI，已修复并保留披露；准入调用数不等于整个会话供应商请求/费用总数。run47 原始 12/12 成功与后续各失败诊断保留为历史记录。当前授权不 push。
 
 ---
 
-## 1. 实验环境与固定约定
+## 1. 实验环境与固定约定（run46 历史快照；当前组合见 §0）
 
 | 项 | 值 |
 | --- | --- |
@@ -91,7 +93,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 
 ---
 
-## 3. 全量结果表（run 2 – run 65，共 64 轮；另有 4 次前置的 `final-acceptance-*` 批次）
+## 3. 全量结果表（run 2 – run 70，共 69 轮；另有 4 次前置的 `final-acceptance-*` 批次）
 
 `calls` 是本次构建实际计入预算的调用数；`stop code` 取自该轮 `runtime/<candidate>/<env>/receipt.json` 的 `gaps[0]`。带 “—” 的行在当时没有写出 receipt（崩溃/中断/早期阶段失败），原因栏取自 `records/*.json` 或该轮 `run<N>.log`。
 
@@ -161,6 +163,11 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 | 63 | blocked | 11 | `unsupported_resource` | 原子映射最终 prepared，但把公共 RDKit 依赖误列必需 private_dependency，资源适配器正确拒绝，未构建/执行；轮后澄清公共依赖与私有资源 |
 | 64 | ready | 6 | — | 原子映射 prepared/固定 digest/构建成功，22/22 passed；原入口、离去基团 [3]、四类拒绝、合法/混合文件独立审计通过；584 回归与三个自检绿，扩展目标 3/4 |
 | 65 | ready | 6 | — | 几何 prepared/固定 digest/构建成功，11/11 passed；真实距离、完成但约束失败、非法请求、输入不变与保留报告独立审计通过；584 回归与三个自检绿，扩展目标 4/4 |
+| 66 | incomplete | 2 | `model_timeout`（原生作者） | 新 Open Babel 样例：发现完成，作者 600 秒超时；未到 planner/Docker，保留证据、不恢复；四场景原成功结论不变 |
+| 67 | interrupted | — | — | 会话中断后发现阶段无结束汇总、无存活进程；保留目录，不恢复，不计成功 |
+| 68 | blocked | 6 | `plan_unresolved` | Open Babel 正确修复补丁被旧草稿 invalid_input=true 的类型校验阻断；轮后修复 rejected-draft 比较路径，587 回归与三个自检绿 |
+| 69 | failed | 10 | `execution_failed` | Open Babel prepared/共享系统环境/构建成功，6/9 passed；SDF 被 JSON 断言误读、自定义计数行偏移、把 required flag 误作非空值拒绝；轮后增加通用文本断言与来源反馈，605 回归/三个自检绿 |
+| 70 | failed | 4 | `execution_failed` | 首次规划 prepared，构建成功且命中共享环境；5/11 passed；材料 CRLF 被规范化导致 hash 不符、原生检查错误依赖跨用例状态、正常 SDF 仍被 JSON 断言误读；轮后保留原字节并明确自包含检查，610 回归/三个自检绿 |
 
 > 第 2–40 行的“停因”是从该轮 `state/outputs/*/records/*.json`、`runtime/*/*/receipt.json` 与 `run<N>.log` 重建的；如果要精确追某一行，直接看该轮目录里的 `run<N>.log` 尾部和 `materials/planning/<n>/rejection.json`。
 
@@ -296,6 +303,6 @@ git -c http.proxy=http://127.0.0.1:7897 push fork upload-v2:upload-pipeline-with
 
 操作者随后授权代码审查和 1–2 个基于原有 skill 的完整实验。发现并修复真实入口执行绑定漏洞（`6e76924`）；run47 的原始入口未利用此漏洞，修复后当前严格资格复核仍通过。run48 又暴露了规划补丁的嵌套类型审计崩溃，不能将其描述为通过。完整审查范围、反例验证、修复依据和追加实验见 `docker-acceptance-review-20261028.md`。最多执行 run48/run49 两个新批次，不恢复失败轮，不放宽契约。
 
-## 12. 再次授权的四场景验收（run50 起，进行中）
+## 12. 再次授权的四场景验收（run50–65，已完成）
 
-操作者在 run49 后明确授权：两轮描述符文件实验先调试到通过，再以两个典型场景验收，遇错修复后新开轮次重跑。此新授权取代 §11 的两个批次数量限制；仍不允许恢复失败轮、放宽断言或推送上游。计划为两个独立描述符成功批次、原子映射审计、ASE XYZ 几何检查；当前成功数 0/4。具体封套、结果与后续配置调整见 `extended-acceptance-campaign.md`，进度机器记录为 `validation/deepseek-api/extended-acceptance-progress.json`。
+操作者在 run49 后明确授权：两轮描述符文件实验先调试到通过，再以两个典型场景验收，遇错修复后新开轮次重跑。此新授权取代 §11 的两个批次数量限制；仍不允许恢复失败轮、放宽断言或推送上游。计划为两个独立描述符成功批次、原子映射审计、ASE XYZ 几何检查；最终成功数 4/4（run59/62/64/65）。具体封套、结果与后续配置调整见 `extended-acceptance-campaign.md`，进度机器记录为 `validation/deepseek-api/extended-acceptance-progress.json`。

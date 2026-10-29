@@ -1,0 +1,37 @@
+{
+  "source_build_id": "20261029T190019-038f4841",
+  "batch_status": "failed",
+  "passed_records": 9,
+  "total_records": 11,
+  "native_original_checks_passed": 5,
+  "normal_direct_conversion_passed": true,
+  "actual_version_report": {
+    "pass": true,
+    "obabel": "Open Babel 3.1.1 -- Jan  4 2023 -- 09:58:24",
+    "obabel_sha256": "57584125b4946eea824d3bfa75c3fce2c018efa680368e1bdfdbf9c121784876",
+    "python": "3.11.18"
+  },
+  "wrong_exact_literal": "\"python\": \"3.11\"",
+  "actual_sdf_counts_line": "  3  2  0  0  0  0  0  0  0  0999 V2000",
+  "actual_counts_first_three": [
+    3,
+    2,
+    0
+  ],
+  "wrong_planner_counts_assertion": "int(parts[0])==3 and int(parts[1])==3 and int(parts[2])==2",
+  "failed_cases": [
+    {
+      "name": "native-real-obabel-and-baseline",
+      "exit_code": 0,
+      "stdout": "{\"pass\": true, \"obabel\": \"Open Babel 3.1.1 -- Jan  4 2023 -- 09:58:24\", \"obabel_sha256\": \"57584125b4946eea824d3bfa75c3fce2c018efa680368e1bdfdbf9c121784876\", \"python\": \"3.11.18\"}\n",
+      "stderr": ""
+    },
+    {
+      "name": "native-retained-ethanol-structure",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 15, in <module>\nAssertionError: counts line wrong\n"
+    }
+  ],
+  "scope": "historical observations, not current execution or permission to omit checks"
+}

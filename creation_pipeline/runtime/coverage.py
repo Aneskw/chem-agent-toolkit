@@ -175,7 +175,10 @@ def acceptance_coverage(tool, cases, observations=None):
     purposes = policy.get('purposes')
     if (not isinstance(purposes, list) or not purposes
             or not set(purposes) <= {c['acceptance']['purpose'] for c in positive}):
-        coverage_reasons.append('Declared purposes are not covered by grounded normal cases')
+        observed_purposes = {c['acceptance']['purpose'] for c in positive}
+        coverage_reasons.append('Declared purposes are not covered by grounded normal cases: '
+            + 'declared=' + repr(purposes) + '; observed=' + repr(sorted(observed_purposes))
+            + '; normal cases=' + repr([c['name'] for c in positive]))
 
     def unit_positive(operation_id):
         if not operation_id:
@@ -249,6 +252,10 @@ def acceptance_coverage(tool, cases, observations=None):
         missing = []
         if not normal or not set(operation['purposes']) <= {c['acceptance']['purpose'] for c in normal}:
             missing.append('normal business purpose')
+            coverage_reasons.append('Operation ' + operation['id'] + ' purpose mismatch: declared='
+                + repr(operation['purposes']) + '; observed='
+                + repr(sorted({c['acceptance']['purpose'] for c in normal})) + '; normal cases='
+                + repr([c['name'] for c in normal]))
         if operation.get('require_persistence') and not any(c.get('output_file') and not c.get('capture_stdout') for c in normal):
             missing.append('persisted output')
         state = statuses.get(operation['id'])

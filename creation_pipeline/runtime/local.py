@@ -221,13 +221,35 @@ class LocalExecutor:
             receipt["execution_status"] = "runtime_blocked"
         else:
             tag = "chem-integrated:" + request.revision_id[4:28] + "-" + uuid.uuid4().hex[:8]
+            from .shared_environment import resolve, SharedEnvironmentError
+            timeout = env["limits"]["build_seconds"]
+            build_deadline = time.monotonic() + timeout
+            if self.deadline is not None:
+                build_deadline = min(build_deadline, self.deadline)
+            try:
+                context, shared, shared_logs = resolve(materials, None,
+                                                      preflight['host'], process, build_deadline, attempt)
+                if time.monotonic() >= build_deadline:
+                    raise SharedEnvironmentError('Build deadline reached before tool image build', shared_logs)
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                logs.extend(getattr(exc, 'logs', []))
+                status = getattr(exc, 'status', 'runtime_blocked')
+                receipt.update(status=status, execution_status=status,
+                               gaps=[gap('docker_build_failed' if status == 'build_failed'
+                                         else 'shared_environment_unavailable', redact(str(exc)))], finished_at=now())
+                logs.append({'exit_code': None, 'stdout': '', 'stderr': redact(str(exc))})
+                self.inputs(request)
+                write_json(attempt / 'build-log.json', logs)
+                receipt['log_sha256'] = file_digest(attempt / 'build-log.json')
+                write_json(attempt / 'receipt.json', receipt)
+                return receipt
+            logs.extend(shared_logs)
+            receipt['shared_environment'] = shared
             command = ["docker", "build", "--platform", "linux/amd64", "--iidfile", str(attempt / "image.id"),
                        "--label", "chem.revision=" + request.revision_id,
                        "--label", "chem.environment=" + request.environment_fingerprint,
-                       "--tag", tag, str(materials / "context")]
-            timeout = env["limits"]["build_seconds"]
-            if self.deadline is not None:
-                timeout = min(timeout, max(0.1, self.deadline - time.monotonic()))
+                       "--tag", tag, str(context)]
+            timeout = max(.1, build_deadline - time.monotonic())
             logs.append(process(command, timeout))
             receipt.update(status="build_failed", execution_status="build_failed", tag=tag)
             if logs[-1]["exit_code"] == 0:
@@ -239,6 +261,9 @@ class LocalExecutor:
                     logs.append(inspection)
                     details = json.loads(inspection["stdout"])[0]
                     plan = env["plan"]
+                    from .shared_environment import inheritance_matches
+                    if not inheritance_matches(shared, details):
+                        raise ValueError('Built tool image did not inherit the resolved shared environment layers/config')
                     if (inspection["exit_code"] != 0 or details["Id"] != image_id or details["Os"] != "linux" or details["Architecture"] != "amd64"
                             or details["Config"]["Entrypoint"] != plan["entrypoint"]
                             or details["Config"]["Labels"].get("chem.revision") != request.revision_id

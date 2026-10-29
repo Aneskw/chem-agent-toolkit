@@ -99,13 +99,23 @@ def _classification(policy, index, source):
                                      'Operation ' + str(operation.get('id'))) for operation in operations]
             aggregate = max(states, key=lambda state: AGGREGATE[state])
             if policy.get('invalid_input') != aggregate:
-                raise ValueError('invalid_input must equal the per-operation aggregate: ' + aggregate)
+                state_view = [{'id': operation.get('id'), 'status': state}
+                              for operation, state in zip(operations, states)]
+                raise ValueError('acceptance_json.invalid_input must equal the per-operation aggregate: '
+                                 + aggregate + '; received=' + json.dumps(policy.get('invalid_input'))
+                                 + '; operation states=' + json.dumps(state_view)
+                                 + '. Replace acceptance_json.invalid_input with the JSON string '
+                                 + json.dumps(aggregate) + ', not an input_contract object. '
+                                   'Keep the separate operations[].input_contract objects unchanged.')
             return 'operations', aggregate
         return 'legacy', policy.get('invalid_input')
     if 'input_contract' in policy:
         status = input_contract(policy['input_contract'], index, source)
         if policy.get('invalid_input') != status:
-            raise ValueError('invalid_input must equal the declared input contract: ' + status)
+            raise ValueError('acceptance_json.invalid_input must equal the declared input contract: '
+                             + status + '; received=' + json.dumps(policy.get('invalid_input'))
+                             + '. Use the JSON string ' + json.dumps(status)
+                             + ' here; keep acceptance_json.input_contract as its separate object.')
         return 'declared', status
     return 'legacy', policy.get('invalid_input')
 
@@ -139,6 +149,8 @@ def consistency(cases):
                     reason = 'Exact stdout field cannot satisfy typed allowed_values (no coercion or tolerance)'
             elif kind == 'stdout_equals' and text.strip() != assertion['value']:
                 reason = 'Two exact assertions on stdout disagree'
+            elif kind == 'text_regex' and re.fullmatch(assertion['pattern'], text) is None:
+                reason = 'Exact stdout cannot satisfy the required text pattern'
         except (ValueError, KeyError, IndexError, TypeError) as exc:
             reason = 'Exact stdout cannot satisfy the required JSON/JSONL path: ' + type(exc).__name__
         if reason:
@@ -261,12 +273,25 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
         if mode == 'legacy' and (not isinstance(invalid, str)
                                  or invalid not in {'required', 'none_documented', 'not_applicable'}
                                  or not grounded(policy, index, source)):
-            raise ValueError('Input policy requires scope and an exact quotation from read source')
+            reasons = []
+            if not isinstance(invalid, str) or invalid not in INPUT_STATES:
+                reasons.append('acceptance_json.invalid_input=' + json.dumps(invalid)
+                               + ' must be one of ' + ', '.join(INPUT_STATES))
+            citation_problem = grounding_problem(policy, index, source)
+            if citation_problem:
+                reasons.append('acceptance_json citation: ' + citation_problem)
+            raise ValueError('Input policy requires scope and an exact quotation from read source: '
+                             + '; '.join(reasons))
         if aggregate == 'required' and not grounded(policy, index, source) and not (
                 isinstance(policy.get('input_contract'), dict) and grounded(policy['input_contract'], index, source)):
             # A required classification still needs a citable basis: the delivered
             # interface or the source that states the rule.
-            raise ValueError('Required input classification needs an exact quotation from read source or the delivered entry')
+            reasons = ['acceptance_json citation: ' + grounding_problem(policy, index, source)]
+            if isinstance(policy.get('input_contract'), dict):
+                reasons.append('acceptance_json.input_contract citation: '
+                               + grounding_problem(policy['input_contract'], index, source))
+            raise ValueError('Required input classification needs an exact quotation from read source '
+                             'or the delivered entry: ' + '; '.join(reasons))
         if mode != 'legacy' and aggregate != 'required' and policy.get('checks'):
             raise ValueError('Input checks describe a constraint, so at least one operation must be required')
         if mode != 'legacy' and aggregate == 'required' and not policy.get('checks') and not policy.get('operations'):
@@ -421,7 +446,45 @@ def _case_contract(case, policy, index, source, entrypoint=None):
         if not isinstance(assertion.get('value'), str) or not assertion['value'].strip():
             raise ValueError('Outcome text must be nonempty' + label
                              + '; for tool-written output_file, assert its actual JSON/JSONL '
-                             'content with kind=json/jsonl, not empty stdout')
+                             'content with kind=json/jsonl, or non-JSON business text with '
+                             'kind=text_regex; do not assert empty stdout')
+        if kind == 'stdout_equals' and assertion['value'] != assertion['value'].strip():
+            raise ValueError('Outcome stdout_equals.value has impossible leading/trailing whitespace'
+                             + label + ': the comparator strips actual text only, but value='
+                             + json.dumps(assertion['value']) + '. Supply an already stripped expected '
+                               'literal or a source-grounded text_regex for a whitespace-sensitive '
+                               'protocol; preserve every promised business value.')
+    elif kind == 'text_regex':
+        pattern = assertion.get('pattern')
+        if not isinstance(pattern, str) or not pattern.strip():
+            raise ValueError('Text outcome requires a nonempty pattern' + label)
+        try:
+            compiled = re.compile(pattern)
+        except re.error as exc:
+            raise ValueError('Text outcome has invalid pattern' + label + ': ' + str(exc)) from exc
+        if compiled.fullmatch('') is not None:
+            raise ValueError('Text outcome pattern must not accept empty output' + label)
+        if 'example_source_path' in assertion:
+            example = assertion['example_source_path']
+            readable = index.get('read_files', index['files'])
+            if not isinstance(example, str) or example not in readable:
+                raise ValueError('Text outcome example_source_path' + label + ' is not read material: '
+                                 + json.dumps(example))
+            example_path = (Path(source) / example).resolve()
+            if not example_path.is_relative_to(Path(source).resolve()) or not example_path.is_file():
+                raise ValueError('Text outcome example_source_path' + label
+                                 + ' is not a readable file in the source tree: ' + example)
+            try:
+                example_text = example_path.read_text(encoding='utf-8')
+            except (OSError, UnicodeError) as exc:
+                raise ValueError('Text outcome example cannot be read as UTF-8' + label
+                                 + ': ' + example) from exc
+            if compiled.fullmatch(example_text) is None:
+                raise ValueError('Text outcome pattern' + label + ' does not full-match its declared '
+                                 'positive example ' + example + '; pattern=' + json.dumps(pattern)
+                                 + '; actual_tail=' + json.dumps(example_text[-160:])
+                                 + '. Correct the source-grounded predicate, preserving business '
+                                   'obligations; do not trim or modify the source example.')
     else:
         raise ValueError('Outcome assertion must be json/jsonl or asserted text; exit code alone is insufficient')
     if case.get('relation'):

@@ -307,6 +307,22 @@ class CoverageTests(unittest.TestCase):
         self.assertFalse(result['complete'])
         self.assertIn('Missing actual invalid-input rejection: nonempty', result['reasons'])
 
+    def test_purpose_mismatch_names_both_values_and_actual_case_without_waiving_coverage(self):
+        policy = self.policy('required')
+        policy['purposes'] = ['report']
+        policy['operations'] = [{'id':'convert','selector':{'args':[{'index':0}]},
+            'purposes':['report'],'checks':['nonempty'],
+            'input_contract':{'status':'required','constraint':'nonempty SMILES'}}]
+        cases = [case('real-result','computation',['CCO'],0),
+                 case('blank','input_rejection',[' '],2,violates='nonempty')]
+        result = acceptance_coverage(self.tool(policy),cases)
+        self.assertFalse(result['complete'])
+        diagnostic = '\n'.join(result['reasons'])
+        for text in ('convert','report','computation','real-result'):
+            self.assertIn(text,diagnostic)
+        policy['purposes'] = policy['operations'][0]['purposes'] = ['computation']
+        self.assertTrue(acceptance_coverage(self.tool(policy),cases)['complete'])
+
     def test_a_recorded_absence_completes_coverage_and_reports_the_gap(self):
         result = acceptance_coverage(self.tool(self.absent_policy()), [case('ok', 'computation', ['CCO'], 0)])
         self.assertTrue(result['coverage_complete'], result)

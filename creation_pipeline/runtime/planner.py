@@ -307,7 +307,7 @@ def patch_plan(base, answer, locked, required=None):
         # A rejected draft's classification may be corrected, but only with the
         # recorded evidence of what was examined; an accepted plan cannot be touched
         # here at all, so an approved contract can only change by a new revision.
-        reject_downgrade(_json_field(base, 'acceptance_json'), _json_field(result, 'acceptance_json'))
+        reject_downgrade(_json_field(base, 'acceptance_json', rejected_draft=True), _json_field(result, 'acceptance_json'))
     if locked:
         # An accepted plan is evidence: it may only grow. Withdrawing an accepted
         # promise would silently shrink the standard the environment was locked to.
@@ -472,7 +472,7 @@ def _apply_pointer(container, parts, op, value):
         raise TypeError('Patch parent is not an object/array')
 
 
-def _json_field(plan, field):
+def _json_field(plan, field, *, rejected_draft=False):
     """Decode a plan field that the schema keeps as JSON text."""
     value = plan.get(field, '{}')
     if not isinstance(value, str):
@@ -505,7 +505,15 @@ def _json_field(plan, field):
                         or not isinstance(contract.get('status'), str)):
                     raise ValueError(label + ': input_contract needs a string status')
             if 'invalid_input' in decoded and not isinstance(decoded['invalid_input'], str):
-                raise ValueError('invalid_input must be a string')
+                if rejected_draft:
+                    # Compare against the strongest obligation while repairing an
+                    # unaccepted draft. Never reinterpret malformed input as a waiver.
+                    decoded = dict(decoded, invalid_input='required')
+                else:
+                    raise ValueError('/acceptance_json/invalid_input must be a string '
+                        '(required, none_documented or not_applicable), got '
+                        + type(decoded['invalid_input']).__name__
+                        + '; repair this field in the rejected draft; booleans are not states')
             checks = decoded.get('checks', [])
             if not isinstance(checks, list) or any(not isinstance(c, dict)
                     or not isinstance(c.get('id'), str) for c in checks):
@@ -636,6 +644,10 @@ covered), validation_gaps (behavior with no contract basis) and blockers (a stat
 obligation without a verifiable contract) separately; a blocker is never replaced by
 a recorded gap. A repair may correct a draft classification only with this recorded
 evidence; a locked acceptance contract stays as it is.
+Required argument/flag presence is not a nonempty-value constraint. For example
+argparse required=True requires the flag, but does not reject an empty string value.
+Do not infer extra value rejections without an explicit source-backed check/error
+path or recorded execution evidence. Preserve actual documented obligations.
 """
 
 POLICY = """You plan portable Docker packages for local CLI / Python CPU tools.
@@ -650,7 +662,16 @@ public base (pip, apt/system packages, Conda, source compilation are supported).
 Workdir /opt/skill receives unchanged source_files before steps, except
 build_layout.prefix_steps: a contiguous prefix needing ONLY dependency_files
 (selected source/install configuration) and the base image. Use 0 if uncertain.
+Prefer the longest source-independent installation prefix whose inputs are known.
+For pip install -r requirements.txt, list that exact dependency file and include
+the install step in prefix_steps when it reads no other source. Inline pip/apt
+installs may have dependency_files=[] and prefix_steps>0. 'The full source could
+be copied first' is not a reason to use zero: doing so couples dependency rebuilds
+to skill prose and test fixtures. Keep steps that read delivered code after COPY;
+never move such steps into the environment prefix merely to increase cache hits.
 Remaining source follows that prefix. Never reorder steps or infer from shell.
+UTF-8 material preserves original newlines: copy exact fixture text including CRLF
+when a byte hash is asserted. Do not replace it with newline-normalized text.
 Steps are Docker RUN shell commands. No Docker directives inside commands.
 script is a repository/context-relative file, not the installed executable name.
 When the caller supplies a bound script, plan.script MUST equal that exact path
@@ -806,6 +827,12 @@ source_quote, and either kind=json, path=[field,...], allowed_values=[scalar,...
 or kind=stdout_equals, value=exact expected text, or kind=stderr_contains with a
 documented diagnostic value. The exact purpose-to-role mapping is computation ->
 completion, operation -> result, report -> report, input_rejection -> rejection.
+Both case.stdout_equals and kind=stdout_equals compare actual_text.strip() to the
+expected literal as supplied. Their expected values must already be stripped;
+leading/trailing whitespace in an expected literal is impossible to satisfy.
+For a source-promised whitespace-sensitive protocol use text_regex instead.
+For JSON reports prefer predicates on their source-backed typed field values;
+keep every promised business value, rather than weakening the assertion.
 These are distinct semantic fields. For JSONL, use kind=jsonl, record_index (zero-based
 line index), path=[field,...], allowed_values=[scalar,...]; expected_json_lines
 can additionally assert all row results. Include a mixed valid/invalid multi-row
@@ -817,6 +844,25 @@ assertions read that retained file, so assert its business records using kind=js
 and record_index, not the empty stdout caused by --output. Empty or whitespace-only
 text is never a business outcome assertion. Set output_file to the actual filename
 written under /output and leave capture_stdout false for tool-written files.
+For non-JSON retained files, use kind=text_regex with pattern=full-match regular
+expression (inline flags such as (?s) are supported). Match actual business
+content and structural/numeric expectations grounded in source/fixtures, allowing
+only irrelevant variable metadata. The pattern must not match empty output;
+file existence alone is not a business oracle. This assertion reads output_file
+when declared (otherwise stdout). stdout_contains/json_equals still inspect
+actual stdout, so JSON metadata can be checked separately from a non-JSON file.
+Do not apply kind=json to a non-JSON artifact or replace the direct entry with an
+inline wrapper just to inspect its file. Additional validators may be separate
+checks, but cannot replace bound normal/rejection coverage. Read real format
+fixtures before choosing offsets; do not guess a record's fields from its header.
+For text_regex, when a representative complete positive output is available in
+read source, set assertion.example_source_path to that exact indexed path. Its
+UTF-8 text (with the same newline reading as retained output) must full-match the
+pattern before locking. This only checks predicate/example consistency: it never
+counts as this batch's execution or replaces source citations, negative cases or
+actual output validation. Do not point at an unrelated document, input fixture,
+partial excerpt or a historical success report. Account for real terminator line
+endings; do not trim the output to make an incorrect pattern match.
 A computation completion
 assertion MUST distinguish completed calculations from infrastructure/runtime
 failures, based on source semantics, NOT merely schema/version/report existence.
@@ -1026,7 +1072,7 @@ def plan(source, config, audit, opts, deadline, feedback=None, previous=None, ca
                 raw=path.read_bytes()
                 if path.is_symlink() or hashlib.sha256(raw).hexdigest()!=index['files'][p]['sha256']:
                     raise InputChanged('Source changed after inventory: '+p)
-                content=raw.decode('utf-8').replace('\r\n','\n').replace('\r','\n')
+                content=raw.decode('utf-8')  # Preserve fixture bytes including CRLF.
             except UnicodeError:
                 omitted[p] = "non-UTF8/binary"
                 continue
@@ -1058,6 +1104,7 @@ def plan(source, config, audit, opts, deadline, feedback=None, previous=None, ca
         material = {"index": compact_index, "materials": read_files, "not_read_count":len(not_read),
                     "omissions":{k:v for k,v in omitted.items() if k in requested},'omission_counts':dict(Counter(omitted.values())),
                     'read_budget':{'used_chars':used,'max_chars':opts['context_chars']}, "entry_hint": config.get("script"),
+                    **({'container_entry_hint': config['container_script']} if config.get('container_script') else {}),
                     "user_constraints": config.get("constraints", []),
                     "execution_budget": {k: opts[k] for k in ("test_seconds", "document_seconds", "total_seconds")},
                     "previous_plan": base, 'base_kind': base_kind,
@@ -1074,8 +1121,8 @@ def plan(source, config, audit, opts, deadline, feedback=None, previous=None, ca
         # of against a separately frozen copy.
         write(audit / f"prompt-provenance-{number}.json", sent)
         try:
-            if call_guard is not None:
-                call_guard()
+            from .accounting import admit, observe
+            ticket = admit(call_guard, 'runtime_planning', opts['backend'], backend_model(opts))
             # Inventory/prompt persistence and the guard consume the same budget.
             # Never reuse the remaining time measured at the start of the round.
             remaining = float("inf") if deadline is None else deadline - time.monotonic()
@@ -1091,6 +1138,7 @@ def plan(source, config, audit, opts, deadline, feedback=None, previous=None, ca
                                              backend=opts["backend"],
                                              api_options=api_options(opts),
                                              audit_dir=audit / f"model-{number}")
+            observe(ticket, receipt)
         except (model_call.ModelExecutionError, model_call.ModelOutputInvalid,
                 model_call.ModelConfigError, OSError) as exc:
             # Keep the transport verdict (for example a stall) distinct from an
@@ -1159,6 +1207,10 @@ def check_case(case):
         raise PlanningError("Invalid test timeout")
     if "stdout_equals" in case and not isinstance(case["stdout_equals"], str):
         raise PlanningError("stdout_equals must be text")
+    if 'stdout_equals' in case and case['stdout_equals'] != case['stdout_equals'].strip():
+        raise PlanningError('stdout_equals has impossible leading/trailing whitespace: the comparator '
+                            'strips actual stdout only; supply an already stripped expected literal, '
+                            'or use a source-grounded text_regex when whitespace is part of the protocol')
     if "stdout_contains" in case and (not isinstance(case["stdout_contains"], list) or not all(isinstance(s, str) for s in case["stdout_contains"])):
         raise PlanningError("stdout_contains must be strings")
     if "expected_json_lines" in case and not isinstance(case["expected_json_lines"], list):

@@ -116,8 +116,8 @@ Return edits=[] for non-contract conclusions.
     (directory / 'prompt.txt').write_text(prompt, encoding='utf-8')
     if options.get('context_chars') is not None and len(prompt) > options['context_chars'] * 4:
         raise ValueError('Explicit diagnosis context limit reached; narrow the source scope')
-    if call_guard:
-        call_guard()
+    from .accounting import admit, observe
+    ticket = admit(call_guard, 'contract_diagnosis', options.get('backend','codex_cli'), backend_model(options))
     answer, receipt = model_call.call(prompt, SCHEMA, backend_model(options),
         timeout=options.get('model_timeout', 600), audit_dir=directory / 'model',
         transport=options.get('transport', 'default'),
@@ -126,6 +126,7 @@ Return edits=[] for non-contract conclusions.
         tier=options.get('service_tier'),
         backend=options.get('backend', 'codex_cli'),
         api_options=api_options(options))
+    observe(ticket, receipt)
     write_json(directory / 'decision.json', sanitized(answer))
     write_json(directory / 'receipt.json', receipt)
     if answer['attribution'] != 'unknown':

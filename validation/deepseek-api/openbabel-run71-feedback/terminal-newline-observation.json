@@ -1,0 +1,16 @@
+{
+  "source_build_id": "20261029T183610-192d1953",
+  "batch_status": "failed",
+  "scope": "saved output only; no fresh business execution or models",
+  "case": "normal-direct-entry",
+  "exit_code": 0,
+  "retained_file_sha256": "bbd166f14f6854a5ae981a403ccab2c68dac2c180404ab56853adc55b4c8d9bc",
+  "retained_file_bytes": 331,
+  "final_eight_bytes_hex": "4e440a242424240a",
+  "failed_pattern": "(?s)\\A.*\\r?\\n.*\\r?\\n[^\\r\\n]*\\r?\\n[^\\r\\n]*V2000\\r?\\n(?:[^\\r\\n]*\\r?\\n){3}[^\\r\\n]*1\\s+2\\s+1[^\\r\\n]*\\r?\\n[^\\r\\n]*2\\s+3\\s+1[^\\r\\n]*\\r?\\nM  END\\r?\\n\\$\\$\\$\\$\\z",
+  "matches_actual_retained_text": false,
+  "matches_only_after_removing_final_LF": true,
+  "passed_records": 11,
+  "total_records": 12,
+  "native_checks_passed": 6
+}

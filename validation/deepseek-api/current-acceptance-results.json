@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-29",
+  "acceptance_tests_passed": true,
+  "backend_scope": "Codex CLI native stages plus DeepSeek structured stages",
+  "scientific_correctness": "not_evaluated",
+  "successful_batches": 5,
+  "total_passed_execution_records": 72,
+  "current_audit_scope": "saved raw results/frozen bundles and current image/library identity metadata; no fresh business or model calls",
+  "current_implementation_commit": "2c1313c",
+  "latest_postflight": {
+    "tests": 647,
+    "skipped": 3,
+    "status": "passed",
+    "three_self_checks": "passed",
+    "log": "E:\\Users\\27343\\Docker\\shared-environment-wait-combined-tests-20261029.log"
+  },
+  "shared_environment": "implemented and verified",
+  "exact_tool_artifact_resolver": "designed, not implemented",
+  "batches": [
+    {
+      "scenario": "descriptors-a",
+      "run": 59,
+      "build_id": "20261029T120012-92debd3f",
+      "model_calls": 5,
+      "cases": 15,
+      "passed": true,
+      "image_id": "sha256:83bbc6b5e2b1b009f5e04564aef26092f8e4c086714946363a6b0e7bbcc87df9",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run59-20261029",
+      "current_audit": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run59-20261029\\current-audit-after-shared-wait.json",
+      "library_qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "library_inspection": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run59-20261029\\current-library-inspection-after-shared-wait.json"
+    },
+    {
+      "scenario": "descriptors-b",
+      "run": 62,
+      "build_id": "20261029T125918-4216a420",
+      "model_calls": 7,
+      "cases": 16,
+      "passed": true,
+      "image_id": "sha256:cfa6be13562715783be404d8774861918608501ce37aa214a36eb38c8ce5fdeb",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-b-run62-20261029",
+      "current_audit": "E:\\Users\\27343\\Docker\\acceptance-descriptors-b-run62-20261029\\current-audit-after-shared-wait.json",
+      "library_qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "library_inspection": "E:\\Users\\27343\\Docker\\acceptance-descriptors-b-run62-20261029\\current-library-inspection-after-shared-wait.json"
+    },
+    {
+      "scenario": "atommap",
+      "run": 64,
+      "build_id": "20261029T134515-50035efd",
+      "model_calls": 6,
+      "cases": 22,
+      "passed": true,
+      "image_id": "sha256:bb9a54174185069327e5935044bc2741ff0c9a3c11efbe583e61aa2307cf7560",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-atommap-run64-20261029",
+      "current_audit": "E:\\Users\\27343\\Docker\\acceptance-atommap-run64-20261029\\current-audit-after-shared-wait.json",
+      "library_qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "library_inspection": "E:\\Users\\27343\\Docker\\acceptance-atommap-run64-20261029\\current-library-inspection-after-shared-wait.json"
+    },
+    {
+      "scenario": "geometry",
+      "run": 65,
+      "build_id": "20261029T140651-71379864",
+      "model_calls": 6,
+      "cases": 11,
+      "passed": true,
+      "image_id": "sha256:d25688f1cbaba14f23cccf226c91a28c144cc8cab7167fa229092fbdba09cc40",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-geometry-run65-20261029",
+      "current_audit": "E:\\Users\\27343\\Docker\\acceptance-geometry-run65-20261029\\current-audit-after-shared-wait.json",
+      "library_qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "library_inspection": "E:\\Users\\27343\\Docker\\acceptance-geometry-run65-20261029\\current-library-inspection-after-shared-wait.json"
+    },
+    {
+      "scenario": "openbabel",
+      "run": 74,
+      "build_id": "20261029T194522-1929c499",
+      "model_calls": 6,
+      "cases": 8,
+      "passed": true,
+      "image_id": "sha256:a65227fdd4f7f501348dffa9653b4b50bea320362ffa4604ee4ec338e4100f1a",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-openbabel-run74-20261029",
+      "current_audit": "E:\\Users\\27343\\Docker\\acceptance-openbabel-run74-20261029\\current-audit-after-shared-wait.json",
+      "library_qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "library_inspection": "E:\\Users\\27343\\Docker\\acceptance-openbabel-run74-20261029\\current-library-inspection-after-shared-wait.json"
+    }
+  ]
+}

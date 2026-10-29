@@ -328,7 +328,26 @@ def run_case(root, tool, image, case, deadline=None, artifact_dir=None):
                     output.write_text(result["stdout"], encoding="utf-8", newline="")
                 text = output.read_text(encoding="utf-8")
                 observation["persisted_output"] = text  # read AFTER --rm container exit
-            ok = ok and output_matches(case, result, text)
+            output_ok = ok and output_matches(case, result, text)
+            ok = ok and output_ok
+            assertion = case.get('acceptance', {}).get('assertion', {})
+            if result['exit_code'] == case.get('expected_exit', 0) and not output_ok:
+                missing = [part for part in case.get('stdout_contains', []) if part not in result['stdout']]
+                if missing:
+                    observation['assertion_failures'] = [{
+                        'case': case['name'], 'kind': 'stdout_contains', 'channel': 'stdout',
+                        'missing_literals': missing,
+                        'detail': 'Required literal substrings did not occur in actual stdout; comparison remains exact'}]
+            if (result['exit_code'] == case.get('expected_exit', 0) and not output_ok
+                    and assertion.get('kind') == 'text_regex'
+                    and re.fullmatch(assertion['pattern'], text) is None):
+                observation['assertion_failure'] = {
+                    'case': case['name'], 'kind': 'text_regex',
+                    'channel': 'output_file' if case.get('output_file') else 'stdout',
+                    'output_file': case.get('output_file'), 'pattern': assertion['pattern'],
+                    'source_path': assertion.get('source_path'),
+                    'actual_characters': len(text), 'actual_tail': text[-160:],
+                    'detail': 'Full-match pattern did not match the actual text; output was not trimmed or normalized to satisfy it'}
             if case.get("forbidden_input_file"):
                 ok = ok and not (input_dir / case["forbidden_input_file"]).exists()
             for name in case.get("artifacts", []):
@@ -372,6 +391,8 @@ def output_matches(case, result, text):
                 ok = ok and text.strip() == assertion['value']
             elif assertion['kind'] == 'stderr_contains':
                 ok = ok and assertion['value'] in result.get('stderr', '')
+            elif assertion['kind'] == 'text_regex':
+                ok = ok and re.fullmatch(assertion['pattern'], text) is not None
             elif assertion['kind'] in {'json', 'jsonl'}:
                 value = (json.loads(text.splitlines()[assertion['record_index']])
                          if assertion['kind'] == 'jsonl' else json.loads(text))

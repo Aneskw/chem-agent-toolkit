@@ -323,6 +323,57 @@ class RuntimeBuildTests(unittest.TestCase):
             self.assertIsNone(opts[k])
         self.assertEqual(planner.options({'max_read_rounds': 20})['max_read_rounds'], 20)
 
+    def test_planner_receives_distinct_context_and_container_entry_paths(self):
+        self.prepared()
+        binding = self.record['delivery']['inputs']['bindings']['payload']
+        with patch.object(planner, 'plan', side_effect=RuntimeError('captured without model')) as mocked:
+            with self.assertRaisesRegex(RuntimeError, 'captured without model'):
+                from creation_pipeline.runtime.preparation import propose
+                propose(self.root, binding, self.root/'path-hint', planner.options({}))
+        config = mocked.call_args.args[1]
+        self.assertEqual(config['script'], 'package/main.py')
+        self.assertEqual(config['container_script'], '/opt/skill/package/main.py')
+        self.assertIn('/opt/skill/package/main.py', config['constraints'][0])
+
+    def test_shared_environment_failure_is_durable_and_retains_install_log(self):
+        from creation_pipeline.runtime.shared_environment import SharedEnvironmentError
+        from creation_pipeline.records import read_json
+        request = self.prepared()
+        failure = SharedEnvironmentError('Shared dependency environment build failed',
+            [{'exit_code': 1, 'stdout': '', 'stderr': 'actual dependency install failure'}], 'build_failed')
+        with patch.object(LocalExecutor, 'host', return_value=HOST), \
+                patch('creation_pipeline.runtime.shared_environment.resolve', side_effect=failure):
+            result = LocalExecutor().build(request)
+        self.assertEqual(result['status'], 'build_failed')
+        self.assertIsNone(result['image_id'])
+        self.assertEqual(read_json(Path(request.attempt_directory)/'receipt.json')['status'], 'build_failed')
+        self.assertIn('actual dependency install failure',
+                      (Path(request.attempt_directory)/'build-log.json').read_text())
+
+    def test_shared_lock_contention_remains_blocked_without_claiming_build_failure(self):
+        request = self.prepared()
+        with patch.object(LocalExecutor, 'host', return_value=HOST), \
+                patch('creation_pipeline.runtime.shared_environment.resolve', side_effect=ValueError('build busy')):
+            result = LocalExecutor().build(request)
+        self.assertEqual(result['status'], 'runtime_blocked')
+        self.assertEqual(result['gaps'][0]['code'], 'shared_environment_unavailable')
+
+    def test_no_tool_build_starts_when_shared_preparation_consumed_deadline(self):
+        request = self.prepared()
+        clock = [0]
+        def resolved(materials, root, host, process, deadline, attempt):
+            clock[0] = deadline
+            return Path(materials)/'context', {'status': 'hit'}, [{'exit_code': 0, 'stdout': 'shared prepared', 'stderr': ''}]
+        with patch.object(LocalExecutor, 'preflight', return_value={'gaps': [], 'host': HOST}), \
+                patch('creation_pipeline.runtime.local.time.monotonic', side_effect=lambda: clock[0]), \
+                patch('creation_pipeline.runtime.shared_environment.resolve', side_effect=resolved), \
+                patch('creation_pipeline.runtime.local.process', side_effect=AssertionError('No Docker build after deadline')):
+            result = LocalExecutor().build(request)
+        self.assertEqual(result['status'], 'runtime_blocked')
+        self.assertIsNone(result['image_id'])
+        self.assertIn('deadline reached before tool image build', result['gaps'][0]['detail'])
+        self.assertIn('shared prepared', (Path(request.attempt_directory)/'build-log.json').read_text())
+
     def test_no_progress_stops_read_loop(self):
         with patch.object(planner.model_call, 'call', return_value=({'action': 'read', 'requested_files': ['main.py']}, {})) as model:
             with self.assertRaisesRegex(planner.PlanningError, 'No progress'):

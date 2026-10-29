@@ -5,6 +5,15 @@ from creation_pipeline.schemas import REVIEW, DELIVERY
 from creation_pipeline.generation.context import candidate_context
 from creation_pipeline.models import ModelCallError
 from creation_pipeline.records import digest
+from creation_pipeline.validation.runtime import NATIVE_CHECK_FIELDS
+
+CHECK_EXECUTION_POLICY = {
+    'native_check_fields': sorted(NATIVE_CHECK_FIELDS),
+    'check_workspace': 'fresh_container_and_output_directory_per_check',
+    'cross_check_state_shared': False,
+    'check_input_fixtures': 'read packaged/source fixtures or create inputs in this check; /input is not implicit',
+    'check_artifact_lifetime': 'a later check cannot read previous output; generate and validate within one check',
+}
 
 
 def author(session, config, plan, staging, feedback=None, previous=None):
@@ -14,7 +23,8 @@ def author(session, config, plan, staging, feedback=None, previous=None):
         "packaging": (ROOT / "docs/skills/packaging.md").read_text(encoding="utf-8"),
         "configured_checks": config["checks"], "feedback": feedback or [],
         "configured_requirement": config.get("runtime_requirements", {}).get(plan["name"]),
-        "execution_policy": {"generated_checks_enabled": config.get("execute_generated_checks", False)},
+        "execution_policy": {**CHECK_EXECUTION_POLICY,
+                             "generated_checks_enabled": config.get("execute_generated_checks", False)},
         "previous_artifact": previous}
     from creation_pipeline.artifacts.delivery import delivered, finish, validate_package
     staging.mkdir(parents=True, exist_ok=True)
@@ -57,6 +67,7 @@ def author(session, config, plan, staging, feedback=None, previous=None):
 def review(session, plan, artifact, checks, config=None):
     instructions = (PROMPTS / "review.md").read_text(encoding="utf-8")
     execution_policy = {
+        **CHECK_EXECUTION_POLICY,
         "generated_checks_enabled": config.get("execute_generated_checks", False),
         "review_scope": "source_fidelity_package_content_and_declared_checks",
         "business_execution": ("deferred_to_bound_docker" if config.get('_docker_checks')

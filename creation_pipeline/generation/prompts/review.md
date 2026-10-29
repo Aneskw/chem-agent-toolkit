@@ -1,4 +1,12 @@
 Review the actual package using the supplied minimum/packaging standards and primary sources.
+Check every declared test as an independent fresh container/output directory.
+native declaration must use only execution_policy.native_check_fields. Unknown
+assertion/fixture fields are unsupported, not extra constraints the executor will
+guess; flag them and require the intended assertion to be expressed correctly.
+A test depending on an earlier check's /output or undeclared /input is a blocking
+check-design defect. Require its own input preparation/artifact production, or
+packaged/source fixtures, preserving all assertions. Verify byte hashes including
+CRLF. Diagnose visible test dependencies without demanding future Docker reports.
 You have native reading, image and helper tools. Use existing program reports rather than
 repeating mechanical work. Inspect source interfaces/examples/tests; fetch specific missing
 known resources if needed. Do not edit official candidate files or install environments.

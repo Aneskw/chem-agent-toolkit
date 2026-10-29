@@ -1,0 +1,87 @@
+{
+  "sources": [
+    {
+      "id": "existing_openbabel",
+      "license": "GPL-2.0-or-later",
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit_newpipeline\\tools-skills\\openbabel\\chem-openbabel-convert"
+    },
+    {
+      "id": "observed_openbabel_run69",
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\openbabel-run69-feedback",
+      "license": "NOASSERTION"
+    },
+    {
+      "id": "observed_openbabel_run70",
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\openbabel-run70-feedback",
+      "license": "NOASSERTION"
+    },
+    {
+      "id": "observed_openbabel_run71",
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\openbabel-run71-feedback",
+      "license": "NOASSERTION"
+    },
+    {
+      "id": "observed_openbabel_run72",
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\openbabel-run72-feedback",
+      "license": "NOASSERTION"
+    }
+  ],
+  "prompt": "Discover and package one executable Skill from the supplied chem-openbabel-convert source. Preserve scripts/convert_molecule.py byte-for-byte as the actual delivered business entry. Preserve the documented --input, --input-format, --output-format and --output interface, JSON success/failure reports and original input files. Install a real Open Babel obabel executable in the Docker image; do not substitute a Python mock or fake conversion. Require complete bound Docker acceptance: convert the original examples/input.smi containing CCO from smi to sdf using the original entry, actually write the SDF under /output and retain it after container exit. Inspect the retained SDF for a valid molecule record, three heavy atoms (two carbon and one oxygen) and two bonds for this supplied ethanol input; use the actual generated file rather than stdout JSON metadata as the structure oracle. Include a successful normal file conversion, environment evidence of the real obabel executable and its version, input preservation checks, and an explicit unknown output format rejection (for example nonexistent_format_xyz) through the same delivered entry: exit 2 and ok:false with the actual upstream error. Ground rejection expectations in the subprocess return-code branch of the original script. Do not assume every invalid SMILES necessarily gives a nonzero Open Babel exit; do not invent per-row continuation or JSONL promises absent from the source. Keep source-backed assertions, preserve stdout/stderr/exit code, and do not treat the historical examples/output.json missing-dependency report as success evidence. No business execution or dependency installation on the host: conversions run only in Docker. Record inferred package versions explicitly when the source specifies no pin. Do not claim physical or experimental validation. Read the registered observed_openbabel_run69 feedback and actual SDF fixture before writing tests. This historical source clarifies channel selection, counts-line offsets and actual empty-output behavior; reproduce all required checks fresh. Use the literal unknown format nonexistent_format_xyz for the rejection fixture. Never convert historical pass flags into current evidence. Read observed_openbabel_run70 before writing checks. Retain all five verification obligation groups and make each declared native check self-contained: its own conversion before artifact parsing and its own before/after hash comparison, using byte-identical packaged/source input instead of undeclared /input or previous checks outputs. Preserve the original CRLF bytes and expected hash. No removal or weakening of assertions. Read registered observed_openbabel_run71 for the actual retained SDF and its final newline. Fix the source-grounded full-match predicate, preserving all atom/bond/count/topology and terminator obligations. Do not trim actual output, alter the original script/input or reuse any historical result; all checks must run fresh. Read observed_openbabel_run72: all five unchanged native checks passed, while two guessed planner copies used an incorrect exact Python patch-version literal and wrong V2000 counts fields. Preserve every original native check and all five obligation groups. Do not reconstruct native programs from argv previews; the executor maps them in full. Keep independently grounded planned normal/rejection coverage. For the retained SDF text_regex, declare example_source_path pointing to the representative read output fixture so predicate/example contradictions are caught before Docker; actual fresh execution remains mandatory. Keep every rejection-report value and all native checks. Follow the framework comparator contract: stdout_equals expected values must already be stripped; structured JSON field comparisons preserve the source-backed ok/error/exit_code values without an impossible terminal-newline expectation. No change to the original business entry, input bytes, comparison engine or required structure checks.",
+  "model": {
+    "name": "gpt-6-astra",
+    "transport": "https",
+    "reasoning_effort": "medium",
+    "service_tier": "default",
+    "backend": "codex_cli"
+  },
+  "execution": {
+    "profile": "production",
+    "stop_on_runtime_failure": true,
+    "progress_watch": "observe"
+  },
+  "limits": {
+    "model_calls": 16,
+    "model_timeout": 600,
+    "total_seconds": 3600,
+    "agent_progress_timeout": null,
+    "max_candidates": 1,
+    "max_builds": 1,
+    "repair_rounds": 2
+  },
+  "runtime_defaults": {
+    "options": {
+      "backend": "deepseek_api",
+      "api_model": "deepseek-v4-pro",
+      "api_retries": 1,
+      "api_stream": true,
+      "api_max_output_tokens": 65536,
+      "pin_base_image": true,
+      "model_timeout": 600,
+      "total_seconds": 2400,
+      "reasoning_effort": "low",
+      "service_tier": "default",
+      "progress_watch": "observe",
+      "api_connect_retries": 1
+    },
+    "constraints": [
+      "Caller-selected environment: set plan.base_image to python:3.11-slim-bookworm. This Python 3.11 bookworm tag is cached locally and pin_base_image remains true: the executor must resolve and freeze its observed RepoDigest before building. Historical source Dockerfile base digests are references, not required identities for this fresh environment. Preserve all source dependency pins, actual business entry, and acceptance obligations; do not copy a historical unavailable base digest.",
+      "For this caller-requested SDF scenario, the normal persisted conversion case must assert actual non-JSON SDF contents with acceptance.assertion.kind=text_regex (full-match, source-grounded), not kind=json on the SDF. Assert JSON stdout separately with stdout_contains or json_equals. The retained file must demonstrate the supplied ethanol structure, not only existence.",
+      "Preserve the exact original UTF-8 input.smi bytes (CCO followed by CRLF), as shown in the registered fixture-byte-observation.json. Native checks are independent, with no shared /output or implicit /input. Do not copy a prior check program that expects shared artifacts into a new plan case.",
+      "The actual retained SDF fixture ends with a newline after the $$$$ delimiter. The normal text_regex must full-match real SDF line endings as documented in observed_openbabel_run71, and retain the three-atom/two-carbon/one-oxygen/two-single-bond obligations. Do not trim runner output or substitute a mere file-exists/banner assertion. Quote the actual source text including its Markdown tokens; wording changes are not whitespace normalization. Actual executable case contracts belong in tests[].case_json, not inside acceptance_json.operations[].cases.",
+      "Native check previews are not executable programs. Every original configured/generated/reviewed check will execute unchanged after planning, so do not synthesize guessed replacements from truncated argv_preview. Preserve all original checks and all five user/source verification obligations. Planned additional validators must use correct source-backed predicates: a Python 3.11 series can report 3.11.18, and the supplied V2000 counts line begins atom count 3, bond count 2, then 0. Use a representative read-source SDF with assertion.example_source_path for the normal text_regex; this is a preflight consistency check, never historical execution credit.",
+      "The legacy stdout_equals comparator strips actual text only. Its expected value must already be stripped; leading/trailing whitespace in the expected value is unsatisfiable and now rejected before locking. For the JSON rejection report retain every expected business value: ok=false, error=\"obabel: cannot write output format!\", exit_code=1, plus wrapper process exit 2. Use source-grounded typed JSON predicates/json_equals for these fields, or a faithful text_regex if exact raw whitespace is required. Do not weaken or drop any promised value; the original native checks also remain mandatory."
+    ]
+  },
+  "batch": {
+    "label": "planner-openbabel",
+    "tags": [
+      "existing-skill",
+      "openbabel",
+      "system-dependency",
+      "docker",
+      "planner"
+    ]
+  },
+  "notes": "Operator requested another source-backed skill test on 2026-10-29 to improve the planner. Fresh independent batches only, no failed-run resume, no source edits or weakened assertions. Keep mixed native Codex CLI and structured DeepSeek backends, 16 admitted calls, 600s/call, 3600s total, digest pinning. Debug failures offline and rerun independently. This experiment is additional to the completed four-scenario campaign. No automatic upstream push.",
+  "network": false
+}

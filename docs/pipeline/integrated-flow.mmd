@@ -1,4 +1,7 @@
 %% Implementation of the approved merged architecture; policies unchanged.
+%% Production repair branches are subject to explicit limits; acceptance experiments
+%% with stop_on_runtime_failure=true stop after the first Docker/acceptance failure.
+%% Exact ToolArtifact resolution is a future protocol, not an implemented node.
 flowchart TB
     A[用户来源与提示] --> B[资源准备与来源快照]
     B --> C[发现 Agent：逐候选计划]
@@ -11,10 +14,19 @@ flowchart TB
     EP -->|入口不支持或歧义| U
     EP -->|确认内容或上下文缺失；撤销内容通过| D
     EP --> EA[严格原样身份，或来源关联提案与独立审阅]
-    EA -->|引用与入口指纹核验；确定性原样提取| R[Docker 依赖构建：资源预检、模型规划、材料、镜像]
+    EA -->|引用与入口指纹核验；确定性原样提取| R[Docker 依赖准备：资源预检、复用或规划环境、冻结材料]
     EA -->|来源不足或独立审阅拒绝| U
     G -->|草稿或需求未知| U[持久候选区与具体缺口]
-    R -->|冻结交付与锁定契约；构建成功| S[Docker 业务验收：实际交付入口、断言、覆盖、镜像证据]
+    R -->|冻结交付与锁定契约| EC{明确固定 digest 的依赖前缀}
+    EC -->|配方命中；核验 daemon 与镜像| EI[复用不可变依赖环境]
+    EC -->|精确配方未命中| EB[按配方互斥构建环境；争用在原时限内等待；完整核验后登记]
+    EB --> EI
+    EI --> TB[构建工具镜像：共享时继承环境；核验层、配置、入口与交付字节]
+    EC -->|不适用共享| TB
+    TB -->|构建成功| S[Docker 业务验收：实际交付入口、断言、覆盖、镜像证据]
+    EB -->|环境构建失败| R
+    EB -->|等待超时或身份/资源不可用| U
+    TB -->|环境构建或身份核验失败| R
     S -->|通过| Q
     R -->|环境失败| R
     S -->|环境缺陷| R

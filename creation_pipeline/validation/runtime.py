@@ -11,6 +11,9 @@ from pathlib import Path
 
 from creation_pipeline.records import redact, safe_relative
 
+NATIVE_CHECK_FIELDS = frozenset({'candidate','name','argv','cwd','expected_exit','stdout_contains',
+                               'json_equals','artifacts','evidence','purpose','kind'})
+
 
 def terminate_tree(proc):
     if os.name == "nt":
@@ -31,6 +34,14 @@ def terminate_tree(proc):
 def validate_test(test):
     if not isinstance(test, dict) or not isinstance(test.get("name"), str) or not test["name"]:
         raise ValueError("Check needs a name")
+    unknown = set(test) - NATIVE_CHECK_FIELDS
+    if unknown:
+        raise ValueError('Native check ' + test['name'] + ' has unsupported fields: '
+                         + ', '.join(sorted(str(key) for key in unknown))
+                         + '. These constraints cannot be silently ignored. Express each intended '
+                           'constraint using the supported native assertions or enforce it in the '
+                           'check program; do not discard it. Supported fields: '
+                         + ', '.join(sorted(NATIVE_CHECK_FIELDS)))
     if test["name"] in {"structure", "runtime_paths", "content_review", "artifact_immutability", "blocking_issues", "changed_failed_oracles"}:
         raise ValueError("Check name is reserved for host validation")
     argv = test.get("argv")

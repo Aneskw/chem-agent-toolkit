@@ -301,14 +301,16 @@ def automatic_correction(output, record, spec, observation, executor, call_guard
             bound = time.monotonic() + opts['total_seconds']
             executor.deadline = min(executor.deadline, bound) if executor.deadline is not None else bound
         def guard(count_call=True):
+            ticket = None
             if call_guard and count_call:
-                call_guard()
+                ticket = call_guard()
             if executor.deadline is not None and math.isfinite(executor.deadline):
                 remaining = executor.deadline - time.monotonic()
                 if remaining < 1:
                     raise ValueError('Explicit runtime diagnosis time limit reached')
                 opts['model_timeout'] = min(opts.get('model_timeout', 600), int(remaining))
                 opts['total_seconds'] = int(remaining)
+            return ticket
         correction, proposed, decision_dir = diagnose(record, frozen, observation, audit,
                                                       opts, guard)
         result.update(attribution=correction['attribution'], reason=correction['reason'])

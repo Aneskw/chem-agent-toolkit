@@ -71,6 +71,9 @@ def main(argv=None):
     child = commands.add_parser('runtime-inspect', help='Inspect current recovery action and blockers without authoring')
     child.add_argument('library')
     child.add_argument('--candidate', required=True)
+    child = commands.add_parser('runtime-shared-inspect', help='Read-only shared dependency environment identity observations; never grants skill qualification')
+    child.add_argument('--root', help='Override the host-configured shared environment directory')
+    child.add_argument('--offline', action='store_true', help='Read historical records without Docker/model calls; availability is unverified')
     child = commands.add_parser('runtime-import', help='Import frozen native output or installed runtime envelope as durable recovery input')
     child.add_argument('source')
     child.add_argument('library')
@@ -145,6 +148,10 @@ def main(argv=None):
         elif args.command == 'runtime-inspect':
             from creation_pipeline.runtime.recovery import inspect_candidate
             result = inspect_candidate(args.library,args.candidate)
+        elif args.command == 'runtime-shared-inspect':
+            from creation_pipeline.runtime.shared_inspection import inspect_registry
+            from creation_pipeline.runtime.shared_environment import registry_root
+            result = inspect_registry(args.root if args.root is not None else registry_root(),offline=args.offline)
         elif args.command == 'runtime-import':
             from creation_pipeline.runtime.recovery import import_candidate
             result = import_candidate(args.source,args.library,args.candidate)
