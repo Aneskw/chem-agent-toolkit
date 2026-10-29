@@ -140,3 +140,9 @@
 镜像 sha256:83bbc6b5e2b1b009f5e04564aef26092f8e4c086714946363a6b0e7bbcc87df9；执行报告 15/15 passed。独立审计确认原 calc_descriptors.py 字节一致且是真实执行入口，乙醇 MW 46.069、供/受体各 1，空串与非法 SMILES 拒绝，合法文件实际输出，以及混合文件拒绝后继续处理有效行；退出后的输出文件仍在。绑定镜像标准库元数据检查确认 rdkit 2024.9.6、numpy 1.26.4、pillow 11.3.0，无宿主业务执行或额外模型调用。
 
 证据根 E:\Users\27343\Docker\acceptance-descriptors-a-run59-20261029，独立结论 acceptance-audit.json；summary/records/frozen evidence/runtime execution report 均在 state/outputs/20261029T120012-92debd3f。轮后 584 OK (3 skipped)，三个自检全绿，日志 acceptance-run59-postflight-tests.log。此轮计描述符 A 成功，四项扩展目标为 1/4；继续全新描述符 B，再原子映射与几何场景，不能将本轮外推成所有场景通过。
+
+## run60：描述符 B，首次规划 DNS 连接失败
+
+起点 `6ccd1fe`，构建 `20261029T121731-fb824754`，北京时间 12:17:31–12:26:46，blocked，预算计数 4。发现、编写和独立内容审阅通过；首次 DeepSeek 规划停止于 model_connection_failed / DeepSeek connection failed: gaierror，未形成计划、构建或执行业务。本轮不恢复、不计成功，证据 E:\Users\27343\Docker\acceptance-descriptors-b-run60-20261029。
+
+轮后仅 DNS 元数据检查 socket.getaddrinfo(api.deepseek.com,443) 已成功解析，无 API/model 请求；不改后端、预算、代码或契约。该检查首次自动权限审批等待超时、未执行，按工具许可重试一次后完成。全量 584 OK (3 skipped)，三个自检绿，日志 acceptance-run60-postflight-tests.log。下轮新建 run61，仍为描述符 B，扩展成功数保持 1/4。

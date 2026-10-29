@@ -144,7 +144,19 @@
       "model_calls": 5,
       "stop_code": null,
       "detail": "Independent scenario audit passed, 15/15 execution records passed, 584 tests OK (3 skipped), three self-checks green."
+    },
+    {
+      "run": 60,
+      "scenario": "descriptors-b",
+      "status": "blocked",
+      "implementation_commit": "6ccd1fe",
+      "structured_reasoning": "low",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-b-run60-20261029",
+      "build_id": "20261029T121731-fb824754",
+      "model_calls": 4,
+      "stop_code": "model_connection_failed",
+      "detail": "First structured planning connection failed: gaierror. No image or business execution. Subsequent metadata-only DNS check resolved; no model probe or backend change."
     }
   ],
-  "next_run": 60
+  "next_run": 61
 }
