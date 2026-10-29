@@ -1,3 +1,5 @@
+> 2026-10-29 更新：混合后端四场景扩展验收已完成（run59/62/64/65，15+16+22+11=64 条执行记录全 passed），各轮 prepared/digest/image.id/独立审计及轮后回归、自检均有证据；当前 584 OK (3 skipped)。以下早期 planner 困境保留为历史分析；最新详情见 [扩展验收记录](extended-acceptance-campaign.md)，结果索引 validation/deepseek-api/extended-acceptance-results.json。此结论不等于全阶段 DeepSeek 验收。
+
 # 现状报告：pipeline + Docker（DeepSeek 副本）
 
 日期：2026-10-28

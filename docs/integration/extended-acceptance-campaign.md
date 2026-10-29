@@ -182,3 +182,13 @@
 独立 acceptance-audit.json passed，missing=[]，冻结证据和当前严格资格通过。原 audit_atom_maps.py 字节不变且为实际入口；合法 leaving-group reactant_only_maps=[3]，重复映射、缺映射、产物额外映射、语法错误拒绝均有输出；合法文件实际持久输出、混合拒绝后继续有效行均符合。绑定镜像标准库元数据确认 rdkit 2026.9.1（该来源未规定固定版本），不据此声称化学反应可行性或科学普适正确。
 
 证据根 E:\Users\27343\Docker\acceptance-atommap-run64-20261029。轮后 584 OK (3 skipped)、三个自检绿，日志 acceptance-run64-postflight-tests.log。扩展进度 3/4，几何封套免费检查 configuration_valid、0 模型调用；下一轮新目录运行 ASE 几何场景。
+
+## run65：几何典型场景通过，四项扩展验收完成
+
+起点 `57546b1`，构建 `20261029T140651-71379864`，北京时间 14:06:51–14:28:35，ready，预算计数 6（3 原生、3 规划）。文件检查绑定和具体用例引文经反馈修正后 prepared、固定 digest、构建成功，11/11 执行记录 passed。镜像 sha256:d25688f1cbaba14f23cccf226c91a28c144cc8cab7167fa229092fbdba09cc40；基础 python@sha256:94a8fee35252d06ab75856f15f12c7bae67b10e8a6da93c7fded82b2610926cd，resolved_from=registry。
+
+独立内容审阅 pass、requirement_assessment=confirmed、file_output_assessment=confirmed，来源明确无输出 flag、输入不变；没有由 planner 自授豁免。独立场景审计 acceptance-audit.json passed、missing=[]，冻结验证与当前严格资格通过，原 check_structure.py 字节不变且为真实入口。真实两 He 距离 2.0；目标 3.0 时 exit0/status success/passed false，证明约束不满足但检查完成；未知字段请求 exit2/INVALID_REQUEST。只读输入与保留报告检查通过，stdout 由 runner 捕获保留，不伪造工具输出能力。绑定镜像元数据 ASE 3.26.0、NumPy 2.4.6。
+
+证据根 E:\Users\27343\Docker\acceptance-geometry-run65-20261029。轮后 584 OK (3 skipped)、三个自检绿，日志 acceptance-run65-postflight-tests.log。四个独立目标全部完成：描述符 A run59 15/15、描述符 B run62 16/16、原子映射 run64 22/22、几何 run65 11/11，共 64 条执行记录 passed。索引 validation/deepseek-api/extended-acceptance-results.json 给出各轮审计和镜像身份。
+
+结论限于本机 Docker、Codex CLI 原生阶段 + DeepSeek 结构化阶段、上述四个具体场景；不是全阶段 DeepSeek或任意 skill 稳定/科学普适正确的证明。失败轮均保留且未续跑，没有放宽用例、改原始来源或推送/合并。网络曾 TLS/DNS 波动，后续新环境仍须先检查 daemon/缓存/连接，不能把成功外推成网络一直可用。

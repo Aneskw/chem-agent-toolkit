@@ -1,0 +1,52 @@
+{
+  "status": "passed",
+  "date": "2026-10-29",
+  "backend_scope": "Codex CLI native stages plus DeepSeek structured stages",
+  "scientific_correctness": "not_evaluated",
+  "batches": [
+    {
+      "scenario": "descriptors-a",
+      "run": 59,
+      "build_id": "20261029T120012-92debd3f",
+      "model_calls": 5,
+      "cases": 15,
+      "passed": true,
+      "image_id": "sha256:83bbc6b5e2b1b009f5e04564aef26092f8e4c086714946363a6b0e7bbcc87df9",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run59-20261029",
+      "audit": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run59-20261029\\acceptance-audit.json"
+    },
+    {
+      "scenario": "descriptors-b",
+      "run": 62,
+      "build_id": "20261029T125918-4216a420",
+      "model_calls": 7,
+      "cases": 16,
+      "passed": true,
+      "image_id": "sha256:cfa6be13562715783be404d8774861918608501ce37aa214a36eb38c8ce5fdeb",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-b-run62-20261029",
+      "audit": "E:\\Users\\27343\\Docker\\acceptance-descriptors-b-run62-20261029\\acceptance-audit.json"
+    },
+    {
+      "scenario": "atommap",
+      "run": 64,
+      "build_id": "20261029T134515-50035efd",
+      "model_calls": 6,
+      "cases": 22,
+      "passed": true,
+      "image_id": "sha256:bb9a54174185069327e5935044bc2741ff0c9a3c11efbe583e61aa2307cf7560",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-atommap-run64-20261029",
+      "audit": "E:\\Users\\27343\\Docker\\acceptance-atommap-run64-20261029\\acceptance-audit.json"
+    },
+    {
+      "scenario": "geometry",
+      "run": 65,
+      "build_id": "20261029T140651-71379864",
+      "model_calls": 6,
+      "cases": 11,
+      "passed": true,
+      "image_id": "sha256:d25688f1cbaba14f23cccf226c91a28c144cc8cab7167fa229092fbdba09cc40",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-geometry-run65-20261029",
+      "audit": "E:\\Users\\27343\\Docker\\acceptance-geometry-run65-20261029\\acceptance-audit.json"
+    }
+  ]
+}

@@ -21,8 +21,8 @@
       "successful_run": 64
     },
     "geometry": {
-      "status": "pending",
-      "successful_run": null
+      "status": "passed",
+      "successful_run": 65
     }
   },
   "attempts": [
@@ -204,7 +204,21 @@
       "model_calls": 6,
       "stop_code": null,
       "detail": "Independent atom-map audit passed, 22/22 execution records; unchanged actual entry, leaving-group [3], four rejection types and real file persistence/continuation. 584 tests OK (3 skipped), three checks green."
+    },
+    {
+      "run": 65,
+      "scenario": "geometry",
+      "status": "ready",
+      "implementation_commit": "57546b1",
+      "structured_reasoning": "low",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-geometry-run65-20261029",
+      "build_id": "20261029T140651-71379864",
+      "model_calls": 6,
+      "stop_code": null,
+      "detail": "Independent geometry audit passed; 11/11 execution records, original actual entry, distance 2.0, completed failed constraint, INVALID_REQUEST, readonly inputs/retained stdout reports, ASE 3.26.0. 584 tests OK (3 skipped), three checks green."
     }
   ],
-  "next_run": 65
+  "next_run": 66,
+  "campaign_status": "passed",
+  "completed_date": "2026-10-29"
 }

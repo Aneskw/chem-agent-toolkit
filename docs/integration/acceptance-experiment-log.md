@@ -1,4 +1,4 @@
-# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 64）
+# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 65）
 
 记录日期：2026-10-28
 
@@ -17,7 +17,7 @@
 
 ## 0. 一句话结论
 
-**当前扩展验证 3/4（截至 run64）**：描述符 A run59（15/15）、描述符 B run62（16/16）、原子映射 run64（22/22）均完整通过；独立审计、轮后 584 项回归和三个自检绿。仍需 ASE 几何全新成功批次，不能宣称四场景完成。详见 extended-acceptance-campaign.md。
+**当前四场景扩展验收通过（截至 run65，4/4）**：描述符 A run59 15/15、描述符 B run62 16/16、原子映射 run64 22/22、ASE 几何 run65 11/11，共 64 条执行记录 passed。四轮各有 prepared、固定 digest、image.id、独立场景审计与轮后全量/三个自检绿。当前全量 584 OK (3 skipped)。结论限于 Codex CLI 原生阶段 + DeepSeek 结构化阶段和这些场景；详情见 extended-acceptance-campaign.md，机器索引 extended-acceptance-results.json。
 
 **追加复查（run48/49）未取得新的端到端通过**：run48 暴露并已修复规划补丁的类型审计崩溃；run49 停在文件 fixture 绑定/覆盖诊断，未到 Docker，轮后已补具名诊断。run47 的单轮成功证据仍成立，但不能将它外推成全部 skill 场景稳定成功。最新详情见 §11 及 `docker-acceptance-review-20261028.md`。
 
@@ -91,7 +91,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 
 ---
 
-## 3. 全量结果表（run 2 – run 64，共 63 轮；另有 4 次前置的 `final-acceptance-*` 批次）
+## 3. 全量结果表（run 2 – run 65，共 64 轮；另有 4 次前置的 `final-acceptance-*` 批次）
 
 `calls` 是本次构建实际计入预算的调用数；`stop code` 取自该轮 `runtime/<candidate>/<env>/receipt.json` 的 `gaps[0]`。带 “—” 的行在当时没有写出 receipt（崩溃/中断/早期阶段失败），原因栏取自 `records/*.json` 或该轮 `run<N>.log`。
 
@@ -160,6 +160,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 | 62 | ready | 7 | — | 描述符 B prepared、固定 digest、构建成功、16/16 passed，原脚本/真实计算/拒绝/合法与混合输出独立审计通过；584 回归与三个自检绿，扩展目标 2/4 |
 | 63 | blocked | 11 | `unsupported_resource` | 原子映射最终 prepared，但把公共 RDKit 依赖误列必需 private_dependency，资源适配器正确拒绝，未构建/执行；轮后澄清公共依赖与私有资源 |
 | 64 | ready | 6 | — | 原子映射 prepared/固定 digest/构建成功，22/22 passed；原入口、离去基团 [3]、四类拒绝、合法/混合文件独立审计通过；584 回归与三个自检绿，扩展目标 3/4 |
+| 65 | ready | 6 | — | 几何 prepared/固定 digest/构建成功，11/11 passed；真实距离、完成但约束失败、非法请求、输入不变与保留报告独立审计通过；584 回归与三个自检绿，扩展目标 4/4 |
 
 > 第 2–40 行的“停因”是从该轮 `state/outputs/*/records/*.json`、`runtime/*/*/receipt.json` 与 `run<N>.log` 重建的；如果要精确追某一行，直接看该轮目录里的 `run<N>.log` 尾部和 `materials/planning/<n>/rejection.json`。
 
