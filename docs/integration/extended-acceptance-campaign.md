@@ -174,3 +174,11 @@
 证据根 E:\Users\27343\Docker\acceptance-atommap-run63-20261029，summary/record/frozen plan/runtime receipt 记录完整，本轮不恢复。按 planner freeze → acceptance freeze 刷新 provenance，三个 check 绿；全量回归结果随后补记。扩展进度保持 2/4，下一轮新目录继续原子映射。
 
 轮后：584 OK (3 skipped)，三个自检全绿，日志 acceptance-run63-postflight-tests.log。
+
+## run64：原子映射典型场景完整通过
+
+起点 `23dc583`，构建 `20261029T134515-50035efd`，北京时间 13:45:15–14:02:40，ready，预算计数 6（3 原生、3 规划）。入口路径、环境/help 断言经具名反馈修正后 prepared、固定 digest、构建和实际执行成功。公共 RDKit 依赖未再误列私有资源。镜像 sha256:bb9a54174185069327e5935044bc2741ff0c9a3c11efbe583e61aa2307cf7560，基础 digest 94a8fee35252d06ab75856f15f12c7bae67b10e8a6da93c7fded82b2610926cd，22/22 执行记录 passed。
+
+独立 acceptance-audit.json passed，missing=[]，冻结证据和当前严格资格通过。原 audit_atom_maps.py 字节不变且为实际入口；合法 leaving-group reactant_only_maps=[3]，重复映射、缺映射、产物额外映射、语法错误拒绝均有输出；合法文件实际持久输出、混合拒绝后继续有效行均符合。绑定镜像标准库元数据确认 rdkit 2026.9.1（该来源未规定固定版本），不据此声称化学反应可行性或科学普适正确。
+
+证据根 E:\Users\27343\Docker\acceptance-atommap-run64-20261029。轮后 584 OK (3 skipped)、三个自检绿，日志 acceptance-run64-postflight-tests.log。扩展进度 3/4，几何封套免费检查 configuration_valid、0 模型调用；下一轮新目录运行 ASE 几何场景。

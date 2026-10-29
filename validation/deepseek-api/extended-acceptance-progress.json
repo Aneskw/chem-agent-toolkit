@@ -17,8 +17,8 @@
       "successful_run": 62
     },
     "atommap": {
-      "status": "pending",
-      "successful_run": null
+      "status": "passed",
+      "successful_run": 64
     },
     "geometry": {
       "status": "pending",
@@ -192,7 +192,19 @@
       "model_calls": 11,
       "stop_code": "unsupported_resource",
       "detail": "Prepared after 8 planning attempts, then resource adapter correctly refused required private_dependency described as public PyPI RDKit. No image/business execution. Clarify public dependencies versus private resources without changing gate semantics."
+    },
+    {
+      "run": 64,
+      "scenario": "atommap",
+      "status": "ready",
+      "implementation_commit": "23dc583",
+      "structured_reasoning": "low",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-atommap-run64-20261029",
+      "build_id": "20261029T134515-50035efd",
+      "model_calls": 6,
+      "stop_code": null,
+      "detail": "Independent atom-map audit passed, 22/22 execution records; unchanged actual entry, leaving-group [3], four rejection types and real file persistence/continuation. 584 tests OK (3 skipped), three checks green."
     }
   ],
-  "next_run": 64
+  "next_run": 65
 }
