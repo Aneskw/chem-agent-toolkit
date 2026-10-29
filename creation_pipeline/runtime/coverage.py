@@ -88,6 +88,9 @@ def acceptance_coverage(tool, cases, observations=None):
     anchors = tool.get('input_anchors') or {}
     coverage_reasons, gaps, blockers = [], [], []
     supported = [c for c in cases if c.get('oracle_status') == 'supported' and c.get('acceptance')]
+    uncontracted = [c for c in cases if c.get('oracle_status') == 'supported' and not c.get('acceptance')
+                   and c.get('expected_exit', 0) == 0 and business_args(tool, c) is not None
+                   and not any(a in {'--help', '--version', '-h', '-V'} for a in c.get('args', []))]
     direct = [c for c in supported if business_args(tool, c) is not None]
     positive = [c for c in direct if c['acceptance']['purpose'] in {'computation', 'operation', 'report'}
                 and c.get('expected_exit', 0) == 0 and not c.get('relation')
@@ -257,6 +260,12 @@ def acceptance_coverage(tool, cases, observations=None):
                                                'invalid_input': state, 'missing': missing}
         coverage_reasons.extend('Operation ' + operation['id'] + ' missing ' + item for item in missing)
         if not normal:
+            for candidate in uncontracted[:5]:
+                if operation_matches(operation, business_args(tool, candidate)):
+                    coverage_reasons.append('Operation ' + operation['id'] + ' normal candidate '
+                        + candidate['name'] + ' has no acceptance contract; add its grounded purpose, '
+                        'source_path/source_quote and assertion. Legacy output checks alone do not '
+                        'declare the promised business purpose.')
             # A different operation may already have a good normal case. The
             # global "no positive" diagnostic then never explains this route's
             # rejected fixtures (run49: blank.smi versus one-valid.smi).

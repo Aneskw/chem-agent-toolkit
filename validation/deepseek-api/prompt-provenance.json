@@ -1,17 +1,17 @@
 {
   "code": {
-    "acceptance_spec_bytes": 8116,
-    "acceptance_spec_sha256": "50906558f9b4b948f55f16e9e3e15acc0bf76508ce68ec50946e3f7f6e31c6e7",
+    "acceptance_spec_bytes": 8285,
+    "acceptance_spec_sha256": "425791c902dc0abe479b7aece690836bc5f7766f75a667d65959ff2670f60e3e",
     "input_contract_spec_sha256": "1cc76b26c56d1c0fe1fc65556947036bc782672cc97768b8f5537932fc71f89a",
-    "patch_schema_sha256": "6b2db47cfafda08f3552fcf4b50d8c4beb9cde51c6bbd31a5f982776e6480045",
-    "plan_schema_sha256": "361c982c03f8bd802dcd25d54e8cea666c79e2a76a1779930504d43517a1820b",
+    "patch_schema_sha256": "d898f042e7049f9a937635de26fe0958b4869b2e9fcf9be2c0c39d8f37eae763",
+    "plan_schema_sha256": "282709b8fc8069c1078e5dafaded55903ecb63c2dc6bcba363c1046ff3c6e727",
     "policy_bytes": 14101,
     "policy_sha256": "294b1e4b8aface8b0c3c0c6942cfe9ef87c65a07f8374b0ec8cdd52570ca6e75"
   },
   "frozen_fixture": {
     "prompt_bytes": 16860,
     "prompt_sha256": "73e0adf0b38e83b771c95ac79b50c7d5b394d30d0700188e5ce7ea11166c0be2",
-    "schema_sha256": "361c982c03f8bd802dcd25d54e8cea666c79e2a76a1779930504d43517a1820b",
+    "schema_sha256": "282709b8fc8069c1078e5dafaded55903ecb63c2dc6bcba363c1046ff3c6e727",
     "status": "frozen",
     "used_by": "validation/deepseek-api/verify_planner.py only"
   },
@@ -19,8 +19,8 @@
   "note": "These are the prompt/schema identities the current code produces. The formal acceptance batch builds the same bytes at call time and records them per planning round as <audit>/prompt-provenance-<n>.json; the small frozen fixture under frozen/ is a separate offline diagnostic and is never read by production.",
   "rounds": {
     "accepted_plan": {
-      "acceptance_spec_bytes": 8116,
-      "acceptance_spec_sha256": "50906558f9b4b948f55f16e9e3e15acc0bf76508ce68ec50946e3f7f6e31c6e7",
+      "acceptance_spec_bytes": 8285,
+      "acceptance_spec_sha256": "425791c902dc0abe479b7aece690836bc5f7766f75a667d65959ff2670f60e3e",
       "base_kind": "accepted_plan",
       "generated_by": "creation_pipeline.runtime.planner current code (no frozen copy)",
       "input_contract_spec_sha256": "1cc76b26c56d1c0fe1fc65556947036bc782672cc97768b8f5537932fc71f89a",
@@ -28,12 +28,12 @@
       "policy_sha256": "e36153df10dcd8454d0a2f246a03010bb2e36cd57f41975c306d1a5df5ae39ee",
       "prompt_bytes": 15520,
       "prompt_sha256": "26991b19015cc26412abede4a47cb6ef74f45e8086aea5668ee3405d1a361d3a",
-      "schema_bytes": 8809,
-      "schema_sha256": "6b2db47cfafda08f3552fcf4b50d8c4beb9cde51c6bbd31a5f982776e6480045"
+      "schema_bytes": 8980,
+      "schema_sha256": "d898f042e7049f9a937635de26fe0958b4869b2e9fcf9be2c0c39d8f37eae763"
     },
     "none": {
-      "acceptance_spec_bytes": 8116,
-      "acceptance_spec_sha256": "50906558f9b4b948f55f16e9e3e15acc0bf76508ce68ec50946e3f7f6e31c6e7",
+      "acceptance_spec_bytes": 8285,
+      "acceptance_spec_sha256": "425791c902dc0abe479b7aece690836bc5f7766f75a667d65959ff2670f60e3e",
       "base_kind": "none",
       "generated_by": "creation_pipeline.runtime.planner current code (no frozen copy)",
       "input_contract_spec_sha256": "1cc76b26c56d1c0fe1fc65556947036bc782672cc97768b8f5537932fc71f89a",
@@ -41,12 +41,12 @@
       "policy_sha256": "294b1e4b8aface8b0c3c0c6942cfe9ef87c65a07f8374b0ec8cdd52570ca6e75",
       "prompt_bytes": 14570,
       "prompt_sha256": "a2425c553b16a1383760b6da26eb71a485ff3386f65591c4c0fbc9cec94730c4",
-      "schema_bytes": 12877,
-      "schema_sha256": "361c982c03f8bd802dcd25d54e8cea666c79e2a76a1779930504d43517a1820b"
+      "schema_bytes": 13048,
+      "schema_sha256": "282709b8fc8069c1078e5dafaded55903ecb63c2dc6bcba363c1046ff3c6e727"
     },
     "rejected_candidate": {
-      "acceptance_spec_bytes": 8116,
-      "acceptance_spec_sha256": "50906558f9b4b948f55f16e9e3e15acc0bf76508ce68ec50946e3f7f6e31c6e7",
+      "acceptance_spec_bytes": 8285,
+      "acceptance_spec_sha256": "425791c902dc0abe479b7aece690836bc5f7766f75a667d65959ff2670f60e3e",
       "base_kind": "rejected_candidate",
       "generated_by": "creation_pipeline.runtime.planner current code (no frozen copy)",
       "input_contract_spec_sha256": "1cc76b26c56d1c0fe1fc65556947036bc782672cc97768b8f5537932fc71f89a",
@@ -54,14 +54,14 @@
       "policy_sha256": "be776e4f0d16355604056b960c90c058f18890d339b05c45a2f0a18e197d6455",
       "prompt_bytes": 15763,
       "prompt_sha256": "5956c7541f7e140d625e0c9d2e27017c2829c32b5029923d584e13e4df351951",
-      "schema_bytes": 8809,
-      "schema_sha256": "6b2db47cfafda08f3552fcf4b50d8c4beb9cde51c6bbd31a5f982776e6480045"
+      "schema_bytes": 8980,
+      "schema_sha256": "d898f042e7049f9a937635de26fe0958b4869b2e9fcf9be2c0c39d8f37eae763"
     }
   },
   "saved_case": {
     "provenance": {
-      "acceptance_spec_bytes": 8116,
-      "acceptance_spec_sha256": "50906558f9b4b948f55f16e9e3e15acc0bf76508ce68ec50946e3f7f6e31c6e7",
+      "acceptance_spec_bytes": 8285,
+      "acceptance_spec_sha256": "425791c902dc0abe479b7aece690836bc5f7766f75a667d65959ff2670f60e3e",
       "base_kind": "none",
       "generated_by": "creation_pipeline.runtime.planner current code (no frozen copy)",
       "input_contract_spec_sha256": "1cc76b26c56d1c0fe1fc65556947036bc782672cc97768b8f5537932fc71f89a",
@@ -69,8 +69,8 @@
       "policy_sha256": "294b1e4b8aface8b0c3c0c6942cfe9ef87c65a07f8374b0ec8cdd52570ca6e75",
       "prompt_bytes": 49825,
       "prompt_sha256": "aa6c947703736f7b8f8ac320d63796135012ed0fd00585296788b5e9eaa0fd98",
-      "schema_bytes": 12877,
-      "schema_sha256": "361c982c03f8bd802dcd25d54e8cea666c79e2a76a1779930504d43517a1820b"
+      "schema_bytes": 13048,
+      "schema_sha256": "282709b8fc8069c1078e5dafaded55903ecb63c2dc6bcba363c1046ff3c6e727"
     },
     "status": "built",
     "written_prompt_matches_provenance": true

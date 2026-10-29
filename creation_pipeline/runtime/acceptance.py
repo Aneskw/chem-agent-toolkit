@@ -372,7 +372,7 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
     case_errors = []
     for case in cases:
         try:
-            _case_contract(case, policy, index, source)
+            _case_contract(case, policy, index, source, plan.get('entrypoint'))
         except ValueError as exc:
             case_errors.append('Case ' + str(case.get('name')) + ': ' + str(exc))
     if case_errors:
@@ -385,7 +385,7 @@ def contracts(plan, cases, index, source, *, check_consistency=True):
     return policy
 
 
-def _case_contract(case, policy, index, source):
+def _case_contract(case, policy, index, source, entrypoint=None):
     """Validate one case without allowing another case's failure to hide its errors."""
     contract = case.get('acceptance')
     if contract is None:
@@ -426,6 +426,15 @@ def _case_contract(case, policy, index, source):
         raise ValueError('Outcome assertion must be json/jsonl or asserted text; exit code alone is insufficient')
     if case.get('relation'):
         raise ValueError('Acceptance outcome requires a direct invocation, not a relation' + label)
+    if entrypoint and case.get('layer') != 'environment':
+        from .coverage import business_args
+        if business_args({'entrypoint': entrypoint}, case) is None:
+            raise ValueError('Acceptance invocation must execute the configured business entrypoint'
+                             + label + ': received entrypoint=' + repr(case.get('entrypoint'))
+                             + ', args=' + repr(case.get('args')) + '; expected '
+                             + repr(entrypoint) + '. Use the default entrypoint with business args '
+                             'only, or its exact interpreter/script prefix. Do not use sh -c/cat '
+                             'wrappers: the runner reads and asserts output_file after container exit.')
     if contract['purpose'] == 'input_rejection' and (not contract.get('violates') or not contract.get('invalid_input_reason')):
         raise ValueError('Rejection requires an identified constraint and explanation of the actual invalid input' + label)
     # Policy is part of each locked case, so repair cannot change applicability.

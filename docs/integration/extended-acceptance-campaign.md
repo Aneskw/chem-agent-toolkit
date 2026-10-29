@@ -100,3 +100,15 @@
 旧 run47 当前只读复核：覆盖仍 complete，镜像本身仍存在，但其 `python@sha256:0a310eeecf4e1f5a0743f9a6520c90c88d089c903ca5fd283f501e3a805f5f89` 已不在本机缓存，当前资格校验返回 base_image_unavailable，不能再称“当前复核通过”。这不是新覆盖规则拒绝了 writer，也不是重新执行业务；历史冻结报告保持原样。详见 `E:\Users\27343\Docker\acceptance-review-20261028\run47-after-readonly-contract-audit.json` 与 run47-current-resource-diagnosis.json。新批次必须在当前环境重新满足全部门禁。
 
 本项轮间修复验证：579 OK (3 skipped)，三个自检全绿，ASE 封套 --preflight 配置有效且 0 模型调用；日志 `E:\Users\27343\Docker\acceptance-readonly-contract-regression.log`。尚未运行 ASE 业务，不宣称只读新路径端到端通过。下一真实轮仍按原顺序验证描述符 A。
+
+## run56：旧行为前置校验忽略 acceptance.assertion，诱发包装循环
+
+起点 `cb4438a`，构建 `20261029T012856-e4bf25f3`，北京时间 01:28:56–01:45:26。blocked、预算计数 9，停止码 planning_no_progress，未构建/执行业务。三个文件行为用例本已定义 acceptance.assertion，但前置校验只识别旧 stdout/expected_json_lines 字段或独立 entrypoint，逐个要求补断言。模型采用 sh -c 调用后 cat 文件，避开了旧前置校验，却正确被覆盖门禁排除为非绑定入口。模型恢复默认直接调用后，又触发旧的 `Behavior test valid_file_output requires assertions or explicit test runner`，停止重复诊断。
+
+轮后修复前后置校验不一致：前置校验识别非空 acceptance.assertion 对象，随后照常执行来源、角色、谓词与一致性校验；runner 本来就执行这种断言，没有放行空断言、未读来源或错误业务输出。业务 acceptance 的调用在契约校验中就必须绑定实际入口，包装调用一次具名列出，指出无需 cat（runner 退出后读 output_file）。缺正常覆盖时，也指名已有但缺 acceptance 的正常候选用例及 operation。模型说明补明确 purpose/role 映射。
+
+原始计划重放见 `E:\Users\27343\Docker\acceptance-descriptors-a-run56-20261029\behavior-assertion-replay.json`：初版现在暴露真正的缺断言/角色问题，包装版明确拒绝三个 sh/cat 用例，最终版仍因角色和引文问题拒绝；没有把旧轮改成通过，没有模型或业务执行。回归证明合法完整断言无需重复旧字段、错误输出仍失败、断言缺独立来源仍拒绝、包装调用具名聚合；缺失业务契约补齐前仍不可覆盖。专项 92 项通过，另新增覆盖诊断专项后 46 项通过；随后执行全量和三个自检。
+
+首轮全量 583 项有 1 个错误：新增业务入口校验把一条旧环境元数据探针也当成业务调用。环境层本来不计入 business_args/业务覆盖，修正为只对非环境业务契约执行入口绑定；业务包装仍拒绝。旧全量失败日志保留在 `E:\Users\27343\Docker\acceptance-run56-postflight-tests.log`，修正后专项 115 项通过（2 skipped），另存完整重跑为 acceptance-run56-postflight-fixed-tests.log。三个自检已绿；2026-10-29 上午免费检查发现 Docker 未运行，已按前置约定启动 Desktop，待 daemon 就绪再开下一轮，不恢复 run56。
+
+修正后全量完成：583 OK (3 skipped)，三个自检全绿。操作者随后确认手动开启 Docker；以 daemon 实际版本响应为下一轮启动条件，不把 Desktop 进程存在当作引擎可用。修复提交后仍先运行描述符 A 的全新独立轮。

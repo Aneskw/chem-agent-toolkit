@@ -96,7 +96,19 @@
       "model_calls": 7,
       "stop_code": "plan_unresolved",
       "detail": "Resource assessment source quote has an extra digest character; repeated partial replacement misses required source_path and schema rejection omitted its JSON path"
+    },
+    {
+      "run": 56,
+      "scenario": "descriptors-a",
+      "status": "blocked",
+      "implementation_commit": "cb4438a",
+      "structured_reasoning": "low",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-a-run56-20261029",
+      "build_id": "20261029T012856-e4bf25f3",
+      "model_calls": 9,
+      "stop_code": "planning_no_progress",
+      "detail": "Legacy behavior precheck ignored supported acceptance.assertion, induced sh/cat wrappers, then rejected correct direct invocations again"
     }
   ],
-  "next_run": 56
+  "next_run": 57
 }

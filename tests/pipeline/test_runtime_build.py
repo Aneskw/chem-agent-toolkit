@@ -79,6 +79,45 @@ class RuntimeBuildTests(unittest.TestCase):
         self.assertTrue((Path(request.frozen_directory) / 'runtime/context/package/main.py').exists())
         self.assertTrue((Path(request.frozen_directory) / 'runtime/locked-tests.json').exists())
 
+    def test_grounded_business_predicate_needs_no_duplicate_legacy_assertion(self):
+        from creation_pipeline.runtime.runner import output_matches
+        p = plan(); behavior = copy.deepcopy(p['tests'][1])
+        behavior.update(name='business_predicate', layer='behavior')
+        case = json.loads(behavior['case_json']); case.pop('stdout_equals')
+        behavior['case_json'] = json.dumps(case); p['tests'].append(behavior)
+        self.prepared(p)
+        self.assertTrue(output_matches(case, {'stdout': 'ok', 'stderr': ''}, 'ok'))
+        self.assertFalse(output_matches(case, {'stdout': 'wrong', 'stderr': ''}, 'wrong'))
+
+    def test_predicate_without_own_citation_is_still_rejected_without_model(self):
+        p = plan(); behavior = copy.deepcopy(p['tests'][1])
+        behavior.update(name='ungrounded_predicate', layer='behavior')
+        case = json.loads(behavior['case_json']); case.pop('stdout_equals')
+        case['acceptance']['assertion'].pop('source_path')
+        behavior['case_json'] = json.dumps(case); p['tests'].append(behavior)
+        with patch.object(LocalExecutor, 'host', return_value=HOST), \
+             patch.object(planner, 'plan', side_effect=AssertionError('No model call')):
+            prepare(self.record, self.package, self.sources, self.root / 'bad-predicate',
+                    {'plan': p}, LocalExecutor())
+        detail = self.record['runtime_preparation']['gaps'][0]['detail']
+        self.assertIn('ungrounded_predicate', detail)
+        self.assertIn('source_path is missing', detail)
+
+    def test_business_contract_wrappers_are_named_together_before_coverage(self):
+        p = plan()
+        for name in ('wrapped_one', 'wrapped_two'):
+            wrapper = copy.deepcopy(p['tests'][1]); wrapper['name'] = name
+            case = json.loads(wrapper['case_json']); case.update(entrypoint='sh', args=['-c', 'echo ok'])
+            wrapper['case_json'] = json.dumps(case); p['tests'].append(wrapper)
+        with patch.object(LocalExecutor, 'host', return_value=HOST), \
+             patch.object(planner, 'plan', side_effect=AssertionError('No model call')):
+            prepare(self.record, self.package, self.sources, self.root / 'bad-wrappers',
+                    {'plan': p}, LocalExecutor())
+        detail = self.record['runtime_preparation']['gaps'][0]['detail']
+        for text in ('wrapped_one', 'wrapped_two', 'configured business entrypoint',
+                     'sh -c/cat', 'output_file after container exit'):
+            self.assertIn(text, detail)
+
     def test_script_path_as_unused_argument_cannot_bind_execution(self):
         for number, prefix in enumerate((['python', '-c', 'print(123)'], ['python', '-m', 'unrelated'],
                                         ['echo'], ['bash', '-c', 'echo ok'], ['python', '-W'])):

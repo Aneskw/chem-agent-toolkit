@@ -787,7 +787,9 @@ computation|operation|report|input_rejection, source_path, source_quote, asserti
 assertion has role completion|result|report|rejection respectively, source_path,
 source_quote, and either kind=json, path=[field,...], allowed_values=[scalar,...]
 or kind=stdout_equals, value=exact expected text, or kind=stderr_contains with a
-documented diagnostic value. For JSONL, use kind=jsonl, record_index (zero-based
+documented diagnostic value. The exact purpose-to-role mapping is computation ->
+completion, operation -> result, report -> report, input_rejection -> rejection.
+These are distinct semantic fields. For JSONL, use kind=jsonl, record_index (zero-based
 line index), path=[field,...], allowed_values=[scalar,...]; expected_json_lines
 can additionally assert all row results. Include a mixed valid/invalid multi-row
 fixture for documented line-oriented input, asserting the rejected row diagnostic.
@@ -1303,8 +1305,15 @@ def validate_plan(p, index, source, previous_cases=None, anchors=None):
             if test["kind"] in {"candidate", "regression"} or not test["source_paths"]:
                 raise PlanningError("Unsupported behavior oracle cannot be promoted")
             if not any(k in case for k in ("stdout_equals", "stdout_contains", "expected_json_lines", "relation")) and case.get("entrypoint") is None:
-                raise PlanningError('Behavior test ' + test['name']
-                                    + ' requires assertions or explicit test runner')
+                # The runner evaluates this source-grounded predicate too. Requiring
+                # a duplicate legacy assertion caused run56 to alternate between
+                # shell/cat wrappers and a rejected correct direct file invocation.
+                acceptance = case.get('acceptance')
+                assertion = acceptance.get('assertion') if isinstance(acceptance, dict) else None
+                if not isinstance(assertion, dict) or not assertion:
+                    raise PlanningError('Behavior test ' + test['name']
+                                        + ' requires assertions or explicit test runner; a grounded '
+                                        'acceptance.assertion is supported and will be validated below')
         cases.append(dict(case, **{k: v for k, v in test.items() if k != "case_json"}, origin="model_proposed"))
     if not {"environment", "interface"} <= {c["layer"] for c in cases if c["oracle_status"] == "supported"}:
         raise PlanningError("Environment and interface validation are required")

@@ -662,6 +662,19 @@ class CoverageDiagnosticTests(unittest.TestCase):
         return {'entrypoint': ['python', '/opt/skill/entry/skill.py'], 'behavior': {'file_io': False},
                 'acceptance_version': 2, 'acceptance_policy': policy, 'input_anchors': {}}
 
+    def test_missing_normal_contract_names_the_existing_candidate_and_operation(self):
+        policy = self.policy([check()])
+        policy['operations'] = [{'id': 'direct', 'selector': {'args': [{'index': 0}]},
+            'checks': ['nonempty'], 'purposes': ['computation'], 'require_persistence': False}]
+        normal = case('ethanol', 'computation', ['CCO'], 0); normal.pop('acceptance')
+        rejected = case('blank', 'input_rejection', [''], 2, violates='nonempty')
+        result = acceptance_coverage(self.tool(policy), [normal, rejected])
+        self.assertFalse(result['complete'])
+        self.assertTrue(any('Operation direct normal candidate ethanol has no acceptance contract' in reason
+                            for reason in result['reasons']), result['reasons'])
+        normal['acceptance'] = case('ethanol', 'computation', ['CCO'], 0)['acceptance']
+        self.assertTrue(acceptance_coverage(self.tool(policy), [normal, rejected])['complete'])
+
     def test_a_normal_case_rejected_by_an_inverted_predicate_names_that_check(self):
         result = acceptance_coverage(self.tool(self.policy([check(), dict(check('rejected_value'), pattern='C1CC')])),
                                      [case('ok', 'computation', ['CCO'], 0),
