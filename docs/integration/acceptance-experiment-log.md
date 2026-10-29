@@ -1,4 +1,4 @@
-# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 57）
+# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 58）
 
 记录日期：2026-10-28
 
@@ -17,7 +17,7 @@
 
 ## 0. 一句话结论
 
-**当前扩展验证尚未完成（截至 run55）**：run54 已 prepared、构建成功且所有描述符业务用例通过，但环境版本探针失败，整轮仍 failed；run55 阻塞在资源评估引文/补丁 schema 诊断，未执行业务。四个新的独立成功目标还不能宣布完成。后续授权、每轮证据、修复及验证见 `extended-acceptance-campaign.md`。
+**当前扩展验证尚未完成（截至 run58）**：run54 已 prepared、构建成功且所有描述符业务用例通过，但环境版本探针失败，整轮仍 failed；run58 的契约/覆盖校验已收敛，随后因历史基础镜像无本地缓存且远端 TLS 超时而阻塞，未 prepared/构建/执行业务。四个新的独立成功目标仍为 0/4。后续授权、每轮证据、修复及验证见 `extended-acceptance-campaign.md`。
 
 **追加复查（run48/49）未取得新的端到端通过**：run48 暴露并已修复规划补丁的类型审计崩溃；run49 停在文件 fixture 绑定/覆盖诊断，未到 Docker，轮后已补具名诊断。run47 的单轮成功证据仍成立，但不能将它外推成全部 skill 场景稳定成功。最新详情见 §11 及 `docker-acceptance-review-20261028.md`。
 
@@ -91,7 +91,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 
 ---
 
-## 3. 全量结果表（run 2 – run 57，共 56 轮；另有 4 次前置的 `final-acceptance-*` 批次）
+## 3. 全量结果表（run 2 – run 58，共 57 轮；另有 4 次前置的 `final-acceptance-*` 批次）
 
 `calls` 是本次构建实际计入预算的调用数；`stop code` 取自该轮 `runtime/<candidate>/<env>/receipt.json` 的 `gaps[0]`。带 “—” 的行在当时没有写出 receipt（崩溃/中断/早期阶段失败），原因栏取自 `records/*.json` 或该轮 `run<N>.log`。
 
@@ -153,6 +153,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 | 55 | blocked | 7 | `plan_unresolved` | 入口路径修正后，resource_assessment 引文 digest 多一个字符；两次不完整对象补丁缺 source_path，schema 错误不带对象路径；轮后补具名引文及 JSON Pointer 诊断 |
 | 56 | blocked | 9 | `planning_no_progress` | 旧行为前置校验不认 acceptance.assertion，逐个要求重复断言，诱发 sh/cat 包装；恢复直接调用后再次被同一旧校验拒绝；轮后修复前后置校验不一致并具名拒绝包装调用 |
 | 57 | blocked | 5 | `planning_no_progress` | 两版 argv 均正确，但 plan.script 为空；旧入口拒绝仅回显正确 argv，未指出空 script；通用“script 可选”说明也未区分已绑定脚本，轮后修复提示和具名诊断 |
+| 58 | blocked | 7 | `base_image_unresolved` | 第三版通过规划契约/覆盖校验；历史基础 digest 本机缺失、远端 TLS 超时，未 prepared/构建/执行业务；下一轮显式选择缓存 Python 3.11 bookworm 标签并保留 digest 固定 |
 
 > 第 2–40 行的“停因”是从该轮 `state/outputs/*/records/*.json`、`runtime/*/*/receipt.json` 与 `run<N>.log` 重建的；如果要精确追某一行，直接看该轮目录里的 `run<N>.log` 尾部和 `materials/planning/<n>/rejection.json`。
 

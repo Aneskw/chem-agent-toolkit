@@ -122,3 +122,13 @@
 原始两版重放 `E:\Users\27343\Docker\acceptance-descriptors-a-run57-20261029\bound-script-diagnostic-replay.json` 仍拒绝，0 次模型调用、无业务执行。回归覆盖空字段、缺 package 前缀、误填容器绝对路径均具名拒绝，只有改为正确相对路径才通过该门禁。专项 36 项通过，随后执行全量与三个自检。
 
 轮后：584 OK (3 skipped)，三个自检全绿，日志 `E:\Users\27343\Docker\acceptance-run57-postflight-tests.log`。下一轮保持描述符 A 的来源、业务义务、混合后端和预算，创建全新 state/library，不恢复 run57。
+
+## run58：规划校验已收敛，历史基础镜像不可用
+
+起点 `2d34d24`，构建 `20261029T111530-5190f9c2`，北京时间 11:15:30–11:43:08，blocked、预算计数 7（4 原生、3 规划），停止码 base_image_unresolved。前两次反馈分别指名缺少 file_rows_nonempty 拒绝覆盖和 blank_file_row_rejection 的来源引文把 Python False 写成 false；第三版已修正并通过契约/覆盖校验，随后固定基础镜像失败。因此不能称为 prepared，也没有 image.id 或业务报告。本轮已停，不恢复。
+
+计划选了原来源 Dockerfile 的历史 `python@sha256:0a310eeecf4e1f5a0743f9a6520c90c88d089c903ca5fd283f501e3a805f5f89`，本机已无该镜像，Docker Hub Head 请求 TLS handshake timeout。本地兜底不能拿其他 digest 冒充这一明确身份；这不是业务代码缺陷。只读检查确认当前缓存 `python:3.11-slim-bookworm` 的 RepoDigest 是 `python@sha256:94a8fee35252d06ab75856f15f12c7bae67b10e8a6da93c7fded82b2610926cd`，记录于本轮 cached-base-selection.json，未调用模型或运行化学代码。
+
+下一轮环境选择：四个新场景封套均增加调用方 constraints，明确 plan.base_image 使用该缓存的 Python 3.11 bookworm 标签，保持 pin_base_image=true，由 executor 再解析并冻结实际 digest。原始来源只读；不修改来源 Dockerfile，不替换原业务脚本、依赖 pins 或验收义务，不改代理。此次仅环境选择和实验记录变更，无生产提示/schema 改动。
+
+轮后：584 OK (3 skipped)，三个自检全绿，免费配置检查 configuration_valid / 0 次模型调用。日志 E:\Users\27343\Docker\acceptance-run58-postflight-tests.log。下一轮 run59 使用新目录，不恢复 run58。

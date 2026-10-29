@@ -42,7 +42,10 @@
       "service_tier": "default",
       "progress_watch": "observe",
       "api_connect_retries": 1
-    }
+    },
+    "constraints": [
+      "Caller-selected environment: set plan.base_image to python:3.11-slim-bookworm. This Python 3.11 bookworm tag is cached locally and pin_base_image remains true: the executor must resolve and freeze its observed RepoDigest before building. Historical source Dockerfile base digests are references, not required identities for this fresh environment. Preserve all source dependency pins, actual business entry, and acceptance obligations; do not copy a historical unavailable base digest."
+    ]
   },
   "batch": {
     "label": "extended-geometry",
