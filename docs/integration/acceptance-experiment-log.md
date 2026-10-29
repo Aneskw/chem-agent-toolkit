@@ -1,4 +1,4 @@
-# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 60）
+# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 61）
 
 记录日期：2026-10-28
 
@@ -17,7 +17,7 @@
 
 ## 0. 一句话结论
 
-**当前扩展验证 1/4（截至 run60）**：run59 描述符 A 已 prepared、固定 digest、构建成功且 15/15 执行记录 passed，独立场景审计及轮后 584 项回归/三个自检通过。仍需三个全新成功批次：描述符 B、原子映射、几何检查。每轮证据与修复见 extended-acceptance-campaign.md。
+**当前扩展验证 1/4（截至 run61）**：run59 描述符 A 已 prepared、固定 digest、构建成功且 15/15 执行记录 passed，独立场景审计及轮后 584 项回归/三个自检通过。仍需三个全新成功批次：描述符 B、原子映射、几何检查。每轮证据与修复见 extended-acceptance-campaign.md。
 
 **追加复查（run48/49）未取得新的端到端通过**：run48 暴露并已修复规划补丁的类型审计崩溃；run49 停在文件 fixture 绑定/覆盖诊断，未到 Docker，轮后已补具名诊断。run47 的单轮成功证据仍成立，但不能将它外推成全部 skill 场景稳定成功。最新详情见 §11 及 `docker-acceptance-review-20261028.md`。
 
@@ -91,7 +91,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 
 ---
 
-## 3. 全量结果表（run 2 – run 60，共 59 轮；另有 4 次前置的 `final-acceptance-*` 批次）
+## 3. 全量结果表（run 2 – run 61，共 60 轮；另有 4 次前置的 `final-acceptance-*` 批次）
 
 `calls` 是本次构建实际计入预算的调用数；`stop code` 取自该轮 `runtime/<candidate>/<env>/receipt.json` 的 `gaps[0]`。带 “—” 的行在当时没有写出 receipt（崩溃/中断/早期阶段失败），原因栏取自 `records/*.json` 或该轮 `run<N>.log`。
 
@@ -156,6 +156,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 | 58 | blocked | 7 | `base_image_unresolved` | 第三版通过规划契约/覆盖校验；历史基础 digest 本机缺失、远端 TLS 超时，未 prepared/构建/执行业务；下一轮显式选择缓存 Python 3.11 bookworm 标签并保留 digest 固定 |
 | 59 | ready | 5 | — | 描述符 A：prepared、固定 digest、构建成功、15/15 passed；原脚本/入口/真实数值/拒绝/文件与混合继续处理的独立审计通过，584 回归与三个自检绿；扩展目标 1/4 |
 | 60 | blocked | 4 | `model_connection_failed` | 描述符 B 首次结构化规划 DNS gaierror；未构建/执行，后续只读 DNS 检查恢复解析；584 回归与三个自检绿，新轮重跑 |
+| 61 | failed | 5 | `execution_failed` | 描述符 B prepared/构建成功，12/13 passed；合法文件用例 --output 使用相对路径落在只读 cwd，补清 /output 参数与 output_file 元数据规则，新轮重跑 |
 
 > 第 2–40 行的“停因”是从该轮 `state/outputs/*/records/*.json`、`runtime/*/*/receipt.json` 与 `run<N>.log` 重建的；如果要精确追某一行，直接看该轮目录里的 `run<N>.log` 尾部和 `materials/planning/<n>/rejection.json`。
 

@@ -146,3 +146,13 @@
 起点 `6ccd1fe`，构建 `20261029T121731-fb824754`，北京时间 12:17:31–12:26:46，blocked，预算计数 4。发现、编写和独立内容审阅通过；首次 DeepSeek 规划停止于 model_connection_failed / DeepSeek connection failed: gaierror，未形成计划、构建或执行业务。本轮不恢复、不计成功，证据 E:\Users\27343\Docker\acceptance-descriptors-b-run60-20261029。
 
 轮后仅 DNS 元数据检查 socket.getaddrinfo(api.deepseek.com,443) 已成功解析，无 API/model 请求；不改后端、预算、代码或契约。该检查首次自动权限审批等待超时、未执行，按工具许可重试一次后完成。全量 584 OK (3 skipped)，三个自检绿，日志 acceptance-run60-postflight-tests.log。下轮新建 run61，仍为描述符 B，扩展成功数保持 1/4。
+
+## run61：描述符 B，输出 argv 使用相对路径失败
+
+起点 `ea5ef9c`，构建 `20261029T123451-0fdb5e5e`，北京时间 12:34:51–12:51:27，failed，预算计数 5。首次规划已能连接 DeepSeek，具名反馈修正正则及文件名绑定后 prepared、固定 digest、构建成功。镜像 sha256:53ea70fddb256ff310c4ec1806b24fb57b7ae94241c49f84eb9c25f002b05337，13 条执行记录 12 passed。
+
+唯一失败 file_input_persisted_ethanol_and_phenol 的 --output descriptors.jsonl 相对路径落在只读默认 workdir /opt/skill，原脚本 open 报 OSError [Errno 30] Read-only file system。命令未指向 /output，output_file 元数据不会改写 argv。其他直接计算和拒绝通过，但整轮失败不能计成功；混合检查通过也不能替代失败的合法文件用例。证据 E:\Users\27343\Docker\acceptance-descriptors-b-run61-20261029，完整 report 在 state/outputs/20261029T123451-0fdb5e5e/runtime 下。
+
+轮后只补规划提示的具体挂载规则和示例：args 的输出路径使用 /output/descriptors.jsonl，output_file 填 descriptors.jsonl；默认 cwd 只读，元数据不重写 argv，不给 stdout-only 工具虚构输出选项。runner、业务脚本、权限和断言不变；不能对所有 CLI 强加参数语法，故不添加猜测各工具内部路径语义的通用拒绝器。按 planner freeze → acceptance freeze 刷新提示 provenance，再跑三个 check。全量回归结果随后记录，新轮继续描述符 B，扩展成功数 1/4。
+
+轮后回归：584 OK (3 skipped)，三个自检全绿，日志 acceptance-run61-postflight-tests.log。

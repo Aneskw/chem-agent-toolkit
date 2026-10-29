@@ -134,6 +134,13 @@ numeric components where needed; still reject a different pinned release. Do not
 infer a literal module.__version__ string from requirements.txt, remove the version
 check, or substitute a constant string for the installed metadata.
 Use /input (read-only), /output (persistent), /tmp (writable) for file IO. Include
+a tool output argument under the actual writable mount: for a documented --output
+flag use args ["--input", "/input/input.smi", "--output", "/output/descriptors.jsonl"]
+and output_file="descriptors.jsonl". The metadata output_file is relative to /output;
+it does NOT rewrite argv or change the current directory. Default workdir /opt/skill
+is read-only, so --output descriptors.jsonl writes to the wrong filesystem. For other
+CLIs use their documented output option with the equivalent absolute /output path;
+do not invent an output flag for a stdout-only tool or change its implementation.
 a passing persisted-output case when file_io=true. The default requires a file
 actually written by the business tool. Only when caller constraints supply an
 independently reviewed read_only_stdout source contract, retain the stdout report

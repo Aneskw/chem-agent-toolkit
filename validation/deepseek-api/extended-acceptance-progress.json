@@ -156,7 +156,19 @@
       "model_calls": 4,
       "stop_code": "model_connection_failed",
       "detail": "First structured planning connection failed: gaierror. No image or business execution. Subsequent metadata-only DNS check resolved; no model probe or backend change."
+    },
+    {
+      "run": 61,
+      "scenario": "descriptors-b",
+      "status": "failed",
+      "implementation_commit": "ea5ef9c",
+      "structured_reasoning": "low",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-b-run61-20261029",
+      "build_id": "20261029T123451-0fdb5e5e",
+      "model_calls": 5,
+      "stop_code": "execution_failed",
+      "detail": "Prepared and built, 12/13 passed. Valid file --output descriptors.jsonl attempted writing to readonly /opt/skill. Clarify absolute /output argv vs relative output_file metadata; no source/runner/assertion change."
     }
   ],
-  "next_run": 61
+  "next_run": 62
 }
