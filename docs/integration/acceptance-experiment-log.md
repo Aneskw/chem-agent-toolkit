@@ -1,4 +1,4 @@
-# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 62）
+# 验收实验记录：DeepSeek 后端 + pipeline with Docker（run 2 – run 63）
 
 记录日期：2026-10-28
 
@@ -17,7 +17,7 @@
 
 ## 0. 一句话结论
 
-**当前扩展验证 2/4（截至 run62）**：run59 描述符 A（15/15）、run62 描述符 B（16/16）均完整通过，独立场景审计、轮后 584 项回归及三个自检全绿。仍需原子映射、几何两个全新成功批次，不能宣称四场景完成。详见 extended-acceptance-campaign.md。
+**当前扩展验证 2/4（截至 run63）**：run59 描述符 A（15/15）、run62 描述符 B（16/16）均完整通过，独立场景审计、轮后 584 项回归及三个自检全绿。仍需原子映射、几何两个全新成功批次，不能宣称四场景完成。详见 extended-acceptance-campaign.md。
 
 **追加复查（run48/49）未取得新的端到端通过**：run48 暴露并已修复规划补丁的类型审计崩溃；run49 停在文件 fixture 绑定/覆盖诊断，未到 Docker，轮后已补具名诊断。run47 的单轮成功证据仍成立，但不能将它外推成全部 skill 场景稳定成功。最新详情见 §11 及 `docker-acceptance-review-20261028.md`。
 
@@ -91,7 +91,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 
 ---
 
-## 3. 全量结果表（run 2 – run 62，共 61 轮；另有 4 次前置的 `final-acceptance-*` 批次）
+## 3. 全量结果表（run 2 – run 63，共 62 轮；另有 4 次前置的 `final-acceptance-*` 批次）
 
 `calls` 是本次构建实际计入预算的调用数；`stop code` 取自该轮 `runtime/<candidate>/<env>/receipt.json` 的 `gaps[0]`。带 “—” 的行在当时没有写出 receipt（崩溃/中断/早期阶段失败），原因栏取自 `records/*.json` 或该轮 `run<N>.log`。
 
@@ -158,6 +158,7 @@ python -m creation_pipeline build validation/deepseek-api/acceptance-normal-inpu
 | 60 | blocked | 4 | `model_connection_failed` | 描述符 B 首次结构化规划 DNS gaierror；未构建/执行，后续只读 DNS 检查恢复解析；584 回归与三个自检绿，新轮重跑 |
 | 61 | failed | 5 | `execution_failed` | 描述符 B prepared/构建成功，12/13 passed；合法文件用例 --output 使用相对路径落在只读 cwd，补清 /output 参数与 output_file 元数据规则，新轮重跑 |
 | 62 | ready | 7 | — | 描述符 B prepared、固定 digest、构建成功、16/16 passed，原脚本/真实计算/拒绝/合法与混合输出独立审计通过；584 回归与三个自检绿，扩展目标 2/4 |
+| 63 | blocked | 11 | `unsupported_resource` | 原子映射最终 prepared，但把公共 RDKit 依赖误列必需 private_dependency，资源适配器正确拒绝，未构建/执行；轮后澄清公共依赖与私有资源 |
 
 > 第 2–40 行的“停因”是从该轮 `state/outputs/*/records/*.json`、`runtime/*/*/receipt.json` 与 `run<N>.log` 重建的；如果要精确追某一行，直接看该轮目录里的 `run<N>.log` 尾部和 `materials/planning/<n>/rejection.json`。
 

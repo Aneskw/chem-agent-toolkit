@@ -30,6 +30,13 @@ The renderer provides USER 10001:10001 and JSON ENTRYPOINT. Set PATH for Conda
 explicitly. Do not require a host Python library. Runtime is offline unless a
 network need is explicitly declared. GPU/private dependencies/credentials/services
 are unsupported; identify them and missing weights/data rather than inventing.
+Public packages installed from PyPI/Conda belong in dependencies and installation
+steps, not resources with kind=private_dependency. For example public RDKit is a
+Python dependency, not a private resource merely because the entrypoint imports it.
+Use private_dependency only for a source-backed nonpublic dependency requiring
+private access; never relabel an actual private dependency as public to bypass a
+blocker. resources may be [] when no special external resources are needed; do not
+invent resource entries to fill every kind or duplicate ordinary dependencies.
 For each resource, required_for_execution describes necessity for the selected
 entrypoint and supported input contract. An optional upstream predictor, training
 weight or service outside this entrypoint's scope may be unavailable without

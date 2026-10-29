@@ -164,3 +164,13 @@
 独立审计 acceptance-audit.json passed、missing=[]：当前严格资格与冻结验证通过，原脚本字节一致且为真实入口、乙醇 46.069 与供受体数、空串/非法拒绝、合法文件持久输出、混合拒绝后有效行继续输出均有本轮证据。标准库发行包元数据 rdkit 2024.9.6 / numpy 1.26.4 / pillow 11.3.0，与 pins 一致。没有复用 A 状态或续跑失败轮。
 
 证据根 E:\Users\27343\Docker\acceptance-descriptors-b-run62-20261029。轮后 584 OK (3 skipped)、三个自检绿，日志 acceptance-run62-postflight-tests.log。两个独立描述符目标已完成，扩展进度 2/4；接着全新原子映射和几何场景，不把描述符成功外推到其他工具。
+
+## run63：原子映射规划通过后，公共包被误列私有资源
+
+起点 `917283b`，构建 `20261029T131922-19b09b2a`，北京时间 13:19:22–13:40:36，blocked，预算计数 11（3 原生、8 规划）。入口路径、环境/接口验证、具体引文、正常/文件拒绝覆盖、正则和检查通道经反馈修正，最终 prepared、固定基础 digest。但在资源准备停于 unsupported_resource：private_dependency: RDKit is a public PyPI package (no compatible local verifier)，未构建/执行业务。
+
+计划已把 rdkit 2024.9.5（来源未指定版本，计划明确 inferred）列入 dependencies，却额外声明 kind=private_dependency、required_for_execution=true。资源适配器按真实声明拒绝是正确行为；不能自动把任意自称 public 的私有资源放行。轮后提示明确公共 PyPI/Conda 包属于 dependencies/安装步骤，private_dependency 仅用于有来源依据的非公开依赖；没有特殊外部资源时 resources=[]，无需逐类虚构条目。真实私有资源的门禁和所有业务断言不变。
+
+证据根 E:\Users\27343\Docker\acceptance-atommap-run63-20261029，summary/record/frozen plan/runtime receipt 记录完整，本轮不恢复。按 planner freeze → acceptance freeze 刷新 provenance，三个 check 绿；全量回归结果随后补记。扩展进度保持 2/4，下一轮新目录继续原子映射。
+
+轮后：584 OK (3 skipped)，三个自检全绿，日志 acceptance-run63-postflight-tests.log。

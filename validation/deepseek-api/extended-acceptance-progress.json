@@ -180,7 +180,19 @@
       "model_calls": 7,
       "stop_code": null,
       "detail": "Independent descriptor B audit passed; 16/16 execution records passed, exact original script and dependency pins, 584 tests OK (3 skipped), three checks green."
+    },
+    {
+      "run": 63,
+      "scenario": "atommap",
+      "status": "blocked",
+      "implementation_commit": "917283b",
+      "structured_reasoning": "low",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-atommap-run63-20261029",
+      "build_id": "20261029T131922-19b09b2a",
+      "model_calls": 11,
+      "stop_code": "unsupported_resource",
+      "detail": "Prepared after 8 planning attempts, then resource adapter correctly refused required private_dependency described as public PyPI RDKit. No image/business execution. Clarify public dependencies versus private resources without changing gate semantics."
     }
   ],
-  "next_run": 63
+  "next_run": 64
 }
