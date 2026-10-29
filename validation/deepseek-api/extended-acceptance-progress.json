@@ -13,8 +13,8 @@
       "successful_run": 59
     },
     "descriptors-b": {
-      "status": "pending",
-      "successful_run": null
+      "status": "passed",
+      "successful_run": 62
     },
     "atommap": {
       "status": "pending",
@@ -168,7 +168,19 @@
       "model_calls": 5,
       "stop_code": "execution_failed",
       "detail": "Prepared and built, 12/13 passed. Valid file --output descriptors.jsonl attempted writing to readonly /opt/skill. Clarify absolute /output argv vs relative output_file metadata; no source/runner/assertion change."
+    },
+    {
+      "run": 62,
+      "scenario": "descriptors-b",
+      "status": "ready",
+      "implementation_commit": "a0bf9b1",
+      "structured_reasoning": "low",
+      "evidence": "E:\\Users\\27343\\Docker\\acceptance-descriptors-b-run62-20261029",
+      "build_id": "20261029T125918-4216a420",
+      "model_calls": 7,
+      "stop_code": null,
+      "detail": "Independent descriptor B audit passed; 16/16 execution records passed, exact original script and dependency pins, 584 tests OK (3 skipped), three checks green."
     }
   ],
-  "next_run": 62
+  "next_run": 63
 }

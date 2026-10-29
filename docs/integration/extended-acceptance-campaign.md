@@ -156,3 +156,11 @@
 轮后只补规划提示的具体挂载规则和示例：args 的输出路径使用 /output/descriptors.jsonl，output_file 填 descriptors.jsonl；默认 cwd 只读，元数据不重写 argv，不给 stdout-only 工具虚构输出选项。runner、业务脚本、权限和断言不变；不能对所有 CLI 强加参数语法，故不添加猜测各工具内部路径语义的通用拒绝器。按 planner freeze → acceptance freeze 刷新提示 provenance，再跑三个 check。全量回归结果随后记录，新轮继续描述符 B，扩展成功数 1/4。
 
 轮后回归：584 OK (3 skipped)，三个自检全绿，日志 acceptance-run61-postflight-tests.log。
+
+## run62：描述符 B 独立完整通过
+
+起点 `a0bf9b1`，构建 `20261029T125918-4216a420`，北京时间 12:59:18–13:14:06，ready，预算计数 7。三条具名规划反馈分别修正资源引文、具体用例引文、直接计算/空白文件行覆盖；随后 prepared、固定 digest、构建成功，16/16 执行记录 passed。镜像 sha256:cfa6be13562715783be404d8774861918608501ce37aa214a36eb38c8ce5fdeb。
+
+独立审计 acceptance-audit.json passed、missing=[]：当前严格资格与冻结验证通过，原脚本字节一致且为真实入口、乙醇 46.069 与供受体数、空串/非法拒绝、合法文件持久输出、混合拒绝后有效行继续输出均有本轮证据。标准库发行包元数据 rdkit 2024.9.6 / numpy 1.26.4 / pillow 11.3.0，与 pins 一致。没有复用 A 状态或续跑失败轮。
+
+证据根 E:\Users\27343\Docker\acceptance-descriptors-b-run62-20261029。轮后 584 OK (3 skipped)、三个自检绿，日志 acceptance-run62-postflight-tests.log。两个独立描述符目标已完成，扩展进度 2/4；接着全新原子映射和几何场景，不把描述符成功外推到其他工具。
