@@ -3,6 +3,7 @@
 %% with stop_on_runtime_failure=true stop after the first Docker/acceptance failure.
 %% Opt-in shared_tool_image_v1 resolves before environment planning.
 %% Hits generate current acceptance with a scoped model protocol; no cached tests.
+%% Finite Open Babel v2 additionally rechecks executable/plugins/data and image-rootfs closure.
 flowchart TB
     A[用户来源与提示] --> B[资源准备与来源快照]
     B --> C[发现 Agent：逐候选计划]
@@ -19,7 +20,7 @@ flowchart TB
     TR -->|默认旧模式或未命中| R[Docker 依赖准备：资源预检、复用或规划环境、冻结材料]
     TR -->|同 daemon 具体版本可用| CA[绑定工具版本；验收专用模型生成当前 Skill 用例；固定环境不可修改]
     CA -->|模型或预算不可用、合同不合格| U
-    CA -->|冻结当前包、绑定及当前合同；零环境规划与构建| TV[核验工具完整目录、入口、依赖版本及当前镜像]
+    CA -->|冻结当前包、绑定及当前合同；零环境规划与构建| TV[核验工具目录、入口、依赖版本和镜像；外部工具核验可执行文件与镜像文件闭包]
     TV --> S
     EA -->|来源不足或独立审阅拒绝| U
     G -->|草稿或需求未知| U[持久候选区与具体缺口]

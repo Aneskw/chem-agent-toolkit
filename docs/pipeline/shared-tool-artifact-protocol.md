@@ -1,5 +1,9 @@
 # 精确 Tool 制品复用：本机 v1 协议
 
+2026-11-01 后续扩展：有限 Open Babel 外部可执行文件使用独立 `shared_tool_image_v2` /
+`openbabel-debian-image-v1`，见 [可执行文件与镜像闭包协议](openbabel-external-tool-protocol.md)。
+下文 v1 的 subprocess 禁止规则继续适用于 v1，不通过删除该规则扩大支持。
+
 2026-11-01：已实现显式 `shared_tool_image_v1`。默认自包含模式不变。
 实现为 `runtime/shared_tool.py`，准备、执行、资格、恢复与 CLI 均已接入。
 当前范围是调用方声明完整闭包、字节一致来源绑定的 Python 脚本。命中后默认调用

@@ -1,5 +1,11 @@
 # 共享工具层：当前集成分支的演进设计
 
+2026-11-01 后续：Open Babel 外部执行文件已有独立 v2 协议与真实普通 CLI 成功对照，
+见 [Open Babel 完整工具共享](openbabel-shared-tool-20261101.md) 和
+[可执行文件及镜像闭包协议](../pipeline/openbabel-external-tool-protocol.md)。
+A 8/8、B 9/9，B 环境规划与两类构建均为 0，仍独立审阅并调用当前验收模型。
+原“仅预检拒绝 Open Babel”是上一轮快照，v1 禁止规则仍保留，v2 支持面限原包装脚本与 Debian 标准布局。
+
 2026-11-01 更新：第二阶段已增加显式 `shared_tool_image_v1` 本机精确复用。
 初版实现与证据见 [第二阶段交付](shared-tool-phase2-20261101.md)，验收模型补齐见
 [验收专用阶段](shared-tool-acceptance-model-20261101.md) 和

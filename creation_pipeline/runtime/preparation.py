@@ -242,12 +242,14 @@ def validate(p, index, source, binding, opts, locked=None, anchors=None):
 
 
 def propose(source, binding, audit, opts, constraints=None, locked=None, feedback=None, call_guard=None,
-            previous=None, anchors=None, acceptance_base=None):
+            previous=None, anchors=None, acceptance_base=None, plan_validator=None, observed_tool_identity=None):
     """Reuse planner reads/patches; stop repeated diagnoses instead of hidden quotas."""
     import itertools
     deadline = None if opts["total_seconds"] is None else time.monotonic() + opts["total_seconds"]
     attempts = itertools.count() if opts["max_attempts"] is None else range(opts["max_attempts"])
     diagnoses = set()
+    repair_validators = []
+    protected_tests = None
     # Cases that came from outside this draft. A repair may withdraw its own
     # over-promises, but never an accepted or author-supplied case.
     required = {c["name"] for c in (locked or []) if c.get("origin") == "model_proposed"}
@@ -270,19 +272,29 @@ def propose(source, binding, audit, opts, constraints=None, locked=None, feedbac
                             + "/opt/skill/" + runtime_path(binding) + ". Do not copy the relative script "
                             "field into the entrypoint array."]) + (constraints or [])},
             Path(audit) / str(number), opts, deadline, feedback=feedback, previous=previous, call_guard=call_guard,
-            required=required, **({'acceptance_base': acceptance_base} if acceptance_base is not None else {}))
+            required=required, **({'acceptance_base': acceptance_base} if acceptance_base is not None else {}),
+            **({'observed_tool_identity': observed_tool_identity} if observed_tool_identity is not None else {}))
         try:
             if acceptance_base is not None:
                 planner.validate_acceptance_entrypoints(p)
             cases = validate(p, index, source, binding, opts, locked, anchors)
+            for repair_validator in repair_validators:
+                repair_validator(p)
+            if plan_validator is not None:
+                plan_validator(p)
             return p, index, cases
         except (planner.PlanningError, ValueError) as exc:
+            if getattr(exc, 'repair_validator', None) is not None and not repair_validators:
+                repair_validators.append(exc.repair_validator)
+                protected_tests = exc.protected_tests
             diagnostic = str(exc)
             if diagnostic in diagnoses:
                 raise RuntimeBlocked("planning_no_progress", diagnostic) from exc
             diagnoses.add(diagnostic)
             feedback = {"rejected_plan": p, "read_files": index.get("read_files", []),
                         "source_fingerprint": fingerprint(index["files"]), "diagnostic": diagnostic}
+            if protected_tests is not None:
+                feedback['channel_repair_cases'] = protected_tests
             write_json(Path(audit) / str(number) / "rejection.json", sanitized(feedback))
     raise RuntimeBlocked("explicit_attempt_limit", "Configured planning attempt limit reached")
 
@@ -547,7 +559,13 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
             p, index, _ = propose(source, binding, target / ("acceptance-planning" if tool_artifact else "planning"), planning_opts, entry_constraints, spec.get("locked_cases"),
                                   feedback=spec.get('feedback'), call_guard=counted_call_guard,
                                   previous=spec.get('previous_plan'), anchors=anchors,
-                                  acceptance_base=tool_artifact['plan'] if tool_artifact else None)
+                                  acceptance_base=tool_artifact['plan'] if tool_artifact else None,
+                                  **({'observed_tool_identity': {'abi': tool_artifact['abi'],
+                                      'artifact_id': tool_artifact['artifact_id'],
+                                      'executable': tool_artifact['external_identity']['executable']}}
+                                     if tool_artifact and 'external_identity' in tool_artifact else {}),
+                                  **({'plan_validator': lambda proposed: shared_tool.check_plan(tool_request, proposed)}
+                                     if tool_request else {}))
         else:
             index["read_files"] = list(index["files"])
         if redact(json.dumps(p, ensure_ascii=False)) != json.dumps(p, ensure_ascii=False):
@@ -592,7 +610,7 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
         if base_image_pin:
             environment["base_image"] = base_image_pin
         if tool_request:
-            environment['shared_tool'] = {'abi': shared_tool.ABI, 'request': tool_request,
+            environment['shared_tool'] = {'abi': tool_request['abi'], 'request': tool_request,
                                           'request_key': fingerprint(tool_request), 'artifact': tool_artifact}
             if 'tool_artifact' in spec:
                 environment['shared_tool']['selection'] = copy.deepcopy(spec['tool_artifact'])

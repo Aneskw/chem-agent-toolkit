@@ -1,5 +1,9 @@
 # 普通 CLI 的完整工具复用验证
 
+后续已有有限 Open Babel v2 协议及真实 CLI 对照，见
+[Open Babel 完整工具共享](openbabel-shared-tool-20261101.md)。本报告的预检拒绝结论属于当时 v1 范围；
+v1 规则未放宽，新声明和实际支持面由 v2 报告说明。
+
 基线 `20f0c67`。本轮从普通配置与 `python -m creation_pipeline` 入口验证，未调用实验脚本
 注入 record、prepare、seal 等内部状态，未提供 plan/acceptance_plan，未复制旧资格。
 原 Codex CLI / DeepSeek 后端和每批 16 调用、600 秒单次、3600 秒整批封套保持不变。

@@ -19,6 +19,7 @@ from contextlib import contextmanager
 from creation_pipeline.artifacts.package import manifest
 from creation_pipeline.contracts import fingerprint
 from creation_pipeline.records import has_link, read_json, safe_relative, write_json, sanitized
+from . import external_tool
 
 ABI = 'shared_tool_image_v1'
 POLICY = 'closed-python-bundle-v1'
@@ -40,7 +41,7 @@ def validate_declaration(declaration):
         raise ValueError('shared_tool.declaration: require closure, requirements, interface, platform, policy')
     if declaration['closure'] != 'all-package-and-sources-except-skill-document':
         raise ValueError('shared_tool.closure: explicit complete bundle declaration missing')
-    if declaration['policy'] != POLICY or declaration['platform'] != 'linux/amd64':
+    if declaration['policy'] not in {POLICY, external_tool.POLICY} or declaration['platform'] != 'linux/amd64':
         raise ValueError('shared_tool.policy/platform: unsupported ' + repr(declaration))
     interface = declaration['interface']
     if (not isinstance(interface, dict) or set(interface) != {'entrypoint', 'workdir', 'resources', 'runtime_network'}
@@ -54,7 +55,9 @@ def validate_declaration(declaration):
             or not isinstance(requirements_spec['executables'], list)
             or any(not isinstance(v, str) or not v for v in requirements_spec['imports'].values())):
         raise ValueError('shared_tool.requirements: require explicit imports/version requirements and executables')
-    if requirements_spec['executables']:
+    if declaration['policy'] == external_tool.POLICY:
+        external_tool.validate_requirements(requirements_spec['executables'])
+    elif requirements_spec['executables']:
         raise ValueError('shared_tool.requirements.executables: external executables unsupported in v1; actual='
                          + repr(requirements_spec['executables'])
                          + '; use self-contained mode without shared_tool or a supported Python-only tool')
@@ -68,6 +71,7 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
     validate_declaration(declaration)
     interface = declaration['interface']
     requirements_spec = declaration['requirements']
+    external = declaration['policy'] == external_tool.POLICY
     if binding.get('kind') == 'markdown_python' or binding.get('association') != 'identical':
         raise ValueError('shared_tool.binding: only byte-identical source-backed Python scripts supported')
     if not binding['entry'].endswith('.py'):
@@ -86,6 +90,8 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
             files.append(dict(item, path=path, mode=real.stat().st_mode & 0o777))
             if directory == 'package' and path.endswith('.py'):
                 tree = ast.parse(real.read_text(encoding='utf-8-sig'), filename=path)
+                if external:
+                    external_tool.validate_wrapper(tree, path, binding['entry'])
                 for node in ast.walk(tree):
                     # No declaration can hide a runtime dependency on excluded prose
                     # or a dynamically loaded, unenumerated implementation.
@@ -103,11 +109,11 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
                             name = module.split('.')[0]
                             if name and name not in sys.stdlib_module_names and name not in local_modules and name not in requirements_spec['imports']:
                                 raise ValueError('shared_tool.requirements.imports.' + name + ': missing explicit dependency requirement; ' + path)
-                        if any(m.split('.')[0] in {'subprocess'} for m in modules):
+                        if not external and any(m.split('.')[0] in {'subprocess'} for m in modules):
                             raise ValueError('shared_tool.closure: external process invocation unsupported in v1; ' + path)
     from .planner import DEFAULTS
     limits = runtime_limits if runtime_limits is not None else DEFAULTS
-    return {'abi': ABI, 'declaration': copy.deepcopy(declaration), 'files': sorted(files, key=lambda f: f['path']),
+    return {'abi': external_tool.ABI if external else ABI, 'declaration': copy.deepcopy(declaration), 'files': sorted(files, key=lambda f: f['path']),
             'entry': binding['entry'], 'entry_sha256': binding['entry_sha256'],
             'requirements': list(requirements), 'constraints': list(constraints),
             'runtime_limits': {k: limits[k] for k in ('memory', 'cpus', 'pids')}}
@@ -137,6 +143,12 @@ def check_plan(request, plan):
     for name, version in request['declaration']['requirements']['imports'].items():
         if dependencies.get(name.lower()) != version:
             raise ValueError('shared_tool.dependencies.' + name + ': expected ' + version + ', actual ' + str(dependencies.get(name.lower())))
+    if request['abi'] == external_tool.ABI:
+        if 'tests' in plan:
+            external_tool.validate_plan(plan, request['declaration']['requirements']['executables'][0]['version'])
+        for variable in plan['environment']:
+            if variable['name'].startswith(('BABEL_', 'LD_')):
+                raise ValueError('shared_tool.external_loader_override: ' + variable['name'])
 
 
 def read_record(path, request=None):
@@ -192,7 +204,9 @@ def select(request, reference, host, process, root=None):
 def validate_record(record, request=None):
     expected = {'abi', 'request', 'request_key', 'recipe_key', 'plan', 'base_image', 'environment',
                 'image_id', 'daemon_id', 'artifact_id'}
-    if not isinstance(record, dict) or set(record) != expected or record['abi'] != ABI:
+    if isinstance(record, dict) and record.get('abi') == external_tool.ABI:
+        expected.add('external_identity')
+    if not isinstance(record, dict) or set(record) != expected or record['abi'] not in {ABI, external_tool.ABI}:
         raise ValueError('shared_tool.record: unsupported schema')
     req = record['request']
     if (not isinstance(req, dict) or not isinstance(req.get('declaration'), dict)
@@ -209,8 +223,12 @@ def validate_record(record, request=None):
         paths.append(item['path'])
     if paths != sorted(set(paths)):
         raise ValueError('shared_tool.files: duplicate/unsorted implementation paths')
-    if record['request'].get('abi') != ABI or record['request']['declaration']['policy'] != POLICY:
+    policy = external_tool.POLICY if record['abi'] == external_tool.ABI else POLICY
+    if record['request'].get('abi') != record['abi'] or record['request']['declaration']['policy'] != policy:
         raise ValueError('shared_tool.policy: version no longer supported')
+    validate_declaration(req['declaration'])
+    if record['abi'] == external_tool.ABI:
+        external_tool.validate_identity(record['external_identity'])
     if record['request_key'] != fingerprint(record['request']):
         raise ValueError('shared_tool.request_key: corrupt request')
     if record['recipe_key'] != fingerprint({'plan': record['plan'], 'base_image': record['base_image']}):
@@ -246,6 +264,15 @@ def available(record, host, process, timeout=30):
             return 'environment_inheritance_changed'
     except (ValueError, KeyError, TypeError, IndexError):
         return 'image_unavailable_or_changed'
+    if record['abi'] == external_tool.ABI:
+        if config.get('Volumes'):
+            return 'external_identity_unsupported_image_volumes'
+        try:
+            observed = external_tool.observe(record['image_id'], record['request']['declaration']['requirements']['executables'],
+                                             process, timeout)
+            external_tool.verify(record['external_identity'], observed)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            return 'external_identity_unavailable_or_changed: ' + str(exc)
     return 'available'
 
 
@@ -329,9 +356,11 @@ def combine(record, acceptance):
 
 def verify_binding(env, materials):
     binding = env['shared_tool']
-    if binding.get('abi') != ABI:
+    if binding.get('abi') not in {ABI, external_tool.ABI}:
         raise ValueError('shared_tool.binding: unsupported ABI')
     request = binding['request']
+    if binding['abi'] != request['abi']:
+        raise ValueError('shared_tool.binding: ABI differs from request')
     if binding['request_key'] != fingerprint(request):
         raise ValueError('shared_tool.binding: request key mismatch')
     actual = describe(Path(materials) / 'context',
@@ -359,6 +388,20 @@ def verify_binding(env, materials):
     return binding
 
 
+def build_process(args, timeout, deadline, process, logs, build_calls):
+    """Keep owned probe cleanup possible even after the build deadline expires."""
+    cleanup = (len(args) == 4 and args[:3] == ['docker', 'rm', '--force']
+               and re.fullmatch(r'chem-external-identity-[0-9a-f]{32}', args[3]))
+    remaining = deadline - time.monotonic()
+    if remaining <= 0 and not cleanup:
+        raise ValueError('shared_tool.build: original deadline exhausted')
+    if args[:2] == ['docker', 'build']:
+        build_calls['environment' if 'chem.shared.recipe=' in ' '.join(args) else 'tool'] += 1
+    result = process(args, min(10, timeout or 10) if cleanup else min(remaining, timeout or remaining))
+    logs.append(result)
+    return result
+
+
 def build(executor, request, record, env, materials):
     """Bind a checked concrete image, or publish a fully checked new version."""
     from .local import process, binding_identity, gap
@@ -378,14 +421,7 @@ def build(executor, request, record, env, materials):
     logs = []
     deadline = min(time.monotonic() + env['limits']['build_seconds'], executor.deadline or float('inf'))
     def run(args, timeout=None):
-        remaining = deadline - time.monotonic()
-        if remaining <= 0:
-            raise ValueError('shared_tool.build: original deadline exhausted')
-        if args[:2] == ['docker', 'build']:
-            receipt['build_calls']['environment' if 'chem.shared.recipe=' in ' '.join(args) else 'tool'] += 1
-        result = process(args, min(remaining, timeout or remaining))
-        logs.append(result)
-        return result
+        return build_process(args, timeout, deadline, process, logs, receipt['build_calls'])
     def check_bytes(artifact):
         expected = {f['path']: f['sha256'] for f in binding['request']['files']}
         tool = {'limits': env['limits'], 'runtime_network': False, 'execution_scope': attempt.name}
@@ -446,10 +482,14 @@ def build(executor, request, record, env, materials):
                     if result['exit_code'] != 0:
                         receipt['status'] = receipt['execution_status'] = 'build_failed'
                         raise ValueError('shared_tool.build: Docker tool build failed; see build-log.json')
-                    concrete = {'abi': ABI, 'request': binding['request'], 'request_key': binding['request_key'],
+                    concrete = {'abi': binding['request']['abi'], 'request': binding['request'], 'request_key': binding['request_key'],
                                 'recipe_key': recipe, 'plan': environment_plan(env['plan']), 'base_image': env['base_image'],
                                 'environment': {k: v for k, v in shared.items() if k != 'registry'},
                                 'image_id': (attempt / 'image.id').read_text().strip(), 'daemon_id': preflight['host']['engine_id']}
+                    if concrete['abi'] == external_tool.ABI:
+                        concrete['external_identity'] = external_tool.observe(concrete['image_id'],
+                            binding['request']['declaration']['requirements']['executables'], run,
+                            min(executor.probe_timeout, max(.1, deadline-time.monotonic())))
                     concrete['artifact_id'] = fingerprint(concrete)
                     validate_record(concrete, binding['request'])
                     reason = available(concrete, preflight['host'], run)
@@ -491,10 +531,14 @@ def inspect(root=None, host=None, process=None):
             record = read_record(path)
             status = available(record, host, process) if process else 'historical_unverified'
             result.append({'path': str(path), 'artifact_id': record['artifact_id'], 'status': status,
+                           'abi': record['abi'],
                            'reference': {k: record[k] for k in ('request_key', 'artifact_id')},
                            'recipe_key': record['recipe_key'], 'image_id': record['image_id'],
                            'daemon_id': record['daemon_id'], 'platform': record['request']['declaration']['platform']})
+            if record['abi'] == external_tool.ABI:
+                identity = record['external_identity']
+                result[-1]['external_identity'] = {k: identity[k] for k in ('executable', 'rootfs', 'plugins', 'data')}
         except (OSError, ValueError, KeyError, TypeError) as exc:
             result.append({'path': str(path), 'status': 'invalid_record', 'detail': str(exc)})
-    return sanitized({'abi': ABI, 'registry': str(root), 'artifacts': result,
+    return sanitized({'abi': ABI, 'supported_abis': [ABI, external_tool.ABI], 'registry': str(root), 'artifacts': result,
                       'pending': [p.name for p in root.glob('*.lock')], 'business_acceptance': 'not_run'})

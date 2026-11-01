@@ -33,7 +33,7 @@ class AcceptanceOnlyTests(unittest.TestCase):
     tearDown = fixtures.SharedToolTests.tearDown
     request = fixtures.SharedToolTests.request
 
-    def run_plan(self, answer, **options):
+    def run_plan(self, answer, observed_tool_identity=None, **options):
         self.request()
         base = shared_tool.environment_plan(plan())
         before = copy.deepcopy(base)
@@ -43,7 +43,8 @@ class AcceptanceOnlyTests(unittest.TestCase):
         with patch.object(planner.model_call, 'call', return_value=(answer, {'status': 'completed', 'model': 'unchanged-model'})) as model:
             result = planner.plan(self.root/'handoff', {'script': 'package/main.py'}, self.root/'audit',
                                   planner.options(dict(backend='deepseek_api', api_model='unchanged-model', **options)),
-                                  time.monotonic()+30, call_guard=guard, acceptance_base=base)
+                                  time.monotonic()+30, call_guard=guard, acceptance_base=base,
+                                  observed_tool_identity=observed_tool_identity)
         self.assertEqual(base, before)
         self.assertEqual(shared_tool.environment_plan(result[0]), before)
         self.assertEqual(tickets[0]['phase'], 'runtime_acceptance_planning')
@@ -69,8 +70,18 @@ class AcceptanceOnlyTests(unittest.TestCase):
         self.assertIn('bound_environment', prompt)
         self.assertNotIn('Choose an appropriate', prompt)
 
+    def test_observed_executable_facts_are_context_not_historical_acceptance(self):
+        facts={'abi':'shared_tool_image_v2','artifact_id':'a'*64,'executable':{
+            'path':'/usr/bin/obabel','version_output':'Open Babel 3.1.1 -- Jan 4 2023','sha256':'b'*64}}
+        self.run_plan(self.answer(),observed_tool_identity=facts)
+        material=json.loads((self.root/'audit/prompt-0.txt').read_text().split('\nINPUT\n',1)[1])
+        self.assertEqual(material['observed_tool_identity'],facts)
+        self.assertIsNone(material['previous_plan'])
+        self.assertFalse(set(material['bound_environment']) & shared_tool.ACCEPTANCE)
+
     def test_model_cannot_change_environment_or_entrypoint(self):
-        for field, value in [('base_image', 'other:latest'), ('entrypoint', ['echo']), ('steps', []), ('source_files', [])]:
+        for field, value in [('base_image', 'other:latest'), ('entrypoint', ['echo']), ('steps', []), ('source_files', []),
+                             ('observed_tool_identity', {'executable': 'model-declared'})]:
             with self.subTest(field=field):
                 answer = self.answer(); answer['plan'][field] = value
                 if (self.root/'handoff').exists():

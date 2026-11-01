@@ -855,6 +855,12 @@ Do not apply kind=json to a non-JSON artifact or replace the direct entry with a
 inline wrapper just to inspect its file. Additional validators may be separate
 checks, but cannot replace bound normal/rejection coverage. Read real format
 fixtures before choosing offsets; do not guess a record's fields from its header.
+Environment version probes must respect actual serialization: obabel -V may return
+"Open Babel 3.1.1 -- <build date>". A JSON dump of that raw string does not contain
+the closed quoted literal '\"Open Babel 3.1.1\"'. Use the full required version
+plus its following space as a prefix, retaining the version boundary and all
+Python-series/path checks. Do not remove the probe or substitute a banner-only
+assertion. This is a predicate correction, not permission to weaken the version.
 For text_regex, when a representative complete positive output is available in
 read source, set assertion.example_source_path to that exact indexed path. Its
 UTF-8 text (with the same newline reading as retained output) must full-match the
@@ -1014,6 +1020,12 @@ Return action=plan with ONLY tests, acceptance_json, output_contract and
 unverified_behavior; or action=read with requested_files to read current material.
 Generate fresh source-grounded cases for the current package and user_constraints.
 No historical tool tests, execution outputs or passed flags are supplied or reusable.
+observed_tool_identity, when present, contains independently verified executable
+metadata of the bound ToolArtifact, not source pins or acceptance results. Use its
+actual version_output to compile current environment probes without guessing
+serialized version literals. Still execute those probes afresh; never claim that
+copying identity facts proves current Skill acceptance. Source citations remain
+grounded in current materials, and all required version/path/Python checks remain.
 previous_plan, if present, is a rejected/current-skill acceptance draft, not another
 skill's acceptance. Preserve caller-locked cases and independently reviewed checks.
 Read current source and SKILL.md, including relevant original tests/examples. Files
@@ -1097,13 +1109,15 @@ def provenance(material, base_kind):
 
 
 def plan(source, config, audit, opts, deadline, feedback=None, previous=None, call_guard=None, required=None,
-         acceptance_base=None):
+         acceptance_base=None, observed_tool_identity=None):
     """Persist every prompt/response; demand-read additional files within budget."""
     audit = Path(audit)
     if acceptance_base is not None:
         if set(acceptance_base) & ACCEPTANCE_FIELDS:
             raise PlanningError('Acceptance-only base must not contain historical acceptance')
         acceptance_base = copy.deepcopy(acceptance_base)
+    if observed_tool_identity is not None and acceptance_base is None:
+        raise PlanningError('Observed tool identity requires a concrete acceptance-only base')
     if not isinstance(config.get("constraints", []), list) or not all(isinstance(c, str) for c in config.get("constraints", [])):
         raise PlanningError("generation.constraints must be a list of caller requirement strings")
     audit.mkdir(parents=True, exist_ok=True)
@@ -1171,6 +1185,8 @@ def plan(source, config, audit, opts, deadline, feedback=None, previous=None, ca
             base_kind = 'acceptance_only'
             material.update(base_kind=base_kind, bound_environment=acceptance_base,
                             previous_plan={k: v for k, v in base.items() if k in ACCEPTANCE_FIELDS} if base else None)
+            if observed_tool_identity is not None:
+                material['observed_tool_identity'] = copy.deepcopy(observed_tool_identity)
         # Feedback is bounded separately and its full version is retained in attempt logs.
         prompt = build_prompt(material, base_kind)
         sent = provenance(material, base_kind)
