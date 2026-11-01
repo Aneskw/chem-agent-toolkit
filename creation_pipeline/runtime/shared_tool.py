@@ -34,8 +34,8 @@ def registry_root():
     return root
 
 
-def describe(source, binding, declaration, requirements=(), constraints=(), runtime_limits=None):
-    """Request identity uses only pre-planning inputs, including explicit requirements."""
+def validate_declaration(declaration):
+    """Validate caller-known support boundaries before any paid generation."""
     if not isinstance(declaration, dict) or set(declaration) != {'closure', 'requirements', 'interface', 'platform', 'policy'}:
         raise ValueError('shared_tool.declaration: require closure, requirements, interface, platform, policy')
     if declaration['closure'] != 'all-package-and-sources-except-skill-document':
@@ -55,10 +55,19 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
             or any(not isinstance(v, str) or not v for v in requirements_spec['imports'].values())):
         raise ValueError('shared_tool.requirements: require explicit imports/version requirements and executables')
     if requirements_spec['executables']:
-        raise ValueError('shared_tool.requirements.executables: external executables unsupported in v1')
+        raise ValueError('shared_tool.requirements.executables: external executables unsupported in v1; actual='
+                         + repr(requirements_spec['executables'])
+                         + '; use self-contained mode without shared_tool or a supported Python-only tool')
     for name, version in requirements_spec['imports'].items():
         if not re.fullmatch(r'[A-Za-z][A-Za-z0-9_]*', name) or (version != 'unpinned' and not re.fullmatch(r'[0-9][A-Za-z0-9.+_-]*', version)):
             raise ValueError('shared_tool.requirements.imports.' + str(name) + ': require exact version or explicit unpinned')
+
+
+def describe(source, binding, declaration, requirements=(), constraints=(), runtime_limits=None):
+    """Request identity uses only pre-planning inputs, including explicit requirements."""
+    validate_declaration(declaration)
+    interface = declaration['interface']
+    requirements_spec = declaration['requirements']
     if binding.get('kind') == 'markdown_python' or binding.get('association') != 'identical':
         raise ValueError('shared_tool.binding: only byte-identical source-backed Python scripts supported')
     if not binding['entry'].endswith('.py'):

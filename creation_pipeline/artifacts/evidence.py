@@ -69,7 +69,13 @@ def verify(directory, freeze_sha256):
     # identity; retain every path/hash/size and duplicate in the comparison.
     ordered = lambda files: sorted(files, key=lambda f: f['path'])
     if ordered(current) != ordered(freeze["files"]):
-        raise ValueError("Frozen package/source/contract/evidence changed")
+        expected_by_path = {f['path']: f for f in freeze['files']}
+        actual_by_path = {f['path']: f for f in current}
+        differences = [{'path': p, 'expected': expected_by_path.get(p), 'actual': actual_by_path.get(p)}
+                       for p in sorted(set(expected_by_path) | set(actual_by_path))
+                       if expected_by_path.get(p) != actual_by_path.get(p)]
+        raise ValueError("Frozen package/source/contract/evidence changed: "
+                         + redact(str(differences or 'duplicate file records differ')))
     record = read_json(directory / "record.json")
     delivery = record["delivery"]
     if fingerprint(delivery["inputs"]) != delivery["revision_id"][4:] or freeze["revision_id"] != delivery["revision_id"]:

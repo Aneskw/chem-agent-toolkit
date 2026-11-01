@@ -27,6 +27,9 @@ def validate_spec(spec):
     for key in ('binding', 'plan', 'options', 'resource_refs', 'native_model', 'shared_tool', 'acceptance_plan', 'tool_artifact'):
         if key in spec and not isinstance(spec[key], dict):
             raise ValueError('runtime.' + key + ' must be an object')
+    if 'shared_tool' in spec:
+        from .shared_tool import validate_declaration
+        validate_declaration(spec['shared_tool'])
     if 'tool_artifact' in spec:
         from .shared_tool import validate_reference
         validate_reference(spec['tool_artifact'])

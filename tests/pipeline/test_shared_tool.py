@@ -24,6 +24,17 @@ def declaration(p=None):
 
 
 class SharedToolTests(unittest.TestCase):
+    def test_cli_preflight_rejects_external_executable_before_generation(self):
+        from creation_pipeline.cli import main
+        config = {'sources': [{'id': 'source', 'path': str(self.package)}],
+                  'prompt': 'Convert with the original Open Babel entry',
+                  'runtime_defaults': {'shared_tool': declaration()}}
+        config['runtime_defaults']['shared_tool']['requirements']['executables'] = ['obabel']
+        path = self.root / 'unsupported.json'
+        write_json(path, config)
+        with patch('creation_pipeline.cli.build', side_effect=AssertionError('must not generate')):
+            self.assertNotEqual(main(['build', str(path), '--preflight']), 0)
+
     setUp = fixtures.RuntimeBuildTests.setUp
     tearDown = fixtures.RuntimeBuildTests.tearDown
     prepared = fixtures.RuntimeBuildTests.prepared

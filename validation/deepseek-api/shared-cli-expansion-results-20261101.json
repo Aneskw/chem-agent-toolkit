@@ -1,0 +1,832 @@
+{
+  "baseline": "20f0c67",
+  "scope": "Public CLI full generation; descriptors supported, Open Babel external executable rejected at preflight",
+  "observations": [
+    {
+      "label": "a",
+      "output": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\a\\state\\outputs\\20261101T170812-a4308885",
+      "qualified": true,
+      "cases": 15,
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 5,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "2d43cfd60317b0ae2ca8d84c527a8ae788902f27f503f24f5da73599bca92af0",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 5,
+        "acceptance_planning_calls": 5,
+        "model_calls_by_stage": {
+          "combined_environment_acceptance_planner": 5
+        }
+      },
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "19aafbc0aaf373bebd96dadf9c14fbdaf24fafd02141bb1aec05dfb0403f737f",
+        "request_key": "2d43cfd60317b0ae2ca8d84c527a8ae788902f27f503f24f5da73599bca92af0"
+      },
+      "model_calls": [
+        {
+          "phase": "discovery",
+          "session_key": "discovery",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 76394,
+            "cached_input_tokens": 55168,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 3059,
+            "reasoning_output_tokens": 52
+          },
+          "prompt_sha256": "8c253273e7930009f04ed8377ff11e5c5460eeb6abd34b30249fd50e203b2db2",
+          "tool_events": 6,
+          "session_id": "01a1965d-d3b4-7cc3-9fd5-74ba5b7b6743",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 95.218,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.925,
+            "last_stdout_seconds": 92.779,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "author",
+          "session_key": "build:chem-rdkit-descriptors",
+          "resumed": true,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 342949,
+            "cached_input_tokens": 283264,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 8868,
+            "reasoning_output_tokens": 589
+          },
+          "prompt_sha256": "725baaee9967240873fc0c32614e505e3c96f412ff4e308d5feb1bbd21280d5c",
+          "tool_events": 8,
+          "session_id": "01a1965d-d3b4-7cc3-9fd5-74ba5b7b6743",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 153.168,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 6.008,
+            "last_stdout_seconds": 150.128,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "author",
+          "session_key": "build:chem-rdkit-descriptors",
+          "resumed": true,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 553961,
+            "cached_input_tokens": 484224,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 10762,
+            "reasoning_output_tokens": 879
+          },
+          "prompt_sha256": "3a2164196818e000c89a912f06926a4156d26bb835330106fe5cb403e733c671",
+          "tool_events": 4,
+          "session_id": "01a1965d-d3b4-7cc3-9fd5-74ba5b7b6743",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 61.856,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 5.941,
+            "last_stdout_seconds": 59.68,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "review",
+          "session_key": "review:chem-rdkit-descriptors",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 221830,
+            "cached_input_tokens": 183168,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2007,
+            "reasoning_output_tokens": 281
+          },
+          "prompt_sha256": "d29be28ce9f444f2c2ace76f27d79aeeb76592d55277b922ed763545569b02ce",
+          "tool_events": 7,
+          "session_id": "01a19662-91c6-7d90-8b02-4dd8ce45036c",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 89.247,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.923,
+            "last_stdout_seconds": 86.948,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 14720,
+            "completion_tokens": 22288,
+            "total_tokens": 37008,
+            "prompt_tokens_details": {
+              "cached_tokens": 7168
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 17612
+            },
+            "prompt_cache_hit_tokens": 7168,
+            "prompt_cache_miss_tokens": 7552
+          },
+          "elapsed_seconds": 246.855,
+          "prompt_sha256": "4be49721c9c38178521f919e3682f75b4b64ba4111d3f1269ffa3bf7e1302d56",
+          "schema_sha256": "24227507fb74cd4b703773e5d95021cf5e502e5c2d96bbc4df66233b299ef179",
+          "request_count": 1
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 18225,
+            "completion_tokens": 1806,
+            "total_tokens": 20031,
+            "prompt_tokens_details": {
+              "cached_tokens": 6272
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 1670
+            },
+            "prompt_cache_hit_tokens": 6272,
+            "prompt_cache_miss_tokens": 11953
+          },
+          "elapsed_seconds": 24.53,
+          "prompt_sha256": "486bcd11d5e819530380fa88e674232b1aab6448737499bb3ec627f6e9f1d9c8",
+          "schema_sha256": "63e572d8138439069c28907c51bf43ab266873f7c0b0e5691ee5c6e55766a063",
+          "request_count": 1
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 18208,
+            "completion_tokens": 9686,
+            "total_tokens": 27894,
+            "prompt_tokens_details": {
+              "cached_tokens": 7296
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 9517
+            },
+            "prompt_cache_hit_tokens": 7296,
+            "prompt_cache_miss_tokens": 10912
+          },
+          "elapsed_seconds": 113.758,
+          "prompt_sha256": "407e107347d9766abd58ce7bd8a11919953eabda583f0b1187af38c986144fec",
+          "schema_sha256": "63e572d8138439069c28907c51bf43ab266873f7c0b0e5691ee5c6e55766a063",
+          "request_count": 1
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 18291,
+            "completion_tokens": 2265,
+            "total_tokens": 20556,
+            "prompt_tokens_details": {
+              "cached_tokens": 15360
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 1858
+            },
+            "prompt_cache_hit_tokens": 15360,
+            "prompt_cache_miss_tokens": 2931
+          },
+          "elapsed_seconds": 28.441,
+          "prompt_sha256": "62de97bf2cef1995bf75a125cdb34596324fc4899f1e3667544cc151a9c8d2ac",
+          "schema_sha256": "63e572d8138439069c28907c51bf43ab266873f7c0b0e5691ee5c6e55766a063",
+          "request_count": 1
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 18470,
+            "completion_tokens": 2272,
+            "total_tokens": 20742,
+            "prompt_tokens_details": {
+              "cached_tokens": 15360
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 2128
+            },
+            "prompt_cache_hit_tokens": 15360,
+            "prompt_cache_miss_tokens": 3110
+          },
+          "elapsed_seconds": 26.642,
+          "prompt_sha256": "672c36010b2e4da56caf8fae5b151140492276a7ee6c5ab3f5ca685972b375aa",
+          "schema_sha256": "63e572d8138439069c28907c51bf43ab266873f7c0b0e5691ee5c6e55766a063",
+          "request_count": 1
+        }
+      ],
+      "skill_sha256": "a5a04e3728a70a34170a72e95bf949d17bbaa74ab130d3cae91f31b281bc65a6",
+      "acceptance_sha256": "58ba7105c2b48a1764a40170cec0b045535bef8b5d08a6e04c6ec4302c7f08b7"
+    },
+    {
+      "label": "b",
+      "output": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\b\\state\\outputs\\20261101T172348-5bbc4eea",
+      "qualified": true,
+      "cases": 14,
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 2,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "2d43cfd60317b0ae2ca8d84c527a8ae788902f27f503f24f5da73599bca92af0",
+          "artifact_id": "19aafbc0aaf373bebd96dadf9c14fbdaf24fafd02141bb1aec05dfb0403f737f"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 2,
+        "model_calls_by_stage": {
+          "acceptance_only_planner": 2
+        }
+      },
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "tool": {
+        "status": "hit",
+        "artifact_id": "19aafbc0aaf373bebd96dadf9c14fbdaf24fafd02141bb1aec05dfb0403f737f",
+        "request_key": "2d43cfd60317b0ae2ca8d84c527a8ae788902f27f503f24f5da73599bca92af0"
+      },
+      "model_calls": [
+        {
+          "phase": "discovery",
+          "session_key": "discovery",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 97487,
+            "cached_input_tokens": 75648,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 3132,
+            "reasoning_output_tokens": 64
+          },
+          "prompt_sha256": "b0dd90a82605b57c653117820519fe35faa219d9e2b4bb821b3861b407644016",
+          "tool_events": 6,
+          "session_id": "01a1966c-18ed-7780-8684-fde0afa4db7f",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 94.028,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 2.359,
+            "last_stdout_seconds": 91.744,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "author",
+          "session_key": "build:chem-rdkit-descriptors",
+          "resumed": true,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 371156,
+            "cached_input_tokens": 308480,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 9013,
+            "reasoning_output_tokens": 679
+          },
+          "prompt_sha256": "49e7fd21b763174f4ee329eb14ff180d827ae166dba59b719312af6cbd0d9bd2",
+          "tool_events": 7,
+          "session_id": "01a1966c-18ed-7780-8684-fde0afa4db7f",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 157.635,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 6.018,
+            "last_stdout_seconds": 155.273,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "author",
+          "session_key": "build:chem-rdkit-descriptors",
+          "resumed": true,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 595977,
+            "cached_input_tokens": 521344,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 10877,
+            "reasoning_output_tokens": 983
+          },
+          "prompt_sha256": "6476277090bfe314f78526abe47495154a4818aa37fa962128b335b8c9164606",
+          "tool_events": 4,
+          "session_id": "01a1966c-18ed-7780-8684-fde0afa4db7f",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 65.57,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.925,
+            "last_stdout_seconds": 63.248,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "review",
+          "session_key": "review:chem-rdkit-descriptors",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 213587,
+            "cached_input_tokens": 178560,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2466,
+            "reasoning_output_tokens": 177
+          },
+          "prompt_sha256": "5ddefef2c80a051227f6f945e8378c62888c9d692ffae073ff0080210a712ab9",
+          "tool_events": 7,
+          "session_id": "01a19670-f1e0-7b20-a193-b9e7fe7978ff",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 86.036,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.945,
+            "last_stdout_seconds": 83.562,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "runtime_acceptance_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 15015,
+            "completion_tokens": 13729,
+            "total_tokens": 28744,
+            "prompt_tokens_details": {
+              "cached_tokens": 2944
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 10604
+            },
+            "prompt_cache_hit_tokens": 2944,
+            "prompt_cache_miss_tokens": 12071
+          },
+          "elapsed_seconds": 146.383,
+          "prompt_sha256": "a88230e67766745763f588e682d6e532bae9ca510a994875988fd022f06dc7ef",
+          "schema_sha256": "e5c283886758dbf7e1a238851431f37b187b026a630cf9e3a2bf0a6728809743",
+          "request_count": 1
+        },
+        {
+          "phase": "runtime_acceptance_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 18247,
+            "completion_tokens": 11329,
+            "total_tokens": 29576,
+            "prompt_tokens_details": {
+              "cached_tokens": 7168
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 7275
+            },
+            "prompt_cache_hit_tokens": 7168,
+            "prompt_cache_miss_tokens": 11079
+          },
+          "elapsed_seconds": 104.646,
+          "prompt_sha256": "16435f730c139bb0f711f00a42e365a0aa10327bc3dda5a1bf15f24aa8e4cda1",
+          "schema_sha256": "e5c283886758dbf7e1a238851431f37b187b026a630cf9e3a2bf0a6728809743",
+          "request_count": 1
+        }
+      ],
+      "skill_sha256": "4f32f39a09eea629c10b1b352214ddd0201fa7f21571975e4d46f8adfdc5c926",
+      "acceptance_sha256": "126d06ca53d810e850ad902b88a54f9f5c5f5d40420a94fbe99c277de22bea7d"
+    }
+  ],
+  "fresh_generation_batches": 2,
+  "fresh_generation_cases": 29,
+  "fresh_generation_model_calls": 15,
+  "manual_acceptance_plan": false,
+  "internal_state_injection": false,
+  "recovery": {
+    "status": "execution_passed",
+    "name": "chem-rdkit-descriptors",
+    "revision_id": "rev-6a811a89af0297dd15d169549527cc28f897815e780da06d09c00797fe756a5d",
+    "image_id": "sha256:8cf9adc274f40520a51b1ec7f297710d2d1c9f96b44adb637a7f20a6df7f527f",
+    "business_acceptance": "passed",
+    "gaps": [],
+    "accepted": true,
+    "recovery": {
+      "action": "validate",
+      "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+      "reused_attempt": "runtime/candidate-8fdfec549396c24045d6afb822f34c1e16f803b2f827235fdb29467087c4e91b/d5c93cf0cfff4e0cba11cd7a75f4dea4",
+      "image_observation": {
+        "status": "available",
+        "reason": "available",
+        "observed_at": "2026-11-01T09:25:29.693920+00:00",
+        "preflight": {
+          "host": {
+            "observed_at": "2026-11-01T09:25:29.331252+00:00",
+            "backend": "local-docker",
+            "status": "available",
+            "gaps": [],
+            "platform": "linux/x86_64",
+            "memory_bytes": 8115146752,
+            "cpus": 12,
+            "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+            "server_version": "29.8.2",
+            "docker_status": "available",
+            "resource_gaps": []
+          },
+          "gaps": [],
+          "planning_limitations": [],
+          "status": "prepared"
+        },
+        "business_acceptance": "not_run"
+      }
+    }
+  },
+  "negative_results": {
+    "dependency": {
+      "status": "runtime_blocked",
+      "revision_id": "rev-ce2561c10f1b0d9848be77c0295d0370bb6bd26e9908d145f11d6cf3b1d828c7",
+      "adoption": [
+        {
+          "name": "chem-rdkit-descriptors",
+          "status": "candidate_saved",
+          "observation_updated": false,
+          "zone": "candidates",
+          "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\dependency-library\\candidates\\chem-rdkit-descriptors"
+        }
+      ],
+      "gaps": [
+        {
+          "code": "selected_tool_unavailable",
+          "detail": "{\"status\": \"miss\", \"selection\": \"explicit\", \"reference\": {\"request_key\": \"2d43cfd60317b0ae2ca8d84c527a8ae788902f27f503f24f5da73599bca92af0\", \"artifact_id\": \"19aafbc0aaf373bebd96dadf9c14fbdaf24fafd02141bb1aec05dfb0403f737f\"}, \"request_key\": \"8f62fed94a5cc24503dded893e3b3b1c5a366fd71e72f11aeffa0ddf543b8a03\", \"reason\": \"selected_request_mismatch\", \"mismatches\": [{\"field\": \"declaration\", \"expected\": {\"closure\": \"all-package-and-sources-except-skill-document\", \"requirements\": {\"imports\": {\"rdkit\": \"2024.9.6\", \"numpy\": \"1.26.4\", \"pillow\": \"11.3.0\"}, \"executables\": []}, \"interface\": {\"entrypoint\": [\"python\", \"/opt/skill/package/scripts/calc_descriptors.py\"], \"workdir\": \"/opt/skill\", \"resources\": [], \"runtime_network\": false}, \"platform\": \"linux/amd64\", \"policy\": \"closed-python-bundle-v1\"}, \"actual\": {\"closure\": \"all-package-and-sources-except-skill-document\", \"requirements\": {\"imports\": {\"rdkit\": \"2024.9.5\", \"numpy\": \"1.26.4\", \"pillow\": \"11.3.0\"}, \"executables\": []}, \"interface\": {\"entrypoint\": [\"python\", \"/opt/skill/package/scripts/calc_descriptors.py\"], \"workdir\": \"/opt/skill\", \"resources\": [], \"runtime_network\": false}, \"platform\": \"linux/amd64\", \"policy\": \"closed-python-bundle-v1\"}}]}",
+          "repair_lane": "environment",
+          "blocker_kind": "unresolved_input"
+        },
+        {
+          "code": "plan_unresolved",
+          "detail": "No validated environment plan",
+          "repair_lane": "environment",
+          "blocker_kind": "unresolved_input"
+        }
+      ]
+    },
+    "interface": {
+      "status": "runtime_blocked",
+      "revision_id": "rev-ce2561c10f1b0d9848be77c0295d0370bb6bd26e9908d145f11d6cf3b1d828c7",
+      "adoption": [
+        {
+          "name": "chem-rdkit-descriptors",
+          "status": "candidate_saved",
+          "observation_updated": false,
+          "zone": "candidates",
+          "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\interface-library\\candidates\\chem-rdkit-descriptors"
+        }
+      ],
+      "gaps": [
+        {
+          "code": "selected_tool_unavailable",
+          "detail": "{\"status\": \"miss\", \"selection\": \"explicit\", \"reference\": {\"request_key\": \"2d43cfd60317b0ae2ca8d84c527a8ae788902f27f503f24f5da73599bca92af0\", \"artifact_id\": \"19aafbc0aaf373bebd96dadf9c14fbdaf24fafd02141bb1aec05dfb0403f737f\"}, \"request_key\": \"0a9c3eca082e305cb5415b7ff528cd65eb2396449a0da9c48b8024d522b90513\", \"reason\": \"selected_request_mismatch\", \"mismatches\": [{\"field\": \"declaration\", \"expected\": {\"closure\": \"all-package-and-sources-except-skill-document\", \"requirements\": {\"imports\": {\"rdkit\": \"2024.9.6\", \"numpy\": \"1.26.4\", \"pillow\": \"11.3.0\"}, \"executables\": []}, \"interface\": {\"entrypoint\": [\"python\", \"/opt/skill/package/scripts/calc_descriptors.py\"], \"workdir\": \"/opt/skill\", \"resources\": [], \"runtime_network\": false}, \"platform\": \"linux/amd64\", \"policy\": \"closed-python-bundle-v1\"}, \"actual\": {\"closure\": \"all-package-and-sources-except-skill-document\", \"requirements\": {\"imports\": {\"rdkit\": \"2024.9.6\", \"numpy\": \"1.26.4\", \"pillow\": \"11.3.0\"}, \"executables\": []}, \"interface\": {\"entrypoint\": [\"python\", \"/opt/skill/package/scripts/calc_descriptors.py\", \"--smiles\", \"CCO\"], \"workdir\": \"/opt/skill\", \"resources\": [], \"runtime_network\": false}, \"platform\": \"linux/amd64\", \"policy\": \"closed-python-bundle-v1\"}}]}",
+          "repair_lane": "environment",
+          "blocker_kind": "unresolved_input"
+        },
+        {
+          "code": "plan_unresolved",
+          "detail": "No validated environment plan",
+          "repair_lane": "environment",
+          "blocker_kind": "unresolved_input"
+        }
+      ]
+    }
+  },
+  "source_drift": {
+    "status": "error",
+    "error": "Frozen package/source/contract/evidence changed: [{'path': 'package/scripts/calc_descriptors.py', 'expected': {'path': 'package/scripts/calc_descriptors.py', 'sha256': '301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e', 'bytes': 1710}, 'actual': {'path': 'package/scripts/calc_descriptors.py', 'sha256': '9f7429ce7205bf718132f7c33fa32c11e4a7c36cb4f88b4909065b41c99888f1', 'bytes': 1739}}]"
+  },
+  "unsupported": {
+    "status": "error",
+    "error": "shared_tool.requirements.executables: external executables unsupported in v1; actual=['obabel']; use self-contained mode without shared_tool or a supported Python-only tool"
+  },
+  "limitations": [
+    "Open Babel paired full-tool reuse not executed: current v1 rejects external executables",
+    "Source drift is installed frozen-envelope integrity rejection, not a freshly generated changed-source version",
+    "A successful recovery is separate original-contract execution, not another generation batch",
+    "CLI root-directory import rejection and sandbox Docker access failures are infrastructure observations, not chemical failures"
+  ],
+  "files": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\a\\state\\outputs\\20261101T170812-a4308885\\evidence\\chem-rdkit-descriptors\\05fb81ae8ceb4610a5367f3bffa52497\\freeze.json",
+      "sha256": "cf11479113275691043bb880d4f185ebd4aa2548758ceeb23e68d2de4c3b8fce"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\a\\state\\outputs\\20261101T170812-a4308885\\records\\chem-rdkit-descriptors.json",
+      "sha256": "3db7432ec9eff555585b174e5a419abc84eadfa487119f00de95061a205a2944"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\a\\state\\outputs\\20261101T170812-a4308885\\runtime\\candidate-8fdfec549396c24045d6afb822f34c1e16f803b2f827235fdb29467087c4e91b\\21e5875e6bb7432b8fc893fd70c741ff\\execution\\report.json",
+      "sha256": "615d106cea5ed54fd649f3b35384738aa7f00ca07e963e299893b59ee11fcbfd"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\a\\state\\outputs\\20261101T170812-a4308885\\runtime\\candidate-8fdfec549396c24045d6afb822f34c1e16f803b2f827235fdb29467087c4e91b\\21e5875e6bb7432b8fc893fd70c741ff\\receipt.json",
+      "sha256": "0246730e6fd0ba919e034cea8f480ba6fa4c72849693505d3c5d3f4e8490353b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\a\\state\\outputs\\20261101T170812-a4308885\\summary.json",
+      "sha256": "99fb6269760ca4bfbd77cd3827096ea96ab5b27d5675a1c33d44b9700ff1ffdd"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\a-cli.log",
+      "sha256": "121fceb2372c113e85ef02d668f02dec6e381e9a106d69ab4f3b2d11258e353d"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\a-inspect-host.log",
+      "sha256": "940898e5778f7be1362438b5922be730f55d16ac832ee8ec551548da3c7f84ab"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\a-inspect.log",
+      "sha256": "53ee1184d565d56fd35fe043e5264258bd08304d91602d122653937f32c0870a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\a-recovery.log",
+      "sha256": "32eaccc6ae60a66fc96c0cba5baaa3c25f652c25fe6c481f8637f8e257d2e0d5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\acceptance-prompt-final.log",
+      "sha256": "87342204c457e6e77a9521bd4a760aa9e85087a3c4d7f68d76f19ca6ac235a8e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\acceptance-prompt.log",
+      "sha256": "671cc038c96bcd726660b4809abdc6bb398eb6485f3159871e7883566d2026ae"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\b\\state\\outputs\\20261101T172348-5bbc4eea\\evidence\\chem-rdkit-descriptors\\f5612ade4e5247bbae40716f647777d4\\freeze.json",
+      "sha256": "2fef39a0009c80c418a7515784a8592eaf9f8239239d946d38cb7604d091dacf"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\b\\state\\outputs\\20261101T172348-5bbc4eea\\records\\chem-rdkit-descriptors.json",
+      "sha256": "94fef5c516b69a525b9bd2629f5e0dbe1fa58f41c139715fb6c0b4c1b190a0b2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\b\\state\\outputs\\20261101T172348-5bbc4eea\\runtime\\candidate-8fdfec549396c24045d6afb822f34c1e16f803b2f827235fdb29467087c4e91b\\f0cc3aa89c6847559332cb3099483ed4\\execution\\report.json",
+      "sha256": "37f6695ff1453bc484d0d5221ff8e78b09a08b8a6964bfeb8c0c15ef916c9611"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\b\\state\\outputs\\20261101T172348-5bbc4eea\\runtime\\candidate-8fdfec549396c24045d6afb822f34c1e16f803b2f827235fdb29467087c4e91b\\f0cc3aa89c6847559332cb3099483ed4\\receipt.json",
+      "sha256": "2cceb303f84e34ebedaad83f895641da57ec7be6a9c3ba3df2f5086cfed79db7"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\b\\state\\outputs\\20261101T172348-5bbc4eea\\summary.json",
+      "sha256": "f0d6e13caf77abea8654376f62b43873d06401875c6dabc33bd7d3e54cba9c64"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\b-cli.log",
+      "sha256": "f3028e34cce23c7dbde2f0ee8018d57471c7edbaada29eb8f21202f00734014b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\corrupt-envelope-final-rejection.log",
+      "sha256": "0dda91a5beb9ef92f7890e60a9ecf4d22e4f580acbaa3670296360aa15a81e61"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\corrupt-envelope-rejection.log",
+      "sha256": "baf964ae6da47025338a1bc7c544b9479c071998bc276634c22c927891ab2385"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\dependency-import.log",
+      "sha256": "90040711fc7da14100e5c5c57d69105fb8a1a4e803df3410c02547985a5b36c7"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\dependency-rejection.log",
+      "sha256": "b7d63a5f18b1bae1317f8bf70472170d471b101a7dc4c35a947c98ea134b88a9"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\dependency-spec.json",
+      "sha256": "50dd6f678f67bc5adb424d6fbd8a287f7b7b821c0cbf46e18c4d205b322bc8af"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\descriptors-a.json",
+      "sha256": "1625d64906d54312e9ca880e2faf0d13feaf26c2b4c5984d42c9b4fb8052843d"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\descriptors-b.json",
+      "sha256": "44ffcd78eb3d7f20f7e8d15ca2862e7f98827049397145665c82691f63e4c107"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\envelope-drift.json",
+      "sha256": "a0b2c441c09bf1395d7484858bc9f1e669b972c5b3a068e7c0f0cddf17c48ab2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\install.log",
+      "sha256": "89d2c5dc8e6cb218761bb662d58dbb3018282313a152a853acfc22bf72b5166b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\interface-import.log",
+      "sha256": "d39b30df29a676647447707535476669d20fe11fc9f92cb5335d92719f217003"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\interface-rejection.log",
+      "sha256": "7e970b08518e9e93e1fe6557ae07a9d11a5f735a8175ec05c53e09881a42482f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\interface-spec.json",
+      "sha256": "457518bede695707be1a60a75dd890cc15feb1e33848d3be5c3ab357952e25b9"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\openbabel-preflight.json",
+      "sha256": "0f846dccc8aa575604e9d2371375e8d1829f8be4bef7f2e8f0784f4c20c20bb4"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\openbabel-preflight.log",
+      "sha256": "ede1ab1410fc2dfa6cfb97a403a4732328a5ea067d94b79c05a321beca3b68d2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\planner-final.log",
+      "sha256": "c400701f42ca57d4037e76dd0b5080d122233203d44cae6ac276e273b07ce119"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\planner.log",
+      "sha256": "75e8378d1d005a2679d48c3364c2718bda77c4d585f1208dcd9c0fd7e7b00ad5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\prompt-contract-final.log",
+      "sha256": "1b5eb17960f1a12626790aa1da476351ece2490863ff568fa3ebb7d292c830c2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\prompt-contract.log",
+      "sha256": "1b5eb17960f1a12626790aa1da476351ece2490863ff568fa3ebb7d292c830c2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\regression.log",
+      "sha256": "92d4e787184be768fe74d25601b5de65b12c517633fe7ce8f103c91368c280b0"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\source-drift.json",
+      "sha256": "9b26b3a14c5319e1a28ad1855c7afdd526cb4d54087174d75b00bf66b83a928e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\source-envelope-rejection.log",
+      "sha256": "dd80f4ecd85517810466c02ad54829241cc94f42df66f7a675393bd12cedb99d"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\source-rejection.log",
+      "sha256": "18b882de6cd4ec26b5ebc415eeb5464d1d07033d6cb0990c07016ce4b3faaa57"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\targeted-final.log",
+      "sha256": "71fa2993cd3f81910f3f9d0d71bacd8a3d2ca99440429cc705ce568b5660487a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\verified-observations.json",
+      "sha256": "201e2df9a632785529b674a8e2d01d03c937b3ca5369d57103a303a261596ae8"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\regression-final.log",
+      "sha256": "97d47f7414069e841b540e99a61a1e7035e9457680b5cc4a129970936132f0d7"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\creation_pipeline\\artifacts\\evidence.py",
+      "sha256": "b7f04b25442959f24b52b30c5e80099c8cf207ce000e86703b16ff48058c8e80"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\creation_pipeline\\pipeline.py",
+      "sha256": "abdef3f36e39a0198e27a3d607adc23b6dc41926bd14115c2f3fa81c48bce219"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\creation_pipeline\\runtime\\preparation.py",
+      "sha256": "fcd5402eeeb222eeabf94761ef63885263c501df2bec47bc82544f44bd2733fc"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\creation_pipeline\\runtime\\shared_tool.py",
+      "sha256": "e81daa342af99954459bcc8e3a005a47ad06fbda9ddd38741fe71a177005bf7a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\tests\\pipeline\\test_shared_tool.py",
+      "sha256": "97ab0d5164692f806d1ad4eb2ead7893c9c1ab98c041a8f612850495c3188d61"
+    }
+  ],
+  "regression": {
+    "total": 690,
+    "passed": 687,
+    "skipped": 3,
+    "failed": 0
+  },
+  "prompt_checks": {
+    "contract": "passed",
+    "acceptance": "passed",
+    "planner": "passed"
+  }
+}

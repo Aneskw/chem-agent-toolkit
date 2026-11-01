@@ -508,6 +508,7 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                         session.receipts.append(call)
                         entity_record.setdefault("model_calls", []).append(call)
                         return call
+                    notify("Preparing runtime and current acceptance: " + name)
                     materials = prepare(entity_record, bundle / "skills" / name, sources.manifest(),
                                         work / "runtime-preparation" / name / uuid.uuid4().hex, runtime_spec, executor, runtime_call_guard)
                     # Final freeze is distinct from the author's durable completion receipt.
@@ -517,6 +518,7 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                                        entity_record, sources.manifest(), materials)
                     entity_record["durable_evidence"] = {"path": relative, "freeze_sha256": freeze_hash}
                     if materials is not None:
+                        notify("Executing bound runtime and locked acceptance: " + name)
                         runtime_receipt = execute_prepared(output, entity_record, executor, persist_record=True)
                     if runtime_gate_stops(config, runtime_receipt):
                         entity_record['runtime_failure_gate'] = {
