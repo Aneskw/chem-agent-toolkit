@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "scope": "Local implementation inventory; platform API is proposed only",
+  "versions": {
+    "delivery": 2,
+    "environment_recipe": 1,
+    "binding_envelope": 1,
+    "tool_abis": [
+      "shared_tool_image_v1",
+      "shared_tool_image_v2"
+    ],
+    "policies": [
+      "closed-python-bundle-v1",
+      "openbabel-debian-image-v1"
+    ]
+  },
+  "objects": [
+    "Skill",
+    "EnvironmentArtifact",
+    "ToolArtifact",
+    "SkillBinding",
+    "ExecutionAttempt"
+  ],
+  "runtime_request_fields": [
+    "candidate_id",
+    "revision_id",
+    "package_fingerprint",
+    "source_fingerprint",
+    "binding_fingerprint",
+    "environment_fingerprint",
+    "acceptance_fingerprint",
+    "frozen_directory",
+    "freeze_sha256",
+    "attempt_directory",
+    "executor_kind",
+    "target_id"
+  ],
+  "tool_record_v1_fields": [
+    "abi",
+    "request",
+    "request_key",
+    "recipe_key",
+    "plan",
+    "base_image",
+    "environment",
+    "image_id",
+    "daemon_id",
+    "artifact_id"
+  ],
+  "tool_v2_extra_fields": [
+    "external_identity"
+  ],
+  "execution_states": [
+    "not_run",
+    "runtime_blocked",
+    "build_failed",
+    "execution_failed",
+    "passed"
+  ],
+  "existing_entrypoints": {
+    "creation_pipeline.pipeline": [
+      "build"
+    ],
+    "creation_pipeline.runtime.shared_tool": [
+      "describe",
+      "resolve",
+      "select",
+      "available",
+      "verify_binding",
+      "build",
+      "inspect"
+    ],
+    "creation_pipeline.runtime.shared_inspection": [
+      "inspect_registry"
+    ],
+    "creation_pipeline.contracts": [
+      "qualify",
+      "runtime_request"
+    ],
+    "creation_pipeline.runtime.service": [
+      "execute_prepared",
+      "resume_build",
+      "prepare_revision"
+    ],
+    "creation_pipeline.artifacts.store": [
+      "entries",
+      "get",
+      "install_from_library"
+    ],
+    "creation_pipeline.runtime.recovery": [
+      "import_candidate",
+      "inspect_candidate",
+      "relocate"
+    ]
+  },
+  "error_anchors": {
+    "creation_pipeline/runtime/shared_tool.py": [
+      "selected_artifact_not_found",
+      "invalid_selected_record",
+      "selected_request_mismatch",
+      "no_available_exact_request",
+      "different_daemon",
+      "image_unavailable_or_changed",
+      "environment_inheritance_changed",
+      "shared_tool.lock",
+      "shared_tool.policy",
+      "shared_tool.current_acceptance_required",
+      "caller_cancelled",
+      "shared_tool_unavailable"
+    ],
+    "creation_pipeline/artifacts/layout.py": [
+      "required_delivery_file_missing",
+      "unexpected_delivery_file"
+    ],
+    "creation_pipeline/runtime/preparation.py": [
+      "delivery_layout_mismatch",
+      "requirements_unknown",
+      "plan_unresolved"
+    ],
+    "creation_pipeline/runtime/local.py": [
+      "resources_unknown"
+    ]
+  },
+  "examples": {
+    "selected_reference": {
+      "request_key": "0000000000000000000000000000000000000000000000000000000000000000",
+      "artifact_id": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "identity_payload": {
+      "name": "example-skill"
+    },
+    "proposed_resolve": {
+      "implementation": "proposed",
+      "request": {
+        "api_version": "skillnet-local-adapter/v1",
+        "operation": "tools.resolve",
+        "request_id": "example-request",
+        "data": {
+          "skill_revision": "<rev>",
+          "current_request_ref": "<verified-frozen-request>"
+        }
+      },
+      "response": {
+        "api_version": "skillnet-local-adapter/v1",
+        "request_id": "example-request",
+        "data": {
+          "status": "miss",
+          "reason": "no_available_exact_request"
+        },
+        "error": null
+      }
+    },
+    "proposed_qualification": {
+      "implementation": "proposed",
+      "request": {
+        "api_version": "skillnet-local-adapter/v1",
+        "operation": "skills.qualification",
+        "request_id": "example-query",
+        "data": {
+          "skill_id": "<platform-skill-id>",
+          "revision_id": "<rev>",
+          "target_id": "<authorized-local-target>"
+        }
+      },
+      "response": {
+        "api_version": "skillnet-local-adapter/v1",
+        "request_id": "example-query",
+        "data": {
+          "accepted": false,
+          "reason": "Current execution required",
+          "execution_attempt_ref": null
+        },
+        "error": null
+      }
+    }
+  }
+}

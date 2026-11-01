@@ -1,0 +1,357 @@
+{
+  "baseline_commit": "6e548753b2ec3923ebba232ce8825b1c88cd44dc",
+  "scope": "Documentation and offline contract verification only; no platform implementation or model/Docker calls",
+  "passed": true,
+  "tests": 3,
+  "results": [
+    {
+      "label": "contract",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_skillnet_contract.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.32651380001334473
+    },
+    {
+      "label": "tests",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "-m",
+        "unittest",
+        "tests.pipeline.test_skillnet_contract",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 0.4858554999809712
+    },
+    {
+      "label": "prompt-contract",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_prompt_contract.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.486528699984774
+    },
+    {
+      "label": "acceptance-prompt",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_acceptance_prompt.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.2313406000030227
+    },
+    {
+      "label": "planner",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_planner.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.23670030001085252
+    }
+  ],
+  "evidence": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\skillnet-contract-20261101-01\\acceptance-prompt.log",
+      "sha256": "8e4a7644575215826397ae598921f3c27964851b6f1ea85e04cba3a3d74b7bc1"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\skillnet-contract-20261101-01\\contract.log",
+      "sha256": "a4a44f59525a445ec2c04aafd297015971bafa418892d78f9ee22512d0850fc8"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\skillnet-contract-20261101-01\\planner.log",
+      "sha256": "c400701f42ca57d4037e76dd0b5080d122233203d44cae6ac276e273b07ce119"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\skillnet-contract-20261101-01\\prompt-contract.log",
+      "sha256": "d0d4836004204951d3185b474d974312cde373d641a8dc5fd4d625c0f07d14ef"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\skillnet-contract-20261101-01\\results.json",
+      "sha256": "5c8f349b808bb5dbff4e58b584ffac21645f2760f0bc1ec298250380ffe678ca"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\skillnet-contract-20261101-01\\tests.log",
+      "sha256": "984bc961e86f8a98df11144dd6f0b295f962934c7113978e868ef9d55d3e031f"
+    }
+  ],
+  "documented_implementation_files": [
+    {
+      "path": "creation_pipeline\\__init__.py",
+      "sha256": "dd828a572fd65fed1abf6392ac2f73826be5c88eb68e3942ad49a167709e4965"
+    },
+    {
+      "path": "creation_pipeline\\__main__.py",
+      "sha256": "482b8693e2fe6dbd732e3d7961e03827d3efa187bad11d29da188be580ebbeea"
+    },
+    {
+      "path": "creation_pipeline\\agent\\__init__.py",
+      "sha256": "48bcff25f5ad0839618e1d6725bbcefa54a63ea79471960b096aa15fe5b7fa1c"
+    },
+    {
+      "path": "creation_pipeline\\agent\\api_provider.py",
+      "sha256": "fa249fc93931b946d89a349978e6262fb8299a71a475f8ec728e67f6409efa7b"
+    },
+    {
+      "path": "creation_pipeline\\agent\\backend.py",
+      "sha256": "8df609629c02d9bc50f9f8514a197c446a80f7955e6fa86109a8d5d61619c7b4"
+    },
+    {
+      "path": "creation_pipeline\\agent\\command.py",
+      "sha256": "497046fb692b02f8e70c0cf6097d3d6f6d8ff569050a201c58f92a883e2d4e2b"
+    },
+    {
+      "path": "creation_pipeline\\agent\\tools.py",
+      "sha256": "1093cb9de1100d0fe3c39f7b9b8c290a3e0ae94258a8f610e43cef1df6d6a0ff"
+    },
+    {
+      "path": "creation_pipeline\\artifacts\\__init__.py",
+      "sha256": "db96c9aa3c413a334d0fbbf0cc8c74ab91f9e03809c5a74b593d74516e240ec8"
+    },
+    {
+      "path": "creation_pipeline\\artifacts\\delivery.py",
+      "sha256": "85c1eb25862d1146db7c6b8024b163770a519fbc62e28a43f3e09156aef4aed4"
+    },
+    {
+      "path": "creation_pipeline\\artifacts\\evidence.py",
+      "sha256": "cdb53a0e8da6b58476e08963eddbdcc16b86da60e46295d5ca1a97dbd23edcdf"
+    },
+    {
+      "path": "creation_pipeline\\artifacts\\layout.py",
+      "sha256": "2bbb42574fa652c49bdcad586235e59c095db00f09ab5adacc5d26a70343467f"
+    },
+    {
+      "path": "creation_pipeline\\artifacts\\library.py",
+      "sha256": "1fd9f1065b74a24e374fff272c9765caa3f808db0e830c5ea41a1a93b017e26e"
+    },
+    {
+      "path": "creation_pipeline\\artifacts\\package.py",
+      "sha256": "3e34b5fc4193871775eb21a81de88626eba31906d3b7a718a81165bb6bbe00e5"
+    },
+    {
+      "path": "creation_pipeline\\artifacts\\store.py",
+      "sha256": "e739110bddcdb119337a03070c4f93650abe481fd97dba7bd405f48c54fd5588"
+    },
+    {
+      "path": "creation_pipeline\\cli.py",
+      "sha256": "f31eb5880e451f1c7505e23e4a04e7d499ac85b46e750090cccfa9683322ed6e"
+    },
+    {
+      "path": "creation_pipeline\\contracts.py",
+      "sha256": "9c837c9eb6c12ffde1e6c5263e50a2ef413fc2644db58b63af227a5203f7e7c6"
+    },
+    {
+      "path": "creation_pipeline\\generation\\__init__.py",
+      "sha256": "e0d5766d0dea32d81412018deefeab23f20633c93f35b944d364995ad0917415"
+    },
+    {
+      "path": "creation_pipeline\\generation\\author.py",
+      "sha256": "a8d7e6e28e6cd58580a7ca520202124c2ec6a6f68778378e778bf98a43e492c3"
+    },
+    {
+      "path": "creation_pipeline\\generation\\candidates.py",
+      "sha256": "364cc92210590b09b06217af1a4175662dab1e43d473289505d5925d8e89c01c"
+    },
+    {
+      "path": "creation_pipeline\\generation\\context.py",
+      "sha256": "e6bfdf7c2dd67e4471be69651498029a84c4129aab3b17279467a0416f8ae16c"
+    },
+    {
+      "path": "creation_pipeline\\generation\\discovery.py",
+      "sha256": "3acef721163de45fd151b9bc0a05ec52c25864bb7fc68b4e196590fce7ce53ee"
+    },
+    {
+      "path": "creation_pipeline\\models.py",
+      "sha256": "0909cb93c5a73eff0c4a303d2e49a938bff282d06c92bf66a2f1dbd8ed2afa7f"
+    },
+    {
+      "path": "creation_pipeline\\paths.py",
+      "sha256": "35b6a625c65fa0ce14cd20d423a313f99d3dac26dfb2f9c5e3d90b7e52f3f892"
+    },
+    {
+      "path": "creation_pipeline\\pipeline.py",
+      "sha256": "a9b9688837b8a956707949237128cc0d8dcfc70958fe8993c669da18099da2da"
+    },
+    {
+      "path": "creation_pipeline\\records.py",
+      "sha256": "4f64c71752859842671dbb698cb0b4d50e7fdae0412916fe8bb8663a4ff4bcf4"
+    },
+    {
+      "path": "creation_pipeline\\resources\\__init__.py",
+      "sha256": "2916a21852a42a9e35b0a10ed5dec8a61fe309190162d4f351e6202c61669463"
+    },
+    {
+      "path": "creation_pipeline\\resources\\acquisition.py",
+      "sha256": "c4f502a0636af1aadfe750f7ffe659c76c4955df1486275e35cd26c0f311f76a"
+    },
+    {
+      "path": "creation_pipeline\\resources\\documents.py",
+      "sha256": "646dbfba43226983d8c85612098d0d4dbcd27497cdbec3cb055e4061f7bebaf9"
+    },
+    {
+      "path": "creation_pipeline\\resources\\intake.py",
+      "sha256": "3fc30904a6179a8921e5085fedd7895eae49eda2ad680c741c159751f3d7d8ed"
+    },
+    {
+      "path": "creation_pipeline\\resources\\supplements.py",
+      "sha256": "93f2207c1660ddb75c626e75a8c7890bdde9d0a47b70b940779e2c418bdfc5d3"
+    },
+    {
+      "path": "creation_pipeline\\resources\\workspace.py",
+      "sha256": "daed28828b31a3ba95c32859d7790007b4195a98882e3300f728970c24cb7dd4"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\__init__.py",
+      "sha256": "434df00817dc585830103e436a11a693763b580d2ad57c7d600b60f51d482eeb"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\acceptance.py",
+      "sha256": "7c1e3a56fadc56b3c2708f41af7c397071757ceb1a56a85019378b8b15121cd1"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\accounting.py",
+      "sha256": "f4e91636e1ba4905cfcc438e4ea408d194823106184a73ca18c1fe919c160a8c"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\checks.py",
+      "sha256": "dd4c215cb5ce39683e1e36e7cd7d29f41cfd968568dc8f7c98efd615a7e5b233"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\coverage.py",
+      "sha256": "624cf71a0a420c682828442abf9a8b9f0a74f2517f1dc980ffc5f4f7d6dc28aa"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\deepseek_api.py",
+      "sha256": "6429a759e845d97406b2b36c95a9b815e8b787e34b1e74bd1d3c8067c493e1a1"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\diagnosis.py",
+      "sha256": "b11c4714193cc84c6f9bc4831fbbbc49fe924376bbe519dc7c5be2aae62b5fdd"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\entry.py",
+      "sha256": "0251a7c7ebbac49d934f007cfe1e38ead3365c648f2e45cbab704e0d36a5dda3"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\execution.py",
+      "sha256": "e1ad3aee44f1a7637c8a761f959be993e940fbcdd935ba9f947cfbd4b393335f"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\external_tool.py",
+      "sha256": "33a67ae94b1a817519a2caf0624bab570a43f0aa3d3d3d3b797e4c4877cf336d"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\installation.py",
+      "sha256": "e606543ea6439b2f9b91eb134508421e1504ff996e66c217254ce2f0443baa1b"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\interface.py",
+      "sha256": "f2bf37d30ffe861e37c9342f69faadc8cc1bf56b4b597b1f43cbf67fc614f4dc"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\local.py",
+      "sha256": "da0080c1f9e9bf20445f36d44841f063e33bd934b89b566eb39a6b401e751926"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\model_call.py",
+      "sha256": "a3b54b266d7eff1a26c3d7f9e98abb4cfe13a88716c0ac93c7581095d752b2d5"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\network.py",
+      "sha256": "2072ccd8d76924d3e9f304b9e505dee9657f8bfe7833adc92554dd92ca5b9c17"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\planner.py",
+      "sha256": "482235a12df36a534ff8822e61e46f01531df1e84cc67074b4b33a0204c19f36"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\preparation.py",
+      "sha256": "eb465738ee464c32c058113f8bff677d2bdb465f88b42a83f23ff12f54bb67d0"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\process_stats.py",
+      "sha256": "3a7fd400f96b05365bfe2ebe5e8282cd1f1c56d53018f9649936699407d165fe"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\recovery.py",
+      "sha256": "de38dceffaeee1e6fc4ba769f2b98cd728ca8d57e02df614c48fa25fd02df31d"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\review.py",
+      "sha256": "956601a8078ab234effdae23f899603fb7ef38da69756205c2e80aa332ebbfc4"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\runner.py",
+      "sha256": "5df55fa24fc32f254d44a374a7f519b3185985bdaf906a30766a1e74f8be474f"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\service.py",
+      "sha256": "2a05243457895451fc6b59de5ae2c13c6fedb6ca32119ebf643c35315c9f68bf"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\shared_environment.py",
+      "sha256": "11d90ade7bf67037404ee96cb1f93d5903f99ecb862497ccf06a55e09bfe329e"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\shared_inspection.py",
+      "sha256": "a05f0d469fabde6766a30ad16d38a3811d51227d66a5c32bbb461f81a51b49d6"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\shared_tool.py",
+      "sha256": "7e23604c8ee9f81b1908947a481f816147b46b197493351d61012bf8bc6781aa"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\strict.py",
+      "sha256": "f27c57dda887247303f8a9876d8d59110c4551b4dd4191a9ce3c96cbfd57fe4e"
+    },
+    {
+      "path": "creation_pipeline\\schemas.py",
+      "sha256": "e1a28ee57bc854b593ed2bd019265729c26279d72810307dce3712540281433f"
+    },
+    {
+      "path": "creation_pipeline\\validation\\__init__.py",
+      "sha256": "823fc37a42afa91270a95c7131d751c74f018e30ba547ed446653e5eda106943"
+    },
+    {
+      "path": "creation_pipeline\\validation\\agent_checks.py",
+      "sha256": "1acf55d3d414883058bff3fb01a5fc4abbde59a9f737f602d3df0ad5573bacdf"
+    },
+    {
+      "path": "creation_pipeline\\validation\\checks.py",
+      "sha256": "12d7ff938dc1d769b543be2edf0661f579dc3ccbe73d3dba2202bf285078ce56"
+    },
+    {
+      "path": "creation_pipeline\\validation\\example_runner.py",
+      "sha256": "97dbced2b33db9ad183fc4daf2c2a89af9da9fb54f6d0f86791857be46d36ecb"
+    },
+    {
+      "path": "creation_pipeline\\validation\\runtime.py",
+      "sha256": "b79573b2df9084a308e9b5805938d5d33524428939bd9fde965cca35408ccc0a"
+    }
+  ],
+  "limits": "Field/version/function/error anchor checks and executable minimal examples do not prove end-to-end platform interoperability. Existing full 731-test baseline is historical, not rerun in this documentation-only task.",
+  "contract_inputs": [
+    {
+      "path": "docs/pipeline/skillnet-local-adapter-contract.md",
+      "sha256": "186fea46e7127f806c497f370b82d78db3508d04118ed27887ad76fa6aaaa30e"
+    },
+    {
+      "path": "validation/deepseek-api/skillnet-contract.json",
+      "sha256": "51b081b4c85a28dac581a9e239d3104cb17a3774a6d563756eebf31ae0bb80c3"
+    },
+    {
+      "path": "validation/deepseek-api/verify_skillnet_contract.py",
+      "sha256": "24672aca4abb670ccb5a0e6a63cb0ede53ca82f857fd712e4ae144acda069f24"
+    },
+    {
+      "path": "tests/pipeline/test_skillnet_contract.py",
+      "sha256": "17a964c5b955aab05e57173fe1e674c7135cce3a4766f4c537bb1c65280446f4"
+    }
+  ]
+}

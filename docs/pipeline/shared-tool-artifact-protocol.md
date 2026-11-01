@@ -145,6 +145,10 @@ miss 包含具体版本、具名失配字段或文件路径。不同请求不会
 
 ## Skillnet 后续适配接口
 
+五类对象的实际字段、独立版本域、原始错误载体、调用边界、最小示例与迁移说明见
+[Skillnet 本地接入契约](skillnet-local-adapter-contract.md)。统一平台 envelope 仅为建议，
+现有 Python/CLI 接缝及其离线交叉核验单独列出，未实现远端服务。
+
 适配层可读取现有 catalog 的 Skill revision/内容状态、SkillBinding 的请求与具体 artifact_id、
 ToolArtifact 的 typed local identity，以及 ExecutionAttempt 的当前合同指纹、独立输出和 qualify 结果。
 写入应走 prepare → freeze → build/bind → execute → qualify/adopt；不直接写 accepted。
