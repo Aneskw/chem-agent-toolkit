@@ -626,7 +626,8 @@
     "Open Babel paired full-tool reuse not executed: current v1 rejects external executables",
     "Source drift is installed frozen-envelope integrity rejection, not a freshly generated changed-source version",
     "A successful recovery is separate original-contract execution, not another generation batch",
-    "CLI root-directory import rejection and sandbox Docker access failures are infrastructure observations, not chemical failures"
+    "CLI root-directory import rejection and sandbox Docker access failures are infrastructure observations, not chemical failures",
+    "requirements.txt is delivered under resources/requirements.txt rather than the requested package-root location; byte identity preserved in both Skills"
   ],
   "files": [
     {
@@ -816,6 +817,10 @@
     {
       "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\tests\\pipeline\\test_shared_tool.py",
       "sha256": "97ab0d5164692f806d1ad4eb2ead7893c9c1ab98c041a8f612850495c3188d61"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-cli-expansion-20261101-01\\source-byte-audit.json",
+      "sha256": "19366ab6a11beb4a234fda21c42dbd93ff040afecbccdd664ff01c88f36ded6f"
     }
   ],
   "regression": {
@@ -828,5 +833,31 @@
     "contract": "passed",
     "acceptance": "passed",
     "planner": "passed"
-  }
+  },
+  "source_byte_audit": [
+    {
+      "skill": "a",
+      "delivered_path": "scripts/calc_descriptors.py",
+      "source_path": "scripts/calc_descriptors.py",
+      "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e"
+    },
+    {
+      "skill": "a",
+      "delivered_path": "resources/requirements.txt",
+      "source_path": "requirements.txt",
+      "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc"
+    },
+    {
+      "skill": "b",
+      "delivered_path": "scripts/calc_descriptors.py",
+      "source_path": "scripts/calc_descriptors.py",
+      "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e"
+    },
+    {
+      "skill": "b",
+      "delivered_path": "resources/requirements.txt",
+      "source_path": "requirements.txt",
+      "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc"
+    }
+  ]
 }
