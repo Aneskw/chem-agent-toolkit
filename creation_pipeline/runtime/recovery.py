@@ -21,6 +21,9 @@ def import_candidate(source, library, name):
     from creation_pipeline.artifacts.evidence import verify
     from creation_pipeline.artifacts.package import manifest
     source = Path(source).resolve()
+    if not source.is_dir():
+        raise ValueError('Unsupported runtime import: expected a native output directory or installed runtime envelope; '
+                         'archive/OCI image import is not implemented: ' + str(source))
     outer = {}
     record_path = safe_relative(source, 'records/' + name + '.json')
     if record_path.exists():
@@ -35,6 +38,9 @@ def import_candidate(source, library, name):
     else:
         frozen = safe_relative(source, 'frozen')
         attempt = safe_relative(source, 'attempt')
+        if not frozen.is_dir() or not (attempt/'receipt.json').is_file():
+            raise ValueError('Unsupported runtime import: package-only directories cannot carry execution qualification; '
+                             'expected records/' + name + '.json or frozen/ and attempt/receipt.json at ' + str(source))
         receipt = read_json(attempt/'receipt.json')
         ref = {'path':'frozen','freeze_sha256':receipt['request']['freeze_sha256']}
         record = verify(frozen,ref['freeze_sha256'])

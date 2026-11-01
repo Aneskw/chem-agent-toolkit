@@ -26,6 +26,17 @@ from tests.pipeline import test_runtime_build as fixtures
 
 
 class RecoveryTests(unittest.TestCase):
+    def test_package_only_and_archive_imports_are_named_before_catalog_mutation(self):
+        destination = self.root/'unsupported-import-library'
+        package = self.root/'bare-package'; package.mkdir()
+        (package/'SKILL.md').write_text('A package is not runtime evidence')
+        with self.assertRaisesRegex(ValueError, 'package-only.*qualification'):
+            import_candidate(package, destination, 'probe')
+        archive = self.root/'image.tar'; archive.write_bytes(b'not an implemented import format')
+        with self.assertRaisesRegex(ValueError, 'archive/OCI image import is not implemented'):
+            import_candidate(archive, destination, 'probe')
+        self.assertFalse(destination.exists())
+
     setUp=fixtures.RuntimeBuildTests.setUp
     tearDown=fixtures.RuntimeBuildTests.tearDown
     prepared=fixtures.RuntimeBuildTests.prepared

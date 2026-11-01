@@ -110,6 +110,18 @@ miss 包含具体版本、具名失配字段或文件路径。不同请求不会
 跨 daemon/主机不继承可用性，当前没有 OCI registry 或 archive 导出导入。
 文件 envelope 可以复制，但不是便携镜像交付，缺失具体制品时明确阻止。
 
+安装生成普通包与旁置 `.runtime/<name>/{frozen,attempt}`。导入支持这份完整 envelope 或
+包含 `records/<name>.json` 的原生输出目录；裸 SKILL 包、缺少 receipt 的 envelope、归档/OCI
+镜像导入均明确拒绝，不从 package 文案重建资格。导入后的候选不能再次安装，必须显式执行。
+迁移目录亦须撤销旧执行地点的资格，冻结输入与具体绑定不重写。
+
+恢复可使用冻结绑定/历史构建回执中已核验的完整 ToolArtifact，不要求原共享目录仍存在；
+这不等于镜像可缺失，也不依赖原作者路径。当前 daemon 必须仍拥有相同、可核验的具体镜像。
+共享模式的显式 `--rebuild` 仍是该具体版本的核验和新执行，不重建一个替代版本。
+复制到新 attempt 的 build receipt 保留历史 build_calls，不能用它统计本次构建；
+本次构建次数应取当前实际调用日志。安装、导入和恢复的真实记录见
+[两个生成 Skill 的交付验证](../integration/shared-tool-delivery-20261101.md)。
+
 ## Skillnet 后续适配接口
 
 适配层可读取现有 catalog 的 Skill revision/内容状态、SkillBinding 的请求与具体 artifact_id、

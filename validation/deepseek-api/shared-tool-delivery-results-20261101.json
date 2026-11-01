@@ -1,0 +1,1093 @@
+{
+  "date": "2026-11-01",
+  "base_commit": "78d9414306d6dd1b954734063643ca88aa97fddb",
+  "regression": {
+    "total": 677,
+    "passed": 674,
+    "skipped": 3,
+    "failed": 0,
+    "errors": 0
+  },
+  "prompt_checks": "all three passed; no prompt/schema changes or freeze",
+  "model_calls": 0,
+  "new_generation_batches": 0,
+  "current_environment_build_calls": 0,
+  "current_tool_build_calls": 0,
+  "shared_tool": {
+    "passed": true,
+    "scope": "existing real-generated contracts delivery revalidation",
+    "new_generation_batches": 0,
+    "model_calls": 0,
+    "current_environment_build_calls": 0,
+    "current_tool_build_calls": 0,
+    "fresh_case_executions": 205,
+    "observations": [
+      {
+        "scenario": "a-envelope-import",
+        "library": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\imported",
+        "accepted": true,
+        "cases": 21,
+        "attempt": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\imported\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\66520f2523c34f058fe3a715e4f35f4f",
+        "revision_id": "rev-959a891f6d567c30890a28cd1309cc33031b65f3c8965e9cdabf00fdddcdd284",
+        "freeze_sha256": "fe0f55f42bc8ffc87a2545f222469ce75d22b5b8532e20bc1f1d2431c79240bc",
+        "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+        "tool": {
+          "status": "built",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+        "recovery": {
+          "action": "validate",
+          "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+          "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/ac4a2364b75a4638ab8f9d378dd9a51b",
+          "image_observation": {
+            "status": "available",
+            "reason": "available",
+            "observed_at": "2026-11-01T07:45:26.666616+00:00",
+            "preflight": {
+              "host": {
+                "observed_at": "2026-11-01T07:45:26.289815+00:00",
+                "backend": "local-docker",
+                "status": "available",
+                "gaps": [],
+                "platform": "linux/x86_64",
+                "memory_bytes": 8115146752,
+                "cpus": 12,
+                "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                "server_version": "29.8.2",
+                "docker_status": "available",
+                "resource_gaps": []
+              },
+              "gaps": [],
+              "planning_limitations": [],
+              "status": "prepared"
+            },
+            "business_acceptance": "not_run"
+          }
+        },
+        "current_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "historical_receipt_build_calls": {
+          "environment": 1,
+          "tool": 1
+        },
+        "report_sha256": "f820a8c9debc142bb3550c4f2ef1e74eb8df5fb3c0637d9cc70105f5eaba233e",
+        "previous_attempt_unchanged": true
+      },
+      {
+        "scenario": "a-migration",
+        "library": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\moved",
+        "accepted": true,
+        "cases": 21,
+        "attempt": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\71f72ce67f3d4bb6a181534deaac4d97",
+        "revision_id": "rev-959a891f6d567c30890a28cd1309cc33031b65f3c8965e9cdabf00fdddcdd284",
+        "freeze_sha256": "fe0f55f42bc8ffc87a2545f222469ce75d22b5b8532e20bc1f1d2431c79240bc",
+        "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+        "tool": {
+          "status": "built",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+        "recovery": {
+          "action": "validate",
+          "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+          "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/66520f2523c34f058fe3a715e4f35f4f",
+          "image_observation": {
+            "status": "available",
+            "reason": "available",
+            "observed_at": "2026-11-01T07:46:11.102861+00:00",
+            "preflight": {
+              "host": {
+                "observed_at": "2026-11-01T07:46:10.736531+00:00",
+                "backend": "local-docker",
+                "status": "available",
+                "gaps": [],
+                "platform": "linux/x86_64",
+                "memory_bytes": 8115146752,
+                "cpus": 12,
+                "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                "server_version": "29.8.2",
+                "docker_status": "available",
+                "resource_gaps": []
+              },
+              "gaps": [],
+              "planning_limitations": [],
+              "status": "prepared"
+            },
+            "business_acceptance": "not_run"
+          }
+        },
+        "current_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "historical_receipt_build_calls": {
+          "environment": 1,
+          "tool": 1
+        },
+        "report_sha256": "02f39722731255e36e98c520f23d762ab7cec75b6663a574c0728f117e7ce541",
+        "previous_attempt_unchanged": true
+      },
+      {
+        "scenario": "a-explicit-rebuild",
+        "library": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\moved",
+        "accepted": true,
+        "cases": 21,
+        "attempt": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\551d1e5c62b04d539a1fee9e328ca2f6",
+        "revision_id": "rev-959a891f6d567c30890a28cd1309cc33031b65f3c8965e9cdabf00fdddcdd284",
+        "freeze_sha256": "fe0f55f42bc8ffc87a2545f222469ce75d22b5b8532e20bc1f1d2431c79240bc",
+        "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+        "tool": {
+          "status": "built",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+        "recovery": {
+          "action": "validate",
+          "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+          "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/71f72ce67f3d4bb6a181534deaac4d97",
+          "image_observation": {
+            "status": "available",
+            "reason": "available",
+            "observed_at": "2026-11-01T07:46:55.156185+00:00",
+            "preflight": {
+              "host": {
+                "observed_at": "2026-11-01T07:46:54.789305+00:00",
+                "backend": "local-docker",
+                "status": "available",
+                "gaps": [],
+                "platform": "linux/x86_64",
+                "memory_bytes": 8115146752,
+                "cpus": 12,
+                "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                "server_version": "29.8.2",
+                "docker_status": "available",
+                "resource_gaps": []
+              },
+              "gaps": [],
+              "planning_limitations": [],
+              "status": "prepared"
+            },
+            "business_acceptance": "not_run"
+          }
+        },
+        "current_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "historical_receipt_build_calls": {
+          "environment": 1,
+          "tool": 1
+        },
+        "report_sha256": "d5f8702c16f15d9788465c9d6eeccb7303b09a6a02e2ae94ac72340c446b0c5b",
+        "previous_attempt_unchanged": true
+      },
+      {
+        "scenario": "a-native-output-import",
+        "library": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\native-output-import",
+        "accepted": true,
+        "cases": 21,
+        "attempt": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\native-output-import\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\c3e26907c1fc4d83907af0e7b882f665",
+        "revision_id": "rev-959a891f6d567c30890a28cd1309cc33031b65f3c8965e9cdabf00fdddcdd284",
+        "freeze_sha256": "fe0f55f42bc8ffc87a2545f222469ce75d22b5b8532e20bc1f1d2431c79240bc",
+        "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+        "tool": {
+          "status": "built",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+        "recovery": {
+          "action": "validate",
+          "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+          "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/890e644fa95144308f96ae81282f2bf7",
+          "image_observation": {
+            "status": "available",
+            "reason": "available",
+            "observed_at": "2026-11-01T07:47:43.594153+00:00",
+            "preflight": {
+              "host": {
+                "observed_at": "2026-11-01T07:47:43.209139+00:00",
+                "backend": "local-docker",
+                "status": "available",
+                "gaps": [],
+                "platform": "linux/x86_64",
+                "memory_bytes": 8115146752,
+                "cpus": 12,
+                "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                "server_version": "29.8.2",
+                "docker_status": "available",
+                "resource_gaps": []
+              },
+              "gaps": [],
+              "planning_limitations": [],
+              "status": "prepared"
+            },
+            "business_acceptance": "not_run"
+          }
+        },
+        "current_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "historical_receipt_build_calls": {
+          "environment": 1,
+          "tool": 1
+        },
+        "report_sha256": "71264def64a184e10bb542a7c8335adeb84c5c694db9ed726294936bded69e83",
+        "previous_attempt_unchanged": true
+      },
+      {
+        "scenario": "a-interrupted-copy-recovery",
+        "library": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\recovered-copy",
+        "accepted": true,
+        "cases": 21,
+        "attempt": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\recovered-copy\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\65484cbda5f347fa98133a4c1ae851f3",
+        "revision_id": "rev-959a891f6d567c30890a28cd1309cc33031b65f3c8965e9cdabf00fdddcdd284",
+        "freeze_sha256": "fe0f55f42bc8ffc87a2545f222469ce75d22b5b8532e20bc1f1d2431c79240bc",
+        "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+        "tool": {
+          "status": "built",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+        "recovery": {
+          "action": "validate",
+          "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+          "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/43f034b597ce4409b343c89c0125fa05",
+          "image_observation": {
+            "status": "available",
+            "reason": "available",
+            "observed_at": "2026-11-01T07:48:24.391076+00:00",
+            "preflight": {
+              "host": {
+                "observed_at": "2026-11-01T07:48:24.041336+00:00",
+                "backend": "local-docker",
+                "status": "available",
+                "gaps": [],
+                "platform": "linux/x86_64",
+                "memory_bytes": 8115146752,
+                "cpus": 12,
+                "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                "server_version": "29.8.2",
+                "docker_status": "available",
+                "resource_gaps": []
+              },
+              "gaps": [],
+              "planning_limitations": [],
+              "status": "prepared"
+            },
+            "business_acceptance": "not_run"
+          }
+        },
+        "current_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "historical_receipt_build_calls": {
+          "environment": 1,
+          "tool": 1
+        },
+        "report_sha256": "54509f7a710056d693ef2dd9ffae1515ad521d2e1dea5d0e176af006bb8e7b77",
+        "previous_attempt_unchanged": true
+      },
+      {
+        "scenario": "b-envelope-import",
+        "library": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\imported",
+        "accepted": true,
+        "cases": 20,
+        "attempt": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\imported\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\b406da8b682546469e41e93a3bca5c56",
+        "revision_id": "rev-67dcce4e042e334161e529bd5998cc6d428f35e53c9c6217dfd08d2666a924de",
+        "freeze_sha256": "db84481b8ca30865cd839310effeaefcc330f58bbbd8c0eaf8e37d3b1c2360e3",
+        "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+        "tool": {
+          "status": "hit",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+        "recovery": {
+          "action": "validate",
+          "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+          "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/a98c3fc70adf43e5b383f3b1b7eabc94",
+          "image_observation": {
+            "status": "available",
+            "reason": "available",
+            "observed_at": "2026-11-01T07:49:33.357948+00:00",
+            "preflight": {
+              "host": {
+                "observed_at": "2026-11-01T07:49:33.170620+00:00",
+                "backend": "local-docker",
+                "status": "available",
+                "gaps": [],
+                "platform": "linux/x86_64",
+                "memory_bytes": 8115146752,
+                "cpus": 12,
+                "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                "server_version": "29.8.2",
+                "docker_status": "available",
+                "resource_gaps": []
+              },
+              "gaps": [],
+              "planning_limitations": [],
+              "status": "prepared"
+            },
+            "business_acceptance": "not_run"
+          }
+        },
+        "current_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "historical_receipt_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "report_sha256": "aad4d4794fd652d85860eb277798e24ac31ee067e541e2ba2dd303fb592c9a47",
+        "previous_attempt_unchanged": true
+      },
+      {
+        "scenario": "b-migration",
+        "library": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\moved",
+        "accepted": true,
+        "cases": 20,
+        "attempt": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\88e1972482e5408aa4747be58a09912f",
+        "revision_id": "rev-67dcce4e042e334161e529bd5998cc6d428f35e53c9c6217dfd08d2666a924de",
+        "freeze_sha256": "db84481b8ca30865cd839310effeaefcc330f58bbbd8c0eaf8e37d3b1c2360e3",
+        "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+        "tool": {
+          "status": "hit",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+        "recovery": {
+          "action": "validate",
+          "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+          "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/b406da8b682546469e41e93a3bca5c56",
+          "image_observation": {
+            "status": "available",
+            "reason": "available",
+            "observed_at": "2026-11-01T07:50:14.682400+00:00",
+            "preflight": {
+              "host": {
+                "observed_at": "2026-11-01T07:50:14.488875+00:00",
+                "backend": "local-docker",
+                "status": "available",
+                "gaps": [],
+                "platform": "linux/x86_64",
+                "memory_bytes": 8115146752,
+                "cpus": 12,
+                "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                "server_version": "29.8.2",
+                "docker_status": "available",
+                "resource_gaps": []
+              },
+              "gaps": [],
+              "planning_limitations": [],
+              "status": "prepared"
+            },
+            "business_acceptance": "not_run"
+          }
+        },
+        "current_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "historical_receipt_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "report_sha256": "9bb5258a0d82d5543b2494de3115a118dc11c0a531c262b84be8b6c34b762e44",
+        "previous_attempt_unchanged": true
+      },
+      {
+        "scenario": "b-explicit-rebuild",
+        "library": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\moved",
+        "accepted": true,
+        "cases": 20,
+        "attempt": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\9077125e87d941289c7e40495d4d4436",
+        "revision_id": "rev-67dcce4e042e334161e529bd5998cc6d428f35e53c9c6217dfd08d2666a924de",
+        "freeze_sha256": "db84481b8ca30865cd839310effeaefcc330f58bbbd8c0eaf8e37d3b1c2360e3",
+        "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+        "tool": {
+          "status": "hit",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+        "recovery": {
+          "action": "validate",
+          "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+          "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/88e1972482e5408aa4747be58a09912f",
+          "image_observation": {
+            "status": "available",
+            "reason": "available",
+            "observed_at": "2026-11-01T07:50:54.552080+00:00",
+            "preflight": {
+              "host": {
+                "observed_at": "2026-11-01T07:50:54.371974+00:00",
+                "backend": "local-docker",
+                "status": "available",
+                "gaps": [],
+                "platform": "linux/x86_64",
+                "memory_bytes": 8115146752,
+                "cpus": 12,
+                "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                "server_version": "29.8.2",
+                "docker_status": "available",
+                "resource_gaps": []
+              },
+              "gaps": [],
+              "planning_limitations": [],
+              "status": "prepared"
+            },
+            "business_acceptance": "not_run"
+          }
+        },
+        "current_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "historical_receipt_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "report_sha256": "c9bc548c2c81f13c0f7adda20364b77ea79ce31c2dc8f795f88424eeb572d853",
+        "previous_attempt_unchanged": true
+      },
+      {
+        "scenario": "b-native-output-import",
+        "library": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\native-output-import",
+        "accepted": true,
+        "cases": 20,
+        "attempt": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\native-output-import\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\64373dd4ebc44ea585ee5ea8d0abcccc",
+        "revision_id": "rev-67dcce4e042e334161e529bd5998cc6d428f35e53c9c6217dfd08d2666a924de",
+        "freeze_sha256": "db84481b8ca30865cd839310effeaefcc330f58bbbd8c0eaf8e37d3b1c2360e3",
+        "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+        "tool": {
+          "status": "hit",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+        "recovery": {
+          "action": "validate",
+          "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+          "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/223f5275ef31437481be278d9a8559e4",
+          "image_observation": {
+            "status": "available",
+            "reason": "available",
+            "observed_at": "2026-11-01T07:51:36.043963+00:00",
+            "preflight": {
+              "host": {
+                "observed_at": "2026-11-01T07:51:35.851320+00:00",
+                "backend": "local-docker",
+                "status": "available",
+                "gaps": [],
+                "platform": "linux/x86_64",
+                "memory_bytes": 8115146752,
+                "cpus": 12,
+                "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                "server_version": "29.8.2",
+                "docker_status": "available",
+                "resource_gaps": []
+              },
+              "gaps": [],
+              "planning_limitations": [],
+              "status": "prepared"
+            },
+            "business_acceptance": "not_run"
+          }
+        },
+        "current_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "historical_receipt_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "report_sha256": "5c052215d1b69b9981aec8046efae1dacafb83fe91c7e74bb44f4bfb1793f67a",
+        "previous_attempt_unchanged": true
+      },
+      {
+        "scenario": "b-interrupted-copy-recovery",
+        "library": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\recovered-copy",
+        "accepted": true,
+        "cases": 20,
+        "attempt": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\recovered-copy\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\3664ba4b4b554bffa2374975d91ab76c",
+        "revision_id": "rev-67dcce4e042e334161e529bd5998cc6d428f35e53c9c6217dfd08d2666a924de",
+        "freeze_sha256": "db84481b8ca30865cd839310effeaefcc330f58bbbd8c0eaf8e37d3b1c2360e3",
+        "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+        "tool": {
+          "status": "hit",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+        "recovery": {
+          "action": "validate",
+          "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+          "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/881a087a3d4841268cf43ade35d6ffb6",
+          "image_observation": {
+            "status": "available",
+            "reason": "available",
+            "observed_at": "2026-11-01T07:52:12.303460+00:00",
+            "preflight": {
+              "host": {
+                "observed_at": "2026-11-01T07:52:12.129125+00:00",
+                "backend": "local-docker",
+                "status": "available",
+                "gaps": [],
+                "platform": "linux/x86_64",
+                "memory_bytes": 8115146752,
+                "cpus": 12,
+                "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                "server_version": "29.8.2",
+                "docker_status": "available",
+                "resource_gaps": []
+              },
+              "gaps": [],
+              "planning_limitations": [],
+              "status": "prepared"
+            },
+            "business_acceptance": "not_run"
+          }
+        },
+        "current_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "historical_receipt_build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "report_sha256": "54d047815a8110df88b7a31f7940b2cbb192cfd30394c1d1e1d5797b9f40848f",
+        "previous_attempt_unchanged": true
+      }
+    ],
+    "negatives": [
+      {
+        "scenario": "a-corrupt-envelope",
+        "rejected": true,
+        "reason": "Frozen package/source/contract/evidence changed"
+      },
+      {
+        "scenario": "a-missing_image",
+        "fault_injection": true,
+        "accepted": false,
+        "result": {
+          "status": "runtime_blocked",
+          "name": "chem-reaction-atommap-audit",
+          "revision_id": "rev-959a891f6d567c30890a28cd1309cc33031b65f3c8965e9cdabf00fdddcdd284",
+          "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+          "business_acceptance": "not_passed",
+          "gaps": [
+            {
+              "code": "image_or_resource_unavailable",
+              "detail": "Current image/resource verification failed"
+            }
+          ],
+          "accepted": false,
+          "recovery": {
+            "action": "validate",
+            "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+            "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/a545ece5106d4941a6fecdadd4e70fc4",
+            "image_observation": {
+              "status": "unavailable",
+              "reason": "image_unavailable_or_changed",
+              "observed_at": "2026-11-01T07:49:03.642678+00:00",
+              "preflight": {
+                "host": {
+                  "observed_at": "2026-11-01T07:49:03.454428+00:00",
+                  "backend": "local-docker",
+                  "status": "available",
+                  "gaps": [],
+                  "platform": "linux/x86_64",
+                  "memory_bytes": 8115146752,
+                  "cpus": 12,
+                  "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                  "server_version": "29.8.2",
+                  "docker_status": "available",
+                  "resource_gaps": []
+                },
+                "gaps": [],
+                "planning_limitations": [],
+                "status": "prepared"
+              },
+              "business_acceptance": "not_run"
+            }
+          }
+        },
+        "report": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\missing_image\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\ab30a160596e40dd92c88ea047c5b50c\\execution\\report.json"
+      },
+      {
+        "scenario": "a-different_daemon",
+        "fault_injection": true,
+        "accepted": false,
+        "result": {
+          "status": "runtime_blocked",
+          "name": "chem-reaction-atommap-audit",
+          "revision_id": "rev-959a891f6d567c30890a28cd1309cc33031b65f3c8965e9cdabf00fdddcdd284",
+          "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+          "business_acceptance": "not_passed",
+          "gaps": [
+            {
+              "code": "image_or_resource_unavailable",
+              "detail": "Current image/resource verification failed"
+            }
+          ],
+          "accepted": false,
+          "recovery": {
+            "action": "validate",
+            "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+            "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/057e3eed62744380be1a47c1737bc315",
+            "image_observation": {
+              "status": "unavailable",
+              "reason": "different_daemon",
+              "observed_at": "2026-11-01T07:49:11.407475+00:00",
+              "preflight": {
+                "host": {
+                  "observed_at": "2026-11-01T07:49:11.216003+00:00",
+                  "backend": "local-docker",
+                  "status": "available",
+                  "gaps": [],
+                  "platform": "linux/x86_64",
+                  "memory_bytes": 8115146752,
+                  "cpus": 12,
+                  "engine_id": "injected-other-daemon",
+                  "server_version": "29.8.2",
+                  "docker_status": "available",
+                  "resource_gaps": []
+                },
+                "gaps": [],
+                "planning_limitations": [],
+                "status": "prepared"
+              },
+              "business_acceptance": "not_run"
+            }
+          }
+        },
+        "report": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\different_daemon\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\f20edce91c3f4c1d8d23ae9bc7f311c0\\execution\\report.json"
+      },
+      {
+        "scenario": "a-unsupported-import",
+        "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\installed\\chem-reaction-atommap-audit",
+        "reason": "Unsupported runtime import: package-only directories cannot carry execution qualification; expected records/chem-reaction-atommap-audit.json or frozen/ and attempt/receipt.json at E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\installed\\chem-reaction-atommap-audit"
+      },
+      {
+        "scenario": "a-unsupported-import",
+        "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\unsupported-oci.tar",
+        "reason": "Unsupported runtime import: expected a native output directory or installed runtime envelope; archive/OCI image import is not implemented: E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\unsupported-oci.tar"
+      },
+      {
+        "scenario": "b-corrupt-envelope",
+        "rejected": true,
+        "reason": "Frozen package/source/contract/evidence changed"
+      },
+      {
+        "scenario": "b-missing_image",
+        "fault_injection": true,
+        "accepted": false,
+        "result": {
+          "status": "runtime_blocked",
+          "name": "chem-reaction-atommap-audit",
+          "revision_id": "rev-67dcce4e042e334161e529bd5998cc6d428f35e53c9c6217dfd08d2666a924de",
+          "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+          "business_acceptance": "not_passed",
+          "gaps": [
+            {
+              "code": "image_or_resource_unavailable",
+              "detail": "Current image/resource verification failed"
+            }
+          ],
+          "accepted": false,
+          "recovery": {
+            "action": "validate",
+            "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+            "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/7e4c55456dbf487aa82599090599ecef",
+            "image_observation": {
+              "status": "unavailable",
+              "reason": "image_unavailable_or_changed",
+              "observed_at": "2026-11-01T07:52:46.187400+00:00",
+              "preflight": {
+                "host": {
+                  "observed_at": "2026-11-01T07:52:46.175479+00:00",
+                  "backend": "local-docker",
+                  "status": "available",
+                  "gaps": [],
+                  "platform": "linux/x86_64",
+                  "memory_bytes": 8115146752,
+                  "cpus": 12,
+                  "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+                  "server_version": "29.8.2",
+                  "docker_status": "available",
+                  "resource_gaps": []
+                },
+                "gaps": [],
+                "planning_limitations": [],
+                "status": "prepared"
+              },
+              "business_acceptance": "not_run"
+            }
+          }
+        },
+        "report": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\missing_image\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\3ded4708f9244148b41f09c6c16903bf\\execution\\report.json"
+      },
+      {
+        "scenario": "b-different_daemon",
+        "fault_injection": true,
+        "accepted": false,
+        "result": {
+          "status": "runtime_blocked",
+          "name": "chem-reaction-atommap-audit",
+          "revision_id": "rev-67dcce4e042e334161e529bd5998cc6d428f35e53c9c6217dfd08d2666a924de",
+          "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+          "business_acceptance": "not_passed",
+          "gaps": [
+            {
+              "code": "image_or_resource_unavailable",
+              "detail": "Current image/resource verification failed"
+            }
+          ],
+          "accepted": false,
+          "recovery": {
+            "action": "validate",
+            "reason": "Concrete shared tool version is pinned; unavailable artifacts require explicit preparation",
+            "reused_attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/02932289312446fb9972ca1b1ccae497",
+            "image_observation": {
+              "status": "unavailable",
+              "reason": "different_daemon",
+              "observed_at": "2026-11-01T07:52:52.403626+00:00",
+              "preflight": {
+                "host": {
+                  "observed_at": "2026-11-01T07:52:52.393112+00:00",
+                  "backend": "local-docker",
+                  "status": "available",
+                  "gaps": [],
+                  "platform": "linux/x86_64",
+                  "memory_bytes": 8115146752,
+                  "cpus": 12,
+                  "engine_id": "injected-other-daemon",
+                  "server_version": "29.8.2",
+                  "docker_status": "available",
+                  "resource_gaps": []
+                },
+                "gaps": [],
+                "planning_limitations": [],
+                "status": "prepared"
+              },
+              "business_acceptance": "not_run"
+            }
+          }
+        },
+        "report": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\different_daemon\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\c4d77e0ca9cc4e1eac0d42db91e3a7df\\execution\\report.json"
+      },
+      {
+        "scenario": "b-unsupported-import",
+        "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\installed\\chem-reaction-atommap-audit",
+        "reason": "Unsupported runtime import: package-only directories cannot carry execution qualification; expected records/chem-reaction-atommap-audit.json or frozen/ and attempt/receipt.json at E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\installed\\chem-reaction-atommap-audit"
+      },
+      {
+        "scenario": "b-unsupported-import",
+        "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\unsupported-oci.tar",
+        "reason": "Unsupported runtime import: expected a native output directory or installed runtime envelope; archive/OCI image import is not implemented: E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\unsupported-oci.tar"
+      }
+    ],
+    "original_libraries_unchanged": true,
+    "shared_registry_unchanged": true,
+    "empty_registry_recovery_supported": true,
+    "faults": "missing image/daemon/interruption injected, no original image removed"
+  },
+  "legacy_self_contained": {
+    "passed": true,
+    "scope": "real Docker install/import/relocation compatibility, not fresh skill generation",
+    "model_calls": 0,
+    "image_builds": 0,
+    "original_qualification_preserved": true,
+    "import_did_not_inherit_qualification": true,
+    "move_did_not_inherit_qualification": true,
+    "shared_registry_unchanged": true,
+    "installed_package_bytes_unchanged": true,
+    "fresh_execution_records": 16,
+    "observations": [
+      {
+        "library": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01\\imported-library",
+        "revision_id": "rev-c6fcf3e3ce4e66bb4d614899b12cd95a6bfccfa8aeb5a6e4bae1a9ff4c188b9d",
+        "freeze_sha256": "805124d9029d5bc9f1572ebb9e4557905db2660ea90b0f1893a5036151403509",
+        "image_id": "sha256:a65227fdd4f7f501348dffa9653b4b50bea320362ffa4604ee4ec338e4100f1a",
+        "fresh_passed_cases": 8,
+        "report": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01\\imported-library\\runtime\\candidate-dbf351030084f5dd250cf0f33b1b3083fbeb2d9c631e0798ad8a8e5272459e48\\69388f7320c44815a16aa2d04c9df920\\execution\\report.json"
+      },
+      {
+        "library": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01\\moved-library",
+        "revision_id": "rev-c6fcf3e3ce4e66bb4d614899b12cd95a6bfccfa8aeb5a6e4bae1a9ff4c188b9d",
+        "freeze_sha256": "805124d9029d5bc9f1572ebb9e4557905db2660ea90b0f1893a5036151403509",
+        "image_id": "sha256:a65227fdd4f7f501348dffa9653b4b50bea320362ffa4604ee4ec338e4100f1a",
+        "fresh_passed_cases": 8,
+        "report": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01\\moved-library\\runtime\\candidate-dbf351030084f5dd250cf0f33b1b3083fbeb2d9c631e0798ad8a8e5272459e48\\eb7b3761984d45bcb104cc7309fa05c4\\execution\\report.json"
+      }
+    ]
+  },
+  "shared_root": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01",
+  "legacy_root": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01",
+  "business_commands_do_not_reference_original_library_or_author_source": true,
+  "counting": "205 shared and 16 self-contained existing-contract revalidations, not new generation or part of historical 41/72",
+  "limitations": [
+    "Same real Docker daemon; cross-daemon/missing-image outcomes are injected probes, not actual daemon migration/image deletion",
+    "Interruption injected after durable journal and before execution, not OS crash",
+    "No OCI archive parsing/distribution or cross-host portability implemented",
+    "Copied build receipts retain historical build_calls; current counters are actual observed calls"
+  ],
+  "evidence_files": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01\\import-before-validation.json",
+      "sha256": "ba86da4fdddf7ec6411574f42a01f819b5897ac7c5bb9bb401a22e3c9573a42b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01\\imported-library\\runtime\\candidate-dbf351030084f5dd250cf0f33b1b3083fbeb2d9c631e0798ad8a8e5272459e48\\69388f7320c44815a16aa2d04c9df920\\execution\\report.json",
+      "sha256": "82fcf755527e813cc40127a39753e5b6b6cb91e64690781e98b70c8616536965"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01\\metadata-commands.json",
+      "sha256": "08c191490fe053919cec8e3e4e65933d0ca0e1fd7758a7939e7d254371b65891"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01\\moved-after-withdrawal.json",
+      "sha256": "4266f8fd33387c0d0320ca476a573150fc93cc74f90a88c6674ab466114e1442"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01\\moved-before-relocation.json",
+      "sha256": "4657247b6de02dac29ed2245ef22782d24d750d49bd9fae6b3d0741dfef3adc7"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01\\moved-library\\runtime\\candidate-dbf351030084f5dd250cf0f33b1b3083fbeb2d9c631e0798ad8a8e5272459e48\\eb7b3761984d45bcb104cc7309fa05c4\\execution\\report.json",
+      "sha256": "49726fbe5ec8be408a82ff526a31808b7065bf58a03ac5b9271d5ef719d728ef"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\self-contained-delivery-regression-20261101-01\\result.json",
+      "sha256": "5bf396a96e2482ec187397fc24a3492223d9534a0657766920327a1df7166be4"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-acceptance-prompt-20261101.log",
+      "sha256": "87342204c457e6e77a9521bd4a760aa9e85087a3c4d7f68d76f19ca6ac235a8e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-planner-20261101.log",
+      "sha256": "c400701f42ca57d4037e76dd0b5080d122233203d44cae6ac276e273b07ce119"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-prompt-contract-20261101.log",
+      "sha256": "1b5eb17960f1a12626790aa1da476351ece2490863ff568fa3ebb7d292c830c2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\different_daemon\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\f20edce91c3f4c1d8d23ae9bc7f311c0\\execution\\report.json",
+      "sha256": "0181f8771f94d3ea620f9c3f3080f542aff4e1b2e3f7180d2890bec7548561dd"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\imported\\catalog.json",
+      "sha256": "78cc082067086e7f64b3a91e8f1878522d86a82c8d4f0e01d8455f89c07c4263"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\imported\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\66520f2523c34f058fe3a715e4f35f4f\\execution\\report.json",
+      "sha256": "f820a8c9debc142bb3550c4f2ef1e74eb8df5fb3c0637d9cc70105f5eaba233e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\imported\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\66520f2523c34f058fe3a715e4f35f4f\\receipt.json",
+      "sha256": "0fcb42a7702f269eba960bef17e6bddada4d4073e725bd8f3d5988644afe3739"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\missing_image\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\ab30a160596e40dd92c88ea047c5b50c\\execution\\report.json",
+      "sha256": "a93f829d1e3b1d8453aadde846f7d31a75b1bb25934491a799aed3e2765db85d"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\moved\\catalog.json",
+      "sha256": "7d4a2b5bd6a9af3c77c567669045029ef1544967c35450ce68ce66b5e0e49e19"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\551d1e5c62b04d539a1fee9e328ca2f6\\execution\\report.json",
+      "sha256": "d5f8702c16f15d9788465c9d6eeccb7303b09a6a02e2ae94ac72340c446b0c5b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\551d1e5c62b04d539a1fee9e328ca2f6\\receipt.json",
+      "sha256": "0fcb42a7702f269eba960bef17e6bddada4d4073e725bd8f3d5988644afe3739"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\71f72ce67f3d4bb6a181534deaac4d97\\execution\\report.json",
+      "sha256": "02f39722731255e36e98c520f23d762ab7cec75b6663a574c0728f117e7ce541"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\71f72ce67f3d4bb6a181534deaac4d97\\receipt.json",
+      "sha256": "0fcb42a7702f269eba960bef17e6bddada4d4073e725bd8f3d5988644afe3739"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\native-output-import\\catalog.json",
+      "sha256": "15917017c7c039882bbe5ab23bbffc02db4a4fecaea5b8052a7f705eee8d7487"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\native-output-import\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\c3e26907c1fc4d83907af0e7b882f665\\execution\\report.json",
+      "sha256": "71264def64a184e10bb542a7c8335adeb84c5c694db9ed726294936bded69e83"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\native-output-import\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\c3e26907c1fc4d83907af0e7b882f665\\receipt.json",
+      "sha256": "0fcb42a7702f269eba960bef17e6bddada4d4073e725bd8f3d5988644afe3739"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\recovered-copy\\catalog.json",
+      "sha256": "bf0a48e4595e8e1eddf16e3e0fbb43af339c70e0a74b6eff79fea558898587f4"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\recovered-copy\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\65484cbda5f347fa98133a4c1ae851f3\\execution\\report.json",
+      "sha256": "54509f7a710056d693ef2dd9ffae1515ad521d2e1dea5d0e176af006bb8e7b77"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a\\recovered-copy\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\65484cbda5f347fa98133a4c1ae851f3\\receipt.json",
+      "sha256": "0fcb42a7702f269eba960bef17e6bddada4d4073e725bd8f3d5988644afe3739"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a-import-before.json",
+      "sha256": "964917f2296211bc941fdeb913195aeef0751e078d71985bf1312e84cf93052b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a-move-before.json",
+      "sha256": "7eba577607ccb3179346109a8909c97bbadd05e3b43a9e1e031327fabeb7662f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a-native-import-before.json",
+      "sha256": "32180b7018c6ee0acee2f373fd68a944c1d5f8a921a33f079e0454b01a1d25cb"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\a-relocate-before.json",
+      "sha256": "69713bcfbb497eefbd8966812f8f1216b6beb38bfb161216613710f8e46067d1"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\different_daemon\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\c4d77e0ca9cc4e1eac0d42db91e3a7df\\execution\\report.json",
+      "sha256": "ff61ce38ec036d736935a759ed73c16fa318c4d83265d5e48bdc3196bd843afe"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\imported\\catalog.json",
+      "sha256": "47276d11a754021509251b6fb114a302f0a2b05b22b566a322c03694fda145de"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\imported\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\b406da8b682546469e41e93a3bca5c56\\execution\\report.json",
+      "sha256": "aad4d4794fd652d85860eb277798e24ac31ee067e541e2ba2dd303fb592c9a47"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\imported\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\b406da8b682546469e41e93a3bca5c56\\receipt.json",
+      "sha256": "3a6f6cd24702a91729cf79c74cbec72b7c7a682eb94499ea552dc993470ec49e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\missing_image\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\3ded4708f9244148b41f09c6c16903bf\\execution\\report.json",
+      "sha256": "26dc31d9171de3c4350a9c06175f530e8a88a5802f0bd1329bc223be986409f5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\moved\\catalog.json",
+      "sha256": "79d9c3b742ebd1a99b5f1d39e0619f41bc74b766590887f7edb93c50638d2c0b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\88e1972482e5408aa4747be58a09912f\\execution\\report.json",
+      "sha256": "9bb5258a0d82d5543b2494de3115a118dc11c0a531c262b84be8b6c34b762e44"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\88e1972482e5408aa4747be58a09912f\\receipt.json",
+      "sha256": "3a6f6cd24702a91729cf79c74cbec72b7c7a682eb94499ea552dc993470ec49e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\9077125e87d941289c7e40495d4d4436\\execution\\report.json",
+      "sha256": "c9bc548c2c81f13c0f7adda20364b77ea79ce31c2dc8f795f88424eeb572d853"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\moved\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\9077125e87d941289c7e40495d4d4436\\receipt.json",
+      "sha256": "3a6f6cd24702a91729cf79c74cbec72b7c7a682eb94499ea552dc993470ec49e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\native-output-import\\catalog.json",
+      "sha256": "2d85fe15a4935079634eb67e6100afa621e702eb804264bfbd1d81cf50aef9eb"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\native-output-import\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\64373dd4ebc44ea585ee5ea8d0abcccc\\execution\\report.json",
+      "sha256": "5c052215d1b69b9981aec8046efae1dacafb83fe91c7e74bb44f4bfb1793f67a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\native-output-import\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\64373dd4ebc44ea585ee5ea8d0abcccc\\receipt.json",
+      "sha256": "3a6f6cd24702a91729cf79c74cbec72b7c7a682eb94499ea552dc993470ec49e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\recovered-copy\\catalog.json",
+      "sha256": "27e935100be41a63ed4f4aa55414b391fc6bc145dc46d66614eb221bbdab96e0"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\recovered-copy\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\3664ba4b4b554bffa2374975d91ab76c\\execution\\report.json",
+      "sha256": "54d047815a8110df88b7a31f7940b2cbb192cfd30394c1d1e1d5797b9f40848f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b\\recovered-copy\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\3664ba4b4b554bffa2374975d91ab76c\\receipt.json",
+      "sha256": "3a6f6cd24702a91729cf79c74cbec72b7c7a682eb94499ea552dc993470ec49e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b-import-before.json",
+      "sha256": "b31883dd9b089c2e6396e84cf6710ab7d02419b6c0f605c65a8d06ddde5e49f8"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b-move-before.json",
+      "sha256": "9b8ba9bcd0308891f7aef386ed99e1cb083c382a8305673cc01ad0e90bf9929f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b-native-import-before.json",
+      "sha256": "3cdbd169b45d1086157b4523759a82ca684edbed97db26313238e5edbbbf5f02"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\b-relocate-before.json",
+      "sha256": "5b4b9559953ed61c853b9066e6929dec5472ae3fedb8d904be6042cef6381a2f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\host.json",
+      "sha256": "035d91b7c9d050c5c7f36387abdcb21f8d6029757ac17be94de6e2f39470b10b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\metadata-commands.json",
+      "sha256": "328370b06f94375c7fa6d9e980f3a9ef9aa24fc90fca16f132d754c60f1c6310"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\negative-observations.json",
+      "sha256": "7631a2f316ece4339fda592b032e9978e580bc2a0cf79328bdb720884f42faf7"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\result.json",
+      "sha256": "cd6ad1752265a2e3521e217cab92a31ef36eef2477edb774fbaf50ed1bdefe36"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-real-20261101-01\\source-snapshots.json",
+      "sha256": "2f717a4f315d5d140f763f0e2b4819ae3c035ba11fde2056ec3181b9160db17e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-delivery-regression-20261101.log",
+      "sha256": "6671f80d1f4bffc6edfe635b58dfda4d422a16cf65d7a186f7391490ae328dbd"
+    }
+  ],
+  "code_files": [
+    {
+      "path": "creation_pipeline/runtime/recovery.py",
+      "sha256": "de38dceffaeee1e6fc4ba769f2b98cd728ca8d57e02df614c48fa25fd02df31d"
+    },
+    {
+      "path": "tests/pipeline/test_runtime_recovery.py",
+      "sha256": "bdd1a189cd176c367bf863eb97df0e8b8a5e4cfed9985c9fd0bc9df7776a1d34"
+    },
+    {
+      "path": "validation/deepseek-api/verify_shared_tool_delivery.py",
+      "sha256": "90f7311ce336080711336ad938b25f265c17076e19b4d6e5e253c41470436bfc"
+    },
+    {
+      "path": "validation/deepseek-api/verify_shared_delivery.py",
+      "sha256": "ac1d5874ba7fbea36cfaa735c3c07badecff37b87f0e877f06a2baef8edfa4ff"
+    }
+  ]
+}
