@@ -1,5 +1,9 @@
 # 精确 Tool 制品复用：本机 v1 协议
 
+P1-1 的独立进程并发、实际构建故障/取消、活跃业务中断及专用镜像删除/恢复证据见
+[故障隔离验证](../integration/tool-fault-isolation-20261101.md)。嵌套环境锁同样使用所有者 token；
+取消保留具名回执、scope 和清理结果，不会为未完成 attempt 授予资格。强杀遗留锁仍不自动抢占。
+
 调用方的必需文件路径和精确交付清单现在由 delivery protocol 2 的 `inputs.layout`
 冻结并确定性核验，见 [交付路径协议](delivery-layout-contract.md)。这是 Skill 交付协议的
 版本，ToolArtifact ABI 没有因此更改。完整工具命中不能豁免当前 Skill 的路径要求；

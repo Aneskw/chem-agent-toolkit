@@ -517,6 +517,10 @@ def build(executor, request, record, env, materials):
                                                         'request_key': binding['request_key']},
                        shared_environment=(concrete['environment'] if status == 'built' else
                                            {'status': 'not_requested_tool_hit', 'artifact_environment': concrete['environment']}))
+    except KeyboardInterrupt:
+        receipt['gaps'] = [gap('caller_cancelled', 'ToolArtifact build/bind interrupted before completion: '
+                               + binding['request_key'])]
+        raise
     except (OSError, ValueError, KeyError, TypeError) as exc:
         if getattr(exc, 'status', None) == 'build_failed':
             receipt['status'] = receipt['execution_status'] = 'build_failed'

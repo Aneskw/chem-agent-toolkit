@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 import shutil
 import time
+import uuid
 
 from creation_pipeline.contracts import fingerprint
 from creation_pipeline.records import file_digest, has_link, read_json, safe_relative, write_json
@@ -90,6 +91,7 @@ def resolve(materials, root, host, process, deadline, attempt):
         raise ValueError('Linked shared environment root')
     root.mkdir(parents=True, exist_ok=True)
     lock = root / (key + '.lock')
+    owner = str(os.getpid()) + ':' + uuid.uuid4().hex
     waited_for_builder = False
     while True:
         remaining = deadline - time.monotonic()
@@ -127,7 +129,7 @@ def resolve(materials, root, host, process, deadline, attempt):
             return False
     try:
         with handle:
-            handle.write(str(os.getpid()))
+            handle.write(owner)
         entry_path = root / (key + '.json')
         if has_link(entry_path) or has_link(entry_path.with_suffix('.json.tmp')):
             raise ValueError('Linked shared registry entry')
@@ -176,4 +178,9 @@ def resolve(materials, root, host, process, deadline, attempt):
                       'inherited_config': inherited_config,
                       'daemon_id': host['engine_id'], 'complete_rebuild_lock': False}, logs
     finally:
-        lock.unlink()
+        if not has_link(lock):
+            try:
+                if lock.read_text(encoding='utf-8') == owner:
+                    lock.unlink()
+            except FileNotFoundError:
+                pass

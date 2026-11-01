@@ -241,6 +241,44 @@ class SharedToolTests(unittest.TestCase):
     def test_failed_build_never_publishes(self):
         self.failed_build()
 
+    def test_temporary_publication_file_is_not_a_candidate(self):
+        artifact = self.artifact(self.request())
+        root = self.root/'atomic'; root.mkdir()
+        path = root/(artifact['request_key']+'-'+artifact['artifact_id']+'.json.tmp')
+        path.write_text('{', encoding='utf-8')
+        found, observation = st.resolve(artifact['request'], {'engine_id':'daemon'}, self.probe(artifact), root)
+        self.assertIsNone(found)
+        self.assertEqual(observation['candidates'], [])
+        self.assertEqual(st.inspect(root)['artifacts'], [])
+        self.assertEqual(path.read_text(), '{')
+
+    def test_cancelled_waiter_preserves_foreign_lock(self):
+        root = self.root/'waiter'; root.mkdir()
+        lock = root/'key.lock'; lock.write_text('foreign')
+        with patch.object(st.time, 'sleep', side_effect=KeyboardInterrupt), self.assertRaises(KeyboardInterrupt):
+            with st.locked(root, 'key', time.monotonic()+2):
+                self.fail('foreign lock acquired')
+        self.assertEqual(lock.read_text(), 'foreign')
+
+    def test_tool_build_timeout_cannot_publish_or_qualify(self):
+        root = self.root/'timeout-registry'
+        pin = {'reference':'python:3.11-slim', 'repo_digest':'python@sha256:'+'1'*64}
+        def timed_out(args, timeout):
+            if args[:2] == ['docker','build']:
+                return {'exit_code':None, 'stdout':'', 'stderr':'timed out', 'error':'TimeoutExpired'}
+            return {'exit_code':0,'stdout':'','stderr':''}
+        with patch.dict('os.environ', {'CHEM_AGENT_SHARED_TOOLS':str(root)}), \
+             patch.object(LocalExecutor,'resolve_base_image',return_value=pin), \
+             patch.object(LocalExecutor,'host',return_value=dict(HOST,engine_id='daemon')), \
+             patch('creation_pipeline.runtime.local.process',side_effect=timed_out):
+            request = self.prepared(spec={'plan':plan(),'shared_tool':declaration(),'options':{'pin_base_image':True}})
+            result = LocalExecutor().build(request)
+        self.assertEqual(result['status'],'build_failed')
+        self.assertEqual(list(root.glob('*.json')),[])
+        self.assertEqual(list(root.glob('*.lock')),[])
+        from creation_pipeline.contracts import qualify
+        self.assertFalse(qualify(self.record['delivery'])[0])
+
     def test_cancelled_builder_never_publishes_and_releases_only_owned_lock(self):
         self.failed_build(cancel=True)
 

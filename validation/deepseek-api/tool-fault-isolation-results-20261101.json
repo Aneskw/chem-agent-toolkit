@@ -1,0 +1,372 @@
+{
+  "schema": 1,
+  "created_at": "2026-11-01T15:02:09.769710+00:00",
+  "status": "P1-1_complete_with_documented_local_boundary",
+  "baseline_commit": "48bb4bc64d00d77675775124d63e79ae68585f62",
+  "report": "docs/integration/tool-fault-isolation-20261101.md",
+  "scope": "Real Docker infrastructure fixtures, not native Agent reviewed/generated chemistry batches. Existing P0 A/B review and qualification preserved.",
+  "model_calls": 0,
+  "backend_or_budget_changes": false,
+  "new_generation_batches": 0,
+  "evidence_root": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05",
+  "result": {
+    "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\result.json",
+    "sha256": "302bd83b18206be0598742c91d240ece127dbca188ad301cda106638b7003337"
+  },
+  "post_audit": {
+    "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\post-audit.json",
+    "sha256": "f024f43d78c7a97f007c95bf52fc831af3e6497ddcb9c03eb3180995878215c9"
+  },
+  "production_code_at_execution": {
+    "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\pipeline-code.json",
+    "sha256": "1c6ff7f575d0e62b8ba8a4636ae125f303f21e7c43458721e89ee7885e182eca"
+  },
+  "experiment_source": {
+    "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\experiment-source.py",
+    "sha256": "eab77ee6f7259170083ae4558bb2f717554c7b36bed19875989ea7a9d224ec8a"
+  },
+  "experiment_source_matches_current_after_newline_normalization": true,
+  "regression": {
+    "total": 731,
+    "passed": 728,
+    "skipped": 3,
+    "failed": 0,
+    "errors": 0,
+    "new_tests": 8,
+    "targeted": 53,
+    "checks": [
+      {
+        "label": "targeted",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "-m",
+          "unittest",
+          "tests.pipeline.test_fault_experiment",
+          "tests.pipeline.test_process_cancellation",
+          "tests.pipeline.test_shared_environment",
+          "tests.pipeline.test_shared_tool",
+          "-q"
+        ],
+        "exit_code": 0,
+        "seconds": 5.245576500019524
+      },
+      {
+        "label": "regression",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "exit_code": 0,
+        "seconds": 173.37651920004282
+      },
+      {
+        "label": "prompt-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_prompt_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.558115599968005
+      },
+      {
+        "label": "acceptance-prompt",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_acceptance_prompt.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.23530749999918044
+      },
+      {
+        "label": "planner",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_planner.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.23922139999922365
+      }
+    ],
+    "results": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-postflight-20261101-02\\results.json",
+      "sha256": "96653c7794f1c9255cf5d53937e756462e29799ad9d3ede9e654f52ad181f91a"
+    },
+    "log": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-postflight-20261101-02\\regression.log",
+      "sha256": "50b5257fa5de9b9ed83bbc09c979cfe50af3e01a528598c95c0d908b26e107dd"
+    },
+    "prompt_or_schema_changes": false,
+    "freeze_required": false
+  },
+  "final_infrastructure_cases": {
+    "complete_passed": 10,
+    "complete_total": 10,
+    "scope": "Includes environment and interface/business checks. Interrupted partial observation excluded.",
+    "new_model_generation_acceptance": false
+  },
+  "current_build_calls": {
+    "environment": 0,
+    "tool": 5
+  },
+  "build_count_scope": "Calls include build failure, timeout and cancellation; not successful images or dependency installations. Existing Docker/BuildKit cache retained.",
+  "versions": [
+    {
+      "artifact_id": "36c201339a773b0dd7d65506f827a3ce87363b7a41facc2d1952b51903fd2758",
+      "request_key": "d8fd71fed925edad85fef8fe1fa95c95b0e9d926589352ce928869b72bb75fb9",
+      "recipe_key": "a4e0f5f9c8bfdd2650ac140bfbf0a240ca297497533d055456ca560daa6c93b1",
+      "image_id": "sha256:45cb38d535a25652812d661eecb5d19088d655d222778766da758864024ab21a",
+      "record": {
+        "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\tools\\d8fd71fed925edad85fef8fe1fa95c95b0e9d926589352ce928869b72bb75fb9-36c201339a773b0dd7d65506f827a3ce87363b7a41facc2d1952b51903fd2758.json",
+        "sha256": "f9327dcfc837aa7d6c8be6f8cace914fd14aa6beae7c8a4fe1301cc8043ce670"
+      }
+    },
+    {
+      "artifact_id": "a9816876278c6b735fed62bae0c4869f58cf79377e322d1ee160cdd151febd83",
+      "request_key": "e92a066d0075f2510ce4f6cc9e2a7cee4e08e8e5d64af4c7a3f682df05f1a092",
+      "recipe_key": "a4e0f5f9c8bfdd2650ac140bfbf0a240ca297497533d055456ca560daa6c93b1",
+      "image_id": "sha256:0df6e7bfffa0a582d69fe24c3904a4118047c74819f0ed037001fb95e44b808b",
+      "record": {
+        "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\tools\\e92a066d0075f2510ce4f6cc9e2a7cee4e08e8e5d64af4c7a3f682df05f1a092-a9816876278c6b735fed62bae0c4869f58cf79377e322d1ee160cdd151febd83.json",
+        "sha256": "c4d4c4885a795d28dd9c9b1bcbb062e19a8972294d91fae365866f8789dbbdd4"
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "publisher-a",
+      "accepted": true,
+      "status": "execution_passed",
+      "build_calls": {
+        "environment": 0,
+        "tool": 1
+      },
+      "result": {
+        "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\publisher-a\\result.json",
+        "sha256": "0b0bbad899a3266cbf1ed155d70c510ca465831aea42d30fbf1a7b510fd397ea"
+      }
+    },
+    {
+      "name": "publisher-b",
+      "accepted": true,
+      "status": "execution_passed",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "result": {
+        "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\publisher-b\\result.json",
+        "sha256": "3b892b7997abbbdf6f6da154c0d6476b0b9332fd1cd1b7de1b58287291dd7bec"
+      }
+    },
+    {
+      "name": "wait-timeout",
+      "accepted": false,
+      "status": "runtime_blocked",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "result": {
+        "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\wait-timeout\\result.json",
+        "sha256": "56bd310cccd798247cf4f29c3f08160d8c37a2051f42ec989c88392e84e80403"
+      }
+    },
+    {
+      "name": "build-failure",
+      "accepted": false,
+      "status": "build_failed",
+      "build_calls": {
+        "environment": 0,
+        "tool": 1
+      },
+      "result": {
+        "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\build-failure\\result.json",
+        "sha256": "11adafdc9f64613592d776c7b705083eaec9dabc46791bbc3e79c1a3cdda925e"
+      }
+    },
+    {
+      "name": "build-timeout",
+      "accepted": false,
+      "status": "build_failed",
+      "build_calls": {
+        "environment": 0,
+        "tool": 1
+      },
+      "result": {
+        "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\build-timeout\\result.json",
+        "sha256": "1dcc1764fd37746192628abf079ef888fcd2771cf0a764d990fb673ab9834bf3"
+      }
+    },
+    {
+      "name": "slow",
+      "accepted": true,
+      "status": "execution_passed",
+      "build_calls": {
+        "environment": 0,
+        "tool": 1
+      },
+      "result": {
+        "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\slow\\result.json",
+        "sha256": "478b6e1328699658091064431bf0801b38cba2cddfcf22e48dbceadd20318557"
+      }
+    },
+    {
+      "name": "cancel-waiter",
+      "accepted": false,
+      "interruption": {
+        "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\cancel-waiter\\interruption.json",
+        "sha256": "33cbc6fbea12618527363afe62bf42dc2aa487ed71aa06422bd5bd4ff5f5dbd9"
+      }
+    },
+    {
+      "name": "build-cancel",
+      "accepted": false,
+      "interruption": {
+        "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\build-cancel\\interruption.json",
+        "sha256": "3e3639bbbfc8c192d3617d99d3f1ce2f46c7fa70ea0ff7941c850e77ddb5bb38"
+      }
+    }
+  ],
+  "publication": {
+    "independent_processes": 2,
+    "both_prepared_before_build": true,
+    "tool_build_calls_total": 1,
+    "same_artifact": true,
+    "temp_not_candidate": true,
+    "foreign_lock_preserved": true,
+    "evidence": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\partial-publication-observation.json",
+      "sha256": "7b91600f3204cf991db45d5cdce1fb8a9d41fe85ddd0e3569e773c40dd50d038"
+    }
+  },
+  "image_loss": {
+    "actual_deletion": true,
+    "image_was_not_in_preexisting_set": true,
+    "missing_candidate_accepted": false,
+    "missing_attempt_cases": 0,
+    "fallback_builds": 0,
+    "exact_image_restored": true,
+    "new_library_new_execution": true,
+    "failed_library_unchanged": true,
+    "removal": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\image-removal.json",
+      "sha256": "4546c7b8b3d5df6aff25929c1762390a1e9f3b50c5967042afc78b569b03ea30"
+    },
+    "restore": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\image-restoration.json",
+      "sha256": "88d6e5a8c40e8cf60d735876d285cab3b6b7081ad146382e0892fb068f61e6bb"
+    },
+    "missing": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\missing-image-result.json",
+      "sha256": "10c13156d75a226a074513f1599b25b2a41ce8f1573caba4c379cbe5d807d3df"
+    },
+    "recovery": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\image-recovery-result.json",
+      "sha256": "1f33d92bdc5f9b5a624a642741b34b81d4c67d7f8d2cc448bee7a0e060caf0ce"
+    },
+    "archive": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\owned-image.tar",
+      "sha256": "d54774ca349a94f7094ec84c212feab5db84e0a22a98a2137064e112de17db40"
+    },
+    "boundary": "Docker local backup/restore only; not a pipeline archive/OCI distribution API."
+  },
+  "execution_interrupt": {
+    "injection": "Python KeyboardInterrupt while observed business container was running; not OS crash/power loss",
+    "observed_container": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\execution-interrupt\\business-running-at-interrupt.json",
+      "sha256": "4f7f9949efeb0555c83e0917eb3642951269500f835e341b00f191ca925ec5a5"
+    },
+    "journal_pending_and_unqualified": true,
+    "scope": "db31592dca9847d4b9ba1fb7da426339",
+    "own_container_cleanup_exit_code": 0,
+    "scope_containers_remaining": 0,
+    "interruption": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\execution-interrupt\\interruption.json",
+      "sha256": "a4bc6639129dd13547fe187b3313419f8ab59391c9824c9c430f60fb31108a9c"
+    },
+    "cleanup": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\interrupted-container-cleanup.json",
+      "sha256": "afb38d1123357d7ebc5503b455a85fa2f5a0ebc9f984379963c8703ce7b5dbe3"
+    },
+    "new_library_recovery": {
+      "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\execution-recovery-result.json",
+      "sha256": "3a2626b4c3e85c6a2f8726ad639b7805bc45012662c2f75a87adc774434a9ee1"
+    },
+    "original_interrupted_directory_unchanged": true
+  },
+  "protected_bindings": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\a",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "manifest_unchanged": true
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\b",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "manifest_unchanged": true
+    }
+  ],
+  "protected_before": {
+    "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\protected-before.json",
+    "sha256": "4ed1c10a7ca63066d0e0e628e4d22006573db9aa8bebe763941b80771b6e9d64"
+  },
+  "old_fixture_version_bytes_unchanged": true,
+  "artifact_record_carries_skill_qualification": false,
+  "failed_rounds": [
+    {
+      "root": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-01",
+      "reason": "offline lock replacement defect; default TEMP permission failure separately retained",
+      "resumed": false
+    },
+    {
+      "root": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-02",
+      "reason": "experiment recipe correctly rejected by code-dependent-steps policy",
+      "resumed": false
+    },
+    {
+      "root": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-03",
+      "reason": "library worker incorrectly required fixture record; earlier real faults completed",
+      "resumed": false
+    },
+    {
+      "root": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-04",
+      "reason": "hook expected runner.py; direct Docker execution completed normally, interruption was not injected",
+      "resumed": false
+    }
+  ],
+  "failed_round_manifests": {
+    "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\failed-round-manifests.json",
+    "sha256": "ec60fab5568f7c16f30a6f3e55c40f4ed630e8c8ff043e7b058ee206d32a96d9"
+  },
+  "postflight_manifest": {
+    "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\postflight-manifest.json",
+    "sha256": "0f388a70609ba205e5365a67343e82113bda223798a1f40f3fb0ad979d0d854d"
+  },
+  "evidence_manifest": {
+    "path": "E:\\Users\\27343\\Docker\\tool-fault-isolation-20261101-05\\evidence-manifest.json",
+    "sha256": "9996a05b625f1c471537d16ba9d2057ed60992ed4364d09cff41825af68f1f33"
+  },
+  "evidence_files": 623,
+  "unsupported_or_unmeasured": [
+    "OS hard kill, power loss, disk-full/fsync durability",
+    "adversarial replacement between token comparison and unlink",
+    "automatic recovery/age-based stealing of crash locks",
+    "remote platform or portable OCI artifact distribution",
+    "cold cache performance or disk savings benchmark"
+  ],
+  "no_existing_cache_cleanup": true,
+  "push": false
+}

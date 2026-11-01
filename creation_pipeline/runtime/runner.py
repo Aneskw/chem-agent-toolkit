@@ -168,7 +168,7 @@ def process(args, timeout=60, cwd=None, *, supervise=None):
     try:
         stdout, stderr = proc.communicate(timeout=timeout)
         return {"command": args, "exit_code": proc.returncode, "stdout": stdout, "stderr": stderr}
-    except subprocess.TimeoutExpired as exc:
+    except (subprocess.TimeoutExpired, KeyboardInterrupt) as exc:
         cleanup = []
         try:
             if job:
@@ -243,7 +243,7 @@ def run(tool, image, args, input_dir=None, output_dir=None, entrypoint=None, tim
     try:
         result = process(invocation(tool, image, args, name, input_dir, output_dir, entrypoint), timeout)
         return result
-    except subprocess.TimeoutExpired as exc:
+    except (subprocess.TimeoutExpired, KeyboardInterrupt) as exc:
         error = exc
         exc.scope = tool.get('execution_scope') or getattr(exc, 'scope', None)
         raise

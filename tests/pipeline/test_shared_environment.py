@@ -12,6 +12,19 @@ from creation_pipeline.runtime.shared_environment import describe, resolve, inhe
 
 
 class SharedEnvironmentTests(unittest.TestCase):
+    def test_cancelled_builder_does_not_remove_replacement_lock(self):
+        lock = self.cache/(fingerprint(self.recipe)+'.lock')
+        original = self.process
+        def interrupted(argv, timeout):
+            if argv[:2] == ['docker', 'build']:
+                lock.write_text('replacement-owner', encoding='utf-8')
+                raise KeyboardInterrupt('cancelled builder')
+            return original(argv, timeout)
+        with patch.object(self, 'process', side_effect=interrupted):
+            with self.assertRaises(KeyboardInterrupt):
+                self.resolve('replacement')
+        self.assertEqual(lock.read_text(encoding='utf-8'), 'replacement-owner')
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
