@@ -1,0 +1,731 @@
+{
+  "baseline": "23dd7af9697bce4677b5edb268fbc683fc1fba44",
+  "evidence_root": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01",
+  "result": {
+    "passed": true,
+    "scope": "real original-contract direct-version reuse and fail-closed selection",
+    "observations": [
+      {
+        "skill": "a",
+        "mode": "automatic",
+        "accepted": true,
+        "cases": 21,
+        "preparation": {
+          "status": "prepared",
+          "gaps": [],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "hit",
+            "reason": "exact_request_and_current_image",
+            "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+            "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+          },
+          "environment_planning_calls": 0,
+          "acceptance_planning_calls": 0
+        },
+        "selection": null,
+        "tool": {
+          "status": "hit",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "model_calls": 0,
+        "run": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-automatic",
+        "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/ed9f9034cc4446e3b0fad87a08a2d5fd",
+        "seconds": {
+          "prepare": 1.5541411000012886,
+          "freeze": 0.8145199000136927,
+          "build_or_bind": 3.28185,
+          "validation": 24.007157,
+          "total": 35.487450500018895,
+          "model_behavior_cases": 6.598256700002821,
+          "authored_business_checks": 11.280575499986298,
+          "business_cases": 17.87883219998912,
+          "all_cases": 19.724588200013386
+        },
+        "storage_delta": {
+          "image_layers_bytes": 0,
+          "new_image_ids": [],
+          "removed_image_ids": [],
+          "build_cache_records": 0,
+          "build_cache_reported_bytes": 0,
+          "desktop_filesystem_used_bytes": 0
+        },
+        "storage_before": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-before",
+        "storage_after": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-a-automatic",
+        "run_files_logical_bytes": 838467
+      },
+      {
+        "skill": "a",
+        "mode": "selected",
+        "accepted": true,
+        "cases": 21,
+        "preparation": {
+          "status": "prepared",
+          "gaps": [],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "hit",
+            "selection": "explicit",
+            "reference": {
+              "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+              "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+            },
+            "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+            "reason": "selected_exact_version_and_current_image",
+            "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+          },
+          "environment_planning_calls": 0,
+          "acceptance_planning_calls": 0
+        },
+        "selection": {
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+        },
+        "tool": {
+          "status": "hit",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "model_calls": 0,
+        "run": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-selected",
+        "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/c796e85a45d4416d974794fc3ca3feac",
+        "seconds": {
+          "prepare": 1.1306733000092208,
+          "freeze": 0.7310129000106826,
+          "build_or_bind": 2.875741,
+          "validation": 23.706427,
+          "total": 33.61548589999438,
+          "model_behavior_cases": 6.5414368999772705,
+          "authored_business_checks": 11.392288899951382,
+          "business_cases": 17.933725799928652,
+          "all_cases": 19.568366099934792
+        },
+        "storage_delta": {
+          "image_layers_bytes": 0,
+          "new_image_ids": [],
+          "removed_image_ids": [],
+          "build_cache_records": 0,
+          "build_cache_reported_bytes": 0,
+          "desktop_filesystem_used_bytes": 0
+        },
+        "storage_before": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-a-automatic",
+        "storage_after": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-a-selected",
+        "run_files_logical_bytes": 839414
+      },
+      {
+        "skill": "b",
+        "mode": "automatic",
+        "accepted": true,
+        "cases": 20,
+        "preparation": {
+          "status": "prepared",
+          "gaps": [],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "hit",
+            "reason": "exact_request_and_current_image",
+            "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+            "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+          },
+          "environment_planning_calls": 0,
+          "acceptance_planning_calls": 0
+        },
+        "selection": null,
+        "tool": {
+          "status": "hit",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "model_calls": 0,
+        "run": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-automatic",
+        "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/86691fc137cb453a947e8245d8703afa",
+        "seconds": {
+          "prepare": 0.9972898999985773,
+          "freeze": 0.6821723000030033,
+          "build_or_bind": 2.492855,
+          "validation": 20.490031,
+          "total": 29.108358400000725,
+          "model_behavior_cases": 4.230420100007905,
+          "authored_business_checks": 11.242991400009487,
+          "business_cases": 15.473411500017392,
+          "all_cases": 17.061906400049338
+        },
+        "storage_delta": {
+          "image_layers_bytes": 0,
+          "new_image_ids": [],
+          "removed_image_ids": [],
+          "build_cache_records": 0,
+          "build_cache_reported_bytes": 0,
+          "desktop_filesystem_used_bytes": 0
+        },
+        "storage_before": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-a-selected",
+        "storage_after": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-b-automatic",
+        "run_files_logical_bytes": 750224
+      },
+      {
+        "skill": "b",
+        "mode": "selected",
+        "accepted": true,
+        "cases": 20,
+        "preparation": {
+          "status": "prepared",
+          "gaps": [],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "hit",
+            "selection": "explicit",
+            "reference": {
+              "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+              "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+            },
+            "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+            "reason": "selected_exact_version_and_current_image",
+            "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+          },
+          "environment_planning_calls": 0,
+          "acceptance_planning_calls": 0
+        },
+        "selection": {
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+        },
+        "tool": {
+          "status": "hit",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+        },
+        "build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "model_calls": 0,
+        "run": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-selected",
+        "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/1276796a887142bf80a228ddc52b1489",
+        "seconds": {
+          "prepare": 0.810852700000396,
+          "freeze": 0.45786140000564046,
+          "build_or_bind": 2.402384,
+          "validation": 19.742793,
+          "total": 26.834886900003767,
+          "model_behavior_cases": 4.135672200034605,
+          "authored_business_checks": 11.264282700023614,
+          "business_cases": 15.39995490005822,
+          "all_cases": 17.064897400065092
+        },
+        "storage_delta": {
+          "image_layers_bytes": 0,
+          "new_image_ids": [],
+          "removed_image_ids": [],
+          "build_cache_records": 0,
+          "build_cache_reported_bytes": 0,
+          "desktop_filesystem_used_bytes": 0
+        },
+        "storage_before": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-b-automatic",
+        "storage_after": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-b-selected",
+        "run_files_logical_bytes": 751169
+      }
+    ],
+    "negatives": [
+      {
+        "skill": "a",
+        "failure": "missing_version",
+        "preparation": {
+          "status": "runtime_blocked",
+          "gaps": [
+            {
+              "code": "selected_tool_unavailable",
+              "detail": "{\"status\": \"miss\", \"selection\": \"explicit\", \"reference\": {\"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"artifact_id\": \"0000000000000000000000000000000000000000000000000000000000000000\"}, \"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"reason\": \"selected_artifact_not_found\", \"path\": \"E:\\\\Users\\\\27343\\\\Docker\\\\acceptance-only-e2e-20261101-01\\\\shared-tools\\\\77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b-0000000000000000000000000000000000000000000000000000000000000000.json\"}",
+              "repair_lane": "environment",
+              "blocker_kind": "unresolved_input"
+            }
+          ],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "miss",
+            "selection": "explicit",
+            "reference": {
+              "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+              "artifact_id": "0000000000000000000000000000000000000000000000000000000000000000"
+            },
+            "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+            "reason": "selected_artifact_not_found",
+            "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\shared-tools\\77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b-0000000000000000000000000000000000000000000000000000000000000000.json"
+          }
+        },
+        "accepted": false
+      },
+      {
+        "skill": "a",
+        "failure": "changed_requirement",
+        "preparation": {
+          "status": "runtime_blocked",
+          "gaps": [
+            {
+              "code": "selected_tool_unavailable",
+              "detail": "{\"status\": \"miss\", \"selection\": \"explicit\", \"reference\": {\"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"artifact_id\": \"a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be\"}, \"request_key\": \"aeefce89e6d8ccb99a785b8f45c2eeaaefd41843cf30e82264d26c8d1ce38def\", \"reason\": \"selected_request_mismatch\", \"mismatches\": [{\"field\": \"requirements\", \"expected\": [\"Discover and package one executable Skill using the supplied reaction atom-map audit Skill as source material. Preserve scripts/audit_atom_maps.py byte-for-byte as the delivered entry. Preserve --reaction and --input with optional --output, JSONL fields, exit 2 on any failed row, and mixed-batch continuation. Require complete bound Docker business acceptance using source-grounded packaged tests: a valid mapped reaction, permitted reactant-only leaving-group maps, duplicate maps, missing maps, unexpected product maps and malformed reaction syntax. Verify meaningful returned map identities and diagnostics, not just process completion. Include a valid file batch and a mixed valid/invalid file batch persisted through the delivered --output flag, retaining all rows and asserting the rejected row after container exit. Old credibility/test claims are source context, not current execution evidence. Do not weaken source behavior, modify the business entry, or delete a failing check. Do not install dependencies or execute business code on the host; chemistry execution is permitted only inside Docker. Do not claim reaction feasibility or chemical mapping correctness. Include the original test_valid_and_reactant_only_maps fixture and its source-declared reactant_only_maps=[3] oracle.\\nThis is an exact shared-tool experiment. Deliver EXACTLY two files: SKILL.md and scripts/audit_atom_maps.py. Preserve the original script byte-for-byte. Put provenance, scope, examples and limitations inline in SKILL.md; do not add reference, example, data, test or helper files to the package. Express generated checks as self-contained argv programs with inline input fixtures written under {run}, using the unchanged delivered script. Preserve all business checks and actual file-output assertions; no lost coverage. The source tree remains available for provenance. The independent reviewer must inspect this current package and source, not adopt any historical approval. Never claim scientific correctness or a shared-tool hit before execution proves it.\"], \"actual\": [\"Discover and package one executable Skill using the supplied reaction atom-map audit Skill as source material. Preserve scripts/audit_atom_maps.py byte-for-byte as the delivered entry. Preserve --reaction and --input with optional --output, JSONL fields, exit 2 on any failed row, and mixed-batch continuation. Require complete bound Docker business acceptance using source-grounded packaged tests: a valid mapped reaction, permitted reactant-only leaving-group maps, duplicate maps, missing maps, unexpected product maps and malformed reaction syntax. Verify meaningful returned map identities and diagnostics, not just process completion. Include a valid file batch and a mixed valid/invalid file batch persisted through the delivered --output flag, retaining all rows and asserting the rejected row after container exit. Old credibility/test claims are source context, not current execution evidence. Do not weaken source behavior, modify the business entry, or delete a failing check. Do not install dependencies or execute business code on the host; chemistry execution is permitted only inside Docker. Do not claim reaction feasibility or chemical mapping correctness. Include the original test_valid_and_reactant_only_maps fixture and its source-declared reactant_only_maps=[3] oracle.\\nThis is an exact shared-tool experiment. Deliver EXACTLY two files: SKILL.md and scripts/audit_atom_maps.py. Preserve the original script byte-for-byte. Put provenance, scope, examples and limitations inline in SKILL.md; do not add reference, example, data, test or helper files to the package. Express generated checks as self-contained argv programs with inline input fixtures written under {run}, using the unchanged delivered script. Preserve all business checks and actual file-output assertions; no lost coverage. The source tree remains available for provenance. The independent reviewer must inspect this current package and source, not adopt any historical approval. Never claim scientific correctness or a shared-tool hit before execution proves it.\", \"Additional current runtime requirement\"]}]}",
+              "repair_lane": "environment",
+              "blocker_kind": "unresolved_input"
+            }
+          ],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "miss",
+            "selection": "explicit",
+            "reference": {
+              "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+              "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+            },
+            "request_key": "aeefce89e6d8ccb99a785b8f45c2eeaaefd41843cf30e82264d26c8d1ce38def",
+            "reason": "selected_request_mismatch",
+            "mismatches": [
+              {
+                "field": "requirements",
+                "expected": [
+                  "Discover and package one executable Skill using the supplied reaction atom-map audit Skill as source material. Preserve scripts/audit_atom_maps.py byte-for-byte as the delivered entry. Preserve --reaction and --input with optional --output, JSONL fields, exit 2 on any failed row, and mixed-batch continuation. Require complete bound Docker business acceptance using source-grounded packaged tests: a valid mapped reaction, permitted reactant-only leaving-group maps, duplicate maps, missing maps, unexpected product maps and malformed reaction syntax. Verify meaningful returned map identities and diagnostics, not just process completion. Include a valid file batch and a mixed valid/invalid file batch persisted through the delivered --output flag, retaining all rows and asserting the rejected row after container exit. Old credibility/test claims are source context, not current execution evidence. Do not weaken source behavior, modify the business entry, or delete a failing check. Do not install dependencies or execute business code on the host; chemistry execution is permitted only inside Docker. Do not claim reaction feasibility or chemical mapping correctness. Include the original test_valid_and_reactant_only_maps fixture and its source-declared reactant_only_maps=[3] oracle.\nThis is an exact shared-tool experiment. Deliver EXACTLY two files: SKILL.md and scripts/audit_atom_maps.py. Preserve the original script byte-for-byte. Put provenance, scope, examples and limitations inline in SKILL.md; do not add reference, example, data, test or helper files to the package. Express generated checks as self-contained argv programs with inline input fixtures written under {run}, using the unchanged delivered script. Preserve all business checks and actual file-output assertions; no lost coverage. The source tree remains available for provenance. The independent reviewer must inspect this current package and source, not adopt any historical approval. Never claim scientific correctness or a shared-tool hit before execution proves it."
+                ],
+                "actual": [
+                  "Discover and package one executable Skill using the supplied reaction atom-map audit Skill as source material. Preserve scripts/audit_atom_maps.py byte-for-byte as the delivered entry. Preserve --reaction and --input with optional --output, JSONL fields, exit 2 on any failed row, and mixed-batch continuation. Require complete bound Docker business acceptance using source-grounded packaged tests: a valid mapped reaction, permitted reactant-only leaving-group maps, duplicate maps, missing maps, unexpected product maps and malformed reaction syntax. Verify meaningful returned map identities and diagnostics, not just process completion. Include a valid file batch and a mixed valid/invalid file batch persisted through the delivered --output flag, retaining all rows and asserting the rejected row after container exit. Old credibility/test claims are source context, not current execution evidence. Do not weaken source behavior, modify the business entry, or delete a failing check. Do not install dependencies or execute business code on the host; chemistry execution is permitted only inside Docker. Do not claim reaction feasibility or chemical mapping correctness. Include the original test_valid_and_reactant_only_maps fixture and its source-declared reactant_only_maps=[3] oracle.\nThis is an exact shared-tool experiment. Deliver EXACTLY two files: SKILL.md and scripts/audit_atom_maps.py. Preserve the original script byte-for-byte. Put provenance, scope, examples and limitations inline in SKILL.md; do not add reference, example, data, test or helper files to the package. Express generated checks as self-contained argv programs with inline input fixtures written under {run}, using the unchanged delivered script. Preserve all business checks and actual file-output assertions; no lost coverage. The source tree remains available for provenance. The independent reviewer must inspect this current package and source, not adopt any historical approval. Never claim scientific correctness or a shared-tool hit before execution proves it.",
+                  "Additional current runtime requirement"
+                ]
+              }
+            ]
+          }
+        },
+        "accepted": false
+      },
+      {
+        "skill": "a",
+        "failure": "conflicting_plan",
+        "preparation": {
+          "status": "runtime_blocked",
+          "gaps": [
+            {
+              "code": "selected_tool_plan_mismatch",
+              "detail": "{\"status\": \"miss\", \"selection\": \"explicit\", \"reference\": {\"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"artifact_id\": \"a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be\"}, \"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"reason\": \"supplied_environment_plan_mismatch\", \"artifact_id\": \"a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be\", \"mismatched_objects\": [\"environment\"]}",
+              "repair_lane": "environment",
+              "blocker_kind": "unresolved_input"
+            }
+          ],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "miss",
+            "selection": "explicit",
+            "reference": {
+              "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+              "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+            },
+            "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+            "reason": "supplied_environment_plan_mismatch",
+            "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+            "mismatched_objects": [
+              "environment"
+            ]
+          }
+        },
+        "accepted": false
+      },
+      {
+        "skill": "a",
+        "failure": "corrupt_record",
+        "preparation": {
+          "status": "runtime_blocked",
+          "gaps": [
+            {
+              "code": "selected_tool_unavailable",
+              "detail": "{\"status\": \"miss\", \"selection\": \"explicit\", \"reference\": {\"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"artifact_id\": \"a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be\"}, \"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"reason\": \"invalid_selected_record\", \"path\": \"E:\\\\Users\\\\27343\\\\Docker\\\\selected-tool-real-20261101-01\\\\a-corrupt-registry\\\\77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b-a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be.json\", \"detail\": \"Expecting property name enclosed in double quotes: line 1 column 2 (char 1)\"}",
+              "repair_lane": "environment",
+              "blocker_kind": "unresolved_input"
+            }
+          ],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "miss",
+            "selection": "explicit",
+            "reference": {
+              "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+              "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+            },
+            "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+            "reason": "invalid_selected_record",
+            "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-corrupt-registry\\77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b-a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be.json",
+            "detail": "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+          }
+        },
+        "accepted": false
+      },
+      {
+        "skill": "b",
+        "failure": "missing_version",
+        "preparation": {
+          "status": "runtime_blocked",
+          "gaps": [
+            {
+              "code": "selected_tool_unavailable",
+              "detail": "{\"status\": \"miss\", \"selection\": \"explicit\", \"reference\": {\"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"artifact_id\": \"0000000000000000000000000000000000000000000000000000000000000000\"}, \"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"reason\": \"selected_artifact_not_found\", \"path\": \"E:\\\\Users\\\\27343\\\\Docker\\\\acceptance-only-e2e-20261101-01\\\\shared-tools\\\\77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b-0000000000000000000000000000000000000000000000000000000000000000.json\"}",
+              "repair_lane": "environment",
+              "blocker_kind": "unresolved_input"
+            }
+          ],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "miss",
+            "selection": "explicit",
+            "reference": {
+              "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+              "artifact_id": "0000000000000000000000000000000000000000000000000000000000000000"
+            },
+            "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+            "reason": "selected_artifact_not_found",
+            "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\shared-tools\\77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b-0000000000000000000000000000000000000000000000000000000000000000.json"
+          }
+        },
+        "accepted": false
+      },
+      {
+        "skill": "b",
+        "failure": "changed_requirement",
+        "preparation": {
+          "status": "runtime_blocked",
+          "gaps": [
+            {
+              "code": "selected_tool_unavailable",
+              "detail": "{\"status\": \"miss\", \"selection\": \"explicit\", \"reference\": {\"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"artifact_id\": \"a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be\"}, \"request_key\": \"aeefce89e6d8ccb99a785b8f45c2eeaaefd41843cf30e82264d26c8d1ce38def\", \"reason\": \"selected_request_mismatch\", \"mismatches\": [{\"field\": \"requirements\", \"expected\": [\"Discover and package one executable Skill using the supplied reaction atom-map audit Skill as source material. Preserve scripts/audit_atom_maps.py byte-for-byte as the delivered entry. Preserve --reaction and --input with optional --output, JSONL fields, exit 2 on any failed row, and mixed-batch continuation. Require complete bound Docker business acceptance using source-grounded packaged tests: a valid mapped reaction, permitted reactant-only leaving-group maps, duplicate maps, missing maps, unexpected product maps and malformed reaction syntax. Verify meaningful returned map identities and diagnostics, not just process completion. Include a valid file batch and a mixed valid/invalid file batch persisted through the delivered --output flag, retaining all rows and asserting the rejected row after container exit. Old credibility/test claims are source context, not current execution evidence. Do not weaken source behavior, modify the business entry, or delete a failing check. Do not install dependencies or execute business code on the host; chemistry execution is permitted only inside Docker. Do not claim reaction feasibility or chemical mapping correctness. Include the original test_valid_and_reactant_only_maps fixture and its source-declared reactant_only_maps=[3] oracle.\\nThis is an exact shared-tool experiment. Deliver EXACTLY two files: SKILL.md and scripts/audit_atom_maps.py. Preserve the original script byte-for-byte. Put provenance, scope, examples and limitations inline in SKILL.md; do not add reference, example, data, test or helper files to the package. Express generated checks as self-contained argv programs with inline input fixtures written under {run}, using the unchanged delivered script. Preserve all business checks and actual file-output assertions; no lost coverage. The source tree remains available for provenance. The independent reviewer must inspect this current package and source, not adopt any historical approval. Never claim scientific correctness or a shared-tool hit before execution proves it.\"], \"actual\": [\"Discover and package one executable Skill using the supplied reaction atom-map audit Skill as source material. Preserve scripts/audit_atom_maps.py byte-for-byte as the delivered entry. Preserve --reaction and --input with optional --output, JSONL fields, exit 2 on any failed row, and mixed-batch continuation. Require complete bound Docker business acceptance using source-grounded packaged tests: a valid mapped reaction, permitted reactant-only leaving-group maps, duplicate maps, missing maps, unexpected product maps and malformed reaction syntax. Verify meaningful returned map identities and diagnostics, not just process completion. Include a valid file batch and a mixed valid/invalid file batch persisted through the delivered --output flag, retaining all rows and asserting the rejected row after container exit. Old credibility/test claims are source context, not current execution evidence. Do not weaken source behavior, modify the business entry, or delete a failing check. Do not install dependencies or execute business code on the host; chemistry execution is permitted only inside Docker. Do not claim reaction feasibility or chemical mapping correctness. Include the original test_valid_and_reactant_only_maps fixture and its source-declared reactant_only_maps=[3] oracle.\\nThis is an exact shared-tool experiment. Deliver EXACTLY two files: SKILL.md and scripts/audit_atom_maps.py. Preserve the original script byte-for-byte. Put provenance, scope, examples and limitations inline in SKILL.md; do not add reference, example, data, test or helper files to the package. Express generated checks as self-contained argv programs with inline input fixtures written under {run}, using the unchanged delivered script. Preserve all business checks and actual file-output assertions; no lost coverage. The source tree remains available for provenance. The independent reviewer must inspect this current package and source, not adopt any historical approval. Never claim scientific correctness or a shared-tool hit before execution proves it.\", \"Additional current runtime requirement\"]}]}",
+              "repair_lane": "environment",
+              "blocker_kind": "unresolved_input"
+            }
+          ],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "miss",
+            "selection": "explicit",
+            "reference": {
+              "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+              "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+            },
+            "request_key": "aeefce89e6d8ccb99a785b8f45c2eeaaefd41843cf30e82264d26c8d1ce38def",
+            "reason": "selected_request_mismatch",
+            "mismatches": [
+              {
+                "field": "requirements",
+                "expected": [
+                  "Discover and package one executable Skill using the supplied reaction atom-map audit Skill as source material. Preserve scripts/audit_atom_maps.py byte-for-byte as the delivered entry. Preserve --reaction and --input with optional --output, JSONL fields, exit 2 on any failed row, and mixed-batch continuation. Require complete bound Docker business acceptance using source-grounded packaged tests: a valid mapped reaction, permitted reactant-only leaving-group maps, duplicate maps, missing maps, unexpected product maps and malformed reaction syntax. Verify meaningful returned map identities and diagnostics, not just process completion. Include a valid file batch and a mixed valid/invalid file batch persisted through the delivered --output flag, retaining all rows and asserting the rejected row after container exit. Old credibility/test claims are source context, not current execution evidence. Do not weaken source behavior, modify the business entry, or delete a failing check. Do not install dependencies or execute business code on the host; chemistry execution is permitted only inside Docker. Do not claim reaction feasibility or chemical mapping correctness. Include the original test_valid_and_reactant_only_maps fixture and its source-declared reactant_only_maps=[3] oracle.\nThis is an exact shared-tool experiment. Deliver EXACTLY two files: SKILL.md and scripts/audit_atom_maps.py. Preserve the original script byte-for-byte. Put provenance, scope, examples and limitations inline in SKILL.md; do not add reference, example, data, test or helper files to the package. Express generated checks as self-contained argv programs with inline input fixtures written under {run}, using the unchanged delivered script. Preserve all business checks and actual file-output assertions; no lost coverage. The source tree remains available for provenance. The independent reviewer must inspect this current package and source, not adopt any historical approval. Never claim scientific correctness or a shared-tool hit before execution proves it."
+                ],
+                "actual": [
+                  "Discover and package one executable Skill using the supplied reaction atom-map audit Skill as source material. Preserve scripts/audit_atom_maps.py byte-for-byte as the delivered entry. Preserve --reaction and --input with optional --output, JSONL fields, exit 2 on any failed row, and mixed-batch continuation. Require complete bound Docker business acceptance using source-grounded packaged tests: a valid mapped reaction, permitted reactant-only leaving-group maps, duplicate maps, missing maps, unexpected product maps and malformed reaction syntax. Verify meaningful returned map identities and diagnostics, not just process completion. Include a valid file batch and a mixed valid/invalid file batch persisted through the delivered --output flag, retaining all rows and asserting the rejected row after container exit. Old credibility/test claims are source context, not current execution evidence. Do not weaken source behavior, modify the business entry, or delete a failing check. Do not install dependencies or execute business code on the host; chemistry execution is permitted only inside Docker. Do not claim reaction feasibility or chemical mapping correctness. Include the original test_valid_and_reactant_only_maps fixture and its source-declared reactant_only_maps=[3] oracle.\nThis is an exact shared-tool experiment. Deliver EXACTLY two files: SKILL.md and scripts/audit_atom_maps.py. Preserve the original script byte-for-byte. Put provenance, scope, examples and limitations inline in SKILL.md; do not add reference, example, data, test or helper files to the package. Express generated checks as self-contained argv programs with inline input fixtures written under {run}, using the unchanged delivered script. Preserve all business checks and actual file-output assertions; no lost coverage. The source tree remains available for provenance. The independent reviewer must inspect this current package and source, not adopt any historical approval. Never claim scientific correctness or a shared-tool hit before execution proves it.",
+                  "Additional current runtime requirement"
+                ]
+              }
+            ]
+          }
+        },
+        "accepted": false
+      },
+      {
+        "skill": "b",
+        "failure": "conflicting_plan",
+        "preparation": {
+          "status": "runtime_blocked",
+          "gaps": [
+            {
+              "code": "selected_tool_plan_mismatch",
+              "detail": "{\"status\": \"miss\", \"selection\": \"explicit\", \"reference\": {\"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"artifact_id\": \"a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be\"}, \"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"reason\": \"supplied_environment_plan_mismatch\", \"artifact_id\": \"a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be\", \"mismatched_objects\": [\"environment\"]}",
+              "repair_lane": "environment",
+              "blocker_kind": "unresolved_input"
+            }
+          ],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "miss",
+            "selection": "explicit",
+            "reference": {
+              "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+              "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+            },
+            "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+            "reason": "supplied_environment_plan_mismatch",
+            "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+            "mismatched_objects": [
+              "environment"
+            ]
+          }
+        },
+        "accepted": false
+      },
+      {
+        "skill": "b",
+        "failure": "corrupt_record",
+        "preparation": {
+          "status": "runtime_blocked",
+          "gaps": [
+            {
+              "code": "selected_tool_unavailable",
+              "detail": "{\"status\": \"miss\", \"selection\": \"explicit\", \"reference\": {\"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"artifact_id\": \"a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be\"}, \"request_key\": \"77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b\", \"reason\": \"invalid_selected_record\", \"path\": \"E:\\\\Users\\\\27343\\\\Docker\\\\selected-tool-real-20261101-01\\\\b-corrupt-registry\\\\77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b-a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be.json\", \"detail\": \"Expecting property name enclosed in double quotes: line 1 column 2 (char 1)\"}",
+              "repair_lane": "environment",
+              "blocker_kind": "unresolved_input"
+            }
+          ],
+          "model_calls": 0,
+          "shared_tool": {
+            "status": "miss",
+            "selection": "explicit",
+            "reference": {
+              "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+              "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+            },
+            "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+            "reason": "invalid_selected_record",
+            "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-corrupt-registry\\77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b-a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be.json",
+            "detail": "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+          }
+        },
+        "accepted": false
+      }
+    ],
+    "cases": 82,
+    "model_calls": 0,
+    "new_generation_batches": 0,
+    "build_calls": {
+      "environment": 0,
+      "tool": 0
+    },
+    "originals_unchanged_and_qualified": true,
+    "registry_unchanged": true
+  },
+  "regression": {
+    "total": 689,
+    "passed": 686,
+    "skipped": 3,
+    "failed": 0
+  },
+  "prompt_checks": {
+    "contract": "passed",
+    "acceptance": "passed",
+    "planner": "passed"
+  },
+  "historical_three_path_index": "validation/deepseek-api/shared-path-metrics-results-20261101.json",
+  "limitations": [
+    "Original-contract revalidation, not fresh model generation",
+    "One paired sample per Skill; warm existing caches; no speedup inference",
+    "Docker Engine layer/cache sizes, Desktop filesystem used bytes and host logical evidence bytes are separate measures",
+    "Same-host exact version only; no OCI distribution or fallback for missing selected version"
+  ],
+  "files": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\creation_pipeline\\models.py",
+      "sha256": "d922a6f4c220d7bc4ebfecfebc5d666df39ed983489047998f5a9ef4f8574dd0"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\creation_pipeline\\runtime\\preparation.py",
+      "sha256": "714bb15b09ae12f0a7ceab38a9ba827ef45da6bf3bff31cbe68954d5d813fe83"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\creation_pipeline\\runtime\\shared_tool.py",
+      "sha256": "08ab96f35cc2b5288d6e66c6005059a1314dc937868fdad64dbbe7de3b44920a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\tests\\pipeline\\test_shared_tool.py",
+      "sha256": "e7f9f65cafc38f5ea86c6cee31fbb9d6a4dcf9b534037d787380ec4b2f7d01a0"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\verify_selected_tool.py",
+      "sha256": "1acef93cfe48e3d376396b4acc4746867194b135638b0808ec211cb48125cd7f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-acceptance-prompt-20261101.log",
+      "sha256": "87342204c457e6e77a9521bd4a760aa9e85087a3c4d7f68d76f19ca6ac235a8e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-planner-20261101.log",
+      "sha256": "c400701f42ca57d4037e76dd0b5080d122233203d44cae6ac276e273b07ce119"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-preflight-20261101-01\\cli-inspection.json",
+      "sha256": "288887b7b278bda26a1db0238e1e63cd0b8a95400718a74665d8358bbc1f6269"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-preflight-20261101-01\\scope.json",
+      "sha256": "bd93186e517189b96e7a60867409e4e53455bfde06cfbf665d6f4916529ab6f9"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-prompt-contract-20261101.log",
+      "sha256": "1b5eb17960f1a12626790aa1da476351ece2490863ff568fa3ebb7d292c830c2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-automatic\\evidence\\frozen\\freeze.json",
+      "sha256": "c1eb3f1326eb989012429c6d7f93e7428bd76af2ca695ab656fe1e8e224a85cb"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-automatic\\evidence\\frozen\\record.json",
+      "sha256": "180192291caf5838abdb3a7dc5b0a25be2fe0245b6d5ad3c40e46520505bbca0"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-automatic\\record.json",
+      "sha256": "1767b49a06d954994f2b0b3910c1523bf2e63f3f4dbdc0b5a052bfbeb90acb78"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-automatic\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\ed9f9034cc4446e3b0fad87a08a2d5fd\\execution\\report.json",
+      "sha256": "eb0ffc7dbe66a83ae7834c9ff36c9fce0b64934fe9884ea1df4839f60327652a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-automatic\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\ed9f9034cc4446e3b0fad87a08a2d5fd\\receipt.json",
+      "sha256": "1449adba870f4d35b95315b6d5bb4f0c8534f359249e57657e806724526f280e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-selected\\evidence\\frozen\\freeze.json",
+      "sha256": "365ff008c61d46678a3458d09cc37aa09f94199fb3b75d1def04ce5c3a3f04ba"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-selected\\evidence\\frozen\\record.json",
+      "sha256": "74f354dd1d64b9177abd45591bc38778f3b35096bae6605e983bd5d135fb7b10"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-selected\\record.json",
+      "sha256": "503e51119056448c4e856d8de21d459d600b337031ed2667b9e7dda29b37caee"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-selected\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\c796e85a45d4416d974794fc3ca3feac\\execution\\report.json",
+      "sha256": "b751e9cb82144dc8432a3678d9b7969c385bfad0969dc31cce916c87c598855f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\a-selected\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\c796e85a45d4416d974794fc3ca3feac\\receipt.json",
+      "sha256": "dd0420dab5428b8dd9fd4c0915aa2e935e1528776a2e992c2b29cb7d86f17b4f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-automatic\\evidence\\frozen\\freeze.json",
+      "sha256": "d15cd7f462bb14e666779cf6d68baa1f67fbbb87b985b36945fe3053f6eb816c"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-automatic\\evidence\\frozen\\record.json",
+      "sha256": "9fde789c60cd33fb2834175ffc6eaac75a532c4455f150f73d1d151a587e3e2f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-automatic\\record.json",
+      "sha256": "4457471f68dea66e5143b0d73eb7dfd491a64fd42f2adbd9c38c680ee8b933e2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-automatic\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\86691fc137cb453a947e8245d8703afa\\execution\\report.json",
+      "sha256": "a1d44265156c1c0af861c8af85c58b86149e4b2dc0b1d38b030f497bb4afc670"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-automatic\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\86691fc137cb453a947e8245d8703afa\\receipt.json",
+      "sha256": "7bc76bbc300cc6c78cad95aaac2d70e2e157f613febcbbacb3a05b3e7d245a0b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-selected\\evidence\\frozen\\freeze.json",
+      "sha256": "5031ca3e56ec76536a91096136e08d57c0f15860c21c210477a68d8a58df791e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-selected\\evidence\\frozen\\record.json",
+      "sha256": "f8b2124c289dda1e1d71be68491930a43cbae4d17111fcc0261ef9dd34063374"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-selected\\record.json",
+      "sha256": "24f0ecec00367bca8146f81ac14d19276be6f6d277f04b2444648532194377b5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-selected\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\1276796a887142bf80a228ddc52b1489\\execution\\report.json",
+      "sha256": "9f9a77d1302b41414182b07b08626b788724e7f9aef63e39fe56815150817c83"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\b-selected\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\1276796a887142bf80a228ddc52b1489\\receipt.json",
+      "sha256": "901d84b3eab5a9c66e15fb6c37ef900148c4b80292724d21b8e5d84ce62364c5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\host.json",
+      "sha256": "8ed78b6bc060cf415e9fc18f9c7135b078e8c18d7409198d444e97522070e148"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\negatives.json",
+      "sha256": "c52c11dc9d41ac11ac6a747fb3e5dfbd12b042849cfe872696ab03e13f67ab67"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\observations.json",
+      "sha256": "6d630a15f36c9b0d34408f6ffa1f9c0d12c5b0300d61ec5585562e5e8679a938"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\result.json",
+      "sha256": "d3a6bbc225cf7ada27509a4d8a67894cba83ac1519f2a01ede3d59e1d19dc66b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\scope.json",
+      "sha256": "bd93186e517189b96e7a60867409e4e53455bfde06cfbf665d6f4916529ab6f9"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-a-automatic\\engine-df.json",
+      "sha256": "7c629962974517bc56d6eb1ff32f018045528d7a909debdff95c453c65660380"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-a-automatic\\filesystem.json",
+      "sha256": "c4197c50d027773ab42d2991dcc7fb5dd094159791c0f88137c621bce074173a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-a-automatic\\summary.json",
+      "sha256": "4b8d4468e78f80cf5cf52d4a491c97aaee34932595ed8022d91f5bfb16edda30"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-a-selected\\engine-df.json",
+      "sha256": "4a9f35793b4bd1a6059fd39c1ae5c7288c41b738fefa3e0d4e6402c4ac8f19e1"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-a-selected\\filesystem.json",
+      "sha256": "c4197c50d027773ab42d2991dcc7fb5dd094159791c0f88137c621bce074173a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-a-selected\\summary.json",
+      "sha256": "51b45237f32e9231e44641060078fc8facdcbb0563b71e845bed5d33ee0cffc4"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-b-automatic\\engine-df.json",
+      "sha256": "21c3332ef7de0406636595f54414258a87783e9f34e0b51d082f6270150660ea"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-b-automatic\\filesystem.json",
+      "sha256": "c4197c50d027773ab42d2991dcc7fb5dd094159791c0f88137c621bce074173a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-b-automatic\\summary.json",
+      "sha256": "d970ce69f0c0728f09c948a3687130b02756988de45bf798796ecca269178689"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-b-selected\\engine-df.json",
+      "sha256": "a047a6dbd960d2fd11cd68ec5fb6930623d9caf1fb7f08c997d077f48516a024"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-b-selected\\filesystem.json",
+      "sha256": "c4197c50d027773ab42d2991dcc7fb5dd094159791c0f88137c621bce074173a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-after-b-selected\\summary.json",
+      "sha256": "609c7fbb4bceb5c0a5a1678a20b33bff6f9c0700ec1ebdba576657ea500aa1de"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-before\\engine-df.json",
+      "sha256": "1f3d6eb59542facb9112214339a05f89dc708ca43c212342858dc63e908c49b3"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-before\\filesystem.json",
+      "sha256": "c4197c50d027773ab42d2991dcc7fb5dd094159791c0f88137c621bce074173a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-real-20261101-01\\storage-before\\summary.json",
+      "sha256": "9fc41d73b9227af4804d72942bc7082e1c2f1e4c1351171b96e13d7c70b298ef"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\selected-tool-regression-final-20261101.log",
+      "sha256": "575ca9ca70a8787f594b53ad608ddbc694e5fb1e5d289e0d6bb21b1f704f5784"
+    }
+  ]
+}

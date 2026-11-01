@@ -22,11 +22,16 @@ class RuntimeBlocked(ValueError):
 def validate_spec(spec):
     if not isinstance(spec, dict) or set(spec) - {'binding', 'plan', 'options', 'resource_refs', 'constraints',
                                                   'requirements', 'locked_cases', 'previous_plan', 'feedback',
-                                                  'native_model', 'shared_tool', 'acceptance_plan'}:
+                                                  'native_model', 'shared_tool', 'acceptance_plan', 'tool_artifact'}:
         raise ValueError('Unsupported runtime preparation settings')
-    for key in ('binding', 'plan', 'options', 'resource_refs', 'native_model', 'shared_tool', 'acceptance_plan'):
+    for key in ('binding', 'plan', 'options', 'resource_refs', 'native_model', 'shared_tool', 'acceptance_plan', 'tool_artifact'):
         if key in spec and not isinstance(spec[key], dict):
             raise ValueError('runtime.' + key + ' must be an object')
+    if 'tool_artifact' in spec:
+        from .shared_tool import validate_reference
+        validate_reference(spec['tool_artifact'])
+        if 'shared_tool' not in spec:
+            raise ValueError('runtime.tool_artifact requires independent shared_tool closure/interface/requirements declaration')
     if not isinstance(spec.get('constraints', []), list) or any(not isinstance(s, str) for s in spec.get('constraints', [])):
         raise ValueError('Runtime constraints must be text items')
     if not isinstance(spec.get('requirements', []), list) or any(not isinstance(s, str) for s in spec.get('requirements', [])):
@@ -476,14 +481,22 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
             except ValueError as exc:
                 result['shared_tool'] = {'status': 'miss', 'reason': 'incomplete_or_unsupported_request', 'detail': redact(str(exc))}
                 raise RuntimeBlocked('shared_tool_request_unresolved', str(exc)) from exc
-            tool_artifact, observation = shared_tool.resolve(tool_request, host, process)
+            if 'tool_artifact' in spec:
+                tool_artifact, observation = shared_tool.select(tool_request, spec['tool_artifact'], host, process)
+            else:
+                tool_artifact, observation = shared_tool.resolve(tool_request, host, process)
+            result['shared_tool'] = observation
+            if 'tool_artifact' in spec and tool_artifact is None:
+                raise RuntimeBlocked('selected_tool_unavailable', json.dumps(observation, ensure_ascii=False))
             if tool_artifact and p is not None and shared_tool.environment_plan(p) != tool_artifact['plan']:
-                observation = {'status': 'miss', 'reason': 'supplied_environment_plan_mismatch',
-                               'artifact_id': tool_artifact['artifact_id'],
-                               'mismatched_objects': [k for k in sorted(set(p) | set(tool_artifact['plan']))
-                                                      if k not in shared_tool.ACCEPTANCE and p.get(k) != tool_artifact['plan'].get(k)]}
+                observation = dict(observation, status='miss', reason='supplied_environment_plan_mismatch',
+                                   artifact_id=tool_artifact['artifact_id'],
+                                   mismatched_objects=[k for k in sorted(set(p) | set(tool_artifact['plan']))
+                                                       if k not in shared_tool.ACCEPTANCE and p.get(k) != tool_artifact['plan'].get(k)])
                 tool_artifact = None
             result['shared_tool'] = observation
+            if 'tool_artifact' in spec and tool_artifact is None:
+                raise RuntimeBlocked('selected_tool_plan_mismatch', json.dumps(observation, ensure_ascii=False))
             result['environment_planning_calls'] = 0
             result['acceptance_planning_calls'] = 0
             if tool_artifact:
@@ -578,6 +591,8 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
         if tool_request:
             environment['shared_tool'] = {'abi': shared_tool.ABI, 'request': tool_request,
                                           'request_key': fingerprint(tool_request), 'artifact': tool_artifact}
+            if 'tool_artifact' in spec:
+                environment['shared_tool']['selection'] = copy.deepcopy(spec['tool_artifact'])
         rebind(record, binding, environment,
                {"cases": cases, "policy": json.loads(p["acceptance_json"]), "author_tests": author_tests,
                 "input_anchors": anchors})

@@ -237,6 +237,106 @@ class SharedToolTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'schema'):
                 st.validate_record(value)
 
+    def test_explicit_reference_selects_only_named_version(self):
+        request = self.request(); artifact = self.artifact(request); root = self.publish(artifact)
+        other = copy.deepcopy(artifact); other['image_id'] = 'sha256:' + 'b'*64
+        other['artifact_id'] = fingerprint({k:v for k,v in other.items() if k!='artifact_id'})
+        self.publish(other)
+        reference = {k:artifact[k] for k in ('request_key','artifact_id')}
+        with patch.object(st,'resolve',side_effect=AssertionError('Do not select another candidate')):
+            resolved, obs = st.select(request,reference,{'engine_id':'daemon'},self.probe(artifact),root)
+        self.assertEqual(resolved,artifact); self.assertEqual(obs['selection'],'explicit')
+        reference['artifact_id']='0'*64
+        resolved,obs=st.select(request,reference,{'engine_id':'daemon'},lambda *a:self.fail('No image to inspect'),root)
+        self.assertIsNone(resolved);self.assertEqual(obs['reason'],'selected_artifact_not_found')
+
+    def test_explicit_reference_cannot_trust_renamed_other_record(self):
+        request=self.request();artifact=self.artifact(request);root=self.publish(artifact)
+        reference={'request_key':artifact['request_key'],'artifact_id':'0'*64}
+        write_json(root/(reference['request_key']+'-'+reference['artifact_id']+'.json'),artifact)
+        self.assertEqual(st.select(request,reference,{'engine_id':'daemon'},self.probe(artifact),root)[1]['reason'],
+                         'invalid_selected_record')
+
+    def test_explicit_reference_reports_changed_file_and_current_daemon(self):
+        request=self.request();artifact=self.artifact(request);root=self.publish(artifact)
+        reference={k:artifact[k] for k in ('request_key','artifact_id')}
+        changed=copy.deepcopy(request);changed['files'][0]['sha256']='0'*64
+        _,obs=st.select(changed,reference,{'engine_id':'daemon'},self.probe(artifact),root)
+        self.assertEqual(obs['reason'],'selected_request_mismatch')
+        self.assertEqual(obs['mismatches'][0]['field'],'files.'+request['files'][0]['path'])
+        self.assertNotEqual(obs['mismatches'][0]['expected'],obs['mismatches'][0]['actual'])
+        self.assertEqual(st.select(request,reference,{'engine_id':'other'},self.probe(artifact),root)[1]['reason'],'different_daemon')
+        self.assertEqual(st.select(request,reference,{'engine_id':'daemon'},lambda *a:{'exit_code':1,'stdout':''},root)[1]['reason'],
+                         'image_unavailable_or_changed')
+
+    def test_selected_missing_version_blocks_before_any_planning_or_base_resolution(self):
+        artifact=self.artifact(self.request());root=self.publish(artifact)
+        with patch.dict('os.environ',{'CHEM_AGENT_SHARED_TOOLS':str(root)}), \
+             patch.object(LocalExecutor,'host',return_value=dict(HOST,engine_id='daemon')), \
+             patch('creation_pipeline.runtime.planner.plan',side_effect=AssertionError('No planning fallback')), \
+             patch.object(LocalExecutor,'resolve_base_image',side_effect=AssertionError('No build fallback')):
+            prepare(self.record,self.package,self.sources,self.root/'prepare',
+                    {'shared_tool':declaration(),'tool_artifact':{'request_key':artifact['request_key'],'artifact_id':'0'*64}},LocalExecutor())
+        self.assertEqual(self.record['runtime_preparation']['status'],'runtime_blocked')
+        self.assertEqual(self.record['runtime_preparation']['model_calls'],0)
+        self.assertEqual(self.record['runtime_preparation']['gaps'][0]['code'],'selected_tool_unavailable')
+
+    def test_selected_version_still_generates_current_acceptance_and_freezes_selection(self):
+        artifact=self.artifact(self.request());root=self.publish(artifact)
+        reference={k:artifact[k] for k in ('request_key','artifact_id')}
+        answer={'action':'plan','reason':'current checks','requested_files':[],
+                'plan':{k:copy.deepcopy(plan()[k]) for k in st.ACCEPTANCE}}
+        with patch.dict('os.environ',{'CHEM_AGENT_SHARED_TOOLS':str(root)}), \
+             patch.object(LocalExecutor,'host',return_value=dict(HOST,engine_id='daemon')), \
+             patch('creation_pipeline.runtime.local.process',self.probe(artifact)), \
+             patch('creation_pipeline.runtime.model_call.call',return_value=(answer,{})) as model, \
+             patch.object(LocalExecutor,'resolve_base_image',side_effect=AssertionError('No environment plan')):
+            materials=prepare(self.record,self.package,self.sources,self.root/'prepare',
+                {'shared_tool':declaration(),'tool_artifact':reference},LocalExecutor())
+        self.assertEqual(self.record['runtime_preparation']['status'],'prepared',self.record['runtime_preparation'])
+        self.assertEqual(model.call_count,1)
+        self.assertEqual(self.record['runtime_preparation']['environment_planning_calls'],0)
+        env=self.record['delivery']['inputs']['environment']['payload']
+        self.assertEqual(env['shared_tool']['selection'],reference)
+        self.assertFalse(self.record['delivery']['qualification']['accepted'])
+        changed=copy.deepcopy(env);changed['shared_tool']['selection']['artifact_id']='0'*64
+        with self.assertRaisesRegex(ValueError,'explicitly selected version'):
+            st.verify_binding(changed,materials)
+
+    def test_reference_requires_independent_declaration_and_disallows_paths(self):
+        from creation_pipeline.runtime.preparation import validate_spec
+        reference={'request_key':'a'*64,'artifact_id':'b'*64}
+        with self.assertRaisesRegex(ValueError,'independent shared_tool'):
+            validate_spec({'tool_artifact':reference})
+        for value in ({'path':'/tmp/record.json'},dict(reference,artifact_id='../x'),dict(reference,artifact_id='A'*64)):
+            with self.assertRaisesRegex(ValueError,'shared_tool.reference'):
+                st.validate_reference(value)
+        validate_spec({'tool_artifact':reference,'shared_tool':declaration()})
+
+    def test_selected_plan_mismatch_blocks_instead_of_building_replacement(self):
+        artifact=self.artifact(self.request());root=self.publish(artifact)
+        p=plan();p['environment']=[{'name':'DIFFERENT','value':'required'}]
+        with patch.dict('os.environ',{'CHEM_AGENT_SHARED_TOOLS':str(root)}), \
+             patch.object(LocalExecutor,'host',return_value=dict(HOST,engine_id='daemon')), \
+             patch('creation_pipeline.runtime.local.process',self.probe(artifact)), \
+             patch('creation_pipeline.runtime.planner.plan',side_effect=AssertionError('No alternate plan')), \
+             patch.object(LocalExecutor,'resolve_base_image',side_effect=AssertionError('No rebuild')):
+            prepare(self.record,self.package,self.sources,self.root/'prepare',
+                {'shared_tool':declaration(),'tool_artifact':{k:artifact[k] for k in ('request_key','artifact_id')},'plan':p},LocalExecutor())
+        self.assertEqual(self.record['runtime_preparation']['gaps'][0]['code'],'selected_tool_plan_mismatch')
+        self.assertFalse(self.record['delivery']['qualification']['accepted'])
+
+    def test_candidate_selection_can_use_independent_declaration_from_defaults(self):
+        from creation_pipeline.models import load_config
+        from creation_pipeline.pipeline import runtime_spec_for
+        reference={'request_key':'a'*64,'artifact_id':'b'*64}
+        path=self.root/'config.json'
+        write_json(path,{'sources':[{'id':'tool','path':self.sources[0]['path']}],
+                         'runtime_defaults':{'shared_tool':declaration()},'runtime':{'probe':{'tool_artifact':reference}}})
+        config=load_config(path);spec=runtime_spec_for(config,'probe')
+        self.assertEqual(spec['tool_artifact'],reference)
+        self.assertEqual(spec['shared_tool'],declaration())
+
 
 if __name__ == '__main__':
     unittest.main()

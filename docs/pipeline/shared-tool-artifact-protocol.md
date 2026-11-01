@@ -6,6 +6,11 @@
 **当前 Skill 的验收专用模型阶段**，不读取旧工具的用例或通过标记。
 显式 `acceptance_plan` 仍可作为调用方覆盖，但不再是命中的必需条件。
 
+支持通过 `tool_artifact: {request_key, artifact_id}` 直接选择已有具体版本；仍须提供独立的
+`shared_tool` 声明及当前要求。指定版本不存在、损坏、不兼容或当前不可用时阻止，不自动替换
+或构建。未指定引用时仍自动解析。inspect 会返回 reference，准备后将 selection 与完整制品
+记录一起冻结；运行时再次核对。用法与实测见 [直接版本选择](../integration/shared-tool-explicit-version-20261101.md)。
+
 ## 四类对象与状态
 
 | 对象 | 身份与持久化 | 不代表什么 |

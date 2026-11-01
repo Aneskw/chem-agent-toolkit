@@ -136,6 +136,50 @@ def read_record(path, request=None):
     return validate_record(read_json(path), request)
 
 
+def validate_reference(reference):
+    if (not isinstance(reference, dict) or set(reference) != {'request_key', 'artifact_id'}
+            or any(not isinstance(v, str) or not re.fullmatch(r'[0-9a-f]{64}', v) for v in reference.values())):
+        raise ValueError('shared_tool.reference: require lowercase SHA256 request_key and artifact_id; paths/tags are unsupported')
+    return reference
+
+
+def select(request, reference, host, process, root=None):
+    """Resolve only the explicitly selected version, without searching or fallback."""
+    validate_reference(reference)
+    root = Path(root) if root is not None else registry_root()
+    observation = {'status': 'miss', 'selection': 'explicit', 'reference': copy.deepcopy(reference),
+                   'request_key': fingerprint(request)}
+    if has_link(root):
+        return None, dict(observation, reason='linked_registry')
+    path = root / (reference['request_key'] + '-' + reference['artifact_id'] + '.json')
+    try:
+        record = read_record(path)
+        if any(record[k] != reference[k] for k in reference):
+            raise ValueError('shared_tool.reference: stored version differs from selected filename identity')
+    except FileNotFoundError:
+        return None, dict(observation, reason='selected_artifact_not_found', path=str(path))
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        return None, dict(observation, reason='invalid_selected_record', path=str(path), detail=str(exc))
+    if record['request'] != request:
+        expected = record['request']
+        mismatches = []
+        for key in sorted(set(expected) | set(request)):
+            if expected.get(key) != request.get(key):
+                if key == 'files':
+                    old = {f['path']: f for f in expected[key]}
+                    new = {f['path']: f for f in request[key]}
+                    mismatches += [{'field': 'files.' + p, 'expected': old.get(p), 'actual': new.get(p)}
+                                   for p in sorted(set(old) | set(new)) if old.get(p) != new.get(p)]
+                else:
+                    mismatches.append({'field': key, 'expected': expected.get(key), 'actual': request.get(key)})
+        return None, dict(observation, reason='selected_request_mismatch', mismatches=mismatches)
+    reason = available(record, host, process)
+    if reason != 'available':
+        return None, dict(observation, reason=reason, artifact_id=record['artifact_id'])
+    return record, dict(observation, status='hit', reason='selected_exact_version_and_current_image',
+                        artifact_id=record['artifact_id'])
+
+
 def validate_record(record, request=None):
     expected = {'abi', 'request', 'request_key', 'recipe_key', 'plan', 'base_image', 'environment',
                 'image_id', 'daemon_id', 'artifact_id'}
@@ -293,6 +337,10 @@ def verify_binding(env, materials):
         if file_digest(path) != item['sha256'] or path.stat().st_mode & 0o777 != item['mode']:
             raise ValueError('shared_tool.closure: frozen content/mode changed at ' + item['path'])
     concrete = binding.get('artifact')
+    if 'selection' in binding:
+        reference = validate_reference(binding['selection'])
+        if not concrete or any(concrete.get(k) != reference[k] for k in reference):
+            raise ValueError('shared_tool.selection: frozen artifact differs from explicitly selected version')
     if concrete:
         validate_record(concrete, request)
         # Validate the embedded record without trusting a mutable registry pointer.
@@ -433,7 +481,10 @@ def inspect(root=None, host=None, process=None):
         try:
             record = read_record(path)
             status = available(record, host, process) if process else 'historical_unverified'
-            result.append({'path': str(path), 'artifact_id': record['artifact_id'], 'status': status})
+            result.append({'path': str(path), 'artifact_id': record['artifact_id'], 'status': status,
+                           'reference': {k: record[k] for k in ('request_key', 'artifact_id')},
+                           'recipe_key': record['recipe_key'], 'image_id': record['image_id'],
+                           'daemon_id': record['daemon_id'], 'platform': record['request']['declaration']['platform']})
         except (OSError, ValueError, KeyError, TypeError) as exc:
             result.append({'path': str(path), 'status': 'invalid_record', 'detail': str(exc)})
     return sanitized({'abi': ABI, 'registry': str(root), 'artifacts': result,
