@@ -1,0 +1,671 @@
+{
+  "date": "2026-11-01",
+  "base_commit": "16e409d2c5cb6f3f56ed4e30c1497319c3037e71",
+  "regression": {
+    "total": 676,
+    "passed": 673,
+    "skipped": 3,
+    "failed": 0,
+    "errors": 0
+  },
+  "prompt_checks": "all three passed",
+  "backend_and_envelope_unchanged": true,
+  "manual_acceptance_plan": false,
+  "complete_generation_batches": 3,
+  "successful_generation_batches": 2,
+  "failed_generation_batches": 1,
+  "total_model_calls": 16,
+  "successful_pair_cases": 41,
+  "historical_72_not_recounted": true,
+  "readonly_requalification_not_new_execution": true,
+  "current_prompt_scope": {
+    "current_skill_supplied": true,
+    "old_acceptance_supplied": false,
+    "current_policy_verified": true
+  },
+  "observations": [
+    {
+      "label": "a",
+      "output": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9",
+      "qualified_now": true,
+      "reason": "Content review and current Docker business evidence passed",
+      "status": "ready",
+      "cases": 21,
+      "passed_cases": 21,
+      "failed_cases": [],
+      "model_calls": 6,
+      "phases": [
+        "discovery",
+        "author",
+        "review",
+        "runtime_planning",
+        "runtime_planning",
+        "runtime_planning"
+      ],
+      "independent_review_sessions": [
+        "01a195e8-75ee-7283-879d-e7ba81c57048"
+      ],
+      "author_sessions": [
+        "01a195e3-ba70-7323-929d-5d76583dfa64"
+      ],
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 3,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 3,
+        "acceptance_planning_calls": 3,
+        "model_calls_by_stage": {
+          "combined_environment_acceptance_planner": 3
+        }
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "elapsed_seconds": 739.445155,
+      "build_or_bind_seconds": 7.779238,
+      "case_wall_seconds": 17.956088800070575,
+      "skill_sha256": "4d79d678611f4580e824fa4b7770247cfa2efb44182983e91f413a86d20357d2",
+      "script_sha256": "173d514c863bd6a85803de258751bac4afc1804d27bd11f1c63c63204f2cb3b5",
+      "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+      "implementation_sha256": "7dcc1e347c8e399a0f289beccd613f8af0270736826da452e3eff008f132d0a3"
+    },
+    {
+      "label": "b",
+      "output": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce",
+      "qualified_now": true,
+      "reason": "Content review and current Docker business evidence passed",
+      "status": "ready",
+      "cases": 20,
+      "passed_cases": 20,
+      "failed_cases": [],
+      "model_calls": 5,
+      "phases": [
+        "discovery",
+        "author",
+        "review",
+        "runtime_acceptance_planning",
+        "runtime_acceptance_planning"
+      ],
+      "independent_review_sessions": [
+        "01a19602-ebf1-77b3-9d4f-6bfd764b6650"
+      ],
+      "author_sessions": [
+        "01a195fe-d146-7352-8bca-be6915a00775"
+      ],
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 2,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 2,
+        "model_calls_by_stage": {
+          "acceptance_only_planner": 2
+        }
+      },
+      "tool": {
+        "status": "hit",
+        "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "elapsed_seconds": 726.023224,
+      "build_or_bind_seconds": 2.902156,
+      "case_wall_seconds": 17.312222700042184,
+      "skill_sha256": "639af92a578bd7f3dc6573b56235a5162fafb376ef23521baf34f2c1b3d0adcc",
+      "script_sha256": "173d514c863bd6a85803de258751bac4afc1804d27bd11f1c63c63204f2cb3b5",
+      "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+      "implementation_sha256": "35f6b9c45de36f000b2f5558d1d5c108add817869044dbb03036e7fd36d3bcc7"
+    },
+    {
+      "label": "b_failed",
+      "output": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-02\\b\\state\\outputs\\20261101T150811-19499243",
+      "qualified_now": false,
+      "reason": "Execution has not passed or content approval was revoked",
+      "status": "failed",
+      "cases": 16,
+      "passed_cases": 15,
+      "failed_cases": [
+        {
+          "name": "environment_python_rdkit_available",
+          "status": "failed",
+          "exit_code": 127,
+          "stderr": "docker: Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: exec: \"python -c \\\"import sys, rdkit; print(f'{sys.version_info.major}.{sys.version_info.minor} rdkit_ok')\\\"\": executable file not found in $PATH\n\nRun 'docker run --help' for more information\n"
+        }
+      ],
+      "model_calls": 5,
+      "phases": [
+        "discovery",
+        "author",
+        "review",
+        "runtime_acceptance_planning",
+        "runtime_acceptance_planning"
+      ],
+      "independent_review_sessions": [
+        "01a195f3-ea97-74b3-87ae-61d43b4b42da"
+      ],
+      "author_sessions": [
+        "01a195ef-ee78-7901-8301-361013d82525"
+      ],
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 2,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 2,
+        "model_calls_by_stage": {
+          "acceptance_only_planner": 2
+        }
+      },
+      "tool": {
+        "status": "hit",
+        "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "elapsed_seconds": 675.599021,
+      "build_or_bind_seconds": 2.593994,
+      "case_wall_seconds": 13.620888999983435,
+      "skill_sha256": "1cb47727df6cb91eacc881ab7ae452c735b4bb3ef735183cef8d4d6d8eddfa86",
+      "script_sha256": "173d514c863bd6a85803de258751bac4afc1804d27bd11f1c63c63204f2cb3b5",
+      "acceptance_sha256": "3b80367bf12d5166d88de5897414f2d33d87ebca26b94d2869b7901a32c53ef5",
+      "implementation_sha256": "7dcc1e347c8e399a0f289beccd613f8af0270736826da452e3eff008f132d0a3"
+    }
+  ],
+  "successful_pair_full_model_receipts": [
+    {
+      "batch": "a",
+      "output": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9",
+      "name": "chem-reaction-atommap-audit",
+      "accepted": true,
+      "new_generation_in_this_directory": false,
+      "cases": 21,
+      "elapsed_seconds": 739.445155,
+      "command_and_audit_seconds_in_this_directory": 2.121417999995174,
+      "tool": {
+        "status": "built",
+        "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 3,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 3,
+        "acceptance_planning_calls": 3,
+        "model_calls_by_stage": {
+          "combined_environment_acceptance_planner": 3
+        }
+      },
+      "skill_sha256": "4d79d678611f4580e824fa4b7770247cfa2efb44182983e91f413a86d20357d2",
+      "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+      "model_calls": 6,
+      "phases": [
+        "discovery",
+        "author",
+        "review",
+        "runtime_planning",
+        "runtime_planning",
+        "runtime_planning"
+      ],
+      "model_receipts": [
+        {
+          "phase": "discovery",
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 70825,
+            "cached_input_tokens": 51200,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2347,
+            "reasoning_output_tokens": 122
+          },
+          "elapsed_seconds": 85.805
+        },
+        {
+          "phase": "author",
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 466153,
+            "cached_input_tokens": 408320,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 10072,
+            "reasoning_output_tokens": 1380
+          },
+          "elapsed_seconds": 224.097
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 323784,
+            "cached_input_tokens": 282496,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2329,
+            "reasoning_output_tokens": 169
+          },
+          "elapsed_seconds": 101.742
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 15321,
+            "completion_tokens": 21513,
+            "total_tokens": 36834,
+            "prompt_tokens_details": {
+              "cached_tokens": 1024
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 15693
+            },
+            "prompt_cache_hit_tokens": 1024,
+            "prompt_cache_miss_tokens": 14297
+          },
+          "elapsed_seconds": 237.934,
+          "request_count": 1
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 20086,
+            "completion_tokens": 1879,
+            "total_tokens": 21965,
+            "prompt_tokens_details": {
+              "cached_tokens": 1024
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 1475
+            },
+            "prompt_cache_hit_tokens": 1024,
+            "prompt_cache_miss_tokens": 19062
+          },
+          "elapsed_seconds": 24.622,
+          "request_count": 1
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 20224,
+            "completion_tokens": 1495,
+            "total_tokens": 21719,
+            "prompt_tokens_details": {
+              "cached_tokens": 8064
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 1342
+            },
+            "prompt_cache_hit_tokens": 8064,
+            "prompt_cache_miss_tokens": 12160
+          },
+          "elapsed_seconds": 21.683,
+          "request_count": 1
+        }
+      ]
+    },
+    {
+      "batch": "b",
+      "output": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce",
+      "name": "chem-reaction-atommap-audit",
+      "accepted": true,
+      "new_generation_in_this_directory": true,
+      "cases": 20,
+      "elapsed_seconds": 726.023224,
+      "command_and_audit_seconds_in_this_directory": 728.7499534999952,
+      "tool": {
+        "status": "hit",
+        "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 2,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 2,
+        "model_calls_by_stage": {
+          "acceptance_only_planner": 2
+        }
+      },
+      "skill_sha256": "639af92a578bd7f3dc6573b56235a5162fafb376ef23521baf34f2c1b3d0adcc",
+      "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+      "model_calls": 5,
+      "phases": [
+        "discovery",
+        "author",
+        "review",
+        "runtime_acceptance_planning",
+        "runtime_acceptance_planning"
+      ],
+      "model_receipts": [
+        {
+          "phase": "discovery",
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 73002,
+            "cached_input_tokens": 52608,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2916,
+            "reasoning_output_tokens": 99
+          },
+          "elapsed_seconds": 91.116
+        },
+        {
+          "phase": "author",
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 371428,
+            "cached_input_tokens": 312704,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 9431,
+            "reasoning_output_tokens": 688
+          },
+          "elapsed_seconds": 177.639
+        },
+        {
+          "phase": "review",
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 277349,
+            "cached_input_tokens": 235776,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2556,
+            "reasoning_output_tokens": 193
+          },
+          "elapsed_seconds": 93.723
+        },
+        {
+          "phase": "runtime_acceptance_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 16007,
+            "completion_tokens": 18477,
+            "total_tokens": 34484,
+            "prompt_tokens_details": {
+              "cached_tokens": 2304
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 14466
+            },
+            "prompt_cache_hit_tokens": 2304,
+            "prompt_cache_miss_tokens": 13703
+          },
+          "elapsed_seconds": 220.807,
+          "request_count": 1
+        },
+        {
+          "phase": "runtime_acceptance_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 19908,
+            "completion_tokens": 12191,
+            "total_tokens": 32099,
+            "prompt_tokens_details": {
+              "cached_tokens": 7296
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 7957
+            },
+            "prompt_cache_hit_tokens": 7296,
+            "prompt_cache_miss_tokens": 12612
+          },
+          "elapsed_seconds": 105.801,
+          "request_count": 1
+        }
+      ]
+    }
+  ],
+  "artifact": {
+    "artifact_id": "a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be",
+    "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+    "recipe_key": "783b8f4ed68097bd36f5ad3f4f3788447068c32066295e1344cf2237652988eb",
+    "image_id": "sha256:f807561ab0797e3271be241cc5c088aace95b3c84d43a107e4d63cf23163dd24",
+    "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6"
+  },
+  "limitations": [
+    "Local same-daemon exact artifact only; no OCI distribution",
+    "Warm Docker/BuildKit caches; build counts are not install-execution counts",
+    "Different generated workloads; timing is descriptive, not a causal speedup",
+    "No new storage delta measured; no summed virtual-image-size claim",
+    "A generated before acceptance-only probe guard fix; current code qualifies A unchanged"
+  ],
+  "evidence_files": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\evidence\\chem-reaction-atommap-audit\\7580d8df6f9447c39942adcb8ba573aa\\freeze.json",
+      "sha256": "fe0f55f42bc8ffc87a2545f222469ce75d22b5b8532e20bc1f1d2431c79240bc"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\evidence\\chem-reaction-atommap-audit\\7580d8df6f9447c39942adcb8ba573aa\\runtime\\planning\\0\\prompt-provenance-0.json",
+      "sha256": "61e214cdcf59a784ebdeb2fcc805a6269bae73f4319f1500f636d1fe5c4fe88d"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\evidence\\chem-reaction-atommap-audit\\7580d8df6f9447c39942adcb8ba573aa\\runtime\\planning\\0\\rejection.json",
+      "sha256": "76a4a7d67d0ac96d6d33d30f1b653d703824215b703b647cb3f61e3fba5a6072"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\evidence\\chem-reaction-atommap-audit\\7580d8df6f9447c39942adcb8ba573aa\\runtime\\planning\\1\\prompt-provenance-0.json",
+      "sha256": "21d285951b49e62638251f347f2c06166a4dca9f229b6404e852305b120ac808"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\evidence\\chem-reaction-atommap-audit\\7580d8df6f9447c39942adcb8ba573aa\\runtime\\planning\\1\\rejection.json",
+      "sha256": "100bf1dd8509cba93b3433476952c249c8ed9a570dba24df6166247ec6a88b51"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\evidence\\chem-reaction-atommap-audit\\7580d8df6f9447c39942adcb8ba573aa\\runtime\\planning\\2\\prompt-provenance-0.json",
+      "sha256": "43ef58962012e518978219986a00f5a02807cdb0d93db25483c959354266318c"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\records\\chem-reaction-atommap-audit.json",
+      "sha256": "a0188a67226bb65b8c83b11f2de794d1147a069326a95fd999918b973c2483c0"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\2966b07fa49d456d970348c2393cab9f\\execution\\report.json",
+      "sha256": "108ef59bc6a66e387888692a71a39dbe79a6bcc6f79e3fae006158e8ac2ac8d9"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\2966b07fa49d456d970348c2393cab9f\\receipt.json",
+      "sha256": "0fcb42a7702f269eba960bef17e6bddada4d4073e725bd8f3d5988644afe3739"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\summary.json",
+      "sha256": "a258ce6d8cf77e2ac0865017d09e05f8b45c1d7a2c1eb128a0c6b972588852b4"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\harness-diagnosis.json",
+      "sha256": "c072bbefd41c5cf4416097c20467a23ef5ce9efdd29c741e1789a19e2e2ce8b6"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\shared-tools\\77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b-a786f6af32abc11279b54c59e8bcff50beae9351eaf08127f583257e3c4eb6be.json",
+      "sha256": "9970e558dc47f394183b703e4fe3c92152f68956686f58b7f3a9649983354674"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-02\\b\\state\\outputs\\20261101T150811-19499243\\evidence\\reaction-atom-map-dataset-audit\\3db993167ab54d4aa892554c53f0402f\\freeze.json",
+      "sha256": "713012db4bc709308bf7fab972211fba786408921815f13daaa8d88060d9ad47"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-02\\b\\state\\outputs\\20261101T150811-19499243\\evidence\\reaction-atom-map-dataset-audit\\3db993167ab54d4aa892554c53f0402f\\runtime\\acceptance-planning\\0\\prompt-provenance-0.json",
+      "sha256": "ef16f17521aac3137ee0de7dafedf2a91171246a99edfcb14952939a8dba3ed3"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-02\\b\\state\\outputs\\20261101T150811-19499243\\evidence\\reaction-atom-map-dataset-audit\\3db993167ab54d4aa892554c53f0402f\\runtime\\acceptance-planning\\0\\rejection.json",
+      "sha256": "19317bec704f3b54620912e2057291ed3697d71bb3637f37e6a3ef672710184d"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-02\\b\\state\\outputs\\20261101T150811-19499243\\evidence\\reaction-atom-map-dataset-audit\\3db993167ab54d4aa892554c53f0402f\\runtime\\acceptance-planning\\1\\prompt-provenance-0.json",
+      "sha256": "fd69d2cfdcd53a233600fec54a42ea29a79500041cbeaf3b8f099ed39bb22b18"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-02\\b\\state\\outputs\\20261101T150811-19499243\\records\\reaction-atom-map-dataset-audit.json",
+      "sha256": "7d549a8fff676a331b17fb47c35089cf007456ab21e214dacae22b8020a4c80d"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-02\\b\\state\\outputs\\20261101T150811-19499243\\runtime\\candidate-829d8e8fd87f197cc3b905b81134531ed1e9ba2c70fea4a777c31dd7dc769619\\b197dcfc34c74a21b3ebb7dcd934d58d\\execution\\report.json",
+      "sha256": "7c1efa2cc79ba2d03efcb234f6d4d2ee86b8790ee97d303284729680c429d541"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-02\\b\\state\\outputs\\20261101T150811-19499243\\runtime\\candidate-829d8e8fd87f197cc3b905b81134531ed1e9ba2c70fea4a777c31dd7dc769619\\b197dcfc34c74a21b3ebb7dcd934d58d\\receipt.json",
+      "sha256": "19ea1894d41d660e8a975e0a1ec4daa3f8e50d550437391866bc5cec111e2140"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-02\\b\\state\\outputs\\20261101T150811-19499243\\summary.json",
+      "sha256": "7f068072e700db85ea304b0008acb6d0f1aefb6a5769c2106c046e0d29804403"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-02\\offline-diagnosis.json",
+      "sha256": "32698402efd7a8ac75b3704ad1ba5a56bd46017b2692f14ce238ce9232ef43e7"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-02\\post-failure-qualification.json",
+      "sha256": "0e8f16fd2d3556603f482b0b85ccb9408adb83c6314e7c8902c97137e3d24c89"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce\\evidence\\chem-reaction-atommap-audit\\4e46322a399545339401694fcb36e1ae\\freeze.json",
+      "sha256": "db84481b8ca30865cd839310effeaefcc330f58bbbd8c0eaf8e37d3b1c2360e3"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce\\evidence\\chem-reaction-atommap-audit\\4e46322a399545339401694fcb36e1ae\\runtime\\acceptance-planning\\0\\prompt-provenance-0.json",
+      "sha256": "819e6acfb09586a5228e7ca6b1e49477205a9e3b75ef8dc426e39771a51fb352"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce\\evidence\\chem-reaction-atommap-audit\\4e46322a399545339401694fcb36e1ae\\runtime\\acceptance-planning\\0\\rejection.json",
+      "sha256": "ee4e6e76131cae3e5cb200bae72c17a44c8bc3e239a9de8fabb0b24d35eb1c5f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce\\evidence\\chem-reaction-atommap-audit\\4e46322a399545339401694fcb36e1ae\\runtime\\acceptance-planning\\1\\prompt-provenance-0.json",
+      "sha256": "54ab59bea4797c4b1109610ea6d26c15393c624b66da90164e9727a012850fc3"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce\\records\\chem-reaction-atommap-audit.json",
+      "sha256": "9af95b836e285dd9f9bb4f89fb1b3731b3b34e785b667bbcdcc3cd312d9d9327"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\ece142de6b5443648017c33cb50706d3\\execution\\report.json",
+      "sha256": "768915eeeeb79c30d7ca2175a9b9a0fd8b012ab32f59757c7a815ae467cdec82"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\ece142de6b5443648017c33cb50706d3\\receipt.json",
+      "sha256": "3a6f6cd24702a91729cf79c74cbec72b7c7a682eb94499ea552dc993470ec49e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce\\summary.json",
+      "sha256": "1173376dda0d9b1bb07769997af50a11bbc4694711c86d41072e63ee1456a33a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\runs\\20261101T152426-6f8be1ce\\runtime-preparation\\chem-reaction-atommap-audit\\bebdaf67a6a0497bad4b4288a347c0a8\\materials\\acceptance-planning\\0\\prompt-0.txt",
+      "sha256": "18deae4b175e87cd5c7a33dc920549992133518ff1b996ff09261dce625104ab"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\result.json",
+      "sha256": "081596400f83bcfc9fcfd4f15b1b72d7f8489208737062f48f1b44d9879ce13f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\source-before.json",
+      "sha256": "388521f9eb14fcf69943e941ce245d3f91c7839c5fe71de918a2cdbaf019c19d"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-offline-final2-20261101.log",
+      "sha256": "c456940fd9ba5546c7985356a616d3080ef05633fd06a60d3cee6f2782ef3d0e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-planner-20261101-final.log",
+      "sha256": "c400701f42ca57d4037e76dd0b5080d122233203d44cae6ac276e273b07ce119"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-prompt-contract-20261101-final.log",
+      "sha256": "1b5eb17960f1a12626790aa1da476351ece2490863ff568fa3ebb7d292c830c2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-prompt-provenance-20261101-final.log",
+      "sha256": "87342204c457e6e77a9521bd4a760aa9e85087a3c4d7f68d76f19ca6ac235a8e"
+    }
+  ],
+  "code_files": [
+    {
+      "path": "creation_pipeline\\runtime\\planner.py",
+      "sha256": "89fae5df1278504a0848345e09dc3cda03d227ab3ef830262367d73276e6b2c2"
+    },
+    {
+      "path": "creation_pipeline\\runtime\\preparation.py",
+      "sha256": "61f3b64213d7743f228fefe1a2e7c933bd5bba22b2b93548cf9626ef16dbaaaf"
+    },
+    {
+      "path": "validation\\deepseek-api\\verify_acceptance_only_e2e.py",
+      "sha256": "8f35abc4d8ba91fe696f6deb848157de1c21a3a3c4200d83d45e076b2ee3d48a"
+    },
+    {
+      "path": "validation\\deepseek-api\\prompt-provenance.json",
+      "sha256": "40097faa5daec38109ffc2a3747e60902ae92aa805186ebf9cf726d82343f37e"
+    }
+  ]
+}

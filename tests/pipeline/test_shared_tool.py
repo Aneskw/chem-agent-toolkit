@@ -161,13 +161,19 @@ class SharedToolTests(unittest.TestCase):
 
     def test_hit_without_current_acceptance_does_not_inherit_tests(self):
         artifact = self.artifact(self.request()); root = self.publish(artifact)
+        answer = {'action': 'plan', 'reason': 'current fixture', 'requested_files': [],
+                  'plan': {k: copy.deepcopy(plan()[k]) for k in st.ACCEPTANCE}}
+        answer['plan']['tests'][1]['name'] = 'new-skill-current-case'
         with patch.dict('os.environ', {'CHEM_AGENT_SHARED_TOOLS': str(root)}), \
              patch.object(LocalExecutor, 'host', return_value=dict(HOST, engine_id='daemon')), \
              patch('creation_pipeline.runtime.local.process', self.probe(artifact)), \
-             patch('creation_pipeline.runtime.planner.plan', side_effect=AssertionError('No model')):
+             patch('creation_pipeline.runtime.model_call.call', return_value=(answer, {'status': 'completed'})) as model:
             prepare(self.record, self.package, self.sources, self.root / 'prepare', {'shared_tool': declaration()}, LocalExecutor())
-        self.assertEqual(self.record['runtime_preparation']['status'], 'runtime_blocked')
-        self.assertIn('current_acceptance_required', self.record['runtime_preparation']['gaps'][0]['detail'])
+        self.assertEqual(self.record['runtime_preparation']['status'], 'prepared', self.record['runtime_preparation'])
+        self.assertEqual(model.call_count, 1)
+        self.assertEqual(self.record['runtime_preparation']['environment_planning_calls'], 0)
+        self.assertEqual(self.record['runtime_preparation']['acceptance_planning_calls'], 1)
+        self.assertEqual(self.record['delivery']['inputs']['acceptance']['payload']['cases'][1]['name'], 'new-skill-current-case')
         self.assertFalse(self.record['delivery']['qualification']['accepted'])
 
     def failed_build(self, cancel=False):

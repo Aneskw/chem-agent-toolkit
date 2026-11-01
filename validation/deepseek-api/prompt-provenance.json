@@ -18,6 +18,19 @@
   "generated_by": "validation/deepseek-api/verify_acceptance_prompt.py freeze",
   "note": "These are the prompt/schema identities the current code produces. The formal acceptance batch builds the same bytes at call time and records them per planning round as <audit>/prompt-provenance-<n>.json; the small frozen fixture under frozen/ is a separate offline diagnostic and is never read by production.",
   "rounds": {
+    "acceptance_only": {
+      "acceptance_spec_bytes": 10575,
+      "acceptance_spec_sha256": "972c255ed7082cbc2b94a9d09926af2188ed6795ba74f277eded9c7c55578f2f",
+      "base_kind": "acceptance_only",
+      "generated_by": "creation_pipeline.runtime.planner current code (no frozen copy)",
+      "input_contract_spec_sha256": "25df0343daff54847eb6c230643d7bde81154166dfcf5bdfcaa56403060348ed",
+      "policy_bytes": 21353,
+      "policy_sha256": "5f7c484797c448e2cfe1226266e39a103b783b7b64688dd54732fe21f485c8f5",
+      "prompt_bytes": 21822,
+      "prompt_sha256": "b831650a61605d7c73bafdeef57c8656ae4d2f4cff7939288840d38bd227f534",
+      "schema_bytes": 12137,
+      "schema_sha256": "e5c283886758dbf7e1a238851431f37b187b026a630cf9e3a2bf0a6728809743"
+    },
     "accepted_plan": {
       "acceptance_spec_bytes": 10575,
       "acceptance_spec_sha256": "972c255ed7082cbc2b94a9d09926af2188ed6795ba74f277eded9c7c55578f2f",

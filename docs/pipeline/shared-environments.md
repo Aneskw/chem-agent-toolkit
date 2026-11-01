@@ -3,8 +3,9 @@
 2026-11-01: opt-in exact local tool reuse now sits above this environment cache.
 See [ToolArtifact v1](shared-tool-artifact-protocol.md). The environment-only
 behavior described below remains the default. Exact hits skip environment
-planning/build and tool build, but require a current caller-supplied acceptance
-plan and independent execution. They do not inherit another skill's acceptance.
+planning/build and tool build. A scoped acceptance-only model stage generates
+the current skill's cases under the existing budget; independent execution and
+qualification remain mandatory. They do not inherit another skill's acceptance.
 
 The local Docker executor shares explicitly declared dependency stages across
 skills. Each task still gets a separate container, and each skill keeps its own

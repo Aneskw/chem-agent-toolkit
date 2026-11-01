@@ -234,7 +234,7 @@ def validate(p, index, source, binding, opts, locked=None, anchors=None):
 
 
 def propose(source, binding, audit, opts, constraints=None, locked=None, feedback=None, call_guard=None,
-            previous=None, anchors=None):
+            previous=None, anchors=None, acceptance_base=None):
     """Reuse planner reads/patches; stop repeated diagnoses instead of hidden quotas."""
     import itertools
     deadline = None if opts["total_seconds"] is None else time.monotonic() + opts["total_seconds"]
@@ -247,7 +247,10 @@ def propose(source, binding, audit, opts, constraints=None, locked=None, feedbac
     for number in attempts:
         p, index, _ = planner.plan(source, {"script": runtime_path(binding),
             "container_script": "/opt/skill/" + runtime_path(binding),
-            "constraints": ["Set plan.script to exactly the supplied context-relative script field "
+            "constraints": (["The bound_environment script and absolute entrypoint are immutable. "
+                             "Generate only current acceptance fields; execute the bound business entry directly, "
+                             "never substitute wrappers or the upstream source as business evidence."] if acceptance_base is not None else
+                            ["Set plan.script to exactly the supplied context-relative script field "
                             "(including package/ or entry/); it cannot be empty for this bound-script pipeline. "
                             "Invoke the unchanged delivered package entry, not only the upstream tool. "
                             "ENTRYPOINT must execute that script directly, or use a supported Python/shell "
@@ -257,10 +260,12 @@ def propose(source, binding, audit, opts, constraints=None, locked=None, feedbac
                             "The script field is context-relative, but the executable/script operand "
                             "in plan.entrypoint must be the supplied container_script absolute path: "
                             + "/opt/skill/" + runtime_path(binding) + ". Do not copy the relative script "
-                            "field into the entrypoint array."] + (constraints or [])},
+                            "field into the entrypoint array."]) + (constraints or [])},
             Path(audit) / str(number), opts, deadline, feedback=feedback, previous=previous, call_guard=call_guard,
-            required=required)
+            required=required, **({'acceptance_base': acceptance_base} if acceptance_base is not None else {}))
         try:
+            if acceptance_base is not None:
+                planner.validate_acceptance_entrypoints(p)
             cases = validate(p, index, source, binding, opts, locked, anchors)
             return p, index, cases
         except (planner.PlanningError, ValueError) as exc:
@@ -395,6 +400,8 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
             if model_stage == 'combined_environment_acceptance_planner':
                 result['environment_planning_calls'] = result.get('environment_planning_calls', 0) + 1
                 result['acceptance_planning_calls'] = result.get('acceptance_planning_calls', 0) + 1
+            elif model_stage == 'acceptance_only_planner':
+                result['acceptance_planning_calls'] = result.get('acceptance_planning_calls', 0) + 1
         return ticket
     binding = None
     opts = planner.options(spec.get("options", {}))
@@ -480,8 +487,7 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
             result['environment_planning_calls'] = 0
             result['acceptance_planning_calls'] = 0
             if tool_artifact:
-                p = shared_tool.combine(tool_artifact, spec.get('acceptance_plan'))
-                index['read_files'] = list(index['files'])
+                p = shared_tool.combine(tool_artifact, spec['acceptance_plan']) if 'acceptance_plan' in spec else None
         if p is None:
             if host["gaps"]:
                 result["gaps"].extend(host["gaps"])
@@ -521,10 +527,11 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
                         'with a nonzero expected exit means that operation is required and needs a named check '
                         'plus a matching rejection case. Declared checks: '
                         + json.dumps(declared, ensure_ascii=False))
-            model_stage = 'combined_environment_acceptance_planner'
-            p, index, _ = propose(source, binding, target / "planning", planning_opts, entry_constraints, spec.get("locked_cases"),
+            model_stage = 'acceptance_only_planner' if tool_artifact else 'combined_environment_acceptance_planner'
+            p, index, _ = propose(source, binding, target / ("acceptance-planning" if tool_artifact else "planning"), planning_opts, entry_constraints, spec.get("locked_cases"),
                                   feedback=spec.get('feedback'), call_guard=counted_call_guard,
-                                  previous=spec.get('previous_plan'), anchors=anchors)
+                                  previous=spec.get('previous_plan'), anchors=anchors,
+                                  acceptance_base=tool_artifact['plan'] if tool_artifact else None)
         else:
             index["read_files"] = list(index["files"])
         if redact(json.dumps(p, ensure_ascii=False)) != json.dumps(p, ensure_ascii=False):

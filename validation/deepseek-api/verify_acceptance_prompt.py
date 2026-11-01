@@ -28,7 +28,7 @@ sys.path.insert(0, str(ROOT))
 
 from creation_pipeline.runtime import planner  # noqa: E402
 
-KINDS = ('none', 'rejected_candidate', 'accepted_plan')
+KINDS = ('none', 'rejected_candidate', 'accepted_plan', 'acceptance_only')
 # The production tree must not depend on any frozen prompt/schema copy.
 FROZEN_REFERENCE = re.compile(r'validation[/\\]deepseek-api|frozen[/\\](?:prompt|schema|manifest)')
 
@@ -63,6 +63,10 @@ def production_references():
 
 def identity_problems():
     problems = []
+    if set(planner.schema_for('acceptance_only')['properties']['plan']['properties']) != planner.ACCEPTANCE_FIELDS:
+        problems.append('acceptance-only schema must expose only current acceptance fields')
+    if planner.policy_for('acceptance_only') != planner.ACCEPTANCE_ONLY_POLICY:
+        problems.append('acceptance-only rounds must send the live scoped policy')
     if planner.schema_for('none') is not planner.PLAN_SCHEMA:
         problems.append('full-plan rounds must send the live PLAN_SCHEMA object')
     for kind in ('rejected_candidate', 'accepted_plan'):

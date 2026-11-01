@@ -2,8 +2,9 @@
 
 2026-11-01：已实现显式 `shared_tool_image_v1`。默认自包含模式不变。
 实现为 `runtime/shared_tool.py`，准备、执行、资格、恢复与 CLI 均已接入。
-当前范围是调用方声明完整闭包、字节一致来源绑定的 Python 脚本；命中时必须提供
-**当前 Skill 的验收计划**，缺少则阻止，不读取旧工具的用例或通过标记。
+当前范围是调用方声明完整闭包、字节一致来源绑定的 Python 脚本。命中后默认调用
+**当前 Skill 的验收专用模型阶段**，不读取旧工具的用例或通过标记。
+显式 `acceptance_plan` 仍可作为调用方覆盖，但不再是命中的必需条件。
 
 ## 四类对象与状态
 
@@ -57,13 +58,20 @@ passed 或 Skill 资格字段。`complete_rebuild_lock=false` 的环境仍只复
 模型用一段“闭包完整”声明替代这些确定性核验。这不是任意 Python 程序的静态闭包证明；
 无法满足此显式有限协议时用具名 miss/阻止或保持原自包含模式。
 
-命中发生在 `propose()` 和 base 解析之前。调用方须提供 `acceptance_plan`，且恰含
+命中发生在 `propose()` 和 base 解析之前。默认使用 `acceptance_only` 协议，只允许模型返回
 `tests`、`acceptance_json`、`output_contract`、`unverified_behavior` 四个当前字段。
-它们重新通过现有来源引用、覆盖、负例、锁定及 native check 校验。首次 miss 可走原组合
-planner 或提供完整 `plan`；命中后不会调用原组合 planner。若同时给出的完整 plan 改变环境
+响应与模拟/重放输出都经过同一严格 schema；额外环境字段或 patch 操作被拒绝。
+环境计划由程序从已绑定制品复制，确定性合并当前验收，模型不能改环境或入口。
+材料按需读取、deadline、尝试数、调用 guard、DeepSeek 配置及供应商重试上限沿用原实现。
+回执阶段为 `runtime_acceptance_planning`，独立于 miss 路径的 `runtime_planning`；
+每个验收读材料/生成调用均占原有预算，不能把环境规划为零解释成总模型调用为零。
+首次 miss 可走原组合 planner 或提供完整 `plan`；命中后不会调用原组合环境规划协议。
+若同时给出的完整 plan 改变环境
 字段，明确记录 `supplied_environment_plan_mismatch`，不会忽略调用方要求。
-自动生成“仅验收”模型调用尚未实现；没有当前验收时返回 `current_acceptance_required`，
-不能声称此时完整自动生成流水线已经完成。
+当前用例重新通过原来源引用、覆盖、负例、锁定及 native check 校验；候选的独立内容审阅不被省略。
+验收模型不可用、超时、预算不足或合同不合格时阻止，不回退到旧用例或环境重规划。
+修复只基于当前 Skill 的被拒草稿，不能引入 ToolArtifact 历史验收。
+调用方覆盖的 `acceptance_plan` 同样要求恰含这四个字段并经过全部原校验。
 
 ## 镜像与资格
 
