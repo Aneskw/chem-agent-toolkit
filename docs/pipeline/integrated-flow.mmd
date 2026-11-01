@@ -1,7 +1,8 @@
 %% Implementation of the approved merged architecture; policies unchanged.
 %% Production repair branches are subject to explicit limits; acceptance experiments
 %% with stop_on_runtime_failure=true stop after the first Docker/acceptance failure.
-%% Exact ToolArtifact resolution is a future protocol, not an implemented node.
+%% Opt-in shared_tool_image_v1 resolves before environment planning.
+%% Hits require a caller-supplied current acceptance plan; no cached tests.
 flowchart TB
     A[用户来源与提示] --> B[资源准备与来源快照]
     B --> C[发现 Agent：逐候选计划]
@@ -14,7 +15,12 @@ flowchart TB
     EP -->|入口不支持或歧义| U
     EP -->|确认内容或上下文缺失；撤销内容通过| D
     EP --> EA[严格原样身份，或来源关联提案与独立审阅]
-    EA -->|引用与入口指纹核验；确定性原样提取| R[Docker 依赖准备：资源预检、复用或规划环境、冻结材料]
+    EA -->|引用与入口指纹核验；确定性原样提取| TR{显式闭包与需求：精确 ToolArtifact 解析}
+    TR -->|默认旧模式或未命中| R[Docker 依赖准备：资源预检、复用或规划环境、冻结材料]
+    TR -->|同 daemon 具体版本可用| CA[绑定工具版本；编译并核验调用方提供的当前 Skill 验收]
+    CA -->|缺少当前验收或要求不一致| U
+    CA -->|冻结当前包、绑定及当前合同；零环境规划与构建| TV[核验工具完整目录、入口、依赖版本及当前镜像]
+    TV --> S
     EA -->|来源不足或独立审阅拒绝| U
     G -->|草稿或需求未知| U[持久候选区与具体缺口]
     R -->|冻结交付与锁定契约| EC{明确固定 digest 的依赖前缀}
@@ -24,6 +30,8 @@ flowchart TB
     EI --> TB[构建工具镜像：共享时继承环境；核验层、配置、入口与交付字节]
     EC -->|不适用共享| TB
     TB -->|构建成功| S[Docker 业务验收：实际交付入口、断言、覆盖、镜像证据]
+    TB -->|共享工具模式：完整核验后按具体版本原子登记，不登记资格| TP[本机 ToolArtifact 目录]
+    TP -.-> TR
     EB -->|环境构建失败| R
     EB -->|等待超时或身份/资源不可用| U
     TB -->|环境构建或身份核验失败| R

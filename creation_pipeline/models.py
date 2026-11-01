@@ -62,7 +62,8 @@ def load_config(path):
     if not isinstance(config["runtime_defaults"], dict):
         raise ValueError("runtime_defaults must be an object shared by every candidate")
     for spec in config["runtime"].values():
-        if not isinstance(spec, dict) or set(spec) - {"binding", "plan", "options", "resource_refs", "constraints"}:
+        if not isinstance(spec, dict) or set(spec) - {"binding", "plan", "options", "resource_refs", "constraints",
+                                                    "shared_tool", "acceptance_plan", "requirements"}:
             raise ValueError("Unsupported runtime configuration")
         validate_spec(spec)
     # Shared defaults exist so a normal creation can fix provider options before the

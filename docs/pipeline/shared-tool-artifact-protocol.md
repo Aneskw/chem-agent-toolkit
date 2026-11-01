@@ -1,6 +1,118 @@
-# 精确 Tool 制品复用：下一阶段协议草案
+# 精确 Tool 制品复用：本机 v1 协议
 
-状态：设计草案，尚未实现。当前第一阶段共享依赖环境与薄工具镜像已经实现；这里定义其后续精确 Tool resolver 的协议和接入边界，不将设计视为功能完成。
+2026-11-01：已实现显式 `shared_tool_image_v1`。默认自包含模式不变。
+实现为 `runtime/shared_tool.py`，准备、执行、资格、恢复与 CLI 均已接入。
+当前范围是调用方声明完整闭包、字节一致来源绑定的 Python 脚本；命中时必须提供
+**当前 Skill 的验收计划**，缺少则阻止，不读取旧工具的用例或通过标记。
+
+## 四类对象与状态
+
+| 对象 | 身份与持久化 | 不代表什么 |
+| --- | --- | --- |
+| EnvironmentArtifact | 原共享环境配方、daemon ID、image ID、层/配置观察 | 不代表业务通过 |
+| ToolArtifact | ABI、完整请求、构建计划（不含验收）、具体 base/env、实际 daemon/image、artifact_id | 已核验构建对象，不代表任一新 Skill 合格 |
+| SkillBinding | 当前冻结包/来源/接口/验收指纹；命中时嵌入具体版本；首建时由绑定全部冻结指纹的 receipt 完成具体版本绑定 | 不继承旧包文案或资格 |
+| ExecutionAttempt | 每次独立目录、容器、当前锁定用例、输入输出、镜像、原始断言与耗时 | 旧执行记录不能授予当前执行资格 |
+
+`request_key` 是规划前已知的闭包（路径/sha256/bytes/mode）、显式依赖要求、接口、
+平台、策略、约束和 memory/cpus/pids 限制的指纹。
+`recipe_key` 是当前 v1 renderer 下具体环境计划（不含验收字段）与固定 base 的指纹；
+它不是依赖完全锁定或可复现构建证明。`artifact_id` 是已观察具体版本记录的完整指纹，
+其中 `image_id` 与 `daemon_id` 共同表达本机 Docker 身份，**不是 OCI manifest digest**。
+升级 renderer/闭包语义时必须升级 ABI/策略，不能悄悄沿用旧请求协议。
+
+`built`、只读探测 `available` 和 Skill `accepted` 分属不同事实。工具记录不含测试、
+passed 或 Skill 资格字段。`complete_rebuild_lock=false` 的环境仍只复用当前确切镜像。
+
+## 声明、闭包与准备
+
+在 `runtime.<candidate>` 或 `runtime_defaults` 配置：
+
+```json
+{
+  "options": {"pin_base_image": true},
+  "shared_tool": {
+    "closure": "all-package-and-sources-except-skill-document",
+    "requirements": {"imports": {"rdkit": "unpinned"}, "executables": []},
+    "interface": {
+      "entrypoint": ["python", "/opt/skill/package/scripts/audit_atom_maps.py"],
+      "workdir": "/opt/skill", "resources": [], "runtime_network": false
+    },
+    "platform": "linux/amd64", "policy": "closed-python-bundle-v1"
+  }
+}
+```
+
+所有 package 支持文件与完整 sources 都进入闭包，只有根 `package/SKILL.md` 被排除；
+该文档仍进入当前 Skill 冻结、内容审阅与来源核验。当前不支持选择性排除其他文件，
+因此改动包内 examples、资源或辅助脚本会保守 miss。锁定测试里的 fixture 与用例可以不同。
+显式 `requirements`/`constraints` 保守进入请求键；流水线默认将用户 prompt 放入 requirements，
+不同 prompt 可能因此 miss。只有确实相同的显式运行要求才应由调用方传入相同 requirements，
+不能为了命中删除真实运行要求。仅修改 SKILL.md 文案不改变工具请求。
+
+第三方 import 必须有显式要求；当前只支持与 import 同名的 distribution、精确版本或显式
+`unpinned`。配方声明须一致，构建/绑定时再读取实际安装版本。包内本地模块和数据均按字节纳入。
+动态加载、已识别的动态执行、`__file__`、外部进程、外部资源、运行时网络、Markdown 入口、
+源码相关安装步骤、生成安装文件和依赖文件在闭包外的情况均拒绝。声明来自运行配置，不允许
+模型用一段“闭包完整”声明替代这些确定性核验。这不是任意 Python 程序的静态闭包证明；
+无法满足此显式有限协议时用具名 miss/阻止或保持原自包含模式。
+
+命中发生在 `propose()` 和 base 解析之前。调用方须提供 `acceptance_plan`，且恰含
+`tests`、`acceptance_json`、`output_contract`、`unverified_behavior` 四个当前字段。
+它们重新通过现有来源引用、覆盖、负例、锁定及 native check 校验。首次 miss 可走原组合
+planner 或提供完整 `plan`；命中后不会调用原组合 planner。若同时给出的完整 plan 改变环境
+字段，明确记录 `supplied_environment_plan_mismatch`，不会忽略调用方要求。
+自动生成“仅验收”模型调用尚未实现；没有当前验收时返回 `current_acceptance_required`，
+不能声称此时完整自动生成流水线已经完成。
+
+## 镜像与资格
+
+旧模式继续核对 revision/environment 标签、整个 package manifest 和来源入口。
+新模式使用 `chem.tool.request`/`chem.tool.recipe` 标签与实际 image/daemon 身份。
+规范工具树为 `/opt/tools/<request_key>/`，另有相同字节的 `/opt/skill/` 执行布局以兼容当前
+入口及 native check 路径。两份工具目录都在镜像内核验；这项兼容副本有存储成本，不能宣称零开销。
+SKILL.md 不在工具镜像内；依赖读取该文档的检查不会被删除，而会失败或要求使用旧模式。
+
+运行前重算当前完整闭包与资源限制，核对冻结包/来源、具体工具记录、入口、层/ENV/WORKDIR、
+非 root 用户和文件内容。目录检查拒绝额外文件与链接。每次在独立只读、非 root、无网络容器执行；
+当前 report 继续通过 `locked_inputs`、`observations_pass`、coverage、当前 daemon 核验后才能 qualify。
+新 Skill 的业务失败只影响自己的执行与资格；不改工具或旧 Skill。
+
+## 登记、检查与恢复
+
+默认目录 `.pipeline/shared-tools`；进程级 `CHEM_AGENT_SHARED_TOOLS` 可选同主机绝对共享目录。
+目录不进入冻结配方。按 request_key 在原构建 deadline 内等待互斥锁；取得锁后重查候选，
+完整构建、身份、内容与当前输入核验完成后才原子发布 `<request_key>-<artifact_id>.json`。
+版本追加，不覆盖旧版本。失败/超时不发布；取消只释放自己的 token 锁；不按年龄抢占崩溃锁。
+
+```text
+python -m creation_pipeline runtime-tools-inspect
+python -m creation_pipeline runtime-tools-inspect --offline
+python -m creation_pipeline runtime-tools-inspect --root ABSOLUTE_PATH
+```
+
+只读检查不建目录、不建镜像、不删锁、不执行业务或授予资格。离线返回 `historical_unverified`；
+在线区分 `different_daemon`、`image_unavailable_or_changed`、`invalid_record` 等。
+miss 包含具体版本、具名失配字段或文件路径。不同请求不会尝试推断兼容。
+
+安装 envelope、导入、同主机路径迁移与恢复沿用现有单一 catalog。导入/迁移撤销旧资格，
+必须重新执行当前锁定合同。已有具体版本的恢复（包括显式 rebuild）仅核验并执行该版本，
+不能在镜像消失后用同配方重建结果悄悄替代它；需要新制品时显式准备新修订。
+本机环境偶然存在的作者路径不是依赖：运行使用冻结来源和镜像内文件。
+跨 daemon/主机不继承可用性，当前没有 OCI registry 或 archive 导出导入。
+文件 envelope 可以复制，但不是便携镜像交付，缺失具体制品时明确阻止。
+
+## Skillnet 后续适配接口
+
+适配层可读取现有 catalog 的 Skill revision/内容状态、SkillBinding 的请求与具体 artifact_id、
+ToolArtifact 的 typed local identity，以及 ExecutionAttempt 的当前合同指纹、独立输出和 qualify 结果。
+写入应走 prepare → freeze → build/bind → execute → qualify/adopt；不直接写 accepted。
+远端适配另增 `oci_manifest` 身份类型、分发与拉取验证、平台/策略协商和新的本机观察，
+不把当前 Docker image ID 当远端引用。本轮不实现 Skillnet 平台、调度、worker、结果缓存或 GC。
+
+## 2026-10-29 原设计记录（历史）
+
+以下是实施前草案；其“尚未实现”状态由上面的有限 v1 实现范围替代，超出范围的能力仍是设计。
 
 ## 可复用对象和绑定
 

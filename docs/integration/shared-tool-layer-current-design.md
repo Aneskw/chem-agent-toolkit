@@ -1,5 +1,11 @@
 # 共享工具层：当前集成分支的演进设计
 
+2026-11-01 更新：第二阶段已增加显式 `shared_tool_image_v1` 本机精确复用。
+当前实现、限制与新证据见 [第二阶段交付](shared-tool-phase2-20261101.md) 和
+[版本协议](../pipeline/shared-tool-artifact-protocol.md)。以下 2026-10-29 内容为历史快照；
+其中“尚未实现 Tool resolver”不代表新版本状态。命中路径目前要求调用方提供当前验收计划，
+未实现自动验收专用模型阶段，也未进行新的完整模型生成批次。
+
 状态：2026-10-29 第一阶段已合入并验证：共享依赖环境、薄工具镜像、真实 RDKit 兼容性、失败隔离与并发。Open Babel run74 已在共享环境 hit 下完成完整 8/8 验收；五成功批次共 72/72，当前 647 OK (3 skipped)、三个自检全绿。精确 Tool resolver / toolset 制品共享仍只是设计，尚未实现；不能将环境共享外推为完整工具制品解析或全部 Skill 稳定性证明。
 
 同主机共享范围已扩展：显式 CHEM_AGENT_SHARED_ENVIRONMENTS 绝对目录可跨工作副本使用，默认仍为各副本 .pipeline；缓存路径仅进动态回执，不进冻结输入。真实双 checkout/双进程公共脚本复验通过（1 次环境构建、2 个薄工具构建、第二进程 hit），结果 shared-registry-cross-checkout-20261029-02/result.json。该试验只验证跨目录共享，新的同键有界等待与双进程争用证据见下；完整 Tool resolver 尚未实现。

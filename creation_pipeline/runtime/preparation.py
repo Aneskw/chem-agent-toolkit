@@ -22,9 +22,9 @@ class RuntimeBlocked(ValueError):
 def validate_spec(spec):
     if not isinstance(spec, dict) or set(spec) - {'binding', 'plan', 'options', 'resource_refs', 'constraints',
                                                   'requirements', 'locked_cases', 'previous_plan', 'feedback',
-                                                  'native_model'}:
+                                                  'native_model', 'shared_tool', 'acceptance_plan'}:
         raise ValueError('Unsupported runtime preparation settings')
-    for key in ('binding', 'plan', 'options', 'resource_refs', 'native_model'):
+    for key in ('binding', 'plan', 'options', 'resource_refs', 'native_model', 'shared_tool', 'acceptance_plan'):
         if key in spec and not isinstance(spec[key], dict):
             raise ValueError('runtime.' + key + ' must be an object')
     if not isinstance(spec.get('constraints', []), list) or any(not isinstance(s, str) for s in spec.get('constraints', [])):
@@ -381,6 +381,7 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
     target = Path(workspace) / "materials"
     target.mkdir(parents=True)
     result = {"status": "runtime_blocked", "gaps": [], "model_calls": 0}
+    model_stage = 'entry_association'
     def counted_call_guard():
         ticket = None
         if call_guard is not None:
@@ -388,6 +389,12 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
         # Count admitted invocation attempts, including failed transports, not
         # only successful planner receipts. Entry association uses models too.
         result['model_calls'] += 1
+        if spec.get('shared_tool') is not None:
+            counts = result.setdefault('model_calls_by_stage', {})
+            counts[model_stage] = counts.get(model_stage, 0) + 1
+            if model_stage == 'combined_environment_acceptance_planner':
+                result['environment_planning_calls'] = result.get('environment_planning_calls', 0) + 1
+                result['acceptance_planning_calls'] = result.get('acceptance_planning_calls', 0) + 1
         return ticket
     binding = None
     opts = planner.options(spec.get("options", {}))
@@ -452,6 +459,29 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
         # judged, and they only accumulate across revisions.
         anchors = merged_anchors(record, spec.get('requirements') or [])
         p = copy.deepcopy(spec.get("plan"))
+        tool_request = tool_artifact = None
+        if spec.get('shared_tool') is not None:
+            from . import shared_tool
+            from .local import process
+            try:
+                tool_request = shared_tool.describe(source, binding, spec['shared_tool'],
+                                                    spec.get('requirements', []), spec.get('constraints', []), opts)
+            except ValueError as exc:
+                result['shared_tool'] = {'status': 'miss', 'reason': 'incomplete_or_unsupported_request', 'detail': redact(str(exc))}
+                raise RuntimeBlocked('shared_tool_request_unresolved', str(exc)) from exc
+            tool_artifact, observation = shared_tool.resolve(tool_request, host, process)
+            if tool_artifact and p is not None and shared_tool.environment_plan(p) != tool_artifact['plan']:
+                observation = {'status': 'miss', 'reason': 'supplied_environment_plan_mismatch',
+                               'artifact_id': tool_artifact['artifact_id'],
+                               'mismatched_objects': [k for k in sorted(set(p) | set(tool_artifact['plan']))
+                                                      if k not in shared_tool.ACCEPTANCE and p.get(k) != tool_artifact['plan'].get(k)]}
+                tool_artifact = None
+            result['shared_tool'] = observation
+            result['environment_planning_calls'] = 0
+            result['acceptance_planning_calls'] = 0
+            if tool_artifact:
+                p = shared_tool.combine(tool_artifact, spec.get('acceptance_plan'))
+                index['read_files'] = list(index['files'])
         if p is None:
             if host["gaps"]:
                 result["gaps"].extend(host["gaps"])
@@ -463,6 +493,9 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
                     raise RuntimeBlocked("explicit_budget", "Explicit runtime time limit reached")
                 planning_opts["total_seconds"] = max(1, int(remaining))
             entry_constraints = list(spec.get('constraints', []))
+            if tool_request:
+                entry_constraints.append('Exact shared-tool requirements (deterministically checked): '
+                                         + json.dumps(tool_request['declaration'], ensure_ascii=False))
             if anchors.get('file_output', {}).get('mode') == 'read_only_stdout':
                 entry_constraints.append('Independently reviewed source contract: file input is read-only '
                     'and business results are JSON/stdout, not tool-written output. Set file_io=true, '
@@ -488,6 +521,7 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
                         'with a nonzero expected exit means that operation is required and needs a named check '
                         'plus a matching rejection case. Declared checks: '
                         + json.dumps(declared, ensure_ascii=False))
+            model_stage = 'combined_environment_acceptance_planner'
             p, index, _ = propose(source, binding, target / "planning", planning_opts, entry_constraints, spec.get("locked_cases"),
                                   feedback=spec.get('feedback'), call_guard=counted_call_guard,
                                   previous=spec.get('previous_plan'), anchors=anchors)
@@ -496,6 +530,8 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
         if redact(json.dumps(p, ensure_ascii=False)) != json.dumps(p, ensure_ascii=False):
             raise RuntimeBlocked("unsafe_plan", "Plan contains credential-like literals")
         cases = validate(p, index, source, binding, opts, spec.get("locked_cases"), anchors)
+        if tool_request:
+            shared_tool.check_plan(tool_request, p)
         confirm_gaps(json.loads(p['acceptance_json']), review_evidence)
         write_json(target / "input-anchors.json", anchors)
         from .checks import mapped_checks
@@ -507,10 +543,16 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
                 raise planner.PlanningError('Environment repair changed locked tests or mapped checks')
         write_json(target / "proposed-plan.json", p)
         write_json(target / "locked-tests.json", {"cases": cases, "policy": json.loads(p["acceptance_json"])})
-        base_image_pin = pin_base_image(record, p, opts, executor)
+        base_image_pin = tool_artifact['base_image'] if tool_artifact else pin_base_image(record, p, opts, executor)
+        if tool_request and not base_image_pin:
+            raise RuntimeBlocked('shared_tool_base_unpinned', 'shared_tool requires pin_base_image=true and an observed repository digest')
         if base_image_pin:
             write_json(target / "base-image.json", base_image_pin)
         render(source, target / "context", p, cases, base_image_pin)
+        if tool_request:
+            # Include the whole declared closure, not just planner-selected files.
+            for item in tool_request['files']:
+                checked_copy(safe_relative(source, item['path']), safe_relative(target / 'context', item['path']), item['sha256'])
         write_json(target / "plan.json", p)
         if review_evidence is not None:
             write_json(target / 'independent-contract-review.json', review_evidence)
@@ -526,6 +568,9 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
         environment = {"plan": p, "materials": manifest(target), "limits": opts, "resource_inputs": resource_inputs}
         if base_image_pin:
             environment["base_image"] = base_image_pin
+        if tool_request:
+            environment['shared_tool'] = {'abi': shared_tool.ABI, 'request': tool_request,
+                                          'request_key': fingerprint(tool_request), 'artifact': tool_artifact}
         rebind(record, binding, environment,
                {"cases": cases, "policy": json.loads(p["acceptance_json"]), "author_tests": author_tests,
                 "input_anchors": anchors})

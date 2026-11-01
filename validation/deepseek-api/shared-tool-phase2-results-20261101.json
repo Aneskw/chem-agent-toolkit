@@ -1,0 +1,446 @@
+{
+  "date": "2026-11-01",
+  "base_commit": "b5ad543c4e309325e996ac776b6d3066b15501f6",
+  "mode": "shared_tool_image_v1",
+  "regression": {
+    "total": 666,
+    "passed": 663,
+    "skipped": 3,
+    "failed": 0,
+    "errors": 0
+  },
+  "prompt_checks": "all passed; no freeze required",
+  "model_calls": 0,
+  "new_complete_generation_batches": 0,
+  "historical_generation_records_not_recounted": 72,
+  "infrastructure": {
+    "root": "E:\\Users\\27343\\Docker\\shared-tools-infrastructure-20261101-05",
+    "passed": true,
+    "scope": "deterministic content fixtures, real Docker; not new model review",
+    "observations": [
+      {
+        "name": "skill-a",
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed",
+        "status": "execution_passed",
+        "shared_tool": {
+          "status": "built",
+          "artifact_id": "54b8b4691a2910eec643523dae44e1c84ce74bd4039140055bec35a2d92ab977",
+          "request_key": "1960588dfab6ed92312b626103a3bc4289cea62f7a6a4d48fecbd62c8d6eec5f"
+        },
+        "build_calls": {
+          "environment": 1,
+          "tool": 1
+        },
+        "preparation_seconds": 0.5971480000007432,
+        "build_execution_seconds": 12.577586900006281,
+        "model_calls": 0,
+        "environment_planner_calls": 0,
+        "acceptance_source": "fresh caller-supplied fixture plan",
+        "cases": 2,
+        "attempt": "runtime/candidate-bed725a3f028fa05c39f66be0a2ce4138052b0423d2dff3e4cc4fd5885b6f3dc/307fee04ebfa41fc8975acc6e9c98cd8",
+        "build_or_bind_seconds": 6.601659,
+        "validation_seconds": 3.844847,
+        "business_case_wall_seconds": 0.6209184000035748,
+        "environment_observation": "built",
+        "buildkit_cached_markers_observed": true
+      },
+      {
+        "name": "skill-b",
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed",
+        "status": "execution_passed",
+        "shared_tool": {
+          "status": "hit",
+          "artifact_id": "54b8b4691a2910eec643523dae44e1c84ce74bd4039140055bec35a2d92ab977",
+          "request_key": "1960588dfab6ed92312b626103a3bc4289cea62f7a6a4d48fecbd62c8d6eec5f"
+        },
+        "build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "preparation_seconds": 0.668726300005801,
+        "build_execution_seconds": 6.772037299990188,
+        "model_calls": 0,
+        "environment_planner_calls": 0,
+        "acceptance_source": "fresh caller-supplied fixture plan",
+        "cases": 2,
+        "attempt": "runtime/candidate-40f4650ca8f70d5abbee82a3d9aee0b28bd7e1b07cd091d91277c8e04bb8239c/7a44db0140fd41df8137dc239fe1528c",
+        "build_or_bind_seconds": 1.494503,
+        "validation_seconds": 3.520425,
+        "business_case_wall_seconds": 0.6866038999869488,
+        "environment_observation": "not_requested_tool_hit",
+        "buildkit_cached_markers_observed": false
+      },
+      {
+        "name": "different-tool",
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed",
+        "status": "execution_passed",
+        "shared_tool": {
+          "status": "built",
+          "artifact_id": "8e6000b472a09e360e447e3a30f829b5a5379d82882d1755a4aa029e43c711f2",
+          "request_key": "c4226a7eaba4029d5240aee3034f25a975d906f0d5a9a6a72b72fdc28a8fac73"
+        },
+        "build_calls": {
+          "environment": 0,
+          "tool": 1
+        },
+        "preparation_seconds": 0.44149720002315007,
+        "build_execution_seconds": 9.409400899981847,
+        "model_calls": 0,
+        "environment_planner_calls": 0,
+        "acceptance_source": "fresh caller-supplied fixture plan",
+        "cases": 2,
+        "attempt": "runtime/candidate-f44e6005cdcb79e2155dca32eccd73f1619acd37a962c96d96633f94c5857d84/9066111de85547a0871bf1d24e7ab038",
+        "build_or_bind_seconds": 3.463576,
+        "validation_seconds": 3.812415,
+        "business_case_wall_seconds": 0.6400165999948513,
+        "environment_observation": "hit",
+        "buildkit_cached_markers_observed": true
+      },
+      {
+        "name": "skill-fails",
+        "accepted": false,
+        "reason": "Execution has not passed or content approval was revoked",
+        "status": "execution_failed",
+        "shared_tool": {
+          "status": "hit",
+          "artifact_id": "54b8b4691a2910eec643523dae44e1c84ce74bd4039140055bec35a2d92ab977",
+          "request_key": "1960588dfab6ed92312b626103a3bc4289cea62f7a6a4d48fecbd62c8d6eec5f"
+        },
+        "build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "preparation_seconds": 0.694421299995156,
+        "build_execution_seconds": 6.7007885000202805,
+        "model_calls": 0,
+        "environment_planner_calls": 0,
+        "acceptance_source": "fresh caller-supplied fixture plan",
+        "cases": 3,
+        "attempt": "runtime/candidate-d5c824001933e0aee022ecb8daaddd3586e12970ec22d54e1e95c54e83b38512/17d2b8bb56f74e6d80abb0530d6e7cec",
+        "build_or_bind_seconds": 1.485198,
+        "validation_seconds": 4.226639,
+        "business_case_wall_seconds": 1.3329074999783188,
+        "environment_observation": "not_requested_tool_hit",
+        "buildkit_cached_markers_observed": false
+      },
+      {
+        "name": "concurrent-b",
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed",
+        "status": "execution_passed",
+        "shared_tool": {
+          "status": "built",
+          "artifact_id": "ca2144f7acd9f38d3cb601e24e0e0f4c4b4ab260012638a52731a06ae583c522",
+          "request_key": "200efab3888b8e32b2cddd1908be289f7e4eac68a39d8e5ca50d6b0b68c0ac59"
+        },
+        "build_calls": {
+          "environment": 0,
+          "tool": 1
+        },
+        "preparation_seconds": 0.6702435000042897,
+        "build_execution_seconds": 10.686773800000083,
+        "model_calls": 0,
+        "environment_planner_calls": 0,
+        "acceptance_source": "fresh caller-supplied fixture plan",
+        "cases": 2,
+        "attempt": "runtime/candidate-088af9358aeb223f6757f3fcb73a25a6cb46139db7b8c837549dd98a7bad5b09/8401542e8a004fbb97c2bb1638f91937",
+        "build_or_bind_seconds": 3.666753,
+        "validation_seconds": 4.379209,
+        "business_case_wall_seconds": 0.7013270000170451,
+        "environment_observation": "hit",
+        "buildkit_cached_markers_observed": true
+      },
+      {
+        "name": "concurrent-a",
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed",
+        "status": "execution_passed",
+        "shared_tool": {
+          "status": "hit",
+          "artifact_id": "ca2144f7acd9f38d3cb601e24e0e0f4c4b4ab260012638a52731a06ae583c522",
+          "request_key": "200efab3888b8e32b2cddd1908be289f7e4eac68a39d8e5ca50d6b0b68c0ac59"
+        },
+        "build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "preparation_seconds": 0.6738117999921087,
+        "build_execution_seconds": 12.45144760000403,
+        "model_calls": 0,
+        "environment_planner_calls": 0,
+        "acceptance_source": "fresh caller-supplied fixture plan",
+        "cases": 2,
+        "attempt": "runtime/candidate-432be7131b1cf04cdd1fcab74440fd0a78a168e6d38737a30312e710d62e9d19/2c2307c988d0427a9e79d2e8b392b328",
+        "build_or_bind_seconds": 5.360052,
+        "validation_seconds": 4.372022,
+        "business_case_wall_seconds": 0.6744900000048801,
+        "environment_observation": "not_requested_tool_hit",
+        "buildkit_cached_markers_observed": false
+      },
+      {
+        "name": "build-fails",
+        "accepted": false,
+        "reason": "Execution has not passed or content approval was revoked",
+        "status": "build_failed",
+        "shared_tool": {
+          "status": "miss"
+        },
+        "build_calls": {
+          "environment": 1,
+          "tool": 0
+        },
+        "preparation_seconds": 0.4912283000012394,
+        "build_execution_seconds": 1.8937586000247393,
+        "model_calls": 0,
+        "environment_planner_calls": 0,
+        "acceptance_source": "fresh caller-supplied fixture plan",
+        "cases": 0,
+        "attempt": "runtime/candidate-c453ffe1521578f8bcaab0ceed78c8c905afb466a2252c77bf18d0cb30755248/15bb62dfc5be410ea6777433b985d688",
+        "build_or_bind_seconds": 0.884288,
+        "validation_seconds": null,
+        "business_case_wall_seconds": 0,
+        "environment_observation": null,
+        "buildkit_cached_markers_observed": true
+      }
+    ],
+    "delivery": {
+      "passed": true,
+      "import_inherited_qualification": false,
+      "move_inherited_qualification": false,
+      "paths": [
+        "install-envelope",
+        "import",
+        "relocate",
+        "resume",
+        "explicit-rebuild"
+      ],
+      "remote_OCI_distribution": "unsupported; local daemon identity required"
+    },
+    "faults": [
+      {
+        "scenario": "missing-image",
+        "observation": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "1960588dfab6ed92312b626103a3bc4289cea62f7a6a4d48fecbd62c8d6eec5f",
+          "candidates": [
+            {
+              "artifact": "1960588dfab6ed92312b626103a3bc4289cea62f7a6a4d48fecbd62c8d6eec5f-47f63d279b40427d3e6df9d7f72b2c2bbaedbb71f7465a13a242580085da72ad.json",
+              "reason": "image_unavailable_or_changed"
+            }
+          ],
+          "other_versions": []
+        }
+      },
+      {
+        "scenario": "different-daemon",
+        "observation": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "1960588dfab6ed92312b626103a3bc4289cea62f7a6a4d48fecbd62c8d6eec5f",
+          "candidates": [
+            {
+              "artifact": "1960588dfab6ed92312b626103a3bc4289cea62f7a6a4d48fecbd62c8d6eec5f-e730aaf8d8390eba0ff5c8f9dfff85199bbf044e07c4274ef385ab1dc243796a.json",
+              "reason": "different_daemon"
+            }
+          ],
+          "other_versions": []
+        }
+      },
+      {
+        "scenario": "corrupt-record",
+        "observation": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "1960588dfab6ed92312b626103a3bc4289cea62f7a6a4d48fecbd62c8d6eec5f",
+          "candidates": [
+            {
+              "artifact": "1960588dfab6ed92312b626103a3bc4289cea62f7a6a4d48fecbd62c8d6eec5f-54b8b4691a2910eec643523dae44e1c84ce74bd4039140055bec35a2d92ab977.json",
+              "reason": "invalid_record",
+              "detail": "shared_tool.record: unsupported schema"
+            }
+          ],
+          "other_versions": []
+        }
+      }
+    ]
+  },
+  "chemistry_contract_revalidation": {
+    "root": "E:\\Users\\27343\\Docker\\shared-tool-atommap-20261101-02",
+    "passed": true,
+    "records": 44,
+    "new_generation_batches": 0,
+    "observations": [
+      {
+        "name": "atommap-first",
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed",
+        "build_calls": {
+          "environment": 1,
+          "tool": 1
+        },
+        "tool": {
+          "status": "built",
+          "artifact_id": "16b719b63d39c79851bfdef69f354daeb04340e5f62a0c29c36ac5d0a2b79414",
+          "request_key": "6b7a8b4a6d28a3eff86bd90d14ff5fdcce4e91b1cb3ff19914e052cea183f27c"
+        },
+        "cases": 22,
+        "preparation_seconds": 1.6151164000038989,
+        "execution_and_build_seconds": 38.16554509999696,
+        "model_calls": 0,
+        "attempt": "runtime/candidate-8fea8f1ab3197047bab46c1fadc99bc78e9b8d8b49a696851e52204d8c8a7175/8ec489de2ff44ba0866344b50db5f5e5"
+      },
+      {
+        "name": "atommap-hit",
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed",
+        "build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "tool": {
+          "status": "hit",
+          "artifact_id": "16b719b63d39c79851bfdef69f354daeb04340e5f62a0c29c36ac5d0a2b79414",
+          "request_key": "6b7a8b4a6d28a3eff86bd90d14ff5fdcce4e91b1cb3ff19914e052cea183f27c"
+        },
+        "cases": 22,
+        "preparation_seconds": 2.7788077000004705,
+        "execution_and_build_seconds": 34.897750000003725,
+        "model_calls": 0,
+        "attempt": "runtime/candidate-f4e75c508283105e200cdec2304d74313275a095850ad2041ace2292b8281591/d5801e7df3c448a7900bc5ca8e8540a6"
+      }
+    ],
+    "final_code_audit": {
+      "scope": "current metadata and raw evidence re-evaluation, no fresh business execution",
+      "checks": [
+        {
+          "name": "atommap-first",
+          "accepted": true,
+          "reason": "Content review and current Docker business evidence passed"
+        },
+        {
+          "name": "atommap-hit",
+          "accepted": true,
+          "reason": "Content review and current Docker business evidence passed"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "method": "Docker system df -v before/after; host-wide layer accounting, not VHDX physical occupancy",
+    "cache": "Existing Docker/BuildKit caches retained; fresh registry is not cold Docker",
+    "disk_savings_claim": null,
+    "installation_execution_count_claim": null
+  },
+  "limitations": [
+    "Hit requires caller-supplied current acceptance_plan; acceptance-only model generation not implemented",
+    "No new complete model generation batch or independent native content review experiment",
+    "Python closed bundle only; no Markdown, external executables/resources, runtime network or dynamic loaders",
+    "Local daemon only; no OCI distribution; exact version missing requires explicit new preparation",
+    "Timeout/cancellation ownership covered offline, not a real Docker timeout/cancellation trial",
+    "Real contention used threads and file locks, not a new cross-process ToolArtifact experiment"
+  ],
+  "evidence_files": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\tool-phase2-regression-final2-20261101.log",
+      "sha256": "30333b72c7c13f607f73d1b92078d0ab616a21673ae30f955a940d1fa4b41935"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\tool-phase2-prompt-contract-final.log",
+      "sha256": "1b5eb17960f1a12626790aa1da476351ece2490863ff568fa3ebb7d292c830c2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\tool-phase2-acceptance-prompt-final.log",
+      "sha256": "248e5ce31c2d16e77759699b416f2a421de922be70e8c99b466b6d11c6d034e6"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\tool-phase2-planner-final.log",
+      "sha256": "c400701f42ca57d4037e76dd0b5080d122233203d44cae6ac276e273b07ce119"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tools-infrastructure-20261101-05\\result.json",
+      "sha256": "027d81117fd223e582f9a155184e24f8ff57436f6d7ee6a06c3e78059399df29"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tools-infrastructure-20261101-05\\observations.json",
+      "sha256": "8b4fc09b132986089cca30cda6894936f8bfb46fc6e0c64d8f473ee2ceef2cb6"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tools-infrastructure-20261101-05\\delivery.json",
+      "sha256": "28d2ff89fb9a886d08c6eb5ac4ce781043d2b122c5e325c7890f8133cbfd9d77"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tools-infrastructure-20261101-05\\faults.json",
+      "sha256": "1e74bd151f6cc9d8d7896db5b6dd0c7047bcf90538fbf163ee77b2d4d00bd4d5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tools-infrastructure-20261101-05\\storage-before.json",
+      "sha256": "060460c8ce7ba2cbb0aab8ccf2a9e2802ab839802fa90fe4d0f0291dfba79090"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tools-infrastructure-20261101-05\\storage-after.json",
+      "sha256": "a9e00d8d4f80d9e35e8df400eaca82b8ae33f592a1ebf9a0ae0cbf9ed4f01d07"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tools-infrastructure-20261101-05\\host.json",
+      "sha256": "6c98e14aca671bbffc7bc2c9713e237ad1dcee688276f4594024e9b7c1ce9f45"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-atommap-20261101-02\\result.json",
+      "sha256": "7c1c2c6e0455654d049bf00f1856fd339e0915894b79a3c37c18dfa2fcbb338f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-atommap-20261101-02\\observations.json",
+      "sha256": "f4f8879ba832631a6c1be5cd6ddc6038d6669cfe72cf190c5bcec51bc53a012d"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-tool-atommap-20261101-02\\final-code-current-audit.json",
+      "sha256": "14b642f9f0f1fc4c120b37c6b9db4111bc449101915d11095ddebf4cb06216a9"
+    }
+  ],
+  "tested_source_files": [
+    {
+      "path": "creation_pipeline/cli.py",
+      "sha256": "c5bdabcaf41934a0b6e6649bb5a406fbd36a893a202c593f64837799f07cde62"
+    },
+    {
+      "path": "creation_pipeline/models.py",
+      "sha256": "b0f552b6a0ada4a314f5527c566aedd47058c2daeab3957e59c9013574ecaf6d"
+    },
+    {
+      "path": "creation_pipeline/runtime/shared_tool.py",
+      "sha256": "06a8522678e5c7f5274d86dc0153d34a67bd7ab251159161e3c659e7259c3ef8"
+    },
+    {
+      "path": "creation_pipeline/runtime/preparation.py",
+      "sha256": "11623edd096149e12a9dd0915b2b1af730f8f455007c80556a254738c996014f"
+    },
+    {
+      "path": "creation_pipeline/runtime/local.py",
+      "sha256": "da0080c1f9e9bf20445f36d44841f063e33bd934b89b566eb39a6b401e751926"
+    },
+    {
+      "path": "creation_pipeline/runtime/execution.py",
+      "sha256": "e1ad3aee44f1a7637c8a761f959be993e940fbcdd935ba9f947cfbd4b393335f"
+    },
+    {
+      "path": "creation_pipeline/runtime/recovery.py",
+      "sha256": "818185b38890176966222bd6ea399460370867c9ea782e025528edabd83d5e80"
+    },
+    {
+      "path": "tests/pipeline/test_shared_tool.py",
+      "sha256": "f2fb3e4e5cc9ecebcaa40609213150ac175d93db1d7dfab2125543d644a4ea2c"
+    },
+    {
+      "path": "validation/deepseek-api/verify_shared_tools.py",
+      "sha256": "efeed06ae96dfe9f143ab6bb4a2035d7b6f855205e8ae73ab8169fe64bd3553f"
+    },
+    {
+      "path": "validation/deepseek-api/verify_shared_tool_atommap.py",
+      "sha256": "4562ae78fd0c3e6045f84791227d5d53b12b8aeeddc117b9f8607e4251fb257a"
+    }
+  ]
+}

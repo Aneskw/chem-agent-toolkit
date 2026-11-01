@@ -74,6 +74,9 @@ def main(argv=None):
     child = commands.add_parser('runtime-shared-inspect', help='Read-only shared dependency environment identity observations; never grants skill qualification')
     child.add_argument('--root', help='Override the host-configured shared environment directory')
     child.add_argument('--offline', action='store_true', help='Read historical records without Docker/model calls; availability is unverified')
+    child = commands.add_parser('runtime-tools-inspect', help='Read-only exact local ToolArtifact observations; never grants qualification')
+    child.add_argument('--root')
+    child.add_argument('--offline', action='store_true')
     child = commands.add_parser('runtime-import', help='Import frozen native output or installed runtime envelope as durable recovery input')
     child.add_argument('source')
     child.add_argument('library')
@@ -155,6 +158,10 @@ def main(argv=None):
         elif args.command == 'runtime-import':
             from creation_pipeline.runtime.recovery import import_candidate
             result = import_candidate(args.source,args.library,args.candidate)
+        elif args.command == 'runtime-tools-inspect':
+            from creation_pipeline.runtime.shared_tool import inspect
+            from creation_pipeline.runtime.local import LocalExecutor, process
+            result = inspect(args.root, None if args.offline else LocalExecutor().host(), None if args.offline else process)
         elif args.command == 'runtime-relocate':
             from creation_pipeline.runtime.recovery import relocate
             result = relocate(args.library,args.candidate,revalidate=args.revalidate,recover_lock=args.recover_lock)

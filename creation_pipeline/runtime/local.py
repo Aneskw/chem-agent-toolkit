@@ -141,6 +141,9 @@ class LocalExecutor:
         if env.get('plan'):
             from .entry import verify_material
             verify_material(Path(request.frozen_directory) / 'package', d['inputs']['bindings']['payload'], materials / 'context')
+        if env.get('shared_tool'):
+            from .shared_tool import verify_binding
+            verify_binding(env, materials)
         return record, env, materials
 
     def preflight(self, request):
@@ -149,7 +152,7 @@ class LocalExecutor:
         gaps = list(host["gaps"])
         plan = env.get("plan")
         delivery = record['delivery']
-        if env.get('base_image'):
+        if env.get('base_image') and not (env.get('shared_tool') or {}).get('artifact'):
             # A pinned base image is part of the frozen identity; verify it before build.
             pinned = pinned_base_gap(env['base_image'], self.probe_timeout)
             if pinned:
@@ -209,6 +212,9 @@ class LocalExecutor:
 
     def build(self, request):
         record, env, materials = self.inputs(request)
+        if env.get('shared_tool'):
+            from .shared_tool import build
+            return build(self, request, record, env, materials)
         attempt = Path(request.attempt_directory)
         attempt.mkdir(parents=True, exist_ok=False)
         receipt = {"version": 1, "backend": "local-docker", "request": binding_identity(request), "started_at": now(),
@@ -301,10 +307,23 @@ class LocalExecutor:
         return validate(self, request, build_receipt)
 
     def verify_current(self, request, evidence):
-        self.inputs(request)
+        _, env, _ = self.inputs(request)
         host = self.preflight(request)
         if evidence.get("request") != binding_identity(request) or evidence.get("status") != "built":
             return {"status": "unavailable", "reason": "No matching built image receipt"}
+        if env.get('shared_tool'):
+            from .shared_tool import validate_record, available, environment_plan
+            try:
+                artifact = validate_record(evidence.get('tool_artifact', {}), env['shared_tool']['request'])
+                bound = env['shared_tool'].get('artifact')
+                if ((bound and artifact != bound) or artifact['plan'] != environment_plan(env['plan'])
+                        or artifact['base_image'] != env.get('base_image') or evidence['image_id'] != artifact['image_id']):
+                    raise ValueError('shared_tool.binding: receipt differs from concrete version/recipe')
+                reason = available(artifact, host['host'], process, self.probe_timeout)
+            except (ValueError, KeyError, TypeError) as exc:
+                reason = str(exc)
+            return {'status': 'available' if not host['gaps'] and reason == 'available' else 'unavailable',
+                    'reason': reason, 'observed_at': now(), 'preflight': host, 'business_acceptance': 'not_run'}
         result = process(["docker", "image", "inspect", "--format", "{{.Id}}", evidence["image_id"]], self.probe_timeout)
         tag = process(["docker", "image", "inspect", "--format", "{{.Id}}", evidence.get('tag', '')], self.probe_timeout)
         return {"status": "available" if not host["gaps"] and result["exit_code"] == 0 and result["stdout"].strip() == evidence["image_id"]

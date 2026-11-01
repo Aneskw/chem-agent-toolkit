@@ -1,6 +1,7 @@
 """Adapt runtime_model_lifecycle.validate/evidence to frozen inputs and sidecar attempts."""
 import copy
 import json
+import time
 from pathlib import Path
 from creation_pipeline.records import read_json, write_json, now, sanitized, file_digest
 from creation_pipeline.contracts import fingerprint
@@ -19,7 +20,10 @@ def tool_for(record, request):
 
 
 def expected_image_files(record, request):
-    p = record['delivery']['inputs']['environment']['payload']['plan']
+    env = record['delivery']['inputs']['environment']['payload']
+    if env.get('shared_tool'):
+        return {f['path']: f['sha256'] for f in env['shared_tool']['request']['files']}
+    p = env['plan']
     context = Path(request.frozen_directory) / 'runtime/context'
     names = set(p['source_files']) | {'package/' + f['path'] for f in record['delivery']['inputs']['files']}
     return {name: file_digest(context / name) for name in sorted(names)}
@@ -110,8 +114,12 @@ def validate(executor, request, build):
         tool = tool_for(record, request)
         import shlex
         expected = expected_image_files(record, request)
+        command = 'cd /opt/skill && sha256sum -- ' + ' '.join(shlex.quote(n) for n in expected)
+        if env.get('shared_tool'):
+            from .shared_tool import INTEGRITY_COMMAND
+            command = 'cd /opt/skill && ' + INTEGRITY_COMMAND
         try:
-            integrity = runner.run(tool, build['image_id'], ['-c', 'cd /opt/skill && sha256sum -- ' + ' '.join(shlex.quote(n) for n in expected)],
+            integrity = runner.run(tool, build['image_id'], ['-c', command],
                                    entrypoint='/bin/sh', timeout=executor.probe_timeout)
         except (OSError, runner.subprocess.TimeoutExpired) as exc:
             integrity = {'error': str(exc), 'cleanup': getattr(exc, 'cleanup', []), 'scope': getattr(exc, 'scope', None)}
@@ -121,9 +129,12 @@ def validate(executor, request, build):
             write_json(root / 'report.json', report)
             return report
         observations = []
+        report['case_wall_seconds'] = {}
         for case in cases:
+            case_started = time.monotonic()
             observed = runner.run_case(materials, tool, build['image_id'], case, deadline=executor.deadline,
                                        artifact_dir=root / ('case-' + fingerprint(case['name'])[:16]))
+            report['case_wall_seconds'][case['name']] = time.monotonic() - case_started
             observed = sanitized(observed)
             observations.append(observed)
             write_json(root / 'tests.json', {'cases': observations})

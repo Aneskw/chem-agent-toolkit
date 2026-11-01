@@ -89,7 +89,8 @@ def choose_build(root, entry, executor, mode):
     execution observations are never reused. A completed build from an interrupted
     attempt can be recovered, but an incomplete build receipt cannot.
     """
-    if mode is False:
+    shared_tool = bool(((entry['delivery']['inputs']['environment'] or {}).get('payload') or {}).get('shared_tool'))
+    if mode is False and not shared_tool:
         return None, {'action': 'build', 'reason': 'Explicit rebuild requested'}
     refs = ([entry['pending_runtime']] if entry.get('pending_runtime') else [])
     refs += [entry['runtime']] if entry.get('runtime') else []
@@ -107,8 +108,9 @@ def choose_build(root, entry, executor, mode):
                 from .service import verify_attempt
                 verify_attempt(root, ref, entry['delivery'], entry['freeze_sha256'])
             current = executor.verify_current(request, build)
-            if mode is True or current['status'] == 'available' or current.get('preflight', {}).get('gaps'):
-                return directory, {'action': 'validate', 'reason': 'Bound completed build; execute all locked cases afresh',
+            if shared_tool or mode is True or current['status'] == 'available' or current.get('preflight', {}).get('gaps'):
+                return directory, {'action': 'validate', 'reason': ('Concrete shared tool version is pinned; unavailable artifacts require explicit preparation'
+                                                                 if shared_tool else 'Bound completed build; execute all locked cases afresh'),
                                    'reused_attempt': ref['path'], 'image_observation': current}
         except (OSError, ValueError, KeyError, TypeError) as exc:
             if ref is entry.get('pending_runtime'):
