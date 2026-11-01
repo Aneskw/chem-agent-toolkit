@@ -1,5 +1,7 @@
 """Independent checks of a completed batch; never runs models or business code."""
 import argparse
+import ast
+import hashlib
 import json
 import sys
 import uuid
@@ -39,6 +41,53 @@ def pinned_version_matches(actual, expected):
     if all(part.isdigit() for part in actual.split('.') + expected.split('.')):
         return tuple(map(int, actual.split('.'))) == tuple(map(int, expected.split('.')))
     return actual == expected
+
+
+def native_file_result(case, observed):
+    """Recognize locked native checks that read the actual business output file.
+
+    This supports the generated subprocess/file-reader form used by the CLI
+    descriptor batch, rather than trusting a reported list of model assertions.
+    Unknown programs remain unrecognized. It never executes the supplied code.
+    """
+    args = case.get('args', [])
+    if (len(args) < 3 or args[0] != '-c' or observed.get('exit_code') != 0
+            or observed.get('status') != 'passed'):
+        return None
+    try:
+        tree = ast.parse(args[1])
+    except (SyntaxError, ValueError, TypeError):
+        return None
+    code = ast.unparse(tree)
+    required = ("raw = dst.read_bytes()", "json.loads(line)", "raw.decode('utf-8').splitlines()",
+        "src.write_bytes(content.encode('utf-8'))",
+        "subprocess.run([sys.executable, entry, '--input', str(src), '--output', str(dst)]",
+        "'exit_code': p.returncode", "'rows': rows", "'byte_count': len(raw)")
+    if not all(text in code for text in required):
+        return None
+    actual = rows(observed.get('stdout'))
+    if len(actual) != 1:
+        return None
+    result = actual[0]
+    if (type(result.get('exit_code')) is not int or not isinstance(result.get('rows'), list)
+            or not all(isinstance(r, dict) for r in result['rows'])
+            or type(result.get('byte_count')) is not int or result['byte_count'] <= 0):
+        return None
+    return result
+
+
+def image_evidence_matches(image_id, image_file, receipt, frozen_shared_tool):
+    if image_file.is_file():
+        return image_file.read_text(encoding='utf-8').strip() == image_id
+    # A full artifact hit performs no Docker build, hence has no iidfile. Its
+    # image identity is pinned in the current frozen binding and receipt instead.
+    artifact = (frozen_shared_tool or {}).get('artifact')
+    shared = receipt.get('shared_tool', {})
+    return (isinstance(artifact, dict) and artifact == receipt.get('tool_artifact')
+            and artifact.get('image_id') == receipt.get('image_id') == image_id
+            and isinstance(image_id, str) and image_id.startswith('sha256:')
+            and shared.get('status') == 'hit' and shared.get('artifact_id') == artifact.get('artifact_id')
+            and receipt.get('build_calls') == {'environment': 0, 'tool': 0})
 
 
 def audit(batch, scenario):
@@ -82,8 +131,12 @@ def audit(batch, scenario):
         detail['cases'] = [{'name': c['name'], 'status': c['status']} for c in observations]
         detail['image_id'] = report.get('image_id')
         image_file = report_path.parent.parent / 'image.id'
-        if not image_file.is_file() or image_file.read_text(encoding='utf-8').strip() != report.get('image_id'):
+        receipt = read_json(report_path.parent.parent/'receipt.json')
+        frozen_shared_tool = record['delivery']['inputs']['environment']['payload'].get('shared_tool')
+        if not image_evidence_matches(report.get('image_id'), image_file, receipt, frozen_shared_tool):
             missing.append('missing_or_mismatched_image_id')
+        else:
+            detail['image_identity_evidence'] = 'build_iidfile' if image_file.is_file() else 'current_frozen_artifact_binding_and_receipt'
         if not observations or any(c.get('status') != 'passed' for c in observations):
             missing.append('not_all_cases_passed')
         if not report.get('acceptance', {}).get('complete'):
@@ -161,13 +214,20 @@ def audit(batch, scenario):
             valid_file = mixed_file = False
             for observed in observations:
                 case = by_name[observed['name']]
-                if not case.get('input_files') or not case.get('output_file') or case.get('capture_stdout'):
-                    continue
-                output_rows = rows(observed.get('persisted_output'))
-                if observed.get('exit_code') == 0 and output_rows and all(r.get('ok') is True for r in output_rows):
+                if case.get('input_files') and case.get('output_file') and not case.get('capture_stdout'):
+                    output_rows, exit_code = rows(observed.get('persisted_output')), observed.get('exit_code')
+                else:
+                    native = native_file_result(case, observed)
+                    if native is None:
+                        continue
+                    output_rows, exit_code = native['rows'], native['exit_code']
+                    detail.setdefault('native_file_observations', []).append({
+                        'name': observed['name'], 'program_sha256': hashlib.sha256(case['args'][1].encode()).hexdigest(),
+                        'business_exit_code': exit_code, 'rows': len(output_rows), 'byte_count': native['byte_count']})
+                if exit_code == 0 and output_rows and all(r.get('ok') is True for r in output_rows):
                     valid_file = True
                 flags = [r.get('ok') for r in output_rows]
-                if observed.get('exit_code') == 2 and False in flags:
+                if exit_code == 2 and False in flags:
                     rejected_index = flags.index(False)
                     if True in flags[rejected_index + 1:]:
                         mixed_file = True

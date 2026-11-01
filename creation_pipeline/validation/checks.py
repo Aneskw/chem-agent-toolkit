@@ -38,7 +38,7 @@ def runtime_path_problems(package, files):
     return problems
 
 
-def static_checks(package, name=None, *, bundle=None, tool=False):
+def static_checks(package, name=None, *, bundle=None, tool=False, layout=None):
     package = Path(package)
     files = manifest(package)
     if tool:
@@ -105,6 +105,9 @@ def static_checks(package, name=None, *, bundle=None, tool=False):
                 problems.append(f"Broken or external package link in {item['path']}: {href}")
     checks = [result("structure", problems)]
     checks.append(result("runtime_paths", runtime_path_problems(package, files)))
+    if layout is not None:
+        from creation_pipeline.artifacts.layout import problems as layout_problems
+        checks.append(result("delivery_layout", layout_problems(files, layout)))
     return checks
 
 

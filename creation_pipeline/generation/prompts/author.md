@@ -1,5 +1,11 @@
 Build a usable English skill from the candidate and actual research sources. Follow the
 supplied minimum/packaging rules as semantic constraints, not a chapter template.
+The caller-owned delivery_layout is a mandatory file-path contract. Its explicit
+required paths override the default role directories, including explicitly required
+root files. Preserve each exact package-relative path and case; do not relocate a
+file to resources/ or invent a replacement path. exact_files, when present, is the
+complete allowed file set. The host checks this contract before accepting a receipt
+and again at qualification; model declarations or business tests cannot waive it.
 Record metadata.entry naming the single executable entry of the delivery when it has
 one: {"kind":"script","path":"<delivered .py or .sh>"} or
 {"kind":"markdown_python","path":"SKILL.md","block_index":<n>} (block_index is 0-based:

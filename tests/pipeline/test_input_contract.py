@@ -181,6 +181,24 @@ class ContractTests(unittest.TestCase):
             self.classification(record)
         self.assertIn('not bound to the examined materials', str(caught.exception))
 
+    def test_file_hash_is_not_list_digest_and_feedback_provides_exact_repair(self):
+        record = self.absent()
+        raw_hash = record['checked'][0]['sha256']
+        expected = materials_digest(record['checked'])
+        self.assertNotEqual(raw_hash, expected)
+        record['review']['materials_sha256'] = raw_hash
+        before = copy.deepcopy(record)
+        with self.assertRaises(ValueError) as caught:
+            self.classification(record)
+        message = str(caught.exception)
+        for text in ('input_contract.review.materials_sha256', 'expected=' + json.dumps(expected),
+                     'actual=' + json.dumps(raw_hash), PATH, 'not a file hash',
+                     'confirmation remains required'):
+            self.assertIn(text, message)
+        self.assertEqual(record, before, 'diagnostics must never fill confirmation or change tests')
+        record['review']['materials_sha256'] = expected
+        self.assertEqual(self.classification(record), 'none_documented')
+
     def test_checked_materials_must_be_read_and_match_their_fingerprint(self):
         unread = self.absent(checked=[{'source_path': 'package/SKILL.md', 'sha256': '0' * 64}])
         with self.assertRaises(ValueError) as caught:

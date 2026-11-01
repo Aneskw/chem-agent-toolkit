@@ -10,8 +10,14 @@ One skill may call multiple tools for one coherent objective. Separate capabilit
 
 ## Files
 
-The package is a closed layout. `SKILL.md` is the only file at the top level; every
-other delivered file must live under one of the five role directories:
+The package is a closed layout. Explicit caller file-path requirements take precedence:
+deliver those files at the exact package-relative paths, including required root files.
+The host freezes these obligations as `delivery_layout` and checks actual paths before
+accepting author delivery and again before qualification. Unchanged bytes at another
+path do not satisfy the obligation. An exact file list also excludes additional files.
+
+Otherwise `SKILL.md` is the only file at the top level; every other delivered file
+must live under one of the five role directories:
 
 ```text
 capability-name/
@@ -23,7 +29,7 @@ capability-name/
   assets/               # necessary small inputs/templates for presentation
 ```
 
-A file outside those directories (for example a top-level `LICENSES.txt`,
+A file outside those directories without an explicit caller path requirement (for example a top-level `LICENSES.txt`,
 `LICENSE`, `README.md` or an upstream module copy) is refused by the delivery
 validator and the candidate fails rather than being repaired silently. Put licence
 or attribution text in `references/LICENSE.txt` (or another `references/` file) and

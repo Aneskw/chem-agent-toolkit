@@ -1,0 +1,93 @@
+{
+  "sources": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit_newpipeline\\tools-skills\\rdkit\\chem-rdkit-descriptors",
+      "license": "BSD-3-Clause",
+      "id": "existing_descriptors"
+    },
+    {
+      "id": "rdkit_canonical_reference",
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\delivery-layout-input\\rdkit-canonical-reference-2024.09.6.json",
+      "license": "BSD-3-Clause"
+    }
+  ],
+  "prompt": "Discover and package one executable Skill using the supplied existing chem-rdkit-descriptors Skill as source material. Preserve scripts/calc_descriptors.py byte-for-byte as the delivered business entry; do not replace it with a demonstration or synthetic output. Preserve its documented CLI scope (--smiles and --input with optional --output), requirements.txt dependency pins, per-row JSONL results, invalid/empty input diagnostics and exit 2, and mixed batch continuation behavior. Ground numerical expected values in execution/fixtures.json; old reports are historical references only and are not evidence for this run. Require complete bound Docker acceptance with at least one actual ethanol descriptor calculation asserting molecular_weight 46.069 and donor/acceptor counts, explicit invalid and empty input rejection, and a mixed valid/invalid file input persisted through the delivered --output flag with row-level assertions after container exit. Read relevant original documentation and fixtures before asserting behavior. Do not weaken documented behavior or remove a failing check. Do not run chemistry/business code or install dependencies on the host; business execution is permitted only inside Docker. Do not claim scientific validity beyond source-backed algorithmic results. Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt; preserve the two source files byte-for-byte. Keep provenance and examples inline in SKILL.md. Express all independent checks as self-contained inline argv programs, preserving every business obligation. Write an operator workflow guide.",
+  "model": {
+    "name": "gpt-6-astra",
+    "transport": "https",
+    "reasoning_effort": "medium",
+    "service_tier": "default",
+    "backend": "codex_cli"
+  },
+  "execution": {
+    "profile": "production",
+    "stop_on_runtime_failure": true,
+    "progress_watch": "observe"
+  },
+  "limits": {
+    "model_calls": 16,
+    "model_timeout": 600,
+    "total_seconds": 3600,
+    "agent_progress_timeout": null,
+    "max_candidates": 1,
+    "max_builds": 1,
+    "repair_rounds": 2
+  },
+  "runtime_defaults": {
+    "options": {
+      "backend": "deepseek_api",
+      "api_model": "deepseek-v4-pro",
+      "api_retries": 1,
+      "api_stream": true,
+      "api_max_output_tokens": 65536,
+      "pin_base_image": true,
+      "model_timeout": 600,
+      "total_seconds": 2400,
+      "reasoning_effort": "low",
+      "service_tier": "default",
+      "progress_watch": "observe",
+      "api_connect_retries": 1
+    },
+    "constraints": [
+      "Caller-selected environment: set plan.base_image to python:3.11-slim-bookworm. This Python 3.11 bookworm tag is cached locally and pin_base_image remains true: the executor must resolve and freeze its observed RepoDigest before building. Historical source Dockerfile base digests are references, not required identities for this fresh environment. Preserve all source dependency pins, actual business entry, and acceptance obligations; do not copy a historical unavailable base digest.",
+      "Use entrypoint [\"python\", \"/opt/skill/package/scripts/calc_descriptors.py\"]. Preserve all three exact requirements.txt pins in dependencies. All install steps form the source-independent dependency prefix; no generated files or code-dependent steps. Resources=[], runtime_network=false, platform=linux/amd64. Ground resource assessment in stable original sources rather than generated prose.",
+      "Preserve the failed valid_file_persisted_rows obligation: actual delivered --input/--output processing of a two-row file containing CCO followed by c1ccccc1O, retained JSONL after container exit, row order and input preservation, and BOTH canonical_smiles fields. The registered rdkit_canonical_reference contains pinned upstream Release_2024_09_6 tests for the phenol canonical value; the original fixtures ground ethanol. Do not assume raw input SMILES equals canonical output; do not remove the phenol row or its canonical assertion, substitute an ethanol-only file, weaken any original check, or use this run output as its own oracle. This is additional source evidence and preservation of the failed case, not an acceptance_plan. Resource assessment must cite stable original files in the tool implementation closure, not the generated Skill document."
+    ],
+    "requirements": [
+      "Discover and package one executable Skill using the supplied existing chem-rdkit-descriptors Skill as source material. Preserve scripts/calc_descriptors.py byte-for-byte as the delivered business entry; do not replace it with a demonstration or synthetic output. Preserve its documented CLI scope (--smiles and --input with optional --output), requirements.txt dependency pins, per-row JSONL results, invalid/empty input diagnostics and exit 2, and mixed batch continuation behavior. Ground numerical expected values in execution/fixtures.json; old reports are historical references only and are not evidence for this run. Require complete bound Docker acceptance with at least one actual ethanol descriptor calculation asserting molecular_weight 46.069 and donor/acceptor counts, explicit invalid and empty input rejection, and a mixed valid/invalid file input persisted through the delivered --output flag with row-level assertions after container exit. Read relevant original documentation and fixtures before asserting behavior. Do not weaken documented behavior or remove a failing check. Do not run chemistry/business code or install dependencies on the host; business execution is permitted only inside Docker. Do not claim scientific validity beyond source-backed algorithmic results. Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt; preserve the two source files byte-for-byte. Keep provenance and examples inline in SKILL.md. Express all independent checks as self-contained inline argv programs, preserving every business obligation."
+    ],
+    "shared_tool": {
+      "closure": "all-package-and-sources-except-skill-document",
+      "requirements": {
+        "imports": {
+          "rdkit": "2024.9.6",
+          "numpy": "1.26.4",
+          "pillow": "11.3.0"
+        },
+        "executables": []
+      },
+      "interface": {
+        "entrypoint": [
+          "python",
+          "/opt/skill/package/scripts/calc_descriptors.py"
+        ],
+        "workdir": "/opt/skill",
+        "resources": [],
+        "runtime_network": false
+      },
+      "platform": "linux/amd64",
+      "policy": "closed-python-bundle-v1"
+    }
+  },
+  "batch": {
+    "label": "cli-descriptors-a",
+    "tags": [
+      "existing-skill",
+      "descriptors",
+      "acceptance",
+      "docker"
+    ]
+  },
+  "notes": "Operator authorised iterative debugging and fresh independent reruns on 2026-10-28 until two descriptor file experiments and two additional typical scenarios pass. Each run retains 16 admitted stage calls, 600 seconds per call, 3600 seconds total, pin_base_image=true; no resume/restart of failed runs, no weakening contracts, no upstream push. Native stages use Codex CLI, structured stages DeepSeek. Preserve every failed run and fix offline before a new run. After run50 provider-high stream timeout, structured reasoning is low; native reasoning remains medium. No timeout/call-budget/acceptance change.",
+  "network": false
+}

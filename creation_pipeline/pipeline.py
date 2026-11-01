@@ -25,6 +25,7 @@ from creation_pipeline.generation.discovery import normalize
 from creation_pipeline.records import clean_run, digest, has_link, now, read_json, redact, sanitized, write_json, safe_relative
 from creation_pipeline.contracts import finalize
 from creation_pipeline.artifacts.evidence import seal, verify as verify_evidence
+from creation_pipeline.artifacts.layout import extract as delivery_layout
 
 
 def hash_object(value):
@@ -95,7 +96,8 @@ def runtime_gate_stops(config, runtime_receipt):
 def _candidate(session, config, entity, bundle, work, allow_generated, initial_feedback=None):
     directory = safe_relative(bundle, "skills/" + entity["name"])
     record = {"name": entity["name"], "kind": entity["kind"], "plan": entity, "status": "failed",
-              "checks": [], "repair_rounds": 0, "files": [], "repair_history": []}
+              "checks": [], "repair_rounds": 0, "files": [], "repair_history": [],
+              "delivery_layout": delivery_layout(config, entity["name"])}
     if entity["readiness"] == "blocked":
         record.update(status="blocked", error="; ".join(entity["gaps"]))
         return record
@@ -132,7 +134,7 @@ def _candidate(session, config, entity, bundle, work, allow_generated, initial_f
                     file_purposes=[{"path": f["path"], "purpose": f["purpose"]} for f in artifact["files"]])
                 write_json(work / entity["name"] / "authored-metadata.json", sanitized({k: record[k] for k in
                     ("test_definitions", "issues", "notes", "file_purposes", "entry_declaration")}))
-                reports = static_checks(directory, entity["name"], bundle=bundle)
+                reports = static_checks(directory, entity["name"], bundle=bundle, layout=record["delivery_layout"])
                 initial = manifest(bundle)
                 if not any(r["status"] == "fail" for r in reports):
                     scoped["_oracle_changes"] = []
@@ -404,6 +406,7 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                             shutil.copytree(old_path, bundle / "skills" / name, dirs_exist_ok=True)
                         entity_record = dict(old, reused_from=prior_output.name, model_calls=[])
                     elif (old.get('content_status') == 'passed' and old.get('status') in {'blocked', 'not_run'}
+                          and old.get('delivery_layout') == delivery_layout(config, name)
                           and manifest(old_path) == old['files'] and old.get('plan') == entity
                           and [(s['id'], s['inventory']) for s in old.get('delivery', {}).get('inputs', {}).get('sources', [])]
                               == [(s['id'], s['inventory']) for s in sorted(sources.manifest(), key=lambda s: s['id'])]):

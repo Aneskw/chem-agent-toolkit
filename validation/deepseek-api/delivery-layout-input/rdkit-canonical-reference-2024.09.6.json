@@ -1,0 +1,28 @@
+{
+  "scope": "Independent upstream golden assertions for RDKit Release_2024_09_6. These are source expectations, not execution or qualification evidence for this pipeline run.",
+  "version": "2024.09.6",
+  "phenol": {
+    "input_smiles": "c1ccccc1O",
+    "canonical_smiles": "Oc1ccccc1"
+  },
+  "sources": [
+    {
+      "repository": "rdkit/rdkit",
+      "ref": "Release_2024_09_6",
+      "path": "Code/MinimalLib/tests/tests.js",
+      "url": "https://github.com/rdkit/rdkit/blob/Release_2024_09_6/Code/MinimalLib/tests/tests.js#L47-L49",
+      "git_blob_sha": "ec50aa6667d226face4a74e05683efb73545d1cb",
+      "quote": "    var mol = RDKitModule.get_mol(\"c1ccccc1O\");\n    assert(mol !== null);\n    assert.equal(mol.get_smiles(),\"Oc1ccccc1\");"
+    },
+    {
+      "repository": "rdkit/rdkit",
+      "ref": "Release_2024_09_6",
+      "path": "Code/GraphMol/MolStandardize/testFragment.cpp",
+      "url": "https://github.com/rdkit/rdkit/blob/Release_2024_09_6/Code/GraphMol/MolStandardize/testFragment.cpp#L92-L96",
+      "git_blob_sha": "9e2854e6ddbed77170ebffc64639a094f0bedeef",
+      "quote": "  // 1,4-Dioxane should be removed..\n  smi10 = \"c1ccccc1O.O1CCOCC1\";\n  std::shared_ptr<ROMol> m10(SmilesToMol(smi10));\n  std::shared_ptr<ROMol> remove10(fragremover.remove(*m10));\n  TEST_ASSERT(MolToSmiles(*remove10) == \"Oc1ccccc1\");"
+    }
+  ],
+  "derivation": "The unchanged wrapper calls default Chem.MolToSmiles. The pinned upstream core tests supply an independent phenol canonical-string expectation; a raw input SMILES is not generally its canonical serialization. This is algorithmic regression evidence, not independent scientific validation.",
+  "retained_failure_obligation": "Keep the persisted two-row CCO plus c1ccccc1O file case, output-file retention, row order and canonical_smiles assertions. Use the existing source fixtures for ethanol values and these pinned upstream assertions for phenol. Do not delete the second row, substitute an ethanol-only file, or drop the canonical field just because the earlier guessed raw-input expectation failed. Preserve every original invalid/empty and mixed-file obligation as well."
+}

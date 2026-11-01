@@ -14,8 +14,8 @@ from . import planner
 
 
 class RuntimeBlocked(ValueError):
-    def __init__(self, code, detail, lane="environment"):
-        self.code, self.lane = code, lane
+    def __init__(self, code, detail, lane="environment", kind="unresolved_input"):
+        self.code, self.lane, self.kind = code, lane, kind
         super().__init__(detail)
 
 
@@ -432,6 +432,12 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
         deadline = time.monotonic() + opts["total_seconds"]
         executor.deadline = min(executor.deadline, deadline) if executor.deadline is not None else deadline
     try:
+        if "layout" in d["inputs"]:
+            from creation_pipeline.artifacts.layout import require
+            try:
+                require(manifest(package), d["inputs"]["layout"]["payload"])
+            except ValueError as exc:
+                raise RuntimeBlocked("delivery_layout_mismatch", str(exc), "content", "content_defect") from exc
         if d["inputs"]["requirement"]["status"] == "unknown":
             raise RuntimeBlocked("requirements_unknown", d["inputs"]["requirement"]["reason"], "requirement")
         from .entry import associate, materialize, preflight

@@ -1,4 +1,9 @@
 Review the actual package using the supplied minimum/packaging standards and primary sources.
+Check the caller-owned delivery_layout against actual file paths. Explicit required
+paths override default role directories; require exact path/case and, when specified,
+the exact file set. A relocated required file is a blocking defect even if its bytes
+are unchanged and business execution would succeed. Never revise the caller request
+to fit the delivery. The deterministic host gate remains mandatory after review.
 Check every declared test as an independent fresh container/output directory.
 native declaration must use only execution_policy.native_check_fields. Unknown
 assertion/fixture fields are unsupported, not extra constraints the executor will

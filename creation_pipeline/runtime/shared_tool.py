@@ -139,6 +139,14 @@ def check_plan(request, plan):
         raise ValueError('shared_tool.source_files: outside closure ' + repr(sorted(set(plan['source_files']) - allowed - provenance)))
     if any(n not in allowed for n in plan['build_layout']['dependency_files']):
         raise ValueError('shared_tool.dependencies: dependency file not in implementation closure')
+    assessment = plan.get('resource_assessment') or {}
+    if assessment.get('status') == 'complete' and assessment.get('source_path') not in allowed:
+        raise ValueError('shared_tool.resource_assessment.source_path: expected a stable file in the '
+                         'implementation closure; actual=' + repr(assessment.get('source_path'))
+                         + '; allowed=' + repr(sorted(allowed))
+                         + '. The excluded Skill document changes across callers and cannot ground '
+                           'a reusable environment requirement. Read the original source or unchanged '
+                           'delivered entry and cite its exact passage; do not rewrite code or waive resources.')
     dependencies = {d['name'].lower(): d['version'] for d in plan['dependencies']}
     for name, version in request['declaration']['requirements']['imports'].items():
         if dependencies.get(name.lower()) != version:

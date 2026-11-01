@@ -1,0 +1,801 @@
+{
+  "schema": 1,
+  "created_at": "2026-11-01T14:25:25.808224+00:00",
+  "status": "P0_complete_with_documented_local_support_boundary",
+  "baseline_commit": "7b423814ab710f307c5bb68c2b49b65cdf59b1f7",
+  "report": "docs/integration/delivery-layout-p0-20261101.md",
+  "evidence_root": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05",
+  "scope": "Caller-owned required delivery paths, deterministic host/frozen qualification and normal CLI generation; no remote platform or OCI distribution.",
+  "support": {
+    "delivery_protocol": 2,
+    "layout_subprotocol": 1,
+    "legacy_protocol_1": "Readable under original frozen rules; absence of caller layout is not evidence of satisfying new path requirements. Use check --config for an original-config audit.",
+    "implemented": [
+      "finite explicit file lists and package-root requirements",
+      "generic structured required_files/exact_files",
+      "frozen original requirement snapshots and separate layout fingerprint",
+      "author receipt, host validation, pre-planner gate, runtime request and final qualification",
+      "current independent review and acceptance on exact tool hit"
+    ],
+    "unsupported": [
+      "arbitrary natural-language path interpretation",
+      "required directories, wildcard or negative path rules",
+      "remote distribution or OCI publishing"
+    ]
+  },
+  "invariants": {
+    "manual_acceptance_plan": false,
+    "live_pipeline_internal_state_injection": false,
+    "failed_generation_resumed": false,
+    "original_requirement_fields_and_original_source_bytes_changed": false,
+    "configured_inputs_and_source_bytes_unchanged_during_generation": true,
+    "supplemental_source_and_stronger_retention_constraint": "One version-pinned official canonical reference plus retention of the failed two-row obligation; original prompt, primary source, requirement fields, dependencies, interfaces, providers and budgets remain exact.",
+    "old_outputs_and_tool_records_unchanged": true,
+    "cache_or_image_cleanup": false,
+    "push": false
+  },
+  "regression": {
+    "total": 723,
+    "passed": 720,
+    "skipped": 3,
+    "failed": 0,
+    "errors": 0,
+    "new_tests": 22,
+    "checks": [
+      {
+        "label": "regression",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "exit_code": 0,
+        "seconds": 171.78837570000906
+      },
+      {
+        "label": "prompt-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_prompt_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.5406499999808148
+      },
+      {
+        "label": "acceptance-prompt",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_acceptance_prompt.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.24606480001239106
+      },
+      {
+        "label": "planner",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_planner.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.23584789998130873
+      }
+    ],
+    "results": {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\postflight\\results.json",
+      "sha256": "ec540fa5a46eb0ff33d7424978cdb8960b564175a374a806939c127b6b46bdfc"
+    },
+    "log": {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\postflight\\regression.log",
+      "sha256": "d5763fda599062713268c1f46f29da0a0eb48fcdf0a5b633499683484df0001b"
+    },
+    "prompt_freeze_and_checks": {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\prompt-self-checks.json",
+      "sha256": "6499b42fd966ac804fe1673eacc48892d27149f148bb76e2ea70fdaa0595a505"
+    }
+  },
+  "new_successful_generation": {
+    "batches": 2,
+    "cases": 33,
+    "passed": 33,
+    "admitted_stage_calls": 15,
+    "observations": [
+      {
+        "label": "a",
+        "build_id": "20261101T213858-8080f16b",
+        "revision_id": "rev-f71ce003737d45c3e2c96bb79005aa910c2bf9da7d8441a876766e2de30e2724",
+        "status": "ready",
+        "delivery_protocol": 2,
+        "output": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\a\\state\\outputs\\20261101T213858-8080f16b",
+        "summary": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\a\\state\\outputs\\20261101T213858-8080f16b\\summary.json",
+          "sha256": "cc0bcba29d368c5ab1b912d15a154f405db06cc4d7790c27fc3b33c4c1617985"
+        },
+        "record": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\a\\state\\outputs\\20261101T213858-8080f16b\\records\\chem-rdkit-descriptors.json",
+          "sha256": "3f2e674fdd49b8e37d57d8f5399e9e40ce8bcde0251ee1ebefa633ead0060450"
+        },
+        "execution_report": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\a\\state\\outputs\\20261101T213858-8080f16b\\runtime\\candidate-8fdfec549396c24045d6afb822f34c1e16f803b2f827235fdb29467087c4e91b\\219c4fd100d44c9f88cf8402de86fed2\\execution\\report.json",
+          "sha256": "9530a3c5ad122edcdd47f4af71dc0685ab37ba5bff0594558f4774bca759a49b"
+        },
+        "execution_receipt": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\a\\state\\outputs\\20261101T213858-8080f16b\\runtime\\candidate-8fdfec549396c24045d6afb822f34c1e16f803b2f827235fdb29467087c4e91b\\219c4fd100d44c9f88cf8402de86fed2\\receipt.json",
+          "sha256": "c8848a8ae6f996f980aba2164554eaed37577e8fd564a02b54f210c5621215a0"
+        },
+        "native_sessions": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\a\\state\\runs\\20261101T213858-8080f16b\\agent-state.json",
+          "sha256": "c3d6525b52d768a3aacb1ed26eb20290c30a9e47b1154fb3aad4d8658c1f6986"
+        },
+        "package_files": [
+          {
+            "path": "requirements.txt",
+            "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+            "bytes": 46
+          },
+          {
+            "path": "scripts/calc_descriptors.py",
+            "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+            "bytes": 1710
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "a820b875df1f9f0c171120ff5f1de79962cddc69bdd8109bd7edb206db2f130b",
+            "bytes": 6267
+          }
+        ],
+        "layout_contract_sha256": "651d93f74cd309730d1688f19203c38d84a031cca3b470a4c82f9a73901a677a",
+        "required_files": [
+          "SKILL.md",
+          "requirements.txt",
+          "scripts/calc_descriptors.py"
+        ],
+        "exact_files": [
+          "SKILL.md",
+          "requirements.txt",
+          "scripts/calc_descriptors.py"
+        ],
+        "original_config": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\descriptors-a.json",
+          "sha256": "d693b248d042516acf24e93c21c84ec50213cacdbc06c116213b190152ce3a1d"
+        },
+        "baseline_config": {
+          "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\shared-cli-expansion\\descriptors-a.json",
+          "sha256": "1625d64906d54312e9ca880e2faf0d13feaf26c2b4c5984d42c9b4fb8052843d"
+        },
+        "config_supplement": "official version-pinned canonical reference and stronger retained-case constraint",
+        "independent_review_session": true,
+        "qualification": {
+          "accepted": true,
+          "reason": "Content review and current Docker business evidence passed"
+        },
+        "library_current_qualification": {
+          "accepted": true,
+          "reason": "Content review and current Docker business evidence passed"
+        },
+        "cases": 17,
+        "retained_two_row_canonical_cases": [
+          "check-generated-valid_file_persisted_rows"
+        ],
+        "model_calls": {
+          "admitted_stages": 9,
+          "by_phase": {
+            "discovery": 1,
+            "author": 1,
+            "review": 1,
+            "runtime_planning": 6
+          },
+          "environment_planning": 6,
+          "acceptance_planning": 6,
+          "planning_stages": {
+            "combined_environment_acceptance_planner": 6
+          },
+          "models": [
+            "deepseek-v4-pro",
+            "gpt-6-astra"
+          ],
+          "stage_elapsed_seconds": {
+            "discovery": 133.47,
+            "author": 201.753,
+            "review": 112.263,
+            "runtime_planning": 1062.385
+          }
+        },
+        "build_calls": {
+          "environment": 1,
+          "tool": 1
+        },
+        "shared_tool": {
+          "status": "built",
+          "artifact_id": "c3bcaa0b388085b6ee559ce6dcbad418bdebcc5d6028fe7a82fc5d3e1fc8c51c",
+          "request_key": "fd093fdb8b98b5a58c72cd6f96e5416d9a799068e11e83d6b1f193310a374b05"
+        },
+        "image_id": "sha256:7b5dcc7e129bd5a37833042084fef1e703ee67bc316d642b0097dafcd23a6b24",
+        "cli_seconds": 1598.133,
+        "skill_sha256": "a820b875df1f9f0c171120ff5f1de79962cddc69bdd8109bd7edb206db2f130b",
+        "acceptance_sha256": "3b89863c26a52555453de6ed308a9f53e18b0b5b0eb65604dd95489405886c59"
+      },
+      {
+        "label": "b",
+        "build_id": "20261101T220629-4ae1f795",
+        "revision_id": "rev-6bad052587f6a898b735f0728a0c396b37fe14b46929cf23729ce218ae51201e",
+        "status": "ready",
+        "delivery_protocol": 2,
+        "output": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\b\\state\\outputs\\20261101T220629-4ae1f795",
+        "summary": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\b\\state\\outputs\\20261101T220629-4ae1f795\\summary.json",
+          "sha256": "801aefdbc27b2a768fa0168d432869b831db6e5fd8bad06e5f78f783b7c8e5c8"
+        },
+        "record": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\b\\state\\outputs\\20261101T220629-4ae1f795\\records\\chem-rdkit-descriptors.json",
+          "sha256": "6416c1a25da449dfeca8b290e9ebf166724f974bff8771cbe402488f5e1790f0"
+        },
+        "execution_report": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\b\\state\\outputs\\20261101T220629-4ae1f795\\runtime\\candidate-8fdfec549396c24045d6afb822f34c1e16f803b2f827235fdb29467087c4e91b\\19dd02c2e0d049bbba10ba2f004fd284\\execution\\report.json",
+          "sha256": "d220cfad1c6a48a2506250e07a2347da289de12ef1fc3319e3232ecc3da918b8"
+        },
+        "execution_receipt": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\b\\state\\outputs\\20261101T220629-4ae1f795\\runtime\\candidate-8fdfec549396c24045d6afb822f34c1e16f803b2f827235fdb29467087c4e91b\\19dd02c2e0d049bbba10ba2f004fd284\\receipt.json",
+          "sha256": "4f4e591a45b3bdf669eacb95029c715765df477d0ee7d738d18ee1683a68370b"
+        },
+        "native_sessions": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\b\\state\\runs\\20261101T220629-4ae1f795\\agent-state.json",
+          "sha256": "474572ca1fc00aa7b4fb214263f3846728907e302693a49da8fd2525bc03bec0"
+        },
+        "package_files": [
+          {
+            "path": "requirements.txt",
+            "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+            "bytes": 46
+          },
+          {
+            "path": "scripts/calc_descriptors.py",
+            "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+            "bytes": 1710
+          },
+          {
+            "path": "SKILL.md",
+            "sha256": "907d7196fd4fa48c6e7dfcf60a897a7dff0e57da9fe3df81eb4810c8effeadee",
+            "bytes": 6268
+          }
+        ],
+        "layout_contract_sha256": "ed061747ef62ea5e6868f305f34264fc1cef48f1724b19dfb1b7e57fc03420ac",
+        "required_files": [
+          "SKILL.md",
+          "requirements.txt",
+          "scripts/calc_descriptors.py"
+        ],
+        "exact_files": [
+          "SKILL.md",
+          "requirements.txt",
+          "scripts/calc_descriptors.py"
+        ],
+        "original_config": {
+          "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\descriptors-b.json",
+          "sha256": "f16e7216acd2a44ca05b379e50bb5b58913dd87ea648393574e8041772d4ac57"
+        },
+        "baseline_config": {
+          "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\shared-cli-expansion\\descriptors-b.json",
+          "sha256": "44ffcd78eb3d7f20f7e8d15ca2862e7f98827049397145665c82691f63e4c107"
+        },
+        "config_supplement": "official version-pinned canonical reference and stronger retained-case constraint",
+        "independent_review_session": true,
+        "qualification": {
+          "accepted": true,
+          "reason": "Content review and current Docker business evidence passed"
+        },
+        "library_current_qualification": {
+          "accepted": true,
+          "reason": "Content review and current Docker business evidence passed"
+        },
+        "cases": 16,
+        "retained_two_row_canonical_cases": [
+          "file_persisted_rows"
+        ],
+        "model_calls": {
+          "admitted_stages": 6,
+          "by_phase": {
+            "discovery": 1,
+            "author": 1,
+            "review": 1,
+            "runtime_acceptance_planning": 3
+          },
+          "environment_planning": 0,
+          "acceptance_planning": 3,
+          "planning_stages": {
+            "acceptance_only_planner": 3
+          },
+          "models": [
+            "deepseek-v4-pro",
+            "gpt-6-astra"
+          ],
+          "stage_elapsed_seconds": {
+            "discovery": 141.077,
+            "author": 282.351,
+            "review": 89.129,
+            "runtime_acceptance_planning": 355.255
+          }
+        },
+        "build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "shared_tool": {
+          "status": "hit",
+          "artifact_id": "c3bcaa0b388085b6ee559ce6dcbad418bdebcc5d6028fe7a82fc5d3e1fc8c51c",
+          "request_key": "fd093fdb8b98b5a58c72cd6f96e5416d9a799068e11e83d6b1f193310a374b05"
+        },
+        "image_id": "sha256:7b5dcc7e129bd5a37833042084fef1e703ee67bc316d642b0097dafcd23a6b24",
+        "cli_seconds": 905.731,
+        "skill_sha256": "907d7196fd4fa48c6e7dfcf60a897a7dff0e57da9fe3df81eb4810c8effeadee",
+        "acceptance_sha256": "9f68d25f66094b75face41e2148994861deb823d7e94a4b57ae002fc2ea2f260"
+      }
+    ],
+    "cross_audit": {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\audit-ab.json",
+      "sha256": "20f7862b7a3af322974d5469ca8ef0276c63d0c1babe9d0c47374bde1e8dfbc4"
+    }
+  },
+  "negative_layout_cli": [
+    {
+      "operation": "reject-historical-a",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\reject-historical-a\\result.json",
+        "sha256": "817d09126e547bc3fae4cadeeb2e4c968ec775e7d24db412b63d98a367a9c4c1"
+      },
+      "exit_code": 1,
+      "scope": "static_only_not_new_qualification",
+      "findings": [
+        {
+          "code": "required_delivery_file_missing",
+          "path": "requirements.txt",
+          "expected": {
+            "path": "requirements.txt",
+            "kind": "file",
+            "present": true,
+            "case": "exact"
+          },
+          "actual": {
+            "present": false,
+            "other_paths": [
+              "resources/requirements.txt"
+            ],
+            "delivered_paths": [
+              "SKILL.md",
+              "resources/requirements.txt",
+              "scripts/calc_descriptors.py"
+            ]
+          },
+          "sources": [
+            {
+              "field": "prompt",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "runtime_defaults.requirements.0",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            }
+          ]
+        },
+        {
+          "code": "unexpected_delivery_file",
+          "path": "resources/requirements.txt",
+          "expected": {
+            "present": false,
+            "allowed_paths": [
+              "SKILL.md",
+              "requirements.txt",
+              "scripts/calc_descriptors.py"
+            ]
+          },
+          "actual": {
+            "present": true,
+            "path": "resources/requirements.txt"
+          },
+          "sources": [
+            {
+              "field": "prompt",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "runtime_defaults.requirements.0",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "prompt",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "runtime_defaults.requirements.0",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "prompt",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "runtime_defaults.requirements.0",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "operation": "reject-historical-b",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\reject-historical-b\\result.json",
+        "sha256": "3518b94505555a8883e33479d0a118b00eb9c1f13e51c3839a6b84f96e385dc4"
+      },
+      "exit_code": 1,
+      "scope": "static_only_not_new_qualification",
+      "findings": [
+        {
+          "code": "required_delivery_file_missing",
+          "path": "requirements.txt",
+          "expected": {
+            "path": "requirements.txt",
+            "kind": "file",
+            "present": true,
+            "case": "exact"
+          },
+          "actual": {
+            "present": false,
+            "other_paths": [
+              "resources/requirements.txt"
+            ],
+            "delivered_paths": [
+              "SKILL.md",
+              "resources/requirements.txt",
+              "scripts/calc_descriptors.py"
+            ]
+          },
+          "sources": [
+            {
+              "field": "prompt",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "runtime_defaults.requirements.0",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            }
+          ]
+        },
+        {
+          "code": "unexpected_delivery_file",
+          "path": "resources/requirements.txt",
+          "expected": {
+            "present": false,
+            "allowed_paths": [
+              "SKILL.md",
+              "requirements.txt",
+              "scripts/calc_descriptors.py"
+            ]
+          },
+          "actual": {
+            "present": true,
+            "path": "resources/requirements.txt"
+          },
+          "sources": [
+            {
+              "field": "prompt",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "runtime_defaults.requirements.0",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "prompt",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "runtime_defaults.requirements.0",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "prompt",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            },
+            {
+              "field": "runtime_defaults.requirements.0",
+              "quote": "Deliver exactly SKILL.md, scripts/calc_descriptors.py and requirements.txt"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "failed_generation": {
+    "rounds": [
+      {
+        "root": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-02",
+        "output": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-02\\a\\state\\outputs\\20261101T202529-e513291c",
+        "status_at_generation": "blocked",
+        "admitted_generation_stage_calls": 6,
+        "current_qualification": {
+          "accepted": false,
+          "reason": "Execution has not passed or content approval was revoked"
+        },
+        "frozen_initial_qualification_declaration": {
+          "accepted": false,
+          "reason": "Docker build is not business acceptance"
+        },
+        "cases_at_generation": 0,
+        "failed_cases_at_generation": [],
+        "failed_round_resumed": false
+      },
+      {
+        "root": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-03",
+        "output": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-03\\a\\state\\outputs\\20261101T205405-33662723",
+        "status_at_generation": "blocked",
+        "admitted_generation_stage_calls": 4,
+        "current_qualification": {
+          "accepted": false,
+          "reason": "Execution has not passed or content approval was revoked"
+        },
+        "frozen_initial_qualification_declaration": {
+          "accepted": false,
+          "reason": "Docker build is not business acceptance"
+        },
+        "cases_at_generation": 0,
+        "failed_cases_at_generation": [],
+        "failed_round_resumed": false
+      },
+      {
+        "root": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-04",
+        "output": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-04\\a\\state\\outputs\\20261101T211335-1b5a2c85",
+        "status_at_generation": "failed",
+        "admitted_generation_stage_calls": 5,
+        "current_qualification": {
+          "accepted": false,
+          "reason": "Execution has not passed or content approval was revoked"
+        },
+        "frozen_initial_qualification_declaration": {
+          "accepted": false,
+          "reason": "Docker build is not business acceptance"
+        },
+        "cases_at_generation": 11,
+        "failed_cases_at_generation": [
+          "valid_file_persisted_rows"
+        ],
+        "failed_round_resumed": false
+      }
+    ],
+    "admitted_stage_calls": 15,
+    "cases_in_failed_round": 11,
+    "passed_cases_in_failed_round": 10,
+    "failed_cases_in_failed_round": 1,
+    "audit": {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\failed-rounds-current-audit.json",
+      "sha256": "6eed5aecc52f81ca27b0f2627b551f3a4b1447b67ae093f295f25ff34c2897e3"
+    },
+    "initial_offline_failure_root": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-01",
+    "initial_offline_failure": "Implicit SKILL.md requirement on lower-level fixtures; corrected to record explicit caller obligations only. Original package SKILL.md validation retained.",
+    "evidence_manifests": {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\failed-evidence-manifests.json",
+      "sha256": "528da189fcd095c1e9a03f03ebc7f72d8cc77b9651cad77196f439b32b154433"
+    }
+  },
+  "total_admitted_generation_stage_calls": 30,
+  "call_count_scope": "Admitted pipeline stages. Combined planner is counted once, even though it handles both environment and acceptance. Not provider billable requests or Codex internal tool turns. Per-batch envelope remains 16.",
+  "legacy_self_contained_revalidation": {
+    "cases": 8,
+    "passed": 8,
+    "new_model_calls": 0,
+    "execution_acceptance_inherited": false,
+    "audit": {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\legacy-final-audit.json",
+      "sha256": "5116d5dc02bacda4e12884058724231ebe18228e2e864556ca3529538f63bffd"
+    },
+    "build_call_count": null,
+    "build_count_limit": "Historical legacy receipt has no build_calls field; no zero count inferred."
+  },
+  "measurements_limit": "CLI elapsed times have different model correction rounds and independently generated checks; no controlled performance/storage benchmark here. Existing Docker/BuildKit cache retained. Image IDs are local Docker identities, not OCI manifest digests.",
+  "unchanged_source_snapshot": {
+    "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\source-before.json",
+    "sha256": "5d999ec9f61d40ed1d268e34d60256da4e8800897479af675a2ca66836bf73b4"
+  },
+  "additional_source_snapshot": {
+    "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\additional-sources-before.json",
+    "sha256": "06abcbe4cc6f01b397a6ddf28f1455ba33cc6e8a3eaa4e86acf3d6062d1a1c35"
+  },
+  "pipeline_code_at_generation": {
+    "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\code-at-generation.json",
+    "sha256": "73c000efe400ca5a0891189c1865fc60c21a38de4451412f0169e7c4d4557ab2"
+  },
+  "old_bindings_and_evidence_before": {
+    "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\old-before.json",
+    "sha256": "f331432f1f9f24b1ba23ce885a95744fed5ca7611443920466d0cb04db9db8e6"
+  },
+  "resource_citation_version_audit": {
+    "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\resource-provenance-version-audit.json",
+    "sha256": "64c90d824d01a538c7a631b5b8cbbdc56c39943afc9a3a59d7206a331cb54ce2"
+  },
+  "read_only_auditor_repairs": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\read-only-audit-initial-failures.json",
+      "sha256": "c6e466f31905a7509b2481632b085530bacb5fd2eafc6d48a11acd87e69cc319"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\read-only-audit-shared-hit-iidfile-failure.json",
+      "sha256": "9e18f2d03318bbcd7f94178e8d7086f8778fcec9a23cb097a40378f1af41f1d6"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\audit-recognizer-offline-probes.json",
+      "sha256": "26bd913c5af224a9b9fb4297602ad64c8d67d44ec9794921d7d02ada54ef0292"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\audit-image-evidence-offline-probes.json",
+      "sha256": "c98f0c06768755d1b1919080830e5c36be2c60472fbd15041625ff29caa6f57d"
+    }
+  ],
+  "public_cli_operations": [
+    {
+      "label": "build-a",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\build-a\\result.json",
+        "sha256": "f6764cb8cac27d3f03e2f5131f6dd48771d8795b895e98969756a690e435a197"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\build-a\\command.json",
+        "sha256": "b65682c2f7d3b12415c8930ef918b2852c073cf501343a53e9b0cb081e4be30e"
+      },
+      "exit_code": 0,
+      "status": "ready"
+    },
+    {
+      "label": "build-b",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\build-b\\result.json",
+        "sha256": "98856c8977c61c5c2549f9ae816c8dc66fb97ed700ec0fdb4d942960e071dc57"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\build-b\\command.json",
+        "sha256": "73ab0cb82687321596170409ce2fa24d6acc088cd0821689ec2ac23c4d69276d"
+      },
+      "exit_code": 0,
+      "status": "ready"
+    },
+    {
+      "label": "check-current-a",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\check-current-a\\result.json",
+        "sha256": "1e18d3df4c8be5628523f7ad5f323996fce8ba94b723f900dace236385c38025"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\check-current-a\\command.json",
+        "sha256": "a4219f8e7a9fdc89a53244b98ae091d3cf6ade20a721c6066feecbc01f19c3ca"
+      },
+      "exit_code": 0,
+      "status": "pass"
+    },
+    {
+      "label": "check-current-b",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\check-current-b\\result.json",
+        "sha256": "a272dbdefe95e60a543e72d6f98b17f43d2868fecb10a6521a0d3a3e03595ce0"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\check-current-b\\command.json",
+        "sha256": "58a943e26e1b74c74e2ee7baab06dc6dc271413acdb019e861cf0755e593dc11"
+      },
+      "exit_code": 0,
+      "status": "pass"
+    },
+    {
+      "label": "inspect-current-a",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\inspect-current-a\\result.json",
+        "sha256": "d976d6d90c4fc3ae03ae9305de159fb985a0f03d325798278850ffc095baeee5"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\inspect-current-a\\command.json",
+        "sha256": "dd84e5a5072b3ecbf713b93a8c3e021108b6fadf7b7db30ccc366d2250a92c2f"
+      },
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "label": "inspect-current-b",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\inspect-current-b\\result.json",
+        "sha256": "52196f50d246653b06aae19d0048be06a8e5c0c36d8ed46e61da8848af2e053c"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\inspect-current-b\\command.json",
+        "sha256": "59d18e7530921df9bfef29f6bbe976034efa1ad1cc4c0dddf31f7d803d205653"
+      },
+      "exit_code": 0,
+      "status": null
+    },
+    {
+      "label": "legacy-import",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\legacy-import\\result.json",
+        "sha256": "62a134671d00e67b7dad45635505df2725a06d138ec9beeb821d3fac9c662a16"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\legacy-import\\command.json",
+        "sha256": "7c9cfe40a5b6385526fb144e3dd8fb6dff91bd0e2b8e0c2c8361d7e807947690"
+      },
+      "exit_code": 1,
+      "status": "not_run"
+    },
+    {
+      "label": "legacy-resume",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\legacy-resume\\result.json",
+        "sha256": "e6d4e09ccee9232d345806e9bf2e772970263de0e0dd380811ac8e04c5701b9f"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\legacy-resume\\command.json",
+        "sha256": "af84ea82075b6b200769a6e4c82da3b421794de34582864f0a969ef88a3536cd"
+      },
+      "exit_code": 0,
+      "status": "execution_passed"
+    },
+    {
+      "label": "preflight-a",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\preflight-a\\result.json",
+        "sha256": "2e1422bfd1088660a3c8c61ba42404b0c33c2a3c4c41dd81cdd550b65b6f5c08"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\preflight-a\\command.json",
+        "sha256": "825e8593b33e820f5a58138864a04d0f30d084b289791b943207b06fb61fbf87"
+      },
+      "exit_code": 0,
+      "status": "configuration_valid"
+    },
+    {
+      "label": "preflight-b",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\preflight-b\\result.json",
+        "sha256": "dd16a78a53dfbb2131b722eed4de4d48f64090b5226833be87c2d21db92e72f8"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\preflight-b\\command.json",
+        "sha256": "9a24b3099f7712aa9c6d9dcdeefb703463552a43d59922bd4c5b34cc36eab543"
+      },
+      "exit_code": 0,
+      "status": "configuration_valid"
+    },
+    {
+      "label": "reject-historical-a",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\reject-historical-a\\result.json",
+        "sha256": "817d09126e547bc3fae4cadeeb2e4c968ec775e7d24db412b63d98a367a9c4c1"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\reject-historical-a\\command.json",
+        "sha256": "e8a2bba4cb5bbaaceb2ab7139e37b02bf6adf629450f38e72b13e4e1ec528b71"
+      },
+      "exit_code": 1,
+      "status": "fail"
+    },
+    {
+      "label": "reject-historical-b",
+      "receipt": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\reject-historical-b\\result.json",
+        "sha256": "3518b94505555a8883e33479d0a118b00eb9c1f13e51c3839a6b84f96e385dc4"
+      },
+      "command": {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\operations\\reject-historical-b\\command.json",
+        "sha256": "0994edea34cfaf52f2b9864710247175e0219b77d66f6de20d7b6de084e5f4b7"
+      },
+      "exit_code": 1,
+      "status": "fail"
+    }
+  ],
+  "evidence_manifest": {
+    "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\evidence-manifest.json",
+    "sha256": "9ad05ae89d62a03f4be4932c51603ce732ea3d2caea3ce3e3a6b91a93edddad0",
+    "files": 1111
+  }
+}

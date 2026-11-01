@@ -70,6 +70,19 @@ class ResourceAssessmentTests(unittest.TestCase):
         self.assertIn('resources_unknown', source)
         self.assertIn("!= \"complete\"", source)
 
+    def test_policy_separates_undocumented_peaks_from_genuine_resource_gaps(self):
+        for text in ('source-backed additional minimum', 'never means zero consumption',
+                     'Do not invent numeric requirements', 'Cite those original materials',
+                     'retain\nunmeasured peaks/scaling in unverified_behavior',
+                     'runtime still blocks unknown'):
+            self.assertIn(text, planner.POLICY)
+        # This clarification must keep the expressible unknown state and the
+        # existing complete-citation gate; it supplies no requirements itself.
+        self.assertEqual(planner._plan['properties']['resource_assessment']['properties']['status']['enum'],
+                         ['complete', 'unknown'])
+        with self.assertRaises(planner.PlanningError):
+            self.validate(self.base('complete', []))
+
 
 if __name__ == '__main__':
     unittest.main()

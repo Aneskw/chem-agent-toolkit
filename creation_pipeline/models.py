@@ -188,6 +188,10 @@ def load_config(path):
         if not isinstance(test, dict) or not isinstance(test.get("candidate"), str) or not test["candidate"]:
             raise ValueError("Configured checks require a candidate name; autonomous builds should propose checks from sources")
     config["config_path"] = str(path)
+    from creation_pipeline.artifacts.layout import extract
+    extract(config)
+    for name in config["runtime"]:
+        extract(config, name)
     return config
 
 

@@ -1,4 +1,4 @@
-"""Versioned delivery identities and fail-closed qualification (integration v1).
+"""Versioned delivery identities and fail-closed qualification (v2, with v1 reads).
 
 Author receipts are not delivery approvals. Runtime observations never change the
 frozen inputs; a changed input creates a different revision.
@@ -11,7 +11,7 @@ from pathlib import Path
 
 from creation_pipeline.records import digest, safe_relative
 
-PROTOCOL = 1
+PROTOCOL = 2
 EXECUTION_STATES = {"not_run", "runtime_blocked", "build_failed", "execution_failed", "passed"}
 HOST_STATES = {"not_checked", "available", "unavailable", "not_applicable"}
 
@@ -84,15 +84,17 @@ def requirement(proposal, entries, review):
 
 
 def inputs_for(record, sources, requirement_value, *, bindings=None, environment=None, acceptance=None):
+    from creation_pipeline.artifacts.layout import extract, validate
     return {"candidate": record["plan"], "files": record["files"], "sources": source_identity(sources),
             "requirement": requirement_value, "bindings": versioned(bindings),
             "environment": versioned(environment),
+            "layout": versioned(validate(record.get("delivery_layout", extract({})))),
             "acceptance": versioned(acceptance if acceptance is not None else record.get("test_definitions", {}))}
 
 
 def qualify(delivery, *, runtime_root=None, runtime_ref=None, frozen_directory=None, freeze_sha256=None, executor=None):
     """No stage-one path can fabricate Docker execution approval."""
-    if delivery.get("protocol") != PROTOCOL:
+    if delivery.get("protocol") not in {1, PROTOCOL}:
         return False, "Unsupported delivery protocol"
     if delivery.get("mode") not in {"normal", "draft"}:
         return False, "Invalid delivery mode"
@@ -101,12 +103,25 @@ def qualify(delivery, *, runtime_root=None, runtime_ref=None, frozen_directory=N
     inputs = delivery["inputs"]
     if delivery["revision_id"] != "rev-" + fingerprint(inputs):
         return False, "Frozen delivery inputs changed"
-    if delivery.get("fingerprints") != {k: fingerprint(inputs[k]) for k in ("files", "sources", "bindings", "environment", "acceptance")}:
+    keys = ("files", "sources", "bindings", "environment", "acceptance") + (("layout",) if "layout" in inputs else ())
+    if delivery.get("protocol") == PROTOCOL and "layout" not in inputs:
+        return False, "Delivery protocol 2 requires the frozen caller layout contract"
+    if delivery.get("fingerprints") != {k: fingerprint(inputs[k]) for k in keys}:
         return False, "Delivery fingerprints changed"
-    for name in ("bindings", "environment", "acceptance"):
+    for name in ("bindings", "environment", "acceptance") + (("layout",) if "layout" in inputs else ()):
         contract = inputs[name]
-        if type(contract["version"]) is not int or contract["version"] < 1 or contract["sha256"] != fingerprint(contract["payload"]):
+        if (not isinstance(contract, dict) or set(contract) != {"version", "payload", "sha256"}
+                or type(contract.get("version")) is not int or contract["version"] < 1
+                or contract["sha256"] != fingerprint(contract["payload"])):
             return False, "Invalid " + name + " contract"
+    if "layout" in inputs:
+        try:
+            from creation_pipeline.artifacts.layout import require
+            if inputs["layout"]["version"] != 1:
+                return False, "Unsupported delivery layout contract version"
+            require(inputs["files"], inputs["layout"]["payload"])
+        except (ValueError, TypeError, KeyError) as exc:
+            return False, str(exc)
     if delivery["mode"] == "draft":
         return False, "Explicit draft has no formal delivery qualification"
     if delivery["content"]["status"] != "passed":
@@ -145,7 +160,7 @@ def finalize(record, sources, proposal=None, *, draft=False):
     delivery = {"protocol": PROTOCOL, "candidate_id": "candidate-" + fingerprint({"name": record["name"]}),
                 "revision_id": "rev-" + fingerprint(inputs), "mode": "draft" if draft else "normal",
                 "inputs": inputs, "content": {"status": content},
-                "fingerprints": {k: fingerprint(inputs[k]) for k in ("files", "sources", "bindings", "environment", "acceptance")},
+                "fingerprints": {k: fingerprint(inputs[k]) for k in ("files", "sources", "bindings", "environment", "acceptance", "layout")},
                 "execution": {"status": "not_run", "attempts": [], "reason": "Execution evidence is recorded separately after final freeze"},
                 "host": {"status": "not_applicable" if req["status"] == "not_required" else "not_checked", "observed_at": None},
                 "evidence": []}
@@ -173,6 +188,9 @@ def runtime_request(delivery, frozen_directory, freeze_sha256, attempt_directory
     inputs = delivery["inputs"]
     if delivery["revision_id"] != "rev-" + fingerprint(inputs):
         raise ValueError("Cannot execute changed frozen inputs")
+    if "layout" in inputs:
+        from creation_pipeline.artifacts.layout import require
+        require(inputs["files"], inputs["layout"]["payload"])
     return RuntimeRequest(delivery["candidate_id"], delivery["revision_id"], fingerprint(inputs["files"]),
                           fingerprint(inputs["sources"]), fingerprint(inputs["bindings"]),
                           fingerprint(inputs["environment"]), fingerprint(inputs["acceptance"]),

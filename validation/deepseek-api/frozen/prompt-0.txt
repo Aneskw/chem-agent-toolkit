@@ -56,6 +56,17 @@ source_path and source_quote quoting the read source; status=unknown still keeps
 all schema-required fields (source_path/source_quote may be empty strings), needs
 no quotation, but must name what is undetermined in unresolved. unknown blocks Docker
 execution, so it is the honest answer, never a shortcut past validation.
+The numeric memory_bytes/cpus fields express source-backed additional minimum
+requirements, not a measured peak or an execution budget. A value of 0 means no
+additional minimum was identified for the selected entry and bounded acceptance
+scope; it never means zero consumption or a guarantee for arbitrary workloads.
+Do not invent numeric requirements or copy host capacity/container limits into
+source facts. Missing a published peak-memory/CPU benchmark alone does not make
+the prerequisite assessment unknown when the read entry, dependencies and usage
+establish its execution-resource scope. Cite those original materials and retain
+unmeasured peaks/scaling in unverified_behavior. Keep status=unknown when needed
+resources or their sufficiency genuinely cannot be assessed (for example unclear
+required weights, input sizes or hardware); the runtime still blocks unknown.
 Actively propose environment probes, interface cases and behavior tests. Try
 original tests/examples, independently derived tiny cases, justified metamorphic
 relations, or independent comparisons. Every oracle needs its source, derivation,

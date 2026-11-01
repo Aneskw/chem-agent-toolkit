@@ -8,7 +8,7 @@ from pathlib import Path
 from creation_pipeline.paths import ROOT
 from creation_pipeline.validation.checks import static_checks
 from creation_pipeline.models import load_config
-from creation_pipeline.artifacts.package import install, verify_bundle
+from creation_pipeline.artifacts.package import install, verify_bundle, manifest
 from .pipeline import build
 from creation_pipeline.records import clean_run, redact
 
@@ -38,6 +38,7 @@ def main(argv=None):
     child.add_argument("--keep-debug", action="store_true")
     child = commands.add_parser("check")
     child.add_argument("path", help="Build output directory or standalone skill directory")
+    child.add_argument("--config", help="Audit actual file paths against original caller requirements; no model calls or qualification inheritance")
     child = commands.add_parser("install")
     child.add_argument("output")
     child.add_argument("--destination", required=True)
@@ -113,17 +114,32 @@ def main(argv=None):
                 notify=lambda m: print(m, file=sys.stderr, flush=True))
         elif args.command == "check":
             path = Path(args.path)
+            from creation_pipeline.artifacts.layout import extract
+            config = load_config(args.config) if args.config else None
             if (path / "summary.json").is_file():
                 record, bundle = verify_bundle(path)
                 reports = []
                 for entity in record["entities"]:
                     directory = bundle / ("skills" if entity["kind"] == "skill" else "tools") / entity["name"]
                     if directory.exists():
-                        reports += static_checks(directory, entity["name"], bundle=bundle, tool=entity["kind"] == "tool")
+                        from creation_pipeline.records import read_json
+                        frozen = read_json(path / "records" / (entity["name"] + ".json"))
+                        layout = frozen["delivery"]["inputs"].get("layout", {}).get("payload")
+                        current = static_checks(directory, entity["name"], bundle=bundle, tool=entity["kind"] == "tool", layout=layout)
+                        if config:
+                            from creation_pipeline.artifacts.layout import problems
+                            from creation_pipeline.validation.checks import result as check_result
+                            for check in current:
+                                if check["name"] == "delivery_layout":
+                                    check["name"] = "frozen_delivery_layout"
+                            current.append(check_result("delivery_layout", problems(
+                                manifest(directory), extract(config, entity["name"]))))
+                        reports += current
                 result = {"status": "fail" if any(r["status"] == "fail" for r in reports) else "pass",
-                          "checks": reports, "recorded_build_status": record["status"], "execution": "not_rerun"}
+                          "checks": reports, "recorded_build_status": record["status"], "execution": "not_rerun",
+                          "scope": "static_only_not_new_qualification"}
             else:
-                reports = static_checks(path)
+                reports = static_checks(path, layout=extract(config, path.name) if config else None)
                 result = {"status": "fail" if any(r["status"] == "fail" for r in reports) else "pass",
                           "checks": reports, "execution": "not_run", "scope": "static_only_not_installation_approval"}
         elif args.command == "install":

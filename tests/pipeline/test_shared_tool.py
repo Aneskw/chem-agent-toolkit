@@ -53,6 +53,32 @@ class SharedToolTests(unittest.TestCase):
         record['artifact_id'] = fingerprint(record)
         return record
 
+    def test_resource_citation_must_survive_skill_document_changes(self):
+        (self.package/'SKILL.md').write_text('A: no extra weights', encoding='utf-8')
+        request = self.request()
+        proposed = plan()
+        proposed['resource_assessment'].update(source_path='package/SKILL.md', source_quote='A: no extra weights')
+        with self.assertRaises(ValueError) as caught:
+            st.check_plan(request, proposed)
+        message = str(caught.exception)
+        for value in ('shared_tool.resource_assessment.source_path', 'expected', 'actual',
+                      'package/SKILL.md', 'sources/tool/main.py', 'implementation closure'):
+            self.assertIn(value, message)
+
+    def test_original_resource_citation_keeps_old_tool_available_after_prose_change(self):
+        (self.package/'SKILL.md').write_text('A: operator guide', encoding='utf-8')
+        request = self.request()
+        artifact = self.artifact(request)
+        root = self.publish(artifact)
+        (self.package/'SKILL.md').write_text('B: curation guide', encoding='utf-8')
+        other_source = self.root/'other-handoff'
+        handoff(self.package, self.sources, other_source)
+        current = st.describe(other_source, bind(self.package, self.sources), declaration())
+        self.assertEqual(current, request)
+        resolved, observation = st.resolve(current, {'engine_id':'daemon'}, self.probe(artifact), root)
+        self.assertEqual(observation['status'], 'hit')
+        self.assertEqual(resolved['artifact_id'], artifact['artifact_id'])
+
     def probe(self, artifact):
         image = {'Id': artifact['image_id'], 'Os': 'linux', 'Architecture': 'amd64',
                  'Config': {'Entrypoint': artifact['plan']['entrypoint'], 'User': '10001:10001', 'WorkingDir': '/opt/skill',

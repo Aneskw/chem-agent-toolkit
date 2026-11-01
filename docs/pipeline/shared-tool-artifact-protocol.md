@@ -1,5 +1,13 @@
 # 精确 Tool 制品复用：本机 v1 协议
 
+调用方的必需文件路径和精确交付清单现在由 delivery protocol 2 的 `inputs.layout`
+冻结并确定性核验，见 [交付路径协议](delivery-layout-contract.md)。这是 Skill 交付协议的
+版本，ToolArtifact ABI 没有因此更改。完整工具命中不能豁免当前 Skill 的路径要求；
+工具文件从一个目录移到另一个目录会改变实现闭包，不能沿用旧路径的工具版本。
+可复用环境的 `resource_assessment.source_path` 必须属于 `request.files`：不得以被排除、
+会随新 Skill 改变的生成 `package/SKILL.md` 作为资源依据。规划阶段会给出具体字段、
+实际路径和允许路径，要求引用稳定源码/来源；不修改原源码，不自动回填资源结论。
+
 2026-11-01 后续扩展：有限 Open Babel 外部可执行文件使用独立 `shared_tool_image_v2` /
 `openbabel-debian-image-v1`，见 [可执行文件与镜像闭包协议](openbabel-external-tool-protocol.md)。
 下文 v1 的 subprocess 禁止规则继续适用于 v1，不通过删除该规则扩大支持。

@@ -1,5 +1,11 @@
 # 共享工具层：当前集成分支的演进设计
 
+2026-11-01 交付路径收尾：调用方的明确文件位置进入 delivery protocol 2，
+在作者交付、准备前及最终资格中确定性检查；独立审阅或业务通过不能豁免。
+P0 本机保守范围完成：新 A/B 33/33，B 环境规划与两类构建均为 0；
+723 项回归（3 跳过）及三个提示自检通过。证据及旧版边界见
+[必需交付路径门禁](delivery-layout-p0-20261101.md)。
+
 2026-11-01 后续：Open Babel 外部执行文件已有独立 v2 协议与真实普通 CLI 成功对照，
 见 [Open Babel 完整工具共享](openbabel-shared-tool-20261101.md) 和
 [可执行文件及镜像闭包协议](../pipeline/openbabel-external-tool-protocol.md)。

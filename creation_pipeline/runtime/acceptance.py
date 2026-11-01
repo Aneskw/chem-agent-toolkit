@@ -80,8 +80,16 @@ def input_contract(record, index, source, where='Input contract'):
     if (not isinstance(review, dict) or review.get('status') != 'confirmed'
             or not isinstance(review.get('reviewer'), str) or not review['reviewer'].strip()):
         raise ValueError(where + ': none_documented needs an independent confirmation of this classification')
-    if review.get('materials_sha256') != materials_digest(checked):
-        raise ValueError(where + ': the independent confirmation is not bound to the examined materials')
+    expected = materials_digest(checked)
+    if review.get('materials_sha256') != expected:
+        raise ValueError(where + '.input_contract.review.materials_sha256: the independent confirmation '
+            'is not bound to the examined materials; expected=' + json.dumps(expected)
+            + '; actual=' + json.dumps(review.get('materials_sha256'))
+            + '; checked=' + json.dumps(checked, ensure_ascii=False, sort_keys=True)
+            + '. This is the SHA-256 of the ordered checked [{source_path,sha256}] list in canonical '
+              'JSON, not a file hash. Use this host-computed digest for this unchanged list; '
+              'do not guess a hash or alter classifications, checked materials or tests to fit it. '
+              'The digest does not grant independent review; that confirmation remains required.')
     return status
 
 

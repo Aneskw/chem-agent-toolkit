@@ -13,16 +13,20 @@ def inside(run, path):
     return target
 
 
-def validate_package(package, limit=None):
+def validate_package(package, limit=None, *, layout=None):
     package = Path(package)
     files = manifest(package)
     if not any(f["path"] == "SKILL.md" for f in files):
         raise ValueError("Missing SKILL.md")
     if exceeded(sum(f["bytes"] for f in files), limit):
         raise ValueError("Package exceeds explicit package_bytes limit")
+    if layout is not None:
+        from creation_pipeline.artifacts.layout import require
+        require(files, layout)
     for f in files:
         parts = Path(f["path"]).parts
-        if f["path"] != "SKILL.md" and (len(parts) < 2 or parts[0] not in ROLES):
+        explicit = layout is not None and f["path"] in layout["required_files"]
+        if f["path"] != "SKILL.md" and not explicit and (len(parts) < 2 or parts[0] not in ROLES):
             raise ValueError("Unsupported file role: " + f["path"])
         from creation_pipeline.resources.intake import exclusion
         if exclusion(Path(f["path"])):
@@ -55,7 +59,9 @@ def finish(run, package, token, metadata=None):
     # layout and the check definitions together instead of discovering them in turn.
     problems, files = [], None
     try:
-        files = validate_package(package, state["config"]["limits"]["package_bytes"])
+        from creation_pipeline.artifacts.layout import extract
+        files = validate_package(package, state["config"]["limits"]["package_bytes"],
+                                 layout=extract(state["config"], package.name))
     except ValueError as exc:
         problems.append(str(exc))
     for key in ("tests", "issues", "notes"):

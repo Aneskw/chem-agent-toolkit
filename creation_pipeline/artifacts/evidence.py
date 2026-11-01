@@ -82,6 +82,11 @@ def verify(directory, freeze_sha256):
         raise ValueError("Revision identity changed")
     if ordered(manifest(directory / "package")) != ordered(delivery["inputs"]["files"]):
         raise ValueError("Frozen package does not match revision")
+    from creation_pipeline.artifacts.layout import validate
+    if delivery.get("protocol") == 2 and "layout" not in delivery["inputs"]:
+        raise ValueError("Delivery protocol 2 requires the frozen caller layout contract")
+    if "layout" in delivery["inputs"]:
+        validate(delivery["inputs"]["layout"]["payload"])
     entries = read_json(directory / "sources.json")
     expected = {e["id"]: e["inventory"] for e in delivery["inputs"]["sources"]}
     if {e["id"]: e["inventory"] for e in entries} != expected:

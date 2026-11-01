@@ -5,7 +5,9 @@ def guidance(config):
 
 
 def candidate_context(session, config, plan):
+    from creation_pipeline.artifacts.layout import extract
     context = {**guidance(config), "plan": plan, "sources": session.sources.index(),
+            "delivery_layout": extract(config, plan["name"]),
             "evidence": session.sources.validate_evidence(plan["evidence"]),
             "handoff": config.get("_handoff", []),
 

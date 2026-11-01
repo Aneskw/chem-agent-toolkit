@@ -47,6 +47,11 @@ requirements, and grounded locked tests. `resource_assessment` explicitly record
 or scientific limitations remain in `unresolved`/`unverified_behavior`; they are
 not confused with missing execution resources. Source citations constrain model
 reasoning but substring verification is not proof of all semantic judgments.
+The numeric assessment fields describe source-backed additional minima, not peak
+benchmarks: 0 does not mean zero consumption. An undocumented peak alone need not
+block an otherwise source-grounded assessment of the selected entry and bounded
+acceptance workload. Keep unmeasured scaling explicit. Genuinely unknown required
+resources still block execution; container limits are budgets, not source facts.
 
 Invalid-input handling is classified per operation with three states, and the
 requirement is kept separate from its verification:

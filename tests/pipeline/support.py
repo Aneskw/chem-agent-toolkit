@@ -50,7 +50,7 @@ ARTIFACT = {"files": [{"path": "SKILL.md", "content": MAIN, "purpose": "Instruct
                 "citations": [{"source_id": "tool", "path": "api.py", "quote": "add(2,3) == 5"}]}}
 
 
-def write_fixture_files(package, files, max_bytes):
+def write_fixture_files(package, files, max_bytes, layout=None):
     """Simulate native file writes; validation remains production code."""
     package = Path(package)
     package.mkdir(parents=True, exist_ok=True)
@@ -58,7 +58,7 @@ def write_fixture_files(package, files, max_bytes):
         path = safe_relative(package, item["path"])
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(item["content"].encode("utf-8"))
-    validate_package(package, max_bytes)
+    validate_package(package, max_bytes, layout=layout)
 
 
 def response(value):
@@ -91,7 +91,7 @@ class ReplayStages:
         value = self.values.pop(0)
         if phase == "author":
             package = Path(context["output_directory"])
-            write_fixture_files(package, value.get("files"), session.limits["package_bytes"])
+            write_fixture_files(package, value.get("files"), session.limits["package_bytes"], context.get("delivery_layout"))
             metadata = Path(context["metadata_path"])
             write_json(metadata, {k: v for k, v in value.items() if k not in ("files", "coverage")})
             finish(session.work, package, context["delivery_token"], metadata)

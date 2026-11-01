@@ -6,6 +6,7 @@ from creation_pipeline.generation.context import candidate_context
 from creation_pipeline.models import ModelCallError
 from creation_pipeline.records import digest
 from creation_pipeline.validation.runtime import NATIVE_CHECK_FIELDS
+from creation_pipeline.artifacts.layout import extract
 
 CHECK_EXECUTION_POLICY = {
     'native_check_fields': sorted(NATIVE_CHECK_FIELDS),
@@ -28,7 +29,8 @@ def author(session, config, plan, staging, feedback=None, previous=None):
         "previous_artifact": previous}
     from creation_pipeline.artifacts.delivery import delivered, finish, validate_package
     staging.mkdir(parents=True, exist_ok=True)
-    token = digest(json.dumps({"plan": plan, "feedback": feedback or []}, sort_keys=True).encode())
+    layout = extract(config, plan["name"])
+    token = digest(json.dumps({"plan": plan, "feedback": feedback or [], "layout": layout}, sort_keys=True).encode())
     saved = delivered(session.work, staging, token)
     if saved is None:
         metadata = session.work / "deliveries" / (plan["name"] + "-metadata.json")
@@ -48,7 +50,7 @@ def author(session, config, plan, staging, feedback=None, previous=None):
             if error:
                 raise error
             raise ValueError("Author has not finalized the package; retain existing files and complete delivery")
-    validate_package(staging, config["limits"]["package_bytes"])
+    validate_package(staging, config["limits"]["package_bytes"], layout=layout)
     files = []
     for item in manifest(staging):
         path = staging / item["path"]
