@@ -1,0 +1,3614 @@
+{
+  "date": "2026-11-01",
+  "base_commit": "ffa00a18f5ed4d6d6c4c7e01c5b13266231b764e",
+  "passed": true,
+  "scope": "controlled fixed-plan warm-cache infrastructure benchmark",
+  "cases": 369,
+  "new_generation_batches": 0,
+  "model_calls": 0,
+  "build_calls": {
+    "environment": 6,
+    "tool": 12
+  },
+  "regression": {
+    "total": 681,
+    "passed": 678,
+    "skipped": 3,
+    "failed": 0,
+    "errors": 0
+  },
+  "prompt_checks": "all three passed; unchanged prompts/schema",
+  "observations": [
+    {
+      "skill": "a",
+      "repetition": 1,
+      "path": "environment_miss",
+      "accepted": true,
+      "cases": 21,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\environment_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/1d477add54104e6eadf199839667ee2a",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "3a2b71a550aa18986b934cae0e0f196a896655a01c7707c1ac5008e0c185bef9",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "built",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:4d66508389c41aff7b5380e11082882df2580a42716a4fa71c87ba0930a8d82b",
+        "reference": "chem-shared-env:4d66508389c41aff7b5380e11082882df2580a42716a4fa71c87ba0930a8d82b",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:65ff48b0025a8a440862e17c1c42fe4959eb8cdb934c4e227e016fad6cb0ce68",
+      "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+      "source_manifest_sha256": "6840e14460ad2a061625d06a371876b05e20fd80927d6c1e561eabfe94ebaed8",
+      "timing_seconds": {
+        "preparation": 1.0618479999830015,
+        "freeze": 0.7474471000023186,
+        "build_and_execution": 32.20586099999491,
+        "qualification": 1.7094604999874718,
+        "total": 35.72468359998311,
+        "build_or_bind": 7.862596,
+        "validation": 21.005963,
+        "business_cases": 15.765746299992315,
+        "all_cases": 17.21967969997786,
+        "environment_build_commands": 2.747161100007361,
+        "tool_build_commands": 1.1791473999910522,
+        "model_behavior_cases": 5.843127099971753,
+        "authored_business_checks": 9.922619200020563
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-before",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-0",
+      "storage_delta": {
+        "image_layers_bytes": 173733,
+        "new_image_ids": [
+          "sha256:4d66508389c41aff7b5380e11082882df2580a42716a4fa71c87ba0930a8d82b",
+          "sha256:65ff48b0025a8a440862e17c1c42fe4959eb8cdb934c4e227e016fad6cb0ce68"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 2,
+        "build_cache_reported_bytes": 163171,
+        "desktop_filesystem_used_bytes": 503808
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333400,
+        "shared_bytes": 527163295,
+        "unique_bytes": 170105
+      },
+      "build_cached_lines": [
+        "#6 CACHED",
+        "#7 CACHED"
+      ],
+      "run_files_logical_bytes": 868653,
+      "registry_files_logical_bytes": 10598
+    },
+    {
+      "skill": "a",
+      "repetition": 1,
+      "path": "environment_hit_tool_miss",
+      "accepted": true,
+      "cases": 21,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\environment_hit_tool_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/a35da812ffd04018b532abe60192caa1",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "2974e1937336ea18137f452c109892e4b1e46b9aadfd2384318cd6095bd6c10b",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "hit",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:4d66508389c41aff7b5380e11082882df2580a42716a4fa71c87ba0930a8d82b",
+        "reference": "chem-shared-env:4d66508389c41aff7b5380e11082882df2580a42716a4fa71c87ba0930a8d82b",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:cf5d46415a62dc13fbd45e427b3f175e08bb45ee8460d7645cd5a31db110f27c",
+      "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+      "source_manifest_sha256": "6840e14460ad2a061625d06a371876b05e20fd80927d6c1e561eabfe94ebaed8",
+      "timing_seconds": {
+        "preparation": 0.8217449999938253,
+        "freeze": 0.6768107999814674,
+        "build_and_execution": 29.015737100009574,
+        "qualification": 1.7646717999887187,
+        "total": 32.279113699973095,
+        "build_or_bind": 4.467399,
+        "validation": 21.135968,
+        "business_cases": 15.923403099965071,
+        "all_cases": 17.353132499963976,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0.7948759999999311,
+        "model_behavior_cases": 5.713952200021595,
+        "authored_business_checks": 10.209450899943477
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-0",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-1",
+      "storage_delta": {
+        "image_layers_bytes": 2762,
+        "new_image_ids": [
+          "sha256:cf5d46415a62dc13fbd45e427b3f175e08bb45ee8460d7645cd5a31db110f27c"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 172032
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333400,
+        "shared_bytes": 527331494,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [
+        "#6 CACHED",
+        "#7 CACHED"
+      ],
+      "run_files_logical_bytes": 862574,
+      "registry_files_logical_bytes": 20591
+    },
+    {
+      "skill": "a",
+      "repetition": 1,
+      "path": "tool_hit",
+      "accepted": true,
+      "cases": 21,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\tool_hit",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/d0b8b7d1cd594fbd8b8cc7ec9727457b",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "artifact_id": "2974e1937336ea18137f452c109892e4b1e46b9aadfd2384318cd6095bd6c10b"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "hit",
+        "artifact_id": "2974e1937336ea18137f452c109892e4b1e46b9aadfd2384318cd6095bd6c10b",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "not_requested_tool_hit",
+        "artifact_environment": {
+          "status": "hit",
+          "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+          "waited_for_builder": false,
+          "image_id": "sha256:4d66508389c41aff7b5380e11082882df2580a42716a4fa71c87ba0930a8d82b",
+          "reference": "chem-shared-env:4d66508389c41aff7b5380e11082882df2580a42716a4fa71c87ba0930a8d82b",
+          "layers": [
+            "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+            "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+            "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+            "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+            "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+            "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+          ],
+          "inherited_config": {
+            "Env": [
+              "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+              "LANG=C.UTF-8",
+              "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+              "PYTHON_VERSION=3.11.18",
+              "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+              "PYTHONDONTWRITEBYTECODE=1",
+              "PYTHONUNBUFFERED=1",
+              "HOME=/tmp"
+            ],
+            "WorkingDir": "/opt/skill"
+          },
+          "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+          "complete_rebuild_lock": false
+        }
+      },
+      "image_id": "sha256:cf5d46415a62dc13fbd45e427b3f175e08bb45ee8460d7645cd5a31db110f27c",
+      "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+      "source_manifest_sha256": "6840e14460ad2a061625d06a371876b05e20fd80927d6c1e561eabfe94ebaed8",
+      "timing_seconds": {
+        "preparation": 0.9972854999941774,
+        "freeze": 0.6932267000083812,
+        "build_and_execution": 26.850134799984517,
+        "qualification": 1.504541500005871,
+        "total": 30.045290799986105,
+        "build_or_bind": 2.479937,
+        "validation": 20.814411,
+        "business_cases": 15.914370399987092,
+        "all_cases": 17.348858499986818,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0,
+        "model_behavior_cases": 5.715742600004887,
+        "authored_business_checks": 10.198627799982205
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-1",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-2",
+      "storage_delta": {
+        "image_layers_bytes": 0,
+        "new_image_ids": [],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 0
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333400,
+        "shared_bytes": 527331494,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [],
+      "run_files_logical_bytes": 847101,
+      "registry_files_logical_bytes": 20591
+    },
+    {
+      "skill": "a",
+      "repetition": 2,
+      "path": "environment_miss",
+      "accepted": true,
+      "cases": 21,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\environment_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/81c69ca96b1e45e5ab922876fddc2d62",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "a79089a16c6900227b7c5b90f5ec9d030509202bab3ef328482a9eb3236a0f64",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "built",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:0a9ba91b7636c4af1be91420395cb8b225b0002e24b6472a4c66ea6c4839601c",
+        "reference": "chem-shared-env:0a9ba91b7636c4af1be91420395cb8b225b0002e24b6472a4c66ea6c4839601c",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:3561c31013ca52fcce57850c35431b3f3082a2393b9f5ef0b13c6dbcf5e75ff0",
+      "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+      "source_manifest_sha256": "6840e14460ad2a061625d06a371876b05e20fd80927d6c1e561eabfe94ebaed8",
+      "timing_seconds": {
+        "preparation": 0.7477524999994785,
+        "freeze": 0.7055700000200886,
+        "build_and_execution": 30.109011299995473,
+        "qualification": 1.7385897999920417,
+        "total": 33.30097760001081,
+        "build_or_bind": 5.756799,
+        "validation": 20.955496,
+        "business_cases": 15.782570200011833,
+        "all_cases": 17.21268740002415,
+        "environment_build_commands": 0.6885946000111289,
+        "tool_build_commands": 1.2631560000008903,
+        "model_behavior_cases": 5.783344800001942,
+        "authored_business_checks": 9.999225400009891
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-before",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-0",
+      "storage_delta": {
+        "image_layers_bytes": 173724,
+        "new_image_ids": [
+          "sha256:0a9ba91b7636c4af1be91420395cb8b225b0002e24b6472a4c66ea6c4839601c",
+          "sha256:3561c31013ca52fcce57850c35431b3f3082a2393b9f5ef0b13c6dbcf5e75ff0"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 2,
+        "build_cache_reported_bytes": 163162,
+        "desktop_filesystem_used_bytes": 360448
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333391,
+        "shared_bytes": 527163295,
+        "unique_bytes": 170096
+      },
+      "build_cached_lines": [
+        "#5 CACHED",
+        "#6 CACHED"
+      ],
+      "run_files_logical_bytes": 868203,
+      "registry_files_logical_bytes": 10598
+    },
+    {
+      "skill": "a",
+      "repetition": 2,
+      "path": "environment_hit_tool_miss",
+      "accepted": true,
+      "cases": 21,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\environment_hit_tool_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/17e26401c9b74bf4ac3e0e1bded4a9e7",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "d64a63879d596e208c0a631c829eaf4d4f27ecacd52ecb9c5adf35ffb66cac9d",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "hit",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:0a9ba91b7636c4af1be91420395cb8b225b0002e24b6472a4c66ea6c4839601c",
+        "reference": "chem-shared-env:0a9ba91b7636c4af1be91420395cb8b225b0002e24b6472a4c66ea6c4839601c",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:078497c72c94ea8200153bc909b7bab5507faa3b0fc5b25894b976fad3bbd412",
+      "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+      "source_manifest_sha256": "6840e14460ad2a061625d06a371876b05e20fd80927d6c1e561eabfe94ebaed8",
+      "timing_seconds": {
+        "preparation": 0.7607348000165075,
+        "freeze": 0.6902305000112392,
+        "build_and_execution": 28.966495000000577,
+        "qualification": 1.8621982999902684,
+        "total": 32.27973420001217,
+        "build_or_bind": 4.415703,
+        "validation": 21.151699,
+        "business_cases": 16.025708100030897,
+        "all_cases": 17.490877700038254,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0.783447800000431,
+        "model_behavior_cases": 5.809990999987349,
+        "authored_business_checks": 10.215717100043548
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-0",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-1",
+      "storage_delta": {
+        "image_layers_bytes": 2762,
+        "new_image_ids": [
+          "sha256:078497c72c94ea8200153bc909b7bab5507faa3b0fc5b25894b976fad3bbd412"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 139264
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333391,
+        "shared_bytes": 527331485,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [
+        "#6 CACHED",
+        "#7 CACHED"
+      ],
+      "run_files_logical_bytes": 862941,
+      "registry_files_logical_bytes": 20591
+    },
+    {
+      "skill": "a",
+      "repetition": 2,
+      "path": "tool_hit",
+      "accepted": true,
+      "cases": 21,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\tool_hit",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/e75599d6ae1f4cb38455bc445870bdfe",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "artifact_id": "d64a63879d596e208c0a631c829eaf4d4f27ecacd52ecb9c5adf35ffb66cac9d"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "hit",
+        "artifact_id": "d64a63879d596e208c0a631c829eaf4d4f27ecacd52ecb9c5adf35ffb66cac9d",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "not_requested_tool_hit",
+        "artifact_environment": {
+          "status": "hit",
+          "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+          "waited_for_builder": false,
+          "image_id": "sha256:0a9ba91b7636c4af1be91420395cb8b225b0002e24b6472a4c66ea6c4839601c",
+          "reference": "chem-shared-env:0a9ba91b7636c4af1be91420395cb8b225b0002e24b6472a4c66ea6c4839601c",
+          "layers": [
+            "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+            "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+            "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+            "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+            "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+            "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+          ],
+          "inherited_config": {
+            "Env": [
+              "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+              "LANG=C.UTF-8",
+              "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+              "PYTHON_VERSION=3.11.18",
+              "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+              "PYTHONDONTWRITEBYTECODE=1",
+              "PYTHONUNBUFFERED=1",
+              "HOME=/tmp"
+            ],
+            "WorkingDir": "/opt/skill"
+          },
+          "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+          "complete_rebuild_lock": false
+        }
+      },
+      "image_id": "sha256:078497c72c94ea8200153bc909b7bab5507faa3b0fc5b25894b976fad3bbd412",
+      "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+      "source_manifest_sha256": "6840e14460ad2a061625d06a371876b05e20fd80927d6c1e561eabfe94ebaed8",
+      "timing_seconds": {
+        "preparation": 0.9841811999795027,
+        "freeze": 0.684180699987337,
+        "build_and_execution": 26.077858500008006,
+        "qualification": 1.5481679000076838,
+        "total": 29.29446989999269,
+        "build_or_bind": 2.481982,
+        "validation": 20.592119,
+        "business_cases": 15.806983500049682,
+        "all_cases": 17.200765500048874,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0,
+        "model_behavior_cases": 5.64026830001967,
+        "authored_business_checks": 10.166715200030012
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-1",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-2",
+      "storage_delta": {
+        "image_layers_bytes": 0,
+        "new_image_ids": [],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 0
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333391,
+        "shared_bytes": 527331485,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [],
+      "run_files_logical_bytes": 847103,
+      "registry_files_logical_bytes": 20591
+    },
+    {
+      "skill": "a",
+      "repetition": 3,
+      "path": "environment_miss",
+      "accepted": true,
+      "cases": 21,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\environment_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/8b8671ec58a044c7ae67cf3eaff5530f",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "1a8797df2d40801296de6fd9d8dd344874a8318806d5d855c4ef28cc835f3c76",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "built",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:40db73fada41332ea70ce3f46a92a16de6e26a9614e6621adc8c41ba8d6753e5",
+        "reference": "chem-shared-env:40db73fada41332ea70ce3f46a92a16de6e26a9614e6621adc8c41ba8d6753e5",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:2179c84a5cf11e71586b095a19a2ccfa6b74bb5fdd341ad7191e789adf853ac1",
+      "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+      "source_manifest_sha256": "6840e14460ad2a061625d06a371876b05e20fd80927d6c1e561eabfe94ebaed8",
+      "timing_seconds": {
+        "preparation": 0.7471600999997463,
+        "freeze": 0.6672216999868397,
+        "build_and_execution": 30.03742870001588,
+        "qualification": 1.7884604999853764,
+        "total": 33.24037240000325,
+        "build_or_bind": 5.679301,
+        "validation": 21.045301,
+        "business_cases": 15.830684899963671,
+        "all_cases": 17.329933399974834,
+        "environment_build_commands": 0.6686128000146709,
+        "tool_build_commands": 1.2888499000109732,
+        "model_behavior_cases": 5.658176499971887,
+        "authored_business_checks": 10.172508399991784
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-before",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-0",
+      "storage_delta": {
+        "image_layers_bytes": 173717,
+        "new_image_ids": [
+          "sha256:2179c84a5cf11e71586b095a19a2ccfa6b74bb5fdd341ad7191e789adf853ac1",
+          "sha256:40db73fada41332ea70ce3f46a92a16de6e26a9614e6621adc8c41ba8d6753e5"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 2,
+        "build_cache_reported_bytes": 163155,
+        "desktop_filesystem_used_bytes": 458752
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333385,
+        "shared_bytes": 527163295,
+        "unique_bytes": 170090
+      },
+      "build_cached_lines": [
+        "#5 CACHED",
+        "#6 CACHED"
+      ],
+      "run_files_logical_bytes": 868019,
+      "registry_files_logical_bytes": 10598
+    },
+    {
+      "skill": "a",
+      "repetition": 3,
+      "path": "environment_hit_tool_miss",
+      "accepted": true,
+      "cases": 21,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\environment_hit_tool_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/2aaf09059c5f485b81c5072e55b3e645",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "fbb176ba3d18e9322dbec8d67c95b1f8018778a60a6e3327a3353cd87b90fdb4",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "hit",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:40db73fada41332ea70ce3f46a92a16de6e26a9614e6621adc8c41ba8d6753e5",
+        "reference": "chem-shared-env:40db73fada41332ea70ce3f46a92a16de6e26a9614e6621adc8c41ba8d6753e5",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:7bb878d171a43cfb521416aa5d33f0b8d339b38300f1227f4827df75a5c4484a",
+      "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+      "source_manifest_sha256": "6840e14460ad2a061625d06a371876b05e20fd80927d6c1e561eabfe94ebaed8",
+      "timing_seconds": {
+        "preparation": 0.796637199993711,
+        "freeze": 0.6736002000106964,
+        "build_and_execution": 29.47890419999021,
+        "qualification": 1.7429320999945048,
+        "total": 32.69212289998541,
+        "build_or_bind": 4.470625,
+        "validation": 21.5418,
+        "business_cases": 16.26667999997153,
+        "all_cases": 17.78973799996311,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0.793505700014066,
+        "model_behavior_cases": 5.893657999986317,
+        "authored_business_checks": 10.373021999985212
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-0",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-1",
+      "storage_delta": {
+        "image_layers_bytes": 2762,
+        "new_image_ids": [
+          "sha256:7bb878d171a43cfb521416aa5d33f0b8d339b38300f1227f4827df75a5c4484a"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 135168
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333385,
+        "shared_bytes": 527331479,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [
+        "#6 CACHED",
+        "#7 CACHED"
+      ],
+      "run_files_logical_bytes": 862951,
+      "registry_files_logical_bytes": 20591
+    },
+    {
+      "skill": "a",
+      "repetition": 3,
+      "path": "tool_hit",
+      "accepted": true,
+      "cases": 21,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\tool_hit",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/4c73a4d8b1934929b9144d4d5e3940db",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "artifact_id": "fbb176ba3d18e9322dbec8d67c95b1f8018778a60a6e3327a3353cd87b90fdb4"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "hit",
+        "artifact_id": "fbb176ba3d18e9322dbec8d67c95b1f8018778a60a6e3327a3353cd87b90fdb4",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "not_requested_tool_hit",
+        "artifact_environment": {
+          "status": "hit",
+          "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+          "waited_for_builder": false,
+          "image_id": "sha256:40db73fada41332ea70ce3f46a92a16de6e26a9614e6621adc8c41ba8d6753e5",
+          "reference": "chem-shared-env:40db73fada41332ea70ce3f46a92a16de6e26a9614e6621adc8c41ba8d6753e5",
+          "layers": [
+            "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+            "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+            "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+            "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+            "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+            "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+          ],
+          "inherited_config": {
+            "Env": [
+              "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+              "LANG=C.UTF-8",
+              "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+              "PYTHON_VERSION=3.11.18",
+              "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+              "PYTHONDONTWRITEBYTECODE=1",
+              "PYTHONUNBUFFERED=1",
+              "HOME=/tmp"
+            ],
+            "WorkingDir": "/opt/skill"
+          },
+          "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+          "complete_rebuild_lock": false
+        }
+      },
+      "image_id": "sha256:7bb878d171a43cfb521416aa5d33f0b8d339b38300f1227f4827df75a5c4484a",
+      "acceptance_sha256": "198bd5d92e48a5e2f26b580d4790d9d75f12701560935117f7c06f3566ade1c4",
+      "source_manifest_sha256": "6840e14460ad2a061625d06a371876b05e20fd80927d6c1e561eabfe94ebaed8",
+      "timing_seconds": {
+        "preparation": 0.9826643999840599,
+        "freeze": 0.725899599987315,
+        "build_and_execution": 26.673766399995657,
+        "qualification": 1.5498112000059336,
+        "total": 29.932376499986276,
+        "build_or_bind": 2.451074,
+        "validation": 21.129183,
+        "business_cases": 16.04254719990422,
+        "all_cases": 17.550108699913835,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0,
+        "model_behavior_cases": 5.760899899963988,
+        "authored_business_checks": 10.281647299940232
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-1",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-2",
+      "storage_delta": {
+        "image_layers_bytes": 0,
+        "new_image_ids": [],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 0
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333385,
+        "shared_bytes": 527331479,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [],
+      "run_files_logical_bytes": 847105,
+      "registry_files_logical_bytes": 20591
+    },
+    {
+      "skill": "b",
+      "repetition": 1,
+      "path": "environment_miss",
+      "accepted": true,
+      "cases": 20,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\environment_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/8ce04b0ddc624149b4d7aacf4eb61f36",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "093cf60d9214a5a34055c7c9f9e4dd1d6a6faf07b9545732f3bbb555c5640798",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "built",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:588829b91015e6c12a4b45b3de94f2d69c4b22a5408a95d89c9704f51fa15fd1",
+        "reference": "chem-shared-env:588829b91015e6c12a4b45b3de94f2d69c4b22a5408a95d89c9704f51fa15fd1",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:f6f0f1dcfa32424fc37813f5e7f7502365975ae94efd635dfaf8d742bd5c6f59",
+      "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+      "source_manifest_sha256": "7def0fbf847b4b1d0042dce1011b8392d08861e4a86cd76d0cf487b53629014f",
+      "timing_seconds": {
+        "preparation": 0.8081353000015952,
+        "freeze": 0.6731498999870382,
+        "build_and_execution": 29.999483199993847,
+        "qualification": 1.8123380000179168,
+        "total": 33.29317310001352,
+        "build_or_bind": 5.820526,
+        "validation": 20.725325,
+        "business_cases": 15.19664419995388,
+        "all_cases": 16.799452899955213,
+        "environment_build_commands": 0.7017796000000089,
+        "tool_build_commands": 1.301944500009995,
+        "model_behavior_cases": 4.0742809000075795,
+        "authored_business_checks": 11.1223632999463
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-before",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-0",
+      "storage_delta": {
+        "image_layers_bytes": 173731,
+        "new_image_ids": [
+          "sha256:588829b91015e6c12a4b45b3de94f2d69c4b22a5408a95d89c9704f51fa15fd1",
+          "sha256:f6f0f1dcfa32424fc37813f5e7f7502365975ae94efd635dfaf8d742bd5c6f59"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 2,
+        "build_cache_reported_bytes": 163168,
+        "desktop_filesystem_used_bytes": 385024
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333398,
+        "shared_bytes": 527163295,
+        "unique_bytes": 170103
+      },
+      "build_cached_lines": [
+        "#5 CACHED",
+        "#6 CACHED"
+      ],
+      "run_files_logical_bytes": 779644,
+      "registry_files_logical_bytes": 10598
+    },
+    {
+      "skill": "b",
+      "repetition": 1,
+      "path": "environment_hit_tool_miss",
+      "accepted": true,
+      "cases": 20,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\environment_hit_tool_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/becf6fcea3f748bba72d1e221b01da12",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "31274f2fadacd3d6c62d2c724d1974ad7cd5167497f49b07363a6463330e66b7",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "hit",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:588829b91015e6c12a4b45b3de94f2d69c4b22a5408a95d89c9704f51fa15fd1",
+        "reference": "chem-shared-env:588829b91015e6c12a4b45b3de94f2d69c4b22a5408a95d89c9704f51fa15fd1",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:f81686498d817daa0b5ef3377f8bea168596754e41174c145555dfe6647ff36c",
+      "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+      "source_manifest_sha256": "7def0fbf847b4b1d0042dce1011b8392d08861e4a86cd76d0cf487b53629014f",
+      "timing_seconds": {
+        "preparation": 0.8221721999871079,
+        "freeze": 0.6607573999790475,
+        "build_and_execution": 28.353662700013956,
+        "qualification": 1.3782962999830488,
+        "total": 31.214985799975693,
+        "build_or_bind": 4.501224,
+        "validation": 20.704204,
+        "business_cases": 15.330851699982304,
+        "all_cases": 16.883666999958223,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0.8174644999962766,
+        "model_behavior_cases": 4.112693000002764,
+        "authored_business_checks": 11.21815869997954
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-0",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-1",
+      "storage_delta": {
+        "image_layers_bytes": 2762,
+        "new_image_ids": [
+          "sha256:f81686498d817daa0b5ef3377f8bea168596754e41174c145555dfe6647ff36c"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 151552
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333398,
+        "shared_bytes": 527331492,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [
+        "#6 CACHED",
+        "#7 CACHED"
+      ],
+      "run_files_logical_bytes": 774155,
+      "registry_files_logical_bytes": 20591
+    },
+    {
+      "skill": "b",
+      "repetition": 1,
+      "path": "tool_hit",
+      "accepted": true,
+      "cases": 20,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\tool_hit",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/171c47b8bf60444daf4171bb8ee2c78a",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "artifact_id": "31274f2fadacd3d6c62d2c724d1974ad7cd5167497f49b07363a6463330e66b7"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "hit",
+        "artifact_id": "31274f2fadacd3d6c62d2c724d1974ad7cd5167497f49b07363a6463330e66b7",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "not_requested_tool_hit",
+        "artifact_environment": {
+          "status": "hit",
+          "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+          "waited_for_builder": false,
+          "image_id": "sha256:588829b91015e6c12a4b45b3de94f2d69c4b22a5408a95d89c9704f51fa15fd1",
+          "reference": "chem-shared-env:588829b91015e6c12a4b45b3de94f2d69c4b22a5408a95d89c9704f51fa15fd1",
+          "layers": [
+            "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+            "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+            "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+            "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+            "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+            "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+          ],
+          "inherited_config": {
+            "Env": [
+              "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+              "LANG=C.UTF-8",
+              "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+              "PYTHON_VERSION=3.11.18",
+              "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+              "PYTHONDONTWRITEBYTECODE=1",
+              "PYTHONUNBUFFERED=1",
+              "HOME=/tmp"
+            ],
+            "WorkingDir": "/opt/skill"
+          },
+          "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+          "complete_rebuild_lock": false
+        }
+      },
+      "image_id": "sha256:f81686498d817daa0b5ef3377f8bea168596754e41174c145555dfe6647ff36c",
+      "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+      "source_manifest_sha256": "7def0fbf847b4b1d0042dce1011b8392d08861e4a86cd76d0cf487b53629014f",
+      "timing_seconds": {
+        "preparation": 0.8127695999864955,
+        "freeze": 0.43470300000626594,
+        "build_and_execution": 23.479177700006403,
+        "qualification": 1.1262176999880467,
+        "total": 25.852909099980025,
+        "build_or_bind": 2.237811,
+        "validation": 19.086217,
+        "business_cases": 14.916344900033437,
+        "all_cases": 16.4752487000369,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0,
+        "model_behavior_cases": 4.154369300027611,
+        "authored_business_checks": 10.761975600005826
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-1",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-2",
+      "storage_delta": {
+        "image_layers_bytes": 0,
+        "new_image_ids": [],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 0
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333398,
+        "shared_bytes": 527331492,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [],
+      "run_files_logical_bytes": 758776,
+      "registry_files_logical_bytes": 20591
+    },
+    {
+      "skill": "b",
+      "repetition": 2,
+      "path": "environment_miss",
+      "accepted": true,
+      "cases": 20,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\environment_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/7d90ebd35f93467597a039543aea18ce",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "c6815b384b9948ea4b381952042c3d78f52f39a5cca18aff76ce76dc207b6c10",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "built",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:7a1f236d6ef1bb676ea31f1a9579dca3b261d7b8ced09cd7c315be8b1d1261fb",
+        "reference": "chem-shared-env:7a1f236d6ef1bb676ea31f1a9579dca3b261d7b8ced09cd7c315be8b1d1261fb",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:5ad46baa65c37b68df81a78f51eac9078b430b9f3d47bb73b4339b4b87d49f0b",
+      "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+      "source_manifest_sha256": "7def0fbf847b4b1d0042dce1011b8392d08861e4a86cd76d0cf487b53629014f",
+      "timing_seconds": {
+        "preparation": 0.6330104999942705,
+        "freeze": 0.4256024000060279,
+        "build_and_execution": 27.653628400003072,
+        "qualification": 1.2529717999859713,
+        "total": 29.965251699992223,
+        "build_or_bind": 5.394911,
+        "validation": 19.759142,
+        "business_cases": 15.084904099989217,
+        "all_cases": 16.685519199992996,
+        "environment_build_commands": 0.6922535999910906,
+        "tool_build_commands": 1.2262729000067338,
+        "model_behavior_cases": 4.040644900029292,
+        "authored_business_checks": 11.044259199959924
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-before",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-0",
+      "storage_delta": {
+        "image_layers_bytes": 173726,
+        "new_image_ids": [
+          "sha256:5ad46baa65c37b68df81a78f51eac9078b430b9f3d47bb73b4339b4b87d49f0b",
+          "sha256:7a1f236d6ef1bb676ea31f1a9579dca3b261d7b8ced09cd7c315be8b1d1261fb"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 2,
+        "build_cache_reported_bytes": 163163,
+        "desktop_filesystem_used_bytes": 376832
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333393,
+        "shared_bytes": 527163295,
+        "unique_bytes": 170098
+      },
+      "build_cached_lines": [
+        "#5 CACHED",
+        "#6 CACHED"
+      ],
+      "run_files_logical_bytes": 779800,
+      "registry_files_logical_bytes": 10598
+    },
+    {
+      "skill": "b",
+      "repetition": 2,
+      "path": "environment_hit_tool_miss",
+      "accepted": true,
+      "cases": 20,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\environment_hit_tool_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/935fa8c28f55410797df28509ab88649",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "2a65a6a650740c5e8133be15424216c9e9eb7fb7ce7b23e1e078f744946d71c6",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "hit",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:7a1f236d6ef1bb676ea31f1a9579dca3b261d7b8ced09cd7c315be8b1d1261fb",
+        "reference": "chem-shared-env:7a1f236d6ef1bb676ea31f1a9579dca3b261d7b8ced09cd7c315be8b1d1261fb",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:a04e17d71b1fd38c2e4102094de96ccac9df9a5440a3c1d6097e2d4d640eed4b",
+      "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+      "source_manifest_sha256": "7def0fbf847b4b1d0042dce1011b8392d08861e4a86cd76d0cf487b53629014f",
+      "timing_seconds": {
+        "preparation": 0.5854041000129655,
+        "freeze": 0.40715269997599535,
+        "build_and_execution": 27.169872500002384,
+        "qualification": 1.3493904000206385,
+        "total": 29.51185930002248,
+        "build_or_bind": 4.101521,
+        "validation": 20.387094,
+        "business_cases": 15.715963000053307,
+        "all_cases": 17.2958634000679,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0.8130539999983739,
+        "model_behavior_cases": 4.281548099999782,
+        "authored_business_checks": 11.434414900053525
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-0",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-1",
+      "storage_delta": {
+        "image_layers_bytes": 2762,
+        "new_image_ids": [
+          "sha256:a04e17d71b1fd38c2e4102094de96ccac9df9a5440a3c1d6097e2d4d640eed4b"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 155648
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333393,
+        "shared_bytes": 527331487,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [
+        "#6 CACHED",
+        "#7 CACHED"
+      ],
+      "run_files_logical_bytes": 774147,
+      "registry_files_logical_bytes": 20591
+    },
+    {
+      "skill": "b",
+      "repetition": 2,
+      "path": "tool_hit",
+      "accepted": true,
+      "cases": 20,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\tool_hit",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/25f29257f84e4ace8a1502224eeae4f0",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "artifact_id": "2a65a6a650740c5e8133be15424216c9e9eb7fb7ce7b23e1e078f744946d71c6"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "hit",
+        "artifact_id": "2a65a6a650740c5e8133be15424216c9e9eb7fb7ce7b23e1e078f744946d71c6",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "not_requested_tool_hit",
+        "artifact_environment": {
+          "status": "hit",
+          "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+          "waited_for_builder": false,
+          "image_id": "sha256:7a1f236d6ef1bb676ea31f1a9579dca3b261d7b8ced09cd7c315be8b1d1261fb",
+          "reference": "chem-shared-env:7a1f236d6ef1bb676ea31f1a9579dca3b261d7b8ced09cd7c315be8b1d1261fb",
+          "layers": [
+            "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+            "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+            "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+            "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+            "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+            "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+          ],
+          "inherited_config": {
+            "Env": [
+              "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+              "LANG=C.UTF-8",
+              "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+              "PYTHON_VERSION=3.11.18",
+              "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+              "PYTHONDONTWRITEBYTECODE=1",
+              "PYTHONUNBUFFERED=1",
+              "HOME=/tmp"
+            ],
+            "WorkingDir": "/opt/skill"
+          },
+          "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+          "complete_rebuild_lock": false
+        }
+      },
+      "image_id": "sha256:a04e17d71b1fd38c2e4102094de96ccac9df9a5440a3c1d6097e2d4d640eed4b",
+      "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+      "source_manifest_sha256": "7def0fbf847b4b1d0042dce1011b8392d08861e4a86cd76d0cf487b53629014f",
+      "timing_seconds": {
+        "preparation": 0.9830795000016224,
+        "freeze": 0.6822607000067364,
+        "build_and_execution": 25.934122799983015,
+        "qualification": 1.6039193000178784,
+        "total": 29.203424100007396,
+        "build_or_bind": 2.537907,
+        "validation": 20.254136,
+        "business_cases": 15.16856699998607,
+        "all_cases": 16.760524599987548,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0,
+        "model_behavior_cases": 4.068375400005607,
+        "authored_business_checks": 11.100191599980462
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-1",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-2",
+      "storage_delta": {
+        "image_layers_bytes": 0,
+        "new_image_ids": [],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 0
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333393,
+        "shared_bytes": 527331487,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [],
+      "run_files_logical_bytes": 758775,
+      "registry_files_logical_bytes": 20591
+    },
+    {
+      "skill": "b",
+      "repetition": 3,
+      "path": "environment_miss",
+      "accepted": true,
+      "cases": 20,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\environment_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/f8c0635c1b69476c926ba948776a0a22",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "a7532c492e9fd90c88a12c6c431eb13d0ddd1e22f32d655e491fe8c26d7fb584",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "built",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:b7d80f8e441ed872fd1ebe69e8af65677681378941328eda756c4e494aa43121",
+        "reference": "chem-shared-env:b7d80f8e441ed872fd1ebe69e8af65677681378941328eda756c4e494aa43121",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:b9ce124a67a1781690853af55f9b77716435f829a9b07f359d0d516bd48e40b0",
+      "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+      "source_manifest_sha256": "7def0fbf847b4b1d0042dce1011b8392d08861e4a86cd76d0cf487b53629014f",
+      "timing_seconds": {
+        "preparation": 0.7930322000174783,
+        "freeze": 0.644160700001521,
+        "build_and_execution": 29.73528090000036,
+        "qualification": 1.7715125000104308,
+        "total": 32.94404980001855,
+        "build_or_bind": 5.746198,
+        "validation": 20.635521,
+        "business_cases": 15.162094900064403,
+        "all_cases": 16.821324000047753,
+        "environment_build_commands": 0.6819678000174463,
+        "tool_build_commands": 1.246197000000393,
+        "model_behavior_cases": 4.057127500040224,
+        "authored_business_checks": 11.10496740002418
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-before",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-0",
+      "storage_delta": {
+        "image_layers_bytes": 173724,
+        "new_image_ids": [
+          "sha256:b7d80f8e441ed872fd1ebe69e8af65677681378941328eda756c4e494aa43121",
+          "sha256:b9ce124a67a1781690853af55f9b77716435f829a9b07f359d0d516bd48e40b0"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 2,
+        "build_cache_reported_bytes": 163161,
+        "desktop_filesystem_used_bytes": 405504
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333391,
+        "shared_bytes": 527163295,
+        "unique_bytes": 170096
+      },
+      "build_cached_lines": [
+        "#5 CACHED",
+        "#6 CACHED"
+      ],
+      "run_files_logical_bytes": 779975,
+      "registry_files_logical_bytes": 10598
+    },
+    {
+      "skill": "b",
+      "repetition": 3,
+      "path": "environment_hit_tool_miss",
+      "accepted": true,
+      "cases": 20,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\environment_hit_tool_miss",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/00b79cc606bb4c03a74178eefcce2ebf",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "built",
+        "artifact_id": "c462ec26e5094bfb30c534e0fb5c53d712713536cab01458acdc091f4c711e14",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "hit",
+        "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+        "waited_for_builder": false,
+        "image_id": "sha256:b7d80f8e441ed872fd1ebe69e8af65677681378941328eda756c4e494aa43121",
+        "reference": "chem-shared-env:b7d80f8e441ed872fd1ebe69e8af65677681378941328eda756c4e494aa43121",
+        "layers": [
+          "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+          "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+          "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+          "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+          "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+          "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+        ],
+        "inherited_config": {
+          "Env": [
+            "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+            "LANG=C.UTF-8",
+            "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+            "PYTHON_VERSION=3.11.18",
+            "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+            "PYTHONDONTWRITEBYTECODE=1",
+            "PYTHONUNBUFFERED=1",
+            "HOME=/tmp"
+          ],
+          "WorkingDir": "/opt/skill"
+        },
+        "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "complete_rebuild_lock": false
+      },
+      "image_id": "sha256:8fa04bde93881372240a46f2073a95a49b8e3ea406f339739f82e1c2e6d8aa74",
+      "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+      "source_manifest_sha256": "7def0fbf847b4b1d0042dce1011b8392d08861e4a86cd76d0cf487b53629014f",
+      "timing_seconds": {
+        "preparation": 0.7849619000044186,
+        "freeze": 0.689380900003016,
+        "build_and_execution": 28.636402699979953,
+        "qualification": 1.7105041000177152,
+        "total": 31.821348700003,
+        "build_or_bind": 4.55051,
+        "validation": 20.615472,
+        "business_cases": 15.337320899910992,
+        "all_cases": 16.87681979991612,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0.8415301999775693,
+        "model_behavior_cases": 4.093366699962644,
+        "authored_business_checks": 11.243954199948348
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-0",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-1",
+      "storage_delta": {
+        "image_layers_bytes": 2762,
+        "new_image_ids": [
+          "sha256:8fa04bde93881372240a46f2073a95a49b8e3ea406f339739f82e1c2e6d8aa74"
+        ],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 135168
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333391,
+        "shared_bytes": 527331485,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [
+        "#6 CACHED",
+        "#7 CACHED"
+      ],
+      "run_files_logical_bytes": 774361,
+      "registry_files_logical_bytes": 20591
+    },
+    {
+      "skill": "b",
+      "repetition": 3,
+      "path": "tool_hit",
+      "accepted": true,
+      "cases": 20,
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\tool_hit",
+      "attempt": "runtime/candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866/e3632491095041e7ad4fe867c4a954ce",
+      "model_calls": 0,
+      "model_stages": {
+        "discovery": 0,
+        "author": 0,
+        "review": 0,
+        "environment_planning": 0,
+        "acceptance_planning": 0
+      },
+      "model_count_reason": "caller supplied existing frozen plan/locked acceptance; no new generation",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 0,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b",
+          "artifact_id": "c462ec26e5094bfb30c534e0fb5c53d712713536cab01458acdc091f4c711e14"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 0
+      },
+      "tool": {
+        "status": "hit",
+        "artifact_id": "c462ec26e5094bfb30c534e0fb5c53d712713536cab01458acdc091f4c711e14",
+        "request_key": "77b46e53b801266c7fb79894a08a6077934372f145dd2fc9904d1920c956e21b"
+      },
+      "environment": {
+        "status": "not_requested_tool_hit",
+        "artifact_environment": {
+          "status": "hit",
+          "recipe_key": "7f9ba5a5b029ffadb2a08f112706e8ee41c08e90aa8a315b4451dd80001282e6",
+          "waited_for_builder": false,
+          "image_id": "sha256:b7d80f8e441ed872fd1ebe69e8af65677681378941328eda756c4e494aa43121",
+          "reference": "chem-shared-env:b7d80f8e441ed872fd1ebe69e8af65677681378941328eda756c4e494aa43121",
+          "layers": [
+            "sha256:44a87794b739d471ec360bec56cc0ceac640d06bbf579ee7d9061a0b88d09818",
+            "sha256:3a7a4b0d1bb1f8b4a91dcf08e472863049e9ba53b4ad6b16996ea9545d0cfb8d",
+            "sha256:3496cce332545ccf7377cbfd1bf179472f2ac03809b42e0fd16c08a4c657d520",
+            "sha256:65613e91118245ec492452aefa21eda4ea4a3f0e14f94ed33b8b67e7cd3d4d7d",
+            "sha256:f94d339c403922c43ec44d280db634641e295f630087cf980265311da36a5843",
+            "sha256:bbbfeed26a8c3830af341645d55ea8766215891574f9d6b8a611c977306fa382"
+          ],
+          "inherited_config": {
+            "Env": [
+              "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+              "LANG=C.UTF-8",
+              "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D",
+              "PYTHON_VERSION=3.11.18",
+              "PYTHON_SHA256=9120e0a653868f6e3698d36cdd99e5a58903ec9469e448f21d98f7b16d8fa290",
+              "PYTHONDONTWRITEBYTECODE=1",
+              "PYTHONUNBUFFERED=1",
+              "HOME=/tmp"
+            ],
+            "WorkingDir": "/opt/skill"
+          },
+          "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+          "complete_rebuild_lock": false
+        }
+      },
+      "image_id": "sha256:8fa04bde93881372240a46f2073a95a49b8e3ea406f339739f82e1c2e6d8aa74",
+      "acceptance_sha256": "1a7bbb0777b7521f7ce5557fd7813c855d6ba7639689f8bbec2a04ca405e9c17",
+      "source_manifest_sha256": "7def0fbf847b4b1d0042dce1011b8392d08861e4a86cd76d0cf487b53629014f",
+      "timing_seconds": {
+        "preparation": 1.0339165999903344,
+        "freeze": 0.7533905000018422,
+        "build_and_execution": 26.364134700008435,
+        "qualification": 1.6453483999939635,
+        "total": 29.796926499984693,
+        "build_or_bind": 2.534307,
+        "validation": 20.567154,
+        "business_cases": 15.541628899925854,
+        "all_cases": 17.105693399935262,
+        "environment_build_commands": 0,
+        "tool_build_commands": 0,
+        "model_behavior_cases": 4.118965799978469,
+        "authored_business_checks": 11.422663099947385
+      },
+      "storage_before": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-1",
+      "storage_after": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-2",
+      "storage_delta": {
+        "image_layers_bytes": 0,
+        "new_image_ids": [],
+        "removed_image_ids": [],
+        "build_cache_records": 0,
+        "build_cache_reported_bytes": 0,
+        "desktop_filesystem_used_bytes": 0
+      },
+      "image_storage": {
+        "size_bytes_virtual": 527333391,
+        "shared_bytes": 527331485,
+        "unique_bytes": 1906
+      },
+      "build_cached_lines": [],
+      "run_files_logical_bytes": 758777,
+      "registry_files_logical_bytes": 20591
+    }
+  ],
+  "statistics": [
+    {
+      "skill": "a",
+      "path": "environment_miss",
+      "samples": 3,
+      "timing_seconds": {
+        "preparation": {
+          "median": 0.7477524999994785,
+          "min": 0.7471600999997463,
+          "max": 1.0618479999830015
+        },
+        "freeze": {
+          "median": 0.7055700000200886,
+          "min": 0.6672216999868397,
+          "max": 0.7474471000023186
+        },
+        "build_and_execution": {
+          "median": 30.109011299995473,
+          "min": 30.03742870001588,
+          "max": 32.20586099999491
+        },
+        "qualification": {
+          "median": 1.7385897999920417,
+          "min": 1.7094604999874718,
+          "max": 1.7884604999853764
+        },
+        "total": {
+          "median": 33.30097760001081,
+          "min": 33.24037240000325,
+          "max": 35.72468359998311
+        },
+        "build_or_bind": {
+          "median": 5.756799,
+          "min": 5.679301,
+          "max": 7.862596
+        },
+        "validation": {
+          "median": 21.005963,
+          "min": 20.955496,
+          "max": 21.045301
+        },
+        "business_cases": {
+          "median": 15.782570200011833,
+          "min": 15.765746299992315,
+          "max": 15.830684899963671
+        },
+        "all_cases": {
+          "median": 17.21967969997786,
+          "min": 17.21268740002415,
+          "max": 17.329933399974834
+        },
+        "environment_build_commands": {
+          "median": 0.6885946000111289,
+          "min": 0.6686128000146709,
+          "max": 2.747161100007361
+        },
+        "tool_build_commands": {
+          "median": 1.2631560000008903,
+          "min": 1.1791473999910522,
+          "max": 1.2888499000109732
+        },
+        "model_behavior_cases": {
+          "median": 5.783344800001942,
+          "min": 5.658176499971887,
+          "max": 5.843127099971753
+        },
+        "authored_business_checks": {
+          "median": 9.999225400009891,
+          "min": 9.922619200020563,
+          "max": 10.172508399991784
+        }
+      }
+    },
+    {
+      "skill": "a",
+      "path": "environment_hit_tool_miss",
+      "samples": 3,
+      "timing_seconds": {
+        "preparation": {
+          "median": 0.796637199993711,
+          "min": 0.7607348000165075,
+          "max": 0.8217449999938253
+        },
+        "freeze": {
+          "median": 0.6768107999814674,
+          "min": 0.6736002000106964,
+          "max": 0.6902305000112392
+        },
+        "build_and_execution": {
+          "median": 29.015737100009574,
+          "min": 28.966495000000577,
+          "max": 29.47890419999021
+        },
+        "qualification": {
+          "median": 1.7646717999887187,
+          "min": 1.7429320999945048,
+          "max": 1.8621982999902684
+        },
+        "total": {
+          "median": 32.27973420001217,
+          "min": 32.279113699973095,
+          "max": 32.69212289998541
+        },
+        "build_or_bind": {
+          "median": 4.467399,
+          "min": 4.415703,
+          "max": 4.470625
+        },
+        "validation": {
+          "median": 21.151699,
+          "min": 21.135968,
+          "max": 21.5418
+        },
+        "business_cases": {
+          "median": 16.025708100030897,
+          "min": 15.923403099965071,
+          "max": 16.26667999997153
+        },
+        "all_cases": {
+          "median": 17.490877700038254,
+          "min": 17.353132499963976,
+          "max": 17.78973799996311
+        },
+        "environment_build_commands": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tool_build_commands": {
+          "median": 0.793505700014066,
+          "min": 0.783447800000431,
+          "max": 0.7948759999999311
+        },
+        "model_behavior_cases": {
+          "median": 5.809990999987349,
+          "min": 5.713952200021595,
+          "max": 5.893657999986317
+        },
+        "authored_business_checks": {
+          "median": 10.215717100043548,
+          "min": 10.209450899943477,
+          "max": 10.373021999985212
+        }
+      }
+    },
+    {
+      "skill": "a",
+      "path": "tool_hit",
+      "samples": 3,
+      "timing_seconds": {
+        "preparation": {
+          "median": 0.9841811999795027,
+          "min": 0.9826643999840599,
+          "max": 0.9972854999941774
+        },
+        "freeze": {
+          "median": 0.6932267000083812,
+          "min": 0.684180699987337,
+          "max": 0.725899599987315
+        },
+        "build_and_execution": {
+          "median": 26.673766399995657,
+          "min": 26.077858500008006,
+          "max": 26.850134799984517
+        },
+        "qualification": {
+          "median": 1.5481679000076838,
+          "min": 1.504541500005871,
+          "max": 1.5498112000059336
+        },
+        "total": {
+          "median": 29.932376499986276,
+          "min": 29.29446989999269,
+          "max": 30.045290799986105
+        },
+        "build_or_bind": {
+          "median": 2.479937,
+          "min": 2.451074,
+          "max": 2.481982
+        },
+        "validation": {
+          "median": 20.814411,
+          "min": 20.592119,
+          "max": 21.129183
+        },
+        "business_cases": {
+          "median": 15.914370399987092,
+          "min": 15.806983500049682,
+          "max": 16.04254719990422
+        },
+        "all_cases": {
+          "median": 17.348858499986818,
+          "min": 17.200765500048874,
+          "max": 17.550108699913835
+        },
+        "environment_build_commands": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tool_build_commands": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "model_behavior_cases": {
+          "median": 5.715742600004887,
+          "min": 5.64026830001967,
+          "max": 5.760899899963988
+        },
+        "authored_business_checks": {
+          "median": 10.198627799982205,
+          "min": 10.166715200030012,
+          "max": 10.281647299940232
+        }
+      }
+    },
+    {
+      "skill": "b",
+      "path": "environment_miss",
+      "samples": 3,
+      "timing_seconds": {
+        "preparation": {
+          "median": 0.7930322000174783,
+          "min": 0.6330104999942705,
+          "max": 0.8081353000015952
+        },
+        "freeze": {
+          "median": 0.644160700001521,
+          "min": 0.4256024000060279,
+          "max": 0.6731498999870382
+        },
+        "build_and_execution": {
+          "median": 29.73528090000036,
+          "min": 27.653628400003072,
+          "max": 29.999483199993847
+        },
+        "qualification": {
+          "median": 1.7715125000104308,
+          "min": 1.2529717999859713,
+          "max": 1.8123380000179168
+        },
+        "total": {
+          "median": 32.94404980001855,
+          "min": 29.965251699992223,
+          "max": 33.29317310001352
+        },
+        "build_or_bind": {
+          "median": 5.746198,
+          "min": 5.394911,
+          "max": 5.820526
+        },
+        "validation": {
+          "median": 20.635521,
+          "min": 19.759142,
+          "max": 20.725325
+        },
+        "business_cases": {
+          "median": 15.162094900064403,
+          "min": 15.084904099989217,
+          "max": 15.19664419995388
+        },
+        "all_cases": {
+          "median": 16.799452899955213,
+          "min": 16.685519199992996,
+          "max": 16.821324000047753
+        },
+        "environment_build_commands": {
+          "median": 0.6922535999910906,
+          "min": 0.6819678000174463,
+          "max": 0.7017796000000089
+        },
+        "tool_build_commands": {
+          "median": 1.246197000000393,
+          "min": 1.2262729000067338,
+          "max": 1.301944500009995
+        },
+        "model_behavior_cases": {
+          "median": 4.057127500040224,
+          "min": 4.040644900029292,
+          "max": 4.0742809000075795
+        },
+        "authored_business_checks": {
+          "median": 11.10496740002418,
+          "min": 11.044259199959924,
+          "max": 11.1223632999463
+        }
+      }
+    },
+    {
+      "skill": "b",
+      "path": "environment_hit_tool_miss",
+      "samples": 3,
+      "timing_seconds": {
+        "preparation": {
+          "median": 0.7849619000044186,
+          "min": 0.5854041000129655,
+          "max": 0.8221721999871079
+        },
+        "freeze": {
+          "median": 0.6607573999790475,
+          "min": 0.40715269997599535,
+          "max": 0.689380900003016
+        },
+        "build_and_execution": {
+          "median": 28.353662700013956,
+          "min": 27.169872500002384,
+          "max": 28.636402699979953
+        },
+        "qualification": {
+          "median": 1.3782962999830488,
+          "min": 1.3493904000206385,
+          "max": 1.7105041000177152
+        },
+        "total": {
+          "median": 31.214985799975693,
+          "min": 29.51185930002248,
+          "max": 31.821348700003
+        },
+        "build_or_bind": {
+          "median": 4.501224,
+          "min": 4.101521,
+          "max": 4.55051
+        },
+        "validation": {
+          "median": 20.615472,
+          "min": 20.387094,
+          "max": 20.704204
+        },
+        "business_cases": {
+          "median": 15.337320899910992,
+          "min": 15.330851699982304,
+          "max": 15.715963000053307
+        },
+        "all_cases": {
+          "median": 16.883666999958223,
+          "min": 16.87681979991612,
+          "max": 17.2958634000679
+        },
+        "environment_build_commands": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tool_build_commands": {
+          "median": 0.8174644999962766,
+          "min": 0.8130539999983739,
+          "max": 0.8415301999775693
+        },
+        "model_behavior_cases": {
+          "median": 4.112693000002764,
+          "min": 4.093366699962644,
+          "max": 4.281548099999782
+        },
+        "authored_business_checks": {
+          "median": 11.243954199948348,
+          "min": 11.21815869997954,
+          "max": 11.434414900053525
+        }
+      }
+    },
+    {
+      "skill": "b",
+      "path": "tool_hit",
+      "samples": 3,
+      "timing_seconds": {
+        "preparation": {
+          "median": 0.9830795000016224,
+          "min": 0.8127695999864955,
+          "max": 1.0339165999903344
+        },
+        "freeze": {
+          "median": 0.6822607000067364,
+          "min": 0.43470300000626594,
+          "max": 0.7533905000018422
+        },
+        "build_and_execution": {
+          "median": 25.934122799983015,
+          "min": 23.479177700006403,
+          "max": 26.364134700008435
+        },
+        "qualification": {
+          "median": 1.6039193000178784,
+          "min": 1.1262176999880467,
+          "max": 1.6453483999939635
+        },
+        "total": {
+          "median": 29.203424100007396,
+          "min": 25.852909099980025,
+          "max": 29.796926499984693
+        },
+        "build_or_bind": {
+          "median": 2.534307,
+          "min": 2.237811,
+          "max": 2.537907
+        },
+        "validation": {
+          "median": 20.254136,
+          "min": 19.086217,
+          "max": 20.567154
+        },
+        "business_cases": {
+          "median": 15.16856699998607,
+          "min": 14.916344900033437,
+          "max": 15.541628899925854
+        },
+        "all_cases": {
+          "median": 16.760524599987548,
+          "min": 16.4752487000369,
+          "max": 17.105693399935262
+        },
+        "environment_build_commands": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "tool_build_commands": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "model_behavior_cases": {
+          "median": 4.118965799978469,
+          "min": 4.068375400005607,
+          "max": 4.154369300027611
+        },
+        "authored_business_checks": {
+          "median": 11.100191599980462,
+          "min": 10.761975600005826,
+          "max": 11.422663099947385
+        }
+      }
+    }
+  ],
+  "storage": [
+    {
+      "skill": "a",
+      "path": "environment_miss",
+      "samples": [
+        {
+          "repetition": 1,
+          "delta": {
+            "image_layers_bytes": 173733,
+            "new_image_ids": [
+              "sha256:4d66508389c41aff7b5380e11082882df2580a42716a4fa71c87ba0930a8d82b",
+              "sha256:65ff48b0025a8a440862e17c1c42fe4959eb8cdb934c4e227e016fad6cb0ce68"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 2,
+            "build_cache_reported_bytes": 163171,
+            "desktop_filesystem_used_bytes": 503808
+          },
+          "image": {
+            "size_bytes_virtual": 527333400,
+            "shared_bytes": 527163295,
+            "unique_bytes": 170105
+          },
+          "run_files_logical_bytes": 868653,
+          "cumulative_registry_files_logical_bytes": 10598
+        },
+        {
+          "repetition": 2,
+          "delta": {
+            "image_layers_bytes": 173724,
+            "new_image_ids": [
+              "sha256:0a9ba91b7636c4af1be91420395cb8b225b0002e24b6472a4c66ea6c4839601c",
+              "sha256:3561c31013ca52fcce57850c35431b3f3082a2393b9f5ef0b13c6dbcf5e75ff0"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 2,
+            "build_cache_reported_bytes": 163162,
+            "desktop_filesystem_used_bytes": 360448
+          },
+          "image": {
+            "size_bytes_virtual": 527333391,
+            "shared_bytes": 527163295,
+            "unique_bytes": 170096
+          },
+          "run_files_logical_bytes": 868203,
+          "cumulative_registry_files_logical_bytes": 10598
+        },
+        {
+          "repetition": 3,
+          "delta": {
+            "image_layers_bytes": 173717,
+            "new_image_ids": [
+              "sha256:2179c84a5cf11e71586b095a19a2ccfa6b74bb5fdd341ad7191e789adf853ac1",
+              "sha256:40db73fada41332ea70ce3f46a92a16de6e26a9614e6621adc8c41ba8d6753e5"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 2,
+            "build_cache_reported_bytes": 163155,
+            "desktop_filesystem_used_bytes": 458752
+          },
+          "image": {
+            "size_bytes_virtual": 527333385,
+            "shared_bytes": 527163295,
+            "unique_bytes": 170090
+          },
+          "run_files_logical_bytes": 868019,
+          "cumulative_registry_files_logical_bytes": 10598
+        }
+      ]
+    },
+    {
+      "skill": "a",
+      "path": "environment_hit_tool_miss",
+      "samples": [
+        {
+          "repetition": 1,
+          "delta": {
+            "image_layers_bytes": 2762,
+            "new_image_ids": [
+              "sha256:cf5d46415a62dc13fbd45e427b3f175e08bb45ee8460d7645cd5a31db110f27c"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 172032
+          },
+          "image": {
+            "size_bytes_virtual": 527333400,
+            "shared_bytes": 527331494,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 862574,
+          "cumulative_registry_files_logical_bytes": 20591
+        },
+        {
+          "repetition": 2,
+          "delta": {
+            "image_layers_bytes": 2762,
+            "new_image_ids": [
+              "sha256:078497c72c94ea8200153bc909b7bab5507faa3b0fc5b25894b976fad3bbd412"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 139264
+          },
+          "image": {
+            "size_bytes_virtual": 527333391,
+            "shared_bytes": 527331485,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 862941,
+          "cumulative_registry_files_logical_bytes": 20591
+        },
+        {
+          "repetition": 3,
+          "delta": {
+            "image_layers_bytes": 2762,
+            "new_image_ids": [
+              "sha256:7bb878d171a43cfb521416aa5d33f0b8d339b38300f1227f4827df75a5c4484a"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 135168
+          },
+          "image": {
+            "size_bytes_virtual": 527333385,
+            "shared_bytes": 527331479,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 862951,
+          "cumulative_registry_files_logical_bytes": 20591
+        }
+      ]
+    },
+    {
+      "skill": "a",
+      "path": "tool_hit",
+      "samples": [
+        {
+          "repetition": 1,
+          "delta": {
+            "image_layers_bytes": 0,
+            "new_image_ids": [],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 0
+          },
+          "image": {
+            "size_bytes_virtual": 527333400,
+            "shared_bytes": 527331494,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 847101,
+          "cumulative_registry_files_logical_bytes": 20591
+        },
+        {
+          "repetition": 2,
+          "delta": {
+            "image_layers_bytes": 0,
+            "new_image_ids": [],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 0
+          },
+          "image": {
+            "size_bytes_virtual": 527333391,
+            "shared_bytes": 527331485,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 847103,
+          "cumulative_registry_files_logical_bytes": 20591
+        },
+        {
+          "repetition": 3,
+          "delta": {
+            "image_layers_bytes": 0,
+            "new_image_ids": [],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 0
+          },
+          "image": {
+            "size_bytes_virtual": 527333385,
+            "shared_bytes": 527331479,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 847105,
+          "cumulative_registry_files_logical_bytes": 20591
+        }
+      ]
+    },
+    {
+      "skill": "b",
+      "path": "environment_miss",
+      "samples": [
+        {
+          "repetition": 1,
+          "delta": {
+            "image_layers_bytes": 173731,
+            "new_image_ids": [
+              "sha256:588829b91015e6c12a4b45b3de94f2d69c4b22a5408a95d89c9704f51fa15fd1",
+              "sha256:f6f0f1dcfa32424fc37813f5e7f7502365975ae94efd635dfaf8d742bd5c6f59"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 2,
+            "build_cache_reported_bytes": 163168,
+            "desktop_filesystem_used_bytes": 385024
+          },
+          "image": {
+            "size_bytes_virtual": 527333398,
+            "shared_bytes": 527163295,
+            "unique_bytes": 170103
+          },
+          "run_files_logical_bytes": 779644,
+          "cumulative_registry_files_logical_bytes": 10598
+        },
+        {
+          "repetition": 2,
+          "delta": {
+            "image_layers_bytes": 173726,
+            "new_image_ids": [
+              "sha256:5ad46baa65c37b68df81a78f51eac9078b430b9f3d47bb73b4339b4b87d49f0b",
+              "sha256:7a1f236d6ef1bb676ea31f1a9579dca3b261d7b8ced09cd7c315be8b1d1261fb"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 2,
+            "build_cache_reported_bytes": 163163,
+            "desktop_filesystem_used_bytes": 376832
+          },
+          "image": {
+            "size_bytes_virtual": 527333393,
+            "shared_bytes": 527163295,
+            "unique_bytes": 170098
+          },
+          "run_files_logical_bytes": 779800,
+          "cumulative_registry_files_logical_bytes": 10598
+        },
+        {
+          "repetition": 3,
+          "delta": {
+            "image_layers_bytes": 173724,
+            "new_image_ids": [
+              "sha256:b7d80f8e441ed872fd1ebe69e8af65677681378941328eda756c4e494aa43121",
+              "sha256:b9ce124a67a1781690853af55f9b77716435f829a9b07f359d0d516bd48e40b0"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 2,
+            "build_cache_reported_bytes": 163161,
+            "desktop_filesystem_used_bytes": 405504
+          },
+          "image": {
+            "size_bytes_virtual": 527333391,
+            "shared_bytes": 527163295,
+            "unique_bytes": 170096
+          },
+          "run_files_logical_bytes": 779975,
+          "cumulative_registry_files_logical_bytes": 10598
+        }
+      ]
+    },
+    {
+      "skill": "b",
+      "path": "environment_hit_tool_miss",
+      "samples": [
+        {
+          "repetition": 1,
+          "delta": {
+            "image_layers_bytes": 2762,
+            "new_image_ids": [
+              "sha256:f81686498d817daa0b5ef3377f8bea168596754e41174c145555dfe6647ff36c"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 151552
+          },
+          "image": {
+            "size_bytes_virtual": 527333398,
+            "shared_bytes": 527331492,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 774155,
+          "cumulative_registry_files_logical_bytes": 20591
+        },
+        {
+          "repetition": 2,
+          "delta": {
+            "image_layers_bytes": 2762,
+            "new_image_ids": [
+              "sha256:a04e17d71b1fd38c2e4102094de96ccac9df9a5440a3c1d6097e2d4d640eed4b"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 155648
+          },
+          "image": {
+            "size_bytes_virtual": 527333393,
+            "shared_bytes": 527331487,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 774147,
+          "cumulative_registry_files_logical_bytes": 20591
+        },
+        {
+          "repetition": 3,
+          "delta": {
+            "image_layers_bytes": 2762,
+            "new_image_ids": [
+              "sha256:8fa04bde93881372240a46f2073a95a49b8e3ea406f339739f82e1c2e6d8aa74"
+            ],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 135168
+          },
+          "image": {
+            "size_bytes_virtual": 527333391,
+            "shared_bytes": 527331485,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 774361,
+          "cumulative_registry_files_logical_bytes": 20591
+        }
+      ]
+    },
+    {
+      "skill": "b",
+      "path": "tool_hit",
+      "samples": [
+        {
+          "repetition": 1,
+          "delta": {
+            "image_layers_bytes": 0,
+            "new_image_ids": [],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 0
+          },
+          "image": {
+            "size_bytes_virtual": 527333398,
+            "shared_bytes": 527331492,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 758776,
+          "cumulative_registry_files_logical_bytes": 20591
+        },
+        {
+          "repetition": 2,
+          "delta": {
+            "image_layers_bytes": 0,
+            "new_image_ids": [],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 0
+          },
+          "image": {
+            "size_bytes_virtual": 527333393,
+            "shared_bytes": 527331487,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 758775,
+          "cumulative_registry_files_logical_bytes": 20591
+        },
+        {
+          "repetition": 3,
+          "delta": {
+            "image_layers_bytes": 0,
+            "new_image_ids": [],
+            "removed_image_ids": [],
+            "build_cache_records": 0,
+            "build_cache_reported_bytes": 0,
+            "desktop_filesystem_used_bytes": 0
+          },
+          "image": {
+            "size_bytes_virtual": 527333391,
+            "shared_bytes": 527331485,
+            "unique_bytes": 1906
+          },
+          "run_files_logical_bytes": 758777,
+          "cumulative_registry_files_logical_bytes": 20591
+        }
+      ]
+    }
+  ],
+  "aggregate_storage_delta": {
+    "image_layers_bytes": 1058927,
+    "new_image_ids": [
+      "sha256:078497c72c94ea8200153bc909b7bab5507faa3b0fc5b25894b976fad3bbd412",
+      "sha256:0a9ba91b7636c4af1be91420395cb8b225b0002e24b6472a4c66ea6c4839601c",
+      "sha256:2179c84a5cf11e71586b095a19a2ccfa6b74bb5fdd341ad7191e789adf853ac1",
+      "sha256:3561c31013ca52fcce57850c35431b3f3082a2393b9f5ef0b13c6dbcf5e75ff0",
+      "sha256:40db73fada41332ea70ce3f46a92a16de6e26a9614e6621adc8c41ba8d6753e5",
+      "sha256:4d66508389c41aff7b5380e11082882df2580a42716a4fa71c87ba0930a8d82b",
+      "sha256:588829b91015e6c12a4b45b3de94f2d69c4b22a5408a95d89c9704f51fa15fd1",
+      "sha256:5ad46baa65c37b68df81a78f51eac9078b430b9f3d47bb73b4339b4b87d49f0b",
+      "sha256:65ff48b0025a8a440862e17c1c42fe4959eb8cdb934c4e227e016fad6cb0ce68",
+      "sha256:7a1f236d6ef1bb676ea31f1a9579dca3b261d7b8ced09cd7c315be8b1d1261fb",
+      "sha256:7bb878d171a43cfb521416aa5d33f0b8d339b38300f1227f4827df75a5c4484a",
+      "sha256:8fa04bde93881372240a46f2073a95a49b8e3ea406f339739f82e1c2e6d8aa74",
+      "sha256:a04e17d71b1fd38c2e4102094de96ccac9df9a5440a3c1d6097e2d4d640eed4b",
+      "sha256:b7d80f8e441ed872fd1ebe69e8af65677681378941328eda756c4e494aa43121",
+      "sha256:b9ce124a67a1781690853af55f9b77716435f829a9b07f359d0d516bd48e40b0",
+      "sha256:cf5d46415a62dc13fbd45e427b3f175e08bb45ee8460d7645cd5a31db110f27c",
+      "sha256:f6f0f1dcfa32424fc37813f5e7f7502365975ae94efd635dfaf8d742bd5c6f59",
+      "sha256:f81686498d817daa0b5ef3377f8bea168596754e41174c145555dfe6647ff36c"
+    ],
+    "removed_image_ids": [],
+    "build_cache_records": 12,
+    "build_cache_reported_bytes": 978980,
+    "desktop_filesystem_used_bytes": 3379200
+  },
+  "installation_cache_observations": [
+    {
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\environment_miss",
+      "steps": [
+        "#7"
+      ],
+      "buildkit_cached": true,
+      "pip_step_executed": false
+    },
+    {
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\environment_miss",
+      "steps": [
+        "#6"
+      ],
+      "buildkit_cached": true,
+      "pip_step_executed": false
+    },
+    {
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\environment_miss",
+      "steps": [
+        "#6"
+      ],
+      "buildkit_cached": true,
+      "pip_step_executed": false
+    },
+    {
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\environment_miss",
+      "steps": [
+        "#6"
+      ],
+      "buildkit_cached": true,
+      "pip_step_executed": false
+    },
+    {
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\environment_miss",
+      "steps": [
+        "#6"
+      ],
+      "buildkit_cached": true,
+      "pip_step_executed": false
+    },
+    {
+      "run": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\environment_miss",
+      "steps": [
+        "#6"
+      ],
+      "buildkit_cached": true,
+      "pip_step_executed": false
+    }
+  ],
+  "originals": [
+    {
+      "skill": "a",
+      "qualified_now": true,
+      "original_frozen_unchanged": true,
+      "reason": "Content review and current Docker business evidence passed",
+      "historical_model_calls": 6,
+      "current_model_calls": 0
+    },
+    {
+      "skill": "b",
+      "qualified_now": true,
+      "original_frozen_unchanged": true,
+      "reason": "Content review and current Docker business evidence passed",
+      "historical_model_calls": 5,
+      "current_model_calls": 0
+    }
+  ],
+  "limitations": [
+    "Fixed plan bypasses models in all paths: no current model speedup measurement",
+    "Fresh registries deliberately cause misses; Docker/BuildKit remain warm",
+    "Sequential path order, three samples per path at most, not randomized causal benchmarking",
+    "Daemon and Desktop filesystem totals include unrelated activity; not Windows physical VHD allocation",
+    "Image virtual sizes are not summed; cache usage overlaps image layers",
+    "A/B contracts differ; compare within each Skill only"
+  ],
+  "metric_correction": "Raw business_cases included model behavior only; published business_cases adds original authored chemistry checks mapped as interface. Recomputed from preserved case_wall_seconds; no reruns or changed assertions.",
+  "evidence_root": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02",
+  "evidence_files": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\evidence\\chem-reaction-atommap-audit\\7580d8df6f9447c39942adcb8ba573aa\\freeze.json",
+      "sha256": "fe0f55f42bc8ffc87a2545f222469ce75d22b5b8532e20bc1f1d2431c79240bc"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-01\\a\\state\\outputs\\20261101T145451-879013f9\\evidence\\chem-reaction-atommap-audit\\7580d8df6f9447c39942adcb8ba573aa\\record.json",
+      "sha256": "647d6bee1bd94d4a460d6ea5bb12978fa033d1182fc0e11c956e5cc0f81b5965"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce\\evidence\\chem-reaction-atommap-audit\\4e46322a399545339401694fcb36e1ae\\freeze.json",
+      "sha256": "db84481b8ca30865cd839310effeaefcc330f58bbbd8c0eaf8e37d3b1c2360e3"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\acceptance-only-e2e-20261101-03\\b\\state\\outputs\\20261101T152426-6f8be1ce\\evidence\\chem-reaction-atommap-audit\\4e46322a399545339401694fcb36e1ae\\record.json",
+      "sha256": "3665116389634da1a372490ad8ae2b4f50cf4235d4fd69b2a587c3cf3d667fd8"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-acceptance-prompt-20261101.log",
+      "sha256": "87342204c457e6e77a9521bd4a760aa9e85087a3c4d7f68d76f19ca6ac235a8e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-01\\diagnosis.json",
+      "sha256": "cc5a872272ec4ce1fc1284f1d338f1f93b0f2d4df918c9e45181bbb6fa612bf5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-01\\failure.json",
+      "sha256": "e13d7f23b24d9ace52531331c88136136a6cd84b89218ec22f5820ce4e713381"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\environment_hit_tool_miss\\build-commands.json",
+      "sha256": "e9db54a5c1919950b4ba0b5daa282799445d4a226c5d148ec43e793deff55f41"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\environment_hit_tool_miss\\record.json",
+      "sha256": "f28dcfd41a2f72ef4d367b59583179b4b654f967327168c64e5f1b830cc8be97"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\a35da812ffd04018b532abe60192caa1\\execution\\report.json",
+      "sha256": "22ebd36d62f051bbd17aaff2ed3556db8da61fc1968269b4ea0d3bcc51c8706a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\a35da812ffd04018b532abe60192caa1\\receipt.json",
+      "sha256": "f0fbc0f1bcbcdb4c68a775d0f4bcfd0eec4d2ed2d72defec0450607be99b0a9b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\environment_miss\\build-commands.json",
+      "sha256": "3d3969d38139afe1852e06eebbcd6d71c97f8830273e14bc9f731164378b1be9"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\environment_miss\\record.json",
+      "sha256": "8fe9d71ca2fcc8a7ec0abfc916ba50aed41cbfd7ea2af5f3c4d14e98391d93b3"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\1d477add54104e6eadf199839667ee2a\\execution\\report.json",
+      "sha256": "9c5c51b378398e4b4a0e70e19a4e0049e6ca8545759331ecece7191765595197"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\1d477add54104e6eadf199839667ee2a\\receipt.json",
+      "sha256": "0b55ff942d319945a58cabd354e935df049b71e74f3e82e1ed286372816b8a28"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-0\\engine-df.json",
+      "sha256": "646f62a45bef43fb32f1573bb7df6d2883a61508c80e4e1318f89a351bb3d15f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-0\\filesystem.json",
+      "sha256": "bb47fa7f26db5a7827c0612cbdac934472d1bc0930f96ed3d4c8bef5a78621ce"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-0\\summary.json",
+      "sha256": "e6a212fde0a341b1c970347d5f0d6c6f5ab372312a646939d2e80f290a78f4b9"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-1\\engine-df.json",
+      "sha256": "d5d2b0b6cc34821d7b14df899ef27d2e915617b44e43b3b04fbac388c1068e9c"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-1\\filesystem.json",
+      "sha256": "faf18ef6dfb9978660c3d13c9294dff11860eb6bba1afa9869f0e03c0f37eb83"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-1\\summary.json",
+      "sha256": "b81ef56e9cc698c50ddf7e9ca583d33ff2f74ad02abf41a1e9bf7d4f84127e0d"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-2\\engine-df.json",
+      "sha256": "ea7c6552e93877e58b3ad19571056031a5d01b5ff04d1aa89e082fe4a3007ca6"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-2\\filesystem.json",
+      "sha256": "faf18ef6dfb9978660c3d13c9294dff11860eb6bba1afa9869f0e03c0f37eb83"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-after-2\\summary.json",
+      "sha256": "8f744104e4950faf9570f5aacb630037fea80e038629c1ef0de06c5c5907dad5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-before\\engine-df.json",
+      "sha256": "091a4d65fa3cdf1aaf33b15965f8d3622f5cfa11b665c7b44cb4857ee934e60e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-before\\filesystem.json",
+      "sha256": "dcf3a80fc5f952b3ac1a7538c52a6a6dea530ff0fc5ba24263748446165faaa6"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\storage-before\\summary.json",
+      "sha256": "d0d23c9c44c0f6f29a2e2b285b403580f2ffe5d21ecac931a172f38a99dbd35a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\tool_hit\\build-commands.json",
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\tool_hit\\record.json",
+      "sha256": "54d6b1447a8badb8ded33dd02ae75207a19e1e7645f43200c61f269f911d5cb5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\d0b8b7d1cd594fbd8b8cc7ec9727457b\\execution\\report.json",
+      "sha256": "d13fdbca05e687947a52267efea9f7dc213d3d39f06fa63294eb34d8157408ac"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-1\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\d0b8b7d1cd594fbd8b8cc7ec9727457b\\receipt.json",
+      "sha256": "28b8040bae9ce4e73579ee2f405c5a49f0194008760fa52cdc0c44d4a0af9ffc"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\environment_hit_tool_miss\\build-commands.json",
+      "sha256": "95fca8b075400a04cbe1783c82890f6e091ef0488b47acc554680dc0421c1b57"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\environment_hit_tool_miss\\record.json",
+      "sha256": "75a92141bcc16dfba317339bd98c44ebf825ced576faa90f8f57aad43a1af816"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\17e26401c9b74bf4ac3e0e1bded4a9e7\\execution\\report.json",
+      "sha256": "cfc49e5b99137ec9ff3130f53aa6f1b0677b20414ff27e6ecba33a6f7ea0cffe"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\17e26401c9b74bf4ac3e0e1bded4a9e7\\receipt.json",
+      "sha256": "f4da34819826ce113a9c3bbaad748e85431443adefd3faaf9ccb984c84e245b5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\environment_miss\\build-commands.json",
+      "sha256": "4532adfb49038589d2ba66ca1830fad2af49da96704ccf3e3a1efeae259495ce"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\environment_miss\\record.json",
+      "sha256": "94f23a1c143ff974636796689c72bd7cc2f07e32850aafbed4395976eb119d93"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\81c69ca96b1e45e5ab922876fddc2d62\\execution\\report.json",
+      "sha256": "a55d25e32b463ddcca374d8360b5a0ae83046ee64715fdbf84bcb8fe454117d6"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\81c69ca96b1e45e5ab922876fddc2d62\\receipt.json",
+      "sha256": "156d3823ba9927b5579ad5ee52ea7b44e1bcc57c0af0c89319e2b9c55e8cdf2c"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-0\\engine-df.json",
+      "sha256": "99c9c395643c956b5873c429f284041d0faf91fcfd03b4aa47417ed7390e71d0"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-0\\filesystem.json",
+      "sha256": "b4c672b06df538a19ea9e6c684f3d173d5bbb46b152f7def0482993d1fa5b4c3"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-0\\summary.json",
+      "sha256": "f903a6495d847ffaafeb261018ab91d83b374d919ac9857bf5a88e3edb4d6dea"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-1\\engine-df.json",
+      "sha256": "2aedb0300739ec584175c99a78fe902f49dec823d3b60619a8411f54d95d5320"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-1\\filesystem.json",
+      "sha256": "13252afaf28e4c42e7ff48186938c25c04c5d7cb68518895acfde0491115e821"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-1\\summary.json",
+      "sha256": "041e5a96b35bfc4bbdd6f1c778ed50d231a4673b9c76bf9817186289557c440f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-2\\engine-df.json",
+      "sha256": "b5a88ce05236230f4edfe6b7f83c921f23ac7fcdad0da0e42559763b5c25ae87"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-2\\filesystem.json",
+      "sha256": "13252afaf28e4c42e7ff48186938c25c04c5d7cb68518895acfde0491115e821"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-after-2\\summary.json",
+      "sha256": "559482be331c5b81c9268a7b556b0c5947b6d7146de1c70f3cfc881cff57b059"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-before\\engine-df.json",
+      "sha256": "85780fa85bfa5a64e3ffc432fee78c5084ba69e520265aac9001f0c1b22fa296"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-before\\filesystem.json",
+      "sha256": "faf18ef6dfb9978660c3d13c9294dff11860eb6bba1afa9869f0e03c0f37eb83"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\storage-before\\summary.json",
+      "sha256": "ce54bc8e055b9a74262f8a963e2c866930c173cb35e05c1fedd10c285fb9f96f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\tool_hit\\build-commands.json",
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\tool_hit\\record.json",
+      "sha256": "fea55c6917a613bf5c0f130c754f8feba8f8038aea2632ff5d27badf8105df1c"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\e75599d6ae1f4cb38455bc445870bdfe\\execution\\report.json",
+      "sha256": "bfee86eb64a1e214f0e16e254c043dc5dd5fab0c7cbc2c2af8d605444855a8e4"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-2\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\e75599d6ae1f4cb38455bc445870bdfe\\receipt.json",
+      "sha256": "69239953a778757c8cf52e3472b6f65658f265390136b566c1c87aa4c45d6e18"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\environment_hit_tool_miss\\build-commands.json",
+      "sha256": "4a4d755930893f36a24845cd905a18c20a6941c594a7d0152aa83c9513a9a781"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\environment_hit_tool_miss\\record.json",
+      "sha256": "58308f7fc2f8695ab5037dc141a82cbd52bb06f9523788321bfeda61edf21205"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\2aaf09059c5f485b81c5072e55b3e645\\execution\\report.json",
+      "sha256": "e2e15581b59c2d513637265ef08d11619178b586cf929337040ef21d628211ef"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\2aaf09059c5f485b81c5072e55b3e645\\receipt.json",
+      "sha256": "bb583731507f74074c5fb64dcd5c9743e960f5df118612b18873dd350537a7e0"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\environment_miss\\build-commands.json",
+      "sha256": "ee95fa5cd4fa30b4750604b275b8e6f5c98b914774921a21daf4f7bb870bd7ca"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\environment_miss\\record.json",
+      "sha256": "d40bcf19c7e79695db9d9a5e86288c550fcb6184b63c87df98057577e94ed1be"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\8b8671ec58a044c7ae67cf3eaff5530f\\execution\\report.json",
+      "sha256": "8047db9314ed4c41861ca13ed2d27e241aa1c6a0ce29b0fcbadf2007fddc66fd"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\8b8671ec58a044c7ae67cf3eaff5530f\\receipt.json",
+      "sha256": "92ced1946ffeff676fc5afb1d3f8dff1159f29be7c0a0e8eed6cfaf4b48dc318"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-0\\engine-df.json",
+      "sha256": "cc9ef087e2aa256ab6ed407b9a5fe43e09c60e80fa8c83d2f177559143c8764d"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-0\\filesystem.json",
+      "sha256": "e1be8cc7d0c4a8100bd8ddcb083aed15c37cb1fe9d9770b640d151fd020ad0bc"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-0\\summary.json",
+      "sha256": "3ea9a27465059aea06973dc3c413ff4ece6144e8bc66a22fd8574f3feef07304"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-1\\engine-df.json",
+      "sha256": "8018d20354150ee56ecd6bfbbb977357009399761e09bf9260119d0ea03ba77a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-1\\filesystem.json",
+      "sha256": "ee4600dfbcb5f25b6e8d909ed5b5c0918ad5b340c373b1c583b2515b09ad1010"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-1\\summary.json",
+      "sha256": "deaa3475aa050727edabc7db02b464c7ec062b4c65ed9a40c470cde44f13e2e3"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-2\\engine-df.json",
+      "sha256": "eb93f5a4c5294d97f3c69802e7445a6f1fe257b6fecd4ecb3ca794f668f57770"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-2\\filesystem.json",
+      "sha256": "ee4600dfbcb5f25b6e8d909ed5b5c0918ad5b340c373b1c583b2515b09ad1010"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-after-2\\summary.json",
+      "sha256": "a36185f346b2d5909c67facf27b057d98ab33d3a2bf82d3d8932d2e270579b81"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-before\\engine-df.json",
+      "sha256": "bf461068082eebe355eb8aa13baddd1ffcc988de5f55bbba4b117bfb240f9606"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-before\\filesystem.json",
+      "sha256": "13252afaf28e4c42e7ff48186938c25c04c5d7cb68518895acfde0491115e821"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\storage-before\\summary.json",
+      "sha256": "2a9f6db282978c6dc8800d858fe044392eb694242622ecb7059dc24cebc58d24"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\tool_hit\\build-commands.json",
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\tool_hit\\record.json",
+      "sha256": "696834766d502bfcc5eebe7518bcfa15ae5e3554846e4c49698d203aa715e52c"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\4c73a4d8b1934929b9144d4d5e3940db\\execution\\report.json",
+      "sha256": "690fcd68dcc200980f9f2d453a79f6e50385d62050b9be50fecee85f3ddda8d2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\a-3\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\4c73a4d8b1934929b9144d4d5e3940db\\receipt.json",
+      "sha256": "583297cca9564eace1a13f61ffbaa123b2d4b3ef1afe64c37d5308b6433bb4df"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\environment_hit_tool_miss\\build-commands.json",
+      "sha256": "eb01dce6c46f2717882ee043ce4bb5623e1b3af086178ef15f54690dc815ada2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\environment_hit_tool_miss\\record.json",
+      "sha256": "d7ce444b7e5b6df6017bbc3b93a5e7b3c7d4268825b4f402013fb0dd89f743ba"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\becf6fcea3f748bba72d1e221b01da12\\execution\\report.json",
+      "sha256": "fae6a9cd6476e3be2431494534212d4b3d9964065da815ae5ce563b77b007a89"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\becf6fcea3f748bba72d1e221b01da12\\receipt.json",
+      "sha256": "993f08c32d35dd26bdde6b311aabb61f6003a038582d440a57ffc35e3524fbf6"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\environment_miss\\build-commands.json",
+      "sha256": "33d118ae301823a28e5f2214957a5eb5b21849687e80cac43d3516488f9a6c40"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\environment_miss\\record.json",
+      "sha256": "2f6f0dd65f0eed5cbb8d4be713522480429852bfea21ff8de05cd1f45286c330"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\8ce04b0ddc624149b4d7aacf4eb61f36\\execution\\report.json",
+      "sha256": "2cfa8b93f1b842b709e5b0a0e8220c0d59811f7bbfaf27d54d8a6566a912adad"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\8ce04b0ddc624149b4d7aacf4eb61f36\\receipt.json",
+      "sha256": "7dfbb393f664c0cdc6419ddafec8cca6e073d4dd91fe984cfa382aded6bf3710"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-0\\engine-df.json",
+      "sha256": "1caece14dc4039c3db901191a2af11048fd17d7f683f8adb8db86f7069a2b91e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-0\\filesystem.json",
+      "sha256": "356e40426d9f9be52a47a1016ef2933136aecafbacca47a301fdb176f6e40fb4"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-0\\summary.json",
+      "sha256": "dcfe2ef5778d618223493be2ae86d26571e2f1b3cfc74831bcf2238a1d70d9e8"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-1\\engine-df.json",
+      "sha256": "b30b777af6e90e0bd7cc3f77d2cb71953e081bbc725f455f74f1d22f4e275e1c"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-1\\filesystem.json",
+      "sha256": "360bcaac3986343d70aacd8708758371624b53764646914e0c70c1f199393703"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-1\\summary.json",
+      "sha256": "63f30e9a97c3d559cc59d42d9bf6e17c5bc51f1391680db14a5c0b78af898bc5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-2\\engine-df.json",
+      "sha256": "2eb8705aeb30f5c19ac061cf8daaf5fcd69f65e06f217afa0bfd3575d854b9fc"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-2\\filesystem.json",
+      "sha256": "360bcaac3986343d70aacd8708758371624b53764646914e0c70c1f199393703"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-after-2\\summary.json",
+      "sha256": "4df61840b30220ec250dd1002ce4a4961e4fce03c7f4254db510fbfb8a9fc85e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-before\\engine-df.json",
+      "sha256": "ac6392f7ecc456f5166de5871796b5faf2060714d45949eeb78012019256b860"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-before\\filesystem.json",
+      "sha256": "ee4600dfbcb5f25b6e8d909ed5b5c0918ad5b340c373b1c583b2515b09ad1010"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\storage-before\\summary.json",
+      "sha256": "a33894b05145079e2526cd67b5e262e5bf8b042fee72881956bf23a424878d0a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\tool_hit\\build-commands.json",
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\tool_hit\\record.json",
+      "sha256": "c76fef51987ca5b2b8581f76f595eac79f471d5c3b1d1e6f2b6ab75e3e79a6a9"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\171c47b8bf60444daf4171bb8ee2c78a\\execution\\report.json",
+      "sha256": "497e39fc562ec38cf2a6c5d30fc443611c56176f91e330b865c67595acbfca39"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-1\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\171c47b8bf60444daf4171bb8ee2c78a\\receipt.json",
+      "sha256": "b1d54e527b56edda806f6f213d1259d90c76c2469a7a6485a3b3e9c6d9c77843"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\environment_hit_tool_miss\\build-commands.json",
+      "sha256": "ee0ec71a283bb80fceaf2ac8e027170b7d3ce01b1d40c38bc11eee0f9254ac41"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\environment_hit_tool_miss\\record.json",
+      "sha256": "c71f6c42cd22c36e650f541883de66f3a419bbe1213baa00a922ea44e4770706"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\935fa8c28f55410797df28509ab88649\\execution\\report.json",
+      "sha256": "e8146d606bc69e2ceffb423fd23c667709bde6598bf803906c5959d2d2bab01c"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\935fa8c28f55410797df28509ab88649\\receipt.json",
+      "sha256": "275967ed17302d49b6537ab3bac7e04b95591d2667284ec053cb4306c69418d0"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\environment_miss\\build-commands.json",
+      "sha256": "3af6f3dee34e53ea897e922711a9b9ade82f5f6393f2c50dd9ac0f5ab76aec89"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\environment_miss\\record.json",
+      "sha256": "3d095779537ee489aab4833614f5b0272ac6f96ee26341c32053c0f28c8f5b86"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\7d90ebd35f93467597a039543aea18ce\\execution\\report.json",
+      "sha256": "cd377a5f99ac97f26d1548627a2df1c6b1e88696e32c9bcb261891afbd47e266"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\7d90ebd35f93467597a039543aea18ce\\receipt.json",
+      "sha256": "e6b474778d4f29c3842a31019a5c78c39f45d44b85d275f95a68736ed4bc5abd"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-0\\engine-df.json",
+      "sha256": "101a1700a0d446a57cac3b9a13a9da8f6e58606f8e6d8c9003807bd302dedfcc"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-0\\filesystem.json",
+      "sha256": "4bcd05dc50bca5484ad94e8117d07d1629145a0a8bb7bef0d6112796fd0524f7"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-0\\summary.json",
+      "sha256": "4725715c3bdb7213af995d82bcadce6e467a383d66e195d7a8bb90a6b9591dd8"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-1\\engine-df.json",
+      "sha256": "c5508e2583a852f118bf4c4244f58bc687f5a197d632d690181aa18d347b59a5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-1\\filesystem.json",
+      "sha256": "c3e182183e4b278529ea73f50371957d4b2bb9067c31d147a92d2cb8db002979"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-1\\summary.json",
+      "sha256": "415883ec909bfd6502318aeef3d860754895c413864eba14ff7a9fa62ca604cb"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-2\\engine-df.json",
+      "sha256": "52f7ffa199657234b339f53078727f4d3b739e179df0762d28e1732b251f9ff1"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-2\\filesystem.json",
+      "sha256": "c3e182183e4b278529ea73f50371957d4b2bb9067c31d147a92d2cb8db002979"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-after-2\\summary.json",
+      "sha256": "ee160aece019b0cd8bd3ef3f21561edbc717cf5ee96f3850901ad089e5feb739"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-before\\engine-df.json",
+      "sha256": "571fd370b7d7e4d4999ebc91c3fea1f941ec0a738a11953f1ccacf025676eb40"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-before\\filesystem.json",
+      "sha256": "360bcaac3986343d70aacd8708758371624b53764646914e0c70c1f199393703"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\storage-before\\summary.json",
+      "sha256": "323235f2f4e34172ba41e1b6235cae12cde827421b4b2821b424444cb322a475"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\tool_hit\\build-commands.json",
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\tool_hit\\record.json",
+      "sha256": "a23acc32f7f5ccefc7299662361870ba53ceca6d87fa91faeee649fd11137c0b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\25f29257f84e4ace8a1502224eeae4f0\\execution\\report.json",
+      "sha256": "abb9a86c7e4672f3deb7e9c4d806e2e0a9233d2eb0b1af4a937bbed1aa574453"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-2\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\25f29257f84e4ace8a1502224eeae4f0\\receipt.json",
+      "sha256": "c70564eb08b0722d35fe4bca034942e8fb11c4bbdbbd3504e40a9274028f9c34"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\environment_hit_tool_miss\\build-commands.json",
+      "sha256": "5a4da715d991866f6ee83ea1841065b4998619abcc29473418031de9b107e124"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\environment_hit_tool_miss\\record.json",
+      "sha256": "d75aa426e38d86d33724de9453b5bbcc03bbb6bdf3f3f88b18b5f664f8b66e78"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\00b79cc606bb4c03a74178eefcce2ebf\\execution\\report.json",
+      "sha256": "627dbb3fab38c6b5c54042517d78f1798e016e98e17e1fce4cd11641b350dba4"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\environment_hit_tool_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\00b79cc606bb4c03a74178eefcce2ebf\\receipt.json",
+      "sha256": "1e0f4d45219bc5039e56d11291504a3717f0323bb8133f2d86be4a675319cb33"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\environment_miss\\build-commands.json",
+      "sha256": "28b4bdeafa4923e974cf35ee792661d21b0c16d9329bd230d71f4e313c5b7502"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\environment_miss\\record.json",
+      "sha256": "876f2741e9ea75bd3ea032c95781dba8e4d15ba9e6fbc66136007bbd73232ec1"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\f8c0635c1b69476c926ba948776a0a22\\execution\\report.json",
+      "sha256": "88a3436b9ea8a8be1e5b0d66372045355d79b38aa3bfcdbb656d226e8f9411b2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\environment_miss\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\f8c0635c1b69476c926ba948776a0a22\\receipt.json",
+      "sha256": "26e54c09766ac07d1a66eefd113b0f655e28b857ea18033ec3b208ad0465bac5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-0\\engine-df.json",
+      "sha256": "2c6d9fb1d2948b051f7ded00d003616e013e3cc5731ba7050ff08444c34fc2eb"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-0\\filesystem.json",
+      "sha256": "04de80ad825244f0306449c1678d6e5ea8335944afab53157a3d161436e20375"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-0\\summary.json",
+      "sha256": "1f95653802de153b8749fb76426c0a764d7d51b2d5b90f6b06df015b71985153"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-1\\engine-df.json",
+      "sha256": "55c56ef0bd83178571c6196be37ae95574723bc7c3e5a6272b7de3945768fb8e"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-1\\filesystem.json",
+      "sha256": "8720e210215b20ad84a1f07f5f64a7034839048d0d9bea132e08fd52275530b5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-1\\summary.json",
+      "sha256": "1a286511d7c9dcaae58a42ea6357d50c1ada5cc3f333a67cd0454fd233e741c0"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-2\\engine-df.json",
+      "sha256": "c2f615159bff2f187fd996d9af60202f35fde5ce932a7fa1b7976c1bd161d908"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-2\\filesystem.json",
+      "sha256": "8720e210215b20ad84a1f07f5f64a7034839048d0d9bea132e08fd52275530b5"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-after-2\\summary.json",
+      "sha256": "1e2611b931976b0f8135238a24596d24e35b4537298767254ad7b717529e843a"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-before\\engine-df.json",
+      "sha256": "870070271a7380746762d2105acdae0a5716c8c2163dc2cf14210da784552cc4"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-before\\filesystem.json",
+      "sha256": "c3e182183e4b278529ea73f50371957d4b2bb9067c31d147a92d2cb8db002979"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\storage-before\\summary.json",
+      "sha256": "e9a40a31ad5bd2e4a61cf7fc303e17b7b6c07ce0906ffac60c6e98c10a7dedad"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\tool_hit\\build-commands.json",
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\tool_hit\\record.json",
+      "sha256": "1d6cf525b506f391526534af6ebff9d8ce2eb35ae7c76306364efbc0f2b03e7c"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\e3632491095041e7ad4fe867c4a954ce\\execution\\report.json",
+      "sha256": "2177353676fd78c5ddf8818b7d4aa622c065b9a94764c43bc4d6b46e0626d97c"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\b-3\\tool_hit\\runtime\\candidate-9e0f3dbbe94ab5078d9d9e6d412e6abc89c8bccffe80aedc181263d24bcf1866\\e3632491095041e7ad4fe867c4a954ce\\receipt.json",
+      "sha256": "6b8d64ce32bf740064a34fe933354a720a3e68676d2905acff108534800315df"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\host.json",
+      "sha256": "b141175d53ba3f7e1f4020e18111e07de80af0b98772982b01de1702f4e0da6b"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\measurement-code.json",
+      "sha256": "268777edb8123a97b95956fb81b6e1d574292d9e3cb8137e8ad54e347cfe9dfc"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\measurement-script.py",
+      "sha256": "1792d5d4b4e5d9f3a91363a0cdda938f4fef58333da4845d7e52119e9da94930"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\method.json",
+      "sha256": "16cb1b7a790c40150b71d4e4de498a2b7714f780a70bbbb24c00a8af5169f98f"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\observations.json",
+      "sha256": "c3a855f35498596902afc2e2fce811b69d203da7dafe2ac96835f5636bae3b63"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-measurement-20261101-02\\result.json",
+      "sha256": "c24b98452673b0025ac7c810e2b9dfa1fd95903fc2bf2b3bbbdd1f4f49f5c9f7"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-planner-20261101.log",
+      "sha256": "c400701f42ca57d4037e76dd0b5080d122233203d44cae6ac276e273b07ce119"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-prompt-contract-20261101.log",
+      "sha256": "1b5eb17960f1a12626790aa1da476351ece2490863ff568fa3ebb7d292c830c2"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\shared-paths-regression-final-20261101.log",
+      "sha256": "7bc7aa345aaa85acf48a187f2ad8923cc66817d7288566b2be6f93a59f434391"
+    }
+  ],
+  "code_files": [
+    {
+      "path": "validation/deepseek-api/measure_shared_tool_paths.py",
+      "sha256": "83e6dedc818e52b400d78886579674f3504ae00ccea8da5204165563a3c8dd10"
+    },
+    {
+      "path": "tests/pipeline/test_shared_path_metrics.py",
+      "sha256": "91b925ee92636af332a0eb80c860280763bfe03159a53695bf48f58b1a36c4da"
+    },
+    {
+      "path": "validation/deepseek-api/audit_shared_path_metrics.py",
+      "sha256": "f65ed30731337f9c3a6031cdbe8d80997a0ccb675f29f0ff829967b335e03c50"
+    }
+  ]
+}
