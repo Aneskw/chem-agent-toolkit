@@ -19,7 +19,7 @@ from contextlib import contextmanager
 from creation_pipeline.artifacts.package import manifest
 from creation_pipeline.contracts import fingerprint
 from creation_pipeline.records import has_link, read_json, safe_relative, write_json, sanitized
-from . import external_tool, bundled_data
+from . import external_tool, bundled_data, request_contracts
 
 ABI = 'shared_tool_image_v1'
 POLICY = 'closed-python-bundle-v1'
@@ -101,7 +101,7 @@ def validate_python(tree, module, declaration, local_modules, entry):
                 raise ValueError('shared_tool.closure: external process invocation unsupported in v1; ' + path)
 
 
-def describe(source, binding, declaration, requirements=(), constraints=(), runtime_limits=None):
+def describe(source, binding, declaration, requirements=(), constraints=(), runtime_limits=None, *, tool_compatibility=None):
     """Request identity uses only pre-planning inputs, including explicit requirements."""
     validate_declaration(declaration)
     interface = declaration['interface']
@@ -131,10 +131,21 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
                 validate_python(tree, item['path'], declaration, local_modules, binding['entry'])
     from .planner import DEFAULTS
     limits = runtime_limits if runtime_limits is not None else DEFAULTS
-    return {'abi': external_tool.ABI if external else bundled_data.PROFILES[declaration['policy']] if data_profile else ABI, 'declaration': copy.deepcopy(declaration), 'files': sorted(files, key=lambda f: f['path']),
+    implementation_abi = external_tool.ABI if external else bundled_data.PROFILES[declaration['policy']] if data_profile else ABI
+    result = {'abi': implementation_abi, 'declaration': copy.deepcopy(declaration), 'files': sorted(files, key=lambda f: f['path']),
             'entry': binding['entry'], 'entry_sha256': binding['entry_sha256'],
             'requirements': list(requirements), 'constraints': list(constraints),
             'runtime_limits': {k: limits[k] for k in ('memory', 'cpus', 'pids')}}
+    if tool_compatibility is not None:
+        request_contracts.compatibility(tool_compatibility, frozen=True)
+        if external:
+            raise ValueError('scoped_tool_profile_unsupported: external executable identity requires legacy request protocol')
+        if any(tool_compatibility['unclassified'][k] != list(v) for k,v in (('requirements', requirements),('constraints', constraints))):
+            raise ValueError('tool_compatibility.unclassified: legacy caller requirements differ; no silent removal allowed')
+        result.update(abi=request_contracts.ABI, implementation_abi=implementation_abi,
+                      request_protocol=request_contracts.REQUEST_PROTOCOL, tool_compatibility=copy.deepcopy(tool_compatibility))
+        for field in ('requirements', 'constraints'): result.pop(field)
+    return result
 
 
 def environment_plan(plan):
@@ -142,6 +153,8 @@ def environment_plan(plan):
 
 
 def check_plan(request, plan):
+    if request.get('request_protocol') == request_contracts.REQUEST_PROTOCOL:
+        request_contracts.check_plan(request, plan)
     interface = request['declaration']['interface']
     for key in ('entrypoint', 'resources', 'runtime_network'):
         if plan.get(key) != interface[key]:
@@ -232,7 +245,7 @@ def validate_record(record, request=None):
                 'image_id', 'daemon_id', 'artifact_id'}
     if isinstance(record, dict) and record.get('abi') == external_tool.ABI:
         expected.add('external_identity')
-    if not isinstance(record, dict) or set(record) != expected or record['abi'] not in {ABI, external_tool.ABI, *bundled_data.PROFILES.values()}:
+    if not isinstance(record, dict) or set(record) != expected or record['abi'] not in {ABI, external_tool.ABI, request_contracts.ABI, *bundled_data.PROFILES.values()}:
         raise ValueError('shared_tool.record: unsupported schema')
     req = record['request']
     if (not isinstance(req, dict) or not isinstance(req.get('declaration'), dict)
@@ -249,7 +262,17 @@ def validate_record(record, request=None):
         paths.append(item['path'])
     if paths != sorted(set(paths)):
         raise ValueError('shared_tool.files: duplicate/unsorted implementation paths')
-    policy = external_tool.POLICY if record['abi'] == external_tool.ABI else next((p for p,a in bundled_data.PROFILES.items() if a==record['abi']), POLICY)
+    implementation_abi = record['abi']
+    if record['abi'] == request_contracts.ABI:
+        if (req.get('request_protocol') != request_contracts.REQUEST_PROTOCOL or type(req['request_protocol']) is not int
+                or req.get('implementation_abi') not in {ABI, *bundled_data.PROFILES.values()}
+                or set(req) != {'abi','request_protocol','implementation_abi','tool_compatibility','declaration','files','entry','entry_sha256','runtime_limits'}):
+            raise ValueError('shared_tool.request_protocol: expected scoped protocol 2 and supported Python implementation ABI')
+        request_contracts.compatibility(req['tool_compatibility'], frozen=True)
+        implementation_abi = req['implementation_abi']
+    elif 'request_protocol' in req or 'tool_compatibility' in req or 'implementation_abi' in req:
+        raise ValueError('shared_tool.request_protocol: scoped fields require v5 ABI')
+    policy = external_tool.POLICY if implementation_abi == external_tool.ABI else next((p for p,a in bundled_data.PROFILES.items() if a==implementation_abi), POLICY)
     if record['request'].get('abi') != record['abi'] or record['request']['declaration']['policy'] != policy:
         raise ValueError('shared_tool.policy: version no longer supported')
     validate_declaration(req['declaration'])
@@ -327,7 +350,7 @@ def resolve(request, host, process, root=None):
             try:
                 other = read_record(path)
                 differences = []
-                for field in ('abi', 'entry', 'entry_sha256', 'requirements', 'constraints', 'runtime_limits'):
+                for field in ('abi', 'request_protocol', 'implementation_abi', 'tool_compatibility', 'entry', 'entry_sha256', 'requirements', 'constraints', 'runtime_limits'):
                     if other['request'].get(field) != request.get(field):
                         differences.append(field)
                 for field in ('platform', 'policy', 'requirements', 'interface', 'closure'):
@@ -384,16 +407,19 @@ def combine(record, acceptance):
 
 def verify_binding(env, materials):
     binding = env['shared_tool']
-    if binding.get('abi') not in {ABI, external_tool.ABI, *bundled_data.PROFILES.values()}:
+    if binding.get('abi') not in {ABI, external_tool.ABI, request_contracts.ABI, *bundled_data.PROFILES.values()}:
         raise ValueError('shared_tool.binding: unsupported ABI')
     request = binding['request']
     if binding['abi'] != request['abi']:
         raise ValueError('shared_tool.binding: ABI differs from request')
     if binding['request_key'] != fingerprint(request):
         raise ValueError('shared_tool.binding: request key mismatch')
+    scoped = request.get('request_protocol') == request_contracts.REQUEST_PROTOCOL
+    compatibility = request_contracts.envelope(env.get('tool_compatibility'), 'tool_compatibility') if scoped else None
+    opaque = compatibility['unclassified'] if scoped else request
     actual = describe(Path(materials) / 'context',
                       {'entry': request['entry'], 'entry_sha256': request['entry_sha256'], 'association': 'identical'},
-                      request['declaration'], request['requirements'], request['constraints'], env['limits'])
+                      request['declaration'], opaque['requirements'], opaque['constraints'], env['limits'], tool_compatibility=compatibility)
     if actual != request:
         raise ValueError('shared_tool.binding: complete current closure/runtime requirements differ from request')
     check_plan(request, env['plan'])
@@ -462,6 +488,14 @@ def build(executor, request, record, env, materials):
             logs.append(observation)
             if not image_files_match(observation, expected):
                 raise ValueError('shared_tool.image_files: implementation differs at ' + directory)
+        if binding['request']['abi'] == request_contracts.ABI:
+            expected_version = binding['request']['tool_compatibility']['requirements']['language_version']
+            observed = runner.run(tool, artifact['image_id'], ['-c', 'import platform; print(platform.python_version())'],
+                                  entrypoint='python', timeout=min(executor.probe_timeout, max(.1, deadline-time.monotonic())))
+            logs.append(observed)
+            actual_version = observed.get('stdout', '').strip()
+            if observed['exit_code'] != 0 or actual_version.split('.')[:len(expected_version.split('.'))] != expected_version.split('.'):
+                raise ValueError('shared_tool.python_version: expected=' + expected_version + '; actual=' + repr(actual_version))
         required = binding['request']['declaration']['requirements']['imports']
         if required:
             code = 'import importlib.metadata,json; print(json.dumps({n:importlib.metadata.version(n) for n in ' + repr(list(required)) + '}))'
@@ -572,5 +606,5 @@ def inspect(root=None, host=None, process=None):
                 result[-1]['external_identity'] = {k: identity[k] for k in ('executable', 'rootfs', 'plugins', 'data')}
         except (OSError, ValueError, KeyError, TypeError) as exc:
             result.append({'path': str(path), 'status': 'invalid_record', 'detail': str(exc)})
-    return sanitized({'abi': ABI, 'supported_abis': [ABI, external_tool.ABI, *bundled_data.PROFILES.values()], 'registry': str(root), 'artifacts': result,
+    return sanitized({'abi': ABI, 'supported_abis': [ABI, external_tool.ABI, *bundled_data.PROFILES.values(), request_contracts.ABI], 'registry': str(root), 'artifacts': result,
                       'pending': [p.name for p in root.glob('*.lock')], 'business_acceptance': 'not_run'})

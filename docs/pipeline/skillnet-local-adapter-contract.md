@@ -45,7 +45,11 @@ SHA256；必须复用程序的 canonicalization，不能散列 pretty JSON 或�
 | SkillBinding | **逻辑对象，非独立资源表**。`inputs.bindings.payload` 保存入口/来源关联：entry/source_id/source_path/association/entry_sha256/source_sha256 等；`inputs.environment.payload.shared_tool` 保存 abi/request/request_key，可选 artifact/selection；首建具体版本由 receipt.tool_artifact 与 request 指纹绑定 | 命中时冻结 artifact；首建在执行前先冻结请求，构建后回执绑定具体版本，不能回写 freeze。共同由 revision/freeze 与 RuntimeRequest 全组指纹证明，不存在单独 binding_id。版本封套是 inputs.bindings.version，不能当作 Tool ABI |
 | ExecutionAttempt | 独立 runtime 目录：attempt-start.json、receipt.json、build-log.json、execution/{started,tests,report}.json 及有界输出；catalog runtime 引用含 path/files/status/execution_status/image_id/host/revision_id 等 | attempt 目录通常为 candidate_id/UUID，但无全局 attempt_id 字段或独立协议。RuntimeRequest 是 frozen dataclass，精确字段见机器清单；receipt version 2、当前 report version 1 / acceptance_version 2 是不同版本域 |
 
-Tool request 精确包含 abi/declaration/files/entry/entry_sha256/requirements/constraints/runtime_limits。
+旧 Tool request 精确包含 abi/declaration/files/entry/entry_sha256/requirements/constraints/runtime_limits。
+显式 v5/request_protocol=2 把兼容要求迁入 tool_compatibility，并保留 implementation_abi；当前业务
+要求、原 prompt 和用例单独冻结在 acceptance.skill_contract。未分类旧式要求、完整 caller constraints
+与所有来源字节仍保守进入工具身份，未知字段/版本拒绝。两个作用域的精确位置、迁移及拒绝码见
+[作用域协议](scoped-tool-contracts.md)；原 delivery/RuntimeRequest 字段和资格门禁不变。
 v4 的有限同目录 JSON 定位新增 policy/ABI 版本，不增加对象字段；平台应转交显式 module/path/sha256
 声明并保留具名拒绝，不按语义相似推断兼容。详见 [v4 协议](sibling-json-tool-protocol.md)。
 files 为排序的 `{path,sha256,bytes,mode}`；declaration 包含 closure/requirements/interface/platform/policy。

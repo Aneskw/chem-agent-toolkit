@@ -498,12 +498,14 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                     if not runtime_existing:
                         finalize(entity_record, sources.manifest(), proposal, draft=config["draft_only"])
                     from creation_pipeline.runtime.preparation import prepare
+                    from creation_pipeline.runtime.request_contracts import caller_context as caller_contract_context
                     from creation_pipeline.runtime.local import LocalExecutor
                     from creation_pipeline.runtime.service import execute_prepared
                     runtime_spec = copy.deepcopy(runtime_override if runtime_override is not None else runtime_spec_for(config, name))
                     # The caller's own wording is an obligation source for the
                     # invalid-input classification, not only the upstream source.
-                    runtime_spec.setdefault('requirements', [config.get('prompt', '')] + list(config.get('constraints') or []))
+                    if 'tool_compatibility' not in runtime_spec:
+                        runtime_spec.setdefault('requirements', [config.get('prompt', '')] + list(config.get('constraints') or []))
                     # The association review is an independent model stage too; give
                     # runtime preparation the batch's native provider (no secrets).
                     runtime_spec.setdefault('native_model', {key: config['model'].get(key) for key in
@@ -531,7 +533,9 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                         return call
                     notify("Preparing runtime and current acceptance: " + name)
                     materials = prepare(entity_record, bundle / "skills" / name, sources.manifest(),
-                                        work / "runtime-preparation" / name / uuid.uuid4().hex, runtime_spec, executor, runtime_call_guard)
+                                        work / "runtime-preparation" / name / uuid.uuid4().hex, runtime_spec, executor, runtime_call_guard,
+                                        **({'caller_context': caller_contract_context(config)}
+                                           if 'tool_compatibility' in runtime_spec else {}))
                     # Final freeze is distinct from the author's durable completion receipt.
                     entity_record.pop("durable_evidence", None)
                     relative = "evidence/" + name + "/" + uuid.uuid4().hex

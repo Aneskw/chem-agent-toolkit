@@ -130,8 +130,12 @@ def check(config,mode='build',snapshots=None,offline=False):
                 if record['request_key']!=reference['request_key'] or record['artifact_id']!=reference['artifact_id']:
                     raise ValueError('record reference identity differs')
                 add(scope+'.tool_artifact',path,'verified concrete version',reference)
-                known={'declaration':declaration,'requirements':spec.get('requirements',[config.get('prompt','')]+list(config.get('constraints') or [])),
-                       'constraints':spec.get('constraints',[])}
+                if 'tool_compatibility' in spec:
+                    from creation_pipeline.runtime.request_contracts import tool_payload, caller_context, REQUEST_PROTOCOL
+                    known={'declaration':declaration,'request_protocol':REQUEST_PROTOCOL,'tool_compatibility':tool_payload(spec,caller_context(config))}
+                else:
+                    known={'declaration':declaration,'requirements':spec.get('requirements',[config.get('prompt','')]+list(config.get('constraints') or [])),
+                           'constraints':spec.get('constraints',[])}
                 for field,value in known.items():
                     if record['request'].get(field)!=value:
                         add(scope+'.tool_artifact.'+field,path,record['request'].get(field),value,'tool_request_mismatch',runtime_required)

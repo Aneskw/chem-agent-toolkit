@@ -22,7 +22,7 @@ class RuntimeBlocked(ValueError):
 def validate_spec(spec):
     if not isinstance(spec, dict) or set(spec) - {'binding', 'plan', 'options', 'resource_refs', 'constraints',
                                                   'requirements', 'locked_cases', 'previous_plan', 'feedback',
-                                                  'native_model', 'shared_tool', 'acceptance_plan', 'tool_artifact'}:
+                                                  'native_model', 'shared_tool', 'acceptance_plan', 'tool_artifact', 'tool_compatibility', 'skill_contract'}:
         raise ValueError('Unsupported runtime preparation settings')
     for key in ('binding', 'plan', 'options', 'resource_refs', 'native_model', 'shared_tool', 'acceptance_plan', 'tool_artifact'):
         if key in spec and not isinstance(spec[key], dict):
@@ -30,6 +30,8 @@ def validate_spec(spec):
     if 'shared_tool' in spec:
         from .shared_tool import validate_declaration
         validate_declaration(spec['shared_tool'])
+    from .request_contracts import validate_spec as validate_scopes
+    validate_scopes(spec)
     if 'tool_artifact' in spec:
         from .shared_tool import validate_reference
         validate_reference(spec['tool_artifact'])
@@ -397,7 +399,7 @@ def rebind(record, binding, environment, acceptance):
     d["qualification"] = {"accepted": False, "reason": "Docker build is not business acceptance"}
 
 
-def prepare(record, package, sources, workspace, spec, executor, call_guard=None, review_evidence=None):
+def prepare(record, package, sources, workspace, spec, executor, call_guard=None, review_evidence=None, caller_context=None):
     """Return immutable materials plus a diagnostic; deterministic blockers do not call models."""
     validate_spec(spec)
     d = record["delivery"]
@@ -424,6 +426,10 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
                 result['acceptance_planning_calls'] = result.get('acceptance_planning_calls', 0) + 1
         return ticket
     binding = None
+    from . import request_contracts
+    scoped_tool = request_contracts.tool_payload(spec, caller_context) if 'tool_compatibility' in spec else None
+    scoped_skill = request_contracts.skill_payload(spec, caller_context) if scoped_tool is not None else None
+    business_requirements = (spec.get('requirements') or []) + (request_contracts.business_texts(scoped_skill) if scoped_skill is not None else [])
     opts = planner.options(spec.get("options", {}))
     # The association review is an independent model stage like discovery/review, so
     # it must run on the batch's native provider instead of silently using the CLI.
@@ -490,7 +496,7 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
         host = host if host is not None else executor.host()
         # Stated invalid-input obligations are anchored before any classification is
         # judged, and they only accumulate across revisions.
-        anchors = merged_anchors(record, spec.get('requirements') or [])
+        anchors = merged_anchors(record, business_requirements)
         p = copy.deepcopy(spec.get("plan"))
         tool_request = tool_artifact = None
         if spec.get('shared_tool') is not None:
@@ -498,7 +504,8 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
             from .local import process
             try:
                 tool_request = shared_tool.describe(source, binding, spec['shared_tool'],
-                                                    spec.get('requirements', []), spec.get('constraints', []), opts)
+                                                    spec.get('requirements', []), spec.get('constraints', []), opts,
+                                                    tool_compatibility=scoped_tool)
             except ValueError as exc:
                 result['shared_tool'] = {'status': 'miss', 'reason': 'incomplete_or_unsupported_request', 'detail': redact(str(exc))}
                 raise RuntimeBlocked('shared_tool_request_unresolved', str(exc)) from exc
@@ -533,6 +540,9 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
                     raise RuntimeBlocked("explicit_budget", "Explicit runtime time limit reached")
                 planning_opts["total_seconds"] = max(1, int(remaining))
             entry_constraints = list(spec.get('constraints', []))
+            if scoped_tool is not None:
+                entry_constraints += request_contracts.business_texts(scoped_skill)
+                entry_constraints += ['Exact versioned tool compatibility (deterministically checked): ' + json.dumps(scoped_tool, ensure_ascii=False)]
             if tool_request:
                 entry_constraints.append('Exact shared-tool requirements (deterministically checked): '
                                          + json.dumps(tool_request['declaration'], ensure_ascii=False))
@@ -615,19 +625,27 @@ def prepare(record, package, sources, workspace, spec, executor, call_guard=None
         environment = {"plan": p, "materials": manifest(target), "limits": opts, "resource_inputs": resource_inputs}
         if base_image_pin:
             environment["base_image"] = base_image_pin
+        if scoped_tool is not None:
+            environment['tool_compatibility'] = versioned(scoped_tool)
         if tool_request:
             environment['shared_tool'] = {'abi': tool_request['abi'], 'request': tool_request,
                                           'request_key': fingerprint(tool_request), 'artifact': tool_artifact}
             if 'tool_artifact' in spec:
                 environment['shared_tool']['selection'] = copy.deepcopy(spec['tool_artifact'])
-        rebind(record, binding, environment,
-               {"cases": cases, "policy": json.loads(p["acceptance_json"]), "author_tests": author_tests,
-                "input_anchors": anchors})
+        acceptance = {"cases": cases, "policy": json.loads(p["acceptance_json"]), "author_tests": author_tests,
+                      "input_anchors": anchors}
+        if scoped_skill is not None: acceptance['skill_contract'] = versioned(scoped_skill)
+        rebind(record, binding, environment, acceptance)
     except (RuntimeBlocked, planner.PlanningError, planner.ModelUnavailable, OSError, ValueError, ImportError) as exc:
         result["gaps"].append({"code": getattr(exc, "code", "plan_unresolved"), "detail": redact(str(exc)),
                                "repair_lane": getattr(exc, "lane", "environment"),
                                "blocker_kind": getattr(exc, 'kind', 'unresolved_input')})
-        rebind(record, binding, {"materials": manifest(target), "limits": opts, "incomplete": True}, d["inputs"]["acceptance"]["payload"])
+        incomplete = {"materials": manifest(target), "limits": opts, "incomplete": True}
+        failed_acceptance = copy.deepcopy(d['inputs']['acceptance']['payload'])
+        if scoped_tool is not None:
+            incomplete.update(tool_compatibility=versioned(scoped_tool), shared_tool_declaration=copy.deepcopy(spec['shared_tool']))
+            failed_acceptance['skill_contract'] = versioned(scoped_skill)
+        rebind(record, binding, incomplete, failed_acceptance)
         if getattr(exc, 'lane', None) == 'content' and getattr(exc, 'kind', None) == 'content_defect':
             d['content']['status'] = 'failed'
             record['content_status'] = 'failed'

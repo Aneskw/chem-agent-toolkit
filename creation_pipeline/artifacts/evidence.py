@@ -98,6 +98,8 @@ def verify(directory, freeze_sha256):
                 entry["inventory"], key=lambda f: f['path']):
             raise ValueError("Durable source files differ from revision")
     environment = delivery["inputs"]["environment"]["payload"]
+    from creation_pipeline.runtime.request_contracts import verify_inputs
+    verify_inputs(delivery['inputs'])
     if isinstance(environment, dict) and "materials" in environment:
         if ordered(manifest(directory / "runtime")) != ordered(environment["materials"]):
             raise ValueError("Frozen runtime materials differ from revision")

@@ -1,5 +1,9 @@
 # 精确 Tool 制品复用：本机 v1 协议
 
+2026-11-02：新增显式 v5/request_protocol=2，用版本化 tool_compatibility 与 skill_contract
+分离工具兼容与当前业务合同；旧要求和完整来源仍有保守路径，旧 v1-v4 请求不改写。
+完整字段、确定性检查和迁移拒绝见 [作用域协议](scoped-tool-contracts.md)。
+
 2026-11-02：固定 with_name 同目录 JSON 定位使用独立 v4 ABI/policy，见
 [同目录资源协议](sibling-json-tool-protocol.md)。它不放开通用路径或动态加载；v1/v2/v3 保留原规则。
 普通 CLI 的零模型就绪观察与模型前门禁见 [readiness](readiness.md)。

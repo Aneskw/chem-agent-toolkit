@@ -1,0 +1,94 @@
+{
+  "passed": true,
+  "scope": "read-only proposal retention audit; no new business/model execution",
+  "observations": [
+    {
+      "label": "a",
+      "rejection_path": "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\a\\state\\runs\\20261102T174532-99361683\\runtime-preparation\\rdkit-descriptor-rule-screening\\dfe889185e3f4075984d487994d9faa6\\materials\\planning\\0\\rejection.json",
+      "rejection_sha256": "9d48f9fdd2f9f615456f2107fc3dd60edb2c950f8ea1bd31ddfa50d83c944f73",
+      "original_case_names_retained": true,
+      "all_non_invocation_case_fields_unchanged": true,
+      "before_model_cases": 8,
+      "after_model_cases": 9,
+      "changes": [
+        {
+          "case": "runtime-distribution-pins",
+          "changed_case_json_fields": []
+        },
+        {
+          "case": "screen-help-interface",
+          "changed_case_json_fields": []
+        },
+        {
+          "case": "ethanol-calculation-completion",
+          "changed_case_json_fields": []
+        },
+        {
+          "case": "phenol-operational-selection",
+          "changed_case_json_fields": []
+        },
+        {
+          "case": "empty-value-rejection",
+          "changed_case_json_fields": []
+        },
+        {
+          "case": "whitespace-value-rejection",
+          "changed_case_json_fields": []
+        },
+        {
+          "case": "missing-required-flag",
+          "changed_case_json_fields": []
+        },
+        {
+          "case": "invalid-syntax-retained-pending-contract",
+          "changed_case_json_fields": []
+        }
+      ]
+    },
+    {
+      "label": "b",
+      "rejection_path": "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\b\\state\\runs\\20261102T175856-6907526a\\runtime-preparation\\descriptor-rule-screening\\74d2c98a81704322927a14d81a6759dc\\materials\\acceptance-planning\\0\\rejection.json",
+      "rejection_sha256": "9255c994464ba7b1ed6b4fcad28fc09f19f5e8f43c0ed440b615ead7efe0b23a",
+      "original_case_names_retained": true,
+      "all_non_invocation_case_fields_unchanged": true,
+      "before_model_cases": 6,
+      "after_model_cases": 6,
+      "changes": [
+        {
+          "case": "current-batch-phenol-computation-first",
+          "changed_case_json_fields": [
+            "entrypoint"
+          ]
+        },
+        {
+          "case": "current-batch-ethanol-policy-inclusion",
+          "changed_case_json_fields": [
+            "entrypoint"
+          ]
+        },
+        {
+          "case": "current-batch-empty-value-rejection",
+          "changed_case_json_fields": [
+            "entrypoint"
+          ]
+        },
+        {
+          "case": "current-batch-whitespace-value-rejection",
+          "changed_case_json_fields": [
+            "entrypoint"
+          ]
+        },
+        {
+          "case": "current-screen-help-interface",
+          "changed_case_json_fields": [
+            "entrypoint"
+          ]
+        },
+        {
+          "case": "current-bound-python-distribution-probe",
+          "changed_case_json_fields": []
+        }
+      ]
+    }
+  ]
+}

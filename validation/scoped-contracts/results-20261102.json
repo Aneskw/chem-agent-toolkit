@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "at": "2026-11-02T10:22:51.332358+00:00",
+  "baseline": "be73aff868b5ab1817f00cbd6a408394a75a5ace",
+  "passed": true,
+  "protocols": {
+    "tool_abi": "shared_tool_image_v5",
+    "implementation_profiles": [
+      "shared_tool_image_v1",
+      "shared_tool_image_v3",
+      "shared_tool_image_v4"
+    ],
+    "tool_request": 2,
+    "compatibility_scope": 1,
+    "skill_scope": 1,
+    "delivery": 2
+  },
+  "backend": "codex_cli",
+  "budget": {
+    "per_batch_admitted_stages": 16,
+    "per_call_seconds": 600,
+    "total_seconds": 3600,
+    "preparation_seconds": 2400
+  },
+  "generated_batches": 2,
+  "fresh_generation_cases": 34,
+  "admitted_model_calls": 10,
+  "observations": [
+    {
+      "label": "a",
+      "name": "rdkit-descriptor-rule-screening",
+      "output": "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\a\\state\\outputs\\20261102T174532-99361683",
+      "build_id": "20261102T174532-99361683",
+      "cases": 17,
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "revision_id": "rev-ca896d0ccf05da8630db7eef431043753926c4f7427b69cf5ef247394cc574f0",
+      "request_key": "4ff3ae1999af786661fa80842819e9e46e6f54d1d779d5ad01c3111dd51cbfe3",
+      "artifact_id": "7030f8641c7aaecd8b100e296cf2c1d4dd6b27f8249588985dbde8302ba22f9a",
+      "image_id": "sha256:89bca2b1356312efc59ba318d15e6914ac16e19031391981acae01cfab49aa49",
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "tool_compatibility_sha256": "71ec40807a806596c19713103246b6be62d77362b0b01ad8e56f2561fc574075",
+      "skill_contract_sha256": "0ee1ebc05e9420d3c1b7bdb900becccf315f59827b20e95298f13f7e68d88acd",
+      "locked_cases_sha256": "54420e32c34af9149251d1a0bc4121f36d9920249d0ae6e6e9386112f599627d",
+      "acceptance_sha256": "a604e8a4c09b23963a1a29dc9df03f8bb36da8388e9359a275eb23bef3b8fd83",
+      "execution_sha256": "2c8992f842065dfd4b0d8ffcf0ad339ef6bd1c9f58aeeed1203dd6af900b58d9",
+      "admitted_model_calls": 5,
+      "environment_planning_calls": 2,
+      "acceptance_planning_calls": 2,
+      "runtime_model_stages": {
+        "combined_environment_acceptance_planner": 2
+      }
+    },
+    {
+      "label": "b",
+      "name": "descriptor-rule-screening",
+      "output": "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\b\\state\\outputs\\20261102T175856-6907526a",
+      "build_id": "20261102T175856-6907526a",
+      "cases": 17,
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "revision_id": "rev-76acdd186519a625003e6149ef81caf39328013cbf0c07a7f33db2ee1a5c8293",
+      "request_key": "4ff3ae1999af786661fa80842819e9e46e6f54d1d779d5ad01c3111dd51cbfe3",
+      "artifact_id": "7030f8641c7aaecd8b100e296cf2c1d4dd6b27f8249588985dbde8302ba22f9a",
+      "image_id": "sha256:89bca2b1356312efc59ba318d15e6914ac16e19031391981acae01cfab49aa49",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "tool_compatibility_sha256": "71ec40807a806596c19713103246b6be62d77362b0b01ad8e56f2561fc574075",
+      "skill_contract_sha256": "a3637aa07d3d83f3f9d47d5f1380b3b7a8bea5c94c3450a220ae4daba715ed62",
+      "locked_cases_sha256": "b2e401a86d05a2328d5ec18fb0884fb890adff56c8e6d71962892a9fa8cd614d",
+      "acceptance_sha256": "7134bb997baea168077e018edcd0c1137ad943fe71559e60b662e7919b66cfca",
+      "execution_sha256": "fee187b8638fd67863ab26bb2a3d4a887f588707e5d99f375e749003e61baf1a",
+      "admitted_model_calls": 5,
+      "environment_planning_calls": 0,
+      "acceptance_planning_calls": 2,
+      "runtime_model_stages": {
+        "acceptance_only_planner": 2
+      }
+    }
+  ],
+  "negative_cli": {
+    "mutations": 11,
+    "models": 0,
+    "builds": 0,
+    "result": {
+      "path": "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\mutation-cli\\results.json",
+      "sha256": "a2e8f505e4e30d00d5c7f8a5aef670f9ffa614f55f4699217f4548057c91a7d4"
+    }
+  },
+  "exact_resolver_mutations": {
+    "path": "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\negative-probes.json",
+    "sha256": "8568cb76985bc30c3ea6dd592db515d29adc3e4565b43dbcde40446bf0fc00e2"
+  },
+  "scope_recovery": {
+    "new_cases": 17,
+    "models": 0,
+    "actual_builds": 0,
+    "result": {
+      "path": "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\delivery-cli\\results.json",
+      "sha256": "4053f70862ae50c4cf9c4de0289068f6e06f21e423b6ec77f5bf10d1bc6cd254"
+    }
+  },
+  "legacy": {
+    "old_v4_requests_exact_and_qualified": {
+      "path": "E:\\Users\\27343\\Docker\\scoped-contract-legacy-audit-20261102-01\\results.json",
+      "sha256": "3bcca67b4957fc3fa783a45a9092240dc9e4ad1b77af0b2f81554761fc490415"
+    },
+    "self_contained_fresh_cases": 16,
+    "self_contained_result": {
+      "path": "E:\\Users\\27343\\Docker\\legacy-delivery-cli-20261102-02\\results.json",
+      "sha256": "6764f1228127f03fd5c6507462a637e31530a716545c94518d17781b2b635364"
+    }
+  },
+  "regression": {
+    "tests": 786,
+    "passed": 783,
+    "skipped": 3,
+    "targeted": 64,
+    "three_prompt_checks": "passed",
+    "platform_contract": "passed",
+    "results": {
+      "path": "E:\\Users\\27343\\Docker\\scoped-contract-regression-20261102-02\\results.json",
+      "sha256": "e71da58b31174c518ecec60e598bdaec2364af727163a6e71c5b1b6de27e5068"
+    }
+  },
+  "evidence": {
+    "pair": {
+      "path": "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\audit-ab.json",
+      "sha256": "01261ed23d485f48b440c545313d2db56034800f4512a9ed45fc0b8f6e174f5f"
+    },
+    "implementation": {
+      "path": "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\implementation-before.json",
+      "sha256": "220d7d16e101d3049c1e4186becfb273c3cac10cf6dcac3df43fc3615c9250d9"
+    },
+    "manifest": {
+      "path": "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\final-evidence-manifest.json",
+      "sha256": "f08adafce05eec3ec5240a29741c51fa95a65ad225d447f0815d2f8f56bee7bb"
+    },
+    "postflight_manifest": {
+      "path": "E:\\Users\\27343\\Docker\\scoped-contract-regression-20261102-02\\final-evidence-manifest.json",
+      "sha256": "74dc04aea8755593b8cbe8f14eac50480a2c9910126763cfc994637ad666844a"
+    },
+    "legacy_manifest": {
+      "path": "E:\\Users\\27343\\Docker\\scoped-contract-legacy-audit-20261102-01\\final-evidence-manifest.json",
+      "sha256": "1ae2fcb2253a792d7a43ab5a32c5f80b6467b068705653939f0258281783fdf3"
+    }
+  },
+  "retained_failures": [
+    "Offline fixture wording and incomplete HOST gap corrected without changing production validation.",
+    "A first combined proposal missing smiles-flag actual rejection; preserved and corrected within original envelope.",
+    "B first acceptance-only proposal omitted interpreter; preserved with per-case expected/actual diagnostics and corrected within original envelope."
+  ],
+  "limitations": [
+    "Explicit caller scopes, not automatic NLP classification.",
+    "All source/support bytes except package/SKILL.md remain conservative in tool identity.",
+    "Legacy requirements/constraints and complete unknown top-level constraints remain conservative identity inputs.",
+    "External executable v2 stays legacy; scoped opt-in rejects it by name.",
+    "Runtime-only scope replacement and implicit legacy migration require new authoring/review.",
+    "No remote/OCI/platform redesign/GC; build calls do not imply installation counts."
+  ],
+  "proposal_retention": {
+    "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\scoped-contracts\\proposal-retention-20261102.json",
+    "sha256": "2dfea067665927732a8f4987c6f0d4569827017e1ffb17c1f4a5acb3844eb01e"
+  }
+}

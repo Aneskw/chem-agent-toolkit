@@ -9,14 +9,18 @@
       "shared_tool_image_v1",
       "shared_tool_image_v2",
       "shared_tool_image_v3",
-      "shared_tool_image_v4"
+      "shared_tool_image_v4",
+      "shared_tool_image_v5"
     ],
     "policies": [
       "closed-python-bundle-v1",
       "openbabel-debian-image-v1",
       "closed-python-json-data-v1",
       "closed-python-sibling-json-v1"
-    ]
+    ],
+    "tool_request": 2,
+    "tool_compatibility": 1,
+    "skill_contract": 1
   },
   "objects": [
     "Skill",
@@ -105,6 +109,13 @@
       "check",
       "from_config",
       "configuration_error"
+    ],
+    "creation_pipeline.runtime.request_contracts": [
+      "validate_spec",
+      "compatibility",
+      "skill",
+      "verify_inputs",
+      "inherit"
     ]
   },
   "error_anchors": {
@@ -146,6 +157,14 @@
       "source_digest_mismatch",
       "docker_unavailable",
       "model_client_unavailable"
+    ],
+    "creation_pipeline/runtime/request_contracts.py": [
+      "scoped_contracts_required",
+      "scoped_tool_profile_unsupported",
+      "scoped_contracts_binding",
+      "tool_compatibility.unclassified",
+      "scope_migration_requires_new_skill",
+      "skill_contract_change_requires_review"
     ]
   },
   "examples": {
@@ -200,5 +219,16 @@
         "error": null
       }
     }
-  }
+  },
+  "tool_request_v2_fields": [
+    "abi",
+    "request_protocol",
+    "implementation_abi",
+    "tool_compatibility",
+    "declaration",
+    "files",
+    "entry",
+    "entry_sha256",
+    "runtime_limits"
+  ]
 }

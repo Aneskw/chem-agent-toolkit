@@ -1,0 +1,121 @@
+{
+  "sources": [
+    {
+      "id": "sibling_source",
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\sibling-json\\source",
+      "license": "BSD-3-Clause"
+    }
+  ],
+  "prompt": "Package the supplied descriptor rule screening tool, preserving scripts/screen.py, scripts/calc_descriptors.py, scripts/rules.json and requirements.txt byte-for-byte. Deliver exactly SKILL.md, scripts/screen.py, scripts/calc_descriptors.py, scripts/rules.json and requirements.txt; keep provenance and usage inline in SKILL.md. Retain the documented --smiles and --help interface, real RDKit calculation, both valid selected branches, all original descriptor fields and invalid/empty exit-2 diagnostics. Compile independent self-contained argv checks for the actual entry; no host chemistry execution or dependency installs. Assert ethanol weight 46.069 and donors/acceptors 1, phenol weight 94.113 and selected false, policy_id demonstration-screen-50-v1 and maximum 50.0. This threshold is an operational example, not scientific validity. Independently review actual source and retain every failed case. No manual acceptance_plan and no inherited qualification. Write for a batch data curation operator using the same tool and requirements. Use the explicit versioned tool_compatibility as the only typed tool requirement scope. Independently satisfy every current skill_contract requirement; no requirement may be weakened for reuse. Keep all four implementation files and exact source bytes; do not create extra package files.",
+  "model": {
+    "name": "gpt-6-astra",
+    "transport": "https",
+    "reasoning_effort": "medium",
+    "service_tier": "default",
+    "backend": "codex_cli"
+  },
+  "execution": {
+    "profile": "production",
+    "stop_on_runtime_failure": true,
+    "progress_watch": "observe"
+  },
+  "limits": {
+    "model_calls": 16,
+    "model_timeout": 600,
+    "total_seconds": 3600,
+    "agent_progress_timeout": null,
+    "max_candidates": 1,
+    "max_builds": 1,
+    "repair_rounds": 2
+  },
+  "runtime_defaults": {
+    "options": {
+      "backend": "codex_cli",
+      "pin_base_image": true,
+      "model_timeout": 600,
+      "total_seconds": 2400,
+      "reasoning_effort": "low",
+      "service_tier": "default",
+      "progress_watch": "observe",
+      "model": "gpt-6-astra",
+      "transport": "https"
+    },
+    "shared_tool": {
+      "closure": "all-package-and-sources-except-skill-document",
+      "requirements": {
+        "imports": {
+          "rdkit": "2024.9.6",
+          "numpy": "1.26.4",
+          "pillow": "11.3.0"
+        },
+        "executables": []
+      },
+      "interface": {
+        "entrypoint": [
+          "python",
+          "/opt/skill/package/scripts/screen.py"
+        ],
+        "workdir": "/opt/skill",
+        "resources": [],
+        "runtime_network": false
+      },
+      "platform": "linux/amd64",
+      "policy": "closed-python-sibling-json-v1",
+      "bundled_data": [
+        {
+          "module": "scripts/screen.py",
+          "path": "scripts/rules.json",
+          "sha256": "57f8da82b4c7eec60fb37001152a57e8fc9a38624e7a6ee9462a04b600be34ba"
+        }
+      ]
+    },
+    "tool_compatibility": {
+      "version": 1,
+      "source_policy": "complete-snapshots-v1",
+      "requirements": {
+        "base_image": "python:3.11-slim-bookworm",
+        "language": "python",
+        "language_version": "3.11"
+      },
+      "constraints": {
+        "dependency_files": [
+          "package/requirements.txt"
+        ],
+        "install_commands": [
+          "python -m pip install --no-cache-dir -r package/requirements.txt"
+        ],
+        "environment": [
+          {
+            "name": "PYTHONDONTWRITEBYTECODE",
+            "value": "1"
+          },
+          {
+            "name": "PYTHONUNBUFFERED",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    "skill_contract": {
+      "version": 1,
+      "requirements": [
+        "Package the supplied descriptor rule screening tool, preserving scripts/screen.py, scripts/calc_descriptors.py, scripts/rules.json and requirements.txt byte-for-byte. Deliver exactly SKILL.md, scripts/screen.py, scripts/calc_descriptors.py, scripts/rules.json and requirements.txt; keep provenance and usage inline in SKILL.md. Retain the documented --smiles and --help interface, real RDKit calculation, both valid selected branches, all original descriptor fields and invalid/empty exit-2 diagnostics. Compile independent self-contained argv checks for the actual entry; no host chemistry execution or dependency installs. Assert ethanol weight 46.069 and donors/acceptors 1, phenol weight 94.113 and selected false, policy_id demonstration-screen-50-v1 and maximum 50.0. This threshold is an operational example, not scientific validity. Independently review actual source and retain every failed case. No manual acceptance_plan and no inherited qualification.",
+        "For this curator Skill, lead with phenol’s valid descriptor computation (ok=true, exit 0, selected=false). Retain ethanol and both documented invalid/empty rejection obligations."
+      ],
+      "constraints": [
+        "Use a compact batch-curation narrative. Compile independently named current cases and a phenol-first worked example without changing any source or interface."
+      ]
+    }
+  },
+  "batch": {
+    "label": "scoped-contract-b",
+    "tags": [
+      "existing-skill",
+      "descriptors",
+      "acceptance",
+      "docker"
+    ]
+  },
+  "notes": "Keep the inherited Codex backend/model/transport and 16-stage, 600/3600/2400-second envelopes. No manual acceptance_plan, internal state injection, old qualification, original source edits or cache cleanup. Tool implementation and compatibility are identical across A/B; current Skill requirements, constraints, prose and compiled acceptance are independent. Runtime installation must follow the exact typed compatibility fields. Ground resource assessment in unchanged screen.py or source README.",
+  "network": false
+}

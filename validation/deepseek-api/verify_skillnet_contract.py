@@ -9,7 +9,7 @@ import sys
 REPO=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(REPO))
 from creation_pipeline import contracts
-from creation_pipeline.runtime import shared_tool, external_tool, bundled_data
+from creation_pipeline.runtime import shared_tool, external_tool, bundled_data, request_contracts
 from creation_pipeline.runtime.interface import RuntimeRequest
 
 
@@ -24,7 +24,9 @@ def check(value):
     recipe=next(n.value for n in ast.walk(describe) if isinstance(n,ast.Return) and isinstance(n.value,ast.Dict))
     abi=next(ast.literal_eval(v) for k,v in zip(recipe.keys,recipe.values) if ast.literal_eval(k)=='abi')
     equal('versions.environment_recipe',abi,value['versions']['environment_recipe'])
-    equal('versions.tool_abis',[shared_tool.ABI,external_tool.ABI,*bundled_data.PROFILES.values()],value['versions']['tool_abis'])
+    equal('versions.tool_abis',[shared_tool.ABI,external_tool.ABI,*bundled_data.PROFILES.values(),request_contracts.ABI],value['versions']['tool_abis'])
+    for name,expected in (('tool_request',request_contracts.REQUEST_PROTOCOL),('tool_compatibility',request_contracts.VERSION),('skill_contract',request_contracts.VERSION)):
+        equal('versions.'+name,expected,value['versions'].get(name))
     equal('versions.policies',[shared_tool.POLICY,external_tool.POLICY,*bundled_data.PROFILES],value['versions']['policies'])
     equal('runtime_request_fields',[f.name for f in fields(RuntimeRequest)],value['runtime_request_fields'])
     equal('execution_states',sorted(contracts.EXECUTION_STATES),sorted(value['execution_states']))
@@ -33,6 +35,10 @@ def check(value):
                   if isinstance(n,ast.FunctionDef) and n.name=='validate_record')
     expected=ast.literal_eval(function.body[0].value)
     equal('tool_record_v1_fields',sorted(expected),sorted(value['tool_record_v1_fields']))
+    request_fields=next(n.comparators[0] for n in ast.walk(function) if isinstance(n,ast.Compare)
+        and isinstance(n.left,ast.Call) and isinstance(n.left.func,ast.Name) and n.left.func.id=='set'
+        and len(n.left.args)==1 and isinstance(n.left.args[0],ast.Name) and n.left.args[0].id=='req')
+    equal('tool_request_v2_fields',sorted(ast.literal_eval(request_fields)),sorted(value['tool_request_v2_fields']))
     extra=next(n for n in ast.walk(function) if isinstance(n,ast.Call)
                and isinstance(n.func,ast.Attribute) and n.func.attr=='add')
     equal('tool_v2_extra_fields',[ast.literal_eval(extra.args[0])],value['tool_v2_extra_fields'])

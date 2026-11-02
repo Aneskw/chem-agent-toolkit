@@ -130,7 +130,7 @@ def extract(config, name=None):
             visit(key, config[key])
     for prefix, spec in (("runtime_defaults", config.get("runtime_defaults", {})),
                          ("runtime." + str(name), config.get("runtime", {}).get(name, {}))):
-        for key in ("requirements", "constraints"):
+        for key in ("requirements", "constraints", "skill_contract"):
             if key in spec:
                 visit(prefix + "." + key, spec[key])
     return _compile(inputs)

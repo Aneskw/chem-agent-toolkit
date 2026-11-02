@@ -122,6 +122,11 @@ def qualify(delivery, *, runtime_root=None, runtime_ref=None, frozen_directory=N
             require(inputs["files"], inputs["layout"]["payload"])
         except (ValueError, TypeError, KeyError) as exc:
             return False, str(exc)
+    try:
+        from creation_pipeline.runtime.request_contracts import verify_inputs
+        verify_inputs(inputs)
+    except (ValueError, KeyError, TypeError) as exc:
+        return False, str(exc)
     if delivery["mode"] == "draft":
         return False, "Explicit draft has no formal delivery qualification"
     if delivery["content"]["status"] != "passed":

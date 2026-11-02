@@ -13,6 +13,8 @@ def candidate_context(session, config, plan):
 
             "resource_index": session.workspace["resource_index"]}
     spec = {**config.get('runtime_defaults', {}), **config.get('runtime', {}).get(plan['name'], {})}
+    if spec.get('tool_compatibility'):
+        context['caller_contract_scopes'] = {k: spec[k] for k in ('tool_compatibility', 'skill_contract')}
     if spec.get('shared_tool'):
         context['tool_execution_layout'] = {
             'authority': 'host runtime protocol, not a business oracle or evidence of execution',

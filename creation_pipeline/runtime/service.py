@@ -206,6 +206,8 @@ def prepare_revision(library, name, spec, *, correction=None):
     for ref in read_json(frozen / "sources.json"):
         sources.append(dict(identity[ref["id"]], path=str(safe_relative(frozen, ref["path"]))))
     spec = copy.deepcopy(spec)
+    from .request_contracts import inherit
+    caller_context = inherit(spec, record['delivery']['inputs'])
     if not spec.get('plan') and record['delivery']['inputs']['environment']['payload'].get('incomplete'):
         # Resume a rejected, never-frozen plan proposal with its exact diagnostic.
         # This is not an accepted contract and must not be passed as previous_plan.
@@ -230,7 +232,8 @@ def prepare_revision(library, name, spec, *, correction=None):
         review_evidence = approve_correction(record, frozen, sources, spec, correction, output)
     executor = LocalExecutor(spec.get("resource_refs"))
     record.pop("durable_evidence", None)
-    materials = prepare(record, frozen / "package", sources, output / "work", spec, executor, review_evidence=review_evidence)
+    materials = prepare(record, frozen / "package", sources, output / "work", spec, executor, review_evidence=review_evidence,
+                        **({'caller_context': caller_context} if caller_context is not None else {}))
     if materials is None:
         raise ValueError("Candidate is not eligible for runtime preparation")
     freeze = seal(output / "evidence/revision", frozen / "package", record, sources, materials)
@@ -296,6 +299,8 @@ def automatic_correction(output, record, spec, observation, executor, call_guard
     result = {'attribution': 'unknown', 'status': 'review_required', 'next_action': 'source_diagnosis_required'}
     try:
         spec = copy.deepcopy(spec)
+        from .request_contracts import inherit
+        caller_context = inherit(spec, record['delivery']['inputs'])
         opts = spec.setdefault('options', {})
         if opts.get('total_seconds') is not None:
             bound = time.monotonic() + opts['total_seconds']
@@ -326,7 +331,8 @@ def automatic_correction(output, record, spec, observation, executor, call_guard
             review['diagnosis_audit'] = {p.relative_to(audit).as_posix(): p.read_text(encoding='utf-8', errors='replace')
                                        for p in audit.rglob('*') if p.is_file()}
             materials = prepare(record, frozen / 'package', sources, decision_dir / 'work',
-                                revised_spec, executor, call_guard, review_evidence=review)
+                                revised_spec, executor, call_guard, review_evidence=review,
+                                **({'caller_context': caller_context} if caller_context is not None else {}))
             if materials is None or record.get('runtime_preparation', {}).get('status') != 'prepared':
                 raise ValueError('Approved proposal could not be prepared; old revision retained')
             new_relative = 'evidence/' + record['name'] + '/' + uuid.uuid4().hex
