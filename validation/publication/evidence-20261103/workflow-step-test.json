@@ -1,0 +1,9 @@
+{
+  "at": "2026-11-02T16:15:55.072281+00:00",
+  "passed": true,
+  "new_empty_absolute_home": "E:\\Users\\27343\\Docker\\publish-review-20261103-01\\workflow-step-test\\temporary files with spaces\\chem-agent-empty-codex",
+  "existing_directory_refused": true,
+  "no_job_level_runner_context": true,
+  "models": 0,
+  "builds": 0
+}

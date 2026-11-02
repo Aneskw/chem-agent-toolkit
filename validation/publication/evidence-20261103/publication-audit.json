@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-02T16:05:07.067914+00:00",
+  "commit": "b759408e7aeff2319c4772170a0da274f32fe23f",
+  "unpublished_blobs_scanned": 384,
+  "private_credentials_detected": false,
+  "tracked_forbidden_files": [],
+  "archive": {
+    "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-b759408-portable.zip",
+    "sha256": "b93bed59e3343da35cbd2a2012f1d4a7c16e094619170723b1095edde31a871e",
+    "bytes": 3413604,
+    "integrity": "passed"
+  },
+  "cleanup": "No disposable tracked files; ignored .env, operational state and failure evidence retained"
+}

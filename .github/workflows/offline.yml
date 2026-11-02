@@ -17,7 +17,6 @@ jobs:
     env:
       PYTHONUTF8: '1'
       PYTHONDONTWRITEBYTECODE: '1'
-      CODEX_HOME: ${{ runner.temp }}/chem-agent-empty-codex
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
@@ -25,6 +24,15 @@ jobs:
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: ${{ matrix.python }}
+      - name: Prepare credential-free client home
+        shell: python
+        run: |
+          import os
+          from pathlib import Path
+          client_home = Path(os.environ['RUNNER_TEMP']) / 'chem-agent-empty-codex'
+          client_home.mkdir(parents=True, exist_ok=False)
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as stream:
+              stream.write(f'CODEX_HOME={client_home}\n')
       - run: python -m pip install -r requirements-yaml.txt
       - run: python -m unittest discover -s tests -q
       - run: python validation/deepseek-api/verify_prompt_contract.py

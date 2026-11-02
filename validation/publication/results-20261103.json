@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "at": "2026-11-02T16:16:55.509787+00:00",
+  "reviewed_commit": "b759408e7aeff2319c4772170a0da274f32fe23f",
+  "local_checks_passed": true,
+  "suite": {
+    "total": 859,
+    "passed": 856,
+    "skipped": 3,
+    "failed": 0
+  },
+  "models": 0,
+  "environment_builds": 0,
+  "tool_builds": 0,
+  "cleanup": "No additional disposable project files; credentials, operational state and failure evidence retained",
+  "initial_ci": {
+    "run_id": 41479254046,
+    "conclusion": "failure",
+    "jobs": 0,
+    "error": "offline.yml:20:19 Unrecognized named-value: runner in job-level runner.temp",
+    "url": "https://github.com/Aneskw/chem-agent-toolkit/actions/runs/41479254046"
+  },
+  "ci_fix": {
+    "job_runner_expression_removed": true,
+    "empty_client_home_created_in_step": true,
+    "local_step_test": "passed",
+    "new_remote_run": "observe GitHub Actions after normal follow-up push; no failure rerun"
+  },
+  "files": [
+    {
+      "path": "validation/publication/evidence-20261103/unittest.log",
+      "sha256": "3a92a7db5812abe6329098b0c2e09821e18ea15e7901b15cc4dd78624b3ed653",
+      "bytes": 1011
+    },
+    {
+      "path": "validation/publication/evidence-20261103/prompt-contract.log",
+      "sha256": "9e3941654beaa52f544f2c92571d745d279733c0050025b595c5e8ad778295f9",
+      "bytes": 601
+    },
+    {
+      "path": "validation/publication/evidence-20261103/acceptance-prompt.log",
+      "sha256": "4c2935faf9b85081511d772d0faa76f6cc278fdfae0cdb34f8d0281ebbd90b70",
+      "bytes": 624
+    },
+    {
+      "path": "validation/publication/evidence-20261103/planner.log",
+      "sha256": "287b5c319e210044f20e52e45dda020019996ed905210d892481831b15fd046c",
+      "bytes": 168
+    },
+    {
+      "path": "validation/publication/evidence-20261103/platform-contract.log",
+      "sha256": "cf439a0b7b52732e61dcb189f9b6a802bb7a101825fcad9fc3c62841c71ace77",
+      "bytes": 157
+    },
+    {
+      "path": "validation/publication/evidence-20261103/portable-evidence.log",
+      "sha256": "be9a193b73b0917fe5346c196ee04de7c277307d2c091129d0205ab3611675aa",
+      "bytes": 140
+    },
+    {
+      "path": "validation/publication/evidence-20261103/results.json",
+      "sha256": "976853ef401a7455ffc3f1c97777c7dff13651d1c03525962a17966aa904633e",
+      "bytes": 1885
+    },
+    {
+      "path": "validation/publication/evidence-20261103/publication-audit.json",
+      "sha256": "1e225fea3916437c099f0261ae4d058f979f8c148821ca3f9ffcab063134aae5",
+      "bytes": 551
+    },
+    {
+      "path": "validation/publication/evidence-20261103/static-review.json",
+      "sha256": "1dfc60d4b0d77d54cb02dbc8c22b3038d4ec191cdbe9be3d5cebcdd1c2949979",
+      "bytes": 244
+    },
+    {
+      "path": "validation/publication/evidence-20261103/archive-review.json",
+      "sha256": "b1fb01fad09f17ab81b1c8df00b6382655ecdee36eb0956f461c3d4133994261",
+      "bytes": 279
+    },
+    {
+      "path": "validation/publication/evidence-20261103/ci-validation-messages.json",
+      "sha256": "8f40b09dafae6d71fd366c20fe5347d94e734fea56b37964ee52dda82c6f59d6",
+      "bytes": 665
+    },
+    {
+      "path": "validation/publication/evidence-20261103/workflow-step-test.json",
+      "sha256": "7316025c48ae0862c8cbc53ed917bd6893e936c53215e9f0a4dc4f76011f3ddf",
+      "bytes": 330
+    }
+  ]
+}

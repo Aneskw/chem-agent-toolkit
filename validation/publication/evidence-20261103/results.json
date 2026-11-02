@@ -1,0 +1,70 @@
+{
+  "at": "2026-11-02T16:12:09.441838+00:00",
+  "passed": true,
+  "commit": "b759408e7aeff2319c4772170a0da274f32fe23f",
+  "models": 0,
+  "builds": 0,
+  "operations": [
+    {
+      "label": "unittest",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 476.3868208999993
+    },
+    {
+      "label": "prompt-contract",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_prompt_contract.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.7753569999986212
+    },
+    {
+      "label": "acceptance-prompt",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_acceptance_prompt.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.38066039999830537
+    },
+    {
+      "label": "planner",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_planner.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.40234090000012657
+    },
+    {
+      "label": "platform-contract",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_skillnet_contract.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.5741552000035881
+    },
+    {
+      "label": "portable-evidence",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/portable/verify_evidence.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.37290060000668745
+    }
+  ]
+}

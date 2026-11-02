@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-02T16:08:28.970283+00:00",
+  "git_archive_commit_matches_HEAD": true,
+  "bootstrap_and_portable_config_included": true,
+  "unnecessary_members": [],
+  "needs_repackaging": false,
+  "sha256": "b93bed59e3343da35cbd2a2012f1d4a7c16e094619170723b1095edde31a871e"
+}
