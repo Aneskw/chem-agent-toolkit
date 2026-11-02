@@ -19,7 +19,7 @@ from contextlib import contextmanager
 from creation_pipeline.artifacts.package import manifest
 from creation_pipeline.contracts import fingerprint
 from creation_pipeline.records import has_link, read_json, safe_relative, write_json, sanitized
-from . import external_tool
+from . import external_tool, bundled_data
 
 ABI = 'shared_tool_image_v1'
 POLICY = 'closed-python-bundle-v1'
@@ -37,11 +37,15 @@ def registry_root():
 
 def validate_declaration(declaration):
     """Validate caller-known support boundaries before any paid generation."""
-    if not isinstance(declaration, dict) or set(declaration) != {'closure', 'requirements', 'interface', 'platform', 'policy'}:
+    expected = {'closure', 'requirements', 'interface', 'platform', 'policy'}
+    if isinstance(declaration, dict) and declaration.get('policy') == bundled_data.POLICY:
+        expected.add('bundled_data')
+        bundled_data.declaration(declaration.get('bundled_data'))
+    if not isinstance(declaration, dict) or set(declaration) != expected:
         raise ValueError('shared_tool.declaration: require closure, requirements, interface, platform, policy')
     if declaration['closure'] != 'all-package-and-sources-except-skill-document':
         raise ValueError('shared_tool.closure: explicit complete bundle declaration missing')
-    if declaration['policy'] not in {POLICY, external_tool.POLICY} or declaration['platform'] != 'linux/amd64':
+    if declaration['policy'] not in {POLICY, external_tool.POLICY, bundled_data.POLICY} or declaration['platform'] != 'linux/amd64':
         raise ValueError('shared_tool.policy/platform: unsupported ' + repr(declaration))
     interface = declaration['interface']
     if (not isinstance(interface, dict) or set(interface) != {'entrypoint', 'workdir', 'resources', 'runtime_network'}
@@ -79,6 +83,9 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
     from .preparation import validate_bound_entrypoint
     validate_bound_entrypoint({'script': 'package/' + binding['entry'], 'entrypoint': interface['entrypoint']}, binding)
     files = []
+    data_profile = declaration['policy'] == bundled_data.POLICY
+    if data_profile:
+        bundled_data.verify(Path(source) / 'package', declaration['bundled_data'])
     local_modules = {p.stem for p in (Path(source) / 'package').rglob('*.py')}
     local_modules |= {p.parent.name for p in (Path(source) / 'package').rglob('__init__.py')}
     for directory in ('package', 'sources'):
@@ -90,6 +97,7 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
             files.append(dict(item, path=path, mode=real.stat().st_mode & 0o777))
             if directory == 'package' and path.endswith('.py'):
                 tree = ast.parse(real.read_text(encoding='utf-8-sig'), filename=path)
+                allowed_file_nodes = bundled_data.reads(tree, item['path'], declaration['bundled_data']) if data_profile else set()
                 if external:
                     external_tool.validate_wrapper(tree, path, binding['entry'])
                 for node in ast.walk(tree):
@@ -97,7 +105,8 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
                     # or a dynamically loaded, unenumerated implementation.
                     if isinstance(node, ast.Constant) and isinstance(node.value, str) and 'SKILL.md' in node.value:
                         raise ValueError('shared_tool.closure: excluded document referenced at ' + path)
-                    if isinstance(node, ast.Name) and node.id in {'eval', 'exec', '__import__', '__file__'}:
+                    if (isinstance(node, ast.Name) and node.id in {'eval', 'exec', '__import__', '__file__'}
+                            and id(node) not in allowed_file_nodes):
                         raise ValueError('shared_tool.closure: dynamic implementation dependency at ' + path + ':' + str(node.lineno))
                     if isinstance(node, ast.Attribute) and node.attr in {'system', 'popen', 'execv', 'execve', 'spawnv', 'spawnve'}:
                         raise ValueError('shared_tool.closure: external executable dependency at ' + path)
@@ -113,7 +122,7 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
                             raise ValueError('shared_tool.closure: external process invocation unsupported in v1; ' + path)
     from .planner import DEFAULTS
     limits = runtime_limits if runtime_limits is not None else DEFAULTS
-    return {'abi': external_tool.ABI if external else ABI, 'declaration': copy.deepcopy(declaration), 'files': sorted(files, key=lambda f: f['path']),
+    return {'abi': external_tool.ABI if external else bundled_data.ABI if data_profile else ABI, 'declaration': copy.deepcopy(declaration), 'files': sorted(files, key=lambda f: f['path']),
             'entry': binding['entry'], 'entry_sha256': binding['entry_sha256'],
             'requirements': list(requirements), 'constraints': list(constraints),
             'runtime_limits': {k: limits[k] for k in ('memory', 'cpus', 'pids')}}
@@ -214,7 +223,7 @@ def validate_record(record, request=None):
                 'image_id', 'daemon_id', 'artifact_id'}
     if isinstance(record, dict) and record.get('abi') == external_tool.ABI:
         expected.add('external_identity')
-    if not isinstance(record, dict) or set(record) != expected or record['abi'] not in {ABI, external_tool.ABI}:
+    if not isinstance(record, dict) or set(record) != expected or record['abi'] not in {ABI, external_tool.ABI, bundled_data.ABI}:
         raise ValueError('shared_tool.record: unsupported schema')
     req = record['request']
     if (not isinstance(req, dict) or not isinstance(req.get('declaration'), dict)
@@ -231,7 +240,7 @@ def validate_record(record, request=None):
         paths.append(item['path'])
     if paths != sorted(set(paths)):
         raise ValueError('shared_tool.files: duplicate/unsorted implementation paths')
-    policy = external_tool.POLICY if record['abi'] == external_tool.ABI else POLICY
+    policy = external_tool.POLICY if record['abi'] == external_tool.ABI else bundled_data.POLICY if record['abi'] == bundled_data.ABI else POLICY
     if record['request'].get('abi') != record['abi'] or record['request']['declaration']['policy'] != policy:
         raise ValueError('shared_tool.policy: version no longer supported')
     validate_declaration(req['declaration'])
@@ -364,7 +373,7 @@ def combine(record, acceptance):
 
 def verify_binding(env, materials):
     binding = env['shared_tool']
-    if binding.get('abi') not in {ABI, external_tool.ABI}:
+    if binding.get('abi') not in {ABI, external_tool.ABI, bundled_data.ABI}:
         raise ValueError('shared_tool.binding: unsupported ABI')
     request = binding['request']
     if binding['abi'] != request['abi']:
@@ -552,5 +561,5 @@ def inspect(root=None, host=None, process=None):
                 result[-1]['external_identity'] = {k: identity[k] for k in ('executable', 'rootfs', 'plugins', 'data')}
         except (OSError, ValueError, KeyError, TypeError) as exc:
             result.append({'path': str(path), 'status': 'invalid_record', 'detail': str(exc)})
-    return sanitized({'abi': ABI, 'supported_abis': [ABI, external_tool.ABI], 'registry': str(root), 'artifacts': result,
+    return sanitized({'abi': ABI, 'supported_abis': [ABI, external_tool.ABI, bundled_data.ABI], 'registry': str(root), 'artifacts': result,
                       'pending': [p.name for p in root.glob('*.lock')], 'business_acceptance': 'not_run'})

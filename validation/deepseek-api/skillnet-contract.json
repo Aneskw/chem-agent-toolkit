@@ -7,11 +7,13 @@
     "binding_envelope": 1,
     "tool_abis": [
       "shared_tool_image_v1",
-      "shared_tool_image_v2"
+      "shared_tool_image_v2",
+      "shared_tool_image_v3"
     ],
     "policies": [
       "closed-python-bundle-v1",
-      "openbabel-debian-image-v1"
+      "openbabel-debian-image-v1",
+      "closed-python-json-data-v1"
     ]
   },
   "objects": [
@@ -91,6 +93,11 @@
       "import_candidate",
       "inspect_candidate",
       "relocate"
+    ],
+    "creation_pipeline.runtime.bundled_data": [
+      "declaration",
+      "verify",
+      "reads"
     ]
   },
   "error_anchors": {
@@ -119,6 +126,12 @@
     ],
     "creation_pipeline/runtime/local.py": [
       "resources_unknown"
+    ],
+    "creation_pipeline/runtime/bundled_data.py": [
+      "shared_tool.bundled_data",
+      "expected UTF-8 JSON",
+      "expected literal reads",
+      "expected declared path"
     ]
   },
   "examples": {

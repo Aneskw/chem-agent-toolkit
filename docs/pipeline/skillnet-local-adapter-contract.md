@@ -6,7 +6,16 @@ HTTP 服务、远端 executor、平台数据库或 OCI 分发**。下文“现�
 [skillnet-contract.json](../../validation/deepseek-api/skillnet-contract.json)，离线交叉验证入口为
 `python validation/deepseek-api/verify_skillnet_contract.py`。不读取凭据或启动 Docker/模型。
 
-本轮字段/版本/入口/错误锚点交叉验证、3 项针对性回归和三个提示自检通过，证据见
+P2 增量：现在另支持 `shared_tool_image_v3` / `closed-python-json-data-v1`，见
+[JSON 资源协议](bundled-json-tool-protocol.md)。ToolArtifact 外层仍为 v1 字段集；新 declaration
+增加 bundled_data[module,path,sha256]，ABI 与声明进入 request_key 和 artifact_id。
+recipe_key 仍仅覆盖实际 plan/base_image，不因为升级 ABI 就必然改变，不能拿它代替请求身份。
+SkillBinding 与 RuntimeRequest 没有新增字段，平台能力协商须明确支持此 ABI，不能降级或删字段。
+下文原 v1/v2 清单作为此前核对基线，v3 的边界以增量协议为准；机器版本清单和离线校验已更新。
+原生编写/审阅 handoff 增加 host 的 tool_execution_layout，区分当前 Skill 包和工具镜像文件集；
+它不是新增的持久化 Binding 字段、业务事实或平台 API，不改变运行要求及模型预算。
+
+此前 P1-2 轮的字段/版本/入口/错误锚点交叉验证、3 项针对性回归和三个提示自检通过，证据见
 [skillnet-contract-results-20261101.json](../../validation/deepseek-api/skillnet-contract-results-20261101.json)。
 验证包含真实离线 CLI 预检/空 registry 查询，以及虚构字段/不存在入口被识别的负例。
 未重跑上一轮完整 731 项，也不将该历史结果计为本轮证明。自动检查不能验证全部文档语义，
@@ -112,7 +121,7 @@ catalog 查询路径会调用 recover/reconcile，可能恢复未完成的本地
 python -m creation_pipeline build CONFIG.json --preflight
 => {"status":"configuration_valid","source_count":1,"source_availability":"not_checked","model_calls":0}
 python -m creation_pipeline runtime-tools-inspect --root EMPTY_LOCAL_ROOT --offline
-=> {"abi":"shared_tool_image_v1","supported_abis":["shared_tool_image_v1","shared_tool_image_v2"],"registry":"EMPTY_LOCAL_ROOT","artifacts":[],"pending":[],"business_acceptance":"not_run"}
+=> {"abi":"shared_tool_image_v1","supported_abis":["shared_tool_image_v1","shared_tool_image_v2","shared_tool_image_v3"],"registry":"EMPTY_LOCAL_ROOT","artifacts":[],"pending":[],"business_acceptance":"not_run"}
 python -m creation_pipeline runtime-inspect LIB --candidate NAME
 => 字段包含 name/revision_id/zone/content/qualification/pending/action（见实际源码，不承诺固定可选字段集）
 ```

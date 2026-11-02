@@ -1,0 +1,816 @@
+{
+  "version": 1,
+  "baseline_commit": "942d57e76d098ae4a29714934b0a016e897b368e",
+  "verified_at": "2026-11-02T02:39:18.119642+00:00",
+  "passed": false,
+  "completion": "implementation and regression verified; second successful ordinary CLI Skill pending Docker recovery",
+  "scope": "P2 one new capability: explicit finite module-__file__-relative bundled UTF-8 JSON read",
+  "abi": "shared_tool_image_v3",
+  "policy": "closed-python-json-data-v1",
+  "source_assembly": {
+    "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\bundled-json-input\\source",
+    "files": [
+      {
+        "path": "README.md",
+        "sha256": "bcff149cc2157c20134892cf7a48054ee7ef6c81e152bd48ff48e4f09f64fd2f",
+        "bytes": 1550
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+        "bytes": 46
+      },
+      {
+        "path": "scripts/calc_descriptors.py",
+        "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+        "bytes": 1710
+      },
+      {
+        "path": "scripts/data/rules.json",
+        "sha256": "57f8da82b4c7eec60fb37001152a57e8fc9a38624e7a6ee9462a04b600be34ba",
+        "bytes": 76
+      },
+      {
+        "path": "scripts/triage.py",
+        "sha256": "ebfd320d735dc15a6d571f11b6421dd36e6b1af2d01739ab400862cd3725e530",
+        "bytes": 1238
+      }
+    ]
+  },
+  "a_historical_success": {
+    "label": "a",
+    "output": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-04\\a\\state\\outputs\\20261102T002955-86ac3232",
+    "build_id": "20261102T002955-86ac3232",
+    "name": "descriptor-rule-screening",
+    "revision_id": "rev-b67f39fd4f2e34631a94ddb689b7b11be284b4ef10c61552d0202c0ef1000cd9",
+    "cases": 14,
+    "current_qualification": {
+      "accepted": true,
+      "reason": "Content review and current Docker business evidence passed"
+    },
+    "independent_review": true,
+    "direct_business_cases": {
+      "CCO": "behavior-ethanol-selected",
+      "c1ccccc1O": "behavior-phenol-unselected",
+      "": "rejection-empty-smiles",
+      "not-a-smiles": "behavior-invalid-not-a-smiles"
+    },
+    "skill_sha256": "719bcc330a25879de11954a1606d82c836e54538164810877a57ff488fc401ec",
+    "artifact_id": "d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9",
+    "image_id": "sha256:2025a3abbaa26559349a684e1d80a98a3fd6de0bc99ab2b13ec3bb6a67a5b3e3",
+    "build_calls": {
+      "environment": 1,
+      "tool": 1
+    },
+    "preparation": {
+      "status": "prepared",
+      "gaps": [],
+      "model_calls": 2,
+      "shared_tool": {
+        "status": "miss",
+        "reason": "no_available_exact_request",
+        "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+        "candidates": [],
+        "other_versions": []
+      },
+      "environment_planning_calls": 2,
+      "acceptance_planning_calls": 2,
+      "model_calls_by_stage": {
+        "combined_environment_acceptance_planner": 2
+      }
+    },
+    "model_calls": [
+      {
+        "phase": "discovery",
+        "session_key": "discovery",
+        "resumed": false,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 90933,
+          "cached_input_tokens": 80384,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2703,
+          "reasoning_output_tokens": 80
+        },
+        "prompt_sha256": "c122ee3586bedcd219c00c9219b184de029b6e0cfc5c7d2244da740629bc6b52",
+        "tool_events": 6,
+        "session_id": "01a197f2-3a1f-7b53-84ca-4416db394fc1",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 113.152,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 2.354,
+          "last_stdout_seconds": 109.113,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      },
+      {
+        "phase": "author",
+        "session_key": "build:descriptor-rule-screening",
+        "resumed": true,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 452931,
+          "cached_input_tokens": 414336,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 8073,
+          "reasoning_output_tokens": 509
+        },
+        "prompt_sha256": "0e20fb897a43abc4feb3f25a93b9006ec845dca7b7c536fdd7ed0e3b36e1f437",
+        "tool_events": 11,
+        "session_id": "01a197f2-3a1f-7b53-84ca-4416db394fc1",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 205.677,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 5.958,
+          "last_stdout_seconds": 202.641,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      },
+      {
+        "phase": "review",
+        "session_key": "review:descriptor-rule-screening",
+        "resumed": false,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 150736,
+          "cached_input_tokens": 125184,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1627,
+          "reasoning_output_tokens": 110
+        },
+        "prompt_sha256": "a5a98c4f56038c3856903476d678b399b58d39b5678f3f1491697302722772fb",
+        "tool_events": 9,
+        "session_id": "01a197f7-1fd8-73a1-baa7-7c8b203e5f73",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 96.989,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 3.824,
+          "last_stdout_seconds": 93.515,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "deepseek-v4-pro",
+        "backend": "deepseek_api",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 13655,
+          "completion_tokens": 15811,
+          "total_tokens": 29466,
+          "prompt_tokens_details": {
+            "cached_tokens": 7552
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 12264
+          },
+          "prompt_cache_hit_tokens": 7552,
+          "prompt_cache_miss_tokens": 6103
+        },
+        "elapsed_seconds": 150.303,
+        "prompt_sha256": "d8a0ee6aa4b31eb90aee9b1b9e22687f87212ddb9e39a2b26defd98d8f974368",
+        "schema_sha256": "a5765810cc3441b84cd09feb8f075e926f890180920e9beed5dbd9441dbb2f4a",
+        "request_count": 1
+      },
+      {
+        "phase": "runtime_planning",
+        "model": "deepseek-v4-pro",
+        "backend": "deepseek_api",
+        "status": "completed",
+        "usage": {
+          "prompt_tokens": 16104,
+          "completion_tokens": 2063,
+          "total_tokens": 18167,
+          "prompt_tokens_details": {
+            "cached_tokens": 6528
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1730
+          },
+          "prompt_cache_hit_tokens": 6528,
+          "prompt_cache_miss_tokens": 9576
+        },
+        "elapsed_seconds": 18.684,
+        "prompt_sha256": "c20a00d417f5774ff0e97f700f6fe0dc5445ce1520f45b177f591a28007ae429",
+        "schema_sha256": "51847f9d809730759063b4c84aa4e5361d8b4872d566c4cfa968c12f4896c563",
+        "request_count": 1
+      }
+    ]
+  },
+  "a_current_qualification": {
+    "accepted": false,
+    "reason": "Live execution check deferred: runtime host unavailable",
+    "deferred": true,
+    "upstream_reason": "Current acceptance coverage/image/resources are not valid"
+  },
+  "b_interrupted": {
+    "root": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-04\\b",
+    "completed_stages": 7,
+    "started_stages": 8,
+    "execution": false,
+    "qualification": false
+  },
+  "b_blocked": {
+    "root": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-05",
+    "build_id": "20261102T101729-103ae39a",
+    "name": "rdkit-descriptor-rule-screening",
+    "status": "blocked",
+    "model_calls": [
+      {
+        "phase": "discovery",
+        "session_key": "discovery",
+        "resumed": false,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 89157,
+          "cached_input_tokens": 69632,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2972,
+          "reasoning_output_tokens": 80
+        },
+        "prompt_sha256": "e28dfa84b99418fd2f9dac2bf89f31daf12b6f023f18a7b4fd0315580c1cf586",
+        "tool_events": 6,
+        "session_id": "01a19a0c-2901-7431-82cc-55b3d4b85c21",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 144.884,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 7.986,
+          "last_stdout_seconds": 142.233,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      },
+      {
+        "phase": "author",
+        "session_key": "build:rdkit-descriptor-rule-screening",
+        "resumed": true,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 459400,
+          "cached_input_tokens": 395648,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 8338,
+          "reasoning_output_tokens": 343
+        },
+        "prompt_sha256": "0ea3fde4a9841546dbed32ddcb8d29f97a819a7f81e0b22b37bda91f7936c166",
+        "tool_events": 9,
+        "session_id": "01a19a0c-2901-7431-82cc-55b3d4b85c21",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 231.432,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 5.909,
+          "last_stdout_seconds": 228.671,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      },
+      {
+        "phase": "review",
+        "session_key": "review:rdkit-descriptor-rule-screening",
+        "resumed": false,
+        "model": "gpt-6-astra",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 183188,
+          "cached_input_tokens": 148864,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2044,
+          "reasoning_output_tokens": 183
+        },
+        "prompt_sha256": "112d6cb0f04a7be150a3cdcb5c42419da3541727065c5dd5f6ef67329912c313",
+        "tool_events": 6,
+        "session_id": "01a19a11-eda9-7b11-8cae-8fa212bb577e",
+        "stream_threads_finished": true,
+        "elapsed_seconds": 119.885,
+        "progress_observation": {
+          "watchdog": "observe_only",
+          "progress_timeout_seconds": null,
+          "max_silence_seconds": 5.929,
+          "last_stdout_seconds": 117.556,
+          "observe_seconds": 240,
+          "progress_limit_exceeded": false,
+          "window_meaning": "exceeded the local output window; nothing is known about the model",
+          "process_activity_seen": true,
+          "counters_available": true
+        },
+        "image_audit": {
+          "status": "available",
+          "view_calls": [],
+          "image_results": 0
+        }
+      }
+    ],
+    "runtime_preparation": {
+      "status": "runtime_blocked",
+      "gaps": [
+        {
+          "code": "docker_unavailable",
+          "detail": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.\n",
+          "repair_lane": "environment",
+          "blocker_kind": "temporary_resource"
+        },
+        {
+          "code": "planning_deferred",
+          "detail": "Docker unavailable; no model called. Supply a plan to prepare offline",
+          "repair_lane": "environment",
+          "blocker_kind": "unresolved_input"
+        }
+      ],
+      "model_calls": 0,
+      "shared_tool": {
+        "status": "miss",
+        "reason": "no_available_exact_request",
+        "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+        "candidates": [
+          {
+            "artifact": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac-d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9.json",
+            "reason": "different_daemon"
+          }
+        ],
+        "other_versions": []
+      },
+      "environment_planning_calls": 0,
+      "acceptance_planning_calls": 0
+    },
+    "execution": false,
+    "qualification": false
+  },
+  "successful_pair_proven": false,
+  "negative_probes": {
+    "passed": true,
+    "scope": "isolated request parsing against real registered version; not new generation",
+    "models": 0,
+    "builds": 0,
+    "old_binding_preserved": true,
+    "observations": [
+      {
+        "mutation": "module",
+        "observation": {
+          "status": "miss",
+          "selection": "explicit",
+          "reference": {
+            "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+            "artifact_id": "d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9"
+          },
+          "request_key": "22be9d216abefd96f2393425f25b4ed43f1f1d939ee4008c185a361adb900c01",
+          "reason": "selected_request_mismatch",
+          "mismatches": [
+            {
+              "field": "files.package/scripts/calc_descriptors.py",
+              "expected": {
+                "path": "package/scripts/calc_descriptors.py",
+                "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+                "bytes": 1710,
+                "mode": 438
+              },
+              "actual": {
+                "path": "package/scripts/calc_descriptors.py",
+                "sha256": "7022c43a83d8a19072c943e0efc30d795e4a8084a6b4125e5bff63961de091a1",
+                "bytes": 1744,
+                "mode": 438
+              }
+            }
+          ]
+        }
+      },
+      {
+        "mutation": "data",
+        "observation": {
+          "status": "miss",
+          "selection": "explicit",
+          "reference": {
+            "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+            "artifact_id": "d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9"
+          },
+          "request_key": "0f7e5849d89da4c6adfca80dccc677e2bd144cfedf258a058d8824417cc0dcd0",
+          "reason": "selected_request_mismatch",
+          "mismatches": [
+            {
+              "field": "declaration",
+              "expected": {
+                "closure": "all-package-and-sources-except-skill-document",
+                "requirements": {
+                  "imports": {
+                    "rdkit": "2024.9.6",
+                    "numpy": "1.26.4",
+                    "pillow": "11.3.0"
+                  },
+                  "executables": []
+                },
+                "interface": {
+                  "entrypoint": [
+                    "python",
+                    "/opt/skill/package/scripts/triage.py"
+                  ],
+                  "workdir": "/opt/skill",
+                  "resources": [],
+                  "runtime_network": false
+                },
+                "platform": "linux/amd64",
+                "policy": "closed-python-json-data-v1",
+                "bundled_data": [
+                  {
+                    "module": "scripts/triage.py",
+                    "path": "scripts/data/rules.json",
+                    "sha256": "57f8da82b4c7eec60fb37001152a57e8fc9a38624e7a6ee9462a04b600be34ba"
+                  }
+                ]
+              },
+              "actual": {
+                "closure": "all-package-and-sources-except-skill-document",
+                "requirements": {
+                  "imports": {
+                    "rdkit": "2024.9.6",
+                    "numpy": "1.26.4",
+                    "pillow": "11.3.0"
+                  },
+                  "executables": []
+                },
+                "interface": {
+                  "entrypoint": [
+                    "python",
+                    "/opt/skill/package/scripts/triage.py"
+                  ],
+                  "workdir": "/opt/skill",
+                  "resources": [],
+                  "runtime_network": false
+                },
+                "platform": "linux/amd64",
+                "policy": "closed-python-json-data-v1",
+                "bundled_data": [
+                  {
+                    "module": "scripts/triage.py",
+                    "path": "scripts/data/rules.json",
+                    "sha256": "013f143782d9bcca5ae3c07a852b6a8ab7b8e9b6f2bc89173dc402aa365aa0dc"
+                  }
+                ]
+              }
+            },
+            {
+              "field": "files.package/scripts/data/rules.json",
+              "expected": {
+                "path": "package/scripts/data/rules.json",
+                "sha256": "57f8da82b4c7eec60fb37001152a57e8fc9a38624e7a6ee9462a04b600be34ba",
+                "bytes": 76,
+                "mode": 438
+              },
+              "actual": {
+                "path": "package/scripts/data/rules.json",
+                "sha256": "013f143782d9bcca5ae3c07a852b6a8ab7b8e9b6f2bc89173dc402aa365aa0dc",
+                "bytes": 74,
+                "mode": 438
+              }
+            }
+          ]
+        }
+      },
+      {
+        "mutation": "dependency",
+        "observation": {
+          "status": "miss",
+          "selection": "explicit",
+          "reference": {
+            "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+            "artifact_id": "d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9"
+          },
+          "request_key": "94f0472b471a77cdff0d22e36174d0e8611c8bae78e306df9722e6ab5c03acbd",
+          "reason": "selected_request_mismatch",
+          "mismatches": [
+            {
+              "field": "declaration",
+              "expected": {
+                "closure": "all-package-and-sources-except-skill-document",
+                "requirements": {
+                  "imports": {
+                    "rdkit": "2024.9.6",
+                    "numpy": "1.26.4",
+                    "pillow": "11.3.0"
+                  },
+                  "executables": []
+                },
+                "interface": {
+                  "entrypoint": [
+                    "python",
+                    "/opt/skill/package/scripts/triage.py"
+                  ],
+                  "workdir": "/opt/skill",
+                  "resources": [],
+                  "runtime_network": false
+                },
+                "platform": "linux/amd64",
+                "policy": "closed-python-json-data-v1",
+                "bundled_data": [
+                  {
+                    "module": "scripts/triage.py",
+                    "path": "scripts/data/rules.json",
+                    "sha256": "57f8da82b4c7eec60fb37001152a57e8fc9a38624e7a6ee9462a04b600be34ba"
+                  }
+                ]
+              },
+              "actual": {
+                "closure": "all-package-and-sources-except-skill-document",
+                "requirements": {
+                  "imports": {
+                    "rdkit": "2025.3.1",
+                    "numpy": "1.26.4",
+                    "pillow": "11.3.0"
+                  },
+                  "executables": []
+                },
+                "interface": {
+                  "entrypoint": [
+                    "python",
+                    "/opt/skill/package/scripts/triage.py"
+                  ],
+                  "workdir": "/opt/skill",
+                  "resources": [],
+                  "runtime_network": false
+                },
+                "platform": "linux/amd64",
+                "policy": "closed-python-json-data-v1",
+                "bundled_data": [
+                  {
+                    "module": "scripts/triage.py",
+                    "path": "scripts/data/rules.json",
+                    "sha256": "57f8da82b4c7eec60fb37001152a57e8fc9a38624e7a6ee9462a04b600be34ba"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "mutation": "interface",
+        "observation": {
+          "status": "miss",
+          "selection": "explicit",
+          "reference": {
+            "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+            "artifact_id": "d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9"
+          },
+          "request_key": "05f06ce0bc3451f0004c805f92c0043a639b3ddda02455b03fa38d46539e26a8",
+          "reason": "selected_request_mismatch",
+          "mismatches": [
+            {
+              "field": "declaration",
+              "expected": {
+                "closure": "all-package-and-sources-except-skill-document",
+                "requirements": {
+                  "imports": {
+                    "rdkit": "2024.9.6",
+                    "numpy": "1.26.4",
+                    "pillow": "11.3.0"
+                  },
+                  "executables": []
+                },
+                "interface": {
+                  "entrypoint": [
+                    "python",
+                    "/opt/skill/package/scripts/triage.py"
+                  ],
+                  "workdir": "/opt/skill",
+                  "resources": [],
+                  "runtime_network": false
+                },
+                "platform": "linux/amd64",
+                "policy": "closed-python-json-data-v1",
+                "bundled_data": [
+                  {
+                    "module": "scripts/triage.py",
+                    "path": "scripts/data/rules.json",
+                    "sha256": "57f8da82b4c7eec60fb37001152a57e8fc9a38624e7a6ee9462a04b600be34ba"
+                  }
+                ]
+              },
+              "actual": {
+                "closure": "all-package-and-sources-except-skill-document",
+                "requirements": {
+                  "imports": {
+                    "rdkit": "2024.9.6",
+                    "numpy": "1.26.4",
+                    "pillow": "11.3.0"
+                  },
+                  "executables": []
+                },
+                "interface": {
+                  "entrypoint": [
+                    "python3",
+                    "/opt/skill/package/scripts/triage.py"
+                  ],
+                  "workdir": "/opt/skill",
+                  "resources": [],
+                  "runtime_network": false
+                },
+                "platform": "linux/amd64",
+                "policy": "closed-python-json-data-v1",
+                "bundled_data": [
+                  {
+                    "module": "scripts/triage.py",
+                    "path": "scripts/data/rules.json",
+                    "sha256": "57f8da82b4c7eec60fb37001152a57e8fc9a38624e7a6ee9462a04b600be34ba"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "regression": {
+    "tests": 748,
+    "passed": 745,
+    "skipped": 3,
+    "failed": 0,
+    "errors": 0,
+    "targeted": 98,
+    "new_tests": 14,
+    "results": [
+      {
+        "label": "targeted",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "-m",
+          "unittest",
+          "tests.pipeline.test_shared_execution_context",
+          "tests.pipeline.test_bundled_data",
+          "tests.pipeline.test_shared_tool",
+          "tests.pipeline.test_input_contract",
+          "tests.pipeline.test_skillnet_contract",
+          "-q"
+        ],
+        "exit_code": 0,
+        "seconds": 17.86517260002438
+      },
+      {
+        "label": "regression",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "exit_code": 0,
+        "seconds": 468.7789836000302
+      },
+      {
+        "label": "prompt-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_prompt_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.809324599977117
+      },
+      {
+        "label": "acceptance-prompt",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_acceptance_prompt.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.5922311999602243
+      },
+      {
+        "label": "planner",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_planner.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.5869111000210978
+      },
+      {
+        "label": "platform-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_skillnet_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.6294946999987587
+      }
+    ]
+  },
+  "call_accounting": {
+    "unit": "admitted model stages, not all internal native API turns or billable provider requests",
+    "per_build_limit_unchanged": 16,
+    "failed_a_rounds": 12,
+    "intermediate_a_with_protocol_source": 7,
+    "final_config_a": 5,
+    "interrupted_b_completed_stages": 7,
+    "interrupted_b_started_stages": 8,
+    "docker_blocked_b": 3,
+    "total_completed_stage_receipts": 34,
+    "total_started_stages": 35,
+    "pending_interrupted_request_outcome": "unknown; not counted completed",
+    "native_author_resumed": "normal within-run discovery session continuation, not failed pipeline resume"
+  },
+  "infrastructure_counts": {
+    "isolated_real_registry_mutation_probes": 4,
+    "models": 0,
+    "builds": 0,
+    "corrected_object_original_program_checks": {
+      "intermediate_a": 1,
+      "final_config_a": 1,
+      "not_qualification": true
+    }
+  },
+  "remaining": [
+    "fresh ordinary CLI B after Docker recovery, same A registries, unchanged backend/budget",
+    "prove same artifact; environment planner 0, both builds 0, acceptance-only model and independent execution pass",
+    "current A/B and old-binding Docker verification after recovery; no failed run resume"
+  ],
+  "support_limits": [
+    "finite literal declared JSON read only, not general Python static proof",
+    "linux/amd64, explicit import versions, empty executable list, no external mounts or runtime network",
+    "existing modules/data already hashed; this only adds the previously refused __file__-relative read",
+    "new assembly over unchanged original RDKit module and requirements; no fabricated chemistry outputs",
+    "Docker/BuildKit caches retained; no cold-start, disk-savings or remote/OCI claim"
+  ],
+  "evidence_roots": {
+    "a": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-04",
+    "b": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-05",
+    "regression": "E:\\Users\\27343\\Docker\\bundled-json-postflight-20261102-04"
+  },
+  "evidence": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-04\\final-evidence-manifest.json",
+      "sha256": "f0b94acc9c834fbc23a89377f72b09cff36cda8c9e83e4e3d95f3e7130889e89",
+      "files": 503
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-05\\final-evidence-manifest.json",
+      "sha256": "82628984e7dcaa94a8f0147fd18c2e95441bb802afafcdbbf398067571bacd6f",
+      "files": 134
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\bundled-json-postflight-20261102-04\\final-evidence-manifest.json",
+      "sha256": "f6f1538447340999f09068d803479506deb3b282e53c74b9fd789b3fe34205cf",
+      "files": 13
+    }
+  ]
+}

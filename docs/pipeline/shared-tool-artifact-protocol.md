@@ -1,5 +1,9 @@
 # 精确 Tool 制品复用：本机 v1 协议
 
+P2 新增的有限 `__file__` 相对 JSON 读取使用独立 v3 ABI/policy，见
+[包内 JSON 资源协议](bundled-json-tool-protocol.md)。下文 v1 的拒绝规则仍有效；
+多模块和静态包内数据本来已入闭包，不计为新增支持。
+
 P1-1 的独立进程并发、实际构建故障/取消、活跃业务中断及专用镜像删除/恢复证据见
 [故障隔离验证](../integration/tool-fault-isolation-20261101.md)。嵌套环境锁同样使用所有者 token；
 取消保留具名回执、scope 和清理结果，不会为未完成 attempt 授予资格。强杀遗留锁仍不自动抢占。

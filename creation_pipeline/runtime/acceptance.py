@@ -215,11 +215,17 @@ def grounding_problem(record, index, source):
         return 'source_path ' + str(path) + ' is not a readable file in the source tree'
     if not isinstance(quote, str) or not quote.strip():
         return 'source_quote is empty'
-    if quote_matches(target.read_text(encoding='utf-8'), quote) is None:
+    text = target.read_text(encoding='utf-8')
+    if quote_matches(text, quote) is None:
+        from difflib import SequenceMatcher
         first = quote.strip().splitlines()[0][:100]
+        lines = [line.strip() for line in text.splitlines() if line.strip()]
+        nearest = max(lines, key=lambda line: SequenceMatcher(None, first.casefold(), line[:1000].casefold()).ratio(), default='')[:1000]
         return ('source_quote does not occur verbatim in ' + str(path)
                 + ' (whitespace differences are tolerated, wording changes are not); '
-                  'the quote starts: ' + json.dumps(first))
+                  'the quote starts: ' + json.dumps(first)
+                + '; expected a contiguous excerpt of this actual source; nearest source line (diagnostic only, '
+                  'not an approved assertion): ' + json.dumps(nearest))
     return None
 
 

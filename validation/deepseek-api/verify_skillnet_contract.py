@@ -9,7 +9,7 @@ import sys
 REPO=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(REPO))
 from creation_pipeline import contracts
-from creation_pipeline.runtime import shared_tool, external_tool
+from creation_pipeline.runtime import shared_tool, external_tool, bundled_data
 from creation_pipeline.runtime.interface import RuntimeRequest
 
 
@@ -24,8 +24,8 @@ def check(value):
     recipe=next(n.value for n in ast.walk(describe) if isinstance(n,ast.Return) and isinstance(n.value,ast.Dict))
     abi=next(ast.literal_eval(v) for k,v in zip(recipe.keys,recipe.values) if ast.literal_eval(k)=='abi')
     equal('versions.environment_recipe',abi,value['versions']['environment_recipe'])
-    equal('versions.tool_abis',[shared_tool.ABI,external_tool.ABI],value['versions']['tool_abis'])
-    equal('versions.policies',[shared_tool.POLICY,external_tool.POLICY],value['versions']['policies'])
+    equal('versions.tool_abis',[shared_tool.ABI,external_tool.ABI,bundled_data.ABI],value['versions']['tool_abis'])
+    equal('versions.policies',[shared_tool.POLICY,external_tool.POLICY,bundled_data.POLICY],value['versions']['policies'])
     equal('runtime_request_fields',[f.name for f in fields(RuntimeRequest)],value['runtime_request_fields'])
     equal('execution_states',sorted(contracts.EXECUTION_STATES),sorted(value['execution_states']))
     source=REPO/'creation_pipeline/runtime/shared_tool.py'

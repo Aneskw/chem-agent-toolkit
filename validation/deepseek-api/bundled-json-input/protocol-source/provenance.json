@@ -1,0 +1,6 @@
+{
+  "project_protocol": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\docs\\pipeline\\shared-tool-artifact-protocol.md",
+  "sha256_at_extraction": "7868be6bd1e5fd505f6f54108a18c4419e2f3043ce6070d84cf936a544fe16ba",
+  "implementation": "creation_pipeline/runtime/shared_tool.py describe excludes package/SKILL.md; creation_pipeline/contracts.py qualify validates inputs.layout before execution qualification",
+  "scope": "Protocol evidence, not an acceptance_plan or old passed evidence"
+}

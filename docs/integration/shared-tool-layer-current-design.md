@@ -1,5 +1,13 @@
 # 共享工具层：当前集成分支的演进设计
 
+P2 新增有限 `__file__` 相对 JSON 读取协议 `shared_tool_image_v3`：显式 module/path/sha256、
+固定 pathlib 读取形态、完整来源与实现闭包、规划前精确解析。多模块和静态数据原已进入闭包，
+不重复计为新增。资源身份不授予 Skill 资格；仍执行独立审阅、当前验收模型和锁定合同。
+边界与迁移见 [资源协议](../pipeline/bundled-json-tool-protocol.md)，
+真实 CLI、失败轮及最终回归见 [P2 验证报告](bundled-json-tool-20261101.md)。
+当前仅普通配置 A 已完成真实 14/14，双 Skill 配对仍受本机 Docker 启动故障阻止，
+**未标记 P2 完成**；B 未获得资格，详见报告中的待补验证和当前主机限制。
+
 P1-2 接口整理见 [Skillnet 本地接入契约](../pipeline/skillnet-local-adapter-contract.md)：
 五类逻辑对象的实际字段/身份/状态、现有 Python/CLI 与建议平台 envelope 分开描述；
 有离线契约交叉验证与最小示例。仅整理协议，未实现平台服务、远端仓库或 OCI 分发。
