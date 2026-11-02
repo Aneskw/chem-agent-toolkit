@@ -1,0 +1,151 @@
+{
+  "version": 1,
+  "baseline_commit": "a7ed138ad4a75410c0d88dd3db0f8a5589d38644",
+  "passed": true,
+  "at": "2026-11-02T07:37:45.622753+00:00",
+  "cases": 192,
+  "independent_attempts": 12,
+  "models": 0,
+  "actual_builds": 0,
+  "fault_scope": "image absence simulated at Docker executable boundary; real image retained",
+  "unsupported": [
+    "bare package import",
+    "archive/OCI import",
+    "cross-host distribution"
+  ],
+  "prior_incomplete_rounds": {
+    "roots": [
+      "v3-delivery-cli-20261102-01",
+      "v3-delivery-cli-20261102-02"
+    ],
+    "extra_passed_business_cases": 32,
+    "cause": "helper success-state enum errors; product executions passed, rounds not resumed"
+  },
+  "executions": [
+    {
+      "label": "a-envelope-resume",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\a\\envelope-library\\runtime\\candidate-628e5a4671bcebc81bab6a0940febd11789f3d43a8ecf2ee2c2479b1fa94a3dc\\65df1d3f21074799bcc14796267af203",
+      "cases": 16,
+      "revision_id": "rev-d8f5e940ebef36f4e14bcbf51ac30674eac42026c869a0b1c7ea018be3f2e7cb",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    },
+    {
+      "label": "a-migrated-resume",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\a\\migrated-library\\runtime\\candidate-628e5a4671bcebc81bab6a0940febd11789f3d43a8ecf2ee2c2479b1fa94a3dc\\faeecef4352a448e921abcc55a37a621",
+      "cases": 16,
+      "revision_id": "rev-d8f5e940ebef36f4e14bcbf51ac30674eac42026c869a0b1c7ea018be3f2e7cb",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    },
+    {
+      "label": "a-native-validate",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\a\\native-library\\runtime\\candidate-628e5a4671bcebc81bab6a0940febd11789f3d43a8ecf2ee2c2479b1fa94a3dc\\31f4a099fca44bc68a1d7a4eaeeeb073",
+      "cases": 16,
+      "revision_id": "rev-d8f5e940ebef36f4e14bcbf51ac30674eac42026c869a0b1c7ea018be3f2e7cb",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    },
+    {
+      "label": "a-explicit-build",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\a\\native-library\\runtime\\candidate-628e5a4671bcebc81bab6a0940febd11789f3d43a8ecf2ee2c2479b1fa94a3dc\\113a16a42ee34f2d85f6dbc9d66c01cd",
+      "cases": 16,
+      "revision_id": "rev-d8f5e940ebef36f4e14bcbf51ac30674eac42026c869a0b1c7ea018be3f2e7cb",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    },
+    {
+      "label": "a-ready-resume",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\a\\envelope-library\\runtime\\candidate-628e5a4671bcebc81bab6a0940febd11789f3d43a8ecf2ee2c2479b1fa94a3dc\\8e5c782f29274275a2169ec27e56cb69",
+      "cases": 16,
+      "revision_id": "rev-d8f5e940ebef36f4e14bcbf51ac30674eac42026c869a0b1c7ea018be3f2e7cb",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    },
+    {
+      "label": "a-restored-resume",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\a\\restored-library\\runtime\\candidate-628e5a4671bcebc81bab6a0940febd11789f3d43a8ecf2ee2c2479b1fa94a3dc\\42d82f009fd54af7b0d1aea1a5d7304b",
+      "cases": 16,
+      "revision_id": "rev-d8f5e940ebef36f4e14bcbf51ac30674eac42026c869a0b1c7ea018be3f2e7cb",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    },
+    {
+      "label": "b-envelope-resume",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\b\\envelope-library\\runtime\\candidate-c69cc297ffc53a23233207d0eeb89cd0e7be4742ff47d9f9e9a208b9c3b4d049\\61ffe2d1347644e49a27d65929580646",
+      "cases": 16,
+      "revision_id": "rev-f8a1f4d4cb79f110017854118e21e2b4a4d5455092e2616850e81eccf0efcbfd",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    },
+    {
+      "label": "b-migrated-resume",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\b\\migrated-library\\runtime\\candidate-c69cc297ffc53a23233207d0eeb89cd0e7be4742ff47d9f9e9a208b9c3b4d049\\1385d33d690947a3bc6f7a0f6edbb2f2",
+      "cases": 16,
+      "revision_id": "rev-f8a1f4d4cb79f110017854118e21e2b4a4d5455092e2616850e81eccf0efcbfd",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    },
+    {
+      "label": "b-native-validate",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\b\\native-library\\runtime\\candidate-c69cc297ffc53a23233207d0eeb89cd0e7be4742ff47d9f9e9a208b9c3b4d049\\756f738121834f82b31f4484df3221ea",
+      "cases": 16,
+      "revision_id": "rev-f8a1f4d4cb79f110017854118e21e2b4a4d5455092e2616850e81eccf0efcbfd",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    },
+    {
+      "label": "b-explicit-build",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\b\\native-library\\runtime\\candidate-c69cc297ffc53a23233207d0eeb89cd0e7be4742ff47d9f9e9a208b9c3b4d049\\a150e191a5d943ff88078efe44461da4",
+      "cases": 16,
+      "revision_id": "rev-f8a1f4d4cb79f110017854118e21e2b4a4d5455092e2616850e81eccf0efcbfd",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    },
+    {
+      "label": "b-ready-resume",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\b\\envelope-library\\runtime\\candidate-c69cc297ffc53a23233207d0eeb89cd0e7be4742ff47d9f9e9a208b9c3b4d049\\a61475d62e29418a95a455b24a898eca",
+      "cases": 16,
+      "revision_id": "rev-f8a1f4d4cb79f110017854118e21e2b4a4d5455092e2616850e81eccf0efcbfd",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    },
+    {
+      "label": "b-restored-resume",
+      "attempt": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\b\\restored-library\\runtime\\candidate-c69cc297ffc53a23233207d0eeb89cd0e7be4742ff47d9f9e9a208b9c3b4d049\\0062dbfa61c541b7bbbb8a8b0a92951f",
+      "cases": 16,
+      "revision_id": "rev-f8a1f4d4cb79f110017854118e21e2b4a4d5455092e2616850e81eccf0efcbfd",
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      }
+    }
+  ],
+  "evidence": {
+    "manifest": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\final-evidence-manifest.json",
+    "sha256": "45666d45247fded98b1a05ff6d2090260d4229df16ca77589c66cce689ff7981"
+  },
+  "result": "E:\\Users\\27343\\Docker\\v3-delivery-cli-20261102-03\\results.json"
+}

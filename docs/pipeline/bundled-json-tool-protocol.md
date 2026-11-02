@@ -1,5 +1,9 @@
 # 有限文件相对 JSON 资源：shared_tool_image_v3
 
+2026-11-02：v3 的真实公开 CLI 安装/envelope 与原生输出导入/路径迁移/恢复已补验，
+12 个独立 attempt 共 192/192；导入与迁移先撤销执行资格，故障和漂移不污染旧绑定。
+支持边界、明确的镜像缺失注入与失败辅助轮见 [交付恢复证据](../integration/v3-delivery-cli-20261102.md)。
+
 新增能力是已声明的、由模块 `__file__` 锚定的固定 JSON 读取。多模块 Python 和包内数据
 原本就会进入完整闭包，不算本次新增。v1 对任何 `__file__` Name 节点仍拒绝；v2 Open Babel
 协议保持原边界。实现为 `runtime/bundled_data.py`，接入 shared_tool 的 describe、记录验证、
