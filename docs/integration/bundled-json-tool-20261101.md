@@ -3,8 +3,10 @@
 基线 `942d57e`；最终核验日期 2026-11-02。本轮只扩展一种能力：有限形式的 `__file__` 相对包内 JSON 读取。
 本轮新增有限资源读取协议、普通编写/审阅执行布局 handoff，以及更具体的引用错误诊断。
 最终证据索引为 `validation/deepseek-api/bundled-json-tool-results-20261102.json`。
-**P2 尚未完成双 Skill 真实验收**：普通配置 A 已完成 14/14；B 一轮进程中断，
-新轮在 Docker 主机不可用时被正确阻止。不能声称已证明第二个 Skill 零规划/零构建并独立通过。
+**P2 本轮有限范围已完成**：普通 CLI A 14/14、恢复后新目录 B 20/20，共 34/34。
+B 自动命中同一 ToolArtifact，环境规划、环境构建、工具构建均为 0，仍有独立审阅、
+2 次当前验收专用模型调用及独立新执行。A/B 当前资格均通过；失败轮没有获得资格。
+`8e25655` 是此前受 Docker 故障阻止的快照，不再代表最终结果；原失败及阻止证据完整保留。
 
 ## 范围选择与实现
 
@@ -70,7 +72,7 @@ selected=false；两者返回实际 policy_id 与 maximum。非法和空输入�
 
 ```powershell
 $root="E:/Users/27343/Docker/bundled-json-cli-20261102-04"
-$broot="E:/Users/27343/Docker/bundled-json-cli-20261102-05"
+$broot="E:/Users/27343/Docker/bundled-json-cli-20261102-06"
 $env:CHEM_AGENT_SHARED_TOOLS="$root/shared-tools"
 $env:CHEM_AGENT_SHARED_ENVIRONMENTS="$root/shared-environments"
 python -m creation_pipeline build "$root/skill-a.json" --preflight
@@ -85,13 +87,14 @@ python -m creation_pipeline build "$broot/skill-b.json" --state-dir "$broot/b/st
 具体旧版本调用 select，记录字段/路径 expected/actual，不改原记录或授予新资格。
 这些解析负例不是新的模型生成批次，也不冒充普通 CLI 新生成；双 Skill 的生成则均使用 CLI。
 
-当前实际结果（分开计数，不合并为成功配对）：
+普通配置各轮实际结果（最终成功配对仅 04/A 与 06/B）：
 
 | 轮次 | 结果 | 准入模型阶段 | 环境规划 | 环境/工具构建 | 资格与限制 |
 | --- | --- | --- | --- | --- | --- |
-| 04/A `20261102T002955-86ac3232` | 14/14，ready | 5：发现/编写/独审各 1，组合规划 2 | 2 | 1/1 | 当时当前资格通过；目前 daemon 不可用，仅保留历史通过及离线字节复核 |
+| 04/A `20261102T002955-86ac3232` | 14/14，ready | 5：发现/编写/独审各 1，组合规划 2 | 2 | 1/1 | 故障时暂不可用；恢复后当前资格复核通过，绑定与原字节不变 |
 | 04/B `20261102T004457-30403bce` | 验收计划请求中断 | 7 个已完成 stage，另 1 个已发请求无结果 | 已进入命中后的验收专用阶段 | 无执行完成凭据 | 没有 summary、执行报告或资格；不计成功 |
 | 05/B `20261102T101729-103ae39a` | 独审通过，runtime_blocked | 3：发现/编写/独审各 1 | 0 | 未进入构建 | docker_unavailable；验收模型 0，实际执行 0，资格 false；这些 0 不是成功复用性能 |
+| 06/B `20261102T112835-7e380d2b` | 20/20，ready | 5：发现/编写/独审各 1，验收专用 2 | 0 | 0/0 | 自动精确命中 A 同一 artifact；当前独立资格通过 |
 
 A 具体 artifact_id 为 `d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9`，
 request_key 为 `b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac`。
@@ -100,8 +103,11 @@ request_key 为 `b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627a
 候选中的 different_daemon 是 engine_id 缺失时的既有粗诊断，不是观察到了另一个 daemon；
 主阻止原因及路径为 docker_unavailable / dockerDesktopLinuxEngine pipe 缺失。
 
-截至此快照，共 35 个已启动准入阶段、34 个完成 receipt：失败 A 两轮 12，中间 A 7，
-普通配置 A 5，中断 B 已完成 7/已启动 8，主机阻止 B 3。每批 16 次封套未变；
+受阻快照共 35 个已启动准入阶段、34 个完成 receipt：失败 A 两轮 12，中间 A 7，
+普通配置 A 5，中断 B 已完成 7/已启动 8，主机阻止 B 3。恢复后 06/B 新增 5 次，
+全轮累计 **40 个已启动阶段、39 个完成 receipt**；最终 A/B 配对单列 **10 次**。
+06/B 首份验收草案的 README 引用不逐字匹配，被门禁拒绝；第二份在原预算内自动修正后锁定执行。
+没有手工 plan、改原来源、继承旧 tests/passed 或降低业务要求。每批 16 次封套未变；
 这些是 host 准入阶段数，不等于 Codex 内部 turns、API 请求数或计费调用数。
 阶段 receipt、usage、重试尝试与实际命令分别保留，不声称所有模型调用为零。
 
@@ -119,7 +125,7 @@ request_key 为 `b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627a
 进程、CLI result、完成 summary 或执行报告，原因未知。3 个 native receipt、4 个已完成验收
 receipt 和第 5 个已发请求保留；不把该请求记成完成，也不把此 B 计为通过。
 第五目录 `bundled-json-cli-20261102-05` 只重新生成 B，配置原字节不变，继续使用第四轮登记目录；
-没有复制 pipeline 内部状态、resume/restart 或继承资格。两个成功 Skill 分处独立 state/library。
+没有复制 pipeline 内部状态、resume/restart 或继承资格。各轮候选使用独立 state/library。
 第三轮的协议补充文件作为历史证据保留，不是最终配置的人工步骤。
 
 2026-11-02 10:27 本机只读 CLI runtime-inspect 观察 A historical_execution=passed、
@@ -128,7 +134,7 @@ qualification.accepted=false/deferred=true，原因是当前 Docker API 不可�
 该零字节 reparse IPC 文件无法访问；单独改名、父目录可逆改名、普通移除都被 Windows 拒绝，
 没有成功移动或删除它。进一步解除 reparse 标记被自动审批以“目标语义未知，可能损坏文件系统
 或 Docker 状态，超出有限修复授权”拒绝；没有绕过，也没有修改 ACL、全局配置、镜像或缓存。
-用户需先在桌面修复 Docker；这和此前 B 的进程中断是否同因未知，不推断因果。
+当时需用户在桌面修复 Docker；这和此前 B 的进程中断是否同因未知，不推断因果。
 05/B 启动前仅重新做了配置 preflight，没有再次探测 Docker，导致 3 个 native 阶段后才被阻止。
 这是本轮实验纪律的缺口，不是必要的模型探针；后续新轮必须先做零模型的 daemon/镜像检查，
 配置 preflight 不能代替该检查，也不能用手工 plan 绕过主机阻止。
@@ -138,11 +144,57 @@ A bundle 完整、登记制品等于 A 内嵌的具体制品记录。它**不证
 此前四个真实 registry 解析变更负例及 A 的当前资格复核在 daemon 停止前已通过；
 之后仅可复核元数据与原字节。不能用这些记录恢复 B 资格或把旧 passed 写入当前结果。
 
-待完成：Docker 恢复后先检查实际 daemon/确切镜像；若可用，在另一个新目录以原 B 配置、
-同一 A registry 和原预算重新普通 CLI build，不能恢复 04/B 或 05/B。必须证明同一 artifact、
-环境规划及两类构建为 0、当前验收模型 >0、独立执行通过，再复核 A/B 和旧绑定当前资格。
-若 daemon/镜像身份不同，应明确 miss；不得为完成配对而改 registry、替换具体版本或继承资格。
+当时的待补项已在恢复后的 -06 新轮完成，见下述核验。04/B、05/B 均未 resume/restart。
+daemon/镜像身份不同仍应明确 miss；不能为完成配对而改 registry、替换具体版本或继承资格。
+
+2026-11-02 11:27 用户确认恢复；`bundled-json-cli-20261102-06` 在付费阶段前完成零模型、零构建
+核验，daemon 仍为 `a7981e1d-64c3-431d-8287-8dad803ceaf6`，原具体工具镜像可用，A 与两份旧 P0
+绑定当前资格通过、文件不变。没有继续执行此前被拒绝的修复动作。新 B 配置与最初配置相同，
+仅共享原 registry，不复制旧计划、内部状态、执行或资格；新证据写入 -06，不改旧实验目录。
+审计脚本的 `--output-root` 只改变证据保存位置，并额外核对跨 Skill 的独立 session/attempt，
+没有修改产品运行时或资格规则。
+
+恢复后的三个提示自检及平台契约复查通过，见 -06/post-recovery-checks-02；首次两个检查只因
+沙箱 C 临时目录写入/清理权限失败，保留 -06/post-recovery-checks 原日志，改回既有工作区 TEMP
+后在新目录重查通过，未 freeze。748 项完整回归、98 项针对性集合仍引用 -04 已通过结果；
+逐文件 SHA 确认恢复前后产品代码相同，本次未重复全套回归，不把旧结果当作改动后新测试。
+
+- `audit-ab.json`：34/34、同一 artifact/image、不同 Skill 文案和 revision、不同编写/独审 session、
+  不同执行 attempt；当前包/镜像/来源完整、四类直接入口业务输出正确、A/B 与两份旧 P0 资格通过。
+- `operations/check-current-b`：公开 check 按原调用方配置核验交付布局通过。
+  `operations/inspect-restored-a` 与 `inspect-current-b` 的公开当前资格查询均 accepted=true。
+- `failure-isolation-after.json`：工具与环境 registry 全部原字节不变；两份旧 P0 绑定不变且仍合格；
+  之前两个失败 A 和主机阻止 B 共三份 Skill 当前仍不合格。原始来源和已回归产品代码不变。
+- `original-package-check-b.json`：原失败程序及四个期望摘要，在当前 B 的只读完整冻结包上通过，
+  仅纠正目录 argv；与 A 的同类复核共两条最终配对基础设施证据，不计入 34 条生成验收。
+  中间轮另有一条同类基础设施复核，三条均不改变旧失败用例或授予资格。
+
+原四类解析负例沿用 -04/negative-probes.json：在隔离 context 中分别变更模块、JSON 原字节并更新
+声明 hash、依赖和接口；对真实具体旧版本都得到 selected_request_mismatch，含字段 expected/actual。
+没有为这些负例新增模型生成或授予资格。数据 hash 未更新、声明缺失、动态路径等另有离线回归。
+
+## 时间与存储观测边界
+
+`-06/timing-observations.json` 保存实际回执的各模型阶段耗时、全部用例与固定四种直接业务输入的
+容器 wall，以及 CLI 总 wall；容器 wall 包含启动/清理，不是化学计算内核时间。
+
+| 观测 | 04/A | 06/B |
+| --- | ---: | ---: |
+| CLI wall 秒 | 689.965 | 783.517 |
+| 组合环境/验收模型秒 | 168.987 | 0 |
+| 当前验收专用模型秒 | 0 | 348.042 |
+| 全部用例容器 wall 秒 | 31.461（14 条） | 35.419（20 条） |
+| 环境/工具 build 调用 | 1/1 | 0/0 |
+
+B 总时间更长；不同模型响应、独立测试数量、生成文案和相隔多小时的主机状态使总时长不可作为
+受控加速比。这里确定的是省去环境 planner 和两类 build，必要模型阶段总数双方均为 5。
+来源、依赖、接口、资源身份、平台与要求相同，业务输入相同；不把不同阶段 wall 相加作同一口径。
+实际物理 Docker 存储差分本轮未测；registry 不变及无新 build 不等于测得磁盘节省。
+此前 P1 三路径受控测量仍见 [测量报告](shared-tool-path-metrics-20261101.md)，与本轮计数分开。
 
 新 registry 不代表 Docker 冷启动；保留已有镜像及 BuildKit 缓存，不把 build 次数当实际依赖
 安装次数。当前任务不作跨工作量性能/磁盘节省声明。没有远端分发、OCI 平台或常驻 worker。
 平台契约增加 v3/policy 与必需数据声明，SkillBinding/ExecutionAttempt 字段未扩展。
+本轮新增真实验证限普通 CLI 配对、当前资格和精确解析负例；不将旧 v1/v2 安装/导入/迁移实验
+重新标成 v3 真实交付矩阵。v3 交付需支持该 ABI 的本机运行时和具体制品；未知 ABI 或缺失制品
+不能降级或继承资格。通用动态加载、任意 subprocess、远端仓库和 OCI 分发仍不支持。

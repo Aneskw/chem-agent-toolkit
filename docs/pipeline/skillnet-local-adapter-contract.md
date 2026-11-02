@@ -14,6 +14,10 @@ SkillBinding 与 RuntimeRequest 没有新增字段，平台能力协商须明确
 下文原 v1/v2 清单作为此前核对基线，v3 的边界以增量协议为准；机器版本清单和离线校验已更新。
 原生编写/审阅 handoff 增加 host 的 tool_execution_layout，区分当前 Skill 包和工具镜像文件集；
 它不是新增的持久化 Binding 字段、业务事实或平台 API，不改变运行要求及模型预算。
+此有限能力已有普通 CLI 真实配对 A 14/14、B 20/20：B 的环境规划和两类 build 均为 0，
+仍有独立审阅、当前验收模型和新 attempt；恢复后双方当前资格分别查询通过。见
+[P2 证据](../integration/bundled-json-tool-20261101.md)。平台不能从同一 ToolArtifact 的 available
+推导任何 Skill 的资格；旧失败 Skill 在主机恢复后仍不合格。未新增平台端点或远端制品能力。
 
 此前 P1-2 轮的字段/版本/入口/错误锚点交叉验证、3 项针对性回归和三个提示自检通过，证据见
 [skillnet-contract-results-20261101.json](../../validation/deepseek-api/skillnet-contract-results-20261101.json)。

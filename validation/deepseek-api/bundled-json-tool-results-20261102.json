@@ -1,9 +1,11 @@
 {
   "version": 1,
   "baseline_commit": "942d57e76d098ae4a29714934b0a016e897b368e",
-  "verified_at": "2026-11-02T02:39:18.119642+00:00",
-  "passed": false,
-  "completion": "implementation and regression verified; second successful ordinary CLI Skill pending Docker recovery",
+  "verified_at": "2026-11-02T03:51:30.183018+00:00",
+  "passed": true,
+  "implementation_commit": "8e256557f08dbf1c65ecfc300ed778073b7cbf87",
+  "completion": "P2 finite bundled JSON capability verified with two ordinary CLI Skills; Docker restored without changing runtime code",
+  "successful_pair_proven": true,
   "scope": "P2 one new capability: explicit finite module-__file__-relative bundled UTF-8 JSON read",
   "abi": "shared_tool_image_v3",
   "policy": "closed-python-json-data-v1",
@@ -37,363 +39,426 @@
       }
     ]
   },
-  "a_historical_success": {
-    "label": "a",
-    "output": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-04\\a\\state\\outputs\\20261102T002955-86ac3232",
-    "build_id": "20261102T002955-86ac3232",
-    "name": "descriptor-rule-screening",
-    "revision_id": "rev-b67f39fd4f2e34631a94ddb689b7b11be284b4ef10c61552d0202c0ef1000cd9",
-    "cases": 14,
-    "current_qualification": {
-      "accepted": true,
-      "reason": "Content review and current Docker business evidence passed"
-    },
-    "independent_review": true,
-    "direct_business_cases": {
-      "CCO": "behavior-ethanol-selected",
-      "c1ccccc1O": "behavior-phenol-unselected",
-      "": "rejection-empty-smiles",
-      "not-a-smiles": "behavior-invalid-not-a-smiles"
-    },
-    "skill_sha256": "719bcc330a25879de11954a1606d82c836e54538164810877a57ff488fc401ec",
-    "artifact_id": "d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9",
-    "image_id": "sha256:2025a3abbaa26559349a684e1d80a98a3fd6de0bc99ab2b13ec3bb6a67a5b3e3",
-    "build_calls": {
-      "environment": 1,
-      "tool": 1
-    },
-    "preparation": {
-      "status": "prepared",
-      "gaps": [],
-      "model_calls": 2,
-      "shared_tool": {
-        "status": "miss",
-        "reason": "no_available_exact_request",
-        "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
-        "candidates": [],
-        "other_versions": []
+  "final_generated_skills": [
+    {
+      "label": "a",
+      "output": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-04\\a\\state\\outputs\\20261102T002955-86ac3232",
+      "build_id": "20261102T002955-86ac3232",
+      "name": "descriptor-rule-screening",
+      "revision_id": "rev-b67f39fd4f2e34631a94ddb689b7b11be284b4ef10c61552d0202c0ef1000cd9",
+      "cases": 14,
+      "current_qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
       },
-      "environment_planning_calls": 2,
-      "acceptance_planning_calls": 2,
-      "model_calls_by_stage": {
-        "combined_environment_acceptance_planner": 2
-      }
-    },
-    "model_calls": [
-      {
-        "phase": "discovery",
-        "session_key": "discovery",
-        "resumed": false,
-        "model": "gpt-6-astra",
-        "status": "completed",
-        "usage": {
-          "input_tokens": 90933,
-          "cached_input_tokens": 80384,
-          "cache_write_input_tokens": 0,
-          "output_tokens": 2703,
-          "reasoning_output_tokens": 80
+      "independent_review": true,
+      "direct_business_cases": {
+        "CCO": "behavior-ethanol-selected",
+        "c1ccccc1O": "behavior-phenol-unselected",
+        "": "rejection-empty-smiles",
+        "not-a-smiles": "behavior-invalid-not-a-smiles"
+      },
+      "author_session": "01a197f2-3a1f-7b53-84ca-4416db394fc1",
+      "review_session": "01a197f7-1fd8-73a1-baa7-7c8b203e5f73",
+      "attempt_directory": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-04\\a\\state\\outputs\\20261102T002955-86ac3232\\runtime\\candidate-c69cc297ffc53a23233207d0eeb89cd0e7be4742ff47d9f9e9a208b9c3b4d049\\02d72e75b7b94145b85c6cd7689736ae",
+      "execution_report_sha256": "4b1acecf5d09814819abab2f1e6dc667f8b043cf0516de9808a69c231e99513f",
+      "acceptance_sha256": "8f9619226f0f43d0dc1e536e170b22db773f2e25b3643b4ccbb0a9bc34246bf7",
+      "skill_sha256": "719bcc330a25879de11954a1606d82c836e54538164810877a57ff488fc401ec",
+      "artifact_id": "d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9",
+      "image_id": "sha256:2025a3abbaa26559349a684e1d80a98a3fd6de0bc99ab2b13ec3bb6a67a5b3e3",
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 2,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+          "candidates": [],
+          "other_versions": []
         },
-        "prompt_sha256": "c122ee3586bedcd219c00c9219b184de029b6e0cfc5c7d2244da740629bc6b52",
-        "tool_events": 6,
-        "session_id": "01a197f2-3a1f-7b53-84ca-4416db394fc1",
-        "stream_threads_finished": true,
-        "elapsed_seconds": 113.152,
-        "progress_observation": {
-          "watchdog": "observe_only",
-          "progress_timeout_seconds": null,
-          "max_silence_seconds": 2.354,
-          "last_stdout_seconds": 109.113,
-          "observe_seconds": 240,
-          "progress_limit_exceeded": false,
-          "window_meaning": "exceeded the local output window; nothing is known about the model",
-          "process_activity_seen": true,
-          "counters_available": true
-        },
-        "image_audit": {
-          "status": "available",
-          "view_calls": [],
-          "image_results": 0
+        "environment_planning_calls": 2,
+        "acceptance_planning_calls": 2,
+        "model_calls_by_stage": {
+          "combined_environment_acceptance_planner": 2
         }
       },
-      {
-        "phase": "author",
-        "session_key": "build:descriptor-rule-screening",
-        "resumed": true,
-        "model": "gpt-6-astra",
-        "status": "completed",
-        "usage": {
-          "input_tokens": 452931,
-          "cached_input_tokens": 414336,
-          "cache_write_input_tokens": 0,
-          "output_tokens": 8073,
-          "reasoning_output_tokens": 509
-        },
-        "prompt_sha256": "0e20fb897a43abc4feb3f25a93b9006ec845dca7b7c536fdd7ed0e3b36e1f437",
-        "tool_events": 11,
-        "session_id": "01a197f2-3a1f-7b53-84ca-4416db394fc1",
-        "stream_threads_finished": true,
-        "elapsed_seconds": 205.677,
-        "progress_observation": {
-          "watchdog": "observe_only",
-          "progress_timeout_seconds": null,
-          "max_silence_seconds": 5.958,
-          "last_stdout_seconds": 202.641,
-          "observe_seconds": 240,
-          "progress_limit_exceeded": false,
-          "window_meaning": "exceeded the local output window; nothing is known about the model",
-          "process_activity_seen": true,
-          "counters_available": true
-        },
-        "image_audit": {
-          "status": "available",
-          "view_calls": [],
-          "image_results": 0
-        }
-      },
-      {
-        "phase": "review",
-        "session_key": "review:descriptor-rule-screening",
-        "resumed": false,
-        "model": "gpt-6-astra",
-        "status": "completed",
-        "usage": {
-          "input_tokens": 150736,
-          "cached_input_tokens": 125184,
-          "cache_write_input_tokens": 0,
-          "output_tokens": 1627,
-          "reasoning_output_tokens": 110
-        },
-        "prompt_sha256": "a5a98c4f56038c3856903476d678b399b58d39b5678f3f1491697302722772fb",
-        "tool_events": 9,
-        "session_id": "01a197f7-1fd8-73a1-baa7-7c8b203e5f73",
-        "stream_threads_finished": true,
-        "elapsed_seconds": 96.989,
-        "progress_observation": {
-          "watchdog": "observe_only",
-          "progress_timeout_seconds": null,
-          "max_silence_seconds": 3.824,
-          "last_stdout_seconds": 93.515,
-          "observe_seconds": 240,
-          "progress_limit_exceeded": false,
-          "window_meaning": "exceeded the local output window; nothing is known about the model",
-          "process_activity_seen": true,
-          "counters_available": true
-        },
-        "image_audit": {
-          "status": "available",
-          "view_calls": [],
-          "image_results": 0
-        }
-      },
-      {
-        "phase": "runtime_planning",
-        "model": "deepseek-v4-pro",
-        "backend": "deepseek_api",
-        "status": "completed",
-        "usage": {
-          "prompt_tokens": 13655,
-          "completion_tokens": 15811,
-          "total_tokens": 29466,
-          "prompt_tokens_details": {
-            "cached_tokens": 7552
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 12264
-          },
-          "prompt_cache_hit_tokens": 7552,
-          "prompt_cache_miss_tokens": 6103
-        },
-        "elapsed_seconds": 150.303,
-        "prompt_sha256": "d8a0ee6aa4b31eb90aee9b1b9e22687f87212ddb9e39a2b26defd98d8f974368",
-        "schema_sha256": "a5765810cc3441b84cd09feb8f075e926f890180920e9beed5dbd9441dbb2f4a",
-        "request_count": 1
-      },
-      {
-        "phase": "runtime_planning",
-        "model": "deepseek-v4-pro",
-        "backend": "deepseek_api",
-        "status": "completed",
-        "usage": {
-          "prompt_tokens": 16104,
-          "completion_tokens": 2063,
-          "total_tokens": 18167,
-          "prompt_tokens_details": {
-            "cached_tokens": 6528
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 1730
-          },
-          "prompt_cache_hit_tokens": 6528,
-          "prompt_cache_miss_tokens": 9576
-        },
-        "elapsed_seconds": 18.684,
-        "prompt_sha256": "c20a00d417f5774ff0e97f700f6fe0dc5445ce1520f45b177f591a28007ae429",
-        "schema_sha256": "51847f9d809730759063b4c84aa4e5361d8b4872d566c4cfa968c12f4896c563",
-        "request_count": 1
-      }
-    ]
-  },
-  "a_current_qualification": {
-    "accepted": false,
-    "reason": "Live execution check deferred: runtime host unavailable",
-    "deferred": true,
-    "upstream_reason": "Current acceptance coverage/image/resources are not valid"
-  },
-  "b_interrupted": {
-    "root": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-04\\b",
-    "completed_stages": 7,
-    "started_stages": 8,
-    "execution": false,
-    "qualification": false
-  },
-  "b_blocked": {
-    "root": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-05",
-    "build_id": "20261102T101729-103ae39a",
-    "name": "rdkit-descriptor-rule-screening",
-    "status": "blocked",
-    "model_calls": [
-      {
-        "phase": "discovery",
-        "session_key": "discovery",
-        "resumed": false,
-        "model": "gpt-6-astra",
-        "status": "completed",
-        "usage": {
-          "input_tokens": 89157,
-          "cached_input_tokens": 69632,
-          "cache_write_input_tokens": 0,
-          "output_tokens": 2972,
-          "reasoning_output_tokens": 80
-        },
-        "prompt_sha256": "e28dfa84b99418fd2f9dac2bf89f31daf12b6f023f18a7b4fd0315580c1cf586",
-        "tool_events": 6,
-        "session_id": "01a19a0c-2901-7431-82cc-55b3d4b85c21",
-        "stream_threads_finished": true,
-        "elapsed_seconds": 144.884,
-        "progress_observation": {
-          "watchdog": "observe_only",
-          "progress_timeout_seconds": null,
-          "max_silence_seconds": 7.986,
-          "last_stdout_seconds": 142.233,
-          "observe_seconds": 240,
-          "progress_limit_exceeded": false,
-          "window_meaning": "exceeded the local output window; nothing is known about the model",
-          "process_activity_seen": true,
-          "counters_available": true
-        },
-        "image_audit": {
-          "status": "available",
-          "view_calls": [],
-          "image_results": 0
-        }
-      },
-      {
-        "phase": "author",
-        "session_key": "build:rdkit-descriptor-rule-screening",
-        "resumed": true,
-        "model": "gpt-6-astra",
-        "status": "completed",
-        "usage": {
-          "input_tokens": 459400,
-          "cached_input_tokens": 395648,
-          "cache_write_input_tokens": 0,
-          "output_tokens": 8338,
-          "reasoning_output_tokens": 343
-        },
-        "prompt_sha256": "0ea3fde4a9841546dbed32ddcb8d29f97a819a7f81e0b22b37bda91f7936c166",
-        "tool_events": 9,
-        "session_id": "01a19a0c-2901-7431-82cc-55b3d4b85c21",
-        "stream_threads_finished": true,
-        "elapsed_seconds": 231.432,
-        "progress_observation": {
-          "watchdog": "observe_only",
-          "progress_timeout_seconds": null,
-          "max_silence_seconds": 5.909,
-          "last_stdout_seconds": 228.671,
-          "observe_seconds": 240,
-          "progress_limit_exceeded": false,
-          "window_meaning": "exceeded the local output window; nothing is known about the model",
-          "process_activity_seen": true,
-          "counters_available": true
-        },
-        "image_audit": {
-          "status": "available",
-          "view_calls": [],
-          "image_results": 0
-        }
-      },
-      {
-        "phase": "review",
-        "session_key": "review:rdkit-descriptor-rule-screening",
-        "resumed": false,
-        "model": "gpt-6-astra",
-        "status": "completed",
-        "usage": {
-          "input_tokens": 183188,
-          "cached_input_tokens": 148864,
-          "cache_write_input_tokens": 0,
-          "output_tokens": 2044,
-          "reasoning_output_tokens": 183
-        },
-        "prompt_sha256": "112d6cb0f04a7be150a3cdcb5c42419da3541727065c5dd5f6ef67329912c313",
-        "tool_events": 6,
-        "session_id": "01a19a11-eda9-7b11-8cae-8fa212bb577e",
-        "stream_threads_finished": true,
-        "elapsed_seconds": 119.885,
-        "progress_observation": {
-          "watchdog": "observe_only",
-          "progress_timeout_seconds": null,
-          "max_silence_seconds": 5.929,
-          "last_stdout_seconds": 117.556,
-          "observe_seconds": 240,
-          "progress_limit_exceeded": false,
-          "window_meaning": "exceeded the local output window; nothing is known about the model",
-          "process_activity_seen": true,
-          "counters_available": true
-        },
-        "image_audit": {
-          "status": "available",
-          "view_calls": [],
-          "image_results": 0
-        }
-      }
-    ],
-    "runtime_preparation": {
-      "status": "runtime_blocked",
-      "gaps": [
+      "model_calls": [
         {
-          "code": "docker_unavailable",
-          "detail": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.\n",
-          "repair_lane": "environment",
-          "blocker_kind": "temporary_resource"
+          "phase": "discovery",
+          "session_key": "discovery",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 90933,
+            "cached_input_tokens": 80384,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2703,
+            "reasoning_output_tokens": 80
+          },
+          "prompt_sha256": "c122ee3586bedcd219c00c9219b184de029b6e0cfc5c7d2244da740629bc6b52",
+          "tool_events": 6,
+          "session_id": "01a197f2-3a1f-7b53-84ca-4416db394fc1",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 113.152,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 2.354,
+            "last_stdout_seconds": 109.113,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
         },
         {
-          "code": "planning_deferred",
-          "detail": "Docker unavailable; no model called. Supply a plan to prepare offline",
-          "repair_lane": "environment",
-          "blocker_kind": "unresolved_input"
+          "phase": "author",
+          "session_key": "build:descriptor-rule-screening",
+          "resumed": true,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 452931,
+            "cached_input_tokens": 414336,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 8073,
+            "reasoning_output_tokens": 509
+          },
+          "prompt_sha256": "0e20fb897a43abc4feb3f25a93b9006ec845dca7b7c536fdd7ed0e3b36e1f437",
+          "tool_events": 11,
+          "session_id": "01a197f2-3a1f-7b53-84ca-4416db394fc1",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 205.677,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 5.958,
+            "last_stdout_seconds": 202.641,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "review",
+          "session_key": "review:descriptor-rule-screening",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 150736,
+            "cached_input_tokens": 125184,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1627,
+            "reasoning_output_tokens": 110
+          },
+          "prompt_sha256": "a5a98c4f56038c3856903476d678b399b58d39b5678f3f1491697302722772fb",
+          "tool_events": 9,
+          "session_id": "01a197f7-1fd8-73a1-baa7-7c8b203e5f73",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 96.989,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.824,
+            "last_stdout_seconds": 93.515,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 13655,
+            "completion_tokens": 15811,
+            "total_tokens": 29466,
+            "prompt_tokens_details": {
+              "cached_tokens": 7552
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 12264
+            },
+            "prompt_cache_hit_tokens": 7552,
+            "prompt_cache_miss_tokens": 6103
+          },
+          "elapsed_seconds": 150.303,
+          "prompt_sha256": "d8a0ee6aa4b31eb90aee9b1b9e22687f87212ddb9e39a2b26defd98d8f974368",
+          "schema_sha256": "a5765810cc3441b84cd09feb8f075e926f890180920e9beed5dbd9441dbb2f4a",
+          "request_count": 1
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 16104,
+            "completion_tokens": 2063,
+            "total_tokens": 18167,
+            "prompt_tokens_details": {
+              "cached_tokens": 6528
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 1730
+            },
+            "prompt_cache_hit_tokens": 6528,
+            "prompt_cache_miss_tokens": 9576
+          },
+          "elapsed_seconds": 18.684,
+          "prompt_sha256": "c20a00d417f5774ff0e97f700f6fe0dc5445ce1520f45b177f591a28007ae429",
+          "schema_sha256": "51847f9d809730759063b4c84aa4e5361d8b4872d566c4cfa968c12f4896c563",
+          "request_count": 1
         }
       ],
-      "model_calls": 0,
-      "shared_tool": {
-        "status": "miss",
-        "reason": "no_available_exact_request",
-        "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
-        "candidates": [
-          {
-            "artifact": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac-d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9.json",
-            "reason": "different_daemon"
-          }
-        ],
-        "other_versions": []
+      "stage_counts": {
+        "discovery": 1,
+        "author": 1,
+        "review": 1,
+        "runtime_planning": 2
       },
-      "environment_planning_calls": 0,
-      "acceptance_planning_calls": 0
+      "cli_seconds": 689.9647401000257,
+      "execution_qualification_scope": "current Skill only; independent review, current locked tests and new execution"
     },
-    "execution": false,
-    "qualification": false
-  },
-  "successful_pair_proven": false,
+    {
+      "label": "b",
+      "output": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-06\\b\\state\\outputs\\20261102T112835-7e380d2b",
+      "build_id": "20261102T112835-7e380d2b",
+      "name": "descriptor-rule-screening",
+      "revision_id": "rev-62cf492759aaa82043127595a2568c8e631f3de45b810ad41a5e864f423e9def",
+      "cases": 20,
+      "current_qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "independent_review": true,
+      "direct_business_cases": {
+        "CCO": "ethanol-report-maximum",
+        "c1ccccc1O": "phenol-report-unselected",
+        "not-a-smiles": "invalid-smiles-rejection",
+        "": "empty-smiles-rejection"
+      },
+      "author_session": "01a19a4d-3f1c-7203-b17d-e8cd682afd6f",
+      "review_session": "01a19a51-cb39-7170-9e5e-2b607ecc26e2",
+      "attempt_directory": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-06\\b\\state\\outputs\\20261102T112835-7e380d2b\\runtime\\candidate-c69cc297ffc53a23233207d0eeb89cd0e7be4742ff47d9f9e9a208b9c3b4d049\\bbf7fe7b1b6b48c69a09b86fa908a609",
+      "execution_report_sha256": "02b9c032d238f095787922f5209875e8c911d1c4cae16250fd42f30819683522",
+      "acceptance_sha256": "f593c6ee4387a120496599d14895ae0cc470ad18c9a0bb66828c4637979e9dc0",
+      "skill_sha256": "e86978a1e6e5bb2765a3cd97989114ebc31754fc4cd17b7c29ce2cfa0f3d8287",
+      "artifact_id": "d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9",
+      "image_id": "sha256:2025a3abbaa26559349a684e1d80a98a3fd6de0bc99ab2b13ec3bb6a67a5b3e3",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 2,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+          "artifact_id": "d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 2,
+        "model_calls_by_stage": {
+          "acceptance_only_planner": 2
+        }
+      },
+      "model_calls": [
+        {
+          "phase": "discovery",
+          "session_key": "discovery",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 70073,
+            "cached_input_tokens": 50816,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2649,
+            "reasoning_output_tokens": 39
+          },
+          "prompt_sha256": "7135cb970772f8c86d7c25f0e3be410d0bba8c743b72ea90421a9dbea439ace5",
+          "tool_events": 6,
+          "session_id": "01a19a4d-3f1c-7203-b17d-e8cd682afd6f",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 112.463,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.937,
+            "last_stdout_seconds": 110.059,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "author",
+          "session_key": "build:descriptor-rule-screening",
+          "resumed": true,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 305011,
+            "cached_input_tokens": 216448,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 7757,
+            "reasoning_output_tokens": 235
+          },
+          "prompt_sha256": "3ce2db2deb6a7a98cd9f6b11bb9c438971ff2247dc0d7c638ce2d1948e9a9e99",
+          "tool_events": 6,
+          "session_id": "01a19a4d-3f1c-7203-b17d-e8cd682afd6f",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 185.291,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.934,
+            "last_stdout_seconds": 182.92,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "review",
+          "session_key": "review:descriptor-rule-screening",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 147291,
+            "cached_input_tokens": 88576,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1300,
+            "reasoning_output_tokens": 86
+          },
+          "prompt_sha256": "ca26d1b886bdab08808fc3fcd8d30849e86c96cbcfb9380db18ac17d08ecff30",
+          "tool_events": 8,
+          "session_id": "01a19a51-cb39-7170-9e5e-2b607ecc26e2",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 78.632,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.942,
+            "last_stdout_seconds": 76.307,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "runtime_acceptance_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 14324,
+            "completion_tokens": 13752,
+            "total_tokens": 28076,
+            "prompt_tokens_details": {
+              "cached_tokens": 7424
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 10022
+            },
+            "prompt_cache_hit_tokens": 7424,
+            "prompt_cache_miss_tokens": 6900
+          },
+          "elapsed_seconds": 190.108,
+          "prompt_sha256": "1ad72062db2285da346d97f27f5a55889a24342e1ce03b23eb22cba7461dc5bb",
+          "schema_sha256": "42ade1ce1bd66b8fe0bb540ab4289984671032982c4854192f808fc8a8e1513a",
+          "request_count": 1
+        },
+        {
+          "phase": "runtime_acceptance_planning",
+          "model": "deepseek-v4-pro",
+          "backend": "deepseek_api",
+          "status": "completed",
+          "usage": {
+            "prompt_tokens": 17919,
+            "completion_tokens": 12964,
+            "total_tokens": 30883,
+            "prompt_tokens_details": {
+              "cached_tokens": 7424
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 8223
+            },
+            "prompt_cache_hit_tokens": 7424,
+            "prompt_cache_miss_tokens": 10495
+          },
+          "elapsed_seconds": 157.934,
+          "prompt_sha256": "911940a5dd9a85d4b64d1df179f81ff1a4453243fc655e4b88126dcdc501c8d8",
+          "schema_sha256": "42ade1ce1bd66b8fe0bb540ab4289984671032982c4854192f808fc8a8e1513a",
+          "request_count": 1
+        }
+      ],
+      "stage_counts": {
+        "discovery": 1,
+        "author": 1,
+        "review": 1,
+        "runtime_acceptance_planning": 2
+      },
+      "cli_seconds": 783.5169768999995,
+      "execution_qualification_scope": "current Skill only; independent review, current locked tests and new execution"
+    }
+  ],
+  "final_generated_cases": 34,
   "negative_probes": {
     "passed": true,
     "scope": "isolated request parsing against real registered version; not new generation",
@@ -758,59 +823,322 @@
   "call_accounting": {
     "unit": "admitted model stages, not all internal native API turns or billable provider requests",
     "per_build_limit_unchanged": 16,
-    "failed_a_rounds": 12,
-    "intermediate_a_with_protocol_source": 7,
-    "final_config_a": 5,
+    "final_successful_pair": 10,
+    "previous_failed_a_rounds": 12,
+    "intermediate_a_with_supplemental_protocol": 7,
     "interrupted_b_completed_stages": 7,
     "interrupted_b_started_stages": 8,
     "docker_blocked_b": 3,
-    "total_completed_stage_receipts": 34,
-    "total_started_stages": 35,
-    "pending_interrupted_request_outcome": "unknown; not counted completed",
-    "native_author_resumed": "normal within-run discovery session continuation, not failed pipeline resume"
+    "total_completed_stage_receipts": 39,
+    "total_started_stages": 40,
+    "pending_interrupted_request_outcome": "unknown; retained, not counted completed",
+    "no_model_infrastructure": "four isolated resolver mutations and two corrected-object package checks; not new generation",
+    "native_author_resumed": "normal within-run discovery session continuation; no failed pipeline run resumed"
+  },
+  "support_limits": [
+    "finite declared JSON reads only; not general dynamic loading or subprocess",
+    "linux/amd64; explicit imports versions, empty executable list, no external mounts or runtime network",
+    "ordinary public CLI successful pair; negative mutations are isolated real-registry parser probes",
+    "new integration wrapper/data over unchanged original RDKit module and requirements",
+    "new registries, existing Docker/BuildKit cache retained; not cold-start or measured storage savings",
+    "no remote registry, OCI distribution or platform service"
+  ],
+  "old_bindings_unchanged": true,
+  "post_recovery_availability": {
+    "at": "2026-11-02T03:28:01.328231+00:00",
+    "host": {
+      "observed_at": "2026-11-02T03:27:34.445136+00:00",
+      "backend": "local-docker",
+      "status": "available",
+      "gaps": [],
+      "platform": "linux/x86_64",
+      "memory_bytes": 8115146752,
+      "cpus": 12,
+      "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+      "server_version": "29.8.2"
+    },
+    "expected_daemon": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+    "artifact_id": "d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9",
+    "image_id": "sha256:2025a3abbaa26559349a684e1d80a98a3fd6de0bc99ab2b13ec3bb6a67a5b3e3",
+    "availability": "available",
+    "a_current": {
+      "accepted": true,
+      "reason": "Content review and current Docker business evidence passed"
+    },
+    "old_p0_bindings": [
+      {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\a",
+        "files_unchanged": true,
+        "current": {
+          "accepted": true,
+          "reason": "Content review and current Docker business evidence passed"
+        }
+      },
+      {
+        "path": "E:\\Users\\27343\\Docker\\descriptor-layout-cli-20261101-05\\b",
+        "files_unchanged": true,
+        "current": {
+          "accepted": true,
+          "reason": "Content review and current Docker business evidence passed"
+        }
+      }
+    ],
+    "model_calls": 0,
+    "build_calls": 0,
+    "scope": "fresh experiment precheck; no old pipeline state resumed or copied"
+  },
+  "failure_isolation": {
+    "passed": true,
+    "at": "2026-11-02T03:46:37.403741+00:00",
+    "scope": "current read-only qualification after fresh B; no recovery or qualification mutation",
+    "successful_current_bindings": [
+      {
+        "label": "a",
+        "qualification": {
+          "accepted": true,
+          "reason": "Content review and current Docker business evidence passed"
+        }
+      },
+      {
+        "label": "b",
+        "qualification": {
+          "accepted": true,
+          "reason": "Content review and current Docker business evidence passed"
+        }
+      }
+    ],
+    "failed_skills_remain_unqualified": [
+      {
+        "root": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261101-01",
+        "candidate": "descriptor-rule-screening",
+        "qualification": {
+          "accepted": false,
+          "reason": "Execution has not passed or content approval was revoked"
+        },
+        "files_unchanged": true
+      },
+      {
+        "root": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261101-02",
+        "candidate": "rdkit-descriptor-rule-screening",
+        "qualification": {
+          "accepted": false,
+          "reason": "Execution has not passed or content approval was revoked"
+        },
+        "files_unchanged": true
+      },
+      {
+        "root": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-05",
+        "candidate": "rdkit-descriptor-rule-screening",
+        "qualification": {
+          "accepted": false,
+          "reason": "Execution has not passed or content approval was revoked"
+        },
+        "files_unchanged": true
+      }
+    ],
+    "registries_unchanged": true,
+    "old_p0_files_and_current_qualifications_preserved": true,
+    "source_and_runtime_code_unchanged": true,
+    "models": 0,
+    "builds": 0
+  },
+  "post_recovery_checks": {
+    "checks": [
+      {
+        "label": "prompt-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_prompt_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.7716183000002275
+      },
+      {
+        "label": "acceptance-prompt",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_acceptance_prompt.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.39182849999997416
+      },
+      {
+        "label": "planner",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_planner.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.3247116000002279
+      },
+      {
+        "label": "platform-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_skillnet_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.4336973000008584
+      }
+    ],
+    "helper_syntax": "passed",
+    "helper_sha256": "7da855050b2f94b6e074c42354a38e85d49ed826daab26a81530632389de80bd",
+    "runtime_code_identical_to_748_tested_version": true,
+    "full_regression_reference": "E:/Users/27343/Docker/bundled-json-postflight-20261102-04/results.json",
+    "full_regression_repeated": false,
+    "previous_check_directory": "post-recovery-checks",
+    "previous_failure": "two checks failed with sandbox C Temp write/cleanup permission errors, not prompt drift; no freeze or source change",
+    "temporary_directory": "E:/Users/27343/Docker/tool-phase2-temp"
+  },
+  "caller_config_comparison": {
+    "passed": true,
+    "scope": "ordinary caller inputs; generated implementation verified separately",
+    "identical_fields": [
+      "sources",
+      "model",
+      "execution",
+      "limits",
+      "runtime_defaults",
+      "network"
+    ],
+    "different_fields": [
+      "prompt audience",
+      "batch label"
+    ],
+    "manual_plan": false,
+    "explicit_artifact_selection": false,
+    "per_build_stage_limit": 16,
+    "b_config_sha256": "dcdb84df6f6dfd8b39644223951e128ff549454d2dfd8fcfa6eacce4dcb685e9"
+  },
+  "timing_observations": {
+    "observations": [
+      {
+        "label": "a",
+        "cli_wall_seconds": 689.9647401000257,
+        "model_stage_elapsed_seconds": {
+          "discovery": 113.152,
+          "author": 205.677,
+          "review": 96.989,
+          "runtime_planning": 168.987
+        },
+        "all_case_container_wall_seconds": 31.46114689996466,
+        "fixed_four_direct_input_case_wall_seconds": {
+          "CCO": 3.8103411000338383,
+          "c1ccccc1O": 2.1887962999753654,
+          "": 1.881781600008253,
+          "not-a-smiles": 2.0005494999932125
+        },
+        "cases": 14,
+        "build_calls": {
+          "environment": 1,
+          "tool": 1
+        },
+        "preparation": {
+          "status": "prepared",
+          "gaps": [],
+          "model_calls": 2,
+          "shared_tool": {
+            "status": "miss",
+            "reason": "no_available_exact_request",
+            "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+            "candidates": [],
+            "other_versions": []
+          },
+          "environment_planning_calls": 2,
+          "acceptance_planning_calls": 2,
+          "model_calls_by_stage": {
+            "combined_environment_acceptance_planner": 2
+          }
+        }
+      },
+      {
+        "label": "b",
+        "cli_wall_seconds": 783.5169768999995,
+        "model_stage_elapsed_seconds": {
+          "discovery": 112.463,
+          "author": 185.291,
+          "review": 78.632,
+          "runtime_acceptance_planning": 348.04200000000003
+        },
+        "all_case_container_wall_seconds": 35.418887100000575,
+        "fixed_four_direct_input_case_wall_seconds": {
+          "CCO": 1.7384423000003153,
+          "c1ccccc1O": 1.7335708999999042,
+          "not-a-smiles": 1.6136455999994723,
+          "": 1.7664776000001439
+        },
+        "cases": 20,
+        "build_calls": {
+          "environment": 0,
+          "tool": 0
+        },
+        "preparation": {
+          "status": "prepared",
+          "gaps": [],
+          "model_calls": 2,
+          "shared_tool": {
+            "status": "hit",
+            "reason": "exact_request_and_current_image",
+            "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+            "artifact_id": "d40620eb9a2face843c14d80f899f9304ff28be3f356c16b7141c7147dfb2be9"
+          },
+          "environment_planning_calls": 0,
+          "acceptance_planning_calls": 2,
+          "model_calls_by_stage": {
+            "acceptance_only_planner": 2
+          }
+        }
+      }
+    ],
+    "scope": "observed ordinary CLI wall and host-reported container case wall, not chemical kernel time",
+    "cache": "new explicit registry for A; existing Docker images and BuildKit cache retained; B uses warmed same artifact; no cache cleanup",
+    "limitations": [
+      "A 14 versus B 20 cases; different native outputs and model responses; many hours apart with Docker recovery between",
+      "not a controlled end-to-end speed benchmark; only counters establish skipped environment planner and builds",
+      "model elapsed and case sums are different scopes; no inferred install count or actual disk saving",
+      "no physical Docker storage delta measured in this P2 run; earlier P1 three-path study is separate"
+    ]
   },
   "infrastructure_counts": {
-    "isolated_real_registry_mutation_probes": 4,
+    "real_registry_mutation_probes": 4,
     "models": 0,
     "builds": 0,
-    "corrected_object_original_program_checks": {
-      "intermediate_a": 1,
-      "final_config_a": 1,
+    "corrected_object_package_checks": {
+      "final_pair": 2,
+      "historical_intermediate": 1,
+      "total": 3,
       "not_qualification": true
     }
   },
-  "remaining": [
-    "fresh ordinary CLI B after Docker recovery, same A registries, unchanged backend/budget",
-    "prove same artifact; environment planner 0, both builds 0, acceptance-only model and independent execution pass",
-    "current A/B and old-binding Docker verification after recovery; no failed run resume"
-  ],
-  "support_limits": [
-    "finite literal declared JSON read only, not general Python static proof",
-    "linux/amd64, explicit import versions, empty executable list, no external mounts or runtime network",
-    "existing modules/data already hashed; this only adds the previously refused __file__-relative read",
-    "new assembly over unchanged original RDKit module and requirements; no fabricated chemistry outputs",
-    "Docker/BuildKit caches retained; no cold-start, disk-savings or remote/OCI claim"
-  ],
+  "previous_blocked_snapshot": {
+    "path": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-06\\previous-blocked-results.json",
+    "sha256": "2a517b264e9945d21e85153f3e94dd916e2f14ebd9bcb813155c77e66f230912"
+  },
+  "original_failed_case": "failed round retained unchanged; original program/hashes rechecked with directory argv rebound to complete frozen Skill package; separate infrastructure proof",
   "evidence_roots": {
     "a": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-04",
-    "b": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-05",
-    "regression": "E:\\Users\\27343\\Docker\\bundled-json-postflight-20261102-04"
+    "b": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-06",
+    "final_regression": "E:\\Users\\27343\\Docker\\bundled-json-postflight-20261102-04"
   },
   "evidence": [
     {
       "path": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-04\\final-evidence-manifest.json",
       "sha256": "f0b94acc9c834fbc23a89377f72b09cff36cda8c9e83e4e3d95f3e7130889e89",
-      "files": 503
-    },
-    {
-      "path": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-05\\final-evidence-manifest.json",
-      "sha256": "82628984e7dcaa94a8f0147fd18c2e95441bb802afafcdbbf398067571bacd6f",
-      "files": 134
+      "files": 503,
+      "scope": "earlier preserved evidence; current checks and B are in the fresh root"
     },
     {
       "path": "E:\\Users\\27343\\Docker\\bundled-json-postflight-20261102-04\\final-evidence-manifest.json",
       "sha256": "f6f1538447340999f09068d803479506deb3b282e53c74b9fd789b3fe34205cf",
-      "files": 13
+      "files": 13,
+      "scope": "earlier preserved evidence; current checks and B are in the fresh root"
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\bundled-json-cli-20261102-06\\final-evidence-manifest.json",
+      "sha256": "cd1bf68c2b91846e0e7ce319b6af2bc613b2ae7a5b8ad3087767f59bf89d18c3",
+      "files": 298
     }
   ]
 }

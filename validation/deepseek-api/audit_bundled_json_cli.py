@@ -15,7 +15,7 @@ from creation_pipeline.runtime import shared_tool as st,local
 from creation_pipeline.runtime.recovery import inspect_candidate
 
 
-def audit(root,labels,b_root=None):
+def audit(root,labels,b_root=None,output_root=None):
     if b_root is not None:
         for name in ('production-code.json','source-before.json','old-bindings-before.json'):
             assert read_json(root/name)==read_json(b_root/name),name
@@ -72,6 +72,9 @@ def audit(root,labels,b_root=None):
         out.append({'label':label,'output':str(directory),'build_id':summary['build_id'],'name':name,
             'revision_id':record['delivery']['revision_id'],'cases':len(report['cases']),
             'current_qualification':current['qualification'],'independent_review':True,'direct_business_cases':seen,
+            'author_session':session['build:'+name],'review_session':session['review:'+name],
+            'attempt_directory':str(rt),'execution_report_sha256':file_digest(rt/'execution/report.json'),
+            'acceptance_sha256':record['delivery']['inputs']['acceptance']['sha256'],
             'skill_sha256':file_digest(frozen/'package/SKILL.md'),'artifact_id':receipt['shared_tool']['artifact_id'],
             'image_id':receipt['image_id'],'build_calls':receipt['build_calls'],'preparation':record['runtime_preparation'],
             'model_calls':summary['model_calls']})
@@ -81,23 +84,26 @@ def audit(root,labels,b_root=None):
     if labels==['a','b']:
         a,b=out;assert a['artifact_id']==b['artifact_id'] and a['skill_sha256']!=b['skill_sha256']
         assert a['revision_id']!=b['revision_id']
+        assert a['author_session']!=b['author_session'] and a['review_session']!=b['review_session']
+        assert a['attempt_directory']!=b['attempt_directory']
         before=read_json(root/'audit-a.json')['observations'][0]
         for field in ('revision_id','skill_sha256','artifact_id','image_id'):
             assert a[field]==before[field],field
         assert b['build_calls']=={'environment':0,'tool':0}
         assert b['preparation']['environment_planning_calls']==0 and b['preparation']['acceptance_planning_calls']>0
-    write_json(root/('audit-'+''.join(labels)+'.json'),sanitized({'passed':True,'observations':out,'old_bindings_unchanged':True}))
+    write_json((output_root or root)/('audit-'+''.join(labels)+'.json'),sanitized({'passed':True,'observations':out,'old_bindings_unchanged':True}))
     print({'passed':True,'cases':sum(x['cases'] for x in out),'labels':labels})
 
 
-def negatives(root):
+def negatives(root,output_root=None):
+    destination=output_root or root
     a=read_json(root/'audit-a.json')['observations'][0];directory=Path(a['output'])
     record=read_json(directory/'records'/(a['name']+'.json'));frozen=directory/record['durable_evidence']['path']
     artifact=read_json(directory/record['runtime']['path']/'receipt.json')['tool_artifact']
     reference={k:artifact[k] for k in ('request_key','artifact_id')};host=local.LocalExecutor().host()
     before=manifest(root/'shared-tools');results=[]
     for mode in ('module','data','dependency','interface'):
-        context=root/'negative-probes'/mode;shutil.copytree(frozen/'runtime/context',context)
+        context=destination/'negative-probes'/mode;shutil.copytree(frozen/'runtime/context',context)
         d=copy.deepcopy(artifact['request']['declaration'])
         if mode=='module':
             p=context/'package/scripts/calc_descriptors.py';p.write_bytes(p.read_bytes()+b'\n# independent new module version\n')
@@ -113,11 +119,11 @@ def negatives(root):
         assert obs['mismatches'];results.append({'mutation':mode,'observation':obs})
     assert manifest(root/'shared-tools')==before
     assert inspect_candidate(root/'a/library',a['name'])['qualification']['accepted']
-    write_json(root/'negative-probes.json',sanitized({'passed':True,'scope':'isolated request parsing against real registered version; not new generation','models':0,'builds':0,'old_binding_preserved':True,'observations':results}))
+    write_json(destination/'negative-probes.json',sanitized({'passed':True,'scope':'isolated request parsing against real registered version; not new generation','models':0,'builds':0,'old_binding_preserved':True,'observations':results}))
     print({'negative_probes':len(results),'passed':True})
 
 
-def original_package_check(root, label):
+def original_package_check(root, label, output_root=None):
     """Recheck the unchanged failed assertion on the correct current Skill object.
 
     Separate infrastructure audit only. No edits to the failed round, its contract,
@@ -144,7 +150,7 @@ def original_package_check(root, label):
     tool={'limits':{'memory':'512m','cpus':'1','pids':64},'behavior':{'file_io':True},
           'runtime_network':False,'execution_scope':'p2-package-audit-'+uuid.uuid4().hex}
     result=runner.run(tool,receipt['image_id'],args,input_dir=package,entrypoint='python',timeout=30)
-    write_json(root/('original-package-check-'+label+'.json'),sanitized({'scope':'separate read-only Docker infrastructure check, not generation qualification',
+    write_json((output_root or root)/('original-package-check-'+label+'.json'),sanitized({'scope':'separate read-only Docker infrastructure check, not generation qualification',
         'original_case':case,'original_failed_observation':observed,'program_and_expected_hashes_unchanged':True,
         'directory_argument':{'expected_object':'current frozen Skill package','old':'/opt/skill/package','actual':'/input'},
         'current_package':str(package),'complete_package_files':manifest(package),'actual_argv':args,'result':result}))
@@ -156,7 +162,10 @@ if __name__=='__main__':
     parser.add_argument('--labels',nargs='+',default=['a','b']);parser.add_argument('--negatives',action='store_true')
     parser.add_argument('--original-package-check',action='store_true')
     parser.add_argument('--b-root',type=Path,help='Fresh B directory after an interrupted run; no state is copied')
-    args=parser.parse_args();audit(args.root.resolve(),args.labels,args.b_root.resolve() if args.b_root else None)
-    if args.negatives:negatives(args.root.resolve())
+    parser.add_argument('--output-root',type=Path,help='Write new audit evidence here; preserve earlier experiment directories')
+    args=parser.parse_args();audit(args.root.resolve(),args.labels,args.b_root.resolve() if args.b_root else None,
+                                 args.output_root.resolve() if args.output_root else None)
+    if args.negatives:negatives(args.root.resolve(),args.output_root.resolve() if args.output_root else None)
     if args.original_package_check:
-        for label in args.labels:original_package_check(args.b_root.resolve() if label=='b' and args.b_root else args.root.resolve(),label)
+        for label in args.labels:original_package_check(args.b_root.resolve() if label=='b' and args.b_root else args.root.resolve(),label,
+                                                      args.output_root.resolve() if args.output_root else None)
