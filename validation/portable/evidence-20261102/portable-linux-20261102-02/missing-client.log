@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "status": "blocked",
+  "mode": "build",
+  "scope": "Zero-inference prerequisites and advertised client capabilities; not authentication, entitlement or acceptance",
+  "runtime_required": false,
+  "checks": [
+    {
+      "object": "source:sibling_source",
+      "path": "/workspace/validation/sibling-json/source",
+      "expected": "retained readable files",
+      "actual": {
+        "files": 5
+      },
+      "status": "passed",
+      "code": null,
+      "reason": ""
+    },
+    {
+      "object": "host.python.jsonschema",
+      "path": "/workspace/.venv/bin/python",
+      "expected": "jsonschema available in the current interpreter",
+      "actual": "available",
+      "status": "passed",
+      "code": null,
+      "reason": "No dependency is installed or repaired by readiness"
+    },
+    {
+      "object": "model.backend",
+      "path": "codex",
+      "expected": "resolvable executable",
+      "actual": "Codex CLI is not installed or is not on PATH",
+      "status": "blocked",
+      "code": "model_client_unavailable",
+      "reason": ""
+    },
+    {
+      "object": "Docker",
+      "path": "local-docker",
+      "expected": "not probed in offline mode",
+      "actual": "not_checked",
+      "status": "deferred",
+      "code": "runtime_deferred",
+      "reason": ""
+    },
+    {
+      "object": "runtime_defaults.shared_tool",
+      "path": "/workspace/validation/sibling-json/source/scripts/screen.py",
+      "expected": "supported declared source structure",
+      "actual": "closed-python-sibling-json-v1",
+      "status": "passed",
+      "code": null,
+      "reason": ""
+    },
+    {
+      "object": "host.git",
+      "path": "git",
+      "expected": "Git executable on PATH",
+      "actual": "/usr/bin/git",
+      "status": "passed",
+      "code": null
+    }
+  ],
+  "gaps": [
+    {
+      "object": "model.backend",
+      "path": "codex",
+      "expected": "resolvable executable",
+      "actual": "Codex CLI is not installed or is not on PATH",
+      "status": "blocked",
+      "code": "model_client_unavailable",
+      "reason": ""
+    },
+    {
+      "object": "model.client",
+      "path": "codex",
+      "expected": "resolvable compatible executable",
+      "actual": "Codex CLI is not installed or is not on PATH",
+      "status": "blocked",
+      "code": "model_client_unavailable"
+    }
+  ],
+  "model_calls": 0,
+  "build_calls": 0,
+  "qualification": "not_granted",
+  "source_acquisition_pending": false
+}

@@ -36,6 +36,8 @@ class DiscoveryTests(unittest.TestCase):
             return_value={'status': 'unavailable', 'gaps': [
                 {'code': 'docker_unavailable', 'detail': 'Offline discovery fixture'}]})
         self.host_patch.start()
+        self.client_patch = patch('creation_pipeline.agent.command.codex_command',return_value=['offline-fixture-client'])
+        self.client_patch.start()
         parent = ROOT / ".pipeline/test-tmp"
         parent.mkdir(parents=True, exist_ok=True)
         self.temp = tempfile.TemporaryDirectory(dir=parent)
@@ -54,6 +56,7 @@ class DiscoveryTests(unittest.TestCase):
             self.temp.cleanup()
         finally:
             self.host_patch.stop()
+            self.client_patch.stop()
 
     def test_replay_never_probes_docker_or_calls_runtime_model(self):
         with patch('creation_pipeline.runtime.local.process', side_effect=AssertionError('Live Docker probe')), \

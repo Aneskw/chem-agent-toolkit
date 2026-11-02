@@ -1,0 +1,12 @@
+plan policy               17436 chars  ok
+patch policy              18386 chars  ok
+plan schema               15859 chars  ok
+patch schema              11791 chars  ok
+acceptance description    11057 chars  ok
+frozen prompt             20195 chars  ok
+frozen schema             20980 chars  ok
+repair feedback:
+  - Repair cannot downgrade the invalid-input classification of tool from required to none_documented without recorded evidence; missing reason, scope, li
+  - Repair cannot patch locked tests
+
+every validator rule is stated where the model can read it, and no superseded statement survives

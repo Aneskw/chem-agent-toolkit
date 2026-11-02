@@ -1,0 +1,10 @@
+{
+  "label": "isolation",
+  "command": [
+    "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+    "-c",
+    "import sys,json,shutil,importlib.metadata,creation_pipeline; print(json.dumps({\"prefix\":sys.prefix,\"base_prefix\":sys.base_prefix,\"module\":creation_pipeline.__file__,\"codex\":shutil.which(\"codex\"),\"jsonschema\":importlib.metadata.version(\"jsonschema\")}))"
+  ],
+  "exit_code": 0,
+  "seconds": 0.45466139999916777
+}

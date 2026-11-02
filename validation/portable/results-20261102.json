@@ -1,0 +1,658 @@
+{
+  "version": 1,
+  "at": "2026-11-02T15:52:20.351985+00:00",
+  "baseline": "797f0f2a8945d610300b9fe369336745d9434e55",
+  "passed": true,
+  "scope": "portable source checkout and zero-model infrastructure, not new Skill generation/qualification or GitHub CI",
+  "production_input_verification": {
+    "files": 166,
+    "matched": true,
+    "manifest": "validation/portable/evidence-20261102/portable-checkout-20261102-02/source-inputs.json",
+    "post_test_nonbehavioral_changes": [
+      "README.md",
+      "docs/README.md",
+      "docs/pipeline/new-machine-setup.md",
+      "validation/portable/verify_checkout.py"
+    ]
+  },
+  "checks": {
+    "windows": {
+      "total": 859,
+      "passed": 856,
+      "skipped": 3,
+      "failed": 0,
+      "log": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/unittest/stderr.log"
+    },
+    "linux": {
+      "total": 859,
+      "passed": 858,
+      "skipped": 1,
+      "failed": 0,
+      "log": "validation/portable/evidence-20261102/portable-linux-20261102-02/unittest.log"
+    },
+    "targeted": {
+      "total": 67,
+      "passed": 66,
+      "skipped": 1,
+      "failed": 0,
+      "log": "validation/portable/evidence-20261102/portable-review-20261102-02/targeted.log"
+    }
+  },
+  "self_checks": [
+    "verify_prompt_contract.py",
+    "verify_acceptance_prompt.py check",
+    "verify_planner.py check",
+    "verify_skillnet_contract.py"
+  ],
+  "model_stage_admissions": 0,
+  "new_model_generation_batches": 0,
+  "environment_build_calls": 0,
+  "tool_build_calls": 0,
+  "qualification": "not_granted",
+  "linux_original_source_workload": {
+    "executions": 5,
+    "passed": 5,
+    "classification": "infrastructure only, not Skill acceptance"
+  },
+  "windows_python": "3.14.3",
+  "linux_python": "3.11 official slim base",
+  "stable_codex_client": "codex-cli 0.166.0",
+  "client_authentication": "not_checked",
+  "client_model_entitlement": "not_checked",
+  "json_only_no_yaml": true,
+  "failure_rounds": [
+    "portable-checkout-20261102-01",
+    "portable-linux-20261102-01"
+  ],
+  "limits": [
+    "Windows isolation is not a second physical machine",
+    "Linux container did not have a Docker socket or Codex client",
+    "Existing host pip/Docker caches and local Python base image preserved; not cold-start timing",
+    "CI workflow authored but not run on GitHub",
+    "No new paid model generation or entitlement test",
+    "Source checkout required; no wheel/ARM/OCI/remote distribution"
+  ],
+  "evidence_files": [
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-01/failure-summary.json",
+      "sha256": "0595e201e89157a5a3044bfbd3354c7d2907ef25d05be173a544d32be7b27e5a",
+      "bytes": 482,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-01\\failure-summary.json",
+      "original_sha256": "f448eec9e5991f706c71ca822dd937f5b42c6b3dbb56333e6f8a30fbe1de3580"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-01/operations/unittest/result.json",
+      "sha256": "e1cd8035291980e0ab9344119556cb849cd4d3eb10b65731609d8d7f881d02ea",
+      "bytes": 297,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-01\\operations\\unittest\\result.json",
+      "original_sha256": "d2db0ed09c6188b73c60392e962a44876e9ab0710bd8e4fb9e61f355ea2ed04e"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-01/operations/unittest/stderr.log",
+      "sha256": "05a03dcc4f6067100e96eaa56e75152f898262de0a286a471d08edf86638cb3e",
+      "bytes": 3571,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-01\\operations\\unittest\\stderr.log",
+      "original_sha256": "b241eb269ea709848baa4553e2fbe23238abd6f10dfef05a5f2b933ddebdd446"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-01/command.json",
+      "sha256": "cf18c1578e607c7cfd61d0694fdcae85da1267ff8104c72bea63c511687397fd",
+      "bytes": 1022,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-01\\command.json",
+      "original_sha256": "0b10de27e207e3becf0f4094e8037ae4aabd7a6b1cac76032f15a528c158a80c"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-01/failure-summary.json",
+      "sha256": "79951ea1e0855eac603e28a721618e765397a6439433bad7630d7e498b2f3152",
+      "bytes": 522,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-01\\failure-summary.json",
+      "original_sha256": "72b5a9378a4560ef9712beafe2f097fc501aadbb480b2c058f46acf2899cda05"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-01/process.json",
+      "sha256": "9c27bf3bb3f599e0991ec1a30b95fd4df8acf82ef834f771d61167ef3743e874",
+      "bytes": 107,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-01\\process.json",
+      "original_sha256": "17ab82e3f015df6b7e9044eb4a522f5d14e5ccafc4e3dd3a7e365e0162bff556"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-01/progress.json",
+      "sha256": "2fbc59dacdf81b2daed905de81e8d6e657438409ee173a60555ffffa051e904f",
+      "bytes": 1812,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-01\\progress.json",
+      "original_sha256": "2fbc59dacdf81b2daed905de81e8d6e657438409ee173a60555ffffa051e904f"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-01/unittest.log",
+      "sha256": "2064b297f7a8f94f1e15f963e81e5ddcdc306653c25c6aec253000d15c09e184",
+      "bytes": 28783,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-01\\unittest.log",
+      "original_sha256": "2064b297f7a8f94f1e15f963e81e5ddcdc306653c25c6aec253000d15c09e184"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/isolation.json",
+      "sha256": "142187ad25f89c182615cde8d8042d1a5cbc8951f56678a0a588ab4319aa6449",
+      "bytes": 378,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\isolation.json",
+      "original_sha256": "2106a28d86543067dd3682ce3831d20f58b07cb7b3947740365fcc69167d1fed"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/acceptance-prompt/result.json",
+      "sha256": "5b78327f07066abc8b10d06cd892644edc7989f8f9d25c9c36d2481702f6dd00",
+      "bytes": 304,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\acceptance-prompt\\result.json",
+      "original_sha256": "e375a94d591e7a499f7867d0cac19eb4e547dc4010119719f0a8984d0e757258"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/acceptance-prompt/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\acceptance-prompt\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/acceptance-prompt/stdout.log",
+      "sha256": "4c2935faf9b85081511d772d0faa76f6cc278fdfae0cdb34f8d0281ebbd90b70",
+      "bytes": 624,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\acceptance-prompt\\stdout.log",
+      "original_sha256": "8e4a7644575215826397ae598921f3c27964851b6f1ea85e04cba3a3d74b7bc1"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/bootstrap-reuse/result.json",
+      "sha256": "8884fdf0e83c12360138e22e014252ed99dcc60351675b1ec74a4993e58a6159",
+      "bytes": 270,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\bootstrap-reuse\\result.json",
+      "original_sha256": "a97231d8ad8524521a4d57261029801452ef9b1fac0a93bb0b69dbc44fcfe03f"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/bootstrap-reuse/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\bootstrap-reuse\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/bootstrap-reuse/stdout.log",
+      "sha256": "72847fbe21fa0aa23581a18301c27958d674cdb8872c91aebed023628b6b291c",
+      "bytes": 366,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\bootstrap-reuse\\stdout.log",
+      "original_sha256": "57734cd164342b5392a794512c9879e90337ef89bbd48a352c268d5ba0bd55f8"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/bootstrap/result.json",
+      "sha256": "5ce4e8907edae175488a81308e9929550dcfae382575cec51949e4536a66585b",
+      "bytes": 219,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\bootstrap\\result.json",
+      "original_sha256": "a77731e5f2ba23923d5cc59178f51c7e4861e2904a6c0db1003f798169b063c5"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/bootstrap/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\bootstrap\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/bootstrap/stdout.log",
+      "sha256": "72847fbe21fa0aa23581a18301c27958d674cdb8872c91aebed023628b6b291c",
+      "bytes": 366,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\bootstrap\\stdout.log",
+      "original_sha256": "57734cd164342b5392a794512c9879e90337ef89bbd48a352c268d5ba0bd55f8"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/initialize/result.json",
+      "sha256": "1ded041c8f9330fcc0ffe6397caab38f13c21082923c7b496c5604a4c262c2fa",
+      "bytes": 376,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\initialize\\result.json",
+      "original_sha256": "a514303065a929f170346978b0da43dc3825ce1abf9a246361b8932280fd8624"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/initialize/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\initialize\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/initialize/stdout.log",
+      "sha256": "521c8553797718486d178d08a1faa58b021ed8bfc0c2cbcd54be43b1c08f2069",
+      "bytes": 405,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\initialize\\stdout.log",
+      "original_sha256": "33a9129c90732d1d551c39f76cf675bf08308acc0bcedf18d3e95eef6eeb7bc4"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/isolation/result.json",
+      "sha256": "16bbd55e9abe9374fe1c29d0aa9f44c20042a87e7c2d3aa05528218f1354cd7b",
+      "bytes": 507,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\isolation\\result.json",
+      "original_sha256": "78904b62fc146856b9ad5592e99412e941939c41847fd61daad3314aecb390f6"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/isolation/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\isolation\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/isolation/stdout.log",
+      "sha256": "9d01c6034d1a965da10ecc96477472c1d0e13eaa85fa0b0c3ee7e4fce4202f45",
+      "bytes": 366,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\isolation\\stdout.log",
+      "original_sha256": "2f28c7cc871f12f45421f8b16a74e2f15c3bb2f3422c5fe768a71b3f29626351"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/missing-client/result.json",
+      "sha256": "fcb5a2dcd61e4b9986a7ea52fd622aa8ce176d75bccffef3555cdc204506ecf1",
+      "bytes": 335,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\missing-client\\result.json",
+      "original_sha256": "f34612a792d7301558b465f0a339239d9d2b463ea023d4de670c2be88683c62c"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/missing-client/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\missing-client\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/missing-client/stdout.log",
+      "sha256": "f9b5922be4d66bd12c31b25ad54afef92eb1600746c718e47a8d3b34e57a1388",
+      "bytes": 2731,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\missing-client\\stdout.log",
+      "original_sha256": "37a96f683356d7556b22647aff5cbbf94cd1cef9a09ebbd8b595f6dd5d9858b1"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/planner/result.json",
+      "sha256": "1299295036f8171e0abdaea5157619007e553285f6ee6222a9e8f1c17fbf13bf",
+      "bytes": 282,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\planner\\result.json",
+      "original_sha256": "fc0c24c130d0171b6b2a5d4a43d9285bcfbef8e028ed6be79d42f9e006d38b1c"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/planner/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\planner\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/planner/stdout.log",
+      "sha256": "287b5c319e210044f20e52e45dda020019996ed905210d892481831b15fd046c",
+      "bytes": 168,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\planner\\stdout.log",
+      "original_sha256": "a6d6694b31011c1adc080e8632548e924babdbc0179605156985ad9b67938836"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/platform-contract/result.json",
+      "sha256": "b308d9fe10647fd4c13a2aa535f67b213085cc84e39baffaac374483696c7aac",
+      "bytes": 290,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\platform-contract\\result.json",
+      "original_sha256": "bdf5dc04002495404be81cb2bdd2fa44a9c8c9dbae48301d4d9bd24fc61eeee5"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/platform-contract/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\platform-contract\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/platform-contract/stdout.log",
+      "sha256": "cf439a0b7b52732e61dcb189f9b6a802bb7a101825fcad9fc3c62841c71ace77",
+      "bytes": 157,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\platform-contract\\stdout.log",
+      "original_sha256": "a4a44f59525a445ec2c04aafd297015971bafa418892d78f9ee22512d0850fc8"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/preflight/result.json",
+      "sha256": "959808cbbe0a67e2ed32cdfdbb5438fd1e863c017d80299994132a9132fcfbd0",
+      "bytes": 330,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\preflight\\result.json",
+      "original_sha256": "c241cc5f467f52c9fd31302a20aa5a29164cf43d0bb06bdf0a5b5c207c738d2d"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/preflight/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\preflight\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/preflight/stdout.log",
+      "sha256": "10c610bffc632687389b7273e105b93dc940daffb89069c774f1cbb3b3122aad",
+      "bytes": 119,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\preflight\\stdout.log",
+      "original_sha256": "c4e62e80d861860c4dc35cfcc9b22ecb42f9cbd962b6bfd0ed9ba1b3ea3bb8f0"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/prompt-contract/result.json",
+      "sha256": "a4b73c3cbfdb9f98acd9d7e0c750a149304df8cc95e93be431094cd3eab7187f",
+      "bytes": 286,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\prompt-contract\\result.json",
+      "original_sha256": "fe56afe169ede58c456a48740e1ce45aaa0dcafb525abd291f49f63084e7a0f6"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/prompt-contract/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\prompt-contract\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/prompt-contract/stdout.log",
+      "sha256": "9e3941654beaa52f544f2c92571d745d279733c0050025b595c5e8ad778295f9",
+      "bytes": 601,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\prompt-contract\\stdout.log",
+      "original_sha256": "d0d4836004204951d3185b474d974312cde373d641a8dc5fd4d625c0f07d14ef"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/stable-client-doctor/result.json",
+      "sha256": "4fea6c112a1acd34a71ff406204a04cb2e5e2a4bee53115e19715e70c47a495c",
+      "bytes": 324,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\stable-client-doctor\\result.json",
+      "original_sha256": "bbff271652ce8ef4d842ad67a2ae5d2d0af05cff3a9b315b2f690a86b0e3afce"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/stable-client-doctor/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\stable-client-doctor\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/stable-client-doctor/stdout.log",
+      "sha256": "7dda33a4576785a0f9b5884a5dc44863a72225f818475dfd74180f38d3ce3b86",
+      "bytes": 3963,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\stable-client-doctor\\stdout.log",
+      "original_sha256": "b00a1ed6699df51849d80a9a85a3c86a0bad0d0106d9eec2a1638259ff7cd8bd"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/unittest/result.json",
+      "sha256": "0237c595cce691e619b5db0d544902109506cfaa05a61cbd648070fd12c7e0b6",
+      "bytes": 296,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\unittest\\result.json",
+      "original_sha256": "e33c68103afa34a44348a9130d2d852105c610d37f05572c59c32f4fcbe5698d"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/unittest/stderr.log",
+      "sha256": "efd4a83f94d7f8c9a397be700a06649526c78d98b9ead3e4c79f5ac9ebd88828",
+      "bytes": 1053,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\unittest\\stderr.log",
+      "original_sha256": "ac9e0e5cf66fbe45546e50f92f14d1c6b1bfba782431863a59180efd91781f08"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/operations/unittest/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\operations\\unittest\\stdout.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/results.json",
+      "sha256": "fd39ed23fc13ef75fdc144d1b79d551d20071172084e1f79f0b3db77216dda8c",
+      "bytes": 5082,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\results.json",
+      "original_sha256": "9db80e16690e51924590c8e7dcbf3417a4aa232e237229c399aadd0b658dcbd1"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-checkout-20261102-02/source-inputs.json",
+      "sha256": "abd81f57cd8e20c1badc27cd4146be7ed6480fe216b6110f5261e081ee444d93",
+      "bytes": 162346,
+      "original": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\source-inputs.json",
+      "original_sha256": "d28f655daea94e76be8d4fdd05e7b789195c74d04eacf70d7a4a1969f957c6d5"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/acceptance-prompt.log",
+      "sha256": "4c2935faf9b85081511d772d0faa76f6cc278fdfae0cdb34f8d0281ebbd90b70",
+      "bytes": 624,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\acceptance-prompt.log",
+      "original_sha256": "4c2935faf9b85081511d772d0faa76f6cc278fdfae0cdb34f8d0281ebbd90b70"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/bootstrap-reuse.log",
+      "sha256": "b30da3de2072fc7eab3f7e2a24c501eca460f416cfe9dae89fdd70dd44652fa3",
+      "bytes": 275,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\bootstrap-reuse.log",
+      "original_sha256": "b30da3de2072fc7eab3f7e2a24c501eca460f416cfe9dae89fdd70dd44652fa3"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/bootstrap.log",
+      "sha256": "b30da3de2072fc7eab3f7e2a24c501eca460f416cfe9dae89fdd70dd44652fa3",
+      "bytes": 275,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\bootstrap.log",
+      "original_sha256": "b30da3de2072fc7eab3f7e2a24c501eca460f416cfe9dae89fdd70dd44652fa3"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/chemistry-dependencies.log",
+      "sha256": "f496deff98f8ee27f45b3a73a30cf188c82db71c697fe92de82ec8d587bc385e",
+      "bytes": 1727,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\chemistry-dependencies.log",
+      "original_sha256": "f496deff98f8ee27f45b3a73a30cf188c82db71c697fe92de82ec8d587bc385e"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/command.json",
+      "sha256": "88e890840b174b0aee33b25f40aa6c48b68377d51e5ad9c0ea1778e6bda7f1c7",
+      "bytes": 1145,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\command.json",
+      "original_sha256": "9f14ad6f7e3009bab5272b38e07383c43b5f6e4158df54058edcf4c51d534317"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/empty.log",
+      "sha256": "28ea140b639575c62d1899ba5708c3f733513da5a87a8e19ba44329d581ad1ea",
+      "bytes": 63,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\empty.log",
+      "original_sha256": "28ea140b639575c62d1899ba5708c3f733513da5a87a8e19ba44329d581ad1ea"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/ethanol.log",
+      "sha256": "064dabc55ea98621ab0ba06f8a00b304b657591fe3ba26fa76119eea95267371",
+      "bytes": 293,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\ethanol.log",
+      "original_sha256": "064dabc55ea98621ab0ba06f8a00b304b657591fe3ba26fa76119eea95267371"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/git-version.log",
+      "sha256": "469b1acf8275955250bdef50b4190688e8e36453cfcb29816ae6dcfb31097039",
+      "bytes": 19,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\git-version.log",
+      "original_sha256": "469b1acf8275955250bdef50b4190688e8e36453cfcb29816ae6dcfb31097039"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/initialize.log",
+      "sha256": "0a7a463a7f53198044ff0115636b41c9aa66502ff72c9aec687420bcfa04a584",
+      "bytes": 322,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\initialize.log",
+      "original_sha256": "0a7a463a7f53198044ff0115636b41c9aa66502ff72c9aec687420bcfa04a584"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/invalid.log",
+      "sha256": "e13676eedb4699820343b765b2d16e8eedd9a64087cd54b9c772dc046092fb9d",
+      "bytes": 349,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\invalid.log",
+      "original_sha256": "e13676eedb4699820343b765b2d16e8eedd9a64087cd54b9c772dc046092fb9d"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/isolation.log",
+      "sha256": "5028035987720bbde527670139a53a719bbf1284b1b76907984e49feadf83d8d",
+      "bytes": 129,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\isolation.log",
+      "original_sha256": "5028035987720bbde527670139a53a719bbf1284b1b76907984e49feadf83d8d"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/missing-client.log",
+      "sha256": "7ef1b2ab3a7fabb29148d44dd183f8ff1e06683e9d7e04e3a73715c6737c4dbc",
+      "bytes": 2448,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\missing-client.log",
+      "original_sha256": "7ef1b2ab3a7fabb29148d44dd183f8ff1e06683e9d7e04e3a73715c6737c4dbc"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/phenol.log",
+      "sha256": "9d244bf21b667ca40334409c7dae071f43fffd53cdf55efd64e96da967f524b1",
+      "bytes": 305,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\phenol.log",
+      "original_sha256": "9d244bf21b667ca40334409c7dae071f43fffd53cdf55efd64e96da967f524b1"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/planner.log",
+      "sha256": "287b5c319e210044f20e52e45dda020019996ed905210d892481831b15fd046c",
+      "bytes": 168,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\planner.log",
+      "original_sha256": "287b5c319e210044f20e52e45dda020019996ed905210d892481831b15fd046c"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/platform-contract.log",
+      "sha256": "cf439a0b7b52732e61dcb189f9b6a802bb7a101825fcad9fc3c62841c71ace77",
+      "bytes": 157,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\platform-contract.log",
+      "original_sha256": "cf439a0b7b52732e61dcb189f9b6a802bb7a101825fcad9fc3c62841c71ace77"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/preflight.log",
+      "sha256": "10c610bffc632687389b7273e105b93dc940daffb89069c774f1cbb3b3122aad",
+      "bytes": 119,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\preflight.log",
+      "original_sha256": "10c610bffc632687389b7273e105b93dc940daffb89069c774f1cbb3b3122aad"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/process.json",
+      "sha256": "1d4de2d974e88a133a2e6a9dbeb76c8e5d742096e0546d4fa7e5a5b61594a292",
+      "bytes": 54,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\process.json",
+      "original_sha256": "957b8af075447133c67b23a017c744e886e576601619c2e99dfb28b71b484964"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/progress.json",
+      "sha256": "3c743d42b930b2714be02513bd59951f361761987f376fad63e1ed77262daa9b",
+      "bytes": 5177,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\progress.json",
+      "original_sha256": "3c743d42b930b2714be02513bd59951f361761987f376fad63e1ed77262daa9b"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/prompt-contract.log",
+      "sha256": "9e3941654beaa52f544f2c92571d745d279733c0050025b595c5e8ad778295f9",
+      "bytes": 601,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\prompt-contract.log",
+      "original_sha256": "9e3941654beaa52f544f2c92571d745d279733c0050025b595c5e8ad778295f9"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/results.json",
+      "sha256": "acbbe1c3650494eb664c9c74f2dd122f89f9c18b0e9321d9883d90591b8ba981",
+      "bytes": 5663,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\results.json",
+      "original_sha256": "acbbe1c3650494eb664c9c74f2dd122f89f9c18b0e9321d9883d90591b8ba981"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\stderr.log",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/stdout.log",
+      "sha256": "933e136200bea77e196be614b76326196779f7c2d3a29b2231e3ee942280fa70",
+      "bytes": 288,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\stdout.log",
+      "original_sha256": "236840b849bf280fbb70b4d2e991259aea55bbba5ba0bcd0366b693b001cb862"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/system-git.log",
+      "sha256": "ced531213a185929710213ed52fdc66efe66c4caff89222c3a071744084bb7f2",
+      "bytes": 7560,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\system-git.log",
+      "original_sha256": "ced531213a185929710213ed52fdc66efe66c4caff89222c3a071744084bb7f2"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/system-package-index.log",
+      "sha256": "95b0ab6b23a2307b201a1bf77f4a88079c10c528c290b8bf388cf78a7c5bce06",
+      "bytes": 522,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\system-package-index.log",
+      "original_sha256": "95b0ab6b23a2307b201a1bf77f4a88079c10c528c290b8bf388cf78a7c5bce06"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/unittest.log",
+      "sha256": "73dea36310a8aa3d704fa741147eb4722cc31fef4dae789a13c5b97918eadf17",
+      "bytes": 318,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\unittest.log",
+      "original_sha256": "73dea36310a8aa3d704fa741147eb4722cc31fef4dae789a13c5b97918eadf17"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-linux-20261102-02/whitespace.log",
+      "sha256": "483857a93feebeb9ebc11c6e249ba440f2ddd0f4de06f55daf4b8c1c3acd06da",
+      "bytes": 66,
+      "original": "E:\\Users\\27343\\Docker\\portable-linux-20261102-02\\whitespace.log",
+      "original_sha256": "483857a93feebeb9ebc11c6e249ba440f2ddd0f4de06f55daf4b8c1c3acd06da"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-client-20261102-01/install.json",
+      "sha256": "ae90f7f12e5db0fe2c10d2bc0a9d238b61de5feba3899ad40ac4b9b37ca3079e",
+      "bytes": 459,
+      "original": "E:\\Users\\27343\\Docker\\portable-client-20261102-01\\install.json",
+      "original_sha256": "83ac4bd88515f0aef6db634197711d56d5ff3b23ddbe694a0ec198534a67212c"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-client-20261102-01/install.log",
+      "sha256": "92926d45ece2940e4b3f80e8535009e49b46f1842abd825740ceb638db5b61d6",
+      "bytes": 25,
+      "original": "E:\\Users\\27343\\Docker\\portable-client-20261102-01\\install.log",
+      "original_sha256": "6a408772f9a9a52d5f8388ac96f15ba02dedaa368679c8ff45b257e6b223e64f"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-client-20261102-01/version-query.json",
+      "sha256": "6ecf468179f496bffc22b2407b7a6a425911ec065e2be367b1f713fb518c021e",
+      "bytes": 318,
+      "original": "E:\\Users\\27343\\Docker\\portable-client-20261102-01\\version-query.json",
+      "original_sha256": "411244fadecaf5720375bb943229e9ecee33f95b2eb3d48a1dc30292f4683db6"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-review-20261102-02/targeted.json",
+      "sha256": "fb95ce0f484116b263880eb138581576c3b3179f8131686ef32dbbedcc1b771d",
+      "bytes": 361,
+      "original": "E:\\Users\\27343\\Docker\\portable-review-20261102-02\\targeted.json",
+      "original_sha256": "e830a7c448e6f3174b45c514b5536896ad84b2a633a10039ae44bbfa456b2d52"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-review-20261102-02/targeted.log",
+      "sha256": "194684a05e348cc27d4adb61c7d94551357411e0c206475efab3d8964c9ff401",
+      "bytes": 804,
+      "original": "E:\\Users\\27343\\Docker\\portable-review-20261102-02\\targeted.log",
+      "original_sha256": "af759d9cf2c7b0a4836331f15e2cead57d8a7dd35cf56b285ce2ab10ee562328"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-json-20261102-01/bootstrap.log",
+      "sha256": "ea28818f4872966220891395bc044354c058ccf6b4b5f81910468df3c8a21029",
+      "bytes": 321,
+      "original": "E:\\Users\\27343\\Docker\\portable-json-20261102-01\\bootstrap.log",
+      "original_sha256": "623a2796b397e464638f266452a6c823a3a59882c5a105a280a5ec04272e3e72"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-json-20261102-01/dependencies.log",
+      "sha256": "df0e6c628b2d284e2d721e9b9eecb6e601fc01b46f76130e799c564da4a16661",
+      "bytes": 107,
+      "original": "E:\\Users\\27343\\Docker\\portable-json-20261102-01\\dependencies.log",
+      "original_sha256": "b434f8642686d8ef98641fd60bbab24203122ae0e403794d0f9e61abc366ffc2"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-json-20261102-01/initialize.log",
+      "sha256": "6f3b851fee680a0246d7afae1288ac25c2189e40504f8f66225399d0caf35e46",
+      "bytes": 404,
+      "original": "E:\\Users\\27343\\Docker\\portable-json-20261102-01\\initialize.log",
+      "original_sha256": "c2c9154d9ef76536b7708dc7ce0943b5c26bbba3c76ef8bd361d87e94045f286"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-json-20261102-01/preflight.log",
+      "sha256": "10c610bffc632687389b7273e105b93dc940daffb89069c774f1cbb3b3122aad",
+      "bytes": 119,
+      "original": "E:\\Users\\27343\\Docker\\portable-json-20261102-01\\preflight.log",
+      "original_sha256": "c4e62e80d861860c4dc35cfcc9b22ecb42f9cbd962b6bfd0ed9ba1b3ea3bb8f0"
+    },
+    {
+      "path": "validation/portable/evidence-20261102/portable-json-20261102-01/results.json",
+      "sha256": "b1304d25e42f4cf2e56553258df7926146b1ae37784aa9263ffb9559681d44b7",
+      "bytes": 1801,
+      "original": "E:\\Users\\27343\\Docker\\portable-json-20261102-01\\results.json",
+      "original_sha256": "b9ba9c02ab25994e7ed248f9582d7d1587151436234be194f88c78ddffcf76b3"
+    }
+  ]
+}

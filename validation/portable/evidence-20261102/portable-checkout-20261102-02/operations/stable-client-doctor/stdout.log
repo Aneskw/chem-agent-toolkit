@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "status": "ready",
+  "mode": "build",
+  "scope": "Zero-inference prerequisites and advertised client capabilities; not authentication, entitlement or acceptance",
+  "runtime_required": true,
+  "checks": [
+    {
+      "object": "source:sibling_source",
+      "path": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\validation\\sibling-json\\source",
+      "expected": "retained readable files",
+      "actual": {
+        "files": 5
+      },
+      "status": "passed",
+      "code": null,
+      "reason": ""
+    },
+    {
+      "object": "host.python.jsonschema",
+      "path": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+      "expected": "jsonschema available in the current interpreter",
+      "actual": "available",
+      "status": "passed",
+      "code": null,
+      "reason": "No dependency is installed or repaired by readiness"
+    },
+    {
+      "object": "model.backend",
+      "path": "codex",
+      "expected": "resolvable executable",
+      "actual": [
+        "E:\\Users\\27343\\Docker\\portable-client-20261102-01\\prefix\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe"
+      ],
+      "status": "passed",
+      "code": null,
+      "reason": ""
+    },
+    {
+      "object": "Docker",
+      "path": "local-docker",
+      "expected": "available daemon",
+      "actual": {
+        "observed_at": "2026-11-02T15:47:47.913260+00:00",
+        "backend": "local-docker",
+        "status": "available",
+        "gaps": [],
+        "platform": "linux/x86_64",
+        "memory_bytes": 8115146752,
+        "cpus": 12,
+        "engine_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6",
+        "server_version": "29.8.2"
+      },
+      "status": "passed",
+      "code": null,
+      "reason": "Required only for explicitly executable build; discovery/draft remain usable offline"
+    },
+    {
+      "object": "runtime_defaults.shared_tool",
+      "path": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\validation\\sibling-json\\source\\scripts\\screen.py",
+      "expected": "supported declared source structure",
+      "actual": "closed-python-sibling-json-v1",
+      "status": "passed",
+      "code": null,
+      "reason": ""
+    },
+    {
+      "object": "host.git",
+      "path": "git",
+      "expected": "Git executable on PATH",
+      "actual": "D:\\Program Files\\Git\\cmd\\git.EXE",
+      "status": "passed",
+      "code": null
+    }
+  ],
+  "gaps": [],
+  "model_calls": 0,
+  "build_calls": 0,
+  "qualification": "not_granted",
+  "source_acquisition_pending": false,
+  "client_compatibility": {
+    "status": "compatible",
+    "command": [
+      "E:\\Users\\27343\\Docker\\portable-client-20261102-01\\prefix\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe"
+    ],
+    "version": "codex-cli 0.166.0",
+    "probes": [
+      {
+        "probe": "version",
+        "argv": [
+          "--version"
+        ],
+        "exit_code": 0,
+        "seconds": 0.039992500001972076
+      },
+      {
+        "probe": "exec",
+        "argv": [
+          "exec",
+          "--help"
+        ],
+        "exit_code": 0,
+        "seconds": 0.03344729999662377
+      },
+      {
+        "probe": "resume",
+        "argv": [
+          "exec",
+          "resume",
+          "--help"
+        ],
+        "exit_code": 0,
+        "seconds": 0.03506080000079237
+      },
+      {
+        "probe": "features",
+        "argv": [
+          "features",
+          "list"
+        ],
+        "exit_code": 0,
+        "seconds": 0.05204789999697823
+      }
+    ],
+    "missing": [],
+    "model_calls": 0,
+    "authentication": "not_checked",
+    "model_entitlement": "not_checked",
+    "scope": "advertised CLI flags/features only; no inference or account access proof"
+  }
+}

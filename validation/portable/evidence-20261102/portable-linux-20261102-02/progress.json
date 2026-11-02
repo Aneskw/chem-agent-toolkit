@@ -1,0 +1,226 @@
+{
+  "operations": [
+    {
+      "label": "system-package-index",
+      "command": [
+        "apt-get",
+        "update"
+      ],
+      "exit_code": 0,
+      "seconds": 7.707383166001819
+    },
+    {
+      "label": "system-git",
+      "command": [
+        "apt-get",
+        "install",
+        "-y",
+        "--no-install-recommends",
+        "git"
+      ],
+      "exit_code": 0,
+      "seconds": 23.15329284100153
+    },
+    {
+      "label": "git-version",
+      "command": [
+        "git",
+        "--version"
+      ],
+      "exit_code": 0,
+      "seconds": 0.006699942001432646
+    },
+    {
+      "label": "bootstrap",
+      "command": [
+        "/usr/local/bin/python",
+        "scripts/bootstrap.py",
+        "--yaml"
+      ],
+      "exit_code": 0,
+      "seconds": 14.720259198002168
+    },
+    {
+      "label": "bootstrap-reuse",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "scripts/bootstrap.py",
+        "--yaml"
+      ],
+      "exit_code": 0,
+      "seconds": 1.255426827003248
+    },
+    {
+      "label": "isolation",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "-c",
+        "import sys,shutil,json,creation_pipeline; print(json.dumps({\"prefix\":sys.prefix,\"base_prefix\":sys.base_prefix,\"codex\":shutil.which(\"codex\"),\"module\":creation_pipeline.__file__}))"
+      ],
+      "exit_code": 0,
+      "seconds": 0.08890074400551384
+    },
+    {
+      "label": "initialize",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "-m",
+        "creation_pipeline",
+        "init",
+        "--model",
+        "account-model-placeholder",
+        "--output",
+        ".pipeline/configs/descriptor.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.653458150998631
+    },
+    {
+      "label": "preflight",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "-m",
+        "creation_pipeline",
+        "build",
+        ".pipeline/configs/descriptor.json",
+        "--preflight"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6172694319975562
+    },
+    {
+      "label": "missing-client",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "-m",
+        "creation_pipeline",
+        "doctor",
+        ".pipeline/configs/descriptor.json",
+        "--offline"
+      ],
+      "exit_code": 1,
+      "seconds": 0.6426863160013454
+    },
+    {
+      "label": "unittest",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 108.55667994700343
+    },
+    {
+      "label": "prompt-contract",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "validation/deepseek-api/verify_prompt_contract.py"
+      ],
+      "exit_code": 0,
+      "seconds": 1.2342494609983987
+    },
+    {
+      "label": "acceptance-prompt",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "validation/deepseek-api/verify_acceptance_prompt.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.46438503099489026
+    },
+    {
+      "label": "planner",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "validation/deepseek-api/verify_planner.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.41969201900064945
+    },
+    {
+      "label": "platform-contract",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "validation/deepseek-api/verify_skillnet_contract.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6478058250067988
+    },
+    {
+      "label": "chemistry-dependencies",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "--no-cache-dir",
+        "-r",
+        "validation/sibling-json/source/requirements.txt"
+      ],
+      "exit_code": 0,
+      "seconds": 30.11964285000431
+    },
+    {
+      "label": "ethanol",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "validation/sibling-json/source/scripts/screen.py",
+        "--smiles",
+        "CCO"
+      ],
+      "exit_code": 0,
+      "seconds": 0.7053627390050679
+    },
+    {
+      "label": "phenol",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "validation/sibling-json/source/scripts/screen.py",
+        "--smiles",
+        "c1ccccc1O"
+      ],
+      "exit_code": 0,
+      "seconds": 0.599742653001158
+    },
+    {
+      "label": "invalid",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "validation/sibling-json/source/scripts/screen.py",
+        "--smiles",
+        "not-a-smiles"
+      ],
+      "exit_code": 2,
+      "seconds": 0.7055021710039
+    },
+    {
+      "label": "empty",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "validation/sibling-json/source/scripts/screen.py",
+        "--smiles",
+        ""
+      ],
+      "exit_code": 2,
+      "seconds": 0.8111008810010389
+    },
+    {
+      "label": "whitespace",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "validation/sibling-json/source/scripts/screen.py",
+        "--smiles",
+        "   "
+      ],
+      "exit_code": 2,
+      "seconds": 0.6722775789967272
+    }
+  ]
+}

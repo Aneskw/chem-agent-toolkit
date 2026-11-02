@@ -1,0 +1,21 @@
+E:\Users\27343\Docker\portable-checkout-20261102-01\Windows user checkout with spaces\creation_pipeline\records.py:81: DeprecationWarning: pathlib.PurePath.is_reserved() is deprecated and scheduled for removal in Python 3.15. Use os.path.isreserved() to detect reserved paths on Windows.
+  or PureWindowsPath(p).is_reserved() for p in parts):
+E:\Users\27343\Docker\portable-checkout-20261102-01\Windows user checkout with spaces\creation_pipeline\artifacts\layout.py:19: DeprecationWarning: pathlib.PurePath.is_reserved() is deprecated and scheduled for removal in Python 3.15. Use os.path.isreserved() to detect reserved paths on Windows.
+  or any(p.endswith((".", " ")) or PureWindowsPath(p).is_reserved() for p in value.split("/"))
+{"status": "error", "error": "shared_tool.requirements.executables: external executables unsupported in v1; actual=['obabel']; use self-contained mode without shared_tool or a supported Python-only tool"}
+======================================================================
+FAIL: test_complete_native_build_and_failed_turn_resume (pipeline.test_native.NativeTests.test_complete_native_build_and_failed_turn_resume)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Users\27343\Docker\portable-checkout-20261102-01\Windows user checkout with spaces\tests\pipeline\test_native.py", line 354, in test_complete_native_build_and_failed_turn_resume
+    self.assertEqual(result["status"], "failed", result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'blocked' != 'failed'
+- blocked
++ failed
+ : {'status': 'blocked', 'phase': 'readiness', 'readiness': {'version': 1, 'status': 'blocked', 'mode': 'build', 'scope': 'observed prerequisites only; source/delivery closure and provider entitlement remain subject to later gates', 'runtime_required': False, 'checks': [{'object': 'source:code', 'path': 'E:\\Users\\27343\\Docker\\portable-checkout-20261102-01\\Windows user checkout with spaces\\.pipeline\\test-tmp\\tmplizowvtm\\source.py', 'expected': 'retained readable files', 'actual': {'files': 1}, 'status': 'passed', 'code': None, 'reason': ''}, {'object': 'model.backend', 'path': 'codex', 'expected': 'resolvable executable', 'actual': 'Codex CLI is not installed or is not on PATH', 'status': 'blocked', 'code': 'model_client_unavailable', 'reason': ''}, {'object': 'Docker', 'path': 'local-docker', 'expected': 'available daemon', 'actual': {'observed_at': '2026-11-02T15:29:47.943485+00:00', 'backend': 'local-docker', 'status': 'available', 'gaps': [], 'platform': 'linux/x86_64', 'memory_bytes': 8115146752, 'cpus': 12, 'engine_id': 'a7981e1d-64c3-431d-8287-8dad803ceaf6', 'server_version': '29.8.2'}, 'status': 'passed', 'code': None, 'reason': 'Required only for explicitly executable build; discovery/draft remain usable offline'}], 'gaps': [{'object': 'model.backend', 'path': 'codex', 'expected': 'resolvable executable', 'actual': 'Codex CLI is not installed or is not on PATH', 'status': 'blocked', 'code': 'model_client_unavailable', 'reason': ''}], 'model_calls': 0, 'build_calls': 0, 'qualification': 'not_granted', 'source_acquisition_pending': False}, 'model_calls': 0, 'errors': [{'object': 'model.backend', 'path': 'codex', 'expected': 'resolvable executable', 'actual': 'Codex CLI is not installed or is not on PATH', 'status': 'blocked', 'code': 'model_client_unavailable', 'reason': ''}]}
+
+----------------------------------------------------------------------
+Ran 857 tests in 269.852s
+
+FAILED (failures=1, skipped=3)

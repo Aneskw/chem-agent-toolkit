@@ -1,0 +1,79 @@
+{
+  "operations": [
+    {
+      "label": "bootstrap",
+      "command": [
+        "/usr/local/bin/python",
+        "scripts/bootstrap.py",
+        "--yaml"
+      ],
+      "exit_code": 0,
+      "seconds": 12.468407870997908
+    },
+    {
+      "label": "isolation",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "-c",
+        "import sys,shutil,json,creation_pipeline; print(json.dumps({\"prefix\":sys.prefix,\"base_prefix\":sys.base_prefix,\"codex\":shutil.which(\"codex\"),\"module\":creation_pipeline.__file__}))"
+      ],
+      "exit_code": 0,
+      "seconds": 0.05965150300471578
+    },
+    {
+      "label": "initialize",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "-m",
+        "creation_pipeline",
+        "init",
+        "--model",
+        "account-model-placeholder",
+        "--output",
+        ".pipeline/configs/descriptor.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.3661999000032665
+    },
+    {
+      "label": "preflight",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "-m",
+        "creation_pipeline",
+        "build",
+        ".pipeline/configs/descriptor.json",
+        "--preflight"
+      ],
+      "exit_code": 0,
+      "seconds": 0.3308383380062878
+    },
+    {
+      "label": "missing-client",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "-m",
+        "creation_pipeline",
+        "doctor",
+        ".pipeline/configs/descriptor.json",
+        "--offline"
+      ],
+      "exit_code": 1,
+      "seconds": 0.3467713959980756
+    },
+    {
+      "label": "unittest",
+      "command": [
+        "/workspace/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-q"
+      ],
+      "exit_code": 1,
+      "seconds": 91.29342012899724
+    }
+  ]
+}

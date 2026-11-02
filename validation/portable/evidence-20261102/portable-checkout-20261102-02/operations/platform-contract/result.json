@@ -1,0 +1,9 @@
+{
+  "label": "platform-contract",
+  "command": [
+    "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+    "validation/deepseek-api/verify_skillnet_contract.py"
+  ],
+  "exit_code": 0,
+  "seconds": 0.6007402999966871
+}

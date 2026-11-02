@@ -16,6 +16,12 @@ from creation_pipeline.records import clean_run, redact
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Discover reusable tool capabilities and build source-grounded skill packages")
     commands = parser.add_subparsers(dest="command", required=True)
+    child = commands.add_parser('init', help='Create the portable descriptor example configuration; never overwrites')
+    child.add_argument('--model', required=True, help='A model identifier available to your own Codex account')
+    child.add_argument('--output', required=True)
+    child = commands.add_parser('doctor', help='Zero-inference prerequisites and Codex flag/feature compatibility')
+    child.add_argument('config')
+    child.add_argument('--offline', action='store_true', help='Skip Docker observations; runtime availability stays deferred')
     child = commands.add_parser('manage', help='Versioned local management DTO; existing execution/qualification chain')
     child.add_argument('request', help='JSON request envelope for chem-local-management/v1')
     child = commands.add_parser('readiness', help='Observe prerequisites before inference; no construction, repair or qualification')
@@ -95,7 +101,13 @@ def main(argv=None):
     child.add_argument('--recover-lock', action='store_true')
     args = parser.parse_args(argv)
     try:
-        if args.command == 'manage':
+        if args.command == 'init':
+            from creation_pipeline.onboarding import initialize
+            result = initialize(args.output,args.model)
+        elif args.command == 'doctor':
+            from creation_pipeline.doctor import from_config
+            result = from_config(args.config,args.offline)
+        elif args.command == 'manage':
             from creation_pipeline.management import from_file, exit_code
             result = from_file(args.request)
             print(json.dumps(result, ensure_ascii=False, indent=2))

@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-02T15:21:40.348037+00:00",
+  "command": [
+    "npm.cmd",
+    "--cache",
+    "E:\\Users\\27343\\Docker\\portable-client-20261102-01\\npm-cache",
+    "--proxy",
+    "http://127.0.0.1:7897",
+    "install",
+    "--global",
+    "--prefix",
+    "E:\\Users\\27343\\Docker\\portable-client-20261102-01\\prefix",
+    "@openai/codex@0.166.0"
+  ],
+  "exit_code": 0,
+  "scope": "isolated prefix/cache, no host global configuration or authentication"
+}

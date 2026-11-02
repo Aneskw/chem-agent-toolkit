@@ -1,5 +1,8 @@
 # Documentation
 
+For a different computer, start with [new-machine setup](pipeline/new-machine-setup.md).
+See the [isolated startup evidence](integration/portable-startup-20261102.md) for verified scope.
+
 Current entry: [small-batch operations](pipeline/batch-operations.md),
 [readiness review](integration/batch-readiness-20261102.md),
 [shared tools](integration/shared-tool-layer-current-design.md),

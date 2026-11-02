@@ -1,0 +1,153 @@
+{
+  "at": "2026-11-02T15:47:50.319278+00:00",
+  "passed": true,
+  "models": 0,
+  "builds": 0,
+  "new_business_executions": 0,
+  "source_export": "candidate tracked and untracked nonignored source; no operational data or credentials",
+  "isolation": {
+    "prefix": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv",
+    "base_prefix": "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64",
+    "module": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\creation_pipeline\\__init__.py",
+    "codex": null,
+    "jsonschema": "4.26.0"
+  },
+  "stable_client_version": "codex-cli 0.166.0",
+  "operations": [
+    {
+      "label": "bootstrap",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "scripts/bootstrap.py",
+        "--yaml"
+      ],
+      "exit_code": 0,
+      "seconds": 49.058760599997186
+    },
+    {
+      "label": "bootstrap-reuse",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+        "scripts/bootstrap.py",
+        "--yaml"
+      ],
+      "exit_code": 0,
+      "seconds": 2.745439799997257
+    },
+    {
+      "label": "isolation",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+        "-c",
+        "import sys,json,shutil,importlib.metadata,creation_pipeline; print(json.dumps({\"prefix\":sys.prefix,\"base_prefix\":sys.base_prefix,\"module\":creation_pipeline.__file__,\"codex\":shutil.which(\"codex\"),\"jsonschema\":importlib.metadata.version(\"jsonschema\")}))"
+      ],
+      "exit_code": 0,
+      "seconds": 0.45466139999916777
+    },
+    {
+      "label": "initialize",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+        "-m",
+        "creation_pipeline",
+        "init",
+        "--model",
+        "account-model-placeholder",
+        "--output",
+        ".pipeline/configs/descriptor.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.4495878999950946
+    },
+    {
+      "label": "preflight",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+        "-m",
+        "creation_pipeline",
+        "build",
+        ".pipeline/configs/descriptor.json",
+        "--preflight"
+      ],
+      "exit_code": 0,
+      "seconds": 0.606622300001618
+    },
+    {
+      "label": "missing-client",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+        "-m",
+        "creation_pipeline",
+        "doctor",
+        ".pipeline/configs/descriptor.json",
+        "--offline"
+      ],
+      "exit_code": 1,
+      "seconds": 0.9913908000016818
+    },
+    {
+      "label": "unittest",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 529.1152617999978
+    },
+    {
+      "label": "prompt-contract",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+        "validation/deepseek-api/verify_prompt_contract.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.7519373999966774
+    },
+    {
+      "label": "acceptance-prompt",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+        "validation/deepseek-api/verify_acceptance_prompt.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.37248239999462385
+    },
+    {
+      "label": "planner",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+        "validation/deepseek-api/verify_planner.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.465632799998275
+    },
+    {
+      "label": "platform-contract",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+        "validation/deepseek-api/verify_skillnet_contract.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.6007402999966871
+    },
+    {
+      "label": "stable-client-doctor",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+        "-m",
+        "creation_pipeline",
+        "doctor",
+        ".pipeline/configs/descriptor.json"
+      ],
+      "exit_code": 0,
+      "seconds": 1.3064847999994527
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "label": "initialize",
+  "command": [
+    "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+    "-m",
+    "creation_pipeline",
+    "init",
+    "--model",
+    "account-model-placeholder",
+    "--output",
+    ".pipeline/configs/descriptor.json"
+  ],
+  "exit_code": 0,
+  "seconds": 1.4495878999950946
+}

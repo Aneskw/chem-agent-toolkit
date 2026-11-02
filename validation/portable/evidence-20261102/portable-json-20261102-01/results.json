@@ -1,0 +1,63 @@
+{
+  "at": "2026-11-02T15:45:39.906228+00:00",
+  "passed": true,
+  "model_calls": 0,
+  "build_calls": 0,
+  "qualification": "not_granted",
+  "dependencies": {
+    "prefix": "E:\\Users\\27343\\Docker\\portable-json-20261102-01\\venv",
+    "jsonschema": true,
+    "yaml": false
+  },
+  "operations": [
+    {
+      "label": "bootstrap",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "scripts/bootstrap.py",
+        "--venv",
+        "E:\\Users\\27343\\Docker\\portable-json-20261102-01\\venv"
+      ],
+      "exit_code": 0,
+      "seconds": 40.96346849999827
+    },
+    {
+      "label": "dependencies",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-json-20261102-01\\venv\\Scripts\\python.exe",
+        "-c",
+        "import sys,json,importlib.util; print(json.dumps({\"prefix\":sys.prefix,\"jsonschema\":bool(importlib.util.find_spec(\"jsonschema\")),\"yaml\":bool(importlib.util.find_spec(\"yaml\"))}))"
+      ],
+      "exit_code": 0,
+      "seconds": 0.1585248000046704
+    },
+    {
+      "label": "initialize",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-json-20261102-01\\venv\\Scripts\\python.exe",
+        "-m",
+        "creation_pipeline",
+        "init",
+        "--model",
+        "account-model-placeholder",
+        "--output",
+        ".pipeline/configs/json-only.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.7653203000008943
+    },
+    {
+      "label": "preflight",
+      "command": [
+        "E:\\Users\\27343\\Docker\\portable-json-20261102-01\\venv\\Scripts\\python.exe",
+        "-m",
+        "creation_pipeline",
+        "build",
+        ".pipeline/configs/json-only.json",
+        "--preflight"
+      ],
+      "exit_code": 0,
+      "seconds": 0.9293152999962331
+    }
+  ]
+}

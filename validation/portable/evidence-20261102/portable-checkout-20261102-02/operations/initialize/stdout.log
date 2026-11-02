@@ -1,0 +1,10 @@
+{
+  "status": "configuration_created",
+  "path": "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.pipeline\\configs\\descriptor.json",
+  "model": "account-model-placeholder",
+  "backend": "codex_cli",
+  "model_calls": 0,
+  "build_calls": 0,
+  "qualification": "not_granted",
+  "next": "Run doctor CONFIG, then build CONFIG with your own state/library paths"
+}

@@ -9,10 +9,16 @@ Start with [small-batch operations](docs/pipeline/batch-operations.md),
 
 ## First run
 
+New user / new computer: follow [new-machine setup](docs/pipeline/new-machine-setup.md) and the
+[portable descriptor example](examples/descriptor-screening/README.md). Create an isolated venv,
+run `init --model YOUR_MODEL --output .pipeline/configs/descriptor.json`, then `doctor` before generation.
+Historical validation configs and absolute evidence paths are not portable startup templates.
+
 Python 3.11+, Git, the configured authenticated Codex executable and Linux/amd64 Docker are required
 for the current executable-Skill configuration. A desktop-bundled executable works on PATH; this is
 not ChatGPT UI automation. Host validation dependencies are declared in [requirements.txt](requirements.txt).
-PyYAML is optional for YAML. The pipeline never installs host packages or repairs Docker automatically.
+PyYAML is optional for YAML. Explicit bootstrap installs validators only in a venv; generation does
+not install global host packages or repair Docker automatically.
 
 ```text
 python -m creation_pipeline build CONFIG.json --preflight

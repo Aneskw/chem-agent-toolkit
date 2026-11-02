@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "scope": "offline local contract inventory, not platform integration acceptance",
+  "models": 0,
+  "docker_calls": 0,
+  "issues": []
+}

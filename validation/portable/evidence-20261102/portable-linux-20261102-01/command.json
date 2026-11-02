@@ -1,0 +1,30 @@
+{
+  "at": "2026-11-02T15:29:57.910267+00:00",
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "--name",
+    "chem-portable-0454dcdde37f4abcb804cf9c6f9e42ce",
+    "--workdir",
+    "/workspace",
+    "--mount",
+    "type=bind,source=E:\\Users\\27343\\Docker\\portable-checkout-20261102-01\\source,target=/input,readonly",
+    "--mount",
+    "type=bind,source=E:\\Users\\27343\\Docker\\portable-linux-20261102-01,target=/evidence",
+    "-e",
+    "HTTPS_PROXY=http://host.docker.internal:7897",
+    "-e",
+    "HTTP_PROXY=http://host.docker.internal:7897",
+    "-e",
+    "PYTHONUTF8=1",
+    "-e",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "sha256:94a8fee35252d06ab75856f15f12c7bae67b10e8a6da93c7fded82b2610926cd",
+    "python",
+    "/input/validation/portable/linux_smoke.py"
+  ],
+  "local_image_id": "sha256:94a8fee35252d06ab75856f15f12c7bae67b10e8a6da93c7fded82b2610926cd",
+  "models": 0,
+  "scope": "ephemeral Linux container; no Docker socket, auth, tool images or operational cache; temporary test network proxy only"
+}

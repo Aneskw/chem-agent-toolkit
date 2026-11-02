@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-02T15:40:12.386095+00:00",
+  "passed": false,
+  "models": 0,
+  "qualification": "not_granted",
+  "continued": false,
+  "fixed_round": "portable-checkout-20261102-02",
+  "suite": {
+    "total": 857,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 3
+  },
+  "reason": "Native lifecycle fixture patched executor resolver but not zero-model readiness resolver; missing installed Codex correctly blocked before test fake. Fix fixture; do not change product gate."
+}

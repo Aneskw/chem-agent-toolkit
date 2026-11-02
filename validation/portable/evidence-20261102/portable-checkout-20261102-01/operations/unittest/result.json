@@ -1,0 +1,14 @@
+{
+  "label": "unittest",
+  "command": [
+    "E:\\Users\\27343\\Docker\\portable-checkout-20261102-01\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-q"
+  ],
+  "exit_code": 1,
+  "seconds": 272.74805809999816
+}

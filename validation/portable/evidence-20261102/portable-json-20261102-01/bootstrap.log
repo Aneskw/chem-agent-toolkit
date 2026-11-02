@@ -1,0 +1,8 @@
+{
+  "status": "environment_prepared",
+  "python": "E:\\Users\\27343\\Docker\\portable-json-20261102-01\\venv\\Scripts\\python.exe",
+  "requirements": "requirements.txt",
+  "model_calls": 0,
+  "build_calls": 0,
+  "next": "Use this Python for: -m creation_pipeline init --model YOUR_MODEL --output .pipeline/config.json"
+}

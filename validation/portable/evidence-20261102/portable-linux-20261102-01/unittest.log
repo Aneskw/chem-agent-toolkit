@@ -1,0 +1,363 @@
+{"status": "error", "error": "shared_tool.requirements.executables: external executables unsupported in v1; actual=['obabel']; use self-contained mode without shared_tool or a supported Python-only tool"}
+======================================================================
+ERROR: test_review_config_records_transport_effort_and_tier (pipeline.test_batch_conditions.ReviewTurnConfigTests.test_review_config_records_transport_effort_and_tier)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_batch_conditions.py", line 117, in test_review_config_records_transport_effort_and_tier
+    review.review_snapshot(record, package,
+  File "/workspace/creation_pipeline/runtime/review.py", line 33, in review_snapshot
+    material = Sources(config, work / 'cache')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_arbitrary_environment_is_not_inherited (pipeline.test_components.PipelineTests.test_arbitrary_environment_is_not_inherited)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_components.py", line 132, in test_arbitrary_environment_is_not_inherited
+    sources = Sources(load_config(self.config), self.root / "cache")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_check_can_use_explicit_source_directory_without_moving_logs (pipeline.test_components.PipelineTests.test_check_can_use_explicit_source_directory_without_moving_logs)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_components.py", line 104, in test_check_can_use_explicit_source_directory_without_moving_logs
+    sources = Sources(load_config(self.config), self.root / 'cache')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_expected_failure_and_json_assertions (pipeline.test_components.PipelineTests.test_expected_failure_and_json_assertions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_components.py", line 97, in test_expected_failure_and_json_assertions
+    sources = Sources(config, self.root / "cache")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_generated_checks_need_opt_in (pipeline.test_components.PipelineTests.test_generated_checks_need_opt_in)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_components.py", line 84, in test_generated_checks_need_opt_in
+    sources = Sources(config, self.root / "cache")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_timeout_kills_check_and_records_unverified (pipeline.test_components.PipelineTests.test_timeout_kills_check_and_records_unverified)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_components.py", line 125, in test_timeout_kills_check_and_records_unverified
+    sources = Sources(load_config(self.config), self.root / "cache")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_containing_repository_is_not_upstream (pipeline.test_markdown_entry.SourceIdentityTests.test_containing_repository_is_not_upstream)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_markdown_entry.py", line 224, in test_containing_repository_is_not_upstream
+    subprocess.run(['git', 'init', '-q', str(root)], check=True)
+  File "/usr/local/lib/python3.11/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/local/lib/python3.11/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'git'
+
+======================================================================
+ERROR: test_api_injection_is_not_a_public_entrypoint (pipeline.test_research.ResearchTests.test_api_injection_is_not_a_public_entrypoint)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_check_permission_is_respected_by_review_helper (pipeline.test_research.ResearchTests.test_check_permission_is_respected_by_review_helper)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_compact_candidates_allow_mixed_blocked_and_callable (pipeline.test_research.ResearchTests.test_compact_candidates_allow_mixed_blocked_and_callable)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_credentials_in_direct_files_are_rejected (pipeline.test_research.ResearchTests.test_credentials_in_direct_files_are_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_development_is_opt_in_and_can_override_preset (pipeline.test_research.ResearchTests.test_development_is_opt_in_and_can_override_preset)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_discovery_and_review_cannot_finalize_runtime_files (pipeline.test_research.ResearchTests.test_discovery_and_review_cannot_finalize_runtime_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_durable_delivery_supports_binary_and_rejects_stale_files (pipeline.test_research.ResearchTests.test_durable_delivery_supports_binary_and_rejects_stale_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_finalized_files_recover_even_without_final_model_json (pipeline.test_research.ResearchTests.test_finalized_files_recover_even_without_final_model_json)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_incremental_candidate_has_valid_source_provenance (pipeline.test_research.ResearchTests.test_incremental_candidate_has_valid_source_provenance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_inventory_pagination_does_not_exclude_other_files (pipeline.test_research.ResearchTests.test_inventory_pagination_does_not_exclude_other_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_large_unknown_and_hidden_research_files_survive (pipeline.test_research.ResearchTests.test_large_unknown_and_hidden_research_files_survive)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_narrow_exclusions_are_recorded (pipeline.test_research.ResearchTests.test_narrow_exclusions_are_recorded)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_only_explicit_saved_candidates_are_selected (pipeline.test_research.ResearchTests.test_only_explicit_saved_candidates_are_selected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_production_has_no_implicit_size_count_or_agent_quotas (pipeline.test_research.ResearchTests.test_production_has_no_implicit_size_count_or_agent_quotas)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_python_blocks_are_not_blindly_executed (pipeline.test_research.ResearchTests.test_python_blocks_are_not_blindly_executed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_reference_storage_avoids_copy_but_detects_changes (pipeline.test_research.ResearchTests.test_reference_storage_avoids_copy_but_detects_changes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_review_cannot_pass_its_own_blocking_finding (pipeline.test_research.ResearchTests.test_review_cannot_pass_its_own_blocking_finding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_reviewed_unexecuted_scope_is_retained_in_catalog (pipeline.test_research.ResearchTests.test_reviewed_unexecuted_scope_is_retained_in_catalog)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_supplement_is_registered_cached_and_survives_new_session (pipeline.test_research.ResearchTests.test_supplement_is_registered_cached_and_survives_new_session)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_unavailable_supplement_preserves_existing_sources (pipeline.test_research.ResearchTests.test_unavailable_supplement_preserves_existing_sources)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_unknown_api_backends_are_still_rejected_at_configuration (pipeline.test_research.ResearchTests.test_unknown_api_backends_are_still_rejected_at_configuration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_writer_small_chunks_and_path_boundaries (pipeline.test_research.ResearchTests.test_writer_small_chunks_and_path_boundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_research.py", line 38, in setUp
+    self.sources = Sources(self.config, self.root / "cache")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'tool', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+ERROR: test_snapshot_added_files_are_detected (pipeline.test_sources.SourceTests.test_snapshot_added_files_are_detected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_sources.py", line 143, in test_snapshot_added_files_are_detected
+    sources = Sources(self.config, self.root / 'cache')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/creation_pipeline/resources/intake.py", line 61, in __init__
+    raise BlockedError("No readable sources: " + str(self.errors)[:2000])
+creation_pipeline.models.BlockedError: No readable sources: [{'source': 'code', 'error': "[Errno 2] No such file or directory: 'git'"}]
+
+======================================================================
+FAIL: test_source_inventory_order_does_not_hide_byte_drift (pipeline.test_delivery_protocol.DeliveryProtocolTests.test_source_inventory_order_does_not_hide_byte_drift)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_delivery_protocol.py", line 97, in test_source_inventory_order_does_not_hide_byte_drift
+    result, record = self.run_text()
+                     ^^^^^^^^^^^^^^^
+  File "/workspace/tests/pipeline/test_delivery_protocol.py", line 56, in run_text
+    self.assertFalse(result["errors"], result)
+AssertionError: ['No readable sources: [{\'source\': \'tool\', \'error\': "[Errno 2] No such file or directory: \'git\'"}]'] is not false : {'build_id': '20261102T153131-e3c1b0ee', 'status': 'blocked', 'output': '/workspace/.pipeline/test-tmp/tmpmmcx4sa5/state/outputs/20261102T153131-e3c1b0ee', 'counts': {}, 'entities': [], 'discovery_summary': None, 'candidate_count': 0, 'adoption': [], 'deferred': [], 'model_calls': 0, 'errors': ['No readable sources: [{\'source\': \'tool\', \'error\': "[Errno 2] No such file or directory: \'git\'"}]']}
+
+======================================================================
+FAIL: test_complete_native_build_and_failed_turn_resume (pipeline.test_native.NativeTests.test_complete_native_build_and_failed_turn_resume)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/tests/pipeline/test_native.py", line 354, in test_complete_native_build_and_failed_turn_resume
+    self.assertEqual(result["status"], "failed", result)
+AssertionError: 'blocked' != 'failed'
+- blocked
++ failed
+ : {'status': 'blocked', 'phase': 'readiness', 'readiness': {'version': 1, 'status': 'blocked', 'mode': 'build', 'scope': 'observed prerequisites only; source/delivery closure and provider entitlement remain subject to later gates', 'runtime_required': False, 'checks': [{'object': 'source:code', 'path': '/workspace/.pipeline/test-tmp/tmppquw5ivh/source.py', 'expected': 'retained readable files', 'actual': {'files': 1}, 'status': 'passed', 'code': None, 'reason': ''}, {'object': 'model.backend', 'path': 'codex', 'expected': 'resolvable executable', 'actual': 'Codex CLI is not installed or is not on PATH', 'status': 'blocked', 'code': 'model_client_unavailable', 'reason': ''}, {'object': 'Docker', 'path': 'local-docker', 'expected': 'available daemon', 'actual': {'observed_at': '2026-11-02T15:31:47.683629+00:00', 'backend': 'local-docker', 'status': 'unavailable', 'gaps': [{'code': 'docker_unavailable', 'detail': "[Errno 2] No such file or directory: 'docker'", 'repair_lane': 'environment', 'blocker_kind': 'temporary_resource'}]}, 'status': 'deferred', 'code': 'docker_unavailable', 'reason': 'Required only for explicitly executable build; discovery/draft remain usable offline'}], 'gaps': [{'object': 'model.backend', 'path': 'codex', 'expected': 'resolvable executable', 'actual': 'Codex CLI is not installed or is not on PATH', 'status': 'blocked', 'code': 'model_client_unavailable', 'reason': ''}], 'model_calls': 0, 'build_calls': 0, 'qualification': 'not_granted', 'source_acquisition_pending': False}, 'model_calls': 0, 'errors': [{'object': 'model.backend', 'path': 'codex', 'expected': 'resolvable executable', 'actual': 'Codex CLI is not installed or is not on PATH', 'status': 'blocked', 'code': 'model_client_unavailable', 'reason': ''}]}
+
+----------------------------------------------------------------------
+Ran 857 tests in 90.520s
+
+FAILED (failures=2, errors=30, skipped=1)

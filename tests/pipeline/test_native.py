@@ -349,7 +349,8 @@ print(json.dumps({'type':'turn.completed','usage':{'input_tokens':10,'output_tok
         options.update(adoption={"enabled": False}, execute_generated_checks=True)
         options["limits"]["repair_rounds"] = 0
         write_json(self.root / "input.json", options)
-        with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]):
+        with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]), \
+             patch("creation_pipeline.agent.command.codex_command", return_value=[sys.executable, str(self.fake)]):
             result = build(self.root / "input.json", self.root / "state", keep_debug=True)
             self.assertEqual(result["status"], "failed", result)
             resumed = build(state_root=self.root / "state", resume_id=result["build_id"], keep_debug=True)

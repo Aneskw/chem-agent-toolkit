@@ -1,0 +1,13 @@
+{
+  "label": "missing-client",
+  "command": [
+    "E:\\Users\\27343\\Docker\\portable-checkout-20261102-02\\Windows user checkout with spaces\\.venv\\Scripts\\python.exe",
+    "-m",
+    "creation_pipeline",
+    "doctor",
+    ".pipeline/configs/descriptor.json",
+    "--offline"
+  ],
+  "exit_code": 1,
+  "seconds": 0.9913908000016818
+}

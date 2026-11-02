@@ -1,0 +1,18 @@
+Collecting rdkit==2024.9.6 (from -r validation/sibling-json/source/requirements.txt (line 1))
+  Downloading rdkit-2024.9.6-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (4.0 kB)
+Collecting numpy==1.26.4 (from -r validation/sibling-json/source/requirements.txt (line 2))
+  Downloading numpy-1.26.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (61 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 61.0/61.0 kB 233.5 kB/s eta 0:00:00
+Collecting pillow==11.3.0 (from -r validation/sibling-json/source/requirements.txt (line 3))
+  Downloading pillow-11.3.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.0 kB)
+Downloading rdkit-2024.9.6-cp311-cp311-manylinux_2_28_x86_64.whl (34.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 34.3/34.3 MB 3.8 MB/s eta 0:00:00
+Downloading numpy-1.26.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (18.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 18.3/18.3 MB 3.6 MB/s eta 0:00:00
+Downloading pillow-11.3.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.6/6.6 MB 2.9 MB/s eta 0:00:00
+Installing collected packages: pillow, numpy, rdkit
+Successfully installed numpy-1.26.4 pillow-11.3.0 rdkit-2024.9.6
+
+[notice] A new release of pip is available: 24.0 -> 26.2.2
+[notice] To update, run: /workspace/.venv/bin/python -m pip install --upgrade pip

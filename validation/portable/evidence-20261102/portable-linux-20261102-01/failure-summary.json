@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-02T15:40:12.388400+00:00",
+  "passed": false,
+  "models": 0,
+  "qualification": "not_granted",
+  "continued": false,
+  "fixed_round": "portable-linux-20261102-02",
+  "suite": {
+    "total": 857,
+    "failures": 2,
+    "errors": 30,
+    "skipped": 1
+  },
+  "reason": "Slim Linux image had no required Git executable; 31 failures/errors were missing Git, one lifecycle fixture needed readiness resolver isolation. New round installs required Git only in disposable container; doctor names missing Git."
+}

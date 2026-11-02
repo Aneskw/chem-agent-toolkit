@@ -1,0 +1,1 @@
+{"ok": true, "input": "c1ccccc1O", "canonical_smiles": "Oc1ccccc1", "descriptors": {"molecular_weight": 94.113, "logp": 1.3922, "tpsa": 20.23, "h_bond_donors": 1, "h_bond_acceptors": 1, "rotatable_bonds": 0}, "selected": false, "policy_id": "demonstration-screen-50-v1", "maximum_molecular_weight": 50.0}

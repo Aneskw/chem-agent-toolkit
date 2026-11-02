@@ -1,0 +1,8 @@
+{
+  "status": "environment_prepared",
+  "python": "/workspace/.venv/bin/python",
+  "requirements": "requirements-yaml.txt",
+  "model_calls": 0,
+  "build_calls": 0,
+  "next": "Use this Python for: -m creation_pipeline init --model YOUR_MODEL --output .pipeline/config.json"
+}

@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-02T15:43:19.631682+00:00",
+  "command": [
+    "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "-m",
+    "unittest",
+    "tests.pipeline.test_onboarding",
+    "tests.pipeline.test_native",
+    "tests.pipeline.test_discovery",
+    "-q"
+  ],
+  "exit_code": 0,
+  "seconds": 84.43157749999955,
+  "model_calls": 0
+}
