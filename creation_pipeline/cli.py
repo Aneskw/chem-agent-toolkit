@@ -16,6 +16,10 @@ from creation_pipeline.records import clean_run, redact
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Discover reusable tool capabilities and build source-grounded skill packages")
     commands = parser.add_subparsers(dest="command", required=True)
+    child = commands.add_parser('readiness', help='Observe prerequisites before inference; no construction, repair or qualification')
+    child.add_argument('config')
+    child.add_argument('--offline', action='store_true', help='Do not probe Docker; runtime availability remains deferred')
+    child.add_argument('--mode', choices=('build','discover','draft'), default='build')
     for operation in ("build", "discover", "plan", "revise"):
         child = commands.add_parser(operation)
         child.add_argument("config", nargs="?")
@@ -89,7 +93,10 @@ def main(argv=None):
     child.add_argument('--recover-lock', action='store_true')
     args = parser.parse_args(argv)
     try:
-        if args.command in ("build", "discover", "plan", "revise"):
+        if args.command == 'readiness':
+            from creation_pipeline.readiness import from_config
+            result = from_config(args.config, args.mode, args.offline)
+        elif args.command in ("build", "discover", "plan", "revise"):
             if bool(args.config) == bool(args.plan_path):
                 raise ValueError("Supply one configuration or --plan path")
             if args.command == "revise" and (not args.plan_path or not args.feedback_file):

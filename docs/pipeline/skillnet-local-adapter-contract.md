@@ -63,6 +63,7 @@ RuntimeRequest 没有独立 layout_fingerprint；revision_id/freeze_sha256 已�
 | 阶段 | 当前入口 | 效果与必须保留的边界 |
 | --- | --- | --- |
 | 配置预检 | `build CONFIG --preflight` | 仅配置合法性，source_availability=not_checked，0 模型；不是来源、镜像或资格确认 |
+| 零模型就绪观察 | `readiness CONFIG [--offline] [--mode build\|discover\|draft]`；普通 build 在模型前自动执行 | 只读配置、保留来源/预算/声明结构、客户端、Docker info、显式版本与镜像元数据；报告 object/path/expected/actual/code。blocked 阻止模型；deferred 不是可用或资格证明。远端来源获取后再次核验，resume/plan 亦不能绕过。外部 executable 的容器闭包探测留给原完整门禁 |
 | 能力发现 | `discover CONFIG` / `plan CONFIG` → pipeline.build(plan_only=true) | 来源获取与发现模型，输出候选计划；不等于 ToolArtifact 精确匹配或合格 Skill 检索 |
 | Skill 检索 | `library LIB [--name NAME] [--include-candidates]` → store.entries/get | 默认排除候选；当前条目会 reconcile/查询资格，不允许直接写 accepted。与语义能力发现不同 |
 | 编写与审阅 | `build CONFIG` 或 `build --plan PLAN` | 交付原路径检查、独立内容审阅、来源/接口核验；平台不能以模型自述代替这些门禁 |

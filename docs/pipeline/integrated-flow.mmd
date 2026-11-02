@@ -7,7 +7,9 @@
 %% v3 permits declared literal module-relative JSON reads with byte identity checks.
 %% Host author/review context distinguishes full Skill layout from tool image implementation files.
 flowchart TB
-    A[用户来源与提示] --> B[资源准备与来源快照]
+    A[用户来源与提示] --> Z[零模型就绪预检：配置、来源、已知结构、Docker 与显式制品；不构建或授予资格]
+    Z -->|可用或允许延后；远端获取后再次核验| B[资源准备与来源快照]
+    Z -->|阻止：对象、路径、期望与实际| ZB[0 模型返回具体缺口；离线发现和草稿保留运行时待核验]
     B --> C[发现 Agent：逐候选计划]
     C --> D[作者：SKILL.md 与支持文件、作者回执]
     D --> E[基础检查]

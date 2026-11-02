@@ -98,6 +98,10 @@
       "declaration",
       "verify",
       "reads"
+    ],
+    "creation_pipeline.readiness": [
+      "check",
+      "from_config"
     ]
   },
   "error_anchors": {
@@ -132,6 +136,13 @@
       "expected UTF-8 JSON",
       "expected literal reads",
       "expected declared path"
+    ],
+    "creation_pipeline/readiness.py": [
+      "tool_support_unresolved",
+      "tool_artifact_unavailable",
+      "source_digest_mismatch",
+      "docker_unavailable",
+      "model_client_unavailable"
     ]
   },
   "examples": {

@@ -70,6 +70,37 @@ def validate_declaration(declaration):
             raise ValueError('shared_tool.requirements.imports.' + str(name) + ': require exact version or explicit unpinned')
 
 
+def validate_python(tree, module, declaration, local_modules, entry):
+    """Same finite implementation checks for delivered and declared source modules."""
+    path = 'package/' + module
+    data_profile = declaration['policy'] == bundled_data.POLICY
+    external = declaration['policy'] == external_tool.POLICY
+    requirements_spec = declaration['requirements']
+    allowed_file_nodes = bundled_data.reads(tree, module, declaration['bundled_data']) if data_profile else set()
+    if external:
+        external_tool.validate_wrapper(tree, path, entry)
+    for node in ast.walk(tree):
+        # No declaration can hide a runtime dependency on excluded prose
+        # or a dynamically loaded, unenumerated implementation.
+        if isinstance(node, ast.Constant) and isinstance(node.value, str) and 'SKILL.md' in node.value:
+            raise ValueError('shared_tool.closure: excluded document referenced at ' + path)
+        if (isinstance(node, ast.Name) and node.id in {'eval', 'exec', '__import__', '__file__'}
+                and id(node) not in allowed_file_nodes):
+            raise ValueError('shared_tool.closure: dynamic implementation dependency at ' + path + ':' + str(node.lineno))
+        if isinstance(node, ast.Attribute) and node.attr in {'system', 'popen', 'execv', 'execve', 'spawnv', 'spawnve'}:
+            raise ValueError('shared_tool.closure: external executable dependency at ' + path)
+        if isinstance(node, (ast.Import, ast.ImportFrom)):
+            modules = [a.name for a in node.names] if isinstance(node, ast.Import) else [node.module or '']
+            if any(m.split('.')[0] in {'importlib', 'runpy', 'ctypes'} for m in modules):
+                raise ValueError('shared_tool.closure: unsupported dynamic loader in ' + path)
+            for module in modules:
+                name = module.split('.')[0]
+                if name and name not in sys.stdlib_module_names and name not in local_modules and name not in requirements_spec['imports']:
+                    raise ValueError('shared_tool.requirements.imports.' + name + ': missing explicit dependency requirement; ' + path)
+            if not external and any(m.split('.')[0] in {'subprocess'} for m in modules):
+                raise ValueError('shared_tool.closure: external process invocation unsupported in v1; ' + path)
+
+
 def describe(source, binding, declaration, requirements=(), constraints=(), runtime_limits=None):
     """Request identity uses only pre-planning inputs, including explicit requirements."""
     validate_declaration(declaration)
@@ -97,29 +128,7 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
             files.append(dict(item, path=path, mode=real.stat().st_mode & 0o777))
             if directory == 'package' and path.endswith('.py'):
                 tree = ast.parse(real.read_text(encoding='utf-8-sig'), filename=path)
-                allowed_file_nodes = bundled_data.reads(tree, item['path'], declaration['bundled_data']) if data_profile else set()
-                if external:
-                    external_tool.validate_wrapper(tree, path, binding['entry'])
-                for node in ast.walk(tree):
-                    # No declaration can hide a runtime dependency on excluded prose
-                    # or a dynamically loaded, unenumerated implementation.
-                    if isinstance(node, ast.Constant) and isinstance(node.value, str) and 'SKILL.md' in node.value:
-                        raise ValueError('shared_tool.closure: excluded document referenced at ' + path)
-                    if (isinstance(node, ast.Name) and node.id in {'eval', 'exec', '__import__', '__file__'}
-                            and id(node) not in allowed_file_nodes):
-                        raise ValueError('shared_tool.closure: dynamic implementation dependency at ' + path + ':' + str(node.lineno))
-                    if isinstance(node, ast.Attribute) and node.attr in {'system', 'popen', 'execv', 'execve', 'spawnv', 'spawnve'}:
-                        raise ValueError('shared_tool.closure: external executable dependency at ' + path)
-                    if isinstance(node, (ast.Import, ast.ImportFrom)):
-                        modules = [a.name for a in node.names] if isinstance(node, ast.Import) else [node.module or '']
-                        if any(m.split('.')[0] in {'importlib', 'runpy', 'ctypes'} for m in modules):
-                            raise ValueError('shared_tool.closure: unsupported dynamic loader in ' + path)
-                        for module in modules:
-                            name = module.split('.')[0]
-                            if name and name not in sys.stdlib_module_names and name not in local_modules and name not in requirements_spec['imports']:
-                                raise ValueError('shared_tool.requirements.imports.' + name + ': missing explicit dependency requirement; ' + path)
-                        if not external and any(m.split('.')[0] in {'subprocess'} for m in modules):
-                            raise ValueError('shared_tool.closure: external process invocation unsupported in v1; ' + path)
+                validate_python(tree, item['path'], declaration, local_modules, binding['entry'])
     from .planner import DEFAULTS
     limits = runtime_limits if runtime_limits is not None else DEFAULTS
     return {'abi': external_tool.ABI if external else bundled_data.ABI if data_profile else ABI, 'declaration': copy.deepcopy(declaration), 'files': sorted(files, key=lambda f: f['path']),
@@ -262,7 +271,7 @@ def validate_record(record, request=None):
     return record
 
 
-def available(record, host, process, timeout=30):
+def available(record, host, process, timeout=30, *, verify_external=True):
     if host.get('engine_id') != record['daemon_id']:
         return 'different_daemon'
     result = process(['docker', 'image', 'inspect', record['image_id']], timeout)
@@ -284,6 +293,8 @@ def available(record, host, process, timeout=30):
     if record['abi'] == external_tool.ABI:
         if config.get('Volumes'):
             return 'external_identity_unsupported_image_volumes'
+        if not verify_external:
+            return 'external_identity_not_observed'
         try:
             observed = external_tool.observe(record['image_id'], record['request']['declaration']['requirements']['executables'],
                                              process, timeout)

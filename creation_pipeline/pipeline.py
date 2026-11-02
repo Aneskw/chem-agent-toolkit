@@ -263,6 +263,17 @@ def _candidate(session, config, entity, bundle, work, allow_generated, initial_f
 def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None, keep_debug=False,
           execute_generated=False, _session_factory=None, notify=lambda message: None, feedback=None,
           library_root=None, no_adopt=False, resume_id=None, rediscover=False, extra_turns=0, draft_only=False):
+    from creation_pipeline.readiness import check as readiness_check
+    initial_config = initial_readiness = None
+    mode = 'discover' if plan_only else 'draft' if draft_only else 'build'
+    if config_path and not plan_path and not resume_id:
+        initial_config = load_config(config_path)
+        initial_config['_deadline'] = time.monotonic() + bound(initial_config['limits']['total_seconds'])
+        notify('Checking local prerequisites before model calls')
+        initial_readiness = readiness_check(initial_config, mode)
+        if initial_readiness['status'] == 'blocked':
+            return {'status':'blocked','phase':'readiness','readiness':initial_readiness,'model_calls':0,
+                    'errors':initial_readiness['gaps']}
     state = Path(state_root or ROOT / ".pipeline").absolute()
     if has_link(state):
         raise ValueError("State root must not contain linked paths")
@@ -321,8 +332,7 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
             plan = document["discovery"]
             notify("Continuing saved discovery plan; no discovery model call")
         else:
-            config = load_config(config_path)
-            config["_deadline"] = time.monotonic() + bound(config["limits"]["total_seconds"])
+            config = initial_config
             notify("Acquiring and snapshotting sources")
             sources = Sources(config, state / "cache")
         if type(extra_turns) is not int or extra_turns < 0 or (extra_turns and not resume_id):
@@ -339,6 +349,9 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
         if config["model"]["backend"] not in ("codex_cli", "deepseek_api"):
             raise ValueError("Saved API/Ollama runs are not executable in the Agent-only pipeline")
         config["draft_only"] = draft_only or config.get("draft_only", False)
+        record['readiness'] = initial_readiness if initial_readiness and not initial_readiness['source_acquisition_pending'] else readiness_check(config, mode, snapshots=sources.manifest())
+        if record['readiness']['status'] == 'blocked':
+            raise BlockedError('readiness: ' + json.dumps(record['readiness']['gaps'], ensure_ascii=False))
         config['_docker_checks'] = True
         config["execute_generated_checks"] = False  # native checks are mapped to Docker, never run on the host
         session = (_session_factory or NativeSession)(config, sources, copy.deepcopy(config["limits"]), work, keep_debug)

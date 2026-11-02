@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "baseline": "8a39a5a",
+  "passed": true,
+  "evidence": "E:\\Users\\27343\\Docker\\readiness-cli-20261102-01\\results.json",
+  "sha256": "99a1e1c3bb1f952d9a94baad57dac9ef8302648f03d6bd601e1264dc15595edd",
+  "operations": 9,
+  "model_calls": 0,
+  "build_calls": 0,
+  "qualification": "not_granted",
+  "initial_regression": "E:/Users/27343/Docker/readiness-offline-first-20261102.log",
+  "initial_regression_issue": "755 tests; one old helper expected persisted output for missing source; now explicitly asserts earlier block, no state and zero calls. Original blocking requirement retained."
+}

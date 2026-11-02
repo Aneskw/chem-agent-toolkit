@@ -236,7 +236,12 @@ class DiscoveryTests(unittest.TestCase):
     def test_missing_source_is_blocked(self):
         self.options["sources"][0]["path"] = "missing"
         write_json(self.config, self.options)
-        result, _ = self.run_case()
+        backend = ReplayStages([])
+        result = build(self.config, self.state, _session_factory=backend)
+        self.assertEqual(result['phase'], 'readiness')
+        self.assertEqual(result['model_calls'], 0)
+        self.assertFalse(self.state.exists())
+        self.assertFalse(backend.prompts)
         self.assertEqual(result["status"], "blocked")
 
     def test_unselected_candidate_does_not_need_complete_build_files(self):
