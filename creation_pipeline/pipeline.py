@@ -267,7 +267,12 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
     initial_config = initial_readiness = None
     mode = 'discover' if plan_only else 'draft' if draft_only else 'build'
     if config_path and not plan_path and not resume_id:
-        initial_config = load_config(config_path)
+        try:
+            initial_config = load_config(config_path)
+        except (ValueError,OSError,KeyError) as exc:
+            from creation_pipeline.readiness import configuration_error
+            report = configuration_error(config_path,mode,exc)
+            return {'status':'blocked','phase':'readiness','readiness':report,'model_calls':0,'errors':report['gaps']}
         initial_config['_deadline'] = time.monotonic() + bound(initial_config['limits']['total_seconds'])
         notify('Checking local prerequisites before model calls')
         initial_readiness = readiness_check(initial_config, mode)

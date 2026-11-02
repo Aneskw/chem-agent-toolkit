@@ -1,5 +1,9 @@
 # 精确 Tool 制品复用：本机 v1 协议
 
+2026-11-02：固定 with_name 同目录 JSON 定位使用独立 v4 ABI/policy，见
+[同目录资源协议](sibling-json-tool-protocol.md)。它不放开通用路径或动态加载；v1/v2/v3 保留原规则。
+普通 CLI 的零模型就绪观察与模型前门禁见 [readiness](readiness.md)。
+
 P2 新增的有限 `__file__` 相对 JSON 读取使用独立 v3 ABI/policy，见
 [包内 JSON 资源协议](bundled-json-tool-protocol.md)。下文 v1 的拒绝规则仍有效；
 多模块和静态包内数据本来已入闭包，不计为新增支持。

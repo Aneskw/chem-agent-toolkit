@@ -8,12 +8,14 @@
     "tool_abis": [
       "shared_tool_image_v1",
       "shared_tool_image_v2",
-      "shared_tool_image_v3"
+      "shared_tool_image_v3",
+      "shared_tool_image_v4"
     ],
     "policies": [
       "closed-python-bundle-v1",
       "openbabel-debian-image-v1",
-      "closed-python-json-data-v1"
+      "closed-python-json-data-v1",
+      "closed-python-sibling-json-v1"
     ]
   },
   "objects": [
@@ -101,7 +103,8 @@
     ],
     "creation_pipeline.readiness": [
       "check",
-      "from_config"
+      "from_config",
+      "configuration_error"
     ]
   },
   "error_anchors": {

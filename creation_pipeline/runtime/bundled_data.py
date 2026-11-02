@@ -8,6 +8,9 @@ from creation_pipeline.records import safe_relative, file_digest, has_link
 
 ABI = 'shared_tool_image_v3'
 POLICY = 'closed-python-json-data-v1'
+SIBLING_ABI = 'shared_tool_image_v4'
+SIBLING_POLICY = 'closed-python-sibling-json-v1'
+PROFILES = {POLICY: ABI, SIBLING_POLICY: SIBLING_ABI}
 
 
 def declaration(value):
@@ -49,7 +52,7 @@ def verify(package, declarations):
             raise ValueError('shared_tool.bundled_data.'+item['path']+': expected UTF-8 JSON; actual='+str(exc)) from exc
 
 
-def reads(tree, module, declarations):
+def reads(tree, module, declarations, *, sibling=False):
     """Return the only __file__ Name nodes allowed by this profile."""
     allowed = set(); path_nodes = set(); used = set()
     declared = {i['path'] for i in declarations if i['module'] == module}
@@ -60,17 +63,19 @@ def reads(tree, module, declarations):
         if ((isinstance(node, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar)) and node.name in {'Path','__file__'})
                 or (isinstance(node, ast.MatchMapping) and node.rest in {'Path','__file__'})
                 or (isinstance(node, ast.Attribute) and (node.attr in {'Path','__file__','modules','__import__'}
-                    or (isinstance(node.ctx, (ast.Store,ast.Del)) and node.attr in {'read_text','resolve','parent'})))):
+                    or (isinstance(node.ctx, (ast.Store,ast.Del)) and node.attr in {'read_text','resolve','parent','with_name'})))):
             raise ValueError('shared_tool.bundled_data: indirect path binding unsupported at '+module)
         if ((isinstance(node, ast.Name) and node.id in {'globals','locals','vars','getattr','setattr','delattr','compile'})
                 or (isinstance(node, ast.Attribute) and node.attr in {'__dict__','__globals__'})):
             raise ValueError('shared_tool.bundled_data: dynamic path binding unsupported at '+module)
         if ((isinstance(node, ast.Name) and node.id in {'Path','__file__'} and not isinstance(node.ctx, ast.Load))
                 or (isinstance(node, ast.arg) and node.arg in {'Path','__file__'})
-                or (isinstance(node, (ast.FunctionDef,ast.ClassDef)) and node.name in {'Path','__file__'})):
+                or (isinstance(node, (ast.FunctionDef,ast.AsyncFunctionDef,ast.ClassDef)) and node.name in {'Path','__file__'})):
             raise ValueError('shared_tool.bundled_data: path binding redefined at '+module)
         if isinstance(node, (ast.Import, ast.ImportFrom)):
             for alias in node.names:
+                if (alias.asname or alias.name.split('.')[0]) == '__file__':
+                    raise ValueError('shared_tool.bundled_data: __file__ import binding redefined at '+module)
                 if (alias.asname or alias.name.split('.')[0]) == 'Path' and node not in path_imports:
                     raise ValueError('shared_tool.bundled_data: Path must be unaliased pathlib.Path at '+module)
         if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Attribute) or node.func.attr != 'read_text':
@@ -78,19 +83,31 @@ def reads(tree, module, declarations):
         if node.args or len(node.keywords) != 1 or node.keywords[0].arg != 'encoding' or not isinstance(node.keywords[0].value, ast.Constant) or node.keywords[0].value.value != 'utf-8':
             continue
         base = node.func.value; parts = []
-        while isinstance(base, ast.BinOp) and isinstance(base.op, ast.Div) and isinstance(base.right, ast.Constant) and isinstance(base.right.value, str):
-            parts.insert(0, base.right.value); base = base.left
-        if not parts or not path_imports or not isinstance(base, ast.Attribute) or base.attr != 'parent':
+        if sibling:
+            if not (isinstance(base,ast.Call) and isinstance(base.func,ast.Attribute) and base.func.attr=='with_name'
+                    and len(base.args)==1 and not base.keywords and isinstance(base.args[0],ast.Constant)
+                    and isinstance(base.args[0].value,str)):
+                continue
+            relative=base.args[0].value
+            if '/' in relative or '\\' in relative or relative in {'','.', '..'}:
+                raise ValueError('shared_tool.bundled_data: with_name requires one literal sibling filename at '+module+'; actual='+repr(relative))
+            call=base.func.value
+        else:
+            while isinstance(base, ast.BinOp) and isinstance(base.op, ast.Div) and isinstance(base.right, ast.Constant) and isinstance(base.right.value, str):
+                parts.insert(0, base.right.value); base = base.left
+            if not parts or not isinstance(base, ast.Attribute) or base.attr != 'parent':
+                continue
+            resolve = base.value
+            if not (isinstance(resolve, ast.Call) and not resolve.args and not resolve.keywords
+                    and isinstance(resolve.func, ast.Attribute) and resolve.func.attr == 'resolve'):
+                continue
+            call = resolve.func.value
+            relative = '/'.join(parts)
+        if not path_imports:
             continue
-        resolve = base.value
-        if not (isinstance(resolve, ast.Call) and not resolve.args and not resolve.keywords
-                and isinstance(resolve.func, ast.Attribute) and resolve.func.attr == 'resolve'):
-            continue
-        call = resolve.func.value
         if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name) and call.func.id == 'Path'
                 and len(call.args) == 1 and not call.keywords and isinstance(call.args[0], ast.Name) and call.args[0].id == '__file__'):
             continue
-        relative = '/'.join(parts)
         if any(p in {'', '.', '..'} for p in relative.split('/')) or '\\' in relative or PurePosixPath(relative).is_absolute():
             raise ValueError('shared_tool.bundled_data: resource escapes module at '+module+': '+relative)
         target = str(PurePosixPath(module).parent / relative)

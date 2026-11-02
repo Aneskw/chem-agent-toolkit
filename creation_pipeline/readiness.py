@@ -67,7 +67,7 @@ def check(config,mode='build',snapshots=None,offline=False):
     # No login/entitlement inference or auth-file inspection. Executability is a
     # prerequisite only; provider access remains explicitly unverified.
     backends={config.get('model',{}).get('backend','codex_cli')}
-    if executable:backends|={s.get('options',{}).get('backend','codex_cli') for _,s in specs}
+    if runtime_required:backends|={s.get('options',{}).get('backend','codex_cli') for _,s in specs}
     if 'codex_cli' in backends:
         from creation_pipeline.agent.command import codex_command
         try:add('model.backend','codex','resolvable executable',codex_command())
@@ -103,7 +103,7 @@ def check(config,mode='build',snapshots=None,offline=False):
             sid,root=matches[0]
             modules={p.stem for _,_,files in roots for p in files if p.suffix=='.py'}
             modules|={p.parent.name for _,_,files in roots for p in files if p.name=='__init__.py'}
-            if declaration['policy']==bd.POLICY:bd.verify(root,declaration['bundled_data'])
+            if declaration['policy'] in bd.PROFILES:bd.verify(root,declaration['bundled_data'])
             named={entry}|{i['module'] for i in declaration.get('bundled_data',[])};visited=set()
             while named-visited:
                 name=sorted(named-visited)[0];visited.add(name)
@@ -157,10 +157,14 @@ def check(config,mode='build',snapshots=None,offline=False):
         'qualification':'not_granted','source_acquisition_pending':any(c['code']=='source_acquisition_pending' for c in checks)})
 
 
+def configuration_error(path,mode,exc):
+    return sanitized({'version':1,'status':'blocked','mode':mode,'model_calls':0,'build_calls':0,'qualification':'not_granted',
+        'gaps':[{'object':'configuration','path':str(path),'expected':'valid readable configuration','actual':redact(str(exc)),
+                 'code':'configuration_invalid','status':'blocked'}]})
+
+
 def from_config(path,mode='build',offline=False):
     from creation_pipeline.models import load_config
     try:return check(load_config(path),mode,offline=offline)
     except (ValueError,OSError,KeyError) as exc:
-        return sanitized({'version':1,'status':'blocked','mode':mode,'model_calls':0,'build_calls':0,'qualification':'not_granted',
-            'gaps':[{'object':'configuration','path':str(path),'expected':'valid readable configuration','actual':redact(str(exc)),
-                     'code':'configuration_invalid','status':'blocked'}]})
+        return configuration_error(path,mode,exc)

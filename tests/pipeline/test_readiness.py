@@ -102,3 +102,18 @@ class ReadinessTests(unittest.TestCase):
         with patch('creation_pipeline.agent.command.codex_command',side_effect=ValueError('missing executable')):
             report=readiness.check(self.config())
         self.assertIn('model_client_unavailable',[g['code'] for g in report['gaps']])
+
+    def test_unused_runtime_provider_does_not_prevent_offline_authoring(self):
+        self.raw['runtime_defaults']['options']={'backend':'deepseek_api'}
+        config=self.config()
+        with patch('creation_pipeline.runtime.deepseek_api.resolve',side_effect=AssertionError('Unused runtime provider')):
+            for mode in ('draft','discover'):
+                self.assertFalse(readiness.check(config,mode)['gaps'])
+            self.assertFalse(readiness.check(config,offline=True)['gaps'])
+
+    def test_invalid_configuration_blocks_build_with_path_before_any_state(self):
+        self.path.write_text('{ invalid json')
+        with patch('creation_pipeline.pipeline.NativeSession',side_effect=AssertionError('No session')):
+            result=build(self.path,self.root/'state')
+        self.assertEqual(result['phase'],'readiness');self.assertEqual(result['errors'][0]['path'],str(self.path))
+        self.assertEqual(result['model_calls'],0);self.assertFalse((self.root/'state').exists())

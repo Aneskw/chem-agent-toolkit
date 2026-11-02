@@ -1,0 +1,28 @@
+{
+  "scope": "new isolated sample assembly; original sources read-only and never changed",
+  "original_bytes": [
+    {
+      "original_path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit_newpipeline\\tools-skills\\rdkit\\chem-rdkit-descriptors\\scripts\\calc_descriptors.py",
+      "current_path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\sibling-json\\source\\scripts\\calc_descriptors.py",
+      "expected_sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+      "actual_sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+      "identical": true
+    },
+    {
+      "original_path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit_newpipeline\\tools-skills\\rdkit\\chem-rdkit-descriptors\\requirements.txt",
+      "current_path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\sibling-json\\source\\requirements.txt",
+      "expected_sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+      "actual_sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+      "identical": true
+    }
+  ],
+  "json_original": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\bundled-json-input\\source\\scripts\\data\\rules.json",
+  "json_current": "scripts/rules.json",
+  "json_sha256": "57f8da82b4c7eec60fb37001152a57e8fc9a38624e7a6ee9462a04b600be34ba",
+  "unsupported_structure_reference": {
+    "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit_newpipeline\\models-skills\\open-models\\localtransform-forward-prediction\\scripts\\preflight.py",
+    "sha256": "b2af382f9e08798f623ec1d02a2a7aca96036a1eb9b26f2defff1dea5987d575",
+    "pattern": "Path(__file__).with_name",
+    "scope": "shape reference only; default encoding, subprocess and external checkout in original model preflight tool remain unsupported"
+  }
+}

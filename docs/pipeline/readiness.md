@@ -34,3 +34,7 @@ external_identity_deferred 是待核验观察。错误保留具体路径、期�
 公开 CLI 证据：`E:/Users/27343/Docker/readiness-cli-20261102-01/results.json`，9 项，0 模型、
 0 构建。模拟 Docker 缺失只向子进程设置专用不存在的 DOCKER_HOST，现有 daemon/cache 不变；
 模型 executable guard 阻止意外调用。测试不依赖真实模型响应或旧资格。
+
+最终补强后在全新 `readiness-cli-20261102-02` 验证 11 项（仍 0 模型/构建），增加坏配置的
+普通 build 结构化错误，以及草稿模式不要求未调用运行时 provider 的本地设置有效；原生编写
+所选 provider 仍必检。原 01 结果保留。完整回归与当前 v3/v4 资格复核见本轮集成报告。

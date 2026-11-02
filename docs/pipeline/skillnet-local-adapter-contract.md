@@ -46,6 +46,8 @@ SHA256；必须复用程序的 canonicalization，不能散列 pretty JSON 或�
 | ExecutionAttempt | 独立 runtime 目录：attempt-start.json、receipt.json、build-log.json、execution/{started,tests,report}.json 及有界输出；catalog runtime 引用含 path/files/status/execution_status/image_id/host/revision_id 等 | attempt 目录通常为 candidate_id/UUID，但无全局 attempt_id 字段或独立协议。RuntimeRequest 是 frozen dataclass，精确字段见机器清单；receipt version 2、当前 report version 1 / acceptance_version 2 是不同版本域 |
 
 Tool request 精确包含 abi/declaration/files/entry/entry_sha256/requirements/constraints/runtime_limits。
+v4 的有限同目录 JSON 定位新增 policy/ABI 版本，不增加对象字段；平台应转交显式 module/path/sha256
+声明并保留具名拒绝，不按语义相似推断兼容。详见 [v4 协议](sibling-json-tool-protocol.md)。
 files 为排序的 `{path,sha256,bytes,mode}`；declaration 包含 closure/requirements/interface/platform/policy。
 request_key 在环境规划前可知；recipe_key 是具体配方；artifact_id 是观察到的具体制品，三者不可合并。
 当前 `(daemon_id,image_id)` 是本机身份，**不是 OCI manifest digest**。EnvironmentArtifact 的

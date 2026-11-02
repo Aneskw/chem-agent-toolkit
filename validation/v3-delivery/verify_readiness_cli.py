@@ -20,11 +20,12 @@ def main():
     shutil.copyfile(guard/'docker.exe',guard/'codex.exe')
     env=os.environ.copy();env['CHEM_PROBE_REAL_DOCKER']=shutil.which('docker');env['PATH']=str(guard)+os.pathsep+env['PATH']
     config=read_json(REPO/'validation/codex-planner/skill-a.json');records=[]
-    def run(label,argv,expected,config_override=None,missing_daemon=False):
+    def run(label,argv,expected,config_override=None,missing_daemon=False,env_overrides=None):
         directory=root/label;directory.mkdir()
         cfg=directory/'config.json';write_json(cfg,config if config_override is None else config_override)
         argv=[str(cfg) if x=='CONFIG' else x for x in argv]
         e=env.copy();e['CHEM_PROBE_COUNTER']=str(directory/'counter.txt')
+        e.update(env_overrides or {})
         if missing_daemon:
             e.pop('DOCKER_CONTEXT',None);e['DOCKER_HOST']='npipe:////./pipe/chem-readiness-isolated-absent'
         cmd=[sys.executable,'-m','creation_pipeline',*argv]
@@ -57,6 +58,12 @@ def main():
     unsupported=copy.deepcopy(config);unsupported['sources'][0]['path']=str(local)
     bad,_=run('known-unsupported',['build','CONFIG','--state-dir',state],1,unsupported)
     assert 'external process invocation' in str(bad['errors'])
+    bad,_=run('invalid-configuration',['build','CONFIG','--state-dir',state],1,{})
+    assert bad['phase']=='readiness' and bad['errors'][0]['code']=='configuration_invalid'
+    unused=copy.deepcopy(config);unused['runtime_defaults']['options']['backend']='deepseek_api'
+    draft,_=run('unused-runtime-provider',['readiness','CONFIG','--mode','draft'],0,unused,True,
+                {'DEEPSEEK_BASE_URL':'file:///intentionally-invalid-unused-runtime-provider'})
+    assert not draft['gaps']
     write_json(root/'results.json',{'at':now(),'passed':True,'models':0,'builds':0,'qualification':'not_granted',
         'fault':'DOCKER_HOST override applies only to child processes; daemon/images/cache unchanged','operations':records})
     print(json.dumps({'passed':True,'operations':len(records),'models':0,'builds':0,'root':str(root)}))

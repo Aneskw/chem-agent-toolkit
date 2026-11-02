@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "at": "2026-11-02T08:37:12.260931+00:00",
+  "baseline": "a7ed138",
+  "intermediate_local_commits": [
+    "8a39a5a",
+    "d0e817e"
+  ],
+  "passed": true,
+  "new_capability": "v4 fixed with_name sibling UTF-8 JSON reads only",
+  "generated_batches": 2,
+  "fresh_generation_cases": 27,
+  "backend": "codex_cli",
+  "admitted_model_calls": 9,
+  "budgets": {
+    "per_batch_admitted_stages": 16,
+    "per_call_seconds": 600,
+    "total_seconds": 3600,
+    "preparation_seconds": 2400
+  },
+  "observations": [
+    {
+      "label": "a",
+      "output": "E:\\Users\\27343\\Docker\\sibling-json-cli-20261102-01\\a\\state\\outputs\\20261102T155812-b1eb10d9",
+      "build_id": "20261102T155812-b1eb10d9",
+      "name": "rdkit-descriptor-rule-screening",
+      "cases": 13,
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "request_key": "e2ac53361b5bc6644fe542ff1c0d4c32b6d6580b28c736427596d515fc01bed2",
+      "artifact_id": "5b8c4de1cd5ba3beadb95279acb41a2266c812b1c6de92577537514a1cf2edd8",
+      "image_id": "sha256:7883e23ce781eb00adb9bb149d28fcc120b36837222b5f7cd6a40617f61f0985",
+      "revision_id": "rev-dc681caebc7c7f09614e45edda2a53811aab821cee66df36a6d13c6a18d94c41",
+      "acceptance_sha256": "fa424c9873a1ec3ab534e8de31be411b040b78a8f7ede4eda64bce531630cff4",
+      "execution_sha256": "eab63ca775670c39b902a9c1b1aaf2b8de29c45f6ff20abe668ece583bc4d1da",
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "model_calls": 4,
+      "environment_planning_calls": 1,
+      "acceptance_planning_calls": 1,
+      "runtime_model_stages": {
+        "combined_environment_acceptance_planner": 1
+      }
+    },
+    {
+      "label": "b",
+      "output": "E:\\Users\\27343\\Docker\\sibling-json-cli-20261102-01\\b\\state\\outputs\\20261102T161211-d734ef7a",
+      "build_id": "20261102T161211-d734ef7a",
+      "name": "rdkit-descriptor-rule-screening",
+      "cases": 14,
+      "qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "request_key": "e2ac53361b5bc6644fe542ff1c0d4c32b6d6580b28c736427596d515fc01bed2",
+      "artifact_id": "5b8c4de1cd5ba3beadb95279acb41a2266c812b1c6de92577537514a1cf2edd8",
+      "image_id": "sha256:7883e23ce781eb00adb9bb149d28fcc120b36837222b5f7cd6a40617f61f0985",
+      "revision_id": "rev-d3813686e249100abe9079ae4d3db81b41d547d53ce5be26be2353a46c7076b0",
+      "acceptance_sha256": "42026d7eda93cbc72c2b2f951fe27e81bc8ab2cf64e7b5e28ee7e482f1f35859",
+      "execution_sha256": "f0d0a34fc778906233284d16f6ce9cfd009968d4c074deb0b44fbc36b5c37e40",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "model_calls": 5,
+      "environment_planning_calls": 0,
+      "acceptance_planning_calls": 2,
+      "runtime_model_stages": {
+        "acceptance_only_planner": 2
+      }
+    }
+  ],
+  "v3_delivery": {
+    "cases": 192,
+    "attempts": 12,
+    "models": 0,
+    "actual_builds": 0,
+    "index": {
+      "path": "validation\\v3-delivery\\results-20261102.json",
+      "sha256": "c2758cd322102d116074a21041f5a3bca1cfc82cda0dcd9e7c2c8e1a79cb6919"
+    }
+  },
+  "legacy_self_contained": {
+    "cases": 16,
+    "models": 0,
+    "actual_builds": 0,
+    "result": {
+      "path": "E:\\Users\\27343\\Docker\\legacy-delivery-cli-20261102-01\\results.json",
+      "sha256": "80835e5fdff8063a3fca01e83b84b533661495721d66cdfe6deb9d423c2ab417"
+    }
+  },
+  "readiness": {
+    "final_cli_operations": 11,
+    "models": 0,
+    "builds": 0,
+    "result": {
+      "path": "E:\\Users\\27343\\Docker\\readiness-cli-20261102-02\\results.json",
+      "sha256": "605a42b8d708fe3464f66e324ab641b43634bcba49296976d03e5bab9cc51770"
+    }
+  },
+  "mutations": {
+    "objects": [
+      "module",
+      "resource",
+      "dependency",
+      "interface"
+    ],
+    "ordinary_cli": {
+      "path": "E:\\Users\\27343\\Docker\\sibling-json-cli-20261102-01\\mutation-cli\\results.json",
+      "sha256": "e8ec23c846435e0d6b2d2a36eac7eb5731953b72294b08920c9691cab48a3326"
+    },
+    "exact_resolver": {
+      "path": "E:\\Users\\27343\\Docker\\sibling-json-cli-20261102-01\\negative-probes.json",
+      "sha256": "5eec25154f672fc51e6b55d4db1dd15f18426bcc40496f392c1bd261a0741f55"
+    }
+  },
+  "regression": {
+    "tests": 774,
+    "passed": 771,
+    "skipped": 3,
+    "three_prompt_checks": "passed",
+    "platform_contract": "passed",
+    "targeted": 63,
+    "logs": {
+      "path": "E:\\Users\\27343\\Docker\\tool-v4-postflight-20261102-01\\results.json",
+      "sha256": "145f54b589a15855f3816f93fe39a2b8ddbae8d19ad210b2108326134869cef3"
+    }
+  },
+  "evidence": {
+    "pair": {
+      "path": "E:\\Users\\27343\\Docker\\sibling-json-cli-20261102-01\\final-audit-ab.json",
+      "sha256": "2ec4294db0277268f3b9166e814a66668af802b96f881bc6fe8c53d48480f12d"
+    },
+    "measurements": {
+      "path": "E:\\Users\\27343\\Docker\\sibling-json-cli-20261102-01\\measurements.json",
+      "sha256": "405a2c178b7f85d43b3706cdcd6655bf60386e866e14243d2b56373f7eb523dc"
+    },
+    "generation_implementation": {
+      "path": "E:\\Users\\27343\\Docker\\sibling-json-cli-20261102-01\\implementation-before.json",
+      "sha256": "2aebe7b3e9ef314806e3ea7888259c864574ae051b0b89f7710a5cbcf1da1197"
+    },
+    "final_implementation": {
+      "path": "E:\\Users\\27343\\Docker\\sibling-json-cli-20261102-01\\implementation-final.json",
+      "sha256": "fc839e9b3087411f2ff92c3734c4b748b45f3f98e5c2fa2da207c0f787c1d406"
+    },
+    "manifest": {
+      "path": "E:\\Users\\27343\\Docker\\sibling-json-cli-20261102-01\\final-evidence-manifest.json",
+      "sha256": "f36f9107cb91f17593055af7a82e48b59d4dc4e26e490dc82a692b11de051676"
+    },
+    "postflight_manifest": {
+      "path": "E:\\Users\\27343\\Docker\\tool-v4-postflight-20261102-01\\final-evidence-manifest.json",
+      "sha256": "fed9b75143b6336f22b167b68f8250ff22a22ca640d21d8581a214c717c481e6"
+    }
+  },
+  "failure_scope": [
+    "Two v3 helper enum mistakes, incomplete rounds preserved; extra 32 executed cases separate from completed 192.",
+    "Two v4 read-only audit helper errors preserved; no model or business reruns.",
+    "B first acceptance-only invocation proposal rejected; regenerated within original envelope, no weakened checks.",
+    "Initial 755-test run exposed old missing-source output assumption; strengthened zero-session/no-state assertion; final full run passes."
+  ],
+  "limits": [
+    "No generic dynamic loading/subprocess/resource variables/default encoding.",
+    "No remote/OCI/platform reconstruction or GC.",
+    "B byte-storage deltas observed zero for whole daemon/filesystem, not attributable Windows physical allocation.",
+    "Single independent A/B contracts; total B latency greater, no end-to-end speedup claim."
+  ]
+}

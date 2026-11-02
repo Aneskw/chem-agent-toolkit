@@ -38,14 +38,14 @@ def registry_root():
 def validate_declaration(declaration):
     """Validate caller-known support boundaries before any paid generation."""
     expected = {'closure', 'requirements', 'interface', 'platform', 'policy'}
-    if isinstance(declaration, dict) and declaration.get('policy') == bundled_data.POLICY:
+    if isinstance(declaration, dict) and declaration.get('policy') in bundled_data.PROFILES:
         expected.add('bundled_data')
         bundled_data.declaration(declaration.get('bundled_data'))
     if not isinstance(declaration, dict) or set(declaration) != expected:
         raise ValueError('shared_tool.declaration: require closure, requirements, interface, platform, policy')
     if declaration['closure'] != 'all-package-and-sources-except-skill-document':
         raise ValueError('shared_tool.closure: explicit complete bundle declaration missing')
-    if declaration['policy'] not in {POLICY, external_tool.POLICY, bundled_data.POLICY} or declaration['platform'] != 'linux/amd64':
+    if declaration['policy'] not in {POLICY, external_tool.POLICY, *bundled_data.PROFILES} or declaration['platform'] != 'linux/amd64':
         raise ValueError('shared_tool.policy/platform: unsupported ' + repr(declaration))
     interface = declaration['interface']
     if (not isinstance(interface, dict) or set(interface) != {'entrypoint', 'workdir', 'resources', 'runtime_network'}
@@ -73,10 +73,10 @@ def validate_declaration(declaration):
 def validate_python(tree, module, declaration, local_modules, entry):
     """Same finite implementation checks for delivered and declared source modules."""
     path = 'package/' + module
-    data_profile = declaration['policy'] == bundled_data.POLICY
+    data_profile = declaration['policy'] in bundled_data.PROFILES
     external = declaration['policy'] == external_tool.POLICY
     requirements_spec = declaration['requirements']
-    allowed_file_nodes = bundled_data.reads(tree, module, declaration['bundled_data']) if data_profile else set()
+    allowed_file_nodes = bundled_data.reads(tree, module, declaration['bundled_data'], sibling=declaration['policy']==bundled_data.SIBLING_POLICY) if data_profile else set()
     if external:
         external_tool.validate_wrapper(tree, path, entry)
     for node in ast.walk(tree):
@@ -114,7 +114,7 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
     from .preparation import validate_bound_entrypoint
     validate_bound_entrypoint({'script': 'package/' + binding['entry'], 'entrypoint': interface['entrypoint']}, binding)
     files = []
-    data_profile = declaration['policy'] == bundled_data.POLICY
+    data_profile = declaration['policy'] in bundled_data.PROFILES
     if data_profile:
         bundled_data.verify(Path(source) / 'package', declaration['bundled_data'])
     local_modules = {p.stem for p in (Path(source) / 'package').rglob('*.py')}
@@ -131,7 +131,7 @@ def describe(source, binding, declaration, requirements=(), constraints=(), runt
                 validate_python(tree, item['path'], declaration, local_modules, binding['entry'])
     from .planner import DEFAULTS
     limits = runtime_limits if runtime_limits is not None else DEFAULTS
-    return {'abi': external_tool.ABI if external else bundled_data.ABI if data_profile else ABI, 'declaration': copy.deepcopy(declaration), 'files': sorted(files, key=lambda f: f['path']),
+    return {'abi': external_tool.ABI if external else bundled_data.PROFILES[declaration['policy']] if data_profile else ABI, 'declaration': copy.deepcopy(declaration), 'files': sorted(files, key=lambda f: f['path']),
             'entry': binding['entry'], 'entry_sha256': binding['entry_sha256'],
             'requirements': list(requirements), 'constraints': list(constraints),
             'runtime_limits': {k: limits[k] for k in ('memory', 'cpus', 'pids')}}
@@ -232,7 +232,7 @@ def validate_record(record, request=None):
                 'image_id', 'daemon_id', 'artifact_id'}
     if isinstance(record, dict) and record.get('abi') == external_tool.ABI:
         expected.add('external_identity')
-    if not isinstance(record, dict) or set(record) != expected or record['abi'] not in {ABI, external_tool.ABI, bundled_data.ABI}:
+    if not isinstance(record, dict) or set(record) != expected or record['abi'] not in {ABI, external_tool.ABI, *bundled_data.PROFILES.values()}:
         raise ValueError('shared_tool.record: unsupported schema')
     req = record['request']
     if (not isinstance(req, dict) or not isinstance(req.get('declaration'), dict)
@@ -249,7 +249,7 @@ def validate_record(record, request=None):
         paths.append(item['path'])
     if paths != sorted(set(paths)):
         raise ValueError('shared_tool.files: duplicate/unsorted implementation paths')
-    policy = external_tool.POLICY if record['abi'] == external_tool.ABI else bundled_data.POLICY if record['abi'] == bundled_data.ABI else POLICY
+    policy = external_tool.POLICY if record['abi'] == external_tool.ABI else next((p for p,a in bundled_data.PROFILES.items() if a==record['abi']), POLICY)
     if record['request'].get('abi') != record['abi'] or record['request']['declaration']['policy'] != policy:
         raise ValueError('shared_tool.policy: version no longer supported')
     validate_declaration(req['declaration'])
@@ -384,7 +384,7 @@ def combine(record, acceptance):
 
 def verify_binding(env, materials):
     binding = env['shared_tool']
-    if binding.get('abi') not in {ABI, external_tool.ABI, bundled_data.ABI}:
+    if binding.get('abi') not in {ABI, external_tool.ABI, *bundled_data.PROFILES.values()}:
         raise ValueError('shared_tool.binding: unsupported ABI')
     request = binding['request']
     if binding['abi'] != request['abi']:
@@ -572,5 +572,5 @@ def inspect(root=None, host=None, process=None):
                 result[-1]['external_identity'] = {k: identity[k] for k in ('executable', 'rootfs', 'plugins', 'data')}
         except (OSError, ValueError, KeyError, TypeError) as exc:
             result.append({'path': str(path), 'status': 'invalid_record', 'detail': str(exc)})
-    return sanitized({'abi': ABI, 'supported_abis': [ABI, external_tool.ABI, bundled_data.ABI], 'registry': str(root), 'artifacts': result,
+    return sanitized({'abi': ABI, 'supported_abis': [ABI, external_tool.ABI, *bundled_data.PROFILES.values()], 'registry': str(root), 'artifacts': result,
                       'pending': [p.name for p in root.glob('*.lock')], 'business_acceptance': 'not_run'})

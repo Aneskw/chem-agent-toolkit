@@ -9,5 +9,13 @@
   "build_calls": 0,
   "qualification": "not_granted",
   "initial_regression": "E:/Users/27343/Docker/readiness-offline-first-20261102.log",
-  "initial_regression_issue": "755 tests; one old helper expected persisted output for missing source; now explicitly asserts earlier block, no state and zero calls. Original blocking requirement retained."
+  "initial_regression_issue": "755 tests; one old helper expected persisted output for missing source; now explicitly asserts earlier block, no state and zero calls. Original blocking requirement retained.",
+  "final_validation": {
+    "operations": 11,
+    "result": {
+      "path": "E:\\Users\\27343\\Docker\\readiness-cli-20261102-02\\results.json",
+      "sha256": "605a42b8d708fe3464f66e324ab641b43634bcba49296976d03e5bab9cc51770"
+    },
+    "regression_tests": 774
+  }
 }
