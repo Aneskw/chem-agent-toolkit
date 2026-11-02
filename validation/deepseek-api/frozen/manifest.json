@@ -6,6 +6,7 @@
   "prompt_bytes": 20195,
   "persisted_prompt_equals_sent_prompt": true,
   "schema_sha256": "a5765810cc3441b84cd09feb8f075e926f890180920e9beed5dbd9441dbb2f4a",
+  "codex_wire_schema_sha256": "ff49fcb9a8ec0235171c55f617ae30a7e5175f8650c0c89f42602e3b48fa0648",
   "fixture_files": {
     "package/README.md": "6f0883f8335f09de4e74b2a089d1a7f446a22356815d28e21eb82cdf2818094e",
     "package/tool.py": "117705254fcec40fb35bd3e15f1aa9082d0bf3866b341d1eba7993596e9b64fd",

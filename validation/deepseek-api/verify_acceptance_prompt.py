@@ -26,7 +26,7 @@ FROZEN = HERE / 'frozen'
 ORIGINAL = HERE / 'original-case'
 sys.path.insert(0, str(ROOT))
 
-from creation_pipeline.runtime import planner  # noqa: E402
+from creation_pipeline.runtime import planner, model_call  # noqa: E402
 
 KINDS = ('none', 'rejected_candidate', 'accepted_plan', 'acceptance_only')
 # The production tree must not depend on any frozen prompt/schema copy.
@@ -151,6 +151,8 @@ def build():
             'input_contract_spec_sha256': sha256(planner.INPUT_CONTRACT_SPEC),
             'plan_schema_sha256': sha256(planner.canonical_schema(planner.PLAN_SCHEMA)),
             'patch_schema_sha256': sha256(planner.canonical_schema(planner.PATCH_SCHEMA)),
+            'codex_wire_schemas': {kind: sha256(planner.canonical_schema(model_call.codex_schema(planner.schema_for(kind))))
+                                   for kind in KINDS},
         },
         'rounds': round_prompts(),
         'saved_case': saved_case_prompt(),

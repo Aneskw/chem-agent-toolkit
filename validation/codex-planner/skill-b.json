@@ -1,0 +1,90 @@
+{
+  "sources": [
+    {
+      "id": "screening_source",
+      "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\bundled-json-input\\source",
+      "license": "BSD-3-Clause"
+    }
+  ],
+  "prompt": "Package the supplied descriptor rule screening tool, preserving scripts/triage.py, scripts/calc_descriptors.py, scripts/data/rules.json and requirements.txt byte-for-byte. Deliver exactly SKILL.md, scripts/triage.py, scripts/calc_descriptors.py, scripts/data/rules.json and requirements.txt; keep provenance and usage inline in SKILL.md. Retain the documented --smiles and --help interface, real RDKit calculation, both valid selected branches, all original descriptor fields and invalid/empty exit-2 diagnostics. Compile independent self-contained argv checks for the actual entry; no host chemistry execution or dependency installs. Assert ethanol weight 46.069 and donors/acceptors 1, phenol weight 94.113 and selected false, policy_id demonstration-screen-50-v1 and maximum 50.0. This threshold is an operational example, not scientific validity. Independently review actual source and retain every failed case. No manual acceptance_plan and no inherited qualification. Write for a batch data curation operator using the same tool and requirements.",
+  "model": {
+    "name": "gpt-6-astra",
+    "transport": "https",
+    "reasoning_effort": "medium",
+    "service_tier": "default",
+    "backend": "codex_cli"
+  },
+  "execution": {
+    "profile": "production",
+    "stop_on_runtime_failure": true,
+    "progress_watch": "observe"
+  },
+  "limits": {
+    "model_calls": 16,
+    "model_timeout": 600,
+    "total_seconds": 3600,
+    "agent_progress_timeout": null,
+    "max_candidates": 1,
+    "max_builds": 1,
+    "repair_rounds": 2
+  },
+  "runtime_defaults": {
+    "options": {
+      "backend": "codex_cli",
+      "pin_base_image": true,
+      "model_timeout": 600,
+      "total_seconds": 2400,
+      "reasoning_effort": "low",
+      "service_tier": "default",
+      "progress_watch": "observe",
+      "model": "gpt-6-astra",
+      "transport": "https"
+    },
+    "constraints": [
+      "Use cached python:3.11-slim-bookworm with observed digest pinning, Python 3.11, all three original pinned dependencies, source-independent dependency prefix only; source_files must include package/scripts/triage.py, package/scripts/calc_descriptors.py, package/scripts/data/rules.json and package/requirements.txt. No generated files, no code-dependent steps, resources=[], runtime_network=false. Cite the stable source README or original modules for CPU-only resource assessment. Never cite generated SKILL.md as environment resource authority. Read JSON resource and retain interface without transforming code."
+    ],
+    "requirements": [
+      "Package the supplied descriptor rule screening tool, preserving scripts/triage.py, scripts/calc_descriptors.py, scripts/data/rules.json and requirements.txt byte-for-byte. Deliver exactly SKILL.md, scripts/triage.py, scripts/calc_descriptors.py, scripts/data/rules.json and requirements.txt; keep provenance and usage inline in SKILL.md. Retain the documented --smiles and --help interface, real RDKit calculation, both valid selected branches, all original descriptor fields and invalid/empty exit-2 diagnostics. Compile independent self-contained argv checks for the actual entry; no host chemistry execution or dependency installs. Assert ethanol weight 46.069 and donors/acceptors 1, phenol weight 94.113 and selected false, policy_id demonstration-screen-50-v1 and maximum 50.0. This threshold is an operational example, not scientific validity. Independently review actual source and retain every failed case. No manual acceptance_plan and no inherited qualification."
+    ],
+    "shared_tool": {
+      "closure": "all-package-and-sources-except-skill-document",
+      "requirements": {
+        "imports": {
+          "rdkit": "2024.9.6",
+          "numpy": "1.26.4",
+          "pillow": "11.3.0"
+        },
+        "executables": []
+      },
+      "interface": {
+        "entrypoint": [
+          "python",
+          "/opt/skill/package/scripts/triage.py"
+        ],
+        "workdir": "/opt/skill",
+        "resources": [],
+        "runtime_network": false
+      },
+      "platform": "linux/amd64",
+      "policy": "closed-python-json-data-v1",
+      "bundled_data": [
+        {
+          "module": "scripts/triage.py",
+          "path": "scripts/data/rules.json",
+          "sha256": "57f8da82b4c7eec60fb37001152a57e8fc9a38624e7a6ee9462a04b600be34ba"
+        }
+      ]
+    }
+  },
+  "batch": {
+    "label": "codex-planner-b",
+    "tags": [
+      "existing-skill",
+      "descriptors",
+      "acceptance",
+      "docker"
+    ]
+  },
+  "notes": "Explicit Codex structured runtime planning via the installed desktop-bundled codex executable. Native discovery, authoring and independent review unchanged. Preserve 16 admitted stages, 600 seconds per model call, 3600 seconds total and 2400 seconds runtime preparation. No manual acceptance plan, no inherited qualification, no backend fallback. Use fresh independent directories and preserve failed evidence.",
+  "network": false
+}

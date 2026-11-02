@@ -1,5 +1,11 @@
 # Skillnet 本地接入契约与适配建议
 
+2026-11-02 Codex planner 增量：本机桌面附带客户端、ChatGPT 登录、普通 CLI 首建/命中已验证，
+见 [后端验证](../integration/codex-planner-desktop-20261102.md)。运行时模型回执增加可选
+wire_schema_sha256/schema_projection，原 schema_sha256 继续指逻辑 schema；不新增 Binding/Attempt
+字段或远端 API。model_config_invalid 可表示本地拒绝或服务端 schema 拒绝，是否已请求须看进程和
+准入台账，不能从错误码推断零请求。旧 DeepSeek 字段、逻辑 schema 和资格协议保持兼容。
+
 核对基线 `6e54875`（P0 与 P1-1）。本文是本地实现的接口清单和未来适配说明，**没有新增
 HTTP 服务、远端 executor、平台数据库或 OCI 分发**。下文“现有”指 Python/CLI/磁盘协议，
 不是承诺稳定的公共 SDK；“建议”需未来单独实现。机器清单和可执行最小示例见

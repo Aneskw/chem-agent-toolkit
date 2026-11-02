@@ -12,6 +12,7 @@ failing request raises a classified error; nothing silently retries through the
 other backend or another model.
 """
 import hashlib
+import copy
 import json
 import os
 import re
@@ -58,6 +59,37 @@ class ModelConfigError(ValueError):
 
 
 BACKENDS = ('codex_cli', 'deepseek_api')
+
+
+def codex_schema(schema):
+    """Narrow existing JSON-text alternatives for Codex's strict wire schema.
+
+    The logical schema and downstream contract validators stay unchanged. Open
+    objects are supported only when the logical schema already permits JSON text;
+    otherwise reject before inference rather than inventing their field closure.
+    """
+    def visit(node, path):
+        result = copy.deepcopy(node)
+        kinds = result.get('type')
+        if isinstance(kinds, list) and 'string' in kinds and 'object' in kinds:
+            result['type'] = 'string'
+            for key in ('properties', 'required', 'additionalProperties', 'items'):
+                result.pop(key, None)
+        if result.get('type') == 'object':
+            props = result.get('properties')
+            if not isinstance(props, dict) or result.get('additionalProperties') is not False:
+                raise ModelConfigError('Codex schema ' + path + ': open object has no supported JSON-text alternative')
+            result['required'] = list(props)
+        for key in ('properties', '$defs', 'definitions'):
+            if isinstance(result.get(key), dict):
+                result[key] = {name: visit(value, path+'/'+key+'/'+name) for name,value in result[key].items()}
+        if isinstance(result.get('items'), dict):
+            result['items'] = visit(result['items'], path+'/items')
+        for key in ('anyOf', 'oneOf', 'allOf'):
+            if isinstance(result.get(key), list):
+                result[key] = [visit(value, path+'/'+key+'/'+str(i)) for i,value in enumerate(result[key])]
+        return result
+    return visit(schema, '$')
 
 
 def isolated_options(transport="default", reasoning=None, tier=None):
@@ -360,7 +392,7 @@ def call(prompt, schema, model, timeout=900, audit_dir=None, progress_timeout=PR
         # Put only the answer schema in the child's working directory. Source
         # documents, skills and test oracles are never discoverable in ancestors.
         target=root/'schema.json'
-        target.write_text(json.dumps(schema, ensure_ascii=False), encoding='utf-8')
+        target.write_text(json.dumps(codex_schema(schema), ensure_ascii=False), encoding='utf-8')
         command=codex_command()+['exec','--ephemeral','--skip-git-repo-check','--sandbox','read-only']
         isolation, settings = isolated_options(transport, reasoning, tier)
         command += isolation
@@ -382,7 +414,7 @@ def call(prompt, schema, model, timeout=900, audit_dir=None, progress_timeout=PR
                  'progress_watch': progress_watch},
                  progress_timeout=progress_timeout, progress_watch=progress_watch,
                  stderr_filter=redact)
-    answer=None;usage={};tools=[];notices=[]
+    answer=None;usage={};tools=[];notices=[];terminal_messages=[]
     completed=False; failed=False
     for line in proc.stdout.splitlines():
         try:event=json.loads(line)
@@ -395,6 +427,10 @@ def call(prompt, schema, model, timeout=900, audit_dir=None, progress_timeout=PR
             notices.append(str(event.get('message', ''))[:200])
         elif event.get('type') in {'turn.failed', 'error'}:
             failed=True
+            detail = event.get('error')
+            message = event.get('message') or (detail.get('message') if isinstance(detail, dict) else detail)
+            if message:
+                terminal_messages.append(redact(str(message))[:1200])
         if event.get('type')!='item.completed':continue
         item=event.get('item',{})
         if not isinstance(item, dict):
@@ -409,7 +445,12 @@ def call(prompt, schema, model, timeout=900, audit_dir=None, progress_timeout=PR
                 tools.append('error')
         elif item.get('type')!='reasoning':tools.append(item.get('type','unknown'))
     if proc.returncode or not completed or failed or answer is None or tools:
-        error=f'Model call failed: exit={proc.returncode}, completed={completed}, failed={failed}, answer={answer is not None}, tool_events={tools}; {redact(proc.stderr[-600:])}'
+        error=f'Model call failed: exit={proc.returncode}, completed={completed}, failed={failed}, answer={answer is not None}, tool_events={tools}; events={terminal_messages[:2]}; {redact(proc.stderr[-600:])}'
+        for message in terminal_messages:
+            try: code = json.loads(message).get('error', {}).get('code')
+            except (ValueError, AttributeError): code = None
+            if code == 'invalid_json_schema':
+                raise ModelConfigError(error)
         if proc.returncode or not completed or failed:
             raise ModelExecutionError(error)
         # Answered, but violated the no-tool / JSON-answer contract. That is a
@@ -421,6 +462,8 @@ def call(prompt, schema, model, timeout=900, audit_dir=None, progress_timeout=PR
              'prompt_sha256':hashlib.sha256(prompt.encode()).hexdigest(),
              'prompt_bytes':len(prompt.encode()),
              'schema_sha256':schema_sha256,
+             'wire_schema_sha256':hashlib.sha256(json.dumps(codex_schema(schema),ensure_ascii=False).encode('utf-8')).hexdigest(),
+             'schema_projection':'codex-json-text-v1',
              'response_sha256':hashlib.sha256(json.dumps(answer,sort_keys=True).encode()).hexdigest()}
     return answer,receipt
 

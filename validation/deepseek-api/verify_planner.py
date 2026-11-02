@@ -128,6 +128,8 @@ def freeze():
         'persisted_prompt_equals_sent_prompt': captured['persisted_equals_sent'],
         'schema_sha256': hashlib.sha256(
             json.dumps(captured['schema'], ensure_ascii=False, sort_keys=True).encode('utf-8')).hexdigest(),
+        'codex_wire_schema_sha256': hashlib.sha256(
+            json.dumps(model_call.codex_schema(captured['schema']), ensure_ascii=False, sort_keys=True).encode('utf-8')).hexdigest(),
         'fixture_files': fixture_digests(),
         'binding': BINDING,
         'script': SCRIPT,
@@ -151,13 +153,16 @@ def check(verbose=True):
     same_schema = (json.dumps(captured['schema'], ensure_ascii=False, sort_keys=True)
                    == json.dumps(expected_schema, ensure_ascii=False, sort_keys=True))
     same_fixture = fixture_digests() == manifest['fixture_files']
+    same_wire = hashlib.sha256(json.dumps(model_call.codex_schema(captured['schema']), ensure_ascii=False,
+                                         sort_keys=True).encode('utf-8')).hexdigest() == manifest.get('codex_wire_schema_sha256')
     clean_prompt = captured['persisted_equals_sent']
     if verbose:
         print('prompt identical:', same_prompt)
         print('schema identical:', same_schema)
+        print('Codex wire schema identical:', same_wire)
         print('fixture identical:', same_fixture)
         print('frozen file equals the sent prompt (no redaction applied):', clean_prompt)
-    return {'prompt_identical': same_prompt, 'schema_identical': same_schema,
+    return {'prompt_identical': same_prompt, 'schema_identical': same_schema, 'codex_wire_schema_identical': same_wire,
             'fixture_identical': same_fixture,
             'persisted_equals_sent': clean_prompt,
             'prompt_sha256': hashlib.sha256(actual_prompt.encode('utf-8')).hexdigest(),

@@ -1,0 +1,831 @@
+{
+  "version": 1,
+  "passed": true,
+  "at": "2026-11-02T06:09:50.516758+00:00",
+  "baseline_commit": "3f459be0e18e3e38d4a306aa39a0f5990899755b",
+  "scope": "desktop-bundled Codex subprocess for runtime planning; ordinary public CLI A/B; no private desktop HTTP API",
+  "runtime_backend": "codex_cli",
+  "codex_model": "gpt-6-astra",
+  "schema_projection": "codex-json-text-v1",
+  "binary_preflight": {
+    "at": "2026-11-02T04:19:00.270115+00:00",
+    "baseline_commit": "3f459be0e18e3e38d4a306aa39a0f5990899755b",
+    "binary": [
+      "C:\\Users\\27343\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae\\codex.EXE"
+    ],
+    "binary_sha256": "3097c909fb6d5cd63510d44aceb1d42df9f6e85722a3e447e477def1ecf60e16",
+    "version": "codex-cli 0.166.0-alpha.5.1",
+    "version_exit_code": 0,
+    "changes": [
+      {
+        "label": "a",
+        "backend_before": "deepseek_api",
+        "backend_after": "codex_cli",
+        "codex_model": "gpt-6-astra",
+        "limits": {
+          "model_calls": 16,
+          "model_timeout": 600,
+          "total_seconds": 3600,
+          "agent_progress_timeout": null,
+          "max_candidates": 1,
+          "max_builds": 1,
+          "repair_rounds": 2
+        },
+        "runtime_options": {
+          "backend": "codex_cli",
+          "pin_base_image": true,
+          "model_timeout": 600,
+          "total_seconds": 2400,
+          "reasoning_effort": "low",
+          "service_tier": "default",
+          "progress_watch": "observe",
+          "model": "gpt-6-astra",
+          "transport": "https"
+        },
+        "source_and_tool_requirements_unchanged": true
+      },
+      {
+        "label": "b",
+        "backend_before": "deepseek_api",
+        "backend_after": "codex_cli",
+        "codex_model": "gpt-6-astra",
+        "limits": {
+          "model_calls": 16,
+          "model_timeout": 600,
+          "total_seconds": 3600,
+          "agent_progress_timeout": null,
+          "max_candidates": 1,
+          "max_builds": 1,
+          "repair_rounds": 2
+        },
+        "runtime_options": {
+          "backend": "codex_cli",
+          "pin_base_image": true,
+          "model_timeout": 600,
+          "total_seconds": 2400,
+          "reasoning_effort": "low",
+          "service_tier": "default",
+          "progress_watch": "observe",
+          "model": "gpt-6-astra",
+          "transport": "https"
+        },
+        "source_and_tool_requirements_unchanged": true
+      }
+    ],
+    "credential_handling": "normal existing client authentication; no token file read/copied",
+    "model_requests": 0,
+    "official_documentation": "https://learn.chatgpt.com/docs/non-interactive-mode"
+  },
+  "source": {
+    "path": "E:\\Users\\27343\\Docker\\chem-agent-toolkit-integration_deepseekapi\\validation\\deepseek-api\\bundled-json-input\\source",
+    "files": [
+      {
+        "path": "README.md",
+        "sha256": "bcff149cc2157c20134892cf7a48054ee7ef6c81e152bd48ff48e4f09f64fd2f",
+        "bytes": 1550
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "60b6e98996d1f712a21cc3d923234da660d360b09ac8578c00bbf977c153d4bc",
+        "bytes": 46
+      },
+      {
+        "path": "scripts/calc_descriptors.py",
+        "sha256": "301b54ba22bdac2c53a984a40a17c06fd75fc36c62da0bf0e0aa8af0d23f7c4e",
+        "bytes": 1710
+      },
+      {
+        "path": "scripts/data/rules.json",
+        "sha256": "57f8da82b4c7eec60fb37001152a57e8fc9a38624e7a6ee9462a04b600be34ba",
+        "bytes": 76
+      },
+      {
+        "path": "scripts/triage.py",
+        "sha256": "ebfd320d735dc15a6d571f11b6421dd36e6b1af2d01739ab400862cd3725e530",
+        "bytes": 1238
+      }
+    ]
+  },
+  "observations": [
+    {
+      "label": "a",
+      "output": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-02\\a\\state\\outputs\\20261102T133538-abd4a2ac",
+      "build_id": "20261102T133538-abd4a2ac",
+      "name": "rdkit-descriptor-rule-screening",
+      "revision_id": "rev-d8f5e940ebef36f4e14bcbf51ac30674eac42026c869a0b1c7ea018be3f2e7cb",
+      "cases": 16,
+      "current_qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "independent_review": true,
+      "direct_business_cases": {
+        "CCO": "direct-ethanol-computation",
+        "c1ccccc1O": "direct-phenol-policy-outcome",
+        "": "reject-empty-value",
+        "not-a-smiles": "documented-invalid-token-pending-contract"
+      },
+      "author_session": "01a19ac1-9267-7e12-adf2-84ede6be0c4f",
+      "review_session": "01a19ac6-365b-7802-9cf8-9a07fc6fd2dd",
+      "attempt_directory": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-02\\a\\state\\outputs\\20261102T133538-abd4a2ac\\runtime\\candidate-628e5a4671bcebc81bab6a0940febd11789f3d43a8ecf2ee2c2479b1fa94a3dc\\edf6d5b9504843d5b142f7348e16acba",
+      "execution_report_sha256": "1bae45494820d60dd4d38218d2d441d9127afe67af40124f7f8e8622bce8b692",
+      "acceptance_sha256": "f77c3358045eec0cf5527d5af96878304b44c82af17ed5e521dd294d6d4cb200",
+      "skill_sha256": "be55b5b72d860e292a482e6ffe16cf4e66e2d9d383b7d474c32110f6f32d7d35",
+      "artifact_id": "95a3fe4d2173cdfa03118dc49eb5855bb44ce0a5bf96be488ae13dc2f4a33357",
+      "image_id": "sha256:3529f09170d52339a86e2002b5d7b7d962237987b02e7d93e424b6a5e1f18926",
+      "build_calls": {
+        "environment": 1,
+        "tool": 1
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 3,
+        "shared_tool": {
+          "status": "miss",
+          "reason": "no_available_exact_request",
+          "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+          "candidates": [],
+          "other_versions": []
+        },
+        "environment_planning_calls": 3,
+        "acceptance_planning_calls": 3,
+        "model_calls_by_stage": {
+          "combined_environment_acceptance_planner": 3
+        }
+      },
+      "model_calls": [
+        {
+          "phase": "discovery",
+          "session_key": "discovery",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 73403,
+            "cached_input_tokens": 52608,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 3126,
+            "reasoning_output_tokens": 76
+          },
+          "prompt_sha256": "2b9c7ebc58422958457f341aa5ceb706c5fcc4238b91b1ae32a77fac7e2a3ebd",
+          "tool_events": 6,
+          "session_id": "01a19ac1-9267-7e12-adf2-84ede6be0c4f",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 116.04,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.978,
+            "last_stdout_seconds": 113.639,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "author",
+          "session_key": "build:rdkit-descriptor-rule-screening",
+          "resumed": true,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 447671,
+            "cached_input_tokens": 390016,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 8436,
+            "reasoning_output_tokens": 328
+          },
+          "prompt_sha256": "5b6d6fa35f50f197d463f51abd3b4e7d17b1c7af1754f9e266e47eafcb9b6209",
+          "tool_events": 8,
+          "session_id": "01a19ac1-9267-7e12-adf2-84ede6be0c4f",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 187.882,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.941,
+            "last_stdout_seconds": 185.11,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "review",
+          "session_key": "review:rdkit-descriptor-rule-screening",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 182388,
+            "cached_input_tokens": 147968,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1368,
+            "reasoning_output_tokens": 64
+          },
+          "prompt_sha256": "69943425d03c6445caf21d440b7e5afa9a4599ca6a05d0b74f904ab5b202db02",
+          "tool_events": 6,
+          "session_id": "01a19ac6-365b-7802-9cf8-9a07fc6fd2dd",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 74.803,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.916,
+            "last_stdout_seconds": 72.036,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "gpt-6-astra",
+          "backend": "codex_cli",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 24171,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 4107,
+            "reasoning_output_tokens": 73
+          },
+          "elapsed_seconds": 84.148,
+          "prompt_sha256": "c48f9ea7a45a73eca60e61482663ac63d37c9c284346d85f1e2fc404caaa0157",
+          "schema_sha256": "a5765810cc3441b84cd09feb8f075e926f890180920e9beed5dbd9441dbb2f4a"
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "gpt-6-astra",
+          "backend": "codex_cli",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 27560,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 664,
+            "reasoning_output_tokens": 203
+          },
+          "elapsed_seconds": 30.868,
+          "prompt_sha256": "09f1d5cd8de5c68414835276964b2e76674a2b2ab1fcb44dc78bffa3d5e529fc",
+          "schema_sha256": "51847f9d809730759063b4c84aa4e5361d8b4872d566c4cfa968c12f4896c563"
+        },
+        {
+          "phase": "runtime_planning",
+          "model": "gpt-6-astra",
+          "backend": "codex_cli",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 27816,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 474,
+            "reasoning_output_tokens": 314
+          },
+          "elapsed_seconds": 31.055,
+          "prompt_sha256": "d32fab86437c7f0191a1347035d4b71282a97f245ad0bf5d3b00bd82a76e73db",
+          "schema_sha256": "51847f9d809730759063b4c84aa4e5361d8b4872d566c4cfa968c12f4896c563"
+        }
+      ],
+      "stage_counts": {
+        "discovery": 1,
+        "author": 1,
+        "review": 1,
+        "runtime_planning": 3
+      },
+      "cli_wall_seconds": 605.1509604999992
+    },
+    {
+      "label": "b",
+      "output": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-02\\b\\state\\outputs\\20261102T135016-17fd2f45",
+      "build_id": "20261102T135016-17fd2f45",
+      "name": "descriptor-rule-screening",
+      "revision_id": "rev-f8a1f4d4cb79f110017854118e21e2b4a4d5455092e2616850e81eccf0efcbfd",
+      "cases": 16,
+      "current_qualification": {
+        "accepted": true,
+        "reason": "Content review and current Docker business evidence passed"
+      },
+      "independent_review": true,
+      "direct_business_cases": {
+        "CCO": "current-ethanol-completed-and-selected",
+        "c1ccccc1O": "current-phenol-valid-unselected",
+        "not-a-smiles": "current-invalid-token-rejection",
+        "": "current-empty-value-rejection"
+      },
+      "author_session": "01a19ace-f7b3-7653-9270-7ffb4c5e1b99",
+      "review_session": "01a19ad4-1fc1-7cb3-963b-567871f3639c",
+      "attempt_directory": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-02\\b\\state\\outputs\\20261102T135016-17fd2f45\\runtime\\candidate-c69cc297ffc53a23233207d0eeb89cd0e7be4742ff47d9f9e9a208b9c3b4d049\\727072f83b8f45b09930c0ec6e3d9f09",
+      "execution_report_sha256": "abb3ff7302b9a8a34aad6f512945a1fc8785ddb9572080c55d081718adeb28cd",
+      "acceptance_sha256": "c8cd70d1415b456de6360203bccd9bdd31fb489062206a83e154c55e7ce82467",
+      "skill_sha256": "72bd709c969bda78d6c08307164c186140a4c41f62076445d67e31d3c361f434",
+      "artifact_id": "95a3fe4d2173cdfa03118dc49eb5855bb44ce0a5bf96be488ae13dc2f4a33357",
+      "image_id": "sha256:3529f09170d52339a86e2002b5d7b7d962237987b02e7d93e424b6a5e1f18926",
+      "build_calls": {
+        "environment": 0,
+        "tool": 0
+      },
+      "preparation": {
+        "status": "prepared",
+        "gaps": [],
+        "model_calls": 2,
+        "shared_tool": {
+          "status": "hit",
+          "reason": "exact_request_and_current_image",
+          "request_key": "b526d9105559a4bcdafbc4b5a9e1468d454fe5a3fb7c14f91c73f9a2f4c627ac",
+          "artifact_id": "95a3fe4d2173cdfa03118dc49eb5855bb44ce0a5bf96be488ae13dc2f4a33357"
+        },
+        "environment_planning_calls": 0,
+        "acceptance_planning_calls": 2,
+        "model_calls_by_stage": {
+          "acceptance_only_planner": 2
+        }
+      },
+      "model_calls": [
+        {
+          "phase": "discovery",
+          "session_key": "discovery",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 88202,
+            "cached_input_tokens": 69120,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 3192,
+            "reasoning_output_tokens": 59
+          },
+          "prompt_sha256": "556995ed8ab7124e0c7225887fe4698e247594bd356c2e58ab45eaa7358315d2",
+          "tool_events": 6,
+          "session_id": "01a19ace-f7b3-7653-9270-7ffb4c5e1b99",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 121.731,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 5.992,
+            "last_stdout_seconds": 119.571,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "author",
+          "session_key": "build:descriptor-rule-screening",
+          "resumed": true,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 558472,
+            "cached_input_tokens": 502400,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 8419,
+            "reasoning_output_tokens": 271
+          },
+          "prompt_sha256": "91b2dce4c78b02bdf326ce818b9368f16b67e23cfb3ebc50c275588ab8a080e8",
+          "tool_events": 12,
+          "session_id": "01a19ace-f7b3-7653-9270-7ffb4c5e1b99",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 215.919,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 3.936,
+            "last_stdout_seconds": 213.576,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "review",
+          "session_key": "review:descriptor-rule-screening",
+          "resumed": false,
+          "model": "gpt-6-astra",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 179693,
+            "cached_input_tokens": 145280,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1901,
+            "reasoning_output_tokens": 81
+          },
+          "prompt_sha256": "0b174a337fd8f850e46ad618c29ac7a125c3c634efeb599211b0331f23a5529a",
+          "tool_events": 6,
+          "session_id": "01a19ad4-1fc1-7cb3-963b-567871f3639c",
+          "stream_threads_finished": true,
+          "elapsed_seconds": 104.18,
+          "progress_observation": {
+            "watchdog": "observe_only",
+            "progress_timeout_seconds": null,
+            "max_silence_seconds": 6.005,
+            "last_stdout_seconds": 101.736,
+            "observe_seconds": 240,
+            "progress_limit_exceeded": false,
+            "window_meaning": "exceeded the local output window; nothing is known about the model",
+            "process_activity_seen": true,
+            "counters_available": true
+          },
+          "image_audit": {
+            "status": "available",
+            "view_calls": [],
+            "image_results": 0
+          }
+        },
+        {
+          "phase": "runtime_acceptance_planning",
+          "model": "gpt-6-astra",
+          "backend": "codex_cli",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 25276,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 3758,
+            "reasoning_output_tokens": 112
+          },
+          "elapsed_seconds": 95.918,
+          "prompt_sha256": "d4cd5874db43ef927bcf6eba602d3a9eb1c1376f7ea4aa4c3e28c4dd8d473335",
+          "schema_sha256": "42ade1ce1bd66b8fe0bb540ab4289984671032982c4854192f808fc8a8e1513a"
+        },
+        {
+          "phase": "runtime_acceptance_planning",
+          "model": "gpt-6-astra",
+          "backend": "codex_cli",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 29203,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 3566,
+            "reasoning_output_tokens": 30
+          },
+          "elapsed_seconds": 61.823,
+          "prompt_sha256": "87d1c1dab4f62ac9cf85eb5e66abf921546c5bcf80fa238117d58696e96710d4",
+          "schema_sha256": "42ade1ce1bd66b8fe0bb540ab4289984671032982c4854192f808fc8a8e1513a"
+        }
+      ],
+      "stage_counts": {
+        "discovery": 1,
+        "author": 1,
+        "review": 1,
+        "runtime_acceptance_planning": 2
+      },
+      "cli_wall_seconds": 635.4441485999996
+    }
+  ],
+  "auth_status": {
+    "at": "2026-11-02T05:43:30.633636+00:00",
+    "exit_code": 0,
+    "auth_mode": "chatgpt",
+    "raw_diagnostics_saved": false,
+    "credential_files_read_by_our_code": false,
+    "model_requests": 0
+  },
+  "successful_pair_cases": 32,
+  "backend_audit": {
+    "passed": true,
+    "at": "2026-11-02T06:03:02.527047+00:00",
+    "scope": "actual completed runtime model receipts, current qualification and immutable prior P2 bindings",
+    "structured_codex_stages": [
+      {
+        "label": "a",
+        "receipt": {
+          "phase": "runtime_planning",
+          "model": "gpt-6-astra",
+          "backend": "codex_cli",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 24171,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 4107,
+            "reasoning_output_tokens": 73
+          },
+          "elapsed_seconds": 84.148,
+          "prompt_sha256": "c48f9ea7a45a73eca60e61482663ac63d37c9c284346d85f1e2fc404caaa0157",
+          "schema_sha256": "a5765810cc3441b84cd09feb8f075e926f890180920e9beed5dbd9441dbb2f4a"
+        }
+      },
+      {
+        "label": "a",
+        "receipt": {
+          "phase": "runtime_planning",
+          "model": "gpt-6-astra",
+          "backend": "codex_cli",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 27560,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 664,
+            "reasoning_output_tokens": 203
+          },
+          "elapsed_seconds": 30.868,
+          "prompt_sha256": "09f1d5cd8de5c68414835276964b2e76674a2b2ab1fcb44dc78bffa3d5e529fc",
+          "schema_sha256": "51847f9d809730759063b4c84aa4e5361d8b4872d566c4cfa968c12f4896c563"
+        }
+      },
+      {
+        "label": "a",
+        "receipt": {
+          "phase": "runtime_planning",
+          "model": "gpt-6-astra",
+          "backend": "codex_cli",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 27816,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 474,
+            "reasoning_output_tokens": 314
+          },
+          "elapsed_seconds": 31.055,
+          "prompt_sha256": "d32fab86437c7f0191a1347035d4b71282a97f245ad0bf5d3b00bd82a76e73db",
+          "schema_sha256": "51847f9d809730759063b4c84aa4e5361d8b4872d566c4cfa968c12f4896c563"
+        }
+      },
+      {
+        "label": "b",
+        "receipt": {
+          "phase": "runtime_acceptance_planning",
+          "model": "gpt-6-astra",
+          "backend": "codex_cli",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 25276,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 3758,
+            "reasoning_output_tokens": 112
+          },
+          "elapsed_seconds": 95.918,
+          "prompt_sha256": "d4cd5874db43ef927bcf6eba602d3a9eb1c1376f7ea4aa4c3e28c4dd8d473335",
+          "schema_sha256": "42ade1ce1bd66b8fe0bb540ab4289984671032982c4854192f808fc8a8e1513a"
+        }
+      },
+      {
+        "label": "b",
+        "receipt": {
+          "phase": "runtime_acceptance_planning",
+          "model": "gpt-6-astra",
+          "backend": "codex_cli",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 29203,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 3566,
+            "reasoning_output_tokens": 30
+          },
+          "elapsed_seconds": 61.823,
+          "prompt_sha256": "87d1c1dab4f62ac9cf85eb5e66abf921546c5bcf80fa238117d58696e96710d4",
+          "schema_sha256": "42ade1ce1bd66b8fe0bb540ab4289984671032982c4854192f808fc8a8e1513a"
+        }
+      }
+    ],
+    "deepseek_stages": 0,
+    "prior_p2_files_and_current_qualifications_preserved": true,
+    "actual_wire_and_isolation": [
+      {
+        "label": "a",
+        "base_kind": "none",
+        "process": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-02\\a\\state\\runs\\20261102T133538-abd4a2ac\\runtime-preparation\\rdkit-descriptor-rule-screening\\affbfd69b8724fbeba0d0510efc5d136\\materials\\planning\\0\\model-0\\process.json",
+        "binary": "C:\\Users\\27343\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae\\codex.EXE",
+        "logical_schema_sha256": "a5765810cc3441b84cd09feb8f075e926f890180920e9beed5dbd9441dbb2f4a",
+        "wire_schema_sha256": "d558a47f416e8688f81df06d583b83f6adc79df239078c9190320d06af9fc9ca",
+        "wire_schema_equals_projection": true
+      },
+      {
+        "label": "a",
+        "base_kind": "rejected_candidate",
+        "process": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-02\\a\\state\\runs\\20261102T133538-abd4a2ac\\runtime-preparation\\rdkit-descriptor-rule-screening\\affbfd69b8724fbeba0d0510efc5d136\\materials\\planning\\1\\model-0\\process.json",
+        "binary": "C:\\Users\\27343\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae\\codex.EXE",
+        "logical_schema_sha256": "51847f9d809730759063b4c84aa4e5361d8b4872d566c4cfa968c12f4896c563",
+        "wire_schema_sha256": "8f83cdc5c4973a972d5daa9ab081df561c2fe4c24c951689d0941e4e700c294f",
+        "wire_schema_equals_projection": true
+      },
+      {
+        "label": "a",
+        "base_kind": "rejected_candidate",
+        "process": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-02\\a\\state\\runs\\20261102T133538-abd4a2ac\\runtime-preparation\\rdkit-descriptor-rule-screening\\affbfd69b8724fbeba0d0510efc5d136\\materials\\planning\\2\\model-0\\process.json",
+        "binary": "C:\\Users\\27343\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae\\codex.EXE",
+        "logical_schema_sha256": "51847f9d809730759063b4c84aa4e5361d8b4872d566c4cfa968c12f4896c563",
+        "wire_schema_sha256": "8f83cdc5c4973a972d5daa9ab081df561c2fe4c24c951689d0941e4e700c294f",
+        "wire_schema_equals_projection": true
+      },
+      {
+        "label": "b",
+        "base_kind": "acceptance_only",
+        "process": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-02\\b\\state\\runs\\20261102T135016-17fd2f45\\runtime-preparation\\descriptor-rule-screening\\ef3372d82f224d2fb7e95e84398883e7\\materials\\acceptance-planning\\0\\model-0\\process.json",
+        "binary": "C:\\Users\\27343\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae\\codex.EXE",
+        "logical_schema_sha256": "42ade1ce1bd66b8fe0bb540ab4289984671032982c4854192f808fc8a8e1513a",
+        "wire_schema_sha256": "d6fab36590b591cc93af764bbfaef63bb7e3434de1fed1a861c999b4121dfd2e",
+        "wire_schema_equals_projection": true
+      },
+      {
+        "label": "b",
+        "base_kind": "acceptance_only",
+        "process": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-02\\b\\state\\runs\\20261102T135016-17fd2f45\\runtime-preparation\\descriptor-rule-screening\\ef3372d82f224d2fb7e95e84398883e7\\materials\\acceptance-planning\\1\\model-0\\process.json",
+        "binary": "C:\\Users\\27343\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae\\codex.EXE",
+        "logical_schema_sha256": "42ade1ce1bd66b8fe0bb540ab4289984671032982c4854192f808fc8a8e1513a",
+        "wire_schema_sha256": "d6fab36590b591cc93af764bbfaef63bb7e3434de1fed1a861c999b4121dfd2e",
+        "wire_schema_equals_projection": true
+      }
+    ],
+    "evidence_audit": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-02\\audit-ab.json",
+    "evidence_audit_sha256": "1b0862748cc459fa276126492b23185893ab3dc11e0fc1db4bcdcf6a55ca1dfd"
+  },
+  "regression": {
+    "tests": 755,
+    "passed": 752,
+    "skipped": 3,
+    "targeted": 154,
+    "new_tests": 7,
+    "results": [
+      {
+        "label": "targeted",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "-m",
+          "unittest",
+          "tests.pipeline.test_codex_wire_schema",
+          "tests.pipeline.test_model_call",
+          "tests.pipeline.test_transport_options",
+          "tests.pipeline.test_planner_schema",
+          "tests.pipeline.test_deepseek_backend",
+          "tests.pipeline.test_input_contract",
+          "tests.pipeline.test_reconnect_recovery",
+          "-q"
+        ],
+        "exit_code": 0,
+        "seconds": 66.41406609999831
+      },
+      {
+        "label": "freeze-planner",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_planner.py",
+          "freeze"
+        ],
+        "exit_code": 0,
+        "seconds": 0.23801230000026408
+      },
+      {
+        "label": "freeze-acceptance",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_acceptance_prompt.py",
+          "freeze"
+        ],
+        "exit_code": 0,
+        "seconds": 0.2406291000006604
+      },
+      {
+        "label": "prompt-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_prompt_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.5404290999995283
+      },
+      {
+        "label": "acceptance-prompt",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_acceptance_prompt.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.2720993000002636
+      },
+      {
+        "label": "planner",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_planner.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.24577469999894674
+      },
+      {
+        "label": "platform-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_skillnet_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.3286603999986255
+      },
+      {
+        "label": "regression",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "exit_code": 0,
+        "seconds": 192.65997980000066
+      }
+    ]
+  },
+  "first_offline_checks": {
+    "root": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-01\\offline-checks",
+    "tests": 133,
+    "scope": "before strict-schema defect repair; not final proof"
+  },
+  "failed_round": {
+    "root": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-01",
+    "summary_status": "blocked",
+    "admitted_stages": 4,
+    "completed_native_stages": 3,
+    "schema_rejected_requests": 1,
+    "current_qualification": {
+      "accepted": false,
+      "reason": "Execution has not passed or content approval was revoked"
+    },
+    "files_unchanged": true,
+    "resumed": false,
+    "execution_reports": 0
+  },
+  "model_accounting": {
+    "unit": "admitted stages, not provider billable calls or internal Codex turns",
+    "per_batch_limit": 16,
+    "successful_pair": 11,
+    "prior_failed_round": 4,
+    "all_started_stages": 15,
+    "known_completed_stages": 14,
+    "prior_rejected_request_billing": "unknown; no successful inference receipt; retained as an admitted request",
+    "paid_probes": 0,
+    "deepseek_stages": 0
+  },
+  "preserved": {
+    "source_and_tool_requirements": true,
+    "original_p2_files_and_current_qualifications": true,
+    "original_p0_bindings": true,
+    "deepseek_configs_and_backend": true,
+    "independent_review_and_current_qualification": true
+  },
+  "limitations": [
+    "local observed desktop binary/path; plain ChatGPT UI is not a callable planner API",
+    "DeepSeek api_* token/retry settings do not apply to Codex; original stage/time envelopes unchanged",
+    "runtime association/diagnosis share runtime options but not counted as real tests unless observed",
+    "existing Docker/BuildKit caches retained; new registries are not cold-start storage measurements",
+    "logical schemas remain unchanged; wire projection is finite and refuses unsupported open objects"
+  ],
+  "evidence": [
+    {
+      "path": "E:\\Users\\27343\\Docker\\codex-planner-cli-20261102-02\\final-evidence-manifest.json",
+      "sha256": "1dabb96e6afff5c51c39754642b79ed6a5b632eab422ffe27f2fdb6837c192c2",
+      "files": 660
+    },
+    {
+      "path": "E:\\Users\\27343\\Docker\\codex-planner-postflight-20261102-01\\final-evidence-manifest.json",
+      "sha256": "8e85036713f91eab87f256dc72ac2c028fdc76d736711b4ca22d854b8e38ee68",
+      "files": 9
+    }
+  ]
+}
