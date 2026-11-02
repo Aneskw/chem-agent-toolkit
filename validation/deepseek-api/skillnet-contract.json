@@ -116,6 +116,12 @@
       "skill",
       "verify_inputs",
       "inherit"
+    ],
+    "creation_pipeline.management": [
+      "dispatch",
+      "from_file",
+      "contract",
+      "exit_code"
     ]
   },
   "error_anchors": {
@@ -165,6 +171,13 @@
       "tool_compatibility.unclassified",
       "scope_migration_requires_new_skill",
       "skill_contract_change_requires_review"
+    ],
+    "creation_pipeline/management.py": [
+      "request_changed",
+      "selection_failed",
+      "host_unavailable",
+      "execution_blocked",
+      "request_invalid"
     ]
   },
   "examples": {
@@ -230,5 +243,10 @@
     "entry",
     "entry_sha256",
     "runtime_limits"
-  ]
+  ],
+  "local_management": {
+    "api_version": "chem-local-management/v1",
+    "contract": "validation/local-management/contract-v1.json",
+    "implementation": "implemented_local_only"
+  }
 }

@@ -1,0 +1,125 @@
+{
+  "api_version": "chem-local-management/v1",
+  "request_fields": [
+    "api_version",
+    "request_id",
+    "operation",
+    "params"
+  ],
+  "response_fields": [
+    "api_version",
+    "request_id",
+    "operation",
+    "ok",
+    "observed_at",
+    "data",
+    "error",
+    "evidence",
+    "side_effects"
+  ],
+  "error_fields": [
+    "code",
+    "object",
+    "field",
+    "expected",
+    "actual",
+    "reason",
+    "source_refs",
+    "raw"
+  ],
+  "evidence_fields": [
+    "path",
+    "kind",
+    "sha256"
+  ],
+  "operations": {
+    "tool.describe": {
+      "required": [
+        "context",
+        "declaration",
+        "entry"
+      ],
+      "optional": [
+        "caller_constraints",
+        "constraints",
+        "requirements",
+        "runtime_limits",
+        "tool_compatibility"
+      ]
+    },
+    "tool.resolve": {
+      "required": [
+        "descriptor",
+        "request_key"
+      ],
+      "optional": [
+        "registry"
+      ]
+    },
+    "tool.select": {
+      "required": [
+        "descriptor",
+        "reference",
+        "request_key"
+      ],
+      "optional": [
+        "registry"
+      ]
+    },
+    "tool.availability": {
+      "required": [
+        "reference"
+      ],
+      "optional": [
+        "offline",
+        "registry"
+      ]
+    },
+    "skill.execute": {
+      "required": [
+        "expected_freeze_sha256",
+        "expected_revision",
+        "library",
+        "name"
+      ],
+      "optional": []
+    },
+    "skill.qualification": {
+      "required": [
+        "library",
+        "name"
+      ],
+      "optional": [
+        "offline"
+      ]
+    }
+  },
+  "descriptor": {
+    "required": [
+      "context",
+      "declaration",
+      "entry"
+    ],
+    "optional": [
+      "caller_constraints",
+      "constraints",
+      "requirements",
+      "runtime_limits",
+      "tool_compatibility"
+    ]
+  },
+  "execution_policy": {
+    "reuse_bound_image": true,
+    "allow_diagnosis": false,
+    "allow_build": false,
+    "allow_models": false,
+    "expected_revision_and_freeze_required": true,
+    "request_id_is_idempotency_key": false,
+    "evidence_snapshot_from_writer_lock": true
+  },
+  "offline_operations": [
+    "tool.describe",
+    "tool.availability",
+    "skill.qualification"
+  ]
+}

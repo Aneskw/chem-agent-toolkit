@@ -101,24 +101,54 @@ def verify_attempt(root, ref, delivery, freeze_sha256):
     return receipt
 
 
-def resume_build(library, name, resource_refs=None, *, reuse_image=False, recover_lock=False):
+def resume_build(library, name, resource_refs=None, *, reuse_image=False, recover_lock=False,
+                 allow_diagnosis=True, expected_revision=None, expected_freeze=None, include_evidence=False):
     """Explicit candidate-only recovery; previous attempts remain immutable."""
     from creation_pipeline.artifacts import store
     if recover_lock:
         store.release_dead_lock(library)
     selected = store.get(library, name, include_candidates=True)
+    def snapshot(entry):
+        return copy.deepcopy({k:entry[k] for k in ('name','revision_id','freeze_sha256','evidence','runtime','pending_runtime') if k in entry})
+    def check_selection(entry):
+        from .preparation import RuntimeBlocked
+        for field, expected in (('revision_id', expected_revision), ('freeze_sha256', expected_freeze)):
+            if expected is not None and entry.get(field) != expected:
+                error = RuntimeBlocked('revision_changed', field + ': expected=' + repr(expected) + '; actual=' + repr(entry.get(field)), 'binding')
+                error.field, error.expected, error.actual = field, expected, entry.get(field)
+                if include_evidence: error.evidence_snapshot = snapshot(entry)
+                raise error
+    check_selection(selected)
     if (selected.get('current_content', {}).get('status') == 'failed'
             or selected.get('runtime', {}).get('repair_lane') in {'unknown', 'contract'}):
+        if not allow_diagnosis:
+            from .preparation import RuntimeBlocked
+            raise RuntimeBlocked('independent_review_required',
+                'Current content/contract needs independent diagnosis or review; validation-only execution cannot invoke models or change the locked contract', 'contract')
         frozen = Path(library).resolve() / selected['evidence']
         record = verify(frozen, selected['freeze_sha256'])
         opts = record['delivery']['inputs']['environment']['payload'].get('limits', {})
         return automatic_revision(library, selected, record, frozen,
                                   {'options': opts, 'resource_refs': resource_refs or {}})
-    with store.locked(library) as root:
+    from contextlib import contextmanager
+    entry = None
+    @contextmanager
+    def capture_evidence():
+        try:
+            yield
+        except BaseException as exc:
+            if include_evidence: exc.evidence_snapshot = snapshot(entry or selected)
+            raise
+    with store.locked(library) as root, capture_evidence():
         value = store.reconcile(root, store.catalog(root))
         entry = next((e for e in value["skills"] if e["name"] == name), None)
         if entry is None or entry.get("invalidated"):
             raise ValueError("Select an intact candidate explicitly")
+        check_selection(entry)  # Recheck under the existing writer lock.
+        if not allow_diagnosis and (entry.get('current_content', {}).get('status') == 'failed'
+                or entry.get('runtime', {}).get('repair_lane') in {'unknown', 'contract'}):
+            from .preparation import RuntimeBlocked
+            raise RuntimeBlocked('independent_review_required', 'Current contract requires independent review before execution', 'contract')
         frozen = verify(root / entry["evidence"], entry["freeze_sha256"])
         if frozen["delivery"]["mode"] == "draft":
             raise ValueError("Draft needs a normal reviewed revision before runtime build")
@@ -175,9 +205,11 @@ def resume_build(library, name, resource_refs=None, *, reuse_image=False, recove
                 packages[previous_path] = None
             entry.pop('runtime_invalidated', None)
         store.commit(root, value, packages)
-        return {"status": receipt["status"], "name": name, "revision_id": entry["revision_id"],
+        result = {"status": receipt["status"], "name": name, "revision_id": entry["revision_id"],
                 "image_id": receipt["image_id"], "business_acceptance": receipt['business_acceptance'], "gaps": receipt["gaps"], 'accepted': accepted,
                 'recovery': decision}
+        if include_evidence: result['evidence_snapshot'] = snapshot(entry)
+        return result
 
 
 def prepare_revision(library, name, spec, *, correction=None):

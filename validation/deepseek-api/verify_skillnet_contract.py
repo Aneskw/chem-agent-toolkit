@@ -47,6 +47,10 @@ def check(value):
         for name in names:
             if not callable(getattr(imported,name,None)):
                 issues.append({'field':module+'.'+name,'expected':'callable','actual':'missing'})
+    from creation_pipeline import management
+    local=value['local_management']
+    equal('local_management.api_version',management.API_VERSION,local['api_version'])
+    equal('local_management.contract',management.contract(),json.loads((REPO/local['contract']).read_text(encoding='utf-8')))
     for path,anchors in value['error_anchors'].items():
         text=(REPO/path).read_text(encoding='utf-8')
         for anchor in anchors:

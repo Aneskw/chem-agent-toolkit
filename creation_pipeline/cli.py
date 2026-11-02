@@ -16,6 +16,8 @@ from creation_pipeline.records import clean_run, redact
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Discover reusable tool capabilities and build source-grounded skill packages")
     commands = parser.add_subparsers(dest="command", required=True)
+    child = commands.add_parser('manage', help='Versioned local management DTO; existing execution/qualification chain')
+    child.add_argument('request', help='JSON request envelope for chem-local-management/v1')
     child = commands.add_parser('readiness', help='Observe prerequisites before inference; no construction, repair or qualification')
     child.add_argument('config')
     child.add_argument('--offline', action='store_true', help='Do not probe Docker; runtime availability remains deferred')
@@ -93,7 +95,12 @@ def main(argv=None):
     child.add_argument('--recover-lock', action='store_true')
     args = parser.parse_args(argv)
     try:
-        if args.command == 'readiness':
+        if args.command == 'manage':
+            from creation_pipeline.management import from_file, exit_code
+            result = from_file(args.request)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return exit_code(result)
+        elif args.command == 'readiness':
             from creation_pipeline.readiness import from_config
             result = from_config(args.config, args.mode, args.offline)
         elif args.command in ("build", "discover", "plan", "revise"):

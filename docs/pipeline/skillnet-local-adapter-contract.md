@@ -1,5 +1,12 @@
 # Skillnet 本地接入契约与适配建议
 
+2026-11-02 增量：现已提供 `creation_pipeline.management.dispatch` 与
+`python -m creation_pipeline manage REQUEST.json` 的六个本地管理操作，版本为
+chem-local-management/v1。描述、精确解析、具体选择、可用性、独立执行和资格查询的
+封套/错误/证据/副作用见 [本地管理接口](local-management-api.md)。这是已实现本地 façade，
+复用既有执行链；下文 skillnet-local-adapter/v1 的平台建议仍是 proposed，不能混为服务实现。
+旧 CLI 原生输出仍保留。管理 execute 不调用模型或构建，具体版本选择不持久化 SkillBinding。
+
 2026-11-02 Codex planner 增量：本机桌面附带客户端、ChatGPT 登录、普通 CLI 首建/命中已验证，
 见 [后端验证](../integration/codex-planner-desktop-20261102.md)。运行时模型回执增加可选
 wire_schema_sha256/schema_projection，原 schema_sha256 继续指逻辑 schema；不新增 Binding/Attempt
