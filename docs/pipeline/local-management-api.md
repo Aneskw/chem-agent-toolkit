@@ -1,5 +1,10 @@
 # 本地管理接口 v1
 
+2026-11-02 增量：新增完全只读的 `references.query`，必需 params 为 libraries、
+tool_registries、environment_registries、target，不接受默认扫描目录。范围、具体身份、
+部分观察及证据协议见 [只读反向引用](reverse-references.md)。不调用下述在线资格查询的
+catalog 协调逻辑，不修改资格/锁/镜像；旧六个操作及其参数保持。机器操作清单已同步扩展。
+
 Python：`creation_pipeline.management.dispatch(request)`；CLI：
 `python -m creation_pipeline manage REQUEST.json`。`contract()` 返回离线契约清单，对照文件
 `validation/local-management/contract-v1.json` 有可执行契约测试。此接口是本地调用方 façade，

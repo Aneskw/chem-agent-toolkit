@@ -1,5 +1,12 @@
 # Skillnet 本地接入契约与适配建议
 
+2026-11-02 反向引用增量：`references.query` / chem-references/v1 是已实现只读本地操作，
+支持具体工具→冻结 Skill 修订、具体环境→工具/绑定/attempt 的依赖观察；只扫描显式根，
+返回范围、不确定项与文件摘要。派生索引每次重建，不产生可用性/资格/删除许可，
+也不调用会变更 catalog 的在线资格查询。见 [反向引用契约](reverse-references.md)。
+未来平台须保留 complete_within_declared_layouts/global_complete/unscanned_categories 及诊断，
+不能把未扫描、损坏记录或依赖边转换成“无引用”“可删除”“当前不合格”。
+
 2026-11-02 增量：现已提供 `creation_pipeline.management.dispatch` 与
 `python -m creation_pipeline manage REQUEST.json` 的六个本地管理操作，版本为
 chem-local-management/v1。描述、精确解析、具体选择、可用性、独立执行和资格查询的

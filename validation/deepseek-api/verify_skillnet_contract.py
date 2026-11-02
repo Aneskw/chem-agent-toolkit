@@ -51,6 +51,8 @@ def check(value):
     local=value['local_management']
     equal('local_management.api_version',management.API_VERSION,local['api_version'])
     equal('local_management.contract',management.contract(),json.loads((REPO/local['contract']).read_text(encoding='utf-8')))
+    from creation_pipeline import references
+    equal('local_management.references_protocol',references.PROTOCOL,local['references_protocol'])
     for path,anchors in value['error_anchors'].items():
         text=(REPO/path).read_text(encoding='utf-8')
         for anchor in anchors:

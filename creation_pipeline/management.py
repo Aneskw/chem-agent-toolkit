@@ -27,6 +27,7 @@ OPERATIONS = {
     'tool.availability': ({'reference'}, {'registry', 'offline'}),
     'skill.execute': ({'library', 'name', 'expected_revision', 'expected_freeze_sha256'}, set()),
     'skill.qualification': ({'library', 'name'}, {'offline'}),
+    'references.query': ({'libraries','tool_registries','environment_registries','target'}, set()),
 }
 
 
@@ -170,6 +171,9 @@ def _library(params):
 
 
 def _perform(operation, params):
+    if operation == 'references.query':
+        from creation_pipeline.references import query
+        return query(params)
     if operation == 'tool.describe': return _describe(params)
     if operation in {'tool.resolve', 'tool.select'}:
         _sha(params['request_key'],'request_key')
@@ -282,4 +286,4 @@ def contract():
         'execution_policy':{'reuse_bound_image':True,'allow_diagnosis':False,'allow_build':False,'allow_models':False,
                             'expected_revision_and_freeze_required':True,'request_id_is_idempotency_key':False,
                             'evidence_snapshot_from_writer_lock':True},
-        'offline_operations':['tool.describe','tool.availability','skill.qualification']}
+        'offline_operations':['tool.describe','tool.availability','skill.qualification','references.query']}

@@ -1,0 +1,303 @@
+{
+  "protocol": "chem-references/v1",
+  "management_api": "chem-local-management/v1",
+  "baseline": "e2f4ac6574e1a652d82550dcbceb1a0c386f33a2",
+  "at": "2026-11-02T13:11:45.256780+00:00",
+  "passed": true,
+  "scope": "explicit local library/registry reverse references only; no qualification, Docker, model, execution, deletion or GC",
+  "cli": {
+    "results": {
+      "path": "E:\\Users\\27343\\Docker\\reverse-references-cli-20261102-03\\results.json",
+      "sha256": "7913f5e7b994dd523e9c5037911dec895efd5638a6bb5e22083643264466545c"
+    },
+    "implementation": {
+      "path": "E:\\Users\\27343\\Docker\\reverse-references-cli-20261102-03\\implementation.json",
+      "sha256": "a5da8266b4bb551626d0a74f90d36a94774f2fa5278ec66a628631b34eb0b3c0"
+    },
+    "operations": 14,
+    "libraries": [
+      "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\a\\library",
+      "E:\\Users\\27343\\Docker\\scoped-contract-cli-20261102-01\\b\\library",
+      "E:\\Users\\27343\\Docker\\local-management-cli-20261102-02\\a\\library",
+      "E:\\Users\\27343\\Docker\\local-management-cli-20261102-02\\b\\library",
+      "E:\\Users\\27343\\Docker\\local-management-cli-20261102-02\\missing-image-library"
+    ],
+    "distinct_skill_revisions": 2,
+    "binding_copies": 5,
+    "historical_attempts": 9,
+    "tool_versions_using_environment": 1,
+    "target_tool": {
+      "kind": "tool",
+      "request_key": "4ff3ae1999af786661fa80842819e9e46e6f54d1d779d5ad01c3111dd51cbfe3",
+      "artifact_id": "7030f8641c7aaecd8b100e296cf2c1d4dd6b27f8249588985dbde8302ba22f9a"
+    },
+    "target_environment": {
+      "kind": "environment",
+      "recipe_key": "a4a61ba1d52c11a3675c7d06cf2ab4abb304fdc9ee02f5e5c9c238d1f885084a",
+      "image_id": "sha256:99134e95c24a3c35e8da7b19b1a367979b2a0e8690e57c284b8d7dd8e36d3743",
+      "daemon_id": "a7981e1d-64c3-431d-8287-8dad803ceaf6"
+    },
+    "models": 0,
+    "docker": 0,
+    "builds": 0,
+    "new_business_executions": 0,
+    "original_bytes_and_file_mtimes_unchanged": true,
+    "each_query_input_bytes_unchanged": true,
+    "positive_queries": [
+      {
+        "label": "tool-real-libraries",
+        "seconds": 2.358894999997574,
+        "bindings": 5,
+        "tools": 1,
+        "attempts": 9
+      },
+      {
+        "label": "environment-real-libraries",
+        "seconds": 2.244175500003621,
+        "bindings": 5,
+        "tools": 1,
+        "attempts": 9
+      },
+      {
+        "label": "rebuilt-index",
+        "seconds": 2.178278200000932,
+        "bindings": 5,
+        "tools": 1,
+        "attempts": 9
+      }
+    ],
+    "negative_queries": [
+      {
+        "label": "only-explicit-one-library",
+        "diagnostic_codes": []
+      },
+      {
+        "label": "libraries-unscanned",
+        "diagnostic_codes": []
+      },
+      {
+        "label": "other-concrete-tool",
+        "diagnostic_codes": []
+      },
+      {
+        "label": "other-concrete-environment",
+        "diagnostic_codes": []
+      },
+      {
+        "label": "missing-library",
+        "diagnostic_codes": [
+          "record_invalid"
+        ]
+      },
+      {
+        "label": "corrupt-catalog",
+        "diagnostic_codes": [
+          "record_invalid"
+        ]
+      },
+      {
+        "label": "corrupt-tool-record",
+        "diagnostic_codes": [
+          "record_invalid",
+          "tool_record_not_found_in_scope"
+        ]
+      },
+      {
+        "label": "environment-record-not-in-scope",
+        "diagnostic_codes": [
+          "environment_record_not_found_in_scope"
+        ]
+      },
+      {
+        "label": "foreign-lock-and-journal",
+        "diagnostic_codes": [
+          "catalog_pending"
+        ]
+      },
+      {
+        "label": "unfinished-publication",
+        "diagnostic_codes": [
+          "publication_pending",
+          "tool_record_not_found_in_scope"
+        ]
+      },
+      {
+        "label": "frozen-resource-drift",
+        "diagnostic_codes": [
+          "record_invalid"
+        ]
+      }
+    ]
+  },
+  "regression": {
+    "results": {
+      "path": "E:\\Users\\27343\\Docker\\reverse-references-regression-20261102-01\\results.json",
+      "sha256": "ffe75f3e4e4e0c660cfc5fb8b05adfc780b95bc4f4888544fc03379a1dc5b2b9"
+    },
+    "total": 837,
+    "passed": 834,
+    "skipped": 3,
+    "failed": 0,
+    "errors": 0,
+    "targeted": 79,
+    "new_reverse_reference_tests": 31,
+    "checks": [
+      {
+        "label": "unittest",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "exit_code": 0,
+        "seconds": 231.22451710000314,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\reverse-references-regression-20261102-01\\unittest.log",
+          "sha256": "69e1fc542000cd922126209ebb09e2af169feccdc023c1d9a4ed2b751a885e28"
+        }
+      },
+      {
+        "label": "targeted",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "-m",
+          "unittest",
+          "tests.pipeline.test_references",
+          "tests.pipeline.test_management",
+          "tests.pipeline.test_runtime_recovery",
+          "tests.pipeline.test_request_contracts",
+          "-q"
+        ],
+        "exit_code": 0,
+        "seconds": 25.91245469999558,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\reverse-references-regression-20261102-01\\targeted.log",
+          "sha256": "bd719baa9cad154fac0c3c2381a3088b3fb0470c7895918a3d343ec749419381"
+        }
+      },
+      {
+        "label": "prompt-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_prompt_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.49300790000415873,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\reverse-references-regression-20261102-01\\prompt-contract.log",
+          "sha256": "d0d4836004204951d3185b474d974312cde373d641a8dc5fd4d625c0f07d14ef"
+        }
+      },
+      {
+        "label": "acceptance-prompt",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_acceptance_prompt.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.23338359999615932,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\reverse-references-regression-20261102-01\\acceptance-prompt.log",
+          "sha256": "8e4a7644575215826397ae598921f3c27964851b6f1ea85e04cba3a3d74b7bc1"
+        }
+      },
+      {
+        "label": "planner",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_planner.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.2549001000006683,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\reverse-references-regression-20261102-01\\planner.log",
+          "sha256": "a6d6694b31011c1adc080e8632548e924babdbc0179605156985ad9b67938836"
+        }
+      },
+      {
+        "label": "platform-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_skillnet_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.32217140000284417,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\reverse-references-regression-20261102-01\\platform-contract.log",
+          "sha256": "a4a44f59525a445ec2c04aafd297015971bafa418892d78f9ee22512d0850fc8"
+        }
+      }
+    ]
+  },
+  "verification_inputs": {
+    "path": "E:\\Users\\27343\\Docker\\reverse-references-evidence-20261102-final\\verification-inputs.json",
+    "sha256": "1055f9aaff72b2b97cf7fea49f88968ed87b05233aad82cc29d05a52c2aca2ed"
+  },
+  "retained_failure": {
+    "summary": {
+      "path": "E:\\Users\\27343\\Docker\\reverse-references-cli-20261102-01\\failure-summary.json",
+      "sha256": "11712c39369903f63c63594d1750260cc5a32106ff57c80f141154216a8cdeef"
+    },
+    "original_input_bytes_unchanged": true,
+    "reason": "native content revision counter was mistaken for schema version; fixed using existing preparation.rebind semantics, positive integer counter and content digest retained"
+  },
+  "retained_offline_notes": {
+    "path": "E:\\Users\\27343\\Docker\\reverse-references-offline-20261102-01\\initial-notes.json",
+    "sha256": "efa940c975a621bff1bc0bc429c98914318b2ed7d08d5a2e35ee47f99370372b"
+  },
+  "sealed_evidence": [
+    {
+      "root": "E:\\Users\\27343\\Docker\\reverse-references-cli-20261102-03",
+      "manifest": {
+        "path": "E:\\Users\\27343\\Docker\\reverse-references-evidence-20261102-final\\final-cli-manifest.json",
+        "sha256": "df986a2355049bd278446cd64bda47b70564de3687c33d8af0be085491c754e4"
+      },
+      "files": 263
+    },
+    {
+      "root": "E:\\Users\\27343\\Docker\\reverse-references-regression-20261102-01",
+      "manifest": {
+        "path": "E:\\Users\\27343\\Docker\\reverse-references-evidence-20261102-final\\regression-manifest.json",
+        "sha256": "08f68ab6852fe0b52cc470073ef1d75e17f9e97dbaaac0f5d841919a53d01adb"
+      },
+      "files": 9
+    },
+    {
+      "root": "E:\\Users\\27343\\Docker\\reverse-references-cli-20261102-01",
+      "manifest": {
+        "path": "E:\\Users\\27343\\Docker\\reverse-references-evidence-20261102-final\\failed-cli-manifest.json",
+        "sha256": "4ac4c2bfc2339599e08a80687db6e932148f60b8e7a53f3010ca4bf305eb6846"
+      },
+      "files": 9
+    },
+    {
+      "root": "E:\\Users\\27343\\Docker\\reverse-references-cli-20261102-02",
+      "manifest": {
+        "path": "E:\\Users\\27343\\Docker\\reverse-references-evidence-20261102-final\\prototype-cli-manifest.json",
+        "sha256": "a3c8247841b902cfd81bd68e5bb6a39e0bb0c81eff740952bbca6418698eb67f"
+      },
+      "files": 263
+    },
+    {
+      "root": "E:\\Users\\27343\\Docker\\reverse-references-offline-20261102-01",
+      "manifest": {
+        "path": "E:\\Users\\27343\\Docker\\reverse-references-evidence-20261102-final\\offline-notes-manifest.json",
+        "sha256": "80ac85115065639c3e40ebb732b4c06143cf274e995f22ca7ad60513c3037679"
+      },
+      "files": 1
+    }
+  ],
+  "limitations": [
+    "No global completeness; unscanned categories and malformed records are explicit",
+    "No availability or acceptance inference; missing environment registration need not break derived image",
+    "Canonical catalog v2/evidence/runtime and direct registry JSON only; installed/native-output implicit adaptation unsupported",
+    "No persistent index; every query rebuilds observations; no cross-file atomic snapshot",
+    "Five bindings are copies of two existing real Skill revisions; nine attempts are historical, no new executions"
+  ]
+}

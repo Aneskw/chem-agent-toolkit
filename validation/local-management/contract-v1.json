@@ -92,6 +92,15 @@
       "optional": [
         "offline"
       ]
+    },
+    "references.query": {
+      "required": [
+        "environment_registries",
+        "libraries",
+        "target",
+        "tool_registries"
+      ],
+      "optional": []
     }
   },
   "descriptor": {
@@ -120,6 +129,7 @@
   "offline_operations": [
     "tool.describe",
     "tool.availability",
-    "skill.qualification"
+    "skill.qualification",
+    "references.query"
   ]
 }
