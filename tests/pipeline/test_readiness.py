@@ -103,6 +103,17 @@ class ReadinessTests(unittest.TestCase):
             report=readiness.check(self.config())
         self.assertIn('model_client_unavailable',[g['code'] for g in report['gaps']])
 
+    def test_missing_planner_dependency_blocks_known_executable_before_model_calls(self):
+        config=self.config()
+        with patch('creation_pipeline.readiness.find_spec',return_value=None):
+            report=readiness.check(config)
+            self.assertEqual(report['status'],'blocked')
+            gap=next(g for g in report['gaps'] if g['code']=='host_dependency_missing')
+            self.assertEqual(gap['actual'],'missing');self.assertIn('jsonschema',gap['expected'])
+            for mode in ('draft','discover'):
+                deferred=readiness.check(config,mode)
+                self.assertFalse(deferred['gaps']);self.assertEqual(deferred['model_calls'],0)
+
     def test_unused_runtime_provider_does_not_prevent_offline_authoring(self):
         self.raw['runtime_defaults']['options']={'backend':'deepseek_api'}
         config=self.config()

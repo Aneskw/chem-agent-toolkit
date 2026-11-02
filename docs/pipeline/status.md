@@ -1,5 +1,10 @@
 # Current status
 
+2026-11-02 operating update: [readiness review](../integration/batch-readiness-20261102.md) and
+[small-batch guide](batch-operations.md) describe the current checkout. Complete ToolArtifact reuse,
+fixed JSON resources, Codex structured planning, local management and scoped reverse references are
+implemented; the historical table below does not describe current support or test counts.
+
 Integration update: the active workflow combines the partner pipeline with local
 Docker planning/build/business acceptance, current qualification and durable recovery.
 See [stage-five results](../integration/stage-five.md), [delivery protocol](delivery-protocol.md),

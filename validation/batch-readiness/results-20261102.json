@@ -1,0 +1,238 @@
+{
+  "at": "2026-11-02T14:04:45.824721+00:00",
+  "baseline": "b4f809ab33a2e532cf2b14b59f732bbffacf5808",
+  "passed": true,
+  "decision": "ready for controlled sequential single/small batches in the verified local support scope; not an unattended multi-worker platform",
+  "regression": {
+    "results": {
+      "path": "E:\\Users\\27343\\Docker\\batch-readiness-regression-20261102-01\\results.json",
+      "sha256": "135c43fed5fda05995ca1595aef4065fca1e08b9a661791dc3da8ad2af793fc6"
+    },
+    "total": 845,
+    "passed": 842,
+    "skipped": 3,
+    "targeted": 65,
+    "new_tests": 8,
+    "checks": [
+      {
+        "label": "unittest",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "exit_code": 0,
+        "seconds": 241.4299608999936,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\batch-readiness-regression-20261102-01\\unittest.log",
+          "sha256": "2764c25d980baad8111ef66968cd2f08d7b359c960e85f004bd681d161456021"
+        }
+      },
+      {
+        "label": "targeted",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "-m",
+          "unittest",
+          "tests.pipeline.test_batch_readiness",
+          "tests.pipeline.test_runtime_defaults",
+          "tests.pipeline.test_readiness",
+          "tests.pipeline.test_batch_conditions",
+          "tests.pipeline.test_references",
+          "-q"
+        ],
+        "exit_code": 0,
+        "seconds": 19.68625780000002,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\batch-readiness-regression-20261102-01\\targeted.log",
+          "sha256": "b9ff5768b07a8b181e3d7af81f3770dfe5b72940748fce7d6ffd537e6bbef454"
+        }
+      },
+      {
+        "label": "prompt-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_prompt_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.5938364999965415,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\batch-readiness-regression-20261102-01\\prompt-contract.log",
+          "sha256": "d0d4836004204951d3185b474d974312cde373d641a8dc5fd4d625c0f07d14ef"
+        }
+      },
+      {
+        "label": "acceptance-prompt",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_acceptance_prompt.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.26922280000144383,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\batch-readiness-regression-20261102-01\\acceptance-prompt.log",
+          "sha256": "8e4a7644575215826397ae598921f3c27964851b6f1ea85e04cba3a3d74b7bc1"
+        }
+      },
+      {
+        "label": "planner",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_planner.py",
+          "check"
+        ],
+        "exit_code": 0,
+        "seconds": 0.26420479999796953,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\batch-readiness-regression-20261102-01\\planner.log",
+          "sha256": "a6d6694b31011c1adc080e8632548e924babdbc0179605156985ad9b67938836"
+        }
+      },
+      {
+        "label": "platform-contract",
+        "command": [
+          "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+          "validation/deepseek-api/verify_skillnet_contract.py"
+        ],
+        "exit_code": 0,
+        "seconds": 0.3507759999993141,
+        "log": {
+          "path": "E:\\Users\\27343\\Docker\\batch-readiness-regression-20261102-01\\platform-contract.log",
+          "sha256": "a4a44f59525a445ec2c04aafd297015971bafa418892d78f9ee22512d0850fc8"
+        }
+      }
+    ]
+  },
+  "live_cli": {
+    "results": {
+      "path": "E:\\Users\\27343\\Docker\\batch-first-skill-20261102-01\\results.json",
+      "sha256": "a18fa7db3c10a879f8e33316cab56ed07e650bd686e1285cb52d797bb8e00d8c"
+    },
+    "postflight": {
+      "path": "E:\\Users\\27343\\Docker\\batch-first-skill-20261102-01\\postflight.json",
+      "sha256": "e916e70debc263b5d3434ff031c04467ae0570c94ac2813f204cecafcf93b3fd"
+    },
+    "inputs": {
+      "path": "E:\\Users\\27343\\Docker\\batch-first-skill-20261102-01\\inputs-before.json",
+      "sha256": "9a68d1b2c15aaada84b2194df052060229a57cf0533a261a71729ea22a00abeb"
+    },
+    "envelope": {
+      "path": "E:\\Users\\27343\\Docker\\batch-first-skill-20261102-01\\envelope.json",
+      "sha256": "957c4939b8452c175070dea2e66df0b367b9d9beabec9f393d772f1904d5a095"
+    },
+    "new_generation_batches": 1,
+    "new_skills": 1,
+    "build_id": "20261102T214839-77668282",
+    "name": "rdkit-descriptor-rule-screening",
+    "model_admissions": 4,
+    "model_phases": [
+      "discovery",
+      "author",
+      "review",
+      "runtime_planning"
+    ],
+    "model_admission_limit": 16,
+    "cases_passed": 13,
+    "build_calls": {
+      "environment": 1,
+      "tool": 1
+    },
+    "accepted": true,
+    "source_and_config_unchanged": true,
+    "extra_model_probes": 0,
+    "extra_business_executions": 0,
+    "qualification_inherited": false,
+    "cache_scope": "fresh shared registries; existing daemon images and BuildKit cache retained, not a cold-cache measurement",
+    "literal_output_assertions": {
+      "ethanol_weight": 46.069,
+      "ethanol_selected": true,
+      "phenol_weight": 94.113,
+      "phenol_selected": false,
+      "policy_id": "demonstration-screen-50-v1",
+      "maximum": 50.0,
+      "invalid_empty_whitespace_exit": 2
+    },
+    "bound_tool": {
+      "request_key": "4ff3ae1999af786661fa80842819e9e46e6f54d1d779d5ad01c3111dd51cbfe3",
+      "artifact_id": "ccf7121b3b3da504f83953c00d2b4bf540e94f9d0552208bc9264ee16b741e40"
+    }
+  },
+  "review": {
+    "host": {
+      "path": "E:\\Users\\27343\\Docker\\batch-readiness-review-20261102-01\\host.json",
+      "sha256": "4c11ec77fff5cf69aecb32e9dfb146bf6762de3f4b02445b96aeb9ec8197fd61"
+    },
+    "tracked_repository_audit": {
+      "path": "E:\\Users\\27343\\Docker\\batch-readiness-review-20261102-01\\repository-audit.json",
+      "sha256": "dd03cf448347e92401474dfcc861a4ea0e020e91e10c293fde2b1312e70d4987"
+    },
+    "confirmed_failure_log": {
+      "path": "E:\\Users\\27343\\Docker\\batch-readiness-review-20261102-01\\confirmed-regression.log",
+      "sha256": "d10df70794f5203667712632be9b974c86b824aa3bfba5ddfea602f89f265738"
+    },
+    "initial_fixture_log": {
+      "path": "E:\\Users\\27343\\Docker\\batch-readiness-review-20261102-01\\initial-regression.log",
+      "sha256": "3abdc33639d94a957b25a14961d8c3efd2cdcf68bee867c22c1201b97cc2881a"
+    }
+  },
+  "cleanup": {
+    "receipt": {
+      "path": "E:\\Users\\27343\\Docker\\batch-readiness-review-20261102-01\\cleanup.json",
+      "sha256": "6f5792eda81d9297f2b2cc85441aabd5de528cbfa6a24859c710efd131d575f0"
+    },
+    "script": {
+      "path": "E:\\Users\\27343\\Docker\\batch-readiness-review-20261102-01\\cleanup-bytecode.py",
+      "sha256": "7dd7780020e6556bc3a8d21fd2a8f194d843cf79923ad972b218311416ce7e5b"
+    },
+    "directories": 12,
+    "files": 152,
+    "bytes": 2716777,
+    "scope": "untracked source/test bytecode only, original evidence and operational caches retained"
+  },
+  "sealed_evidence": [
+    {
+      "root": "E:\\Users\\27343\\Docker\\batch-first-skill-20261102-01",
+      "manifest": {
+        "path": "E:\\Users\\27343\\Docker\\batch-readiness-evidence-20261102-final\\live-cli-manifest.json",
+        "sha256": "a08f2bb116cdeabf2a9aec30507bba2db6d2640736e88672dce05553fb6210b6"
+      },
+      "files": 298
+    },
+    {
+      "root": "E:\\Users\\27343\\Docker\\batch-readiness-review-20261102-01",
+      "manifest": {
+        "path": "E:\\Users\\27343\\Docker\\batch-readiness-evidence-20261102-final\\review-and-cleanup-manifest.json",
+        "sha256": "79f58519005ffbe4509893d510b042cc019a979eb4ff90c30a9a754a0e5c4c70"
+      },
+      "files": 6
+    },
+    {
+      "root": "E:\\Users\\27343\\Docker\\batch-readiness-regression-20261102-01",
+      "manifest": {
+        "path": "E:\\Users\\27343\\Docker\\batch-readiness-evidence-20261102-final\\regression-manifest.json",
+        "sha256": "7e9ee729f4041c2254317391c2d908472e4bbc06c9857131cb14a1b2588ada89"
+      },
+      "files": 9
+    }
+  ],
+  "publication": {
+    "scope": {
+      "path": "E:\\Users\\27343\\Docker\\batch-readiness-evidence-20261102-final\\publication-scope-before-final-commit.json",
+      "sha256": "c77f8e73fc0fe8a952425277bb438874adeaa93f77f58e97add1faea38a572a3"
+    },
+    "pushed": false,
+    "requires_user_confirmation": true
+  },
+  "limits": [
+    "native/structured Codex RDKit single-Skill case is the new live proof; multi-Skill stop and cancellation/budget paths are deterministic regression evidence",
+    "historical incomplete admission ledgers need separate audit before reuse",
+    "no campaign-wide budget, queue, concurrency scheduler, quota alert or automatic GC",
+    "source-supported operational examples do not establish independent scientific validity",
+    "raw evidence remains local; repository retains summaries and digests"
+  ]
+}

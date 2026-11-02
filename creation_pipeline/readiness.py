@@ -1,21 +1,19 @@
 """Zero-inference prerequisite observations, never construction or qualification."""
 import ast
-import copy
 import os
+import sys
+from importlib.util import find_spec
 from pathlib import Path
 from creation_pipeline.records import file_digest,has_link,sanitized,redact
 from creation_pipeline.resources.intake import exclusion
 from creation_pipeline.runtime import shared_tool as st,bundled_data as bd
-from creation_pipeline.models import exceeded
+from creation_pipeline.models import exceeded, runtime_spec
 
 
 def check(config,mode='build',snapshots=None,offline=False):
     checks=[];roots=[];inventories={}
-    specs=[('runtime_defaults',config.get('runtime_defaults',{}))]
-    for name,spec in config.get('runtime',{}).items():
-        merged=copy.deepcopy(config.get('runtime_defaults',{}))
-        for k,v in spec.items():merged[k]={**merged.get(k,{}),**v} if isinstance(v,dict) else v
-        specs.append(('runtime.'+name,merged))
+    specs=[('runtime_defaults',runtime_spec(config))]
+    specs += [('runtime.'+name,runtime_spec(config,name)) for name in config.get('runtime',{})]
     executable=any(s.get('shared_tool') or s.get('plan') for _,s in specs)
     executable=executable or any(r.get('status')=='required' for r in config.get('runtime_requirements',{}).values() if isinstance(r,dict))
     runtime_required=mode=='build' and not config.get('draft_only',False) and executable and not offline
@@ -67,6 +65,12 @@ def check(config,mode='build',snapshots=None,offline=False):
     # No login/entitlement inference or auth-file inspection. Executability is a
     # prerequisite only; provider access remains explicitly unverified.
     backends={config.get('model',{}).get('backend','codex_cli')}
+    api_native = config.get('model',{}).get('backend','codex_cli') == 'deepseek_api'
+    if executable or api_native:
+        present = find_spec('jsonschema') is not None
+        add('host.python.jsonschema',sys.executable,'jsonschema available in the current interpreter',
+            'available' if present else 'missing',None if present else 'host_dependency_missing',
+            runtime_required or api_native,'No dependency is installed or repaired by readiness')
     if runtime_required:backends|={s.get('options',{}).get('backend','codex_cli') for _,s in specs}
     if 'codex_cli' in backends:
         from creation_pipeline.agent.command import codex_command

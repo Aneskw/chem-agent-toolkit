@@ -1,5 +1,9 @@
 # 零模型就绪预检
 
+2026-11-02 补强：配置校验/预检/执行复用同一 runtime-default 合并规则；已声明可执行构建
+及原生 DeepSeek 模式会检查当前 Python 能否定位 jsonschema，缺失报告 host_dependency_missing。
+不自动安装。草稿/发现中的未使用运行时依赖只作延期观察，不阻断合法离线路径。
+
 `python -m creation_pipeline readiness CONFIG` 只读观察现有配置、来源、Docker 及显式指定的工具版本。
 普通 build 自动在 NativeSession 创建和推理前执行；本地明确缺口直接返回 phase=readiness、0 模型，
 不创建构建状态目录。远端/表格来源未获取时标记 deferred，正常资源获取后再次检查；续接计划和

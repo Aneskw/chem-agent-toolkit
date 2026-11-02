@@ -16,7 +16,7 @@ from creation_pipeline.generation.discovery import ROOT, analyze, ordered, speci
 from creation_pipeline.generation.author import author, review
 from creation_pipeline.validation.checks import classify, run_checks, static_checks
 from creation_pipeline.resources.intake import Sources
-from creation_pipeline.models import BlockedError, BudgetError, IncompleteError, ModelCallError, load_config, bound, iterations
+from creation_pipeline.models import BlockedError, BudgetError, IncompleteError, ModelCallError, load_config, bound, iterations, runtime_spec
 from creation_pipeline.artifacts.package import manifest
 from creation_pipeline.artifacts.library import adopt
 from creation_pipeline.schemas import CANDIDATES
@@ -73,14 +73,13 @@ def runtime_spec_for(config, name):
     discovery names the candidate. Per-candidate keys win; nested maps are merged one
     level so one option cannot silently erase the rest.
     """
-    merged = copy.deepcopy(config.get("runtime_defaults") or {})
-    override = config.get("runtime", {}).get(name) or {}
-    for key, value in override.items():
-        if isinstance(value, dict) and isinstance(merged.get(key), dict):
-            merged[key] = {**merged[key], **copy.deepcopy(value)}
-        else:
-            merged[key] = copy.deepcopy(value)
-    return merged
+    return runtime_spec(config,name)
+
+
+def _checkpoint_session(session):
+    """Persist admissions before runtime inference; native turns use this same state."""
+    session.state['receipts'] = session.receipts
+    write_json(session.state_path,sanitized(session.state))
 
 
 def runtime_gate_stops(config, runtime_receipt):
@@ -530,6 +529,7 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                                 "status": "attempted", "usage": None}
                         session.receipts.append(call)
                         entity_record.setdefault("model_calls", []).append(call)
+                        _checkpoint_session(session)
                         return call
                     notify("Preparing runtime and current acceptance: " + name)
                     materials = prepare(entity_record, bundle / "skills" / name, sources.manifest(),
@@ -609,6 +609,11 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
                 outcomes[name] = entity_record
                 write_json(output / "records" / (name + ".json"), sanitized(entity_record))
                 record["entities"].append({"name": name, "kind": "skill", "status": entity_record["status"], "needs": []})
+                if entity_record.get('runtime_failure_gate'):
+                    record['runtime_failure_gate'] = dict(entity_record['runtime_failure_gate'],candidate=name)
+                    record['stopped_reason'] = entity_record['runtime_failure_gate']['reason']
+                    record['deferred'] += [e['name'] for e in roots if e['name'] not in outcomes and e['name'] not in record['deferred']]
+                    break
                 if entity_record["content_status"] == "passed" and entity_record.get("additional_candidates"):
                     for raw in entity_record["additional_candidates"]:
                         addition = normalize({"candidates": [raw]})["candidates"][0]
@@ -664,6 +669,12 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
     record["finished_at"] = now()
     record["counts"] = dict(Counter(e["status"] for e in record["entities"]))
     receipts = session.receipts if session else []
+    if session:
+        try:
+            _checkpoint_session(session)
+        except (ValueError,OSError,TypeError) as exc:
+            record['errors'].append('Could not persist model admission checkpoint: '+redact(exc))
+            if record['status'] != 'interrupted': record['status'] = 'failed'
     # model_calls is what this build spent; model_metrics keeps the full session
     # trail because resumed turns reuse earlier receipts and the audit needs them.
     this_build = receipts[build_call_start:] if session else []
@@ -697,7 +708,10 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
     write_json(output / "summary.json", sanitized(record))
     if successful and not keep_debug:
         clean_run(state, build_id)
-    return {"build_id": build_id, "status": record["status"], "output": str(output),
+    result = {"build_id": build_id, "status": record["status"], "output": str(output),
             "counts": record["counts"], "entities": record["entities"],
             "discovery_summary": record.get("discovery_summary"), "candidate_count": record.get("candidate_count", 0),
             "adoption": record.get("adoption", []), "deferred": record.get("deferred", []), "model_calls": len(this_build), "errors": record["errors"]}
+    if record.get('runtime_failure_gate'):
+        result['runtime_failure_gate'] = record['runtime_failure_gate']
+    return result

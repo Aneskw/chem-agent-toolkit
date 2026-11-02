@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import copy
 import os
 import re
 from pathlib import Path
@@ -21,6 +22,18 @@ class ModelCallError(ValueError):
 
 class BudgetError(ModelCallError):
     """An execution bound stopped work; not evidence of a defective skill."""
+
+
+def runtime_spec(config, name=None):
+    """One-level map merge shared by validation, readiness and execution."""
+    merged = copy.deepcopy(config.get('runtime_defaults') or {})
+    override = (config.get('runtime', {}).get(name) or {}) if name is not None else {}
+    for key, value in override.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = {**merged[key], **copy.deepcopy(value)}
+        else:
+            merged[key] = copy.deepcopy(value)
+    return merged
 
 
 def load_config(path):
@@ -61,11 +74,11 @@ def load_config(path):
         raise ValueError("runtime must map candidate names to preparation settings")
     if not isinstance(config["runtime_defaults"], dict):
         raise ValueError("runtime_defaults must be an object shared by every candidate")
-    for spec in config["runtime"].values():
+    for name, spec in config["runtime"].items():
         if not isinstance(spec, dict) or set(spec) - {"binding", "plan", "options", "resource_refs", "constraints",
                                                     "shared_tool", "acceptance_plan", "requirements", "tool_artifact", "tool_compatibility", "skill_contract"}:
             raise ValueError("Unsupported runtime configuration")
-        validate_spec({**config['runtime_defaults'], **spec})
+        validate_spec(runtime_spec(config, name))
     # Shared defaults exist so a normal creation can fix provider options before the
     # candidate name is known; a per-candidate spec overrides them.
     validate_spec(config["runtime_defaults"])

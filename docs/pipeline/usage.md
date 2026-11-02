@@ -4,6 +4,7 @@ See [configuration](configuration.md) and [resources](resources.md). Use authent
 
 ```text
 python -m creation_pipeline build sources.json --preflight
+python -m creation_pipeline readiness sources.json
 python -m creation_pipeline build sources.json
 ```
 
@@ -25,4 +26,4 @@ python -m creation_pipeline clean <build-id> --dry-run
 
 check verifies recorded files/static structure, not fresh runtime execution. install checks eligible output and collisions. Clean only registered local workspaces; do not clean incomplete work intended for resume.
 
-discover/plan/revise/--plan remain native diagnostic interfaces. Hand-editing evidence is unsupported. Direct API/Ollama configuration fails early. The [base-counting example](../../examples/base-count/README.md) starts from source code and a fixed documented contract, without a prewritten Skill or environment plan. See [runtime recovery](runtime-recovery.md) for persistent candidate recovery, migration and evidence refresh; discovery checkpoints are not required for frozen runtime recovery.
+discover/plan/revise/--plan remain diagnostic interfaces. Hand-editing evidence is unsupported. Codex and explicit DeepSeek selection are supported; unsupported provider fields/Ollama fail early. See [batch operations](batch-operations.md), the [base-count example](../../examples/base-count/README.md) and [runtime recovery](runtime-recovery.md). Frozen runtime recovery does not require discovery checkpoints.

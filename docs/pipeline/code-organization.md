@@ -11,6 +11,10 @@ creation_pipeline/
   schemas.py                  # Concise Agent stage result formats
   records.py                  # Hashes, safe paths, durable JSON and cleanup
   paths.py                    # Stable repository, package and prompt locations
+  readiness.py                # Zero-model prerequisite observations
+  management.py               # Versioned facade over existing lifecycle
+  references.py               # Read-only explicitly scoped dependency index
+  runtime/                    # Planning, exact artifacts, Docker execution and recovery
   resources/
     acquisition.py            # Known URLs, repositories, papers and catalogs
     intake.py                 # Source snapshots, inventories and integrity
@@ -55,6 +59,6 @@ skills/                       # Reviewed skills and simple batch/catalog organiz
 
 `pipeline.py` coordinates stages; it does not implement source downloading, CLI transport or file packaging. The helper router in `agent/tools.py` exposes operations whose implementations live in `resources`, `generation`, `validation` and `artifacts`. Native sessions call these helpers and access retained original files directly.
 
-Only native Codex Agent execution is implemented. Test doubles replace stage decisions and write real fixture files through the delivery receipt code. They are not a production backend. The CLI's own connection to its model, including optional model selection and `http_only`, remains the responsibility of the native Agent integration.
+Codex native execution and explicit single-shot DeepSeek are supported; runtime structured calls select their backend independently, without fallback. Test doubles replace decisions and write real fixture files through delivery receipt code; they are not a production backend. See configuration and the current batch guide for actual provider/budget settings.
 
 Internal import paths follow this tree. Old internal module paths and helper commands saved in earlier workspaces are not compatibility entry points; start a new build after updating the code. Completed skill packages do not depend on these helper paths.
