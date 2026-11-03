@@ -1,0 +1,84 @@
+{
+  "at": "2026-11-03T01:54:40.674187+00:00",
+  "passed": true,
+  "models": 0,
+  "builds": 0,
+  "operations": [
+    {
+      "name": "targeted",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "-m",
+        "unittest",
+        "tests.pipeline.test_process_cancellation",
+        "tests.pipeline.test_native",
+        "tests.pipeline.test_model_call",
+        "tests.pipeline.test_model_wait_stage",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 26.556120000000192
+    },
+    {
+      "name": "unittest",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 227.23090609999963
+    },
+    {
+      "name": "prompt-contract",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_prompt_contract.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.5581874999998035
+    },
+    {
+      "name": "acceptance-prompt",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_acceptance_prompt.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.25008709999929124
+    },
+    {
+      "name": "planner",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_planner.py",
+        "check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.29383710000001884
+    },
+    {
+      "name": "platform-contract",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/deepseek-api/verify_skillnet_contract.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.4609346999995978
+    },
+    {
+      "name": "portable-evidence",
+      "command": [
+        "C:\\Users\\27343\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "validation/portable/verify_evidence.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.277276100000563
+    }
+  ]
+}

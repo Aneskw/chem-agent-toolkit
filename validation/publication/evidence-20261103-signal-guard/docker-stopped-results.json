@@ -1,0 +1,20 @@
+{
+  "at": "2026-11-03T01:12:18.415240+00:00",
+  "passed": true,
+  "scope": "Expected ordinary CLI zero-model rejection while local Docker daemon is stopped",
+  "model_calls": 0,
+  "build_calls": 0,
+  "qualification": "not_granted",
+  "operations": [
+    {
+      "name": "init",
+      "exit_code": 0,
+      "seconds": 0.9676773000001049
+    },
+    {
+      "name": "doctor",
+      "exit_code": 1,
+      "seconds": 41.02684349999981
+    }
+  ]
+}

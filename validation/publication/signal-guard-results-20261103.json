@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "at": "2026-11-03T01:56:42.870169+00:00",
+  "passed": true,
+  "scope": "Final local code regression and safe controlled reproduction; CI final status remains external until completed",
+  "root_cause": "Cancellation test used default MagicMock pid (index 1) and left real POSIX killpg in finally unmocked",
+  "controlled_before": {
+    "primitive_calls": 1,
+    "pid_index": 1,
+    "real_signals": 0
+  },
+  "controlled_after": {
+    "primitive_calls": 0,
+    "rejected": "nonconcrete PID",
+    "real_signals": 0
+  },
+  "guard": "concrete int PID >1 and different from caller group",
+  "targeted": {
+    "total": 50,
+    "passed": 49,
+    "skipped": 1,
+    "failed": 0
+  },
+  "full": {
+    "total": 861,
+    "passed": 858,
+    "skipped": 3,
+    "failed": 0
+  },
+  "self_checks": [
+    "prompt contract",
+    "acceptance prompt check",
+    "planner check",
+    "Skillnet contract",
+    "portable evidence bytes"
+  ],
+  "models": 0,
+  "environment_builds": 0,
+  "tool_builds": 0,
+  "temporary_workflow_removed": true,
+  "module_probe_option_removed": true,
+  "local_docker": "stopped; ordinary doctor correctly blocks with zero models/builds and no qualification",
+  "source_inputs": {
+    "creation_pipeline/runtime/runner.py": "d15c758e3cd1b4acb406e9f0b027ac8e90de0e2628c6a7da534833f4b874e7a4",
+    "creation_pipeline/validation/runtime.py": "1acfeb8f77f27b20a72212665ec4b651db1579fe81a62817d5c1d0a0598d5f44",
+    "tests/pipeline/test_process_cancellation.py": "900b9675f2aa03682c6678ebd4a5e8d141c463319fb80cce3cf186ab2419c12b",
+    "validation/run_offline_suite.py": "2408703609c84a51245466e6c6701f6ad07784d44eb18dff7e26c02a593b5853",
+    ".github/workflows/offline.yml": "d1b573ada8705c3b6d8c231d1fcb939f7f41ab2ecb6503448a4004425804dbf9"
+  },
+  "files": [
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/controlled-before-after.json",
+      "sha256": "afdf2b05f2fa0ac4526d3ee51820cb3799ec0399110d8f3406280fc3a20ded23",
+      "bytes": 718
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/obsolete-ci-cancellation.json",
+      "sha256": "70c6b80e71b29c38c902f8d99f74668d2b1252389c410e485b0ff98fce4f4789",
+      "bytes": 807
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/module-location.json",
+      "sha256": "9fcfe0af5be5d344d7fcdc9be6af6cc40d308ad93c262e75a4616452eb78ba4d",
+      "bytes": 23475
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/targeted.log",
+      "sha256": "e767e24cd40747bf27f4d1826f076bcedd23d92a0ba1586a4626cc240476cd39",
+      "bytes": 433
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/unittest.log",
+      "sha256": "2c98ef344457c699c28137191d4b417df22e909cccea63c07f565e7accacb334",
+      "bytes": 1011
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/prompt-contract.log",
+      "sha256": "9e3941654beaa52f544f2c92571d745d279733c0050025b595c5e8ad778295f9",
+      "bytes": 601
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/acceptance-prompt.log",
+      "sha256": "4c2935faf9b85081511d772d0faa76f6cc278fdfae0cdb34f8d0281ebbd90b70",
+      "bytes": 624
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/planner.log",
+      "sha256": "287b5c319e210044f20e52e45dda020019996ed905210d892481831b15fd046c",
+      "bytes": 168
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/platform-contract.log",
+      "sha256": "cf439a0b7b52732e61dcb189f9b6a802bb7a101825fcad9fc3c62841c71ace77",
+      "bytes": 157
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/portable-evidence.log",
+      "sha256": "be9a193b73b0917fe5346c196ee04de7c277307d2c091129d0205ab3611675aa",
+      "bytes": 140
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/results.json",
+      "sha256": "cfd065909f2b3cfd3d9ad5c4befc81d56457a8948bd32c440f9e369b20d5f0f5",
+      "bytes": 2258
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/docker-stopped-results.json",
+      "sha256": "1e8f90bff5e6c0394c83f4e766444cc8278c64963edae8b428f2c61a5f9afa21",
+      "bytes": 442
+    },
+    {
+      "path": "validation/publication/evidence-20261103-signal-guard/docker-stopped-doctor.log",
+      "sha256": "2c8886a8f65ba02361ca3a6f87c1afd5504b0dcc87aa2d4e2812676b01f11676",
+      "bytes": 4695
+    }
+  ]
+}

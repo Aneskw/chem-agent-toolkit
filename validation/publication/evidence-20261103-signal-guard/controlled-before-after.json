@@ -1,0 +1,21 @@
+{
+  "at": "2026-11-03T01:47:49.641535+00:00",
+  "passed": true,
+  "scope": "Controlled POSIX namespace with mocked signal primitive only; no real group signal, process termination or Docker call",
+  "baseline": "0ea9b9f8389076ec2df5fbc569d0515420b48300",
+  "observations": [
+    {
+      "version": "before",
+      "fake_pid_posix_index": 1,
+      "signal_primitive_calls": 1,
+      "error": "KeyboardInterrupt"
+    },
+    {
+      "version": "after",
+      "fake_pid_posix_index": 1,
+      "signal_primitive_calls": 0,
+      "error": "ValueError"
+    }
+  ],
+  "prior_targeted_failure": "New positive guard test initially lacked a mocked SIGKILL constant on Windows; fixed test simulation without production fallback"
+}

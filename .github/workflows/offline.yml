@@ -1,8 +1,6 @@
 name: Offline contracts
 on:
   push:
-    paths-ignore:
-      - .github/workflows/offline-diagnostic.yml
   pull_request:
   workflow_dispatch:
 permissions:
@@ -12,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, windows-latest]
+        os: [ubuntu-latest, windows-latest]
         python: ['3.11', '3.14']
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20

@@ -1,0 +1,10 @@
+production references to frozen copies: 0
+round identities:
+  none               prompt=17905 B 2f31ed3b8fbe3347  schema=15859 B a5765810cc3441b8
+  rejected_candidate prompt=19098 B 23bef15cc2882119  schema=11791 B 51847f9d80973075
+  accepted_plan      prompt=18855 B 86846470ec05d96e  schema=11791 B 51847f9d80973075
+  acceptance_only    prompt=22789 B afeae9837660d36f  schema=12629 B 42ade1ce1bd66b8f
+saved RECAP case round 0: built 8766a2ffbea9d22a
+frozen fixture (not the acceptance path): frozen 75f0ae2371d2d1c9
+
+the acceptance path sends prompts and schemas built by the current code, and their identity is recorded

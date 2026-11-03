@@ -1,0 +1,6 @@
+E:\Users\27343\Docker\chem-agent-toolkit-integration_deepseekapi\creation_pipeline\records.py:81: DeprecationWarning: pathlib.PurePath.is_reserved() is deprecated and scheduled for removal in Python 3.15. Use os.path.isreserved() to detect reserved paths on Windows.
+  or PureWindowsPath(p).is_reserved() for p in parts):
+----------------------------------------------------------------------
+Ran 50 tests in 26.130s
+
+OK (skipped=1)

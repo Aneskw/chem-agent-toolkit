@@ -71,6 +71,16 @@ class WindowsProcessJob:
             self.handle = None
 
 
+def kill_owned_process_group(pid):
+    """Call sites own a new child session; reserved or coerced IDs are never safe."""
+    if type(pid) is not int or pid <= 1:
+        raise ValueError('Process group PID: expected concrete child integer > 1; actual=' + repr(pid))
+    caller_group = os.getpgrp()
+    if pid == caller_group:
+        raise ValueError('Process group PID: expected child group outside caller group; actual=' + str(pid))
+    os.killpg(pid, signal.SIGKILL)
+
+
 def stop_process_tree(proc, owns_group=True):
     if proc.poll() is not None:
         return
@@ -84,7 +94,7 @@ def stop_process_tree(proc, owns_group=True):
     else:
         try:
             if owns_group:
-                os.killpg(proc.pid, signal.SIGKILL)
+                kill_owned_process_group(proc.pid)
             else:
                 proc.kill()
         except ProcessLookupError:
@@ -193,7 +203,7 @@ def process(args, timeout=60, cwd=None, *, supervise=None):
             job.close()
         elif supervised and owns_group:
             try:
-                os.killpg(proc.pid, signal.SIGKILL)
+                kill_owned_process_group(proc.pid)
             except ProcessLookupError:
                 pass
 

@@ -1,0 +1,31 @@
+{
+  "at": "2026-11-03T01:52:21.035338+00:00",
+  "reason": "Only obsolete runs of this task containing the proven unsafe mock signal path; fixed independent run follows",
+  "runs": [
+    {
+      "run": 41560583035,
+      "sha": "04516fa35733367f658231c2d21c8747a0afe512",
+      "status": "in_progress",
+      "cancel": 202
+    },
+    {
+      "run": 41560583034,
+      "sha": "04516fa35733367f658231c2d21c8747a0afe512",
+      "status": "in_progress",
+      "cancel": 202
+    },
+    {
+      "run": 41561115298,
+      "sha": "0ea9b9f8389076ec2df5fbc569d0515420b48300",
+      "status": "in_progress",
+      "cancel": 202
+    },
+    {
+      "run": 41561115270,
+      "sha": "0ea9b9f8389076ec2df5fbc569d0515420b48300",
+      "status": "in_progress",
+      "cancel": 202
+    }
+  ],
+  "credential": "not_recorded"
+}

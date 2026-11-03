@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import json
 import os
-import signal
 import subprocess
 import sys
 import time
@@ -25,7 +24,8 @@ def terminate_tree(proc):
             proc.kill()
     else:
         try:
-            os.killpg(proc.pid, signal.SIGKILL)
+            from creation_pipeline.runtime.runner import kill_owned_process_group
+            kill_owned_process_group(proc.pid)
         except ProcessLookupError:
             pass
     proc.wait(timeout=5)
