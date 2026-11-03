@@ -10,8 +10,9 @@ from creation_pipeline.runtime.runner import process
 from creation_pipeline.records import redact,sanitized,write_json
 
 CHILD='''import faulthandler,runpy,sys
-faulthandler.dump_traceback_later(120,repeat=True)
-sys.argv=['unittest','discover','-s','tests','-v']
+selection=sys.argv[1:]
+faulthandler.dump_traceback_later(30 if selection else 120,repeat=True)
+sys.argv=['unittest',*selection] if selection else ['unittest','discover','-s','tests','-v']
 try:
     runpy.run_module('unittest',run_name='__main__',alter_sys=True)
 finally:
@@ -53,5 +54,7 @@ if __name__=='__main__':
     import argparse
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--self-check',action='store_true')
+    parser.add_argument('--module',choices=['tests.pipeline.'+p.stem for p in sorted((ROOT/'tests/pipeline').glob('test_*.py'))])
     args=parser.parse_args()
-    raise SystemExit(self_check() if args.self_check else run([sys.executable,'-u','-c',CHILD]))
+    command=[sys.executable,'-u','-c',CHILD]+([args.module,'-v'] if args.module else [])
+    raise SystemExit(self_check() if args.self_check else run(command,120 if args.module else 18*60))
