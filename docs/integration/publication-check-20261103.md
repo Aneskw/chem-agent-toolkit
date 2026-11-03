@@ -32,3 +32,19 @@ GITHUB_ENV 设置后续 CODEX_HOME；不存在 job 级 runner 表达式。含空
 本轮本地日志、检查结果及首轮 CI 原因见
 [证据索引](../../validation/publication/results-20261103.json)。发布不会使新用户继承原有资格；
 新电脑仍需准备自己的客户端/认证、支持的 Docker 平台，并完成第一次独立验收。
+
+## 第二轮 Linux 诊断
+
+b857b21 的运行 41480049712：Windows/Python 3.11、3.14 均通过完整 859 项及后续自检；
+Ubuntu 两个任务均有 GitHub 注释确认超出原 20 分钟上限，取消后日志端点仍缺失，尚未
+确定具体阻塞点。没有将其记为通过，也没有放宽超时或重跑失败轮。
+
+下一独立轮仅为 CI 增加监管与诊断：validation/run_offline_suite.py 复用既有 runner.process
+在独立进程会话中运行原 unittest discovery，输出详细用例名，每 120 秒输出线程栈；
+测试进程上限 18 分钟，低于原 job 的 20 分钟。保留退出码，超时清理自有进程组，拒绝在
+业务执行 scope 内启动。正常/失败/超时的本地短进程检查通过；原生产链和用例均未改变。
+新一轮真实结果仍以 Actions 为准。
+[诊断证据](../../validation/publication/ci-diagnostic-20261103.json) 保留上轮注释与取消记录。
+
+检查过程中本机 Docker daemon 当前不可用，未尝试修复系统或清理缓存；本轮未新增
+Docker 业务验收，源码包解压/CLI 预检与离线回归不依赖其可用。

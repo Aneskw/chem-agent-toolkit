@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "at": "2026-11-03T00:44:33.826127+00:00",
+  "previous_run": 41480049712,
+  "previous_commit": "b857b21e7cd897caae6309daca5d3656fb75f79b",
+  "windows_jobs": "both passed; 859 cases each and prompt/contract checks",
+  "linux_jobs": "both exceeded 20-minute deadline; cancelled, logs unavailable via API",
+  "root_cause": "not yet established",
+  "next_round": "new commit, never rerun failed run",
+  "diagnostic_change": {
+    "runner": "existing runtime.runner.process, independent owned session",
+    "suite": "same unittest discovery, verbose",
+    "traceback_dump_seconds": 120,
+    "suite_deadline_seconds": 1080,
+    "job_deadline_seconds": 1200,
+    "failed_exit_preserved": 7,
+    "timeout_exit": 124,
+    "parent_survived_timeout": true,
+    "business_scope_refused": true
+  },
+  "models": 0,
+  "builds": 0,
+  "files": [
+    {
+      "path": "validation/publication/evidence-20261103-ci/ci-check-125395633959.json",
+      "sha256": "977d8616c4fa2e3a8514e8bafb73f46a7ae050204091d1fcf040a77ba17e39a2"
+    },
+    {
+      "path": "validation/publication/evidence-20261103-ci/ci-annotations-125395633959.json",
+      "sha256": "8ac0f0f98faad30818ba3670746bcbf054d40aa3e914ceb37c99578d4069dac0"
+    },
+    {
+      "path": "validation/publication/evidence-20261103-ci/ci-annotations-125395634101.json",
+      "sha256": "8ac0f0f98faad30818ba3670746bcbf054d40aa3e914ceb37c99578d4069dac0"
+    },
+    {
+      "path": "validation/publication/evidence-20261103-ci/ci-cancellation.json",
+      "sha256": "db2181059ce69ce2fd62242f4ddb0993e49b981da29f3e64bc2a6bd20c3d0ceb"
+    },
+    {
+      "path": "validation/publication/evidence-20261103-ci/ci-force-cancellation.json",
+      "sha256": "e44624ff102b4ff38953cced8159c8d1d474503edc3f4d904c2f5c1567381b66"
+    },
+    {
+      "path": "validation/publication/evidence-20261103-ci/supervisor-01.json",
+      "sha256": "156365db0c9cd360f49ece7446e5c2558dd2e4038ad0688ce49437868170d73f"
+    },
+    {
+      "path": "validation/publication/evidence-20261103-ci/supervisor-02.json",
+      "sha256": "466cbe50049d25d107820f5cf5db0aa85f5fb38b1f884cddb5b22484b16c5216"
+    },
+    {
+      "path": "validation/publication/evidence-20261103-ci/supervisor-03.json",
+      "sha256": "4affa423ba5be2d555bac4e333998cf113e8a0237821bf376b116a11e1d5c7a1"
+    }
+  ]
+}

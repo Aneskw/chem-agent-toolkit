@@ -1,0 +1,7 @@
+{
+  "at": "2026-11-02T16:40:54.185312+00:00",
+  "run_id": 41480049712,
+  "http_status": 202,
+  "reason": "Linux jobs exceeded configured 20-minute limit without finalization; preserve own run for diagnosis",
+  "credential": "not_recorded"
+}
