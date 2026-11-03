@@ -1,6 +1,8 @@
 name: Offline contracts
 on:
   push:
+    paths-ignore:
+      - .github/workflows/offline-diagnostic.yml
   pull_request:
   workflow_dispatch:
 permissions:

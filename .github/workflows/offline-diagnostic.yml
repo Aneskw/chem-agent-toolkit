@@ -137,6 +137,20 @@ jobs:
         run: python validation/run_offline_suite.py --module tests.pipeline.test_policy_examples
       - name: test_policy_grounding_diagnostics
         run: python validation/run_offline_suite.py --module tests.pipeline.test_policy_grounding_diagnostics
+      - name: Process headroom before repeated policy module
+        shell: python
+        run: |
+          import json,os,resource,subprocess
+          from pathlib import Path
+          fields={'nproc':resource.getrlimit(resource.RLIMIT_NPROC),'nofile':resource.getrlimit(resource.RLIMIT_NOFILE)}
+          for name in ['pids.current','pids.max','memory.current','memory.max','cgroup.events']:
+              p=Path('/sys/fs/cgroup')/name
+              if p.is_file():fields[name]=p.read_text().strip()
+          print('::notice title=Linux process headroom::'+json.dumps(fields),flush=True)
+          subprocess.run(['ps','-e','-o','pid,ppid,pgid,sid,stat,comm'],check=True,timeout=10)
+      - name: Direct whole policy module after previous modules
+        timeout-minutes: 1
+        run: python -m unittest tests.pipeline.test_policy_types -v
       - name: test_policy_types
         run: python validation/run_offline_suite.py --module tests.pipeline.test_policy_types
       - name: test_process_cancellation
