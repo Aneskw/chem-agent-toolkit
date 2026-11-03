@@ -32,6 +32,23 @@ jobs:
               stream.write(f'CODEX_HOME={path}\n')
       - run: python -m pip install -r requirements-yaml.txt
       - run: python validation/run_offline_suite.py --self-check
+      - name: Import acceptance validator directly
+        run: python -c "from creation_pipeline.runtime.acceptance import contracts; print('acceptance import passed')"
+      - name: Direct policy test_an_object_invalid_input_is_rejected
+        timeout-minutes: 1
+        run: python -m unittest tests.pipeline.test_policy_types.PolicyTypeTests.test_an_object_invalid_input_is_rejected -v
+      - name: Direct policy test_object_purposes_are_rejected
+        timeout-minutes: 1
+        run: python -m unittest tests.pipeline.test_policy_types.PolicyTypeTests.test_object_purposes_are_rejected -v
+      - name: Direct policy test_object_checks_are_rejected
+        timeout-minutes: 1
+        run: python -m unittest tests.pipeline.test_policy_types.PolicyTypeTests.test_object_checks_are_rejected -v
+      - name: Direct policy test_object_operations_and_check_ids_are_rejected
+        timeout-minutes: 1
+        run: python -m unittest tests.pipeline.test_policy_types.PolicyTypeTests.test_object_operations_and_check_ids_are_rejected -v
+      - name: Direct policy test_object_operation_purposes_are_rejected
+        timeout-minutes: 1
+        run: python -m unittest tests.pipeline.test_policy_types.PolicyTypeTests.test_object_operation_purposes_are_rejected -v
       - name: test_acceptance_only
         run: python validation/run_offline_suite.py --module tests.pipeline.test_acceptance_only
       - name: test_aggregate_status_diagnostic
