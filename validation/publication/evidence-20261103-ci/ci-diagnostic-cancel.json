@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-03T01:07:46.240298+00:00",
+  "run_id": 41555115730,
+  "status": 202,
+  "observed_status": "in_progress",
+  "reason": "Preserve incomplete rolling-label Linux diagnostic run beyond original job deadline; new controlled Ubuntu 24.04 comparison follows",
+  "credential": "not_recorded"
+}

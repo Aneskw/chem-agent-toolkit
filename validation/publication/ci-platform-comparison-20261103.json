@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "at": "2026-11-03T01:08:37.332554+00:00",
+  "incomplete_run": 41555115730,
+  "commit": "3d7e58ebe737385ef67a3712e0e87814fa5b5333",
+  "rolling_linux_label": "unverified; exceeded original deadline without accessible final logs",
+  "windows": "both passed full 859-case suites and later checks",
+  "cause": "not established; platform change is a controlled comparison, not proof of root cause",
+  "next_linux_target": "ubuntu-24.04",
+  "tests_removed": 0,
+  "job_deadline_seconds": 1200,
+  "suite_deadline_seconds": 1080,
+  "models": 0,
+  "builds": 0,
+  "new_self_checks": [
+    "success 0",
+    "failure 7 preserved",
+    "timeout 124 with parent survival",
+    "POSIX owned-process-group termination with parent survival"
+  ],
+  "evidence": {
+    "path": "validation/publication/evidence-20261103-ci/ci-diagnostic-cancel.json",
+    "sha256": "f7f2939b61b6ab155d20014f29c44689c094c84044c6fcb85b9b60e799cce464"
+  }
+}

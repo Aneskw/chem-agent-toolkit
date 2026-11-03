@@ -84,6 +84,9 @@ Python 3.11/3.14 workflow 只有在实际运行后才可称 CI 通过。项目�
 Linux 基础设施结果见 [隔离启动报告](../integration/portable-startup-20261102.md)，不能替代
 用户机器上的第一次独立审阅和验收。实际已检验 Windows/Python 3.14 与 Linux/Python 3.11；
 本轮没有新增付费生成，认证和模型权限须由使用者确认。未验证 macOS 主机运行。
+CI 的 Linux 主机明确固定为 Ubuntu 24.04，避免滚动标签的不可控变化；它的新一轮结果以
+Actions 为准。此前 ubuntu-latest 两组超时且未取得完整日志，不能将其称为已通过或把
+原因归给某个确定发行版。参见 [发布复查](../integration/publication-check-20261103.md)。
 
 模型不可用：核对自己客户端/账号和 model 字段，不借用原作者认证或自动切换后端。
 缺 Python 依赖：确认使用 .venv 的 Python。Docker 不可用/ARM：按报告的平台原因处理。

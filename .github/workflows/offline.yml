@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-24.04, windows-latest]
         python: ['3.11', '3.14']
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
@@ -34,6 +34,8 @@ jobs:
           with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as stream:
               stream.write(f'CODEX_HOME={client_home}\n')
       - run: python -m pip install -r requirements-yaml.txt
+      - name: Verify offline supervisor process boundaries
+        run: python validation/run_offline_suite.py --self-check
       - name: Run offline suite in an owned process session
         run: python validation/run_offline_suite.py
       - run: python validation/deepseek-api/verify_prompt_contract.py

@@ -36,4 +36,22 @@ def run(command,timeout=18*60):
     return code if isinstance(code,int) and 0<=code<=255 else 1
 
 
-if __name__=='__main__':raise SystemExit(run([sys.executable,'-u','-c',CHILD]))
+def self_check():
+    checks=[('success','print("offline supervisor success")',5,0),
+            ('failure','raise SystemExit(7)',5,7),
+            ('timeout','import time;time.sleep(30)',1,124)]
+    if os.name=='posix':
+        checks.append(('owned_group','import os,signal;os.killpg(os.getpgrp(),signal.SIGKILL)',5,1))
+    for name,code,timeout,expected in checks:
+        actual=run([sys.executable,'-c',code],timeout)
+        if actual!=expected:raise ValueError(f'Offline supervisor {name}: expected={expected}; actual={actual}')
+        print(f'offline supervisor {name}: passed',flush=True)
+    return 0
+
+
+if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--self-check',action='store_true')
+    args=parser.parse_args()
+    raise SystemExit(self_check() if args.self_check else run([sys.executable,'-u','-c',CHILD]))
