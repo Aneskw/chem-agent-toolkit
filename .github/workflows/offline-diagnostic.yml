@@ -49,6 +49,18 @@ jobs:
       - name: Direct policy test_object_operation_purposes_are_rejected
         timeout-minutes: 1
         run: python -m unittest tests.pipeline.test_policy_types.PolicyTypeTests.test_object_operation_purposes_are_rejected -v
+      - name: Direct whole policy module
+        timeout-minutes: 1
+        run: python -m unittest tests.pipeline.test_policy_types -v
+      - name: Policy module through runpy only
+        timeout-minutes: 1
+        run: python -c "import runpy,sys; sys.argv=['unittest','tests.pipeline.test_policy_types','-v']; runpy.run_module('unittest',run_name='__main__',alter_sys=True)"
+      - name: Policy module with traceback timer
+        timeout-minutes: 1
+        run: python -c "import faulthandler,runpy,sys; faulthandler.dump_traceback_later(30,repeat=True); sys.argv=['unittest','tests.pipeline.test_policy_types','-v']; runpy.run_module('unittest',run_name='__main__',alter_sys=True)"
+      - name: Policy module through owned supervisor first
+        timeout-minutes: 3
+        run: python validation/run_offline_suite.py --module tests.pipeline.test_policy_types
       - name: test_acceptance_only
         run: python validation/run_offline_suite.py --module tests.pipeline.test_acceptance_only
       - name: test_aggregate_status_diagnostic
