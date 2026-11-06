@@ -6,8 +6,8 @@ from pathlib import Path
 from unittest.mock import patch
 
 from creation_pipeline import readiness
-from creation_pipeline.models import load_config
-from creation_pipeline.pipeline import build
+from creation_pipeline.models import load_legacy_config as load_config
+from creation_pipeline.pipeline import build_legacy as build
 from creation_pipeline.records import write_json, file_digest
 from tests.pipeline.test_shared_tool import declaration
 

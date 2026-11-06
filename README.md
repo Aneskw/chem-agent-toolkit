@@ -1,5 +1,15 @@
 # Research Skill Creation Pipeline
 
+The default creation workflow now shares **tool environments**, keeps task code in pure Skill
+packages, and executes only necessary custom logic after full semantic review. Start with
+[shared environment creation](docs/pipeline/shared-creation.md) and the
+[new example](examples/shared-environments/README.md). Resource groups run serially; qualified
+packages enter `verified/` or `pending-validation/`. A working, published Docker environment is
+required for either class. Existing catalogs need an explicit migration or a new library directory.
+
+The following startup and runtime-* documentation describes the retained **legacy script-image
+workflow**, selected explicitly with `workflow: legacy-script-images`.
+
 Discover, author, independently review, freeze, execute and qualify source-grounded Skills.
 Failed candidates retain evidence for explicit recovery. `built`, `available`, `passed` and
 `accepted` are separate facts; importing or moving evidence does not inherit current qualification.

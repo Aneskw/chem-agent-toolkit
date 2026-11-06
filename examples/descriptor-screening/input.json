@@ -1,4 +1,5 @@
 {
+  "workflow": "legacy-script-images",
   "sources": [
     {
       "id": "sibling_source",

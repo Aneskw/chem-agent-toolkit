@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 from creation_pipeline.agent.backend import NativeSession, audit_images
 from creation_pipeline.resources.intake import Sources
-from creation_pipeline.models import load_config, ModelCallError
+from creation_pipeline.models import load_legacy_config as load_config, ModelCallError
 from creation_pipeline.resources.workspace import prepare
 from creation_pipeline.records import write_json, read_json
 from creation_pipeline.generation.discovery import analyze
@@ -64,6 +64,29 @@ print(json.dumps({"type":"turn.completed","usage":{"input_tokens":10,"output_tok
         self.assertIn('sandbox_mode="workspace-write"', argv)
         self.assertNotIn("--ephemeral", argv)
         self.assertIn("resume", argv)
+
+    def test_independent_cli_does_not_inherit_desktop_launcher_identity(self):
+        import os
+        session = self.session()
+        self.fake.write_text(self.fake.read_text(encoding="utf-8") + "\nimport os\nPath(sys.argv[0]).with_name('child-env.json').write_text(json.dumps({'registered':os.environ.get('CODEX_WINDOWS_REGISTERED_CORE'),'origin':os.environ.get('CODEX_INTERNAL_ORIGINATOR_OVERRIDE')}))\n", encoding="utf-8")
+        with patch.dict(os.environ, {"CODEX_WINDOWS_REGISTERED_CORE": "1", "CODEX_INTERNAL_ORIGINATOR_OVERRIDE": "Codex Desktop"}), patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]):
+            session.stage("test", {}, {})
+        self.assertEqual(read_json(self.root / "child-env.json"), {"registered": None, "origin": None})
+
+    def test_shared_cache_is_an_explicit_child_writable_directory(self):
+        self.config["workflow"] = "shared-environments"
+        session = self.session()
+        with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]):
+            session.stage("test", {}, {})
+        argv = read_json(self.root / "argv.json")
+        self.assertIn("--add-dir", argv)
+        self.assertIn(str(self.sources.cache), argv)
+        self.assertIn('sandbox_mode="workspace-write"', argv)
+        with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]):
+            session.stage("test", {}, {})
+        resumed = read_json(self.root / "argv.json")
+        self.assertNotIn("--add-dir", resumed)
+        self.assertTrue(any(v.startswith("sandbox_workspace_write.writable_roots=") for v in resumed))
 
     def test_failure_retains_session_and_does_not_retry(self):
         self.fake.write_text('import json\nprint(json.dumps({"type":"thread.started","thread_id":"retained"}))\n', encoding="utf-8")
@@ -214,7 +237,7 @@ time.sleep(30)
         self.assertEqual((target / "SKILL.md").read_bytes(), raw)
 
     def test_missing_checkpoint_does_not_make_fake_resume(self):
-        from creation_pipeline.pipeline import build
+        from creation_pipeline.pipeline import build_legacy as build
         with self.assertRaisesRegex(ValueError, "checkpoint"):
             build(state_root=self.root / "state", resume_id="missing")
 
@@ -312,7 +335,7 @@ for i in range(5):
             load_config(self.root / "input.json")
 
     def test_complete_native_build_and_failed_turn_resume(self):
-        from creation_pipeline.pipeline import build
+        from creation_pipeline.pipeline import build_legacy as build
         from tests.pipeline.support import MAIN
         from tests.pipeline.test_discovery import candidate, discovery
         plan = discovery(candidate())

@@ -7,9 +7,9 @@ from pathlib import Path
 from unittest.mock import patch
 
 from creation_pipeline.generation.discovery import ordered
-from creation_pipeline.models import load_config
+from creation_pipeline.models import load_legacy_config as load_config
 from creation_pipeline.artifacts.package import install, manifest, verify_bundle
-from creation_pipeline.pipeline import ROOT, build
+from creation_pipeline.pipeline import ROOT, build_legacy as build
 from creation_pipeline.records import read_json, write_json
 from tests.pipeline.support import MAIN, PLAN, ARTIFACT, ReplayStages, response, isolated_check_regression
 

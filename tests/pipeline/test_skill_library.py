@@ -4,10 +4,10 @@ from pathlib import Path
 from unittest.mock import patch
 from tests.pipeline import test_discovery as f
 from tests.pipeline.support import ARTIFACT, ReplayStages, response, isolated_check_regression
-from creation_pipeline.pipeline import build
+from creation_pipeline.pipeline import build_legacy as build
 from creation_pipeline.records import read_json, write_json
 from creation_pipeline.resources.intake import Sources
-from creation_pipeline.models import load_config
+from creation_pipeline.models import load_legacy_config as load_config
 
 
 class SkillLibraryTests(unittest.TestCase):

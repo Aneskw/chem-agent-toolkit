@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from creation_pipeline.models import load_config
+from creation_pipeline.models import load_legacy_config as load_config
 from creation_pipeline.pipeline import runtime_spec_for
 
 BASE = {

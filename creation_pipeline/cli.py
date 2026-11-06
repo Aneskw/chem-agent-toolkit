@@ -55,6 +55,7 @@ def main(argv=None):
     child.add_argument("output")
     child.add_argument("--destination", required=True)
     child.add_argument("--name", help="Install a named accepted entry from a catalog library")
+    child.add_argument("--include-pending", action="store_true", help="Explicitly install an unverified pending Skill")
     child = commands.add_parser("library", help="Query the catalog; candidates require explicit selection")
     child.add_argument("path")
     child.add_argument("--name")
@@ -99,9 +100,30 @@ def main(argv=None):
     child.add_argument('--candidate', required=True)
     child.add_argument('--revalidate', action='store_true')
     child.add_argument('--recover-lock', action='store_true')
+    child = commands.add_parser("promote", help="Promote a pending Skill using explicit manual verification evidence")
+    child.add_argument("library")
+    child.add_argument("name")
+    child.add_argument("--report", required=True)
+    for operation in ("pin", "unpin", "prune"):
+        child = commands.add_parser(operation, help="Manage archived grouped workspaces")
+        child.add_argument("--state-dir", default=str(ROOT / ".pipeline"))
+        if operation == "prune":
+            child.add_argument("--older-than-days", type=int, default=7)
+            child.add_argument("--dry-run", action="store_true")
+        else:
+            child.add_argument("build_id")
     args = parser.parse_args(argv)
     try:
-        if args.command == 'init':
+        if args.command in ("pin", "unpin"):
+            from creation_pipeline.shared.retention import pin
+            result = pin(args.state_dir, args.build_id, args.command == "pin")
+        elif args.command == "prune":
+            from creation_pipeline.shared.retention import sweep
+            result = sweep(args.state_dir, args.older_than_days, args.dry_run)
+        elif args.command == "promote":
+            from creation_pipeline.shared.delivery import promote
+            result = promote(args.library, args.name, json.loads(Path(args.report).read_text(encoding="utf-8")))
+        elif args.command == 'init':
             from creation_pipeline.onboarding import initialize
             result = initialize(args.output,args.model)
         elif args.command == 'doctor':
@@ -124,7 +146,7 @@ def main(argv=None):
                 if args.plan_path:
                     raise ValueError("Preflight takes a configuration; continuation validates saved sources itself")
                 config = load_config(args.config)
-                result = {"status": "configuration_valid", "source_count": len(config["sources"]),
+                result = {"status": "configuration_valid", "source_count": sum(len(g["sources"]) for g in config.get("resource_groups", [{"sources": config["sources"]}])),
                           "source_availability": "not_checked", "model_calls": 0}
             else:
                 result = build(args.config, args.state_dir, plan_only=args.command in ("discover", "plan", "revise"), plan_path=args.plan_path,
@@ -142,6 +164,11 @@ def main(argv=None):
             path = Path(args.path)
             from creation_pipeline.artifacts.layout import extract
             config = load_config(args.config) if args.config else None
+            if (path / "summary.json").is_file() and json.loads((path / "summary.json").read_text(encoding="utf-8")).get("workflow") == "shared-environments":
+                summary = json.loads((path / "summary.json").read_text(encoding="utf-8"))
+                result = {"status": "pass", "recorded_build_status": summary["status"], "scope": "record_only_not_new_qualification"}
+                print(json.dumps(result, ensure_ascii=False, indent=2))
+                return 0
             if (path / "summary.json").is_file():
                 record, bundle = verify_bundle(path)
                 reports = []
@@ -169,13 +196,24 @@ def main(argv=None):
                 result = {"status": "fail" if any(r["status"] == "fail" for r in reports) else "pass",
                           "checks": reports, "execution": "not_run", "scope": "static_only_not_installation_approval"}
         elif args.command == "install":
-            if args.name:
+            if (Path(args.output) / "catalog.json").exists() and json.loads((Path(args.output) / "catalog.json").read_text(encoding="utf-8")).get("workflow") == "shared-environments":
+                from creation_pipeline.shared.delivery import install as shared_install
+                if not args.name:
+                    raise ValueError("Select --name for a shared environment Skill library")
+                result = shared_install(args.output, args.name, args.destination, args.include_pending)
+            elif args.name:
                 from creation_pipeline.artifacts.library import install_from_library
                 result = install_from_library(args.output, args.name, args.destination)
             else:
                 result = install(args.output, args.destination)
         elif args.command == "library":
             from creation_pipeline.artifacts.library import entries, get
+            if (Path(args.path) / "catalog.json").exists() and json.loads((Path(args.path) / "catalog.json").read_text(encoding="utf-8")).get("workflow") == "shared-environments":
+                from creation_pipeline.shared.delivery import entries as shared_entries
+                values = shared_entries(args.path, args.include_candidates)
+                result = {"skills": [v for v in values if not args.name or v["name"] == args.name]}
+                print(json.dumps(result, ensure_ascii=False, indent=2))
+                return 0
             result = get(args.path, args.name, include_candidates=args.include_candidates) if args.name else {"skills": entries(args.path, include_candidates=args.include_candidates)}
         elif args.command == "runtime-build":
             from creation_pipeline.runtime.service import resume_build
@@ -208,7 +246,12 @@ def main(argv=None):
             from creation_pipeline.runtime.recovery import relocate
             result = relocate(args.library,args.candidate,revalidate=args.revalidate,recover_lock=args.recover_lock)
         else:
-            result = clean_run(args.state_dir, args.build_id, args.dry_run)
+            saved_checkpoint = Path(args.state_dir) / 'runs' / args.build_id / 'checkpoint.json'
+            if saved_checkpoint.is_file() and json.loads(saved_checkpoint.read_text(encoding='utf-8')).get('workflow') == 'shared-environments':
+                from creation_pipeline.shared.retention import clean as shared_clean
+                result = shared_clean(args.state_dir, args.build_id, args.dry_run)
+            else:
+                result = clean_run(args.state_dir, args.build_id, args.dry_run)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 1 if result.get("status") in ("failed", "blocked", "fail", "partial", "interrupted", "incomplete", "not_run", "runtime_blocked", "build_failed", "execution_failed", "review_required") else 0
     except (ValueError, OSError, KeyError) as exc:

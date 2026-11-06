@@ -1,5 +1,10 @@
 # Documentation
 
+Current default workflow: [shared tool environment creation](pipeline/shared-creation.md),
+[Docker Skill requirements](skills/docker-minimum.md) and
+[packaging](skills/docker-packaging.md). Older guides below describe the explicit
+`legacy-script-images` workflow and its historical acceptance records.
+
 For a different computer, start with [new-machine setup](pipeline/new-machine-setup.md).
 See the [isolated startup evidence](integration/portable-startup-20261102.md) for verified scope.
 

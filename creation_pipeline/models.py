@@ -36,7 +36,7 @@ def runtime_spec(config, name=None):
     return merged
 
 
-def load_config(path):
+def _load_legacy_config(path, _raw=None):
     path = Path(path).resolve()
     raw = path.read_text(encoding="utf-8-sig")
     if path.suffix.lower() == ".json":
@@ -47,9 +47,11 @@ def load_config(path):
         except ImportError as exc:
             raise ValueError("YAML needs PyYAML; JSON configurations need no extra package") from exc
         config = yaml.safe_load(raw)
+    if _raw is not None:
+        config = copy.deepcopy(_raw)
     if not isinstance(config, dict):
         raise ValueError("Configuration must be an object")
-    allowed = {"task", "sources", "model", "limits", "checks", "environment", "intent", "notes", "http_only",
+    allowed = {"workflow", "task", "sources", "model", "limits", "checks", "environment", "intent", "notes", "http_only",
                "prompt", "constraints", "execution", "network", "execute_generated_checks", "batch", "adoption", "draft_only", "runtime_requirements", "revision_parents", "runtime", "runtime_defaults"}
     unknown = set(config) - allowed
     if unknown:
@@ -241,3 +243,14 @@ def exceeded(value, limit):
 def iterations(limit):
     import itertools
     return itertools.count() if limit is None else range(limit + 1)
+
+
+def load_config(path):
+    from creation_pipeline.shared.config import load
+    return load(path, _load_legacy_config)
+
+
+def load_legacy_config(path):
+    result = _load_legacy_config(path)
+    result["workflow"] = "legacy-script-images"
+    return result

@@ -11,7 +11,7 @@ from pathlib import Path
 
 from creation_pipeline.validation.checks import classify, run_checks, static_checks
 from creation_pipeline.resources.intake import Sources
-from creation_pipeline.models import BlockedError, load_config
+from creation_pipeline.models import BlockedError, load_legacy_config as load_config
 from creation_pipeline.artifacts.package import install, manifest
 from creation_pipeline.generation.discovery import ROOT
 from creation_pipeline.records import clean_run, digest, read_json, safe_relative, write_json

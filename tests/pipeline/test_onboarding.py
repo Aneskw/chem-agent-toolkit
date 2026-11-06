@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import patch
 
 from creation_pipeline import onboarding,doctor
-from creation_pipeline.models import load_config
+from creation_pipeline.models import load_legacy_config as load_config
 from creation_pipeline.records import read_json,file_digest
 from creation_pipeline.paths import ROOT
 

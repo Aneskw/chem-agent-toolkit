@@ -12,7 +12,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from creation_pipeline.agent import backend
-from creation_pipeline.models import load_config
+from creation_pipeline.models import load_legacy_config as load_config
 from creation_pipeline.records import write_json
 from creation_pipeline.resources.intake import Sources
 from creation_pipeline.runtime import model_call

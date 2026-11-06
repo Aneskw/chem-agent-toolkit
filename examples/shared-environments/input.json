@@ -1,0 +1,19 @@
+{
+  "workflow": "shared-environments",
+  "resource_groups": [
+    {
+      "id": "rdkit-descriptors",
+      "sources": [
+        {"id": "usage", "path": "resources/usage.md"}
+      ]
+    }
+  ],
+  "research_access": "supplement",
+  "network": true,
+  "environments": {
+    "root": "../../tools/environments",
+    "image_prefix": "ghcr.io/your-account/chem-agent-toolkit",
+    "source_url": "https://github.com/your-account/chem-agent-toolkit",
+    "operation_timeout": 600
+  }
+}

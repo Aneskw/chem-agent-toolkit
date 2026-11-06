@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 from creation_pipeline import pipeline
 from creation_pipeline.agent.backend import NativeSession
-from creation_pipeline.models import load_config, BudgetError
+from creation_pipeline.models import load_legacy_config as load_config, BudgetError
 from creation_pipeline.records import read_json,write_json
 from tests.pipeline import test_discovery as fixture
 from tests.pipeline.support import ReplayStages,ARTIFACT
@@ -36,7 +36,7 @@ class BatchReadinessTests(unittest.TestCase):
                 return answer
             session.stage=stage
             return session
-        result=pipeline.build(self.c.config,self.c.state,_session_factory=factory,keep_debug=True,**kwargs)
+        result=pipeline.build_legacy(self.c.config,self.c.state,_session_factory=factory,keep_debug=True,**kwargs)
         return result,read_json(Path(result['output'])/'summary.json'),replay
 
     def failure(self,output,record,executor,**kwargs):

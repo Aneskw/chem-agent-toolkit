@@ -5,7 +5,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from creation_pipeline.agent.command import transport_args
-from creation_pipeline.models import load_config
+from creation_pipeline.models import load_legacy_config as load_config
 from creation_pipeline.runtime import model_call, planner
 
 

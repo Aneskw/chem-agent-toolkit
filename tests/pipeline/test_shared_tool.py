@@ -402,7 +402,7 @@ class SharedToolTests(unittest.TestCase):
         self.assertFalse(self.record['delivery']['qualification']['accepted'])
 
     def test_candidate_selection_can_use_independent_declaration_from_defaults(self):
-        from creation_pipeline.models import load_config
+        from creation_pipeline.models import load_legacy_config as load_config
         from creation_pipeline.pipeline import runtime_spec_for
         reference={'request_key':'a'*64,'artifact_id':'b'*64}
         path=self.root/'config.json'

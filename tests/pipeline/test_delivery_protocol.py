@@ -16,7 +16,7 @@ from creation_pipeline.artifacts import store
 from creation_pipeline.artifacts.evidence import verify
 from creation_pipeline.artifacts.package import install, manifest
 from creation_pipeline.contracts import qualify, fingerprint, inputs_for, versioned
-from creation_pipeline.pipeline import build
+from creation_pipeline.pipeline import build_legacy as build
 from creation_pipeline.records import read_json, write_json
 
 

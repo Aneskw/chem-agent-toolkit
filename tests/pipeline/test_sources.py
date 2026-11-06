@@ -11,7 +11,7 @@ from unittest.mock import MagicMock, patch
 from creation_pipeline.resources.acquisition import Acquisition
 from creation_pipeline.resources.documents import read_text, table_rows
 from creation_pipeline.resources.intake import Sources
-from creation_pipeline.models import BlockedError, load_config
+from creation_pipeline.models import BlockedError, load_legacy_config as load_config
 from creation_pipeline.records import write_json
 
 

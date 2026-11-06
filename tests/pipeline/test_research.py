@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from creation_pipeline.models import load_config, ModelCallError
+from creation_pipeline.models import load_legacy_config as load_config, ModelCallError
 from creation_pipeline.resources.intake import Sources, permitted
 from creation_pipeline.records import write_json, read_json
 from creation_pipeline.resources.workspace import prepare, sync_sources
@@ -74,7 +74,7 @@ class ResearchTests(unittest.TestCase):
 
     def test_api_injection_is_not_a_public_entrypoint(self):
         import inspect
-        from creation_pipeline.pipeline import build
+        from creation_pipeline.pipeline import build_legacy as build
         self.assertNotIn("backend", inspect.signature(build).parameters)
         self.assertFalse((Path(__file__).resolve().parents[2] / "creation_pipeline/providers.py").exists())
 

@@ -13,7 +13,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from creation_pipeline.agent import backend
-from creation_pipeline.models import load_config
+from creation_pipeline.models import load_legacy_config as load_config
 from creation_pipeline.pipeline import runtime_gate_stops
 from creation_pipeline.records import write_json
 from creation_pipeline.runtime import entry, model_call, planner, review
@@ -167,7 +167,7 @@ class SilentChildBehaviourTests(unittest.TestCase):
             (root / 'src.py').write_text('def f():\n    return 1\n', encoding='utf-8')
             write_json(root / 'input.json', {'sources': [{'id': 'c', 'path': 'src.py'}], 'network': False,
                                              'limits': {'model_calls': 4, 'model_timeout': 30}})
-            from creation_pipeline.models import load_config as load
+            from creation_pipeline.models import load_legacy_config as load
             from creation_pipeline.resources.intake import Sources
             config = load(root / 'input.json')
             sources = Sources(config, root / 'cache')

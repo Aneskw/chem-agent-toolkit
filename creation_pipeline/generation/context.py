@@ -4,7 +4,14 @@ def guidance(config):
             "constraints": config["constraints"]}
 
 
-def candidate_context(session, config, plan):
+def candidate_context(session, config, plan, independent_review=False):
+    if config.get("workflow") == "shared-environments":
+        from creation_pipeline.shared.contracts import handoff
+        declared = {k: plan[k] for k in ("name", "task", "scope", "entrypoint", "construction") if k in plan} if independent_review else plan
+        return {**guidance(config), "plan": declared, "sources": session.sources.index(),
+                "evidence": session.sources.validate_evidence(plan["evidence"]),
+                "environment_plan": handoff(config["_environment_plan"]),
+                "resource_index": session.workspace["resource_index"]}
     from creation_pipeline.artifacts.layout import extract
     context = {**guidance(config), "plan": plan, "sources": session.sources.index(),
             "delivery_layout": extract(config, plan["name"]),

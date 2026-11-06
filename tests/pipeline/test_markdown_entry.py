@@ -202,7 +202,7 @@ class MarkdownEntryTests(unittest.TestCase):
 
 class SourceIdentityTests(unittest.TestCase):
     def test_pinned_raw_url_has_distinct_upstream_identity(self):
-        from creation_pipeline.models import load_config
+        from creation_pipeline.models import load_legacy_config as load_config
         from creation_pipeline.resources.intake import Sources
         from creation_pipeline.resources.acquisition import Acquisition
         with tempfile.TemporaryDirectory() as temp:
@@ -216,7 +216,7 @@ class SourceIdentityTests(unittest.TestCase):
             self.assertNotIn('resolved_ref', entry)
 
     def test_containing_repository_is_not_upstream(self):
-        from creation_pipeline.models import load_config
+        from creation_pipeline.models import load_legacy_config as load_config
         from creation_pipeline.resources.intake import Sources
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp); source = root / 'input'; source.mkdir()
@@ -236,7 +236,7 @@ class SavedPlanEntryTests(unittest.TestCase):
         from tests.pipeline.test_discovery import DiscoveryTests, discovery, candidate
         from tests.pipeline.test_delivery_protocol import configure_text, text_artifact
         from tests.pipeline.support import ReplayStages
-        from creation_pipeline.pipeline import build
+        from creation_pipeline.pipeline import build_legacy as build
         from creation_pipeline.artifacts import store
         from creation_pipeline.records import read_json, write_json
         from creation_pipeline.runtime.preparation import rebind
@@ -269,7 +269,7 @@ class SavedPlanEntryTests(unittest.TestCase):
         from tests.pipeline.test_discovery import DiscoveryTests, discovery, candidate
         from tests.pipeline.test_delivery_protocol import configure_text, text_artifact
         from tests.pipeline.support import ReplayStages
-        from creation_pipeline.pipeline import build
+        from creation_pipeline.pipeline import build_legacy as build
         fixture = DiscoveryTests(); fixture.setUp(); self.addCleanup(fixture.tearDown)
         configure_text(fixture)
         artifact = text_artifact(); artifact['runtime_requirement']['status'] = 'required'

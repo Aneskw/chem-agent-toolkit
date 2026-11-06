@@ -4,14 +4,14 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
-from creation_pipeline.records import has_link, read_json, safe_relative, file_digest
+from creation_pipeline.records import has_link, read_json, safe_relative, file_digest, long_path
 
 
 ROLES = {"scripts", "references", "examples", "resources", "assets"}
 
 
 def manifest(package):
-    package = Path(package)
+    package = long_path(package)
     if not package.is_dir() or has_link(package):
         raise ValueError("Package must be a real directory")
     result = []

@@ -6,6 +6,7 @@ import json
 import os
 import re
 import shutil
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path, PureWindowsPath
 
@@ -25,9 +26,20 @@ def read_json(path):
 def write_json(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    temp = path.with_suffix(path.suffix + ".tmp")
-    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    temp.replace(path)
+    temp = path.with_name(path.name + '.' + uuid.uuid4().hex + '.tmp')
+    try:
+        temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        for replace_attempt in range(6):
+            try:
+                temp.replace(path)
+                break
+            except PermissionError:
+                if replace_attempt == 5:
+                    raise
+                import time
+                time.sleep(0.05 * (replace_attempt + 1))
+    finally:
+        temp.unlink(missing_ok=True)
 
 
 RECOVERABLE_NOTICE = re.compile(r"(?i)^\s*(?:reconnecting\.\.\.|falling back from websockets to https transport)")
@@ -134,3 +146,43 @@ def file_digest(path):
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+from contextlib import contextmanager
+@contextmanager
+def lease(state, name):
+    """OS locks expire on process death; stale lock files do not pin a run forever."""
+    path = safe_relative(Path(state).absolute(), "leases/" + name + ".lock")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a+b") as stream:
+        stream.seek(0, 2)
+        if stream.tell() == 0:
+            stream.write(b"0")
+            stream.flush()
+        stream.seek(0)
+        acquired = False
+        try:
+            if os.name == "nt":
+                import msvcrt
+                msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            acquired = True
+            yield
+        finally:
+            if acquired:
+                stream.seek(0)
+                if os.name == "nt":
+                    msvcrt.locking(stream.fileno(), msvcrt.LK_UNLCK, 1)
+                else:
+                    fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
+
+
+def long_path(path):
+    """Use Windows extended paths for internal filesystem operations only."""
+    path = Path(path).absolute()
+    text = str(path)
+    if os.name == "nt" and not text.startswith("\\\\?\\"):
+        text = "\\\\?\\UNC\\" + text[2:] if text.startswith("\\\\") else "\\\\?\\" + text
+    return Path(text)

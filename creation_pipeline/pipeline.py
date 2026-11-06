@@ -16,7 +16,7 @@ from creation_pipeline.generation.discovery import ROOT, analyze, ordered, speci
 from creation_pipeline.generation.author import author, review
 from creation_pipeline.validation.checks import classify, run_checks, static_checks
 from creation_pipeline.resources.intake import Sources
-from creation_pipeline.models import BlockedError, BudgetError, IncompleteError, ModelCallError, load_config, bound, iterations, runtime_spec
+from creation_pipeline.models import BlockedError, BudgetError, IncompleteError, ModelCallError, load_legacy_config as load_config, bound, iterations, runtime_spec
 from creation_pipeline.artifacts.package import manifest
 from creation_pipeline.artifacts.library import adopt
 from creation_pipeline.schemas import CANDIDATES
@@ -259,7 +259,7 @@ def _candidate(session, config, entity, bundle, work, allow_generated, initial_f
     return record
 
 
-def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None, keep_debug=False,
+def build_legacy(config_path=None, state_root=None, *, plan_only=False, plan_path=None, keep_debug=False,
           execute_generated=False, _session_factory=None, notify=lambda message: None, feedback=None,
           library_root=None, no_adopt=False, resume_id=None, rediscover=False, extra_turns=0, draft_only=False):
     from creation_pipeline.readiness import check as readiness_check
@@ -715,3 +715,22 @@ def build(config_path=None, state_root=None, *, plan_only=False, plan_path=None,
     if record.get('runtime_failure_gate'):
         result['runtime_failure_gate'] = record['runtime_failure_gate']
     return result
+
+
+def build(config_path=None, state_root=None, **options):
+    if config_path is not None:
+        from creation_pipeline.models import load_config as load_current_config
+        config = load_current_config(config_path)
+        legacy = config.get("workflow") == "legacy-script-images"
+    elif options.get("resume_id"):
+        checkpoint = safe_relative(Path(state_root or ROOT / ".pipeline"), "runs/" + options["resume_id"] + "/checkpoint.json")
+        if not checkpoint.is_file():
+            raise ValueError("No resumable checkpoint for this build")
+        saved = read_json(checkpoint)
+        legacy = saved.get("workflow") != "shared-environments"
+    else:
+        legacy = bool(options.get("plan_path"))
+    if legacy:
+        return build_legacy(config_path, state_root, **options)
+    from creation_pipeline.shared.pipeline import build as shared_build
+    return shared_build(config_path, state_root, **options)

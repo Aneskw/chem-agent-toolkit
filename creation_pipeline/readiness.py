@@ -11,6 +11,9 @@ from creation_pipeline.models import exceeded, runtime_spec
 
 
 def check(config,mode='build',snapshots=None,offline=False):
+    if config.get('workflow') == 'shared-environments':
+        from creation_pipeline.shared.readiness import check as shared_check
+        return shared_check(config, mode, offline)
     checks=[];roots=[];inventories={}
     specs=[('runtime_defaults',runtime_spec(config))]
     specs += [('runtime.'+name,runtime_spec(config,name)) for name in config.get('runtime',{})]

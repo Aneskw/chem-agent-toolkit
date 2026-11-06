@@ -16,7 +16,7 @@ from creation_pipeline.artifacts.delivery import validate_package
 from creation_pipeline.artifacts.package import install, manifest
 from creation_pipeline.cli import main
 from creation_pipeline.contracts import fingerprint, qualify, versioned
-from creation_pipeline.models import load_config
+from creation_pipeline.models import load_legacy_config as load_config
 from creation_pipeline.records import read_json, write_json
 from tests.pipeline import test_discovery as fixtures
 from tests.pipeline.test_delivery_protocol import configure_text, text_artifact
