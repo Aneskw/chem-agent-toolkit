@@ -5,7 +5,7 @@ import re
 import shutil
 import time
 
-from creation_pipeline.records import read_json, write_json, safe_relative, has_link, sanitized, clean_run, lease
+from creation_pipeline.records import read_json, write_json, safe_relative, has_link, sanitized, clean_run, lease, file_digest
 
 DAY = 86400
 
@@ -98,7 +98,29 @@ def archive(state, output, summary, config, sources):
     dest.mkdir(parents=True, exist_ok=True)
     (dest / "complete.json").unlink(missing_ok=True)
     write_json(dest / "input.json", sanitized({k: v for k, v in (config or {}).items() if not k.startswith("_")}))
-    write_json(dest / "sources.json", sanitized(sources))
+    # Supplemental evidence must survive run cleanup and ordinary cache expiry.
+    # Keep IDs/inventory paths unchanged so writing basis still resolves.
+    retained_sources = []
+    for entry in sources:
+        entry = dict(entry)
+        if entry.get("supplemental"):
+            root = Path(entry["path"])
+            target = safe_relative(dest, "sources/" + entry["id"])
+            for item in entry["inventory"]:
+                original = root if root.is_file() else safe_relative(root, item["path"])
+                saved = safe_relative(target, item["path"])
+                if has_link(original) or file_digest(original) != item["sha256"]:
+                    raise ValueError("Supplement changed before archive: " + entry["id"])
+                saved.parent.mkdir(parents=True, exist_ok=True)
+                if saved.exists() and file_digest(saved) != item["sha256"]:
+                    raise ValueError("Archived supplement differs: " + entry["id"])
+                if not saved.exists():
+                    shutil.copyfile(original, saved)
+                if file_digest(saved) != item["sha256"]:
+                    raise ValueError("Supplement archive mismatch: " + entry["id"])
+            entry["path"] = str(target / root.name if root.is_file() else target)
+        retained_sources.append(entry)
+    write_json(dest / "sources.json", sanitized(retained_sources))
     compact = {k: v for k, v in summary.items() if k not in ("evidence", "sources", "model_metrics")}
     compact["model_metrics"] = {k: v for k, v in summary.get("model_metrics", {}).items() if k != "receipts"}
     adoption = {a["name"]: a for a in summary.get("adoption", [])}

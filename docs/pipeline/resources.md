@@ -6,6 +6,11 @@ Sources are retained independently of parser support. Unknown formats and large 
 
 Local snapshots preserve selected files and provenance; explicit single-file reference storage avoids copying large originals. Repository archives and downloads stream to disk, and file hashes are computed incrementally. No default byte/file-count cutoff. Explicit development limits report their effect.
 
+On Windows, keep the state root short enough for snapshot hashes and upstream relative paths;
+see [state-path guidance](usage.md#windows-state-paths). A recognized local path-length failure
+stops preparation for correction instead of silently dropping that input. Working long paths are
+not capped, and remote access failures remain localized gaps.
+
 Excluded: .git, installed .venv/venv/node_modules, __pycache__ and common test/lint caches, .pipeline, .aws/.ssh credential stores, system/editor junk and known secret files. Hidden research directories such as .github, output/results examples, credential documentation and .env.example templates survive. Links are recorded but not followed automatically. Git submodules and LFS payloads are not automatically resolved; archive limitations are recorded. Exclusions are not a complete secret-detection service.
 
 resources.json maps file locators to originals, hashes, optional views and helper commands. eN identifies a source file, not proof the Agent read it correctly. Claims identify concrete passages/functions/pages. resource-state.json retains the full source registry, config and acquisition failures for supplements/recovery. A concise initial context points to the index; it does not inject all files into the model.

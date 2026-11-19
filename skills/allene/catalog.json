@@ -1,0 +1,943 @@
+{
+  "skills": [
+    {
+      "path": "analyst-quantify-calibrated-lcms-samples",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1021/acs.jmedchem.5c00520"
+      ]
+    },
+    {
+      "path": "artemis-fit-calibrated-palladium-phosphorus-exafs",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1016/j.cclet.2025.111286"
+      ]
+    },
+    {
+      "path": "artemis-fit-palladium-exafs-coordination",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1039/d3sc06408e"
+      ]
+    },
+    {
+      "path": "auto-vtna-estimate-catalyst-order",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1002/anie.202305680"
+      ]
+    },
+    {
+      "path": "autodock-vina-dock-prepared-ligands",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1016/j.molstruc.2024.139035"
+      ]
+    },
+    {
+      "path": "copasi-simulate-competing-reaction-selectivity",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1021/jacs.2c07969"
+      ]
+    },
+    {
+      "path": "crest-sample-low-energy-conformers",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1021/acs.joc.2c01530"
+      ]
+    },
+    {
+      "path": "crest-sample-noncovalent-complex-conformers",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1039/d5sc05356k"
+      ]
+    },
+    {
+      "path": "crest-sample-tblite-conformer-ensemble",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1016/j.tetlet.2024.155247",
+        "10.1021/acs.joc.2c01962"
+      ]
+    },
+    {
+      "path": "crystalexplorer-analyze-hirshfeld-contact-fingerprints",
+      "category": "Visualization and crystallography",
+      "papers": [
+        "10.1016/j.molstruc.2024.139035"
+      ]
+    },
+    {
+      "path": "cylview-render-annotated-structures",
+      "category": "Visualization and crystallography",
+      "papers": [
+        "10.1002/ajoc.201700389",
+        "10.1002/anie.202513342",
+        "10.1021/acs.joc.0c02971",
+        "10.1021/acs.joc.2c01530",
+        "10.1021/acs.joc.2c01962",
+        "10.1021/acs.macromol.4c00699",
+        "10.1021/jacs.2c09479",
+        "10.1039/d0sc02878a",
+        "10.1039/d3sc04474b"
+      ]
+    },
+    {
+      "path": "deepsynthesis-predict-solvent-specific-pka",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1021/jacs.4c16214"
+      ]
+    },
+    {
+      "path": "dftd4-decompose-hf-reference-dispersion",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1016/j.tetlet.2024.155247"
+      ]
+    },
+    {
+      "path": "dp4plusapp-rank-stereoisomer-candidates",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1021/acs.joc.2c01962"
+      ]
+    },
+    {
+      "path": "easymecp-search-spin-crossing-geometries",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1021/jacs.0c04395"
+      ]
+    },
+    {
+      "path": "easyspin-compare-xq-band-frozen-spectra",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1002/anie.202318956"
+      ]
+    },
+    {
+      "path": "easyspin-simulate-frozen-solution-epr",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1038/s41557-025-01945-2"
+      ]
+    },
+    {
+      "path": "easyspin-simulate-solution-epr-hyperfine",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1039/d4ob01847h"
+      ]
+    },
+    {
+      "path": "freestyle-review-peptide-msms-spectra",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1021/acs.jmedchem.0c01464"
+      ]
+    },
+    {
+      "path": "gaussian-assemble-two-level-free-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1002/chem.200900325"
+      ]
+    },
+    {
+      "path": "gaussian-build-rhodium-free-energy-profiles",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1038/s41467-024-52209-5"
+      ]
+    },
+    {
+      "path": "gaussian-calculate-dp4plus-compatible-giao-shielding",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1021/acs.joc.2c01962"
+      ]
+    },
+    {
+      "path": "gaussian-calculate-nmr-shielding-and-couplings",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1021/jacs.3c12597"
+      ]
+    },
+    {
+      "path": "gaussian-calculate-rhodium-thf-free-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1038/s41929-021-00643-9"
+      ]
+    },
+    {
+      "path": "gaussian-calculate-smd-dioxane-single-point-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1007/s12274-022-4395-2"
+      ]
+    },
+    {
+      "path": "gaussian-calculate-smd-water-stationary-point-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.joc.2c01530"
+      ]
+    },
+    {
+      "path": "gaussian-check-irc-connectivity",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1002/anie.202517878",
+        "10.1002/ejoc.202001147",
+        "10.1021/acs.joc.2c00065",
+        "10.1039/d0qo00564a"
+      ]
+    },
+    {
+      "path": "gaussian-combine-supplied-single-point-thermochemistry",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.inorgchem.5c04051"
+      ]
+    },
+    {
+      "path": "gaussian-compare-electronic-and-thermal-pathway-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1002/anie.202116154"
+      ]
+    },
+    {
+      "path": "gaussian-compare-harmonic-reaction-free-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.joc.3c02509"
+      ]
+    },
+    {
+      "path": "gaussian-compare-irc-validated-reaction-pathways",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/jacs.4c10431"
+      ]
+    },
+    {
+      "path": "gaussian-compare-transition-state-free-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1002/anie.202403707",
+        "10.1021/jacs.2c09479"
+      ]
+    },
+    {
+      "path": "gaussian-evaluate-rigid-torsion-profiles",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1002/chem.202304145"
+      ]
+    },
+    {
+      "path": "gaussian-export-ecd-transition-data",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1002/anie.202403707"
+      ]
+    },
+    {
+      "path": "gaussian-locate-and-validate-transition-paths",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1002/anie.202517136",
+        "10.1021/acs.joc.2c02476",
+        "10.1021/jacs.3c12597",
+        "10.1021/om700629x",
+        "10.1021/om800030a",
+        "10.1039/d0sc00650e"
+      ]
+    },
+    {
+      "path": "gaussian-locate-transition-states",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1002/ejoc.202001147"
+      ]
+    },
+    {
+      "path": "gaussian-refine-composite-reaction-pathway-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1002/anie.202400143"
+      ]
+    },
+    {
+      "path": "gaussian-scan-relaxed-bending-profiles",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1002/chem.202304145"
+      ]
+    },
+    {
+      "path": "gaussian-scan-relaxed-bond-distances",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1002/chem.200900325",
+        "10.1021/acs.joc.3c02509"
+      ]
+    },
+    {
+      "path": "gaussian-validate-palladium-stationary-points",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1039/d2nj04657a"
+      ]
+    },
+    {
+      "path": "gaussian-validate-reaction-pathways-c01",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1002/ajoc.201700389"
+      ]
+    },
+    {
+      "path": "gaussian-validate-stationary-points",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1002/anie.202402195",
+        "10.1002/anie.202419127",
+        "10.1002/anie.202513342",
+        "10.1002/anie.202515183",
+        "10.1002/chem.202304145",
+        "10.1016/j.molstruc.2024.139035",
+        "10.1021/acs.joc.0c02971",
+        "10.1021/acs.joc.2c00065",
+        "10.1021/acs.macromol.4c00699",
+        "10.1021/acs.orglett.1c00837",
+        "10.1021/acs.orglett.4c03372",
+        "10.1021/acscatal.4c01460",
+        "10.1021/jacs.0c04395",
+        "10.1021/jacs.3c12597",
+        "10.1021/om700629x",
+        "10.1039/d0qo00564a",
+        "10.1039/d2dt01071b"
+      ]
+    },
+    {
+      "path": "gennbo-compare-bonding-interactions",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1002/ajoc.201700389",
+        "10.1039/d0sc00650e"
+      ]
+    },
+    {
+      "path": "gennbo-compare-natural-charges",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1002/anie.202112427",
+        "10.1021/acscatal.4c03688",
+        "10.1021/om800030a",
+        "10.1039/d1sc02090k"
+      ]
+    },
+    {
+      "path": "goodvibes-analyze-conformer-channel-selectivity",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.joc.3c02322"
+      ]
+    },
+    {
+      "path": "goodvibes-analyze-reaction-profile-kinetics",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1021/acs.joc.3c02322"
+      ]
+    },
+    {
+      "path": "goodvibes-build-computed-reaction-profiles",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.joc.3c02322"
+      ]
+    },
+    {
+      "path": "goodvibes-calculate-api-quasi-harmonic-thermochemistry",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.joc.3c02322"
+      ]
+    },
+    {
+      "path": "goodvibes-calculate-cli-quasi-harmonic-thermochemistry",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1038/s44160-024-00658-7",
+        "10.1039/d0cy00092b"
+      ]
+    },
+    {
+      "path": "goodvibes-plot-declared-reaction-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.joc.3c02322"
+      ]
+    },
+    {
+      "path": "iochem-bd-retrieve-calculation-files",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1002/adsc.202100644"
+      ]
+    },
+    {
+      "path": "larch-fit-exafs-scattering-paths",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1007/s12274-022-4395-2"
+      ]
+    },
+    {
+      "path": "matlab-estimate-oxygen18-incorporation",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1016/j.tet.2009.04.023"
+      ]
+    },
+    {
+      "path": "mayr-retrieve-reactivity-parameters",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1039/d1cc06786a"
+      ]
+    },
+    {
+      "path": "mnova-calculate-internal-standard-nmr-purity",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1021/acs.jmedchem.5c00520"
+      ]
+    },
+    {
+      "path": "mnova-review-and-export-nmr-documents",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1038/s41467-024-48936-4"
+      ]
+    },
+    {
+      "path": "multiwfn-analyze-aim-shannon-aromaticity",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1039/d2dt01071b"
+      ]
+    },
+    {
+      "path": "multiwfn-analyze-electron-density-bond-topology",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1021/acs.inorgchem.5c04051"
+      ]
+    },
+    {
+      "path": "multiwfn-analyze-igmh-contributions",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1002/anie.202420563",
+        "10.1002/anie.202515183"
+      ]
+    },
+    {
+      "path": "multiwfn-assign-localized-orbital-oxidation-states",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1021/acs.inorgchem.5c04051"
+      ]
+    },
+    {
+      "path": "multiwfn-compare-frontier-orbitals",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1039/d1sc02167b"
+      ]
+    },
+    {
+      "path": "multiwfn-compare-iri-interaction-regions",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1021/acs.orglett.5c03172"
+      ]
+    },
+    {
+      "path": "multiwfn-compare-metal-ligand-bond-orders",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1039/d3cc00279a"
+      ]
+    },
+    {
+      "path": "multiwfn-estimate-hydrogen-bond-energies",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1021/acs.joc.2c02476"
+      ]
+    },
+    {
+      "path": "multiwfn-evaluate-ring-normal-nics",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1038/s41557-023-01381-0"
+      ]
+    },
+    {
+      "path": "multiwfn-export-hirshfeld-charges",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1039/d2dt01071b"
+      ]
+    },
+    {
+      "path": "multiwfn-export-wavefunction-nci-grids",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1021/acs.joc.2c02476",
+        "10.1039/d1sc02167b"
+      ]
+    },
+    {
+      "path": "multiwfn-map-pi-electron-localization",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1038/s41557-023-01381-0"
+      ]
+    },
+    {
+      "path": "multiwfn-project-molecular-surface-distances",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1002/anie.202420563"
+      ]
+    },
+    {
+      "path": "multiwfn-visualize-interfragment-igmh",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1038/s41467-025-62204-z",
+        "10.1038/s41557-025-01945-2"
+      ]
+    },
+    {
+      "path": "multiwfn-visualize-wavefunction-nci",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1021/acs.inorgchem.5c04051",
+        "10.1021/acs.joc.0c02971"
+      ]
+    },
+    {
+      "path": "nciplot-map-noncovalent-interactions",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1021/jacs.4c11661"
+      ]
+    },
+    {
+      "path": "olex2-refine-small-molecule-crystal-models",
+      "category": "Visualization and crystallography",
+      "papers": [
+        "10.1039/d3sc04474b"
+      ]
+    },
+    {
+      "path": "orca-analyze-natural-bonding",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1038/s41557-023-01381-0"
+      ]
+    },
+    {
+      "path": "orca-calculate-solvated-dft-single-point-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.joc.3c02550"
+      ]
+    },
+    {
+      "path": "orca-decompose-fragment-bonding",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1038/s41557-023-01381-0"
+      ]
+    },
+    {
+      "path": "orca-screen-static-correlation",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1038/s41557-023-01381-0"
+      ]
+    },
+    {
+      "path": "orca-validate-molecular-minima",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1002/anie.202011790",
+        "10.1038/s41557-023-01381-0"
+      ]
+    },
+    {
+      "path": "pkcsm-predict-admet-properties",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1016/j.molstruc.2024.139035"
+      ]
+    },
+    {
+      "path": "ppb-inspect-multifingerprint-target-consensus",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1002/chem.202303027"
+      ]
+    },
+    {
+      "path": "prism-compare-treatments-with-control",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1021/acs.jmedchem.5c00520"
+      ]
+    },
+    {
+      "path": "prism-plot-assay-summaries",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1021/acs.jmedchem.0c01464"
+      ]
+    },
+    {
+      "path": "psi4-compare-sapt0-interaction-components",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1126/sciadv.adg1002"
+      ]
+    },
+    {
+      "path": "psi4-scan-arene-ssapt0-interactions",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1021/jacs.0c01637"
+      ]
+    },
+    {
+      "path": "pymol-render-optimized-molecular-structures",
+      "category": "Visualization and crystallography",
+      "papers": [
+        "10.1038/s44160-024-00658-7"
+      ]
+    },
+    {
+      "path": "rdkit-compare-molecular-inertia-shapes",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1002/chem.202303027"
+      ]
+    },
+    {
+      "path": "rdkit-compare-natural-product-likeness-and-qed",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1002/chem.202303027"
+      ]
+    },
+    {
+      "path": "sambvca-map-ligand-buried-volume",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1039/d4sc07002j",
+        "10.1039/d5sc01148e",
+        "10.1126/sciadv.adg1002"
+      ]
+    },
+    {
+      "path": "scikit-learn-fit-descriptor-selectivity",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1021/jacs.0c01637",
+        "10.1126/sciadv.adg1002"
+      ]
+    },
+    {
+      "path": "scikit-learn-map-descriptor-chemical-space",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1002/chem.202303027"
+      ]
+    },
+    {
+      "path": "scipy-analyze-initial-rates-isotope-effects-and-orders",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1002/anie.202419127"
+      ]
+    },
+    {
+      "path": "scipy-calculate-boltzmann-channel-weights",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1021/acs.orglett.1c00837"
+      ]
+    },
+    {
+      "path": "scipy-check-catalyst-product-ee-linearity",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1038/s41467-025-57381-w"
+      ]
+    },
+    {
+      "path": "scipy-check-depletion-and-catalyst-rate-linearity",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1039/c9sc00603f"
+      ]
+    },
+    {
+      "path": "scipy-compare-intensity-and-lifetime-quenching",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1039/d4qo01153h"
+      ]
+    },
+    {
+      "path": "scipy-compare-polymer-conformation",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1002/anie.202425648"
+      ]
+    },
+    {
+      "path": "scipy-compare-transition-state-ensemble-selectivity",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1002/chem.202001236"
+      ]
+    },
+    {
+      "path": "scipy-estimate-linear-regression-inference",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1002/chem.202101078"
+      ]
+    },
+    {
+      "path": "scipy-extract-second-order-rates-from-absorbance",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1039/d1cc06786a",
+        "10.1039/d4sc04852k"
+      ]
+    },
+    {
+      "path": "scipy-fit-concentration-or-pressure-orders",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1002/anie.202424273"
+      ]
+    },
+    {
+      "path": "scipy-fit-eyring-temperature-dependence",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1039/d3sc06408e"
+      ]
+    },
+    {
+      "path": "scipy-fit-first-order-substrate-depletion",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1038/s41929-019-0346-z"
+      ]
+    },
+    {
+      "path": "scipy-fit-grouped-initial-rate-orders",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1002/anie.202416089"
+      ]
+    },
+    {
+      "path": "scipy-fit-hammett-diastereoselectivity",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1021/acscatal.2c00464"
+      ]
+    },
+    {
+      "path": "scipy-fit-hammett-enantioselectivity",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1038/s41467-025-57381-w"
+      ]
+    },
+    {
+      "path": "scipy-fit-hammett-rate-correlations",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1039/d5sc02831k"
+      ]
+    },
+    {
+      "path": "scipy-fit-nonlinear-measurement-models",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1002/chem.202101078"
+      ]
+    },
+    {
+      "path": "scipy-fit-polymerization-semilog-kinetics",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1016/j.polymer.2022.124712",
+        "10.1021/acs.macromol.0c02198",
+        "10.1021/acs.macromol.4c00699"
+      ]
+    },
+    {
+      "path": "scipy-fit-rate-concentration-or-loading",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1021/acs.orglett.4c04586",
+        "10.1021/acscatal.0c05225",
+        "10.1021/acscatal.5c03915",
+        "10.1021/acscatal.5c05647"
+      ]
+    },
+    {
+      "path": "scipy-fit-stern-volmer-quenching",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1002/chem.202304010",
+        "10.1002/cjoc.202400705",
+        "10.1021/acscatal.5c04424",
+        "10.1038/s41467-022-30655-3"
+      ]
+    },
+    {
+      "path": "scipy-fit-uncaging-rate-constants",
+      "category": "Kinetics and statistics",
+      "papers": [
+        "10.1039/d3sc06408e"
+      ]
+    },
+    {
+      "path": "sea-query-target-hypotheses",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1002/chem.202303027"
+      ]
+    },
+    {
+      "path": "seqcrow-render-transition-state-structures",
+      "category": "Visualization and crystallography",
+      "papers": [
+        "10.1002/adsc.202000936"
+      ]
+    },
+    {
+      "path": "shermo-analyze-vibrational-thermochemistry",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.orglett.5c03172"
+      ]
+    },
+    {
+      "path": "shermo-calculate-qrrho-free-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1038/s41467-024-48936-4"
+      ]
+    },
+    {
+      "path": "skyline-calculate-modified-peptide-precursors",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1021/acs.jmedchem.0c01464"
+      ]
+    },
+    {
+      "path": "sobeda-decompose-catalyst-substrate-interactions",
+      "category": "Electronic structure and interactions",
+      "papers": [
+        "10.1038/s41557-025-01945-2"
+      ]
+    },
+    {
+      "path": "sobmecp-search-spin-crossing-geometries",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1038/s41557-025-01945-2"
+      ]
+    },
+    {
+      "path": "spartan-compare-conformer-weighted-nmr",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1021/jacs.4c11661"
+      ]
+    },
+    {
+      "path": "spartan-compare-diastereomer-relative-energies",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1021/acs.jmedchem.0c01464"
+      ]
+    },
+    {
+      "path": "spartan-screen-constrained-conformers",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1021/acs.joc.2c02476"
+      ]
+    },
+    {
+      "path": "stda-predict-xtb-ecd-transitions",
+      "category": "Spectroscopy and experimental data",
+      "papers": [
+        "10.1002/anie.202421310"
+      ]
+    },
+    {
+      "path": "swissadme-screen-druglikeness",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1016/j.molstruc.2024.139035"
+      ]
+    },
+    {
+      "path": "swisstargetprediction-inspect-target-hypotheses",
+      "category": "Molecular properties and screening",
+      "papers": [
+        "10.1002/chem.202303027"
+      ]
+    },
+    {
+      "path": "xtb-compare-frozen-oligomer-energy-series",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1002/anie.202421310"
+      ]
+    },
+    {
+      "path": "xtb-optimize-and-check-minima",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1021/acs.joc.3c02550"
+      ]
+    }
+  ]
+}

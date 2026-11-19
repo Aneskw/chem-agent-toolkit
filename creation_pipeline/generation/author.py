@@ -37,6 +37,8 @@ def _author_once(session, config, plan, staging, feedback=None, previous=None):
     validate_package(staging, config["limits"]["package_bytes"])
     from creation_pipeline.validation.basis import validate_basis
     saved["basis"] = validate_basis(saved.get("basis"), session.sources)
+    from creation_pipeline.artifacts.delivery import validate_adjustment
+    validate_adjustment(saved, session.sources)
     return {**saved, "files": [{**item, "purpose": "Delivered capability resource"} for item in manifest(staging)]}
 
 
@@ -60,11 +62,13 @@ def author(session, config, plan, staging, feedback=None, previous=None):
 
 
 def review(session, plan, artifact, checks, config=None):
+    from creation_pipeline.validation.checks import inline_python_diagnostics
     instructions = (PROMPTS / "review.md").read_text(encoding="utf-8")
     context = {**candidate_context(session, config, plan, independent_review=True), "_phase": "review",
         "minimum": (ROOT / "docs/skills/minimum.md").read_text(encoding="utf-8"),
         "packaging": (ROOT / "docs/skills/packaging.md").read_text(encoding="utf-8"),
-        "artifact": artifact, "checks": checks}
+        "artifact": artifact, "checks": checks,
+        "inline_python_diagnostics": inline_python_diagnostics(artifact["package"])}
     previous_error = None
     while True:
         result = session.stage(instructions, context, schema=REVIEW)
@@ -73,6 +77,8 @@ def review(session, plan, artifact, checks, config=None):
                 raise ValueError("status must be pass/fail/not_run")
             if result.get("resolution") not in ("none", "revise_files", "supply_evidence"):
                 raise ValueError("resolution must be none/revise_files/supply_evidence")
+            if not isinstance(result.get("usage_assessment"), str) or not result["usage_assessment"].strip():
+                raise ValueError("usage_assessment must be nonempty text about the package's operational contribution and gaps")
             if not isinstance(result.get("findings"), list):
                 raise ValueError("findings must be an array")
             for index, finding in enumerate(result["findings"]):

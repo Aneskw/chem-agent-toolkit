@@ -2,10 +2,9 @@
 import re
 import shutil
 import tempfile
-from datetime import datetime
 from pathlib import Path
 from creation_pipeline.artifacts.package import manifest
-from creation_pipeline.validation.acceptance import require_ready, ACCEPTANCE_VERSION
+from creation_pipeline.validation.acceptance import require_ready
 from creation_pipeline.records import read_json, write_json, safe_relative, has_link, sanitized
 
 
@@ -14,6 +13,29 @@ def slug(value):
     if not value:
         raise ValueError("Batch label needs a readable ASCII name")
     return value
+
+
+def render_index(root, catalog):
+    """Describe available packages and collections without publishing build history."""
+    tags = {item["path"]: item.get("tags", []) for item in catalog["skills"]}
+    collections, packages = [], []
+    for path in sorted(Path(root).iterdir(), key=lambda p: p.name):
+        if not path.is_dir() or has_link(path):
+            continue
+        if (path / "SKILL.md").is_file():
+            labels = ", ".join(tags.get(path.name, []))
+            packages.append(f"- [{path.name}]({path.name}/SKILL.md)" + (f": {labels}" if labels else ""))
+        elif (path / "README.md").is_file():
+            title = (path / "README.md").read_text(encoding="utf-8").partition("\n")[0].lstrip("# ").strip() or path.name
+            collections.append(f"- [{title}]({path.name}/README.md)")
+    lines = ["# Skill library", "",
+             "Each skill is a directory containing `SKILL.md` and any supporting files. Read the package's prerequisites before use. Collection indexes group related tasks; individual packages are listed below.", "",
+             "Available instructions do not establish successful tool execution, scientific validity or measured benefit to an agent.", ""]
+    if collections:
+        lines.extend(["## Collections", "", *collections, ""])
+    if packages:
+        lines.extend(["## Individual packages", "", *packages, ""])
+    return "\n".join(lines)
 
 
 def adopt(output, records, config, destination):
@@ -30,8 +52,10 @@ def adopt(output, records, config, destination):
             catalog = read_json(catalog_path) if catalog_path.exists() else {"version": 1, "skills": []}
             old_catalog = catalog_path.read_bytes() if catalog_path.exists() else None
             old_readme = (root / "README.md").read_bytes() if (root / "README.md").exists() else None
+            catalog = {"version": 1, "skills": [
+                {"name": item["name"], "path": item["path"], "tags": item.get("tags", [])}
+                for item in catalog["skills"]]}
             active = {v["name"]: v for v in catalog["skills"]}
-            batch = datetime.now().strftime("%Y-%m-%d") + "-" + slug(config["batch"]["label"])
             results, created = [], []
             try:
                 for record in records:
@@ -63,23 +87,13 @@ def adopt(output, records, config, destination):
                             raise ValueError("Adoption copy mismatch")
                         staged.rename(target)
                     created.append(target)
-                    item = {"name": name, "path": target.relative_to(root).as_posix(), "batch": batch,
-                            "tags": config["batch"]["tags"], "build_id": Path(output).name,
-                            "scope": record["plan"]["scope"], "files": record["files"],
-                            "acceptance_version": ACCEPTANCE_VERSION, "acceptance_sha256": record["acceptance_sha256"],
-                            "checks": [{k: c.get(k) for k in ("name", "status", "evidence_kind")} for c in record["checks"]],
-                            "unverified": [{"name": c["name"], "findings": c.get("findings", [])} for c in record["checks"] if c["status"] == "not_run"], "agent_efficacy": "not_evaluated"}
-                    doc = read_json(Path(output) / "plan.json")
-                    item["sources"] = [{k: s[k] for k in ("id", "url", "repo", "resolved_ref", "snapshot_id") if k in s} for s in doc["sources"]]
+                    item = {"name": name, "path": target.relative_to(root).as_posix(),
+                            "tags": config["batch"]["tags"]}
                     catalog["skills"].append(item)
                     active[name] = item
                     results.append({"name": name, "status": "adopted", "path": str(target)})
                 write_json(catalog_path, sanitized(catalog))
-                lines = ["# Skills", "", "Skills are reviewed against sources and usage requirements. Target tools are not executed during review. Agent benefit remains unmeasured.", "",
-                         "| Skill | Tags | Batch |", "| --- | --- | --- |"]
-                for item in catalog["skills"]:
-                    lines.append(f"| [{item['name']}]({item['path']}/SKILL.md) | {', '.join(item['tags'])} | {item['batch']} |")
-                (root / "README.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+                (root / "README.md").write_text(render_index(root, catalog), encoding="utf-8")
                 return results
             except Exception:
                 for target in created:

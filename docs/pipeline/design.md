@@ -31,7 +31,8 @@ Discovery states a realistic input starting point, main invocation path and prom
 than an API inventory. Writing assumes the execution Agent sees only the delivered package and
 declared inputs, with explicit source/setup entrypoints. Review first reads the actual package,
 then independently verifies source evidence, tracing material data/state transitions and choosing
-deeper checks from that capability's risks. It asks whether the Agent can start, reach the promised
-result, and do so without avoidable reading burden. Feedback is verified rather than obeyed blindly: authors can retain correct files and submit
-source-backed rebuttals, which reviewers reconsider. Fixes replace ambiguity rather than
-continually appending warnings. No extra review-planning call or expanded result schema is required.
+deeper checks from that capability's risks. Its short usage_assessment records the package's
+operational contribution and remaining in-scope gaps. This is a content judgment, not a measured
+efficiency claim. Feedback is verified rather than obeyed blindly: authors can retain correct
+files and submit source-backed rebuttals, which reviewers reconsider. Fixes replace ambiguity
+rather than continually appending warnings. No extra review-planning call is required.

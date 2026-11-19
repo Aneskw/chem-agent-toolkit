@@ -9,6 +9,7 @@ import queue
 import subprocess
 import threading
 import time
+import uuid
 
 from creation_pipeline.agent.command import codex_command
 from creation_pipeline.models import ModelCallError, BudgetError, bound
@@ -42,6 +43,11 @@ class NativeSession:
             sources.evidence = saved_sources["evidence"]
             sources.errors = saved_sources["errors"]
             sources.verify()
+        # Helpers execute inside the Agent's workspace-write sandbox. New evidence
+        # must not write to the shared, read-only initial-source cache outside it.
+        # Initial snapshots retain their existing paths; supplements are archived.
+        sources.cache = self.work / "research/cache"
+        sources.acquisition.cache = sources.cache
         self.workspace = prepare(sources, self.work)
         self.state_path = self.work / "agent-state.json"
         self.state = read_json(self.state_path) if self.state_path.exists() else {"sessions": {}, "completed": {}}
@@ -60,7 +66,9 @@ class NativeSession:
         empty.acquisition = Acquisition(config, empty.cache)
         empty.total_bytes = 0
         limits = dict(config["limits"], model_calls=1, model_timeout=90, total_seconds=90)
-        session = cls(config, empty, limits, Path(work) / "preflight")
+        # A resumed build needs a fresh one-call probe, not the previous probe's
+        # already exhausted one-call session. Preserve every earlier receipt.
+        session = cls(config, empty, limits, Path(work) / "preflight" / uuid.uuid4().hex)
         session.notify = notify
         try:
             result = session.stage("Connection preflight only. Do not use tools, read resources or write files. Return ready=true.",
@@ -78,6 +86,27 @@ class NativeSession:
         sync_sources(self.sources, self.work)
 
     def stage(self, instructions, context, schema=None):
+        from creation_pipeline.resources.supplements import SourceHandoffError
+        from creation_pipeline.models import iterations
+        last = None
+        for _ in iterations(self.limits["repair_rounds"]):
+            try:
+                return self._stage_once(instructions, context, schema)
+            except SourceHandoffError as exc:
+                if str(exc) == last:
+                    raise ModelCallError("Repeated unchanged resource handoff error: " + str(exc)) from exc
+                last = str(exc)
+                context = {**context, "resource_handoff_error": last,
+                           "repair_instruction": "Repair only the listed sidecars/content, then complete the stage using retained observations. inventory refreshes registration."}
+        raise ModelCallError("Resource handoff repair limit reached: " + str(last))
+
+    def _stage_once(self, instructions, context, schema=None):
+        from creation_pipeline.resources.supplements import SourceHandoffError
+        context = copy.deepcopy(context)
+        try:
+            self.refresh_sources()
+        except SourceHandoffError as exc:
+            context["resource_handoff_error"] = str(exc)
         if len(self.receipts) >= bound(self.limits["model_calls"]):
             raise BudgetError("Agent turn budget exhausted")
         remaining = bound(self.limits["total_seconds"]) - (time.monotonic() - self.started)
@@ -157,8 +186,14 @@ class NativeSession:
         began = time.monotonic()
         repeated = {}
         answer, completed, errors = None, False, []
+        child_env = None
+        if os.name == "nt":
+            child_env = os.environ.copy()
+            # The independent CLI process has no desktop app package identity.
+            child_env.pop("CODEX_WINDOWS_REGISTERED_CORE", None)
+            child_env.pop("CODEX_INTERNAL_ORIGINATOR_OVERRIDE", None)
         with (folder / "stderr.log").open("w", encoding="utf-8") as stderr:
-            proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr,
+            proc = subprocess.Popen(command, env=child_env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr,
                 text=True, encoding="utf-8", errors="replace", cwd=self.work, **options)
             def pump():
                 for line in proc.stdout:
@@ -226,6 +261,8 @@ class NativeSession:
                 if proc.poll() is None:
                     terminate_tree(proc)
                 if isinstance(exc, KeyboardInterrupt):
+                    raise
+                if isinstance(exc, SourceHandoffError):
                     raise
                 if isinstance(exc, (TimeoutError, BudgetError)):
                     raise BudgetError(redact(exc)) from exc

@@ -1,72 +1,75 @@
-# Build examples
+# Workflow examples
 
-Each folder is one curated research-resource batch. These examples show the creation pipeline,
-not a benchmark or proof that the underlying scientific tools were executed. Common instructions
-live here; batch READMEs record only resource-specific facts, outcomes and limitations.
+Each curated example shows how research resources become usable skill packages. Selected stage
+records make the decisions and handoffs inspectable; portable configurations let readers try the
+current pipeline. Formal packages live in [the skill library](../skills/README.md).
 
-## Batches
-
-| Batch | Resources and capabilities |
+| Example | Resources and delivered capabilities |
 | --- | --- |
-| [EDBO reaction optimization](edbo-reaction-optimization/README.md) | Original EDBO paper and fixed repository revision; see the batch for actual accepted Skills |
+| [EDBO reaction optimization](edbo-reaction-optimization/README.md) | Paper and pinned EDBO code; reaction-space encoding and initial experiment design |
 
-## Common layout
+## Follow the workflow
 
-```text
-examples/<batch>/
-  README.md                       # unique sources, outcomes, limitations and any special steps
-  input.json                      # reusable configuration, no machine-specific paths or credentials
-  sources.json                    # source origins, resolved revisions and content identity
-  discovery.json                  # discovered/omitted capabilities, scope, value and known gaps
-  summary.json                    # actual batch outcome, calls and acceptance scope
-  skills.json                     # links and file hashes of authoritative skills/ packages
-  records/<skill-name>/
-    basis.json                    # final writing claims and inspected source locations
-    review.json                   # program checks, final independent review and important fixes
+```mermaid
+flowchart LR
+  A[Input resources] --> B[Acquisition and source index]
+  B --> C[Candidate discovery]
+  C --> D[Skill writing and basis]
+  D --> E[Static checks and independent review]
+  E -->|Concrete feedback| D
+  E -->|Approved| F[Formal skill packages]
+  F --> G[Outcome and adoption records]
 ```
 
-Skills themselves live only under [skills/](../skills/README.md). They are linked from each batch,
-not copied here. Supporting references/scripts/assets, when generated, remain inside that same
-pure Skill package. Build records are never needed by an Agent merely using the Skill.
+| Stage | Files to read | What they explain |
+| --- | --- | --- |
+| Recorded configuration | `recorded-input.json` | Supplied resources, guidance and effective limits for the illustrated run |
+| Resource preparation | `sources.json` | Source identities, pinned versions and public file locators |
+| Discovery | `discovery.json` | Proposed capabilities, software entrypoints, evidence and gaps |
+| Writing | `records/<skill>/basis.json` and the linked `SKILL.md` | How inspected source passages support the delivered instructions |
+| Checking and review | `records/<skill>/review.json` | Static checks, independent review, material feedback and its resolution |
+| Delivery | `skills.json` | Accepted package locations, scope and file identities at publication |
+| Batch result | `summary.json` | Accepted/deferred candidates, recorded model usage and acceptance limits |
+| Current rerun | `input.json` | A reusable configuration for the current pipeline |
 
-## Read a complete extraction
+Read the example README first, then follow these stages. For a concrete instruction, start in the
+linked skill, find its block in `basis.json`, and use the source ID in `sources.json` to inspect
+the upstream file. Compare the review's concerns and resolutions with the final instructions.
+`summary.json` explains how candidate selection relates to the delivered packages.
 
-1. Read input.json and sources.json to identify the inputs and exact source revision.
-2. Read discovery.json to see which capabilities were considered, why they were selected and
-   where scope starts/ends. Development limits can leave selected candidates unbuilt.
-3. Follow the batch's Skill links to inspect the actual delivered instructions and support files.
-4. Read basis.json to connect delivered content to source functions/pages; read review.json to
-   see checks, review findings and substantive repairs. Locators are not proof that every claim is true.
-5. Read summary.json for the final scope and limitations. Source/content approval does not mean
-   target-tool execution, scientific validation or measured improvement to an Agent.
+Recorded files describe the illustrated run. They are not a live export of current schemas,
+defaults or package contents. Package fingerprints identify the recorded output; a later maintained
+package may differ. A fresh build can make different decisions even from the same sources.
 
-## Run the pipeline again
+## Run the current pipeline
 
-From the repository root, prepare Python 3.11+, authenticated Codex CLI and any optional document
-parsers described in the [project README](../README.md). Target tool environments are not required.
+Prepare the prerequisites in the [project README](../README.md), then run from the repository root:
 
 ```text
-python -m creation_pipeline build examples/<batch>/input.json --preflight
-python -m creation_pipeline build examples/<batch>/input.json --no-adopt
+python -m creation_pipeline build examples/edbo-reaction-optimization/input.json --preflight
+python -m creation_pipeline build examples/edbo-reaction-optimization/input.json --no-adopt --state-dir ../chemical_skill/pipeline-state
 ```
 
-The first command checks configuration without model calls; the actual build also performs a real
-connection handshake before fetching sources. --no-adopt avoids collisions with published examples:
-approved regenerated packages stay under .pipeline/records/<new-build-id>/skills/<name>/package/.
-Omit --no-adopt to adopt new non-conflicting names. Do not delete existing Skills to force a rerun.
+Preflight validates configuration without fetching resources or calling a model. A real build
+checks the model connection, fetches resources and can incur model usage. `--no-adopt` retains
+approved packages in the state archive; omit it to publish non-conflicting packages. Use the same
+state directory for later resume or retention commands. The current example configuration uses
+production defaults with no candidate or model-call quota. `recorded-input.json` preserves the
+illustrated run's settings for reference, rather than prescribing those limits for a new build.
 
-Inputs record development limits used in the demonstration; production has no implicit candidate,
-source-size or model-time quota. Match the recorded model only if it is available to your account;
-otherwise the local configured default may differ. Another model run can choose different scopes,
-names, files or text, even with the same resources. Remote acquisition may also become unavailable.
-This reproduces the workflow to a degree, not byte-identical output or actual scientific results.
+## Example boundaries
 
-## Record curation
+Examples are selected and published manually. Completing a build does not trigger a new example
+or refresh an existing example's recorded files. After reviewing run results, maintainers choose
+suitable cases and assemble the selected records and walkthrough. Current rerun instructions
+are maintained as the pipeline changes; recorded-run evidence remains tied to its illustrated run.
 
-Retain decisions and their supporting evidence, not full conversations, caches, credentials, large
-upstream trees or every intermediate draft. Public source locators use stable URL/revision/path and
-page/function/section details instead of local .pipeline paths. Examples record file hashes so a
-later change to an authoritative Skill can be identified; they are not an immutable second copy.
+Keep the stage records needed to explain a complete workflow, useful review feedback and final
+package links. State material interventions outside the automated stages and any limitations so a development demonstration
+is not mistaken for a fully autonomous result. Keep credentials, raw conversations, caches,
+large upstream trees, temporary troubleshooting and routine trial histories outside the repository.
+Do not duplicate formal packages inside examples.
 
-For current architecture, acceptance and cleanup behavior see [design](../docs/pipeline/design.md),
+Source/content approval does not establish successful target-tool execution, scientific validation
+or measured benefit to an agent. See [configuration](../docs/pipeline/configuration.md),
 [acceptance](../docs/pipeline/acceptance.md) and [outputs](../docs/pipeline/outputs.md).

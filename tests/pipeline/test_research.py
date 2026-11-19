@@ -148,11 +148,12 @@ class ResearchTests(unittest.TestCase):
         from creation_pipeline.generation.author import review
         from tests.pipeline.test_discovery import candidate
         session = NativeSession(self.config, self.sources, copy.deepcopy(self.config["limits"]), self.work)
-        response = {"status": "pass", "resolution": "none", "findings": [
+        response = {"status": "pass", "resolution": "none",
+            "usage_assessment": "The promised call cannot run with the documented arguments.", "findings": [
             {"location": "SKILL.md", "problem": "Wrong interface", "evidence": "api.py",
              "impact": "Cannot call", "action": "Use add", "blocking": True, "category": "file"}]}
         with patch.object(session, "stage", return_value=response):
-            report = review(session, candidate(), {"files": []}, [], self.config)
+            report = review(session, candidate(), {"package": str(self.package), "files": []}, [], self.config)
         self.assertEqual(report["status"], "fail")
 
 

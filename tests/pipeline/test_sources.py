@@ -1,5 +1,6 @@
 """Resource adapters and provider protocol tests without external services."""
 import json
+import errno
 import io
 import sqlite3
 import tempfile
@@ -8,11 +9,11 @@ import zipfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from creation_pipeline.resources.acquisition import Acquisition
+from creation_pipeline.resources.acquisition import Acquisition, SourceContentError
 from creation_pipeline.resources.documents import read_text, table_rows
 from creation_pipeline.resources.intake import Sources
-from creation_pipeline.models import BlockedError, load_config
-from creation_pipeline.records import write_json
+from creation_pipeline.models import BlockedError, LocalPathError, load_config
+from creation_pipeline.records import write_json, digest, file_digest
 
 
 class SourceTests(unittest.TestCase):
@@ -92,6 +93,35 @@ class SourceTests(unittest.TestCase):
         self.assertIn("Actual source", text)
         sources.verify()
 
+    def test_windows_long_path_failure_stops_instead_of_dropping_input(self):
+        error = FileNotFoundError(errno.ENOENT, "Cannot open destination", "C:/" + "nested/" * 40 + "api.py")
+        with patch("creation_pipeline.resources.intake.sys.platform", "win32"), \
+             patch("creation_pipeline.resources.intake.shutil.copyfile", side_effect=error):
+            with self.assertRaises(LocalPathError) as caught:
+                Sources(self.config, self.root / "cache")
+        self.assertIn("--state-dir", str(caught.exception))
+        self.assertIn(error.filename, str(caught.exception))
+        self.assertIn("local filesystem", str(caught.exception))
+
+    def test_long_path_hint_does_not_replace_other_filesystem_errors(self):
+        long_name = "C:/" + "nested/" * 40 + "api.py"
+        for platform, error in (("linux", FileNotFoundError(errno.ENOENT, "Missing", long_name)),
+                                ("win32", PermissionError(errno.EACCES, "Denied", long_name))):
+            with self.subTest(platform=platform, error=type(error).__name__):
+                with patch("creation_pipeline.resources.intake.sys.platform", platform), \
+                     patch("creation_pipeline.resources.intake.shutil.copyfile", side_effect=error):
+                    with self.assertRaises(BlockedError) as caught:
+                        Sources(self.config, self.root / "cache")
+                self.assertNotIn("Possible Windows path/name-length", str(caught.exception))
+
+    def test_explicit_windows_filename_limit_is_actionable(self):
+        error = OSError(errno.EINVAL, "Name too long")
+        error.winerror = 206
+        with patch("creation_pipeline.resources.intake.sys.platform", "win32"), \
+             patch("creation_pipeline.resources.intake.shutil.copyfile", side_effect=error):
+            with self.assertRaisesRegex(LocalPathError, "path/name-length"):
+                Sources(self.config, self.root / "cache")
+
     def test_fetch_budget_and_disabled_network(self):
         self.config["network"] = False
         acquisition = Acquisition(self.config, self.root / "cache")
@@ -114,6 +144,43 @@ class SourceTests(unittest.TestCase):
         self.config["limits"]["source_bytes"] = 10
         with patch("creation_pipeline.resources.acquisition.urllib.request.urlopen", return_value=Response(b"x" * 11)), self.assertRaises(BlockedError):
             acquisition.download("https://example.org/oversized.xml")
+
+    def test_empty_download_is_not_a_successful_cached_source(self):
+        class Response(io.BytesIO):
+            url = "https://example.org/empty"
+            headers = {"Content-Type": "text/html"}
+        acquisition = Acquisition(self.config, self.root / "cache")
+        with patch("creation_pipeline.resources.acquisition.urllib.request.urlopen", return_value=Response(b"")):
+            with self.assertRaisesRegex(SourceContentError, "Empty download"):
+                acquisition.download(Response.url)
+        self.assertFalse((acquisition.cache / "download-index").exists())
+
+    def test_legacy_empty_cache_is_refetched_and_binary_pdf_is_reused(self):
+        class Response(io.BytesIO):
+            url = "https://example.org/manual"
+            headers = {"Content-Type": "application/octet-stream"}
+        acquisition = Acquisition(self.config, self.root / "cache")
+        empty = acquisition.cache / "old-empty.html"
+        empty.parent.mkdir(parents=True)
+        empty.write_bytes(b"")
+        write_json(acquisition.cache / "download-index" / (digest(Response.url.encode()) + ".json"),
+                   {"path": str(empty), "sha256": file_digest(empty), "origin": {}})
+        content = b"%PDF-1.7\nsource bytes"
+        with patch("creation_pipeline.resources.acquisition.urllib.request.urlopen", return_value=Response(content)) as fetch:
+            path, origin = acquisition.download(Response.url)
+            self.assertEqual((path, origin), acquisition.download(Response.url))
+        self.assertEqual(fetch.call_count, 1)
+        self.assertEqual(path.suffix, ".pdf")
+        self.assertEqual(path.read_bytes(), content)
+
+    def test_legitimate_empty_repository_files_are_retained(self):
+        source = self.root / "package"
+        source.mkdir()
+        (source / "__init__.py").write_bytes(b"")
+        self.config["sources"] = [{"id": "code", "path": str(source)}]
+        sources = Sources(self.config, self.root / "cache")
+        self.assertIn("__init__.py", sources.entries["code"]["files"])
+        sources.verify()
 
     def test_github_export_pins_commit_and_retains_binary_assets(self):
         stream = io.BytesIO()

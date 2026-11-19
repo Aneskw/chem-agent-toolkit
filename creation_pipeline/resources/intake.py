@@ -2,12 +2,14 @@
 from __future__ import annotations
 
 import json
+import errno
 import re
 import subprocess
 import shutil
+import sys
 from pathlib import Path
 
-from creation_pipeline.models import BlockedError, exceeded
+from creation_pipeline.models import BlockedError, LocalPathError, exceeded
 from creation_pipeline.resources.acquisition import Acquisition
 from creation_pipeline.records import digest, has_link, redact, safe_relative, file_digest
 
@@ -54,6 +56,8 @@ class Sources:
                 before_bytes = self.total_bytes
                 try:
                     self.add(source)
+                except LocalPathError:
+                    raise
                 except (OSError, ValueError, subprocess.SubprocessError) as exc:
                     self.total_bytes = before_bytes
                     self.errors.append({"source": source["id"], "error": redact(exc)})
@@ -61,6 +65,25 @@ class Sources:
             raise BlockedError("No readable sources: " + str(self.errors)[:2000])
 
     def add(self, item):
+        try:
+            return self._add(item)
+        except OSError as exc:
+            paths = [str(p) for p in (exc.filename, exc.filename2) if p is not None]
+            longest = max(paths, key=lambda p: len(p.encode("utf-16-le", errors="surrogatepass")), default="")
+            length = len(longest.encode("utf-16-le", errors="surrogatepass")) // 2
+            winerror = getattr(exc, "winerror", None)
+            missing_or_long = exc.errno in (errno.ENOENT, errno.ENAMETOOLONG) or winerror in (2, 3)
+            if sys.platform == "win32" and (winerror == 206 or (length >= 260 and missing_or_long)):
+                location = f" ({length} UTF-16 code units): {longest}" if longest else ""
+                raise LocalPathError(
+                    f"Possible Windows path/name-length limit{location}. "
+                    "Check the local path and file names, and start a new build with a shorter "
+                    "--state-dir or input root. Do not move retained build state. "
+                    f"This is a local filesystem failure, not unavailable remote evidence. Original error: {exc}"
+                ) from exc
+            raise
+
+    def _add(self, item):
         sid = item["id"]
         if not re.fullmatch(r"[A-Za-z0-9_-]+", sid) or sid in self.entries:
             raise ValueError("Duplicate or invalid source ID")

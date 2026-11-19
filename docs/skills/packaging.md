@@ -1,12 +1,15 @@
 # Tool skill packaging
 
-Apply the [minimum requirements](minimum.md) with the smallest adequate file set. One recognizable capability has coherent inputs, outputs and independently inspectable results. Neither a complete software library nor every API function automatically defines one skill.
+Apply the [minimum requirements](minimum.md) for eligibility, capability scope, version choice
+and usage content. This guide covers file organization and delivery details.
 
 ## Source and behavior
 
-Direct packaging exposes existing upstream behavior. Research extensions package a method or combination already supported by the supplied research/code. Cite original method and implementation evidence; do not invent scientific thresholds, algorithms or new acceptance policies from generic documentation. Formatting and invocation glue may be added transparently and independently reviewed. Missing algorithms, weights or data remain gaps.
+Direct packaging exposes existing upstream behavior. Research extensions package a method or combination already supported by the supplied research/code. Record original method and implementation evidence in the separate writing basis; do not invent scientific thresholds, algorithms or new acceptance policies from generic documentation. Formatting and invocation glue may be added transparently and independently reviewed. Missing algorithms, weights or data remain gaps.
 
-One skill may call multiple tools for one coherent objective. Separate capabilities with independently selectable triggers, contracts or result meaning. Keep mandatory preparation and result inspection together. Do not generate scripts just to satisfy a template.
+Prefer supported entrypoints and structured outputs that cover the task without avoidable manual
+reimplementation. A lower-level route can be appropriate when the scientific method or declared
+inputs require it; do not infer that the highest-level API is always best.
 
 ## Files
 
@@ -18,9 +21,19 @@ capability-name/
   assets/               # necessary small inputs/templates
 ```
 
-SKILL.md contains the normal path, decision-changing boundaries, essential prerequisites, usable example and minimum result checks. Long parameter details or uncommon modes may move to conditionally linked references. No required headings or fixed length. Use compact actual parameter/key lists or tables when they help. Do not copy complete API references or hide common-path caveats in optional reading.
+SKILL.md contains the normal path, decision-changing boundaries, essential prerequisites, usable example and result handling. Follow the minimum standard's title and organization guidance without a fixed chapter template. Long parameter details or uncommon modes may move to conditionally linked references. Keep common-path correctness in the main file; do not copy complete API references.
 
-Scripts need an entrypoint, inputs, outputs and failure semantics, with source/version attribution. Existing research code may be packaged when its dependencies/resources are understood. Independent tool packages, sibling-skill script dependencies and shared tool layers are unsupported. Do not bundle upstream trees, weights, private credentials or large datasets.
+A reference needs a usage purpose, such as setup, parameter lookup or a method needed for the task.
+Put the link where that need arises and explain conditional reading when appropriate. There is no
+mandatory Reference section. Construction provenance, source-ID mappings and review evidence stay
+outside the package; citing a source does not by itself make a paragraph useful at runtime.
+
+Scripts need an entrypoint, inputs, outputs and failure semantics, with source/version attribution.
+Use them when repeated, error-prone invocation or transformation would otherwise be left to the
+execution Agent; a short adaptable example is enough for simple operations. Do not generate scripts
+to satisfy a template. Existing research code may be packaged when its dependencies/resources are
+understood. Independent tool packages, sibling-skill script dependencies and shared tool layers are
+unsupported. Do not bundle upstream trees, weights, private credentials or large datasets.
 
 ## Interface details
 
@@ -42,6 +55,12 @@ interfaces, preparation, input/output contracts, Usage and result meaning. It al
 concrete removal of redundancy and compact alternatives for low-value prose. Do not remove
 important pitfalls to meet a word count. No runtime test definitions or exact numeric outputs
 are required. Missing local target dependencies do not block sound instructions.
+
+Markdown `python`/`py` fences provide host-parser syntax observations to the reviewer, not an
+execution verdict. Label intentional excerpts and their scope; the reviewer distinguishes real
+errors from snippets or target-version syntax differences. Required source files and quantitative
+interpretation conditions belong in the usable workflow. Correct defects in that path rather
+than appending a disclaimer or changing code-fence labels to hide them.
 
 Writing basis and review findings stay in build records, not the runtime package. Source/content
 approval does not establish runtime success, scientific adequacy or Agent benefit.

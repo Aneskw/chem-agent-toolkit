@@ -43,6 +43,23 @@ class SkillLibraryTests(unittest.TestCase):
         self.assertEqual(result["status"], "partial", result)
         self.assertTrue((self.library / "add-numbers/SKILL.md").exists())
 
+    def test_adoption_keeps_collection_navigation_and_current_registry(self):
+        collection = self.library / "collection"
+        collection.mkdir(parents=True)
+        (collection / "README.md").write_text("# Chemistry tasks\n", encoding="utf-8")
+        unmanaged = self.library / "existing-skill"
+        unmanaged.mkdir()
+        (unmanaged / "SKILL.md").write_text("---\nname: existing-skill\n---\n", encoding="utf-8")
+        result, _ = self.case.run_case(discovery(candidate()), ARTIFACT, library_root=self.library)
+        self.assertEqual(result["adoption"][0]["status"], "adopted")
+        catalog = read_json(self.library / "catalog.json")
+        self.assertEqual(set(catalog), {"version", "skills"})
+        self.assertEqual(set(catalog["skills"][0]), {"name", "path", "tags"})
+        index = (self.library / "README.md").read_text(encoding="utf-8")
+        self.assertIn("[Chemistry tasks](collection/README.md)", index)
+        self.assertIn("[existing-skill](existing-skill/SKILL.md)", index)
+        self.assertIn("[add-numbers](add-numbers/SKILL.md)", index)
+
     def test_tampered_receipt_cannot_approve(self):
         record = certify({"name": "x", "status": "ready", "files": [], "basis": ["basis"],
                           "checks": [{"name": "content_review", "status": "pass", "required": True}]})

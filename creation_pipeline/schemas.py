@@ -16,6 +16,7 @@ def array(properties):
 
 REVIEW = obj({"status": {"type": "string", "enum": ["pass", "fail", "not_run"]},
               "resolution": {"type": "string", "enum": ["none", "revise_files", "supply_evidence"]},
+              "usage_assessment": STRING,
               "findings": array({"location": STRING, "problem": STRING, "evidence": STRING,
                   "impact": STRING, "action": STRING, "blocking": {"type": "boolean"},
                   "category": {"type": "string", "enum": ["file", "source", "environment", "concision", "suggestion"]}}),

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import ast
+import sys
 import tokenize
 import re
 import time
@@ -15,6 +16,50 @@ from creation_pipeline.records import redact, safe_relative
 def python_source(path):
     with tokenize.open(path) as stream:
         return stream.read()
+
+
+def _python_blocks(text):
+    """Read ordinary Markdown fences, including EOF-terminated code blocks."""
+    closer, language, lines = None, None, []
+    for number, line in enumerate(text.splitlines(), 1):
+        if closer is None:
+            opening = re.fullmatch(r"( {0,3})(`{3,}|~{3,})(.*)", line)
+            if not opening:
+                continue
+            prefix, fence, info = opening.groups()
+            if fence[0] == "`" and "`" in info:
+                continue
+            closer = re.compile(r" {0,3}" + re.escape(fence[0]) + "{" + str(len(fence)) + r",}[ \t]*")
+            language = info.split()[0].lower() if info.split() else ""
+            start, indent, lines = number + 1, len(prefix), []
+        elif closer.fullmatch(line):
+            if language in {"python", "py"}:
+                yield start, "\n".join(lines)
+            closer = None
+        elif language in {"python", "py"}:
+            removed = min(indent, len(line) - len(line.lstrip(" ")))
+            lines.append(line[removed:])
+    if closer is not None and language in {"python", "py"}:
+        yield start, "\n".join(lines)
+
+
+def inline_python_diagnostics(package):
+    """Give reviewers host-parser observations, never an execution/approval verdict."""
+    package = Path(package)
+    diagnostics = {"python_version": ".".join(map(str, sys.version_info[:3])),
+                   "blocks_checked": 0, "issues": []}
+    for item in manifest(package):
+        if Path(item["path"]).suffix.lower() != ".md":
+            continue
+        text = (package / item["path"]).read_text(encoding="utf-8-sig")
+        for start, code in _python_blocks(text):
+            diagnostics["blocks_checked"] += 1
+            try:
+                ast.parse(code, filename=item["path"])
+            except SyntaxError as exc:
+                diagnostics["issues"].append({"path": item["path"], "block_line": start,
+                    "line": start + (exc.lineno or 1) - 1, "message": exc.msg})
+    return diagnostics
 
 
 def result(name, problems, required=True, **extra):

@@ -31,13 +31,13 @@ creation_pipeline/
     author.py                 # Author/repair coordination and independent review
     prompts/                  # Discovery, author and independent review instructions
   validation/
-    checks.py                 # Static package, references and script syntax checks
+    checks.py                 # Package checks, script syntax and advisory Markdown Python parsing
     basis.py                  # Shared source locator and writing-basis validation
     acceptance.py             # Content approval bound to files and basis
   artifacts/
     delivery.py               # Direct-file validation, chunks and delivery receipts
     package.py                # Manifests, output integrity and explicit installation
-    library.py                # Individual flat adoption and catalog
+    library.py                # Flat adoption, active name registry and library navigation
 
 tests/pipeline/
   support.py                  # Deterministic Agent-stage doubles and fixtures
@@ -49,13 +49,16 @@ tests/pipeline/
   test_sources.py             # Acquisition, document conversion and snapshots
   test_entrypoints.py         # Helpers invoked outside the repository directory
   test_review_workflow.py     # Independent content review and correct feedback routing
+  test_inline_python.py       # Read-only fence parsing, locations and language boundaries
   test_research_access.py     # Policy, native CLI wiring and adopted-source registry
   test_retention.py           # Expiry, pinning, active locks, safe archives and usage
-  test_examples.py            # Portable example records and authoritative package integrity
+  test_source_handoff.py      # Acquisition failures, native fallback and evidence handoff
+  test_examples.py            # Portable inputs, preflight and example evidence links
 
+AGENTS.md                     # Repository content and contribution conventions
 docs/                         # Current usage, configuration and design standards
-examples/                     # Reserved for complete reproducible build batches
-skills/                       # Ready skills directly under their names
+examples/                     # Workflow walkthroughs, selected stage records and portable inputs
+skills/                       # Formal packages and indexed task collections
 .pipeline/                    # Ignored local cache, workspaces and build records
 ```
 
@@ -64,3 +67,5 @@ skills/                       # Ready skills directly under their names
 Only native Codex Agent execution is implemented. Test doubles replace stage decisions and write real fixture files through the delivery receipt code. They are not a production backend. The CLI's own connection to its model, including optional model selection and `http_only`, remains the responsibility of the native Agent integration.
 
 Completed skill packages are independent of pipeline helper paths. Recovery checkpoints require unchanged content specifications; compact records preserve drafts for reuse when a full session cannot be resumed.
+
+Plans, audit reports, routine trial histories and one-off maintenance scripts are working materials kept outside the checkout. Curated examples retain selected process records that explain the workflow, with recorded-run context and limitations. The ignored `.pipeline/` directory contains managed execution state, not public documentation; `--state-dir` can place that state elsewhere.

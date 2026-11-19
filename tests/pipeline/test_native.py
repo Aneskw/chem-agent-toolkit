@@ -171,8 +171,13 @@ class PreflightTests(unittest.TestCase):
             config = load_config(root / "config.json")
             with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(fake)]), patch("creation_pipeline.resources.acquisition.Acquisition.repository") as acquire:
                 receipts = NativeSession.preflight(config, root / "work")
+                resumed_probe = NativeSession.preflight(config, root / "work")
             acquire.assert_not_called()
             args = read_json(root / "args.json")
             self.assertIn("selected-model", args)
             self.assertIn('model_provider="skill-pipeline-http"', args)
             self.assertEqual(receipts[0]["phase"], "preflight")
+            self.assertEqual(len(resumed_probe), 1)
+            self.assertFalse(resumed_probe[0]["resumed"])
+            self.assertNotIn("resume", args)
+            self.assertEqual(len(list((root / "work/preflight").iterdir())), 2)

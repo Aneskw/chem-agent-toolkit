@@ -17,6 +17,10 @@ from creation_pipeline.models import BlockedError, exceeded
 from creation_pipeline.records import digest, has_link, safe_relative, write_json, read_json
 
 
+class SourceContentError(ValueError):
+    """A completed download did not contain usable source bytes."""
+
+
 def https_url(value):
     url = urllib.parse.urlsplit(value)
     if url.scheme != "https" or not url.hostname or url.username or url.password:
@@ -55,6 +59,8 @@ class Acquisition:
                         raise BlockedError("Downloaded resource exceeds explicit source size limit")
                     h.update(chunk)
                     out.write(chunk)
+        if total == 0:
+            raise SourceContentError("Empty download response; no source was cached or registered")
         return final, mime, h.hexdigest()
 
     def download(self, url, depth=0):
@@ -64,7 +70,8 @@ class Acquisition:
         if index.exists():
             cached = read_json(index)
             from creation_pipeline.records import file_digest
-            if Path(cached["path"]).is_file() and file_digest(cached["path"]) == cached["sha256"]:
+            if (Path(cached["path"]).is_file() and Path(cached["path"]).stat().st_size > 0
+                    and file_digest(cached["path"]) == cached["sha256"]):
                 return Path(cached["path"]), cached["origin"]
         self.cache.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(dir=self.cache) as tmp:

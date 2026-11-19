@@ -11,6 +11,10 @@ class BlockedError(ValueError):
     pass
 
 
+class LocalPathError(ValueError):
+    """Local path setup must be corrected before resource preparation continues."""
+
+
 class IncompleteError(ValueError):
     """A discovery stopped before a defensible decision; not zero value."""
 

@@ -1,26 +1,71 @@
-# EDBO reaction-space and initial-design batch
+# EDBO reaction optimization
 
-Original resources: Shields et al., Nature (2021), DOI [10.1038/s41586-021-03213-y](https://doi.org/10.1038/s41586-021-03213-y), and [b-shields/edbo](https://github.com/b-shields/edbo/tree/9b41eac3f6d9e520547702fd5b0c7ef6441625a4). The PDF URL/hash and code commit are fixed in input.json. Full paper/repository contents are acquired rather than copied into this example. The DOE method is packaged from repository example code; it is not claimed to be a validated protocol from the Nature paper.
+This example follows a paper and code through resource preparation, candidate discovery, skill
+writing, review and publication. The recorded run is from 2026-10-27; `input.json` is a separate
+configuration for running the current pipeline with production defaults.
 
-For the shared file-by-file reading guide and reproduction procedure see [Examples](../README.md). No batch-specific preparation is required beyond the common pipeline prerequisites and network access.
+## Resources
 
-## Actual outcome
+The inputs are *Bayesian reaction optimization as a tool for chemical synthesis*
+([Nature, 2021](https://doi.org/10.1038/s41586-021-03213-y)) and
+[b-shields/edbo at the pinned revision](https://github.com/b-shields/edbo/tree/9b41eac3f6d9e520547702fd5b0c7ef6441625a4).
+Both configurations identify the paper by URL/hash and the repository by commit. Full upstream
+resources are fetched instead of copied into this example.
 
-| Accepted Skill | Scope |
-| --- | --- |
-| [build-encoded-reaction-space](../../skills/build-encoded-reaction-space/SKILL.md) | The user supplies the reaction components and, when needed, SMILES strings, compound names that can be resolved, or prepared descriptor matrices. The function performs component encoding, feature cleanup, Cartesian expansion, and optional min–max scaling; resolving invalid or unavailable structures remains input preparation. |
-| [pca-doe-initial-batch](../../skills/pca-doe-initial-batch/SKILL.md) | The user supplies a prepared EDBO reaction-space object. Supply component keys from reaction.descriptors in the same builder order as reaction.index_headers, with each key matching its descriptor columns and generated index header. Use every indexed component to retrieve encoded rows. |
+The pinned code is an input resource, not a claim that it provides the latest supported interfaces.
+Current discovery assesses maintained compatible versions and may supplement related official
+resources. The recorded skills target the inspected EDBO snapshot. The DOE workflow comes from
+repository example code; it is not presented as a validated protocol from the Nature paper.
 
-Discovery considered 3 candidates; 2 packages were accepted and adopted. Effective development limits are recorded in input.json; the initial 12-call stage budget was extended to 14 for targeted development corrections, as recorded in summary.json. Deferred candidates are listed there too. The source model was gpt-6-luna. No tool installation or EDBO execution was performed. Content review is not an Agent-benefit measurement.
+## Walk through the recorded run
 
-The records/<skill-name>/ folders contain final writing basis and independent review, including important repair history. This development batch also received a developer source audit: an earlier PCA alignment allegation was challenged against the exact ndarray insertion and scaler implementation, and unnecessary upstream overrides were removed before final publication. This extra intervention is not an autonomous pipeline stage or a claim of perfect review reliability. Skills are linked to their single authoritative packages in the project skills/ directory; this example adds no README or build record inside those packages.
+1. Read [recorded-input.json](recorded-input.json) for the original input selection and effective
+   development limits. [sources.json](sources.json) connects the acquired resources to stable file
+   locators such as `e224` for `edbo/feature_utils.py` and `e234` for `examples/DOE/DOE.py`.
+2. Read [discovery.json](discovery.json). It proposes reaction-space encoding, PCA/DOE initial
+   design and iterative Bayesian optimization. Each candidate states its starting inputs, entrypoint,
+   intended result and evidence gaps.
+3. Follow the accepted package links below. The writing-basis files map their sections to inspected
+   source functions and setup instructions. For example, the encoding skill's basis identifies
+   `reaction_space`, `encode_component` and the `Data` container rather than relying on the paper
+   alone for software usage details.
+4. Read each review beside its basis. The encoding review narrows input preparation and setup
+   requirements. The DOE review records corrections to component selection and ordering, along
+   with a retracted allegation about PCA index alignment. This shows how a finding is checked
+   against code and resolved, rather than treating every reviewer statement as correct.
+5. Read [skills.json](skills.json) for package links and recorded file fingerprints, then
+   [summary.json](summary.json) for the overall result, deferred work, model usage and limits.
 
-## Reproduce this batch
+| Delivered skill | Task | Writing basis | Final review |
+| --- | --- | --- | --- |
+| [build-encoded-reaction-space](../../skills/build-encoded-reaction-space/SKILL.md) | Encode supplied reaction components, clean features and expand the Cartesian search space | [basis](records/build-encoded-reaction-space/basis.json) | [review](records/build-encoded-reaction-space/review.json) |
+| [pca-doe-initial-batch](../../skills/pca-doe-initial-batch/SKILL.md) | Map an initial design through component PCA coordinates to valid rows of a prepared EDBO reaction space | [basis](records/pca-doe-initial-batch/basis.json) | [review](records/pca-doe-initial-batch/review.json) |
+
+The recorded development run considered three candidates and published two packages. Iterative
+Bayesian optimization was deferred under its build limit, rather than rejected as having no
+packaging value. The effective limits in `recorded-input.json` match the summary; an earlier
+model-call limit was extended during development, as disclosed there. These limits do not apply
+to the current production rerun configuration.
+
+The recorded model was `gpt-6-luna`. A developer source audit helped retract the PCA alignment
+allegation and remove an unnecessary patch; this was additional work outside the automated stages,
+not an autonomous pipeline stage. A supplemental-source registration limitation is also disclosed
+in the review. No EDBO installation or execution was performed, and agent benefit was not measured.
+
+## Run with the current configuration
 
 From the repository root:
 
 ```text
-python -m creation_pipeline build examples/edbo-reaction-optimization/input.json --no-adopt
+python -m creation_pipeline build examples/edbo-reaction-optimization/input.json --preflight
+python -m creation_pipeline build examples/edbo-reaction-optimization/input.json --no-adopt --state-dir ../chemical_skill/pipeline-state
 ```
 
-The common README explains configuration-only preflight, real connection checks, output locations and non-determinism. Keep --no-adopt for a rerun to avoid conflicts with the already published names. Source revisions and published package hashes are preserved; byte-identical model output is not promised.
+[input.json](input.json) uses the same initial resources with production defaults, your configured
+Codex model and scoped supplementary research. It does not prescribe candidates or skill names.
+A new build need not reproduce the recorded package count, text or source choices.
+
+Keep `--no-adopt` to inspect a rerun without publishing conflicting names. See the
+[workflow guide](../README.md) for prerequisites, the common stage map and record interpretation.
+The recorded reviews and fingerprints describe the illustrated publication; subsequent package
+maintenance does not retroactively update that evidence.

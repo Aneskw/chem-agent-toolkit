@@ -61,10 +61,13 @@ class ReplayStages:
         write_json(session.work / "active-phase.json", {"phase": phase})
         session.receipts.append({"model": "deterministic-agent-fixture", "phase": phase, "usage": None})
         if phase == "review" and (not self.values or "status" not in self.values[0]):
-            return {"status": "pass", "resolution": "none", "findings": []}
+            return {"status": "pass", "resolution": "none", "findings": [],
+                    "usage_assessment": "Supplied numeric inputs reach an addition result through the declared call; no in-scope gap identified."}
         if not self.values:
             raise ModelCallError("No fixture Agent result")
         value = self.values.pop(0)
+        if phase == "review":
+            value.setdefault("usage_assessment", "The declared inputs and invocation reach the promised result; findings identify any remaining in-scope gap.")
         if phase == "author":
             package = Path(context["output_directory"])
             write_fixture_files(package, value.get("files"), session.limits["package_bytes"])

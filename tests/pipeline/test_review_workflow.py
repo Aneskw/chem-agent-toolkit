@@ -1,5 +1,6 @@
 """Regression coverage for independent source review, not execution approval."""
 import copy
+import json
 from pathlib import Path
 import unittest
 from tests.pipeline.test_discovery import discovery, candidate
@@ -45,6 +46,43 @@ class ReviewWorkflowTests(unittest.TestCase):
         result, _ = self.case.run_case(discovery(candidate()), ARTIFACT,
             {"status": "pass", "resolution": "none", "findings": [f]})
         self.assertEqual(result["status"], "ready", result)
+
+    def test_usage_assessment_is_retained_outside_runtime_package(self):
+        assessment = "Numeric inputs reach a sum through add; text rejection is the useful convention and no in-scope gap remains."
+        result, _ = self.case.run_case(discovery(candidate()), ARTIFACT,
+            {"status": "pass", "resolution": "none", "usage_assessment": assessment, "findings": []})
+        record = read_json(Path(result["output"]) / "skills/add-numbers/review.json")
+        review = next(check for check in record["checks"] if check["name"] == "content_review")
+        self.assertEqual(review["usage_assessment"], assessment)
+        package = Path(result["output"]) / "skills/add-numbers/package/SKILL.md"
+        self.assertNotIn(assessment, package.read_text(encoding="utf-8"))
+
+    def test_empty_usage_assessment_returns_to_reviewer_not_writer(self):
+        result, _ = self.case.run_case(discovery(candidate()), ARTIFACT,
+            {"status": "pass", "resolution": "none", "usage_assessment": "  ", "findings": []},
+            {"status": "pass", "resolution": "none", "usage_assessment": "Numeric inputs reach a sum; the call preserves the input convention.", "findings": []})
+        self.assertEqual(result["status"], "ready", result)
+        self.assertEqual(len(self.case.last_backend.prompts), 4)
+        correction = json.loads(self.case.last_backend.prompts[-1].rsplit("\n", 1)[1])
+        self.assertEqual(correction["_phase"], "review")
+        self.assertIn("usage_assessment", correction["record_format_error"])
+
+    def test_inline_diagnostic_reaches_reviewer_and_refreshes_after_repair(self):
+        broken = copy.deepcopy(ARTIFACT)
+        broken["files"][0]["content"] += "\n```python\nanswer =\n```\n"
+        repaired = copy.deepcopy(ARTIFACT)
+        repaired["files"][0]["content"] += "\n```python\nanswer = 2 + 3\n```\n"
+        result, _ = self.case.run_case(discovery(candidate()), broken,
+            {"status": "fail", "resolution": "revise_files",
+             "findings": [finding("Incomplete assignment in promised Python example")]}, repaired)
+        self.assertEqual(result["status"], "ready", result)
+        self.assertEqual(len(self.case.last_backend.prompts), 5)
+        first = json.loads(self.case.last_backend.prompts[2].rsplit("\n", 1)[1])
+        second = json.loads(self.case.last_backend.prompts[4].rsplit("\n", 1)[1])
+        self.assertEqual(first["inline_python_diagnostics"]["blocks_checked"], 2)
+        self.assertEqual(len(first["inline_python_diagnostics"]["issues"]), 1)
+        self.assertTrue(all(c["status"] == "pass" for c in first["checks"]))
+        self.assertEqual(second["inline_python_diagnostics"]["issues"], [])
 
     def test_multi_file_package_is_not_executed(self):
         artifact = copy.deepcopy(ARTIFACT)

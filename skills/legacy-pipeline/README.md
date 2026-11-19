@@ -1,12 +1,11 @@
-# Legacy Skill collection
+# Chemistry skill collection
 
-Migration status: **66 retained; 20 removed or excluded**, from 86 unique historical packages at main commit `1e7cada4f693501b35e69b99676cdcbcc801c29c`.
+This collection contains 66 packages for chemistry tools, models, databases and other workflows.
+Browse the classifications below, then read each package's `SKILL.md` for its task, inputs and
+prerequisites. Required tools, weights and datasets are supplied separately unless bundled.
+Available instructions do not establish successful execution or measured benefit to an agent.
 
-- Original tool/model/database classifications are retained; previously unclassified packages are under `unclassified/`.
-- Retained packages have received content and support-file review. External tools, weights and datasets remain prerequisites where specified; full runtime correctness and Agent benefit are not established.
-- [catalog.json](catalog.json) records source revisions, imported/current file hashes and changes.
-
-## Retained packages
+## Packages
 
 | Classification | Packages |
 | --- | --- |
@@ -84,29 +83,13 @@ Migration status: **66 retained; 20 removed or excluded**, from 86 unique histor
 | [widom-sorbent-screening](unclassified/widom-sorbent-screening/SKILL.md) | unclassified |
 | [xrd-mixture-phase-quantification](unclassified/xrd-mixture-phase-quantification/SKILL.md) | unclassified |
 
-## Removed or excluded packages (20)
+## Catalog and attribution
 
-Exclusions reflect missing essentials for the promised capability or limited independent value. External dependencies and lack of runtime tests alone were not grounds for removal.
+[catalog.json](catalog.json) records relative package paths, classifications and upstream source
+locations. The shared source repository/revision applies unless an entry specifies its own
+`source_commit`. These are origin locators; they do not imply that a maintained package is an
+unchanged copy. Names and usage instructions remain in each `SKILL.md`.
 
-| Package | Specific reason |
-| --- | --- |
-| `attach-semi-template-residuals` | Template representation and attachment operations are undefined; map/match/replace alone does not specify a reliable graph rewrite. |
-| `chem-diffdock-nim` | Only checks two files exist and the endpoint string is nonempty; little DiffDock-specific preparation value. |
-| `chem-genmol` | Only checks a repository directory and checkpoint file exist; no SAFE or task-configuration guidance. |
-| `chem-openmm-md` | Only enumerates available platforms; better as a preparation step than a standalone simulation Skill. |
-| `chem-reinvent` | Claims to check the configuration path, but only checks executable availability; little task-specific help. |
-| `construct-leaving-group-vocabulary` | Attachment-marker encoding and ambiguous component alignment are undefined; source references point to an old local workspace. |
-| `correct-and-filter-semi-template-pairs` | No usable paired predictor contract, template vocabulary or pair-prior construction is established. |
-| `experience-guided-retrosynthetic-search` | The core PUCT expression is damaged, with no definite implementation entrypoint to resolve selection behavior. |
-| `generate-and-filter-chemical-reasoning-examples` | Requires a score of at least 4/5 but supplies no scoring rubric, leaving the main acceptance rule undefined. |
-| `generate-reactant-graphs-with-valid-action-beam-search` | Valid-action rules and atom/bond vocabularies are neither defined nor tied to a usable predictor. |
-| `gln-support-restricted-training` | The required gradient equation and weighting for the uniform-sampling approximation are missing. |
-| `graph-aware-molecular-attention` | Distance buckets are specified, but the attention equation needed to produce the promised representations is not. |
-| `graphretro-beam-search-retrosynthesis` | Final attachment and stereochemistry rules depend on a missing appendix; references use old local paths. |
-| `localretro-extract-local-template` | The documented scripts/extract_template.py entrypoint is not included. |
-| `localtransform-forward-prediction` | Mostly generic file/commit checks; the command depends on the old repository/evidence layout. |
-| `rdkit-descriptor-result-triage` | Duplicates the existing descriptor calculator and interpretation boundary with substantially more template text. |
-| `robustify-rgn-against-synthon-errors` | Does not define target alignment when erroneous synthons change component counts or correspondence, the core augmentation case. |
-| `retroxpert-evaluate-bond-disconnection` | No inference adapter is delivered; documented command only tests a checkpoint path in an old evidence workspace. |
-| `wln-build-molecular-graph` | Documented executable run.py is not delivered; command requires an old virtual environment and batch workspace. |
-| `retroprime-two-stage-retrosynthesis` | Resource recovery instructions depend on another Skill package through an incorrect relative link; package is not independently self-contained. |
+The collection derives from [chem-agent-toolkit](https://github.com/Aneskw/chem-agent-toolkit).
+See [LICENSE](LICENSE) and any package-specific notices for applicable terms. Keep maintenance
+reports, prior file manifests and screening histories outside the collection.

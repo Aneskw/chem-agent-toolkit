@@ -74,6 +74,7 @@ def validate_discovery(plan, config, sources):
 def analyze(session, config):
     instructions = (PROMPTS / "analyze.md").read_text(encoding="utf-8")
     context = {
+        "minimum": (ROOT / "docs/skills/minimum.md").read_text(encoding="utf-8"),
         "user_guidance": config["prompt"], "notes": config["notes"], "constraints": config["constraints"],
         "intent": config["intent"], "limits": {k: config["limits"][k] for k in ("max_candidates", "max_builds")},
         "sources": session.sources.index(), "source_errors": session.sources.errors,

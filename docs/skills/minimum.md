@@ -1,7 +1,56 @@
 # Minimum tool-skill content
 
-Produce an English SKILL.md with YAML name and description. Name identifies the capability;
-description explains when the Agent should select it. Do not mechanically repeat that description.
+Produce an English SKILL.md with YAML name and description and a descriptive body title.
+Name identifies the capability; description explains when the Agent should select it.
+Do not mechanically repeat that description.
+
+## Tool-workflow eligibility
+
+Every candidate must teach a source-supported use of actual software: a library, CLI,
+script/module, service or documented executable software workflow. Connect realistic starting
+inputs through real invocation to output access and interpretation. Laboratory recipes,
+equipment names, standalone theory/mechanism explanations and paper summaries are not eligible.
+Do not manufacture a trivial script to turn such content into a tool skill.
+
+Using existing software in research can be valuable; a new tool, author repository, open source,
+local installation or complete paper reproduction is not required. Licensed software can qualify
+when acquisition, prerequisites and the actual interface can be established. Missing use details
+in a paper trigger scoped supplementation for a promising capability, not immediate omission.
+If evidence remains insufficient, retain a concrete gap rather than inventing an interface.
+
+## Capability scope and value
+
+Define a reusable task by its starting inputs and useful result. Identify the non-obvious
+interface choices, scientific conditions or data handoffs the guidance resolves. This is a
+source-supported value hypothesis, not measured Agent benefit or a requirement for complexity.
+
+Keep necessary preparation, invocation and result handling together. Changes to example data,
+temperature, file count or configurable settings do not alone define separate capabilities.
+Separate uses when their starting conditions, interfaces or result meanings warrant independent
+selection. A coherent task may use several tools. Check a plausible input variation within the
+declared scope; do not require every variant or expand a specialist workflow into an entire study.
+
+## Target software version
+
+For reusable capabilities, first check official current stable releases, maintenance/support and
+relevant documentation. Prefer a maintained, obtainable version compatible with the task and
+declared environment. A paper's publication/citation date or cited software version is provenance,
+not an automatic requirement to package that historical interface. Age alone does not establish
+obsolescence; neither the highest version number nor the development branch is automatically best.
+
+Use a historical release or specially constrained commit when an explicit reproduction requirement, existing artifacts,
+format/platform constraint or source-supported scientific-method dependency requires it. An easier
+old manual alone is not justification. If current usage cannot be established, record the gap;
+do not silently fall back to an obsolete workflow and present it as the general current solution.
+Pin the chosen release/commit as appropriate, including current supported releases.
+
+Preserve the supported scientific method while verifying the chosen version's actual interfaces,
+defaults, units, input/output behavior and dependencies. Do not assume numerical equivalence or
+invent a migration. Record the target version, concise selection reason and original-versus-target
+distinction in existing construction/basis/evidence fields. Runtime instructions need the chosen
+version and operational boundaries, not a version-survey essay or build-only provenance.
+
+## Required usage information
 
 The execution Agent receives only the final package, not the build conversation or source
 workspace. Essential external tools/resources need explicit official acquisition/setup entrypoints
@@ -19,15 +68,25 @@ Every skill must convey these five kinds of information, with flexible organizat
    structures to scattered prose. Do not copy the full API or repeat obvious example details.
 4. **Representative Usage.** Integrate a typical complete example with its necessary workflow
    explanations. Use real imports/commands and output access, creating an adaptable template.
-   Mark external inputs, handoffs and alternative paths. Match the candidate's declared starting
-   conditions; completeness is not exhaustive lifecycle/API coverage. Do not reduce this to a shortest call.
+   Distinguish replaceable example values from scientific requirements. Connect necessary data
+   transformations and handoffs within the declared scope; identify genuinely external preparation.
+   Completeness is not exhaustive lifecycle/API coverage. Do not reduce this to a shortest call.
    Exact numerical output is optional; never fabricate an execution result.
 5. **Result interpretation.** Explain how to use the output, tool-specific meaningful empty
    outcomes and failure signals. Predictions, measurements and scientific conclusions are distinct.
 
-Write for a capable Agent. Omit introductory background, repeated caveats, obvious instructions,
-line-by-line code translations and option catalogs without decision value. Keep important
-pitfalls, defaults and data mappings. Compact prose, lists, tables and code are choices, not quotas.
+Organize content by its role in use. Use short descriptive sections when preparation, invocation
+and result handling need separate lookup; a very short Skill may use a few connected paragraphs.
+Present groups of fields/options as compact keys, lists or tables with material meanings and
+units. Keep explanations beside the relevant example; avoid both dense mixed-purpose paragraphs
+and line-by-line translations. No fixed section names or required table format.
+
+Keep information that changes selection, preparation, invocation or interpretation. Runtime
+references should help obtain a resource, resolve an interface or apply a method. Internal source
+IDs, benchmark/grader links and accounts of why a paper inspired the Skill belong in build records.
+Include publication-specific settings only when they affect the declared workflow; a generic tool
+example need not end with a paper-reproduction disclaimer. Never present illustrative settings as
+published facts. Omit generic background, repeated caveats and unrelated option catalogs.
 
 One file is enough when adequate. Conditional references/scripts/assets are allowed; link their
 purpose and use conditions. Keep normal-path correctness in the main file. No mandatory chapter

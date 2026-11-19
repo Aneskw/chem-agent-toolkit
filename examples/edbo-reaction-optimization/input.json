@@ -11,27 +11,12 @@
       "ref": "9b41eac3f6d9e520547702fd5b0c7ef6441625a4"
     }
   ],
-  "model": {},
-  "http_only": true,
   "network": true,
   "research_access": "supplement",
-  "execution": {
-    "profile": "development"
-  },
-  "limits": {
-    "max_candidates": 3,
-    "max_builds": 2,
-    "model_calls": 14,
-    "repair_rounds": 2
-  },
   "batch": {
     "label": "edbo-tool-skills",
     "tags": [
       "reaction-optimization"
     ]
-  },
-  "adoption": {
-    "enabled": true
-  },
-  "notes": "Original EDBO study DOI 10.1038/s41586-021-03213-y. Discover reusable capabilities from these original resources. Do not inspect historical generated Skills or previous trial output. Do not replace the input with EDBO+. Follow the current source/content-only review workflow."
+  }
 }

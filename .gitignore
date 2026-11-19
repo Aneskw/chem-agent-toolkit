@@ -4,6 +4,3 @@ __pycache__/
 *.pyc
 .pipeline/
 .venv*/
-evaluation/**/cache/
-evaluation/**/runs/
-evaluation/**/results/
