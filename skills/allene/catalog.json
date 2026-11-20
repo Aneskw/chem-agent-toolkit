@@ -43,6 +43,13 @@
       ]
     },
     {
+      "path": "crest-generate-and-export-conformer-ensembles",
+      "category": "Structure and reaction paths",
+      "papers": [
+        "10.1021/acs.joc.2c01530"
+      ]
+    },
+    {
       "path": "crest-sample-low-energy-conformers",
       "category": "Structure and reaction paths",
       "papers": [
@@ -186,6 +193,13 @@
     },
     {
       "path": "gaussian-calculate-smd-water-stationary-point-energies",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.joc.2c01530"
+      ]
+    },
+    {
+      "path": "gaussian-calculate-solution-reaction-energy-profiles",
       "category": "Energy and thermochemistry",
       "papers": [
         "10.1021/acs.joc.2c01530"
@@ -369,6 +383,13 @@
       ]
     },
     {
+      "path": "goodvibes-build-reaction-energy-profiles-v4-4",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.joc.3c02322"
+      ]
+    },
+    {
       "path": "goodvibes-calculate-api-quasi-harmonic-thermochemistry",
       "category": "Energy and thermochemistry",
       "papers": [
@@ -381,6 +402,20 @@
       "papers": [
         "10.1038/s44160-024-00658-7",
         "10.1039/d0cy00092b"
+      ]
+    },
+    {
+      "path": "goodvibes-calculate-thermochemistry-v4-4",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.joc.3c02322"
+      ]
+    },
+    {
+      "path": "goodvibes-compare-labeled-populations-v4-4",
+      "category": "Energy and thermochemistry",
+      "papers": [
+        "10.1021/acs.joc.3c02322"
       ]
     },
     {
