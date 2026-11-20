@@ -6,10 +6,14 @@ def guidance(config):
 
 def candidate_context(session, config, plan, independent_review=False):
     # Review gets the declared capability, not the writer's benefit/rationale verdict.
-    declared = {k: plan[k] for k in ("name", "task", "scope", "entrypoint", "construction") if k in plan} if independent_review else plan
+    declared = {k: plan[k] for k in ("name", "task", "scope", "entrypoint", "construction") if k in plan} if independent_review else {
+        k: v for k, v in plan.items() if k not in ("files", "checks", "dependencies", "needs", "kind", "priority", "selected")}
     context = {**guidance(config), "plan": declared, "sources": session.sources.index(),
             "evidence": session.sources.validate_evidence(plan["evidence"]),
             "handoff": config.get("_handoff", []),
 
             "resource_index": session.workspace["resource_index"]}
+    if not independent_review:
+        context["group_boundaries"] = [{"name": c["name"], "task": c["task"], "scope": c["scope"]}
+                                       for c in config.get("_group_plan", {}).get("candidates", [])]
     return context

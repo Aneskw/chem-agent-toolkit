@@ -7,6 +7,7 @@ creation_pipeline/
   __main__.py                 # Python module entry point
   cli.py                      # Commands, arguments and console results
   pipeline.py                 # Stage orchestration, repair, resume and adoption
+  groups.py                   # Serial resource groups and flat child-build recovery
   models.py                   # Configuration validation, limits and errors
   schemas.py                  # Concise Agent stage result formats
   records.py                  # Hashes, safe paths, durable JSON and shared OS leases
@@ -25,7 +26,7 @@ creation_pipeline/
     backend.py                # Native sessions, CLI events, recovery and image audit
     tools.py                  # Thin helper CLI; delegates to responsible modules
   generation/
-    discovery.py              # Discover, normalize and validate candidate decisions
+    discovery.py              # Explore, consolidate, reconcile and validate candidate sets
     candidates.py             # Save incremental source-backed candidates
     context.py                # Assemble small source-backed stage handoffs
     author.py                 # Author/repair coordination and independent review
@@ -43,6 +44,8 @@ tests/pipeline/
   support.py                  # Deterministic Agent-stage doubles and fixtures
   test_components.py          # Validation and safe-file operations
   test_discovery.py           # Build, no-candidate decisions, failures and preflight gating
+  test_consolidation.py       # Candidate coverage, scope handoffs and discovery recovery
+  test_groups.py              # Serial dispatch, group isolation, budgets and queue recovery
   test_native.py              # Native CLI/session lifecycle using a fake executable
   test_research.py            # Research resources, direct files and scoped readiness
   test_skill_library.py       # Pure flat adoption, archive installation and conflicts
@@ -69,3 +72,7 @@ Only native Codex Agent execution is implemented. Test doubles replace stage dec
 Completed skill packages are independent of pipeline helper paths. Recovery checkpoints require unchanged content specifications; compact records preserve drafts for reuse when a full session cannot be resumed.
 
 Plans, audit reports, routine trial histories and one-off maintenance scripts are working materials kept outside the checkout. Curated examples retain selected process records that explain the workflow, with recorded-run context and limitations. The ignored `.pipeline/` directory contains managed execution state, not public documentation; `--state-dir` can place that state elsewhere.
+
+JSON publication uses unique same-directory staging files and atomic replacement, with bounded
+retry for Windows sharing/access failures. Persistent errors propagate without replacing the old
+document. Logical read-modify-write transactions still need their existing leases.

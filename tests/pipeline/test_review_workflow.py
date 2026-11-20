@@ -28,15 +28,15 @@ class ReviewWorkflowTests(unittest.TestCase):
         result, _ = self.case.run_case(discovery(candidate()), ARTIFACT,
             {"status": "fail", "resolution": "revise_files", "findings": [finding()]}, fixed)
         self.assertEqual(result["status"], "ready", result)
-        self.assertEqual(len(self.case.last_backend.prompts), 5)
-        self.assertIn("feedback", self.case.last_backend.prompts[3])
+        self.assertEqual(len(self.case.last_backend.prompts), 6)
+        self.assertIn("feedback", self.case.last_backend.prompts[4])
 
     def test_review_record_error_goes_back_to_reviewer(self):
         result, _ = self.case.run_case(discovery(candidate()), ARTIFACT,
             {"status": "pass", "resolution": "none", "findings": "bad format"},
             {"status": "pass", "resolution": "none", "findings": []})
         self.assertEqual(result["status"], "ready", result)
-        self.assertEqual(len(self.case.last_backend.prompts), 4)
+        self.assertEqual(len(self.case.last_backend.prompts), 5)
         self.assertIn("record_format_error", self.case.last_backend.prompts[-1])
         self.assertIn('"_phase": "review"', self.case.last_backend.prompts[-1])
 
@@ -62,7 +62,7 @@ class ReviewWorkflowTests(unittest.TestCase):
             {"status": "pass", "resolution": "none", "usage_assessment": "  ", "findings": []},
             {"status": "pass", "resolution": "none", "usage_assessment": "Numeric inputs reach a sum; the call preserves the input convention.", "findings": []})
         self.assertEqual(result["status"], "ready", result)
-        self.assertEqual(len(self.case.last_backend.prompts), 4)
+        self.assertEqual(len(self.case.last_backend.prompts), 5)
         correction = json.loads(self.case.last_backend.prompts[-1].rsplit("\n", 1)[1])
         self.assertEqual(correction["_phase"], "review")
         self.assertIn("usage_assessment", correction["record_format_error"])
@@ -76,9 +76,9 @@ class ReviewWorkflowTests(unittest.TestCase):
             {"status": "fail", "resolution": "revise_files",
              "findings": [finding("Incomplete assignment in promised Python example")]}, repaired)
         self.assertEqual(result["status"], "ready", result)
-        self.assertEqual(len(self.case.last_backend.prompts), 5)
-        first = json.loads(self.case.last_backend.prompts[2].rsplit("\n", 1)[1])
-        second = json.loads(self.case.last_backend.prompts[4].rsplit("\n", 1)[1])
+        self.assertEqual(len(self.case.last_backend.prompts), 6)
+        first = json.loads(self.case.last_backend.prompts[3].rsplit("\n", 1)[1])
+        second = json.loads(self.case.last_backend.prompts[5].rsplit("\n", 1)[1])
         self.assertEqual(first["inline_python_diagnostics"]["blocks_checked"], 2)
         self.assertEqual(len(first["inline_python_diagnostics"]["issues"]), 1)
         self.assertTrue(all(c["status"] == "pass" for c in first["checks"]))
@@ -108,21 +108,21 @@ class ReviewWorkflowTests(unittest.TestCase):
         result, _ = self.case.run_case(discovery(candidate()), ARTIFACT,
             {"status": "fail", "resolution": "revise_files", "findings": [finding()]}, ARTIFACT)
         self.assertEqual(result["status"], "incomplete", result)
-        self.assertEqual(len(self.case.last_backend.prompts), 4)
+        self.assertEqual(len(self.case.last_backend.prompts), 5)
 
     def test_bad_author_metadata_is_corrected_by_author(self):
         bad = copy.deepcopy(ARTIFACT)
         bad["basis"] = []
         result, _ = self.case.run_case(discovery(candidate()), bad, ARTIFACT)
         self.assertEqual(result["status"], "ready", result)
-        self.assertEqual(len(self.case.last_backend.prompts), 4)
-        self.assertIn("author_delivery", self.case.last_backend.prompts[2])
+        self.assertEqual(len(self.case.last_backend.prompts), 5)
+        self.assertIn("author_delivery", self.case.last_backend.prompts[3])
 
     def test_reviewer_gets_promise_and_sources_not_authors_value_verdict(self):
         plan = candidate(rationale="AUTHOR-ONLY-BENEFIT-VERDICT")
         result, _ = self.case.run_case(discovery(plan), ARTIFACT)
         self.assertEqual(result["status"], "ready", result)
-        writer, reviewer = self.case.last_backend.prompts[1:3]
+        writer, reviewer = self.case.last_backend.prompts[2:4]
         self.assertIn("AUTHOR-ONLY-BENEFIT-VERDICT", writer)
         self.assertNotIn("AUTHOR-ONLY-BENEFIT-VERDICT", reviewer)
         self.assertIn("Numeric addition", reviewer)
@@ -136,4 +136,4 @@ class ReviewWorkflowTests(unittest.TestCase):
         result, _ = self.case.run_case(discovery(candidate()), ARTIFACT,
             {"status": "fail", "resolution": "revise_files", "findings": [finding()]}, rebuttal)
         self.assertEqual(result["status"], "ready", result)
-        self.assertEqual(len(self.case.last_backend.prompts), 5)
+        self.assertEqual(len(self.case.last_backend.prompts), 6)

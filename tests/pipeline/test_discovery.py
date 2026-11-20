@@ -57,7 +57,7 @@ class DiscoveryTests(unittest.TestCase):
         self.assertEqual((output / "skills/add-numbers/package/SKILL.md").read_text(), MAIN)
         self.assertFalse((self.state / "runs" / result["build_id"]).exists())
         self.assertFalse((self.state / "outputs" / result["build_id"]).exists())
-        self.assertEqual(len(self.last_backend.prompts), 3)
+        self.assertEqual(len(self.last_backend.prompts), 4)
 
     def test_no_candidates_is_normal_completion(self):
         result, _ = self.run_case(discovery())

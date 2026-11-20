@@ -21,9 +21,10 @@ interpretation. Select deeper checks from its material risks:
    establish meaningful inference. Check glue as well as upstream calls.
 3. What work does the guidance actually remove? Identify its concrete operational contribution
    and any critical in-scope work still left unexplained. Check a plausible input variation for
-   accidental dependence on example values. Inspect whether repeated work, scattered instructions
-   or unconditional optional branches create avoidable burden. Do not demand automation, extra
-   branches or expansion beyond a sound declared scope. A specialized task is not itself a defect.
+   accidental dependence on example values, including materially different promised modes. Check
+   that a broader title is supported by complete routes and clear mode selection. Inspect whether
+   reconstructed repeated code, scattered instructions or unconditional optional branches create
+   avoidable burden. Do not demand scripts, file counts or expansion beyond sound declared scope.
 
 Return a short usage_assessment identifying the starting inputs/result, the concrete work saved
 and any material remaining gap (or that none was identified). Ground it in the actual package;

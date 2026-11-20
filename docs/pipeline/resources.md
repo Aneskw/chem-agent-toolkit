@@ -15,6 +15,8 @@ Excluded: .git, installed .venv/venv/node_modules, __pycache__ and common test/l
 
 resources.json maps file locators to originals, hashes, optional views and helper commands. eN identifies a source file, not proof the Agent read it correctly. Claims identify concrete passages/functions/pages. resource-state.json retains the full source registry, config and acquisition failures for supplements/recovery. A concise initial context points to the index; it does not inject all files into the model.
 
+Internal helper output uses UTF-8, preserving Unicode paths independently of the Windows console locale.
+
 ## Views
 
 | Format | Auxiliary support / limit |

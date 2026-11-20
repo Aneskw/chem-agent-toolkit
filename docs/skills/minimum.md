@@ -20,15 +20,18 @@ If evidence remains insufficient, retain a concrete gap rather than inventing an
 
 ## Capability scope and value
 
-Define a reusable task by its starting inputs and useful result. Identify the non-obvious
+Define a reusable task or coherent task family by its starting inputs and useful result. Identify the non-obvious
 interface choices, scientific conditions or data handoffs the guidance resolves. This is a
 source-supported value hypothesis, not measured Agent benefit or a requirement for complexity.
 
 Keep necessary preparation, invocation and result handling together. Changes to example data,
 temperature, file count or configurable settings do not alone define separate capabilities.
-Separate uses when their starting conditions, interfaces or result meanings warrant independent
-selection. A coherent task may use several tools. Check a plausible input variation within the
-declared scope; do not require every variant or expand a specialist workflow into an entire study.
+Related uses can share a common core with modes selected by supplied data, environment or analysis
+need. A mode being independently usable is not sufficient reason to split it into another package.
+Keep separate packages when different scientific purposes, input/result meanings or incompatible
+prerequisites make a common entrypoint confusing. Shared tool names, APIs or sequential steps alone
+do not justify merging. A coherent task may use several tools. Check plausible input variation and
+consequential promised modes without requiring every variant or an entire study.
 
 ## Target software version
 

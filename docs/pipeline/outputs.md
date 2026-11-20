@@ -5,6 +5,7 @@ skills/name/                            # approved pure package
 skills/README.md                        # current packages and collection navigation
 skills/catalog.json                     # adopted-name registry: name, path and tags
 .pipeline/
+  queues/queue-id.json                  # ordered groups, child IDs and aggregate progress
   records/batch-id/
     input.json                         # sanitized configuration
     sources.json                       # origins, versions, file fingerprints
@@ -46,6 +47,19 @@ paths and claims; a deleted cache may need reacquisition. No hidden reasoning is
 Supplemental source paths in archived sources.json point to retained content under that archive;
 they remain readable after ordinary workspace and cache expiration. Initial user sources retain
 their existing reference/snapshot policy.
+
+## Resource-group state
+
+Grouped runs keep child builds in the same flat paths, rather than nesting source and package
+trees beneath queue/group directories. The queue record references child results and retains
+scheduling facts; it does not duplicate packages. Discovery evidence contains the exploration
+draft, final set and their coverage mapping. Those records stay outside runtime packages.
+discover retains recoverable work until normal expiration; resume continues the final set.
+An active/pinned queue protects registered child work and a pinned queue protects child caches.
+Queue control records are durable; they cannot restore an expired native session.
+The queue JSON is scheduling metadata. Use each group's result.output directory for check/install,
+or check an individual package path. Missing archive completion markers are not successful delivery;
+an expired child checkpoint requires a new queue rather than a fresh build under the old identity.
 
 ## State location and public catalogs
 

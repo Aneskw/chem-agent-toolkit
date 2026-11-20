@@ -51,12 +51,21 @@ method constraints can justify pinned versions with explicit evidence.
 flowchart LR
   A[Configuration and connection preflight] --> B[Acquire and index originals]
   B --> C[Discover useful capabilities]
-  C --> D[Write Skill and writing basis]
+  C --> H[Consolidate group package boundaries]
+  H --> D[Write Skill and writing basis]
   D --> E[Static file checks]
   E --> F[Independent source/content review]
   F -->|Concrete defects| D
   F -->|Approved| G[skills/name and compact records]
 ```
+
+Discovery saves a candidate draft, then the same Agent explicitly compares the complete set before
+writing. Related uses can become modes of one coherent task family; different scientific promises
+remain separate. References and scripts are delivered when useful, without a file quota.
+
+For several independent input groups, use `resource_groups` instead of `sources`. Groups acquire
+resources and run serially in input order, sharing the cache but isolating evidence and discovery
+sessions. `resume QUEUE_ID` continues retained work. See [grouped inputs](docs/pipeline/configuration.md#resource-groups).
 
 Approved pure packages go directly to skills/name. Approval means source/content review, not
 runtime verification, scientific validation or measured Agent benefit. Review includes explicit

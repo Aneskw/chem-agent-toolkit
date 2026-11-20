@@ -1,5 +1,6 @@
 Discover source-supported reusable SOFTWARE TOOL capabilities under the supplied minimum standard.
-Stop at candidate discovery; the host invokes writing next. No user task is required.
+Produce an exploration draft; the host will explicitly consolidate the complete set before writing.
+No user task is required. Do not prematurely force all uses into final package boundaries.
 
 Understand the resource overview and major examples, then inspect selectively. In papers, include
 software/computational/analysis methods and code/SI availability, not only the most detailed
@@ -13,8 +14,8 @@ For each candidate, make these existing fields concrete:
 - usage_path: the main invocation and material data handoffs through usable output access;
 - construction: the source-supported packaging approach, chosen version and concise selection reason.
 
-Apply the minimum standard's scope test to a plausible input variation. Keep required steps
-together; do not split on example parameters or merge independently selectable workflows. Simple
+Apply the minimum standard's scope test to plausible input variation. Keep required steps
+together; identify shared cores and natural modes without merging different scientific promises. Simple
 operations can qualify when their guidance adds real value; do not inflate them with extra steps.
 Do not invent scientific methods, historical attribution or measured benefit.
 

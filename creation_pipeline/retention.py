@@ -34,6 +34,14 @@ def active(state, build_id):
         return True
 
 
+def queue_protected(state, record, *, include_active=True):
+    qid = record.get("queue_id")
+    if not qid:
+        return False
+    parent = safe_relative(state, "retention/" + qid + ".json")
+    return bool(parent.exists() and (read_json(parent).get("pinned") or (include_active and active(state, qid))))
+
+
 def remove_registered(root, relative):
     root = Path(root).absolute()
     path = safe_relative(root, relative)
@@ -60,7 +68,7 @@ def pin(state, build_id, value):
         path = safe_relative(Path(state).absolute(), "retention/" + build_id + ".json")
         if not path.exists():
             raise ValueError("Unregistered historical batch; inspect/migrate explicitly before retention management")
-        if active(state, build_id):
+        if active(state, build_id) or queue_protected(state, read_json(path)):
             raise ValueError("Cannot change retention of an active batch")
         return mark(state, build_id, pinned=value)
 
@@ -205,13 +213,13 @@ def sweep(state, *, dry_run=False, clock=None):
                 warnings.append(str(exc))
                 continue
             registrations.append(record)
-            if record.get("pinned") or active(state, bid):
+            if record.get("pinned") or active(state, bid) or queue_protected(state, record):
                 skipped.append(bid)
                 continue
             if stamp - record["last_activity"] < 7 * DAY:
                 continue
             archived = safe_relative(state, "records/" + bid + "/complete.json")
-            if not archived.exists():
+            if not archived.exists() and not (record.get("kind") == "queue" and safe_relative(state, "queues/" + bid + ".json").exists()):
                 warnings.append("Not archived; retained: " + bid)
                 continue
             try:
@@ -229,7 +237,8 @@ def sweep(state, *, dry_run=False, clock=None):
                 warnings.append(str(exc))
         # Active runs may acquire new cache units not yet registered: defer cache GC conservatively.
         if not any(active(state, r["build_id"]) for r in registrations):
-            protected = {p for r in registrations if r.get("pinned") for p in r.get("cache", [])}
+            protected = {p for r in registrations if r.get("pinned") or queue_protected(state, r, include_active=False)
+                         for p in r.get("cache", [])}
             with lease(state, "cache-registry"):
                 index_path = state / "retention-cache.json"
                 index = read_json(index_path) if index_path.exists() else {}

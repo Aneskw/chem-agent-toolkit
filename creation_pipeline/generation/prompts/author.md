@@ -14,11 +14,13 @@ necessary transformations and output handoffs connected, including paths/cwd or 
 when material. Explicitly identify external preparation; do not move a necessary promised step
 outside scope merely to simplify the example.
 
-Make the path adaptable: separate replaceable inputs and example values from scientific
-requirements, and check that a plausible input variation still fits the guidance. Do not add
-branches for every variation. Put common-path instructions together and substantial conditional
-detail in linked references when useful. Scripts are optional support for recurring mechanics,
-not a required deliverable. Avoid repeating validations already performed adequately by the
+Implement the consolidated common core and promised modes, with clear selection conditions.
+Use the group boundary index to avoid proposing a separate package for an already covered mode.
+Make the path adaptable: separate replaceable example values from scientific requirements and
+check consequential promised routes. Put common instructions together and substantial conditional
+detail in linked references. Consider delivering repeated error-prone mechanics as scripts rather
+than requiring their reconstruction from Markdown; simple calls can remain examples. Avoid
+gratuitous branches, file quotas and validations already performed adequately by the
 chosen tool; retain independent checks that change the result's meaning or trustworthiness.
 
 Match result claims to actual conditions, including calibration, normalization, uncertainty or

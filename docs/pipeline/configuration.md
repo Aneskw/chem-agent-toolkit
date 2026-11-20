@@ -1,10 +1,13 @@
 # Configuration
 
-JSON or YAML object. Only sources is required; YAML needs PyYAML. Unknown top-level fields are rejected. Paths resolve relative to the configuration file. Parser/defaults: creation_pipeline/models.py.
+JSON or YAML object with exactly one of sources and resource_groups; YAML needs PyYAML. Unknown
+top-level fields are rejected. Paths resolve relative to the configuration file. Parser/defaults:
+creation_pipeline/models.py.
 
 | Field | Default | Meaning |
 | --- | --- | --- |
-| sources | required nonempty array | Local files/directories, known URLs/repos/paper identifiers/catalogs |
+| sources | alternative to resource_groups | One related source collection |
+| resource_groups | alternative to sources | Ordered groups of related sources, each with id and sources |
 | prompt / notes | empty strings | Optional guidance; task is a legacy prompt alias |
 | constraints | {} | Model-interpreted preferences, not executable enforcement rules |
 | model | {} | Optional name passed to Codex CLI; a model-name string is also accepted |
@@ -33,6 +36,23 @@ Each source has exactly one of path, url, repo, paper, table. Optional id (simpl
 
 Unknown file extensions are retained; parsing support is separate. No implicit input size/count cap. Optional development limits can deliberately narrow a trial; limitations/exclusions are recorded. See [resources](resources.md).
 
+## Resource groups
+
+```json
+{
+  "resource_groups": [
+    {"id": "quenching", "sources": [{"id": "paper", "path": "inputs/quenching.pdf"}]},
+    {"id": "epr", "sources": [{"id": "paper", "path": "inputs/epr.pdf"}]}
+  ]
+}
+```
+
+Each group has exactly id and a nonempty sources array. Group IDs are unique simple identifiers;
+source IDs are unique only within their group. One group can contain multiple related papers,
+code and tool documentation. Each is explored and consolidated separately before authoring.
+Global settings apply to all groups. Acquisition is lazy and shared snapshots can be reused;
+capability merging is restricted to the current group.
+
 ## Execution profiles and limits
 
 Production defaults to null (disabled) for model_calls, candidate_calls, model_timeout, total_seconds, discovery_seconds, agent_events, max_candidates, max_builds, source_bytes, source_total_bytes, source_files, package_bytes, network_requests and repair_rounds.
@@ -49,8 +69,15 @@ Development defaults: model_calls=8, max_candidates=3, max_builds=1, repair_roun
 
 network_timeout=60 seconds, converter_timeout=60 seconds are per-operation fault controls, not whole-build deadlines. converter_timeout may be null for a deliberately long conversion. Agent resources are original files and optional prepared views; no host read-request protocol or text-context pagination is used.
 
-model_calls limits stage CLI turns, not internal inference requests. The separate connection
-preflight is recorded too, but does not consume the development stage-turn quota. Missing usage is unknown, not zero. No automatic monetary-cost estimate. Optional agent_events counts CLI-reported tool completions; the CLI does not report every native tool there.
+model_calls limits CLI turns, not internal inference requests. Single-group preflights are reported
+separately from its stage quota. Grouped runs count queue preflights and all group stage turns
+against one saved queue quota; resume --extra-turns explicitly extends it. total_seconds covers
+recorded active time, excluding time between invocations. max_builds limits newly started candidate
+builds across groups in one invocation; resume reuses approved candidates before further work.
+max_candidates and discovery_seconds apply to each group's discovery, including consolidation and
+reconciliation. candidate_calls applies to one candidate; source/resource limits retain their
+per-group scope. Production adds no implicit limits. Missing usage is unknown, not zero, and no
+monetary cost is inferred. agent_events counts CLI-reported completions, not every native tool.
 
 ## Retired execution settings
 

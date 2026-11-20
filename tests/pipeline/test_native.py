@@ -1,6 +1,8 @@
 """Native lifecycle tests run a fake CLI, never a remote model."""
 import json
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -71,6 +73,19 @@ print(json.dumps({"type":"turn.completed","usage":{"input_tokens":10,"output_tok
         self.assertEqual(read_json(session.state_path)["sessions"]["discovery"], "retained")
         self.assertEqual(len(session.receipts), 1)
 
+    def test_state_io_failure_is_not_relabelled_as_model_connection_failure(self):
+        session = self.session()
+        failed = []
+        def local_error(path, value):
+            if Path(path).name == 'progress.json' and not failed:
+                failed.append(True)
+                raise PermissionError('Local state publication denied')
+            return write_json(path, value)
+        with patch('creation_pipeline.agent.backend.write_json', side_effect=local_error), patch(
+                'creation_pipeline.agent.backend.codex_command', return_value=[sys.executable, str(self.fake)]):
+            with self.assertRaises(PermissionError):
+                session.stage('test', {}, {})
+
     def test_timeout_is_incomplete_work_and_preserves_checkpoint(self):
         from creation_pipeline.models import BudgetError
         self.fake.write_text('''import sys,json,time
@@ -81,8 +96,9 @@ time.sleep(30)
         session = self.session()
         session.limits["model_timeout"] = 1
         with patch("creation_pipeline.agent.backend.codex_command", return_value=[sys.executable, str(self.fake)]):
-            with self.assertRaises(BudgetError):
+            with self.assertRaises(BudgetError) as stopped:
                 session.stage("test", {}, {})
+        self.assertEqual(stopped.exception.scope, "operation")
         saved = read_json(session.state_path)
         self.assertEqual(saved["sessions"]["discovery"], "timeout-session")
         self.assertIsNone(saved["receipts"][0]["usage"])
@@ -103,6 +119,26 @@ time.sleep(30)
         self.assertEqual(self.sources.evidence[0]["end"], 0)
         prepare(self.sources, self.work)
         self.assertEqual(len(self.sources.evidence), 1)
+
+    def test_helper_json_preserves_unicode_under_legacy_stdout_encoding(self):
+        source = self.root / "\u8054\u70ef.py"
+        source.write_text("def identity(x): return x\n", encoding="utf-8")
+        write_json(self.root / "unicode.json", {"sources": [{"id": "code", "path": source.name}], "network": False})
+        sources = Sources(load_config(self.root / "unicode.json"), self.root / "unicode-cache")
+        prepare(sources, self.work)
+        expected = read_json(self.work / "resources.json")["files"][0]["original"]
+        command = [sys.executable, "-m", "creation_pipeline.agent.tools"]
+        options = {"cwd": Path(__file__).resolve().parents[2], "capture_output": True,
+                   "env": {**os.environ, "PYTHONIOENCODING": "cp936"}}
+        result = subprocess.run(command + ["inventory", "--run", str(self.work)], **options)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        document = json.loads(result.stdout.decode("utf-8"))
+        self.assertEqual(document["items"][0]["original"], expected)
+        self.assertEqual(Path(expected).name, source.name)
+        missing = self.work / "\u7f3a\u5931.json"
+        result = subprocess.run(command + ["candidate", "--run", str(self.work), "--definition", str(missing)], **options)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn(missing.name, json.loads(result.stdout.decode("utf-8"))["error"])
 
     def test_direct_file_validation_preserves_bytes(self):
         from creation_pipeline.artifacts.delivery import validate_package

@@ -39,3 +39,7 @@ Unchanged findings and material cannot trigger endless identical review calls.
 Approved pure packages enter skills/name. Incomplete or rejected drafts remain local, with reasons.
 There is no pending runtime-verification area or promotion workflow. Content approval is not
 runtime proof, scientific certification or measured Agent improvement.
+Recovery reuses byte-identical approved packages only with matching capability, sources,
+configuration and content specifications, the current acceptance contract and fresh static checks.
+Infrastructure implementation hashes remain audit data. Maintainers must change the acceptance
+version when changing approval requirements that existing receipts do not establish.

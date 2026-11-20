@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from creation_pipeline.agent.backend import NativeSession
 from creation_pipeline.artifacts.delivery import finish, validate_package
-from creation_pipeline.models import ModelCallError
+from creation_pipeline.models import ModelCallError, BudgetError, bound
 from creation_pipeline.records import write_json, safe_relative
 
 MAIN = """---
@@ -56,10 +56,20 @@ class ReplayStages:
         return FixtureSession(config, sources, limits, work, keep_debug)
 
     def stage(self, session, instructions, context, schema=None):
+        if len(session.receipts) + session.call_offset >= bound(session.limits["model_calls"]):
+            raise BudgetError("Fixture Agent turn budget exhausted", scope=session.call_limit_scope)
         self.prompts.append(instructions + "\n" + json.dumps(context, ensure_ascii=False))
         phase = context.get("_phase", "discovery")
         write_json(session.work / "active-phase.json", {"phase": phase})
         session.receipts.append({"model": "deterministic-agent-fixture", "phase": phase, "usage": None})
+        write_json(session.state_path, session.state)
+        if context.get("_discovery_step") in ("consolidate", "reconcile"):
+            if self.values and "mapping" in self.values[0]:
+                return self.values.pop(0)
+            draft = copy.deepcopy(context["draft"])
+            return {**draft, "outcome": "candidates" if draft["candidates"] else "no_suitable_candidates",
+                    "mapping": [{"from": [c["name"]], "to": [c["name"]], "reason": "Distinct supported result"}
+                                for c in draft["candidates"]]}
         if phase == "review" and (not self.values or "status" not in self.values[0]):
             return {"status": "pass", "resolution": "none", "findings": [],
                     "usage_assessment": "Supplied numeric inputs reach an addition result through the declared call; no in-scope gap identified."}

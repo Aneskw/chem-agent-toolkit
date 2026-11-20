@@ -7,6 +7,8 @@ import json
 import os
 import re
 import shutil
+import tempfile
+import time
 from datetime import datetime, timezone
 from pathlib import Path, PureWindowsPath
 
@@ -26,9 +28,22 @@ def read_json(path):
 def write_json(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    temp = path.with_suffix(path.suffix + ".tmp")
-    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    temp.replace(path)
+    descriptor, name = tempfile.mkstemp(prefix=".write-", suffix=".tmp", dir=path.parent)
+    temp = Path(name)
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
+            json.dump(value, stream, ensure_ascii=False, indent=2)
+            stream.write("\n")
+        for attempt in range(8):
+            try:
+                os.replace(temp, path)
+                break
+            except PermissionError as exc:
+                if getattr(exc, "winerror", None) not in (5, 32, 33) or attempt == 7:
+                    raise
+                time.sleep(min(0.01 * 2**attempt, 0.2))
+    finally:
+        temp.unlink(missing_ok=True)
 
 
 def redact(value):

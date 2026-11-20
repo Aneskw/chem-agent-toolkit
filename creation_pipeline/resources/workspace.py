@@ -108,6 +108,9 @@ def render_page(pdf, page, prefix):
 if __name__ == "__main__":
     # The helper is callable directly by an Agent outside the repository cwd.
     import sys
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     print(render_page(*sys.argv[1:]))
 
 

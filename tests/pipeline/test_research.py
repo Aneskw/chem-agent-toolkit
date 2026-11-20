@@ -139,7 +139,9 @@ class ResearchTests(unittest.TestCase):
         session = NativeSession(self.config, self.sources, copy.deepcopy(self.config["limits"]), self.work)
         result = {"outcome": "candidates", "summary": "Selected from inspected source",
             "candidates": [], "saved_candidates": ["selected"], "omitted": [], "limitations": []}
-        with patch.object(session, "stage", return_value=result):
+        final = {**result, "candidates": [candidate], "saved_candidates": [],
+                 "mapping": [{"from": ["selected"], "to": ["selected"], "reason": "Selected supported capability"}]}
+        with patch.object(session, "stage", side_effect=[result, final]):
             plan = analyze(session, self.config)
         self.assertEqual([c["name"] for c in plan["candidates"]], ["selected"])
 

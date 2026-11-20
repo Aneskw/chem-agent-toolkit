@@ -15,7 +15,27 @@ python -m creation_pipeline resume BUILD_ID --extra-turns 4
 
 --preflight validates configuration only (no network/model calls). Every real build additionally
 performs a lightweight selected-model handshake before acquiring research resources. Its connectivity
-timeout is 90 seconds, distinct from optional development model time limits.
+timeout is at most 90 seconds and respects a shorter configured turn or remaining build limit.
+
+## Serial groups and discovery
+
+Use resource_groups for independently processed collections; sources remains the single-group
+shorthand. All group configurations validate before fetching. Resources are acquired when each
+group starts, then its candidate draft is explicitly consolidated before authoring. Independent
+groups share cached originals, not conversations or evidence namespaces.
+
+```text
+python -m creation_pipeline discover groups.json --state-dir D:/study/chemical_skill/.pipeline/v11
+python -m creation_pipeline resume QUEUE_ID --state-dir D:/study/chemical_skill/.pipeline/v11 --no-adopt
+```
+
+discover retains finalized plans and temporary checkpoints for resume. resume accepts a queue or
+single build ID. Completed groups are checked and reused; unresolved groups receive another attempt
+from retained state. Missing group resources do not prevent later groups from running. Backend,
+explicit global-budget and state-integrity failures stop dispatch; later groups remain unattempted.
+Unchanged obstacles are not retried in a loop. Use a new queue for changed configuration or discovery
+specifications; grouped --rediscover is unsupported. Missing/expired checkpoints cannot be restored
+from package directories. pin QUEUE_ID protects its registered children and their caches.
 
 ## Windows state paths
 

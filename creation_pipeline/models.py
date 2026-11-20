@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import copy
 import os
 import re
 from pathlib import Path
@@ -26,11 +27,17 @@ class ModelCallError(ValueError):
 class BudgetError(ModelCallError):
     """An execution bound stopped work; not evidence of a defective skill."""
 
+    def __init__(self, message, *, scope="run"):
+        super().__init__(message)
+        self.scope = scope
 
-def load_config(path):
+
+def load_config(path, *, _data=None):
     path = Path(path).resolve()
-    raw = path.read_text(encoding="utf-8-sig")
-    if path.suffix.lower() == ".json":
+    raw = path.read_text(encoding="utf-8-sig") if _data is None else ""
+    if _data is not None:
+        config = copy.deepcopy(_data)
+    elif path.suffix.lower() == ".json":
         config = json.loads(raw)
     else:
         try:
@@ -40,6 +47,25 @@ def load_config(path):
         config = yaml.safe_load(raw)
     if not isinstance(config, dict):
         raise ValueError("Configuration must be an object")
+    if "resource_groups" in config:
+        if "sources" in config:
+            raise ValueError("Use either sources or resource_groups, not both")
+        groups = config["resource_groups"]
+        if not isinstance(groups, list) or not groups:
+            raise ValueError("resource_groups must be a nonempty array")
+        normalized, names = [], set()
+        base = {k: v for k, v in config.items() if k != "resource_groups"}
+        for group in groups:
+            if not isinstance(group, dict) or set(group) != {"id", "sources"}:
+                raise ValueError("Each resource group needs only id and sources")
+            gid = group["id"]
+            if not isinstance(gid, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", gid) or gid in names:
+                raise ValueError("Resource group IDs must be unique simple identifiers")
+            names.add(gid)
+            part = load_config(path, _data={**base, "sources": group["sources"]})
+            normalized.append({"id": gid, "sources": part["sources"]})
+        part.pop("sources")
+        return {**part, "resource_groups": normalized}
     retired = set(config) & {"checks", "environment", "execute_generated_checks"}
     if retired:
         raise ValueError("Target execution settings are retired: " + ", ".join(sorted(retired)) + "; use source/content review")

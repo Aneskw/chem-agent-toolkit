@@ -67,4 +67,8 @@ def main(argv=None):
         return 1
 
 if __name__ == "__main__":
+    # Native Agent tools exchange UTF-8 regardless of the Windows console locale.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     raise SystemExit(main())

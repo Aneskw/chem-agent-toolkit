@@ -49,7 +49,9 @@ def main(argv=None):
         if args.command in ("build", "discover"):
             if args.preflight:
                 config = load_config(args.config)
-                result = {"status": "configuration_valid", "source_count": len(config["sources"]),
+                groups = config.get("resource_groups", [{"sources": config.get("sources", [])}])
+                result = {"status": "configuration_valid", "source_count": sum(len(g["sources"]) for g in groups),
+                          "group_count": len(groups),
                           "source_availability": "not_checked", "model_calls": 0}
             else:
                 result = build(args.config, args.state_dir, plan_only=args.command == "discover",

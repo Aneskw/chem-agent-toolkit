@@ -2,8 +2,9 @@
 
 1. Parse strict configuration; test selected native Agent connection with a small real request.
 2. Acquire/filter resources, retain originals and create optional text/render helpers and indexes.
-3. Discover reusable source-supported capabilities and packaging value without a required task.
-4. Write a concise English Skill, supporting resources when useful, and separate writing basis.
+3. Explore source-supported capabilities, then explicitly consolidate the complete draft in the
+   discovery session. Account for each draft capability in final package boundaries or concrete gaps.
+4. Write the resulting task/task-family packages, supporting files when useful, and separate basis.
 5. Check package structure, references, syntax and delivery integrity without target execution.
 6. Independently inspect source fidelity, interfaces, inputs/outputs, representative Usage and
    information value. Send concrete content feedback to the writer. Send record-format errors

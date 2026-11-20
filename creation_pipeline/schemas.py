@@ -32,4 +32,6 @@ CANDIDATES = obj({
         "blocked": {"type": "boolean"}}),
     "omitted": array({"capability": STRING, "reason": STRING}), "limitations": STRINGS,
 })
+CONSOLIDATION = obj({**{k: v for k, v in CANDIDATES["properties"].items() if k != "saved_candidates"},
+    "mapping": array({"from": STRINGS, "to": STRINGS, "reason": STRING})})
 DELIVERY = obj({"completed": {"type": "boolean"}, "summary": STRING})

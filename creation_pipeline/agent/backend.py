@@ -12,7 +12,7 @@ import time
 import uuid
 
 from creation_pipeline.agent.command import codex_command
-from creation_pipeline.models import ModelCallError, BudgetError, bound
+from creation_pipeline.models import ModelCallError, BudgetError, IncompleteError, bound
 from creation_pipeline.records import read_json, write_json, redact, digest
 from creation_pipeline.agent.command import terminate_tree
 from creation_pipeline.resources.workspace import prepare
@@ -26,6 +26,8 @@ class NativeSession:
         self.config, self.sources, self.limits = config, sources, limits
         self.work, self.keep_debug = Path(work), keep_debug
         self.started, self.receipts = time.monotonic(), []
+        self.call_offset = 0
+        self.call_limit_scope = "run"
         self.notify = lambda message: None
         import tomllib
         user_config = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")) / "config.toml"
@@ -65,7 +67,11 @@ class NativeSession:
         empty.cache = Path(work) / "empty-cache"
         empty.acquisition = Acquisition(config, empty.cache)
         empty.total_bytes = 0
-        limits = dict(config["limits"], model_calls=1, model_timeout=90, total_seconds=90)
+        timeout = min(90, bound(config["limits"]["model_timeout"]),
+                      config.get("_deadline", float("inf")) - time.monotonic())
+        if timeout <= 0:
+            raise BudgetError("Build time budget exhausted before connection preflight")
+        limits = dict(config["limits"], model_calls=1, model_timeout=timeout, total_seconds=timeout)
         # A resumed build needs a fresh one-call probe, not the previous probe's
         # already exhausted one-call session. Preserve every earlier receipt.
         session = cls(config, empty, limits, Path(work) / "preflight" / uuid.uuid4().hex)
@@ -94,11 +100,11 @@ class NativeSession:
                 return self._stage_once(instructions, context, schema)
             except SourceHandoffError as exc:
                 if str(exc) == last:
-                    raise ModelCallError("Repeated unchanged resource handoff error: " + str(exc)) from exc
+                    raise IncompleteError("Repeated unchanged resource handoff error: " + str(exc)) from exc
                 last = str(exc)
                 context = {**context, "resource_handoff_error": last,
                            "repair_instruction": "Repair only the listed sidecars/content, then complete the stage using retained observations. inventory refreshes registration."}
-        raise ModelCallError("Resource handoff repair limit reached: " + str(last))
+        raise IncompleteError("Resource handoff repair limit reached: " + str(last))
 
     def _stage_once(self, instructions, context, schema=None):
         from creation_pipeline.resources.supplements import SourceHandoffError
@@ -107,8 +113,8 @@ class NativeSession:
             self.refresh_sources()
         except SourceHandoffError as exc:
             context["resource_handoff_error"] = str(exc)
-        if len(self.receipts) >= bound(self.limits["model_calls"]):
-            raise BudgetError("Agent turn budget exhausted")
+        if len(self.receipts) + self.call_offset >= bound(self.limits["model_calls"]):
+            raise BudgetError("Agent turn budget exhausted", scope=self.call_limit_scope)
         remaining = bound(self.limits["total_seconds"]) - (time.monotonic() - self.started)
         if remaining <= 0:
             raise BudgetError("Build time budget exhausted")
@@ -177,6 +183,7 @@ class NativeSession:
         command += ["-c", 'approval_policy="never"', "-"]
         options = {"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP} if os.name == "nt" else {"start_new_session": True}
         receipt = {"phase": phase, "session_key": key, "resumed": bool(session_id),
+                   "discovery_step": context.get("_discovery_step"),
                    "model": self.model_name or "CLI default", "status": "running",
                    "usage": None, "usage_mode": "session_cumulative", "search_mode": search_mode(self.config), "search_events": 0, "prompt_sha256": digest(prompt.encode()), "tool_events": 0}
         self.receipts.append(receipt)
@@ -243,9 +250,9 @@ class NativeSession:
                                 if command_text:
                                     repeated[command_text] = repeated.get(command_text, 0) + 1
                                     if repeated[command_text] > 3 and item.get("status") == "failed":
-                                        raise BudgetError("Repeated identical command without convergence; progress retained")
+                                        raise BudgetError("Repeated identical command without convergence; progress retained", scope="operation")
                                 if receipt["tool_events"] > bound(self.limits.get("agent_events")):
-                                    raise BudgetError("Native tool event budget exhausted")
+                                    raise BudgetError("Native tool event budget exhausted", scope="operation")
                         write_json(self.state_path, self.state)
                         write_json(self.work / "progress.json", {"phase": phase, "receipts": self.receipts})
                 proc.wait(timeout=5)
@@ -264,8 +271,12 @@ class NativeSession:
                     raise
                 if isinstance(exc, SourceHandoffError):
                     raise
-                if isinstance(exc, (TimeoutError, BudgetError)):
-                    raise BudgetError(redact(exc)) from exc
+                if isinstance(exc, BudgetError):
+                    raise
+                if isinstance(exc, TimeoutError):
+                    raise BudgetError(redact(exc), scope="operation") from exc
+                if isinstance(exc, OSError):
+                    raise
                 raise ModelCallError(redact(exc)) from exc
             finally:
                 reader.join(timeout=3)
