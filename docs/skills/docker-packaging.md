@@ -1,6 +1,13 @@
 # Tool skill packaging
 
-Apply the [minimum requirements](minimum.md) with the smallest adequate file set. One recognizable capability has coherent inputs, outputs and independently inspectable results. Neither a complete software library nor every API function automatically defines one skill.
+Apply tool-workflow eligibility and target-version selection from docker-minimum.md during discovery, environment preparation, authoring and semantic review. Keep selection provenance in internal records.
+
+
+Apply the [minimum requirements](docker-minimum.md) with the smallest adequate file set. One recognizable capability has coherent inputs, outputs and independently inspectable results. Neither a complete software library nor every API function automatically defines one skill.
+
+Create supporting files only for a consumer need. Omit empty directories, construction reports,
+duplicate inventories and process records. runtime.json is generated from the Skill's selected
+requirements; report incorrect host-owned fields as environment feedback instead of editing them.
 
 ## Source and behavior
 
@@ -19,7 +26,7 @@ capability-name/
   assets/               # necessary small inputs/templates
 ```
 
-SKILL.md contains the normal path, decision-changing boundaries, essential prerequisites, usable example and result handling. Follow the minimum standard's title and organization guidance without a fixed chapter template. Long parameter details or uncommon modes may move to conditionally linked references. Keep common-path correctness in the main file; do not copy complete API references.
+SKILL.md contains the normal path, decision-changing boundaries, essential prerequisites, usable example and result handling. Follow the minimum standard's title and organization guidance without a fixed chapter template beyond the runtime section template. Long parameter details or uncommon modes may move to conditionally linked references. Keep common-path correctness in the main file; do not copy complete API references.
 
 A reference needs a usage purpose, such as setup, parameter lookup or a method needed for the task.
 Put the link where that need arises and explain conditional reading when appropriate. There is no
@@ -38,7 +45,7 @@ A pure package must be independently usable with its declared inputs: name and l
 external tools, relevant source versions and official installation/resource entrypoints. Do not
 assume access to the build conversation, private source index or sibling package.
 
-Document existing prerequisites only when necessary; no generated Docker/Conda environments or automatic dependency installation. Preserve original structures unless the source-supported operation explicitly transforms them. Clearly distinguish transformed output from original input.
+Document prerequisites only when necessary. The pipeline prepares shared Docker environments; the Skill package does not contain provisioning scripts or install host dependencies. Preserve original structures unless the source-supported operation explicitly transforms them. Clearly distinguish transformed output from original input.
 
 ## Review and information value
 
@@ -52,4 +59,4 @@ are required. Missing local target dependencies do not block sound instructions.
 Writing basis and review findings stay in build records, not the runtime package. Source/content
 approval does not establish runtime success, scientific adequacy or Agent benefit.
 
-Binary support assets may be delivered when useful and source/license conditions are understood. Do not treat all resources as UTF-8 text. Candidate scope and file organization may evolve with evidence; record meaningful adjustments outside runtime context. No server/Docker provisioning is performed.
+Binary support assets may be delivered when useful and source/license conditions are understood. Do not treat all resources as UTF-8 text. Candidate scope and file organization may evolve with evidence; record meaningful adjustments outside runtime context. No service deployment is performed by the Skill; shared image construction is a separate pipeline responsibility.

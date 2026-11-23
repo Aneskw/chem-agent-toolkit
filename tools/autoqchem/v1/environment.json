@@ -1,0 +1,161 @@
+{
+  "id": "autoqchem",
+  "version": "v1",
+  "platform": "linux/amd64",
+  "base_image": "mambaorg/micromamba@sha256:ce2026639d612fbe837a35ca9d513292a8d776a24a5e6c82cccf9dddf45ad3d2",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "sha256": "385cc77db617e32ba66bcff4ebaa22a4b77dd1fc7b04d7cc1fc345c80273f479",
+      "bytes": 17
+    },
+    {
+      "path": "Dockerfile",
+      "sha256": "9fab169e78fab6ebe9d6079d80c406aa37a5cfe219922c0ff1323944359f4f3e",
+      "bytes": 1249
+    },
+    {
+      "path": "patch_import.py",
+      "sha256": "6da71c847bab131ee85835bb86f61eb394d86ee149f71c1fd2ec83f9365661b1",
+      "bytes": 1084
+    },
+    {
+      "path": "probe.py",
+      "sha256": "81671c730cc77cbfab76c562ea4159045199df3cfff1626e8e0ddd8d650416a6",
+      "bytes": 2051
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "a831d39aadb4e766934c956b6bfddc7396bf553f4a9d551d7ad59087fd5af519",
+      "bytes": 504
+    }
+  ],
+  "image": "ghcr.io/jinselw/chem-tools:autoqchem-v1",
+  "digest": "sha256:d52ef79aa0024a4461fcc3e7b6f06d1e6103a86c32378867a9105fae3a7158ec",
+  "probe": [
+    "python",
+    "/opt/autoqchem/probe.py"
+  ],
+  "tools": [
+    {
+      "name": "Python",
+      "version": "3.12.16",
+      "kind": "runtime"
+    },
+    {
+      "name": "openbabel",
+      "version": "3.2.1",
+      "kind": "system"
+    },
+    {
+      "name": "micromamba",
+      "version": "2.3.2",
+      "kind": "executable"
+    },
+    {
+      "name": "auto-qchem",
+      "version": "1.3.16",
+      "kind": "python"
+    },
+    {
+      "name": "numpy",
+      "version": "2.5.4",
+      "kind": "python"
+    },
+    {
+      "name": "pandas",
+      "version": "3.1.1",
+      "kind": "python"
+    },
+    {
+      "name": "scipy",
+      "version": "1.18.1",
+      "kind": "python"
+    },
+    {
+      "name": "rdkit",
+      "version": "2026.9.1",
+      "kind": "python"
+    },
+    {
+      "name": "PyYAML",
+      "version": "6.0.3",
+      "kind": "python"
+    },
+    {
+      "name": "fabric",
+      "version": "3.2.3",
+      "kind": "python"
+    },
+    {
+      "name": "paramiko",
+      "version": "5.1.0",
+      "kind": "python"
+    },
+    {
+      "name": "pymongo",
+      "version": "4.19.0",
+      "kind": "python"
+    },
+    {
+      "name": "appdirs",
+      "version": "1.4.4",
+      "kind": "python"
+    },
+    {
+      "name": "ipywidgets",
+      "version": "8.1.9",
+      "kind": "python"
+    },
+    {
+      "name": "py3Dmol",
+      "version": "2.5.5",
+      "kind": "python"
+    },
+    {
+      "name": "jupyterlab",
+      "version": "4.6.6",
+      "kind": "python"
+    },
+    {
+      "name": "notebook",
+      "version": "7.6.5",
+      "kind": "python"
+    },
+    {
+      "name": "xlrd",
+      "version": "2.0.2",
+      "kind": "python"
+    },
+    {
+      "name": "openpyxl",
+      "version": "3.1.5",
+      "kind": "python"
+    },
+    {
+      "name": "tqdm",
+      "version": "4.70.1",
+      "kind": "python"
+    },
+    {
+      "name": "matplotlib",
+      "version": "3.11.2",
+      "kind": "python"
+    },
+    {
+      "name": "pip",
+      "version": "26.3",
+      "kind": "python"
+    },
+    {
+      "name": "setuptools",
+      "version": "84.2.1",
+      "kind": "python"
+    },
+    {
+      "name": "wheel",
+      "version": "0.48.0",
+      "kind": "python"
+    }
+  ]
+}

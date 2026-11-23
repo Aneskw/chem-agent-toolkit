@@ -18,14 +18,16 @@ from creation_pipeline.shared.retention import pin, clean
 from creation_pipeline.resources.intake import Sources
 
 
-IMAGE = 'ghcr.io/example/project/env@sha256:' + 'a' * 64
+DIGEST = 'sha256:' + 'a' * 64
+IMAGE = 'ghcr.io/example/project:env-python-v1'
 
 
 def env_plan():
     return {'status': 'ready', 'reason': '', 'resume_when': '', 'selection': 'new',
         'environment_id': 'env-python', 'platform': 'linux/amd64', 'base_image': 'python:3.11',
         'tools': [{'name': 'python', 'version': '3.11', 'kind': 'runtime', 'probe': ['python', '-V']}],
-        'contract_version': 2, 'conditions': {'accelerator': 'none', 'minimum_memory_gib': None, 'network_required': False},
+        'contract_version': 4, 'skill_tools': ['python'], 'skill_resources': [],
+        'conditions': {'accelerator': 'none', 'minimum_memory_gib': None, 'network_required': False},
         'resources': [], 'usage_notes': [], 'investigation_notes': [], 'unresolved': [], 'evidence': ['e1'],
         'files': [{'path': 'Dockerfile', 'content': 'FROM python:3.11\n'}], 'rationale': 'Documented runtime'}
 
@@ -65,7 +67,10 @@ class Session:
             if self.mode == 'mutating-review':
                 package = next((self.work / 'candidates').glob('*/package/SKILL.md'))
                 package.write_text(package.read_text(encoding='utf-8') + '\nUnreviewed replacement\n', encoding='utf-8')
-            return {'status': 'pass', 'resolution': 'none', 'findings': [], 'execution_items': [{
+            decisions = [{'unit_id': u['unit_id'], 'decision': ('exempt' if self.mode == 'exempt' else 'execute') if u['language'] == 'python' else 'runtime_example',
+                          'reason': 'Documented use', 'execution_ids': ['sample'] if u['language'] == 'python' and self.mode != 'exempt' else []}
+                         for u in context['code_inventory']]
+            return {'status': 'pass', 'resolution': 'none', 'findings': [], 'code_decisions': decisions, 'execution_items': [{
                 'id': 'sample', 'file': 'SKILL.md', 'start_line': 8, 'end_line': 8,
                 'necessary': self.mode != 'exempt', 'reason': 'Documented call' if self.mode == 'exempt' else 'Custom result',
                 'expected_check': 'Print 2'}]}
@@ -90,11 +95,13 @@ class Library:
     def ensure(self, plan, directory):
         if self.fail:
             raise ValueError('Docker unavailable')
-        return {**plan, 'id': 'env-python', 'version': '1', 'checks': 'passed', 'tag': 'local:1', 'image': None}
+        return {**plan, 'id': 'env-python', 'version': 'v1', 'state': 'built', 'checks': 'passed', 'tag': 'local:1', 'content_id': 'sha256:local', 'anonymous_access': {'status': 'unverified'}, 'image': None}
     def probe(self, *args):
         pass
     def publish(self, env):
-        return {**env, 'image': IMAGE}
+        return {**env, 'image': IMAGE, 'digest': DIGEST, 'anonymous_access': {'status': 'verified', 'image': IMAGE, 'digest': DIGEST}}
+    def verify_public(self, env):
+        return env
 
 
 class SharedCreationTests(unittest.TestCase):
@@ -102,6 +109,12 @@ class SharedCreationTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
+        tool_state = patch('creation_pipeline.shared.environment_state.STATE_ROOT', self.root / '.pipeline/tool-libraries')
+        tool_state.start()
+        self.addCleanup(tool_state.stop)
+        library_state = patch('creation_pipeline.shared.library.STATE_ROOT', self.root / '.pipeline/skill-libraries')
+        library_state.start()
+        self.addCleanup(library_state.stop)
         (self.root / 'source.txt').write_text('Documented print(2)', encoding='utf-8')
         self.config_path = self.root / 'input.json'
         self.config = {'resource_groups': [{'id': g, 'sources': [{'id': 'code', 'path': 'source.txt'}]} for g in ('a', 'b')]}
@@ -125,6 +138,38 @@ class SharedCreationTests(unittest.TestCase):
         self.assertEqual(set(p.name for p in package.iterdir()), {'SKILL.md', 'runtime.json'})
         installed = install(self.root / 'skills', 'skill-a', self.root / 'installed')
         self.assertTrue(Path(installed['installed']).is_dir())
+
+    def test_group_supplements_are_archived_and_verified_before_cleanup(self):
+        from creation_pipeline.resources.supplements import receive
+        from creation_pipeline.resources.workspace import sync_sources
+        from creation_pipeline.shared.retention import eligible
+
+        class ResearchSession(Session):
+            def stage(self, instructions, context, schema=None):
+                if context['_phase'] == 'environment':
+                    inbox = self.work / 'research/inbox'
+                    (inbox / 'manual.txt').write_text('Official Python print example: print(2)')
+                    write_json(inbox / 'manual.source.json', {
+                        'path': 'research/inbox/manual.txt', 'url': 'https://example.org/python',
+                        'reason': 'Confirm documented invocation', 'related_to': ['code'],
+                    })
+                    receive(self.work)
+                    sync_sources(self.sources, self.work)
+                return super().stage(instructions, context, schema)
+
+        with patch('creation_pipeline.shared.pipeline.EnvironmentLibrary', Library):
+            result = build(self.config_path, self.root / 'state', library_root=self.root / 'skills',
+                           _session_factory=ResearchSession)
+        self.assertEqual(result['status'], 'ready', result)
+        bid = result['build_id']
+        retained = self.root / 'state/records' / bid / 'groups/a/sources.json'
+        supplement = next(e for e in read_json(retained) if e.get('supplemental'))
+        content = Path(supplement['path'])
+        self.assertIn('print(2)', content.read_text())
+        eligible(self.root / 'state', bid)
+        content.write_text('Changed archived evidence')
+        with self.assertRaisesRegex(ValueError, 'snapshot changed'):
+            eligible(self.root / 'state', bid)
 
     def test_necessary_external_gap_is_pending_and_manual_evidence_bound(self):
         Session.mode = 'necessary'
@@ -241,7 +286,7 @@ class SharedCreationTests(unittest.TestCase):
     def test_container_work_paths_are_normalized_but_other_absolute_paths_rejected(self):
         case = {'item_id': 'x', 'files': [{'path': '/work/input.csv', 'content': 'x'}],
                 'command': ['python', '/code/x.py'], 'basis': 'Source',
-                'stdout_contains': [], 'output_files': ['/work/output.csv'], 'check_command': []}
+                'stdout_contains': ['documented result'], 'output_files': ['/work/output.csv'], 'check_command': []}
         plan = {'cases': [case], 'deferred': []}
         validate_plan([{'id': 'x', 'necessary': True}], plan)
         self.assertEqual(case['files'][0]['path'], 'input.csv')
@@ -274,15 +319,22 @@ class SharedCreationTests(unittest.TestCase):
     def test_build_publish_reuse_and_version_expansion_preserve_old_materials(self):
         config = load_config(self.config_path)
         config['environments'].update(root=str(self.root / 'environments'),
-            image_prefix='ghcr.io/example/project', source_url='https://github.com/example/project')
+            repository='ghcr.io/example/project', image_prefix='ghcr.io/example/project', source_url='https://github.com/example/project')
         calls = []
         current = env_plan()
-        repository = 'ghcr.io/example/project/env-python'
+        repository = 'ghcr.io/example/project'
+        class FakeRegistry:
+            tags = {}
+            def resolve(self, image, authenticated=False): return self.tags.get(image)
+            def public(self, image, digest, platform): return {'status': 'verified', 'image': image, 'digest': digest}
+        registry = FakeRegistry()
         def docker(command, timeout):
             calls.append(command)
             stdout = ''
+            if command[:2] == ['docker', 'push']:
+                registry.tags[command[-1]] = DIGEST
             if command[:3] == ['docker', 'image', 'inspect']:
-                stdout = json.dumps([{'Os': 'linux', 'Architecture': 'amd64',
+                stdout = json.dumps([{'Id': 'sha256:' + 'c'*64, 'Os': 'linux', 'Architecture': 'amd64',
                     'RepoDigests': [repository + '@sha256:' + 'a'*64] if command[-1].startswith(repository)
                                    else ['python@sha256:' + 'b'*64]}])
             if command[:3] == ['docker', 'run', '--rm']:
@@ -290,10 +342,10 @@ class SharedCreationTests(unittest.TestCase):
             return {'exit_code': 0, 'stdout': stdout, 'stderr': ''}
         current['tools'][0]['probe'] = ['probe-python']
         work = self.root / 'attempt'; work.mkdir()
-        library = EnvironmentLibrary(config, self.root / 'state', docker)
+        library = EnvironmentLibrary(config, self.root / 'state', docker, registry=registry)
         first = library.ensure(current, work)
         first = library.publish(first)
-        self.assertEqual(first['image'], IMAGE.replace('/env@', '/env-python@'))
+        self.assertEqual(first['image'], IMAGE)
         original_files = copy.deepcopy(first['files'])
         reused = library.ensure(current, work)
         self.assertTrue(reused['reuse'])
@@ -305,7 +357,9 @@ class SharedCreationTests(unittest.TestCase):
         expanded = library.ensure(current, work)
         self.assertNotEqual(expanded['version'], first['version'])
         self.assertEqual(library.records()[0]['files'], original_files)
-        self.assertTrue(any(c[:3] == ['docker', '--config', c[2]] and 'manifest' in c for c in calls if len(c)>2))
+        self.assertEqual(first['anonymous_access']['status'], 'verified')
+        self.assertEqual(first['version'], 'v1')
+        self.assertEqual(expanded['version'], 'v2')
 
     def test_probe_wrong_version_cannot_qualify_environment(self):
         config = load_config(self.config_path)

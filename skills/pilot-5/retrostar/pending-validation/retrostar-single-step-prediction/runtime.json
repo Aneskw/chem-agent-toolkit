@@ -1,0 +1,62 @@
+{
+  "image": "ghcr.io/jinselw/chem-tools:edbo-v2",
+  "platform": "linux/amd64",
+  "environment": {
+    "tools": [
+      {
+        "name": "Python",
+        "version": "3.7.5",
+        "kind": "runtime"
+      },
+      {
+        "name": "torch",
+        "version": "1.3.1+cpu",
+        "kind": "python"
+      },
+      {
+        "name": "pandas",
+        "version": "1.0.1",
+        "kind": "python"
+      },
+      {
+        "name": "numpy",
+        "version": "1.18.1",
+        "kind": "python"
+      },
+      {
+        "name": "rdkit",
+        "version": "2019.09.3",
+        "kind": "python"
+      },
+      {
+        "name": "retro_star",
+        "version": "60e7a24213810706a7075d113704c9320158d726",
+        "kind": "python"
+      },
+      {
+        "name": "mlp_retrosyn",
+        "version": "60e7a24213810706a7075d113704c9320158d726",
+        "kind": "python"
+      },
+      {
+        "name": "rdchiral",
+        "version": "60e7a24213810706a7075d113704c9320158d726",
+        "kind": "python"
+      },
+      {
+        "name": "tqdm",
+        "version": "4.43.0",
+        "kind": "python"
+      }
+    ]
+  },
+  "resources": [
+    {
+      "name": "retrostar-model-assets",
+      "url": "https://www.dropbox.com/s/ar9cupb18hv96gj/retro_data.zip?dl=0",
+      "version": "",
+      "included_in_image": false,
+      "usage": "Supply local saved_rollout_state_1_2048.ckpt and its matching ordered template_rules_1.dat to MLPModel(checkpoint_path, template_path, device=-1, fp_dim=2048)."
+    }
+  ]
+}

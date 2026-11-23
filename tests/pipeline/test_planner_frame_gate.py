@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import unittest
 
-from validation.planner_frame_observation import ProposedObserver, launch_gate, safe_unknown_log
+from validation.checks.planner_frame_observation import ProposedObserver, launch_gate, safe_unknown_log
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -93,7 +93,7 @@ class FrameContractTests(unittest.TestCase):
         self.assertNotIn(secret, json.dumps(safe))
 
     def test_installed_source_explains_signal_loss(self):
-        sources = json.loads((ROOT/'validation/planner-frame-gate/source-excerpts.json').read_text())
+        sources = json.loads((ROOT/'validation/fixtures/transport/frame-source-excerpts.json').read_text())
         by_path = {s['path']: '\n'.join(r['text'] for r in s['ranges']) for s in sources['sources']}
         pump = by_path['codex-api/src/endpoint/responses_websocket.rs']
         self.assertIn('Ok(Message::Pong(_)) => {}', pump)

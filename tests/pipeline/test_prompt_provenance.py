@@ -18,7 +18,7 @@ from pathlib import Path
 from creation_pipeline.runtime import planner
 
 ROOT = Path(__file__).resolve().parents[2]
-SPEC = ROOT / 'validation/deepseek-api/verify_acceptance_prompt.py'
+SPEC = ROOT / 'validation/checks/verify_acceptance_prompt.py'
 
 
 def load_verifier():
@@ -51,7 +51,7 @@ class PromptProvenanceTests(unittest.TestCase):
     def test_the_recorded_provenance_matches_the_current_code(self):
         problems = self.verify.check(verbose=False)
         self.assertEqual(problems, [], '\n'.join(problems))
-        recorded = json.loads((ROOT / 'validation/deepseek-api/prompt-provenance.json')
+        recorded = json.loads((ROOT / 'validation/fixtures/planner/provenance.json')
                               .read_text(encoding='utf-8'))
         self.assertEqual(recorded['code']['policy_sha256'],
                          self.verify.sha256(planner.POLICY))
@@ -69,7 +69,7 @@ class PromptProvenanceTests(unittest.TestCase):
         self.assertEqual(sent['schema_sha256'],
                          self.verify.sha256(planner.canonical_schema(planner.PLAN_SCHEMA)))
         self.assertEqual(sent['policy_sha256'], self.verify.sha256(planner.POLICY))
-        recorded = json.loads((ROOT / 'validation/deepseek-api/prompt-provenance.json')
+        recorded = json.loads((ROOT / 'validation/fixtures/planner/provenance.json')
                               .read_text(encoding='utf-8'))
         self.assertEqual(recorded['frozen_fixture']['prompt_sha256'] != sent['prompt_sha256'], True,
                          'the frozen fixture must not be the acceptance prompt')

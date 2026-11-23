@@ -1,0 +1,97 @@
+{
+  "image": "ghcr.io/jinselw/chem-tools:rxnmapper-v1",
+  "platform": "linux/amd64",
+  "environment": {
+    "tools": [
+      {
+        "name": "Python",
+        "version": "3.11.18",
+        "kind": "runtime"
+      },
+      {
+        "name": "rxnmapper",
+        "version": "0.4.3",
+        "kind": "python"
+      },
+      {
+        "name": "transformers",
+        "version": "4.57.6",
+        "kind": "python"
+      },
+      {
+        "name": "setuptools",
+        "version": "80.10.2",
+        "kind": "python"
+      },
+      {
+        "name": "numpy",
+        "version": "2.4.6",
+        "kind": "python"
+      },
+      {
+        "name": "scipy",
+        "version": "1.17.1",
+        "kind": "python"
+      },
+      {
+        "name": "torch",
+        "version": "2.15.0+cpu",
+        "kind": "python"
+      },
+      {
+        "name": "pandas",
+        "version": "3.1.1",
+        "kind": "python"
+      },
+      {
+        "name": "rxn-chem-utils",
+        "version": "1.6.0",
+        "kind": "python"
+      },
+      {
+        "name": "rdkit",
+        "version": "2026.9.1",
+        "kind": "python"
+      },
+      {
+        "name": "huggingface-hub",
+        "version": "0.36.2",
+        "kind": "python"
+      },
+      {
+        "name": "pyyaml",
+        "version": "6.0.3",
+        "kind": "python"
+      },
+      {
+        "name": "tokenizers",
+        "version": "0.22.2",
+        "kind": "python"
+      },
+      {
+        "name": "safetensors",
+        "version": "0.8.0",
+        "kind": "python"
+      },
+      {
+        "name": "tqdm",
+        "version": "4.70.1",
+        "kind": "python"
+      },
+      {
+        "name": "rxn-utils",
+        "version": "2.0.0",
+        "kind": "python"
+      }
+    ]
+  },
+  "resources": [
+    {
+      "name": "rxnmapper-albert",
+      "url": "https://files.pythonhosted.org/packages/ff/b0/012426a039b6e88352d48f6381f165f5eb9225939814d3c518df51a176ec/rxnmapper-0.4.3-py3-none-any.whl",
+      "version": "0.4.3",
+      "included_in_image": true,
+      "usage": "Bundled by the pinned RXNMapper wheel; inference loads its pretrained ALBERT checkpoint, configuration and SMILES tokenizer locally from rxnmapper/models/transformers/albert_heads_8_uspto_all_1310k."
+    }
+  ]
+}

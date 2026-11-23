@@ -6,7 +6,7 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 
-path=Path(__file__).resolve().parents[2]/'validation/deepseek-api/measure_shared_tool_paths.py'
+path=Path(__file__).resolve().parents[2]/'validation/checks/storage_metrics.py'
 spec=importlib.util.spec_from_file_location('shared_path_metrics',path)
 metrics=importlib.util.module_from_spec(spec);spec.loader.exec_module(metrics)
 

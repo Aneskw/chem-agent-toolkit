@@ -1,0 +1,231 @@
+{
+  "id": "edbo",
+  "version": "v2",
+  "platform": "linux/amd64",
+  "base_image": "ghcr.io/jinselw/chem-tools@sha256:e939ef5c984c02876db5a779ef1a66d77329a71e7471c484c11e63419e272a04",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "sha256": "385cc77db617e32ba66bcff4ebaa22a4b77dd1fc7b04d7cc1fc345c80273f479",
+      "bytes": 17
+    },
+    {
+      "path": "Dockerfile",
+      "sha256": "ad679c5b5288eabc76d68ef24bb90356e2958c0d9c1e9e7e88feef0966e85973",
+      "bytes": 857
+    },
+    {
+      "path": "fetch_source.py",
+      "sha256": "a222d0a1447019d6caa631e6eae0433d7b93b6658ed556073f2ef37c9be0889b",
+      "bytes": 1445
+    },
+    {
+      "path": "probe.py",
+      "sha256": "10229b6fc59710903c8d01f31592ad1b960476d25b89f49386d27a0b619db333",
+      "bytes": 2877
+    },
+    {
+      "path": "requirements.lock",
+      "sha256": "19634b38bcb431823851a692a7e193e15df0a208110e499cd96c5d052a8ba069",
+      "bytes": 97
+    }
+  ],
+  "image": "ghcr.io/jinselw/chem-tools:edbo-v2",
+  "digest": "sha256:7c0d1e198646b28796e7ce3b3f7ff499cb27bd53062a7dccaad3348491a2a036",
+  "probe": [
+    "python",
+    "/opt/edbo/probe.py"
+  ],
+  "tools": [
+    {
+      "name": "Python",
+      "version": "3.7.5",
+      "kind": "runtime"
+    },
+    {
+      "name": "edbo",
+      "version": "0.1.0",
+      "kind": "python"
+    },
+    {
+      "name": "torch",
+      "version": "1.3.1+cpu",
+      "kind": "python"
+    },
+    {
+      "name": "gpytorch",
+      "version": "1.0.0",
+      "kind": "python"
+    },
+    {
+      "name": "pyro-ppl",
+      "version": "1.1.0",
+      "kind": "python"
+    },
+    {
+      "name": "pandas",
+      "version": "1.0.1",
+      "kind": "python"
+    },
+    {
+      "name": "numpy",
+      "version": "1.18.1",
+      "kind": "python"
+    },
+    {
+      "name": "scipy",
+      "version": "1.4.1",
+      "kind": "python"
+    },
+    {
+      "name": "scikit-learn",
+      "version": "0.22.1",
+      "kind": "python"
+    },
+    {
+      "name": "rdkit",
+      "version": "2019.09.3",
+      "kind": "python"
+    },
+    {
+      "name": "mordred",
+      "version": "1.2.0",
+      "kind": "python"
+    },
+    {
+      "name": "pyclustering",
+      "version": "0.9.3.1",
+      "kind": "python"
+    },
+    {
+      "name": "matplotlib",
+      "version": "3.1.3",
+      "kind": "python"
+    },
+    {
+      "name": "seaborn",
+      "version": "0.10.0",
+      "kind": "python"
+    },
+    {
+      "name": "dill",
+      "version": "0.3.1.1",
+      "kind": "python"
+    },
+    {
+      "name": "xlrd",
+      "version": "1.2.0",
+      "kind": "python"
+    },
+    {
+      "name": "ipython",
+      "version": "7.12.0",
+      "kind": "python"
+    },
+    {
+      "name": "networkx",
+      "version": "2.4",
+      "kind": "python"
+    },
+    {
+      "name": "pip",
+      "version": "20.0.2",
+      "kind": "python"
+    },
+    {
+      "name": "setuptools",
+      "version": "45.2.0.post20200210",
+      "kind": "python"
+    },
+    {
+      "name": "wheel",
+      "version": "0.34.2",
+      "kind": "python"
+    },
+    {
+      "name": "libxrender1",
+      "version": "1:0.9.12-1",
+      "kind": "system"
+    },
+    {
+      "name": "libxext6",
+      "version": "2:1.3.4-1+b3",
+      "kind": "system"
+    },
+    {
+      "name": "retro_star",
+      "version": "60e7a24213810706a7075d113704c9320158d726",
+      "kind": "python",
+      "probe": [
+        "python",
+        "/opt/retrostar/probe.py",
+        "retro_star",
+        "60e7a24213810706a7075d113704c9320158d726"
+      ]
+    },
+    {
+      "name": "mlp_retrosyn",
+      "version": "60e7a24213810706a7075d113704c9320158d726",
+      "kind": "python",
+      "probe": [
+        "python",
+        "/opt/retrostar/probe.py",
+        "mlp_retrosyn",
+        "60e7a24213810706a7075d113704c9320158d726"
+      ]
+    },
+    {
+      "name": "rdchiral",
+      "version": "60e7a24213810706a7075d113704c9320158d726",
+      "kind": "python",
+      "probe": [
+        "python",
+        "/opt/retrostar/probe.py",
+        "rdchiral",
+        "60e7a24213810706a7075d113704c9320158d726"
+      ]
+    },
+    {
+      "name": "tqdm",
+      "version": "4.43.0",
+      "kind": "python",
+      "probe": [
+        "python",
+        "/opt/retrostar/probe.py",
+        "tqdm",
+        "4.43.0"
+      ]
+    },
+    {
+      "name": "graphviz",
+      "version": "0.20.1",
+      "kind": "python",
+      "probe": [
+        "python",
+        "/opt/retrostar/probe.py",
+        "graphviz",
+        "0.20.1"
+      ]
+    },
+    {
+      "name": "Graphviz",
+      "version": "2.42.4-3",
+      "kind": "executable",
+      "probe": [
+        "python",
+        "/opt/retrostar/probe.py",
+        "Graphviz",
+        "2.42.4-3"
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "name": "retrostar-model-assets",
+      "url": "https://www.dropbox.com/s/ar9cupb18hv96gj/retro_data.zip?dl=0",
+      "version": "",
+      "included_in_image": false,
+      "usage": "Supply local building-block CSV with mol column or a pickle collection, template_rules_1.dat and its matching saved_rollout_state_1_2048.ckpt. Supply best_epoch_final_4.pt when use_value_fn=True. Pass explicit RSPlanner paths, or place dataset/, one_step_model/ and saved_models/ under /opt/retrostar/src/retro_star/."
+    }
+  ]
+}

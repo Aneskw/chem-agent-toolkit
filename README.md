@@ -1,85 +1,104 @@
 # Research Skill Creation Pipeline
 
-The default creation workflow now shares **tool environments**, keeps task code in pure Skill
-packages, and executes only necessary custom logic after full semantic review. Start with
-[shared environment creation](docs/pipeline/shared-creation.md) and the
-[new example](examples/shared-environments/README.md). Resource groups run serially; qualified
-packages enter `verified/` or `pending-validation/`. A working, published Docker environment is
-required for either class. Existing catalogs need an explicit migration or a new library directory.
+Discover tool Skills from papers, code and documentation, prepare shared Docker environments, author and independently review content, and run selected code checks before delivering Skill packages and downloadable images.
 
-The following startup and runtime-* documentation describes the retained **legacy script-image
-workflow**, selected explicitly with `workflow: legacy-script-images`.
+Resource groups run serially. Each group is discovered once, then its candidates are built individually. All groups share source snapshots and the tool environment library.
 
-Discover, author, independently review, freeze, execute and qualify source-grounded Skills.
-Failed candidates retain evidence for explicit recovery. `built`, `available`, `passed` and
-`accepted` are separate facts; importing or moving evidence does not inherit current qualification.
+## Prerequisites
 
-Start with [small-batch operations](docs/pipeline/batch-operations.md),
-[configuration](docs/pipeline/configuration.md) and the [readiness review](docs/integration/batch-readiness-20261102.md).
+| Component | Requirement |
+| --- | --- |
+| Python | 3.11 or later |
+| Codex CLI | Available on PATH, authenticated with your account, with access to the selected model |
+| Docker | A running Linux container engine; Windows can use Docker Desktop |
+| Git | Required when acquiring Git repository sources |
+| Network | Access to the model service, sources, registries and build dependencies |
+| Publishing account | Upload rights to the target GHCR Package; optional for local-only validation |
 
-## First run
+Live build validation currently covers CPU Linux/amd64. Scientific tools are installed in Docker images.
 
-New user / new computer: follow [new-machine setup](docs/pipeline/new-machine-setup.md) and the
-[portable descriptor example](examples/descriptor-screening/README.md). Create an isolated venv,
-run `init --model YOUR_MODEL --output .pipeline/configs/descriptor.json`, then `doctor` before generation.
-Historical validation configs and absolute evidence paths are not portable startup templates.
+Run from the repository root. These commands use Windows PowerShell:
 
-Python 3.11+, Git, the configured authenticated Codex executable and Linux/amd64 Docker are required
-for the current executable-Skill configuration. A desktop-bundled executable works on PATH; this is
-not ChatGPT UI automation. Host validation dependencies are declared in [requirements.txt](requirements.txt).
-PyYAML is optional for YAML. Explicit bootstrap installs validators only in a venv; generation does
-not install global host packages or repair Docker automatically.
-
-```text
-python -m creation_pipeline build CONFIG.json --preflight
-python -m creation_pipeline readiness CONFIG.json
-python -m creation_pipeline build CONFIG.json --state-dir NEW_STATE --library-dir NEW_LIBRARY --keep-debug
-python -m creation_pipeline library NEW_LIBRARY --include-candidates
+```powershell
+python scripts/bootstrap.py
+codex login
+docker info
+docker login ghcr.io -u YOUR_GITHUB_USERNAME
 ```
 
-Preflight validates configuration only. Readiness observes known prerequisites with zero inference
-and zero construction, without qualification. Production defaults have no aggregate cap: set explicit
-model/time/candidate budgets before batch use. Admitted model stages are not HTTP counts or fees.
+Bootstrap creates `.venv` and installs the pipeline's JSON Schema validation and YAML parsing dependencies from [requirements.txt](requirements.txt). Model authentication uses the Codex CLI account; no model API key file is required. At the GHCR password prompt, enter a classic token with `write:packages`. The publishing account can be independent of the source repository owner.
 
-## Implemented scope
+See [Codex CLI](https://learn.chatgpt.com/docs/codex/cli) for client setup and [GitHub Container registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry) for publishing credentials. On Linux, run bootstrap with Python 3.11+ and replace `.\.venv\Scripts\python.exe` below with `.venv/bin/python`.
 
-- Exact pinned dependency environment sharing and complete ToolArtifact reuse before environment
-  planning, for supported closed Python, fixed JSON-resource and Open Babel profiles. A hit still
-  requires independent review, current acceptance compilation, actual execution and qualification.
-- Explicit backends, without fallback. The current scoped-contract configuration uses Codex for both
-  native and structured stages. Opt-in DeepSeek remains supported independently for either.
-- Durable accepted/candidates library, installation, import, migration and explicit recovery.
-- [Local management](docs/pipeline/local-management-api.md) and
-  [read-only reverse references](docs/pipeline/reverse-references.md), with versioned errors and evidence.
+## Input configuration
 
-See the [current sharing design](docs/integration/shared-tool-layer-current-design.md) for support
-boundaries and actual evidence. Arbitrary dynamic loading/external processes, remote distribution,
-HTTP/multitenancy, automatic dependency merging and GC are outside scope. Start sequentially; no
-campaign-wide budget, production queue or multi-worker scheduler is provided.
+Save `input.json` in the repository root. Replace `your-account` with your lowercase publishing namespace:
 
-```text
-python -m creation_pipeline check OUTPUT --config CONFIG.json
-python -m creation_pipeline runtime-inspect LIBRARY --candidate NAME
-python -m creation_pipeline runtime-validate LIBRARY --candidate NAME
-python -m creation_pipeline install LIBRARY --name NAME --destination DESTINATION
-python -m creation_pipeline manage REQUEST.json
+```json
+{
+  "workflow": "shared-environments",
+  "prompt": "Discover source-grounded RDKit tool Skills with clear inputs and outputs.",
+  "model": {"backend": "codex_cli"},
+  "resource_groups": [
+    {
+      "id": "rdkit",
+      "sources": [
+        {"id": "guide", "url": "https://www.rdkit.org/docs/GettingStartedInPython.html"},
+        {"id": "api", "url": "https://www.rdkit.org/docs/source/rdkit.Chem.Descriptors.html", "related_to": ["guide"]}
+      ]
+    }
+  ],
+  "research_access": "supplement",
+  "network": true,
+  "environments": {
+    "root": "./tools",
+    "repository": "ghcr.io/your-account/chem-tools"
+  }
+}
 ```
 
-`check` is static auditing, not new qualification. `runtime-resume` can invoke models or rebuild;
-inspect failures and budget before recovery. Do not concurrently resume one run. See
-[recovery](docs/pipeline/runtime-recovery.md) and [execution](docs/pipeline/docker-execution.md).
+Paths are relative to the configuration file. Put related papers, code and documentation in one resource group. Set `model.name` to select a model explicitly, or omit it to use the CLI configuration/default. Use the same `environments.root` across batches to share environments. See [configuration](docs/pipeline/configuration.md) for all fields.
 
-## Verification and hygiene
+You can also generate a configuration with `.\.venv\Scripts\python.exe -m creation_pipeline init --model YOUR_MODEL --output input.json`, then edit its sources and publishing target.
 
-```text
-python -m unittest discover -s tests -q
-python validation/deepseek-api/verify_prompt_contract.py
-python validation/deepseek-api/verify_acceptance_prompt.py check
-python validation/deepseek-api/verify_planner.py check
-python validation/deepseek-api/verify_skillnet_contract.py
+## Check and build
+
+```powershell
+.\.venv\Scripts\python.exe -m creation_pipeline build input.json --preflight
+.\.venv\Scripts\python.exe -m creation_pipeline readiness input.json --mode build
+.\.venv\Scripts\python.exe -m creation_pipeline build input.json --state-dir .pipeline/shared --library-dir skills-shared
 ```
 
-Fixtures prove mechanisms, not live model quality or scientific validity. Every live round has new
-evidence; unsuccessful rounds are retained. The [October snapshot](docs/integration/current-acceptance-20261029.md)
-is historical, not the current test count/backend. Credentials stay in ignored `.env`. Libraries,
-`.pipeline` operational data, registries, failure evidence and global Docker data are not disposable caches.
+The first two commands validate configuration and observe known prerequisites without model calls. Build performs actual model and file-tool permission checks before starting the workflow. Candidate counts, repair rounds and model calls have no default aggregate cap; configure `limits` as needed.
+
+A newly created GHCR Package is Private by default. If anonymous access blocks delivery, make the Package Public and resume with the returned `build_id`:
+
+```powershell
+.\.venv\Scripts\python.exe -m creation_pipeline resume BUILD_ID --state-dir .pipeline/shared --library-dir skills-shared
+```
+
+Resume retains completed authoring, builds and code verification. Further tags in a public Package normally need no visibility change.
+
+## Results
+
+```text
+skills-shared/
+  verified/NAME/              # Skills meeting all delivery requirements
+  pending-validation/NAME/    # Necessary code still needs validation
+tools/                       # Environment index, versions and full build materials
+.pipeline/shared/            # Workspaces, source snapshots, review and execution records
+.pipeline/skill-libraries/    # Private delivery indexes, locks and export staging
+```
+
+A Skill package contains `SKILL.md`, `runtime.json` and any useful scripts or references. Images are stored in Docker and the configured GHCR Package, using version tags such as `rdkit-v1`. Candidates with build or publication failures remain in internal records.
+
+The delivery directory contains packages only. Library commands find their private index automatically; build logs, catalog records, locks and staging directories are not included in installed Skills.
+
+```powershell
+.\.venv\Scripts\python.exe -m creation_pipeline library skills-shared --include-candidates
+.\.venv\Scripts\python.exe -m creation_pipeline install skills-shared --name SKILL_NAME --destination installed
+```
+
+For local-only validation, set `environments.publish=false`. This mode needs no GHCR login and does not export packages to the delivery library.
+
+See [the workflow](docs/pipeline/shared-creation.md), [operations](docs/pipeline/batch-operations.md), [examples](examples/README.md) and [documentation index](docs/README.md).

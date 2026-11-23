@@ -1,0 +1,335 @@
+{
+  "id": "rxnmapper",
+  "version": "v1",
+  "platform": "linux/amd64",
+  "base_image": "python@sha256:07d4824036af339fa1b6ef769cc99d9c10a141769538b52b3b597c84f7a7b535",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "sha256": "385cc77db617e32ba66bcff4ebaa22a4b77dd1fc7b04d7cc1fc345c80273f479",
+      "bytes": 17
+    },
+    {
+      "path": "check_native.py",
+      "sha256": "134689b0b2a1c175055f096ad660d08de0e7fcf5eff6c052b0ede313461acacd",
+      "bytes": 668
+    },
+    {
+      "path": "Dockerfile",
+      "sha256": "0feff85f78f1e9b6bcfadaaae8583be9582b9264af5d56b3e4a0f8fe4631fdf3",
+      "bytes": 872
+    },
+    {
+      "path": "probe.py",
+      "sha256": "9dcb1c833748e9aedb7fa9483ec68be1b84247a00b0637ebf718882c32ec49db",
+      "bytes": 4319
+    },
+    {
+      "path": "requirements.lock",
+      "sha256": "9a8efa9b9524c3b0d6906ad3602b28d8ce9091a88b3e121779db2827a2d981ce",
+      "bytes": 4668
+    }
+  ],
+  "image": "ghcr.io/jinselw/chem-tools:rxnmapper-v1",
+  "digest": "sha256:230984c4139901b722d5b87b28754a725d8da21d36c5f9c2d2b711181e846fa0",
+  "probe": [
+    "python",
+    "/opt/rxnmapper/probe.py"
+  ],
+  "tools": [
+    {
+      "name": "Python",
+      "version": "3.11.18",
+      "kind": "runtime"
+    },
+    {
+      "name": "rxnmapper",
+      "version": "0.4.3",
+      "kind": "python"
+    },
+    {
+      "name": "transformers",
+      "version": "4.57.6",
+      "kind": "python"
+    },
+    {
+      "name": "setuptools",
+      "version": "80.10.2",
+      "kind": "python"
+    },
+    {
+      "name": "numpy",
+      "version": "2.4.6",
+      "kind": "python"
+    },
+    {
+      "name": "scipy",
+      "version": "1.17.1",
+      "kind": "python"
+    },
+    {
+      "name": "torch",
+      "version": "2.15.0+cpu",
+      "kind": "python"
+    },
+    {
+      "name": "pip",
+      "version": "26.3",
+      "kind": "python"
+    },
+    {
+      "name": "wheel",
+      "version": "0.48.0",
+      "kind": "python"
+    },
+    {
+      "name": "pandas",
+      "version": "3.1.1",
+      "kind": "python"
+    },
+    {
+      "name": "rxn-chem-utils",
+      "version": "1.6.0",
+      "kind": "python"
+    },
+    {
+      "name": "rdkit",
+      "version": "2026.9.1",
+      "kind": "python"
+    },
+    {
+      "name": "filelock",
+      "version": "4.2.10",
+      "kind": "python"
+    },
+    {
+      "name": "huggingface-hub",
+      "version": "0.36.2",
+      "kind": "python"
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "kind": "python"
+    },
+    {
+      "name": "pyyaml",
+      "version": "6.0.3",
+      "kind": "python"
+    },
+    {
+      "name": "regex",
+      "version": "2026.11.9",
+      "kind": "python"
+    },
+    {
+      "name": "requests",
+      "version": "2.34.2",
+      "kind": "python"
+    },
+    {
+      "name": "tokenizers",
+      "version": "0.22.2",
+      "kind": "python"
+    },
+    {
+      "name": "safetensors",
+      "version": "0.8.0",
+      "kind": "python"
+    },
+    {
+      "name": "tqdm",
+      "version": "4.70.1",
+      "kind": "python"
+    },
+    {
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "kind": "python"
+    },
+    {
+      "name": "sympy",
+      "version": "1.14.0",
+      "kind": "python"
+    },
+    {
+      "name": "networkx",
+      "version": "3.6.1",
+      "kind": "python"
+    },
+    {
+      "name": "jinja2",
+      "version": "3.1.6",
+      "kind": "python"
+    },
+    {
+      "name": "fsspec",
+      "version": "2026.9.0",
+      "kind": "python"
+    },
+    {
+      "name": "python-dateutil",
+      "version": "4.0.0",
+      "kind": "python"
+    },
+    {
+      "name": "attrs",
+      "version": "26.1.0",
+      "kind": "python"
+    },
+    {
+      "name": "click",
+      "version": "8.5.1",
+      "kind": "python"
+    },
+    {
+      "name": "rxn-utils",
+      "version": "2.0.0",
+      "kind": "python"
+    },
+    {
+      "name": "pillow",
+      "version": "13.0.0",
+      "kind": "python"
+    },
+    {
+      "name": "hf-xet",
+      "version": "1.8.0",
+      "kind": "python"
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.5.2",
+      "kind": "python"
+    },
+    {
+      "name": "idna",
+      "version": "3.20",
+      "kind": "python"
+    },
+    {
+      "name": "urllib3",
+      "version": "2.8.0",
+      "kind": "python"
+    },
+    {
+      "name": "certifi",
+      "version": "2026.10.23",
+      "kind": "python"
+    },
+    {
+      "name": "mpmath",
+      "version": "1.3.0",
+      "kind": "python"
+    },
+    {
+      "name": "markupsafe",
+      "version": "3.0.4",
+      "kind": "python"
+    },
+    {
+      "name": "tzdata",
+      "version": "2026.6",
+      "kind": "python"
+    },
+    {
+      "name": "diskcache",
+      "version": "5.6.3",
+      "kind": "python"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.14.3",
+      "kind": "python"
+    },
+    {
+      "name": "pydantic-settings",
+      "version": "2.16.2",
+      "kind": "python"
+    },
+    {
+      "name": "pymongo",
+      "version": "4.19.0",
+      "kind": "python"
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "kind": "python"
+    },
+    {
+      "name": "pydantic-core",
+      "version": "2.50.4",
+      "kind": "python"
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.5",
+      "kind": "python"
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.2.4",
+      "kind": "python"
+    },
+    {
+      "name": "dnspython",
+      "version": "2.9.2",
+      "kind": "python"
+    },
+    {
+      "name": "gcc-14-base",
+      "version": "14.2.0-19",
+      "kind": "system"
+    },
+    {
+      "name": "libgcc-s1",
+      "version": "14.2.0-19",
+      "kind": "system"
+    },
+    {
+      "name": "libstdc++6",
+      "version": "14.2.0-19",
+      "kind": "system"
+    },
+    {
+      "name": "zlib1g",
+      "version": "1:1.3.dfsg+really1.3.1-1+b1",
+      "kind": "system"
+    },
+    {
+      "name": "libexpat1",
+      "version": "2.8.3-1~deb13u1",
+      "kind": "system"
+    },
+    {
+      "name": "libx11-6",
+      "version": "2:1.8.12-1",
+      "kind": "system"
+    },
+    {
+      "name": "libxext6",
+      "version": "2:1.3.4-1+b3",
+      "kind": "system"
+    },
+    {
+      "name": "libxrender1",
+      "version": "1:0.9.12-1",
+      "kind": "system"
+    },
+    {
+      "name": "libquadmath0",
+      "version": "14.2.0-19",
+      "kind": "system"
+    }
+  ],
+  "resources": [
+    {
+      "name": "rxnmapper-albert",
+      "url": "https://files.pythonhosted.org/packages/ff/b0/012426a039b6e88352d48f6381f165f5eb9225939814d3c518df51a176ec/rxnmapper-0.4.3-py3-none-any.whl",
+      "version": "0.4.3",
+      "included_in_image": true,
+      "usage": "Bundled by the pinned RXNMapper wheel; inference loads its pretrained ALBERT checkpoint, configuration and SMILES tokenizer locally from rxnmapper/models/transformers/albert_heads_8_uspto_all_1310k."
+    }
+  ]
+}

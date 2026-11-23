@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from creation_pipeline.paths import ROOT, PROMPTS
 from creation_pipeline.artifacts.package import manifest
 from creation_pipeline.shared.schemas import REVIEW
@@ -13,10 +14,12 @@ def _author_once(session, config, plan, staging, feedback=None, previous=None):
     context = {**candidate_context(session, config, plan),
         "minimum": (ROOT / "docs/skills/docker-minimum.md").read_text(encoding="utf-8"),
         "packaging": (ROOT / "docs/skills/docker-packaging.md").read_text(encoding="utf-8"),
+        "runtime_template": (ROOT / "docs/skills/runtime-template.md").read_text(encoding="utf-8"),
         "feedback": feedback or [], "previous_artifact": ({k: previous[k] for k in ("basis", "issues", "files") if k in previous} if previous else None)}
     from creation_pipeline.artifacts.content_delivery import delivered, finish, validate_package
     staging.mkdir(parents=True, exist_ok=True)
-    token = digest(json.dumps({"plan": plan, "feedback": feedback or [], "runtime": context["environment_plan"]["runtime"]}, sort_keys=True).encode())
+    token = digest(json.dumps({"plan": plan, "feedback": feedback or [], "runtime": context["environment_plan"]["runtime"], "revision": config.get("_author_revision", 0),
+                              "standards": [instructions, context["minimum"], context["packaging"], context["runtime_template"]]}, sort_keys=True).encode())
     saved = delivered(session.work, staging, token)
     if saved is None:
         metadata = session.work / "deliveries" / (plan["name"] + "-metadata.json")
@@ -38,6 +41,8 @@ def _author_once(session, config, plan, staging, feedback=None, previous=None):
     validate_package(staging, config["limits"]["package_bytes"])
     from creation_pipeline.validation.basis import validate_basis
     saved["basis"] = validate_basis(saved.get("basis"), session.sources)
+    from creation_pipeline.artifacts.content_delivery import validate_adjustment
+    validate_adjustment(saved, session.sources)
     return {**saved, "files": [{**item, "purpose": "Delivered capability resource"} for item in manifest(staging)]}
 
 
@@ -62,9 +67,12 @@ def author(session, config, plan, staging, feedback=None, previous=None):
 
 def review(session, plan, artifact, checks, config=None):
     instructions = (PROMPTS / "content-review.md").read_text(encoding="utf-8")
+    from creation_pipeline.shared.verification import code_units
     context = {**candidate_context(session, config, plan, independent_review=True), "_phase": "review",
         "minimum": (ROOT / "docs/skills/docker-minimum.md").read_text(encoding="utf-8"),
         "packaging": (ROOT / "docs/skills/docker-packaging.md").read_text(encoding="utf-8"),
+        "runtime_template": (ROOT / "docs/skills/runtime-template.md").read_text(encoding="utf-8"),
+        "code_inventory": code_units(Path(artifact["package"])),
         "artifact": {k: artifact[k] for k in ("basis", "issues", "files") if k in artifact}, "checks": checks}
     previous_error = None
     while True:
@@ -84,6 +92,8 @@ def review(session, plan, artifact, checks, config=None):
                 for key in ("location", "problem", "evidence", "impact", "action", "category"):
                     if not isinstance(finding.get(key), str) or not finding[key].strip():
                         raise ValueError(f"findings[{index}].{key} requires text")
+                if finding['category'] == 'factual' and not finding['blocking']:
+                    raise ValueError('Established factual errors require blocking=true and correction/removal, even when the example runs')
             blocking = any(f["blocking"] for f in result["findings"])
             if result["status"] == "fail" and not blocking:
                 raise ValueError("fail requires an actionable blocking finding")

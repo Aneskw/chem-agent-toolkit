@@ -16,7 +16,7 @@ from creation_pipeline.records import clean_run, redact
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Discover reusable tool capabilities and build source-grounded skill packages")
     commands = parser.add_subparsers(dest="command", required=True)
-    child = commands.add_parser('init', help='Create the portable descriptor example configuration; never overwrites')
+    child = commands.add_parser('init', help='Generate a shared-environment input configuration; never overwrites')
     child.add_argument('--model', required=True, help='A model identifier available to your own Codex account')
     child.add_argument('--output', required=True)
     child = commands.add_parser('doctor', help='Zero-inference prerequisites and Codex flag/feature compatibility')
@@ -42,6 +42,7 @@ def main(argv=None):
     child = commands.add_parser("resume", help="Resume an interrupted native run from its local checkpoint")
     child.add_argument("build_id")
     child.add_argument("--extra-turns", type=int, default=0, help="Explicitly extend the saved turn budget; does not extend time")
+    child.add_argument('--image-repository', help='Resume publication into an explicit ghcr.io/account/package')
     child.add_argument("--rediscover", action="store_true", help="Re-enter discovery in the retained native session")
     child.add_argument("--state-dir", default=str(ROOT / ".pipeline"))
     child.add_argument("--no-adopt", action="store_true")
@@ -60,6 +61,8 @@ def main(argv=None):
     child.add_argument("path")
     child.add_argument("--name")
     child.add_argument("--include-candidates", action="store_true")
+    child = commands.add_parser('library-reindex', help='Recover package locations after private state loss; does not restore qualification')
+    child.add_argument('path')
     child = commands.add_parser("clean")
     child.add_argument("build_id")
     child.add_argument("--state-dir", default=str(ROOT / ".pipeline"))
@@ -114,7 +117,10 @@ def main(argv=None):
             child.add_argument("build_id")
     args = parser.parse_args(argv)
     try:
-        if args.command in ("pin", "unpin"):
+        if args.command == 'library-reindex':
+            from creation_pipeline.shared.library import reindex
+            result = reindex(args.path)
+        elif args.command in ("pin", "unpin"):
             from creation_pipeline.shared.retention import pin
             result = pin(args.state_dir, args.build_id, args.command == "pin")
         elif args.command == "prune":
@@ -158,7 +164,7 @@ def main(argv=None):
                                notify=lambda m: print(m, file=sys.stderr, flush=True))
         elif args.command == "resume":
             result = build(state_root=args.state_dir, resume_id=args.build_id, keep_debug=args.keep_debug,
-                no_adopt=args.no_adopt, rediscover=args.rediscover, extra_turns=args.extra_turns, draft_only=args.draft_only, library_root=args.library_dir,
+                no_adopt=args.no_adopt, rediscover=args.rediscover, extra_turns=args.extra_turns, image_repository=args.image_repository, draft_only=args.draft_only, library_root=args.library_dir,
                 notify=lambda m: print(m, file=sys.stderr, flush=True))
         elif args.command == "check":
             path = Path(args.path)
@@ -196,7 +202,8 @@ def main(argv=None):
                 result = {"status": "fail" if any(r["status"] == "fail" for r in reports) else "pass",
                           "checks": reports, "execution": "not_run", "scope": "static_only_not_installation_approval"}
         elif args.command == "install":
-            if (Path(args.output) / "catalog.json").exists() and json.loads((Path(args.output) / "catalog.json").read_text(encoding="utf-8")).get("workflow") == "shared-environments":
+            from creation_pipeline.shared.library import is_library
+            if is_library(args.output):
                 from creation_pipeline.shared.delivery import install as shared_install
                 if not args.name:
                     raise ValueError("Select --name for a shared environment Skill library")
@@ -208,7 +215,8 @@ def main(argv=None):
                 result = install(args.output, args.destination)
         elif args.command == "library":
             from creation_pipeline.artifacts.library import entries, get
-            if (Path(args.path) / "catalog.json").exists() and json.loads((Path(args.path) / "catalog.json").read_text(encoding="utf-8")).get("workflow") == "shared-environments":
+            from creation_pipeline.shared.library import is_library
+            if is_library(args.path):
                 from creation_pipeline.shared.delivery import entries as shared_entries
                 values = shared_entries(args.path, args.include_candidates)
                 result = {"skills": [v for v in values if not args.name or v["name"] == args.name]}

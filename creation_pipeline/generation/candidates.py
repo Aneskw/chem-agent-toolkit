@@ -2,10 +2,11 @@
 from pathlib import Path
 from creation_pipeline.records import read_json, write_json, safe_relative
 from creation_pipeline.artifacts.delivery import inside
-from creation_pipeline.resources.supplements import restore
+from creation_pipeline.resources.supplements import restore, receive
 
 
 def save_candidate(run, definition):
+    receive(run)
     candidate = read_json(inside(run, definition))
     from creation_pipeline.generation.discovery import normalize
     from creation_pipeline.models import validate_plan

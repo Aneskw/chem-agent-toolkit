@@ -13,7 +13,7 @@ from pathlib import Path
 from creation_pipeline.runtime import acceptance, planner
 
 ROOT = Path(__file__).resolve().parents[2]
-SPEC = ROOT / 'validation/deepseek-api/verify_prompt_contract.py'
+SPEC = ROOT / 'validation/checks/verify_prompt_contract.py'
 
 
 def load_audit():

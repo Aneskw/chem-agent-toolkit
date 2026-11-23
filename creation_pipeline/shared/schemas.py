@@ -11,6 +11,7 @@ RESOURCES = array(RESOURCE)
 DECISION = {'status': {'type': 'string', 'enum': ['ready', 'blocked']}, 'reason': S, 'resume_when': S}
 ENVIRONMENT = obj({**DECISION, 'selection': {'type': 'string', 'enum': ['reuse', 'extend', 'new']},
     'environment_id': S, 'environment_version': S, 'platform': S, 'base_image': S, 'tools': TOOLS, 'resources': RESOURCES,
+    'skill_tools': SS, 'skill_resources': SS,
     'conditions': obj({'accelerator': {'type': 'string', 'enum': ['none', 'nvidia', 'amd']},
         'minimum_memory_gib': {'type': ['number', 'null']}, 'network_required': B}),
     'usage_notes': SS, 'investigation_notes': SS, 'unresolved': SS, 'evidence': SS,
@@ -24,12 +25,18 @@ ITEM = {'id': S, 'file': S, 'start_line': {'type': 'integer'}, 'end_line': {'typ
         'necessary': B, 'reason': S, 'expected_check': S}
 REVIEW = copy.deepcopy(OLD_REVIEW)
 REVIEW['properties']['findings']['items']['properties']['category']['enum'] += ['concision']
+REVIEW['properties']['findings']['items']['properties']['category']['enum'] += ['factual']
 REVIEW['properties']['execution_items'] = array(ITEM)
 REVIEW['required'].append('execution_items')
+REVIEW['properties']['code_decisions'] = array({'unit_id': S, 'decision': {'type': 'string', 'enum': ['execute', 'exempt', 'runtime_example']}, 'reason': S, 'execution_ids': SS})
+REVIEW['required'].append('code_decisions')
 REVIEW['properties']['findings']['items']['properties']['owner'] = {'type': 'string', 'enum': ['content', 'environment']}
 REVIEW['properties']['findings']['items']['required'].append('owner')
 EXECUTION = obj({'status': {'type': 'string', 'enum': ['ready', 'blocked']}, 'reason': S,
-    'resume_when': S, 'blocked_owner': {'type': 'string', 'enum': ['none', 'content', 'external']}, 'cases': array({'item_id': S, 'files': array({'path': S, 'content': S}),
+    'resume_when': S, 'blocked_owner': {'type': 'string', 'enum': ['none', 'content', 'external']},
+    'asset_requests': array({'url': S, 'reason': S, 'related_to': SS}),
+    'cases': array({'item_id': S, 'files': array({'path': S, 'content': S}),
+        'inputs': array({'source': S, 'path': S, 'member': S, 'target': S}),
         'command': SS, 'expected_exit': {'type': 'integer'}, 'stdout_contains': SS,
         'output_files': SS, 'check_command': SS, 'basis': S}),
     'audit_risks': {'type': 'array', 'items': {'type': 'string', 'enum': ['context_injection', 'monkeypatch', 'uncertain_oracle', 'complex_wrapper']}},

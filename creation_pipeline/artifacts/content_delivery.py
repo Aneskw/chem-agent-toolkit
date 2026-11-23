@@ -44,6 +44,21 @@ def validate_package(package, limit=None):
     return files
 
 
+def validate_adjustment(data, sources):
+    update = data.get("candidate_update")
+    if not update:
+        return
+    if not isinstance(update, dict) or not isinstance(update.get("reason"), str) or not update["reason"].strip():
+        raise ValueError("candidate_update needs a concrete reason")
+    evidence = update.get("evidence")
+    if not isinstance(evidence, list) or not evidence or any(not isinstance(e, dict) for e in evidence):
+        raise ValueError('candidate_update.evidence must be [{"id":"registered eN","claim":"inspected fact and locator"}], not strings')
+    sources.validate_evidence(evidence)
+    for key in ("scope", "task", "entrypoint", "construction"):
+        if key in update and (not isinstance(update[key], str) or not update[key].strip()):
+            raise ValueError("candidate_update." + key + " must be nonempty text")
+
+
 def finish(run, package, token, metadata=None):
     phase_path = Path(run) / "active-phase.json"
     if phase_path.exists() and read_json(phase_path)["phase"] != "author":
@@ -60,10 +75,12 @@ def finish(run, package, token, metadata=None):
             raise ValueError(key + " must be an array")
     if "tests" in data or "verification" in data:
         raise ValueError("Execution metadata is retired; provide basis/issues/notes")
-    from creation_pipeline.resources.supplements import restore
+    from creation_pipeline.resources.supplements import restore, receive
+    receive(run)
     from creation_pipeline.validation.basis import validate_basis
     sources = restore(run)
     data["basis"] = validate_basis(data["basis"], sources)
+    validate_adjustment(data, sources)
     for issue in data["issues"]:
         if not isinstance(issue, dict) or type(issue.get("blocking")) is not bool or not issue.get("description"):
             raise ValueError("Issues need description and blocking boolean")

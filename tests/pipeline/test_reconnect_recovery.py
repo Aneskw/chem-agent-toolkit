@@ -141,7 +141,7 @@ class StructuredCallTests(unittest.TestCase):
     def test_batch2_replay_is_no_longer_a_failure(self):
         """Replay of the recorded batch-2 discovery event sequence."""
         tape = Path(__file__).resolve().parents[2] / \
-            'validation/final-acceptance-run/batch-2/agent-turn-001-events.jsonl'
+            'validation/fixtures/transport/event-stream.jsonl'
         lines = [json.loads(line) for line in tape.read_text(encoding='utf-8').splitlines() if line.strip()]
         stdout = '\n'.join(json.dumps({'type': e.get('type'), 'item': e.get('item'),
                                        'message': e.get('message'), 'usage': e.get('usage')})

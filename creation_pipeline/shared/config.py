@@ -11,6 +11,12 @@ def identifier(value):
     return value
 
 
+def repository_name(value):
+    if not isinstance(value, str) or not re.fullmatch(r'ghcr\.io/[a-z0-9][a-z0-9_-]*/[a-z0-9][a-z0-9._/-]*', value):
+        raise ValueError('repository must be one ghcr.io/account/package without a tag')
+    return value
+
+
 def load(path, legacy):
     path = Path(path).resolve()
     raw = path.read_text(encoding='utf-8-sig')
@@ -64,20 +70,24 @@ def load(path, legacy):
     if result['research_access'] not in {'supplement', 'known_only'}:
         raise ValueError('research_access must be supplement or known_only')
     env = data.get('environments', {})
-    if not isinstance(env, dict) or set(env) - {'root', 'image_prefix', 'source_url', 'operation_timeout', 'publish'}:
+    if not isinstance(env, dict) or set(env) - {'root', 'image_prefix', 'source_url', 'operation_timeout', 'publish', 'repository'}:
         raise ValueError('Unknown environments settings')
     env = dict(env)
-    env['root'] = str((path.parent / env.get('root', 'tools/environments')).resolve())
-    env.setdefault('image_prefix', '')
+    env['root'] = str((path.parent / env.get('root', 'tools')).resolve())
+    if env.get('repository') and env.get('image_prefix') and env['repository'] != env['image_prefix']:
+        raise ValueError('Use environments.repository, or image_prefix as its deprecated alias')
+    env['repository'] = env.get('repository') or env.get('image_prefix') or 'ghcr.io/jinselw/chem-tools'
+    env['image_prefix'] = env['repository']
     env.setdefault('source_url', '')
-    env.setdefault('operation_timeout', 600)
+    env.setdefault('operation_timeout', None)
     env.setdefault('publish', True)
     if type(env['publish']) is not bool:
         raise ValueError('environments.publish must be boolean')
-    if type(env['operation_timeout']) is not int or env['operation_timeout'] <= 0:
-        raise ValueError('operation_timeout must be a positive integer')
+    if env['operation_timeout'] is not None and (type(env['operation_timeout']) is not int or env['operation_timeout'] <= 0):
+        raise ValueError('operation_timeout must be null or a positive integer')
     if env['image_prefix'] and not re.fullmatch(r'[a-z0-9][a-z0-9./_-]+', env['image_prefix']):
         raise ValueError('image_prefix must be a registry/repository path without tag')
+    repository_name(env['repository'])
     result['environments'] = env
     if result['model']['backend'] != 'codex_cli':
         raise ValueError('Shared environment Agents require native tool access via codex_cli; deepseek_api remains available with workflow=legacy-script-images')

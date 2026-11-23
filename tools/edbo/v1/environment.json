@@ -1,0 +1,156 @@
+{
+  "id": "edbo",
+  "version": "v1",
+  "platform": "linux/amd64",
+  "base_image": "mambaorg/micromamba@sha256:ce2026639d612fbe837a35ca9d513292a8d776a24a5e6c82cccf9dddf45ad3d2",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "sha256": "385cc77db617e32ba66bcff4ebaa22a4b77dd1fc7b04d7cc1fc345c80273f479",
+      "bytes": 17
+    },
+    {
+      "path": "check_native.py",
+      "sha256": "7b2d011d3eb11f4e6364a57c2b0f0d0f74a67fff6f375d2c9757f06a6220a504",
+      "bytes": 1034
+    },
+    {
+      "path": "Dockerfile",
+      "sha256": "d4592307256ad43dc1c2811b2e54ba6010027bf550d8eaafa8e4c04d97d4f0cb",
+      "bytes": 1103
+    },
+    {
+      "path": "probe.py",
+      "sha256": "ffdc5ce1e3e0b5705adf2bfee43812ab42db288bc44bbfac9b5eb57e4643cc80",
+      "bytes": 2210
+    },
+    {
+      "path": "requirements.lock",
+      "sha256": "63e4c487308b5ff012b4d871762632741a5377869566d997d5cc4f444f805e21",
+      "bytes": 650
+    }
+  ],
+  "image": "ghcr.io/jinselw/chem-tools:edbo-v1",
+  "digest": "sha256:e939ef5c984c02876db5a779ef1a66d77329a71e7471c484c11e63419e272a04",
+  "probe": [
+    "python",
+    "/opt/edbo/probe.py"
+  ],
+  "tools": [
+    {
+      "name": "Python",
+      "version": "3.7.5",
+      "kind": "runtime"
+    },
+    {
+      "name": "edbo",
+      "version": "0.1.0",
+      "kind": "python"
+    },
+    {
+      "name": "torch",
+      "version": "1.3.1+cpu",
+      "kind": "python"
+    },
+    {
+      "name": "gpytorch",
+      "version": "1.0.0",
+      "kind": "python"
+    },
+    {
+      "name": "pyro-ppl",
+      "version": "1.1.0",
+      "kind": "python"
+    },
+    {
+      "name": "pandas",
+      "version": "1.0.1",
+      "kind": "python"
+    },
+    {
+      "name": "numpy",
+      "version": "1.18.1",
+      "kind": "python"
+    },
+    {
+      "name": "scipy",
+      "version": "1.4.1",
+      "kind": "python"
+    },
+    {
+      "name": "scikit-learn",
+      "version": "0.22.1",
+      "kind": "python"
+    },
+    {
+      "name": "rdkit",
+      "version": "2019.09.3",
+      "kind": "python"
+    },
+    {
+      "name": "mordred",
+      "version": "1.2.0",
+      "kind": "python"
+    },
+    {
+      "name": "pyclustering",
+      "version": "0.9.3.1",
+      "kind": "python"
+    },
+    {
+      "name": "matplotlib",
+      "version": "3.1.3",
+      "kind": "python"
+    },
+    {
+      "name": "seaborn",
+      "version": "0.10.0",
+      "kind": "python"
+    },
+    {
+      "name": "dill",
+      "version": "0.3.1.1",
+      "kind": "python"
+    },
+    {
+      "name": "xlrd",
+      "version": "1.2.0",
+      "kind": "python"
+    },
+    {
+      "name": "ipython",
+      "version": "7.12.0",
+      "kind": "python"
+    },
+    {
+      "name": "networkx",
+      "version": "2.4",
+      "kind": "python"
+    },
+    {
+      "name": "pip",
+      "version": "20.0.2",
+      "kind": "python"
+    },
+    {
+      "name": "setuptools",
+      "version": "45.2.0.post20200210",
+      "kind": "python"
+    },
+    {
+      "name": "wheel",
+      "version": "0.34.2",
+      "kind": "python"
+    },
+    {
+      "name": "libxrender1",
+      "version": "1:0.9.12-1",
+      "kind": "system"
+    },
+    {
+      "name": "libxext6",
+      "version": "2:1.3.4-1+b3",
+      "kind": "system"
+    }
+  ]
+}

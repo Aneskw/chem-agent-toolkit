@@ -20,11 +20,11 @@ def digest(data: bytes):
 
 
 def read_json(path):
-    return json.loads(Path(path).read_text(encoding="utf-8"))
+    return json.loads(long_path(path).read_text(encoding="utf-8"))
 
 
 def write_json(path, value):
-    path = Path(path)
+    path = long_path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temp = path.with_name(path.name + '.' + uuid.uuid4().hex + '.tmp')
     try:

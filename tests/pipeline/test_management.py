@@ -53,7 +53,7 @@ class ManagementTests(unittest.TestCase):
     def test_published_contract_inventory_matches_versioned_facade(self):
         from creation_pipeline.records import read_json
         from creation_pipeline.paths import ROOT
-        self.assertEqual(read_json(ROOT/'validation/local-management/contract-v1.json'),api.contract())
+        self.assertEqual(read_json(ROOT/'validation/fixtures/contracts/local-management-v1.json'),api.contract())
 
     def test_caller_cannot_assert_an_unverified_binding(self):
         descriptor=self.descriptor();descriptor['binding']={'association':'identical'}

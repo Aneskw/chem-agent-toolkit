@@ -3,14 +3,14 @@ __pycache__/
 .pytest_cache/
 *.pyc
 .pipeline/
+# Internal state written by earlier shared environment clients.
+/tools/leases/
+/tools/versions.json
+/tools/prepared-plans.json
 .venv*/
-evaluation/**/cache/
-evaluation/**/runs/
-evaluation/**/results/
 validation/**/tmp/
 # Local credentials and run evidence are never committed.
 .env
 .env.*
-!.env.example
 validation/**/runs/
 validation/**/real/

@@ -14,13 +14,13 @@ from creation_pipeline.contracts import versioned, fingerprint
 from creation_pipeline.records import write_json
 
 ROOT=Path(__file__).resolve().parents[2]
-spec=importlib.util.spec_from_file_location('skillnet_contract',ROOT/'validation/deepseek-api/verify_skillnet_contract.py')
+spec=importlib.util.spec_from_file_location('skillnet_contract',ROOT/'validation/checks/verify_skillnet_contract.py')
 verifier=importlib.util.module_from_spec(spec);spec.loader.exec_module(verifier)
 
 
 class SkillnetContractTests(unittest.TestCase):
     def setUp(self):
-        self.value=json.loads((ROOT/'validation/deepseek-api/skillnet-contract.json').read_text(encoding='utf-8'))
+        self.value=json.loads((ROOT/'validation/fixtures/contracts/runtime-contract.json').read_text(encoding='utf-8'))
 
     def test_documented_local_contract_matches_code(self):
         self.assertEqual(verifier.check(self.value),[])

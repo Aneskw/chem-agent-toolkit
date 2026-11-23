@@ -1,0 +1,28 @@
+{
+  "image": "ghcr.io/jinselw/chem-tools:pydoe-v1",
+  "platform": "linux/amd64",
+  "environment": {
+    "tools": [
+      {
+        "name": "Python",
+        "version": "3.11.18",
+        "kind": "runtime"
+      },
+      {
+        "name": "pyDOE2",
+        "version": "1.3.0",
+        "kind": "python"
+      },
+      {
+        "name": "numpy",
+        "version": "2.4.6",
+        "kind": "python"
+      },
+      {
+        "name": "scipy",
+        "version": "1.17.1",
+        "kind": "python"
+      }
+    ]
+  }
+}

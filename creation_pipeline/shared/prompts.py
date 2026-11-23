@@ -1,18 +1,29 @@
 """Stage-specific permissions and decisions for shared environment creation."""
 ENVIRONMENT = """Investigate the candidate's tool environment from registered primary sources. Read code,
 dependency files, official setup/version notes, and use scoped supplemental research for concrete gaps.
+Assess maintained compatible releases before choosing target versions. Keep historical versions when
+weights, formats, reproduction or method constraints require them. Verify defaults and scientific
+behavior before changing interfaces; record selection reasons in investigation_notes, not consumer fields.
 Return ready with evidence and exact resolved tool versions, or blocked with a concrete reason and
 resume_when. Do not build Docker or run business code now. Choose reuse, compatible extension, or new
-from the supplied catalog. For extension select environment_id AND environment_version; new plans use
+from the supplied catalog. Catalog state=built means an available checked local image even if
+image is null. state=published means uploaded; anonymous_access separately describes public access.
+Prepared investigations are only plans; prefer actual built/published records when compatible.
+Choose a short stable environment_id such as rdkit, openbabel or chem-core, without dates, versions
+or task names. The host assigns v1/v2 and registry tags; you do not allocate them. For extension select environment_id AND environment_version; new plans use
 an empty environment_version. Tools contain only upstream tools, runtimes and dependencies, never Skill
 task implementations, examples or tests. An extension must preserve its parent's contracts. Supply
 the complete text build context (Dockerfile, locks, scripts, patches as required), not references to
 unavailable workspace files. Use one FROM stage; the host pins the actual base digest. Include all
 image tools in extension plans. Tool probes are argv commands inside the image: assert the declared
 version and basic usability (for example Python assertions), and required bundled resources' readability.
-Each probe must print exactly one JSON object with observed "version" and optional "resources":
+Prefer external common checks: probe=["@python-version"] for Python or
+["@python-import", "IMPORT_MODULE"] for a Python distribution (the host checks its declared package version).
+Use explicit argv for small tool-specific operations or bundled-resource checks; do not generate
+copies of common check scripts in every image. Explicit probes print exactly one JSON object with observed "version" and optional "resources":
 {"resource-name": true} after actually checking readability; the host checks these facts against requirements.
 Do not claim a compatibility range was tested. resource usage describes actual acquisition and use.
+GPU device execution is not implemented yet; return blocked for GPU-only requirements.
 Do not install on the host. Missing installation details require research, not imagined packages.
 Separate consumer requirements from investigation: conditions contains only accelerator,
 minimum_memory_gib (null if no established minimum), and network_required for task execution, not
@@ -28,6 +39,13 @@ for build materials rather than repeating research. Confirm candidate-specific d
 sources; when requirements already match, reuse those facts. Discovery version hints are provisional,
 not installation proof. tools names and kinds are structured, never natural-language matching keys.
 Feedback contains previous attempts: retry transient faults, otherwise explain and change the plan.
+tools describes installed image contents. resources includes bundled contents and this candidate's
+external inputs; external weights never distinguish physical image compatibility. An extension
+preserves installed tools and bundled assets, not unrelated external weights of its parent.
+skill_tools and skill_resources select exact names needed by THIS Skill, including consequential
+local compatibility dependencies. Do not select unrelated inherited tools/assets. Selection arrays
+reference the existing entries, without copying inventories. Files contain only necessary build
+inputs; no default reports, empty directories, duplicate manifests or inspection transcripts.
 """
 
 REVIEW_EXTRA = """
@@ -48,11 +66,19 @@ Original code will be mounted read-only: full package /skill, extracted selected
 /code/<item-id><suffix> (Python .py, Bash .sh, R .R); each item supplies suffix. Case files are written
 under /work, and command/check_command are argv inside the Docker image. The command must explicitly
 include the original /code path or /skill/<original-file>. Context wrappers receive that original path
-as an argument and execute it without rewriting logic. Include expected exit plus meaningful stdout,
-output artifacts or an asserting check_command. Cite the source-backed expected result in basis,
+as an argument and execute it without rewriting logic. Include expected exit plus meaningful stdout or
+an asserting check_command for output artifacts; exit code/file existence alone is insufficient.
+Cite the source-backed expected result in basis,
 never fit expected values to observed output. Record all supplied context. For a partial snippet,
 fixtures may set missing variables but must run the unchanged source. No network or host installation
-is performed in this planning stage. Return blocked only for a demonstrated content defect
+is performed by you in this planning stage. Use asset_requests=[{url,reason,related_to:[original input IDs]}]
+when source-backed binary inputs are not registered; the host acquires them using existing resource
+helpers and returns asset_results for replanning. Do not repeat an unchanged failed request: find
+another source or defer the necessary check with its real limitation. Case inputs select registered
+{source:source-id, path:inventory-relative-path, member:archive-member-or-empty,
+target:relative-path-under-/work}. Selected files are mounted read-only. Never embed binary data
+in files/content or copy weights into the Skill. Use inputs=[] and asset_requests=[] when unused.
+Return blocked only for a demonstrated content defect
 (blocked_owner=content) or a missing external prerequisite (blocked_owner=external). Correct fixture
 mistakes yourself; never send them to the author. ready uses blocked_owner=none.
 Report audit_risks honestly: context_injection for init_globals/runpy/trace injection; monkeypatch

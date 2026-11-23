@@ -62,7 +62,7 @@ class PlannerSchemaTests(unittest.TestCase):
         already normalises. Both changes are asserted here and normalised on the
         baseline copy before the exact comparison.
         """
-        root = Path(__file__).resolve().parents[2] / 'validation/planner-schema-isolation/before'
+        root = Path(__file__).resolve().parents[2] / 'validation/fixtures/transport/schema-before'
         for name, current, intended in [
             ('plan', planner.PLAN_SCHEMA, '/properties/plan/properties/acceptance_json/description'),
             ('patch', planner.PATCH_SCHEMA, '/description')]:

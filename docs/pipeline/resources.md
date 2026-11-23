@@ -1,32 +1,73 @@
-# Resources and known supplements
+# Source acquisition and sharing
 
-Sources are retained independently of parser support. Unknown formats and large data/weights are not discarded just because the program cannot interpret them. Default snapshots exclude only narrow internal/environment/cache/credential categories. No general web search, dependency installation or recursive link crawling is provided.
+Each group has its own workspace and source IDs. Acquired material is stored in shared snapshots, with group-local registration explaining its use. Shared files retain separate evidence IDs in each group.
 
-## Preparation
+## Inputs
 
-Local snapshots preserve selected files and provenance; explicit single-file reference storage avoids copying large originals. Repository archives and downloads stream to disk, and file hashes are computed incrementally. No default byte/file-count cutoff. Explicit development limits report their effect.
+A source accepts a local path, HTTPS url, Git repo, paper identifier or table. Put a paper and its associated code in the same resource_group. related_to expresses relationships between that group's inputs.
 
-Excluded: .git, installed .venv/venv/node_modules, __pycache__ and common test/lint caches, .pipeline, .aws/.ssh credential stores, system/editor junk and known secret files. Hidden research directories such as .github, output/results examples, credential documentation and .env.example templates survive. Links are recorded but not followed automatically. Git submodules and LFS payloads are not automatically resolved; archive limitations are recorded. Exclusions are not a complete secret-detection service.
+Directories are snapshotted by default. Single-file reference storage uses the original file and is not offered as an immutable cross-group snapshot; resume requires that original to remain unchanged. Git submodule and LFS payloads are not resolved automatically.
 
-resources.json maps file locators to originals, hashes, optional views and helper commands. eN identifies a source file, not proof the Agent read it correctly. Claims identify concrete passages/functions/pages. resource-state.json retains the full source registry, config and acquisition failures for supplements/recovery. A concise initial context points to the index; it does not inject all files into the model.
+Acquisition excludes credentials, installed environments and caches, including .git, .venv, node_modules, .ssh, .aws, .pipeline and actual .env files. Source size is governed by explicit limits. Unsupported formats retain their originals and parsing diagnostics.
 
-## Views
+## File locations
 
-| Format | Auxiliary support / limit |
+```text
+STATE/cache/snapshots/               # Immutable shared source snapshots
+STATE/cache/resource-index.json      # URL, version and snapshot lookup
+STATE/runs/BATCH/groups/GROUP/
+  resources.json                    # Group file locations, views and helper commands
+  source-evidence.json               # Group-local eN IDs
+  resource-state.json                # Restorable source registry
+  views/                            # Optional text or page views
+```
+
+Local originals remain in place. Snapshots are checked on acquisition, and views never replace originals. Agent-downloaded files must be registered in the group and snapshotted with provenance before other groups reuse them.
+
+## Supplemental research
+
+research_access=supplement permits targeted search and acquisition for concrete gaps. known_only disables open search. network=false restricts both source acquisition and Agent network access. Initial Docker pulls and dependency builds also need suitable network access.
+
+Agents use the helper advertised in resources.json:
+
+| Operation | Purpose |
 | --- | --- |
-| Code/text | Direct Agent search/read; no duplicate view needed |
-| PDF | Poppler text when available, pypdf fallback; page renderer is on demand |
-| PNG/JPEG/WebP | Native image tool reads original |
-| DOCX | Paragraph text; layout and embedded diagrams not fully represented |
-| XLSX | First worksheet values; no automatic chart/visual interpretation |
-| Notebook | Markdown/code view; outputs remain in original JSON |
-| SQLite | Schema-only view, not automatic table extraction |
-| Other formats | Original retained, Agent may inspect or use an appropriate installed processor |
+| supplement | Acquire a URL, repo or paper and register its purpose and related inputs |
+| register | Register a file already saved by the Agent |
+| lookup | Search the shared index by address, version or other recorded identity |
+| adopt-resource | Register a shared snapshot for a group-local purpose with local evidence IDs |
+| inventory | Query the group's file inventory |
 
-Views are cached with hashes and never replace originals. Structured converters run in a separate process with an optional converter timeout. HTML views retain link addresses to support targeted supplements. Parse failures are warnings with locations, not blanket source rejection. Individual PDF pages render with pdftoppm, at 1600-pixel longest edge, with a 60-second converter timeout. There is no separate OCR service. Merely passing an image path is not vision; best-effort current-session image audits count actual native image returns without copying base64 or private reasoning.
+Native-acquired content can be saved under the group's `research/inbox/`. Write content first, then
+atomically rename a matching `*.source.json` into place with `path` (relative to the group workspace),
+`url`, `reason` and `related_to` original source IDs. Optional `version` and `representation`
+(`saved_content` or `excerpt`) describe provenance. Save actual source text and identify excerpt scope.
+The program ingests committed sidecars before candidate/delivery validation and at Agent turn
+boundaries. `inventory` refreshes immediately. Invalid sidecars return repair feedback; unchanged
+repeated errors stop the stage. Multiple original inputs require explicit related-to IDs.
 
-## Supplemental acquisition
+Empty downloads are rejected; legacy empty cache entries are fetched again. Helper failures carry
+`error_kind` for transport, empty content, constraints or acquisition subprocess failures. Invalid
+requests and local implementation/filesystem errors are reported as helper errors. A failed page
+viewer alone does not establish missing evidence; use permitted downloads/local PDF views or
+verified original-source alternatives where appropriate.
 
-The Agent uses the helper listed in resources.json: supplement --run RUN --url URL (or --repo URL / --paper DOI) --reason WHY [--ref REVISION]. It identifies a concrete missing fact, not a vague wish for more background. Success updates provenance, source locators, views and durable registry, and the Agent continues in the same conversation. Duplicate supplements reuse registered material; failures preserve existing sources. Metadata is not a substitute for a PDF that was not obtained.
+Registered supplements remain shared immutable snapshots with group-local evidence IDs. Their
+content and evidence index are also retained under `STATE/records/BATCH/groups/GROUP/` before
+workspace cleanup. Cleanup verifies the retained source inventory and content hashes.
 
-Known links/identifiers are supported in discovery, authoring and review. Searching for unknown papers/sites remains out of scope. Protected/unavailable resources become localized gaps, not a reason to stop unrelated candidates.
+Unavailable sources retain concrete gaps. An evidence ID locates a file; it does not prove the Agent read it or establish a scientific claim.
+
+## Reading and views
+
+| Format | Support |
+| --- | --- |
+| Code, text, HTML | Direct reading; HTML views retain link addresses |
+| PDF | Poppler text extraction and page rendering when installed; pypdf can provide text extraction |
+| PNG/JPEG/WebP | Native image tools read the original |
+| DOCX | Paragraph text |
+| XLSX | First worksheet values |
+| Notebook | Markdown and code views; outputs remain in the original JSON |
+| SQLite | Schema view |
+
+Install document converters as needed. Layout, charts and embedded figures require the original file or page images; text extraction alone does not provide full visual interpretation.

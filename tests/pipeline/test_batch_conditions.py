@@ -203,7 +203,7 @@ class SilentChildBehaviourTests(unittest.TestCase):
 
 class ConfigAndGateTests(unittest.TestCase):
     def test_actual_batch_input_is_accepted_with_its_budget(self):
-        path = Path(__file__).resolve().parents[2] / 'validation/final-acceptance-review/input-batch-1.json'
+        path = Path(__file__).resolve().parents[2] / 'validation/fixtures/transport/batch-input.json'
         config = load_config(path)
         self.assertEqual(config['model']['transport'], 'https')
         self.assertEqual(config['execution']['progress_watch'], 'observe')

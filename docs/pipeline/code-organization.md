@@ -1,64 +1,76 @@
-# Code organization
+# Code organization and state invariants
 
-Run commands from the repository root with `python -m creation_pipeline`. The CLI and configuration format are independent of the internal package layout.
+## Entry points and modules
 
 ```text
 creation_pipeline/
-  __main__.py                 # Python module entry point
-  cli.py                      # Commands, arguments and console results
-  pipeline.py                 # Stage orchestration, repair, resume and adoption
-  models.py                   # Configuration validation, limits and errors
-  schemas.py                  # Concise Agent stage result formats
-  records.py                  # Hashes, safe paths, durable JSON and cleanup
-  paths.py                    # Stable repository, package and prompt locations
-  readiness.py                # Zero-model prerequisite observations
-  management.py               # Versioned facade over existing lifecycle
-  references.py               # Read-only explicitly scoped dependency index
-  runtime/                    # Planning, exact artifacts, Docker execution and recovery
-  resources/
-    acquisition.py            # Known URLs, repositories, papers and catalogs
-    intake.py                 # Source snapshots, inventories and integrity
-    documents.py              # Optional document-to-text conversion
-    workspace.py              # Original-file locators, views and resource registry
-    supplements.py            # Known-resource supplements and inventory queries
-  agent/
-    command.py                # Locate the installed Codex CLI
-    backend.py                # Native sessions, CLI events, recovery and image audit
-    tools.py                  # Thin helper CLI; delegates to responsible modules
+  cli.py                        # Commands, arguments and console output
+  pipeline.py                   # Workflow dispatch
+  models.py                     # Basic configuration validation and budgets
+  records.py                    # File identity, atomic records, locks and safe paths
+  shared/
+    config.py                   # Resource groups and environment settings
+    pipeline.py                 # Group scheduling, candidate state, archives and resume
+    preflight.py                # CLI, Docker, registry login and model permission checks
+    investigation.py            # Source-bound preparation cache
+    environment.py              # Matching, builds, probes, versions and publication
+    registry.py                 # GHCR identity checks and anonymous HTTP observations
+    contracts.py                # Internal environment contract and consumer JSON projection
+    verification.py             # Code inventory, test plans, cache and container execution
+    delivery.py                 # Final substitution, file checks, library, install and promotion
+    library.py                  # Private library indexes, locks and migration of old output state
+    environment_state.py        # Private environment counters, preparation caches and lock migration
+    environment_metadata.py     # Portable descriptions, compact indexes and private evidence binding
+    resources.py                # Cross-group snapshot lookup and registration
+    assets.py                   # Registered binary verification inputs and archive members
+    runtime_probe.py            # Read-only common checks run with the image's Python
+    observations.py             # Compact diagnostics and operation events
+    retention.py                # Pins and explicit cleanup
   generation/
-    discovery.py              # Discover, normalize and validate candidate decisions
-    candidates.py             # Save incremental source-backed candidates
-    context.py                # Assemble small source-backed stage handoffs
-    author.py                 # Author/repair coordination and independent review
-    prompts/                  # Discovery, author, review and revision instructions
-  validation/
-    checks.py                 # Static checks, execution dispatch and conclusions
-    runtime.py                # Execute explicit checks and assert their results
-    agent_checks.py           # Record authorized Agent diagnostics
-    example_runner.py         # Execute explicitly selected Python examples
-  artifacts/
-    delivery.py               # Direct-file validation, chunks and delivery receipts
-    package.py                # Manifests, output integrity and explicit installation
-    library.py                # Individual adoption, collision handling and catalog
-
-tests/pipeline/
-  support.py                  # Deterministic Agent-stage doubles and fixtures
-  test_components.py          # Validation, execution and safe-file operations
-  test_discovery.py           # Discovery, build, repair and source-locked continuation
-  test_native.py              # Native CLI/session lifecycle using a fake executable
-  test_research.py            # Research resources, direct files and scoped readiness
-  test_skill_library.py       # Review, selected examples, adoption and catalog
-  test_sources.py             # Acquisition, document conversion and snapshots
-  test_entrypoints.py         # Helpers invoked outside the repository directory
-
-docs/                         # Current usage, configuration and design standards
-examples/                     # Reserved for complete reproducible build batches
-skills/                       # Reviewed skills and simple batch/catalog organization
-.pipeline/                    # Ignored local cache, workspaces and build records
+    discovery.py                # Candidate discovery and validation
+    content_author.py           # Direct authoring and independent content review
+    prompts/                    # Agent instructions
+  resources/                    # Acquisition, snapshots, views and supplemental sources
+  agent/                        # Native CLI sessions, helper routing and usage observations
+  artifacts/                    # Package manifests, file delivery and runtime artifacts
+  runtime/                      # Process management and RuntimeRequest execution interfaces
 ```
 
-`pipeline.py` coordinates stages; it does not implement source downloading, CLI transport or file packaging. The helper router in `agent/tools.py` exposes operations whose implementations live in `resources`, `generation`, `validation` and `artifacts`. Native sessions call these helpers and access retained original files directly.
+shared-environments uses the shared state machine. legacy-script-images uses pipeline.build_legacy and RuntimeRequest interfaces. Their accepted/candidates libraries are separate from verified/pending-validation libraries. See [runtime interfaces](../runtime/README.md).
 
-Codex native execution and explicit single-shot DeepSeek are supported; runtime structured calls select their backend independently, without fallback. Test doubles replace decisions and write real fixture files through delivery receipt code; they are not a production backend. See configuration and the current batch guide for actual provider/budget settings.
+## Stages and repair ownership
 
-Internal import paths follow this tree. Old internal module paths and helper commands saved in earlier workspaces are not compatibility entry points; start a new build after updating the code. Completed skill packages do not depend on these helper paths.
+environment → author → review → build → prepare-tests → audit-tests (when needed) → execute → publish → finalize → done.
+
+Environment contract errors return to investigation; code inventory errors return to review; fixture and test-plan errors return to execution preparation. Inconsistent source, package or frozen-file identities block progress. Execution failures can be diagnosed for ownership; content repairs require an original-code location and supporting evidence.
+
+author_revision identifies repair rounds. Interrupted work can resume a consistent receipt within a round; a new round cannot retrieve rejected output merely because feedback is unchanged. Unchanged output is reported to the next repair decision without adding a default universal retry cap.
+
+## Environment identity and publication
+
+contracts.CONTRACT_VERSION identifies internal contracts. Compatibility uses installed tool identity, fixed versions, platform, bundled resources and accelerator requirements. External assets do not distinguish image identity. Skill-specific tool/resource selections determine runtime.json; memory and task-network conditions describe use requirements. Build identity includes the pinned base, context files, installed tools, bundled resources and source label.
+
+An investigation is prepared. A successfully probed image is built and may have no remote reference. A confirmed upload is published, with anonymous_access recorded separately. Uploaded state is persisted before public-access checks so a private Package can resume without repeating upload or business computation.
+
+Version allocation holds a local lock and checks remote tags. Materials are frozen under id/version/context; environment metadata retains image digests while Skill instructions use version tags. Publication and export check tag identity and anonymous access. Multi-machine publishers require coordination beyond the local lock.
+
+Tool environment indexes and complete build contexts stay under tools/. Counters, investigation caches, locks and host command receipts live under .pipeline/tool-libraries/, keyed by the canonical tool-library path. Legacy control files migrate under both lock locations; conflicting copies are retained for inspection.
+
+The environment index contains only id, version and path. Portable version descriptions omit process state and factor repeated probe prefixes. Private checks and local image identities are bound to a hash of that description; missing or changed metadata cannot inherit anonymous-access approval. The reader accepts full legacy catalog entries, and compaction writes the compact index only after all version descriptions are stored.
+
+## Execution and delivery evidence
+
+reviewed_files binds semantic approval to package bytes. Execution items bind original file ranges and code hashes. Complex wrappers require independent audit; direct calls must use the actual entry. Cached evidence binds image content, code, supporting files and the exact test plan.
+
+After publication, only {{image}} substitution and runtime.json projection are allowed. final_files controls archive, export and resume checks; changed work packages cannot inherit approval. Archive, publication and adoption errors remain separate from completed computation.
+
+Delivery indexes, catalog locks, staging and manual-verification records live under `.pipeline/skill-libraries/`, keyed by the canonical delivery-directory path. Packages contain only consumer files. Existing shared catalogs are migrated under both old and new locks after checking package manifests; interrupted staging is retained internally. Keep the delivery directory on the same filesystem as `.pipeline` so the checked staging copy can be renamed atomically. A failed copy or cross-filesystem rename cannot commit a catalog entry or inherit delivery approval.
+
+## Maintenance checks
+
+```bash
+python -m unittest tests.pipeline.test_shared_creation tests.pipeline.test_shared_revision tests.pipeline.test_shared_next tests.pipeline.test_environment_state tests.pipeline.test_environment_metadata tests.pipeline.test_research_access tests.pipeline.test_onboarding
+python validation/checks/run_offline_suite.py
+```
+
+Install requirements.txt before running the suite. Some RuntimeRequest file operations on Windows still require a short temporary root. Offline doubles verify control logic; publication and Skill content quality need separate live small-batch validation.

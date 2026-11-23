@@ -1,0 +1,22 @@
+{
+  "LICENSE": "6c32c823db6784543861cf323af6a02b76b62bebb347e369eaa7fe9af57f4f29",
+  "README.md": "f8d7644b3d864f1af6bafa4c7107468e9c1051254af11909a1c365d2caba3190",
+  "Retrosynthesis.py": "8596feffa61cdd611087cc50707d39212b3b7351b01eb6f5a02eafe09232db1b",
+  "LocalTemplate/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "LocalTemplate/template_decoder.py": "7fa2a97eb3b22f4ba283e5407cf185e6f0877ae1d5699bfef92bfbd9a3e485b4",
+  "LocalTemplate/template_extract_utils.py": "a3f9b3e215a7fe7a9a59b1d53a2f68a37126bc741ae88786612ef4ae22b7308a",
+  "LocalTemplate/template_extractor.py": "31749a76084707bed5f6a363fdd83d4f8032126888560fb3b31cf31e267d66ee",
+  "data/configs/default_config.json": "211ca091749057f87ccfa4b928da273ae210ece6205058fd35bbd1e9b2bb1115",
+  "preprocessing/Extract_from_train_data.py": "7c476b821247f22026875560f81e970df9df8461c541f0d53118b074b3b5c58b",
+  "preprocessing/Run_preprocessing.py": "7d83b68bee41484b57114d64204517c7d2b60c7fc4b0c92e40af5d1c018bc0a8",
+  "preprocessing/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "scripts/Decode_predictions.py": "d756123c99d3d470bfa312efb8910aadee85511950f641bfc6802d6ef6fd14ce",
+  "scripts/Test.py": "a5d713507abd7f5089a8cb72fe5c17e115eba7c13f9e9955f548596e38e18a81",
+  "scripts/Train.py": "5fc478237e11b093e4c1eaec3b810e72e926cdf4e582bec076985bdfc6e1ebdd",
+  "scripts/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "scripts/dataset.py": "73e1a65360bb86d1405a5373dbfad3e5b7cf4fa6c35dac7f3683c23caeaef7bd",
+  "scripts/get_edit.py": "f0332165eb8b1afe7ecddd82458e10a095e8702f629477023f70e803d71d20e2",
+  "scripts/model_utils.py": "adb163236798cf0944e1005f26476ed55056dfeb8dbccb9436c638d70f99ba9c",
+  "scripts/models.py": "34564c1558cee344ceb9ed553915f28798183085e2d6faf4ce209264da1fe7ba",
+  "scripts/utils.py": "7e04d9377ea8125f1bf3b5cda7c9fa4b57af675f56ad988fcce21ea6f21e4996"
+}

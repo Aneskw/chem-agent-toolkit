@@ -10,6 +10,7 @@ from creation_pipeline.agent.command import codex_command
 from creation_pipeline.records import read_json, write_json, file_digest
 from creation_pipeline.runtime.runner import process
 from .environment import fingerprint
+from .registry import Registry, RegistryError
 
 
 def observe(config, mode='build', run=process):
@@ -29,8 +30,16 @@ def observe(config, mode='build', run=process):
         checks.append({'object': 'cli', 'status': 'blocked', 'reason': str(exc)})
     if mode == 'build':
         if config['environments'].get('publish', True) and (
-                not config['environments']['image_prefix'] or not config['environments']['source_url'].startswith('https://github.com/')):
-            checks.append({'object': 'publication', 'status': 'blocked', 'reason': 'Configure image_prefix and GitHub source_url'})
+                not config['environments'].get('repository', config['environments'].get('image_prefix'))):
+            checks.append({'object': 'publication', 'status': 'blocked', 'reason': 'Configure environments.repository'})
+        elif config['environments'].get('publish', True):
+            try:
+                repository = config['environments'].get('repository') or config['environments']['image_prefix']
+                Registry(15).session(repository + ':bootstrap', authenticated=True)
+                checks.append({'object': 'publication', 'status': 'passed', 'repository': repository,
+                               'scope': 'authenticated_registry_session; upload permission checked on push'})
+            except (RegistryError, OSError, ValueError, KeyError, subprocess.SubprocessError) as exc:
+                checks.append({'object': 'publication', 'status': 'blocked', 'reason': str(exc)})
         try:
             result = run(['docker', 'info', '--format', '{{json .}}'], 15)
             if result['exit_code']:
@@ -77,7 +86,7 @@ def startup(config, state, work, notify, mode='build'):
     empty.entries, empty.evidence, empty.errors = {}, [], []
     empty.cache, empty.total_bytes = cache, 0
     empty.acquisition = Acquisition(cfg, cache)
-    session = NativeSession(cfg, empty, dict(cfg['limits'], model_calls=None, model_timeout=90, total_seconds=180), Path(work) / 'preflight')
+    session = NativeSession(cfg, empty, dict(cfg['limits'], model_calls=None), Path(work) / 'preflight' / uuid.uuid4().hex)
     session.notify = notify
     token = uuid.uuid4().hex
     local = session.work / ('probe-' + token + '.txt')
@@ -85,8 +94,9 @@ def startup(config, state, work, notify, mode='build'):
     resumed = session.work / ('resume-' + token + '.txt')
     # Prove shell permissions and the native helper path, not merely model connectivity.
     instructions = ('Startup permission check only. Do not acquire sources or install anything. '
-                    'Use shell to write the supplied token to local_probe. Use the resource workspace helper write '
-                    'to write the same token to cache_probe (package is its parent, path is its filename; encode as base64). Read both back, and invoke helper inventory for this run. '
+                    'Use the resource workspace helper write to write token to local_probe (package is its parent, '
+                    'path is its filename; encode as base64). Use shell to write the same token to cache_probe. '
+                    'Read both back, and invoke helper inventory for this run. '
                     'The cache_probe path is explicitly authorized for this startup check. Return ready=true only after success.')
     context = {'plan': {'name': 'startup'}, '_phase': 'preflight', 'token': token,
                'local_probe': str(local), 'cache_probe': str(cached), 'resume_probe': str(resumed), 'run': str(session.work)}

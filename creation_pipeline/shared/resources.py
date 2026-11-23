@@ -1,7 +1,8 @@
 """Cross-group lookup adopts immutable snapshots with group-local evidence IDs."""
 import copy
+import shutil
 from pathlib import Path
-from creation_pipeline.records import lease, read_json, write_json, digest
+from creation_pipeline.records import lease, read_json, write_json, digest, file_digest, safe_relative, has_link, long_path
 from creation_pipeline.resources.supplements import restore, anchors_for
 from creation_pipeline.resources.workspace import prepare
 
@@ -48,3 +49,32 @@ def adopt(run, snapshot_id, reason, related_to):
         sources.verify()
         prepare(sources, run)
         return {'status': 'adopted', 'source': entry['id']}
+
+
+def archive_sources(run, destination):
+    """Retain registered supplemental evidence independently of mutable workspaces."""
+    sources = restore(run)
+    sources.verify()
+    destination = Path(destination)
+    retained = copy.deepcopy(sources.manifest())
+    for entry in retained:
+        if not entry.get('supplemental'):
+            continue
+        if entry.get('test_asset'):
+            # Binary validation assets already have immutable shared snapshots and hashes.
+            # Do not duplicate full checkpoints/archives into every group's evidence tree.
+            continue
+        root = Path(entry['path'])
+        target = safe_relative(destination, 'sources/' + entry['snapshot_id'][:16])
+        for item in entry['inventory']:
+            original = root if root.is_file() else safe_relative(root, item['path'])
+            saved = safe_relative(target, item['path'])
+            long_path(saved.parent).mkdir(parents=True, exist_ok=True)
+            if not long_path(saved).exists():
+                shutil.copyfile(long_path(original), long_path(saved))
+            if has_link(saved) or file_digest(saved) != item['sha256']:
+                raise ValueError('Supplement archive differs: ' + entry['id'])
+        entry['path'] = str(target / root.name if root.is_file() else target)
+    write_json(destination / 'sources.json', retained)
+    write_json(destination / 'source-evidence.json', sources.evidence)
+    return retained

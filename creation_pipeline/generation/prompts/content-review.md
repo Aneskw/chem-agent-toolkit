@@ -3,6 +3,19 @@ Never modify Skill files. Read the package first to identify its promise and lik
 then use writing basis to locate evidence, independently checking it rather than adopting the
 writer's interpretation. This is source/content review, not runtime or scientific verification.
 
+First apply the minimum standard's tool-workflow eligibility. A laboratory recipe, standalone
+theory or a guide without a source-supported software invocation/output path is a blocking content
+defect even when faithful to the paper. Assess actual semantics, not software-name keywords.
+Read registered supplements independently; writing basis locates evidence but cannot replace it.
+
+Also assess whether the target version suits the intended task, not only whether its old manual
+matches the prose. Check official support/release evidence and the recorded selection reason.
+For generic use, an unexamined obsolete release chosen solely from a paper citation or easier
+documentation needs revision/evidence; do not accept a gratuitous legacy scope as its own excuse.
+Keep justified historical/reproduction constraints, and do not demand the newest release or
+exhaustive version coverage. Unsupported migration, mixed-version interfaces or changed scientific
+behavior without evidence are material defects. Age alone is not a blocking finding.
+
 Work through three questions within this same review, prioritizing risks of this actual capability:
 
 1. Can an execution Agent start with only this package and the declared user inputs? Check that
@@ -30,9 +43,15 @@ accessible source gaps under the research policy before declaring them unavailab
 check the actual fix and affected relationships, not merely that a requested sentence was added.
 Do not require expansion to cover cases outside a properly declared scope.
 
+Established factual errors must be corrected or removed before acceptance, even when an example
+happens to work. Use category=factual and blocking=true for an incorrect source-established claim
+about prerequisites, interfaces, data or output interpretation. Reserve nonblocking findings for
+optional improvements. Trace the exact claim and relevant helper behavior; reconsider source-backed
+rebuttals. Correct the procedure or its promise, rather than adding a disclaimer after a false step.
+
 Return status pass/fail/not_run, resolution none/revise_files/supply_evidence and concise findings.
 Each finding has location, problem, concrete source evidence, impact, action, blocking and category
-(file/source/environment/concision/suggestion). Blocking requires a material usage/evidence defect supported by the exact expression and relevant
+(file/source/environment/factual/concision/suggestion). Blocking requires a material usage/evidence defect supported by the exact expression and relevant
 helper behavior, not a hypothetical premise. Reconsider source-backed rebuttals rather than
 defending an earlier finding;
 minor style preferences alone do not fail. pass means no blocking defect found, not universal
@@ -64,3 +83,13 @@ consumer fields; do not approve solely because static checks passed. On repair t
 input/output/environment relationships again; a new sentence alone is not proof of a fix.
 Execution item paths are relative to the package root (e.g. SKILL.md). Select actual code only,
 without fences. Select the whole relevant example when expected_check covers the whole workflow.
+
+
+Check the runtime section against runtime_template, adapting only real tool argv and necessary
+resource options. No mandatory filename; no repeated installation tutorial. Follow the provided
+code_inventory: return exactly one code_decisions entry per unit_id. decision is execute, exempt,
+or runtime_example (only shell commands for using the provided runtime). Give a concrete reason.
+execute lists the necessary execution_items IDs within that unit; other decisions list no IDs.
+Do not omit ordinary API examples: explicitly exempt them when appropriate. Illustrative fragments
+may be exempt; inventory coverage does not require every snippet to be executable independently.
+Ensure text requirements are realized in example outputs, e.g. version metadata when required.

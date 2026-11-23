@@ -1,0 +1,90 @@
+{
+  "image": "ghcr.io/jinselw/chem-tools:retroknn-v2",
+  "platform": "linux/amd64",
+  "environment": {
+    "tools": [
+      {
+        "name": "Python",
+        "version": "3.11.18",
+        "kind": "runtime"
+      },
+      {
+        "name": "torch",
+        "version": "2.2.2+cpu",
+        "kind": "python"
+      },
+      {
+        "name": "dgl",
+        "version": "2.4.0",
+        "kind": "python"
+      },
+      {
+        "name": "dgllife",
+        "version": "0.3.2",
+        "kind": "python"
+      },
+      {
+        "name": "rdkit",
+        "version": "2023.9.6",
+        "kind": "python"
+      },
+      {
+        "name": "numpy",
+        "version": "1.26.4",
+        "kind": "python"
+      },
+      {
+        "name": "pandas",
+        "version": "2.1.4",
+        "kind": "python"
+      },
+      {
+        "name": "setuptools",
+        "version": "80.10.2",
+        "kind": "python"
+      },
+      {
+        "name": "networkx",
+        "version": "3.6.1",
+        "kind": "python"
+      },
+      {
+        "name": "scipy",
+        "version": "1.17.1",
+        "kind": "python"
+      },
+      {
+        "name": "tqdm",
+        "version": "4.70.1",
+        "kind": "python"
+      },
+      {
+        "name": "scikit-learn",
+        "version": "1.9.1",
+        "kind": "python"
+      },
+      {
+        "name": "joblib",
+        "version": "1.6.0",
+        "kind": "python"
+      },
+      {
+        "name": "LocalRetro",
+        "version": "eba83e72efabeb854fec86c865e8743c295a8a1e",
+        "kind": "python"
+      }
+    ]
+  },
+  "resources": [
+    {
+      "name": "localretro-default-config",
+      "url": "https://raw.githubusercontent.com/kaist-amsg/LocalRetro/eba83e72efabeb854fec86c865e8743c295a8a1e/data/configs/default_config.json",
+      "version": "eba83e72efabeb854fec86c865e8743c295a8a1e",
+      "included_in_image": true,
+      "usage": "Default configuration at /opt/localretro/src/data/configs/default_config.json; preserve it with the writable source copy used by Train.py."
+    }
+  ],
+  "usage_notes": [
+    "Author LocalRetro is CC BY-NC-SA 4.0; commercial use requires prior written permission from the copyright holder."
+  ]
+}

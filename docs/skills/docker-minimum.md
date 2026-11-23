@@ -1,5 +1,40 @@
 # Minimum tool-skill content
 
+## Tool-workflow eligibility
+
+Every candidate must teach a source-supported use of actual software: a library, CLI,
+script/module, service or documented executable software workflow. Connect realistic starting
+inputs through real invocation to output access and interpretation. Laboratory recipes,
+equipment names, standalone theory/mechanism explanations and paper summaries are not eligible.
+Do not manufacture a trivial script to turn such content into a tool skill.
+
+Using existing software in research can be valuable; a new tool, author repository, open source,
+local installation or complete paper reproduction is not required. Licensed software can qualify
+when acquisition, prerequisites and the actual interface can be established. Missing use details
+in a paper trigger scoped supplementation for a promising capability, not immediate omission.
+If evidence remains insufficient, retain a concrete gap rather than inventing an interface.
+
+## Target software version
+
+For reusable capabilities, first check official current stable releases, maintenance/support and
+relevant documentation. Prefer a maintained, obtainable version compatible with the task and
+declared environment. A paper's publication/citation date or cited software version is provenance,
+not an automatic requirement to package that historical interface. Age alone does not establish
+obsolescence; neither the highest version number nor the development branch is automatically best.
+
+Use a historical release or specially constrained commit when an explicit reproduction requirement, existing artifacts,
+format/platform constraint or source-supported scientific-method dependency requires it. An easier
+old manual alone is not justification. If current usage cannot be established, record the gap;
+do not silently fall back to an obsolete workflow and present it as the general current solution.
+Pin the chosen release/commit as appropriate, including current supported releases.
+
+Preserve the supported scientific method while verifying the chosen version's actual interfaces,
+defaults, units, input/output behavior and dependencies. Do not assume numerical equivalence or
+invent a migration. Record the target version, concise selection reason and original-versus-target
+distinction in existing construction/basis/evidence fields. Runtime instructions need the chosen
+version and operational boundaries, not a version-survey essay or build-only provenance.
+
+
 Produce an English SKILL.md with YAML name and description and a descriptive body title.
 Name identifies the capability; description explains when the Agent should select it.
 Do not mechanically repeat that description.
@@ -45,18 +80,8 @@ template, length target, file quota or coverage quotations. Build basis/review r
 the pure package. Semantic review does not execute target tools; a later stage selectively validates necessary custom logic.
 
 
-Docker delivery: add runtime.json and one compact body section with image pull and execution
-commands (identify the shell). Explain once that files under the mounted directory persist locally.
-Use image reference {{image}} until host finalization; host replaces it with a verified registry digest.
-Do not force saving the typical example as a particular filename. Later examples contain ordinary
-tool code, without repeated Docker wrappers. State that a compatible local environment may run
-the same code; detailed versions, dependencies and required external resources are in runtime.json.
-The host generates runtime.json from the environment contract, then checks actual observations.
-Do not put build provenance, review reports or execution tests in the Skill.
-
-
-The single Docker section must include a noninteractive execution command (caller script or tool
-CLI); an interactive shell/REPL alone is insufficient. Filenames and mounted directories are examples,
-not compulsory user paths. Important scientific outputs require their definitions and units or
-unitless conventions, not just column names. Semantic review enforces these material usage details.
-runtime.json is host-owned. Environment findings return to environment preparation, not to the author.
+Docker delivery: the author uses the supplied [runtime template](runtime-template.md) once, before
+business examples. Replace the task command with real invocation; retain {{image}} for host
+finalization. The host owns runtime.json. The section is included in full semantic review; it is
+not injected after approval. Ordinary code can run locally with a compatible environment.
+Important output quantities need source-supported meanings and units/conventions. No API catalog.

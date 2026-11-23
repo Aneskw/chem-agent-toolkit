@@ -1,0 +1,112 @@
+{
+  "image": "ghcr.io/jinselw/chem-tools:retroknn-v1",
+  "platform": "linux/amd64",
+  "environment": {
+    "tools": [
+      {
+        "name": "Python",
+        "version": "3.11.18",
+        "kind": "runtime"
+      },
+      {
+        "name": "torch",
+        "version": "2.2.2+cpu",
+        "kind": "python"
+      },
+      {
+        "name": "dgl",
+        "version": "2.4.0",
+        "kind": "python"
+      },
+      {
+        "name": "syntheseus",
+        "version": "0.9.0",
+        "kind": "python"
+      },
+      {
+        "name": "syntheseus-local-retro",
+        "version": "0.5.0",
+        "kind": "python"
+      },
+      {
+        "name": "dgllife",
+        "version": "0.3.2",
+        "kind": "python"
+      },
+      {
+        "name": "rdkit",
+        "version": "2023.9.6",
+        "kind": "python"
+      },
+      {
+        "name": "numpy",
+        "version": "1.26.4",
+        "kind": "python"
+      },
+      {
+        "name": "pandas",
+        "version": "2.1.4",
+        "kind": "python"
+      },
+      {
+        "name": "setuptools",
+        "version": "80.10.2",
+        "kind": "python"
+      },
+      {
+        "name": "networkx",
+        "version": "3.6.1",
+        "kind": "python"
+      },
+      {
+        "name": "pyyaml",
+        "version": "6.0.3",
+        "kind": "python"
+      },
+      {
+        "name": "requests",
+        "version": "2.34.2",
+        "kind": "python"
+      },
+      {
+        "name": "scipy",
+        "version": "1.17.1",
+        "kind": "python"
+      },
+      {
+        "name": "tqdm",
+        "version": "4.70.1",
+        "kind": "python"
+      },
+      {
+        "name": "more-itertools",
+        "version": "11.2.1",
+        "kind": "python"
+      },
+      {
+        "name": "omegaconf",
+        "version": "2.4.0",
+        "kind": "python"
+      },
+      {
+        "name": "scikit-learn",
+        "version": "1.9.1",
+        "kind": "python"
+      },
+      {
+        "name": "joblib",
+        "version": "1.6.0",
+        "kind": "python"
+      }
+    ]
+  },
+  "resources": [
+    {
+      "name": "localretro-uspto50k",
+      "url": "https://figshare.com/ndownloader/files/42287319",
+      "version": "42287319",
+      "included_in_image": false,
+      "usage": "Supply an extracted compatible local model_dir containing exactly one .pth checkpoint, exactly one .json configuration, and data/atom_templates.csv, data/bond_templates.csv and data/template_infos.csv. Pass model_dir and device='cpu' to LocalRetroModel."
+    }
+  ]
+}

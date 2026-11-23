@@ -119,6 +119,8 @@ def static_checks(package, name=None, *, bundle=None, tool=False, expected_runti
         if not any(not re.search(r'(?:^|\s)(?:--interactive(?:=true)?|-i|-it|-ti)(?:\s|$)', line) for line in runs):
             problems.append('Provide a noninteractive Docker execution command')
         image = expected_runtime['image']
+        if '{{task_command}}' in main:
+            problems.append('Replace the template task_command with the actual tool invocation')
         if image not in main or not re.search(r'\bdocker\s+pull\b', main):
             problems.append('Provide the bound Docker image and pull command')
         checks.append(result('consumer_contract', problems))

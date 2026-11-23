@@ -2,6 +2,4 @@
 skills/** -text whitespace=cr-at-eol
 skills/README.md text eol=lf
 skills/catalog.json text eol=lf
-validation/** -text whitespace=cr-at-eol
-examples/dilution/resources/** -text whitespace=cr-at-eol
-examples/base-count/resources/** -text whitespace=cr-at-eol
+validation/fixtures/** -text whitespace=cr-at-eol

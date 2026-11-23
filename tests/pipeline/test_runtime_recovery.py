@@ -1,7 +1,7 @@
 """Migrate d5b77dc recovery/transaction regression scenarios to native contracts.
 
 Filesystem fault injections and Docker doubles test mechanics only. Real recovery
-is recorded by validation/stage4/real_recovery.py.
+is recorded by validation/integration/verify_tool_fault_isolation.py.
 """
 import copy
 import os
@@ -149,7 +149,7 @@ class RecoveryTests(unittest.TestCase):
 
     def test_new_host_cannot_inherit_historical_acceptance(self):
         from creation_pipeline.runtime.execution import evidence
-        library=Path(__file__).resolve().parents[2]/'validation/stage3/rdkit-library'
+        library=Path(__file__).resolve().parents[2]/'validation/fixtures/recovery/rdkit-library'
         entry=next(e for e in store.catalog(library)['skills'] if e['name']=='rdkit-descriptor-delivery')
         attempt=library/entry['runtime']['path']
         request=runtime_request(entry['delivery'],library/entry['evidence'],entry['freeze_sha256'],attempt)

@@ -18,6 +18,8 @@ IMAGES = {".png", ".jpg", ".jpeg", ".webp"}
 
 def prepare(sources, work):
     work = Path(work)
+    inbox = work / "research/inbox"
+    inbox.mkdir(parents=True, exist_ok=True)
     views = work / "views"
     views.mkdir(parents=True, exist_ok=True)
     processor = file_digest(Path(__file__).with_name("documents.py"))
@@ -79,6 +81,8 @@ def prepare(sources, work):
         "cache": str(sources.cache), "sources": sources.manifest(), "evidence": sources.evidence, "errors": sources.errors,
         "network_requests": sources.acquisition.requests})
     return {"helper": document["helper"], "run": str(work.resolve()), "resource_index": str(work / "resources.json"), "resource_count": len(entries),
+            "research_inbox": str(inbox.resolve()),
+            "research_handoff": "Save content, then atomically commit *.source.json with path (run-relative), url, reason, related_to input IDs and optional version/representation. inventory and stage boundaries ingest automatically.",
             "reading_hint": "Avoid printing the full JSON index. Query paths with helper inventory or parse/filter it locally; browse original directories freely.",
             "view_warning_count": sum("view_warning" in e for e in entries),
             "view_warnings": [e for e in entries if "view_warning" in e][:3]}
@@ -109,6 +113,8 @@ if __name__ == "__main__":
 
 
 def sync_sources(sources, work):
+    from creation_pipeline.resources.supplements import receive
+    receive(work)
     state = read_json(Path(work) / "resource-state.json")
     sources.restore(state["sources"], state["evidence"], state["errors"])
     sources.acquisition.requests = state.get("network_requests", 0)

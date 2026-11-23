@@ -1,0 +1,37 @@
+[
+  {
+    "id": "pydoe",
+    "version": "v1",
+    "path": "pydoe/v1"
+  },
+  {
+    "id": "autoqchem",
+    "version": "v1",
+    "path": "autoqchem/v1"
+  },
+  {
+    "id": "rxnmapper",
+    "version": "v1",
+    "path": "rxnmapper/v1"
+  },
+  {
+    "id": "edbo",
+    "version": "v1",
+    "path": "edbo/v1"
+  },
+  {
+    "id": "retroknn",
+    "version": "v1",
+    "path": "retroknn/v1"
+  },
+  {
+    "id": "edbo",
+    "version": "v2",
+    "path": "edbo/v2"
+  },
+  {
+    "id": "retroknn",
+    "version": "v2",
+    "path": "retroknn/v2"
+  }
+]

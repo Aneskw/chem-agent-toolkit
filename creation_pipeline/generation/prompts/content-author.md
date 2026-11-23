@@ -1,6 +1,23 @@
 Write a usable English Skill from this candidate and inspected sources. The supplied minimum
 and packaging standards define the content; they are not a mandatory chapter template.
 
+Create only consumer-needed files. Do not add a construction report, a duplicate manifest, empty
+auxiliary directories or inspection transcripts. Keep runtime.json host-owned; select/report
+incorrect requirements through environment feedback. Preserve meaningful units, assumptions and
+output conventions; remove repeated background and build investigation narratives.
+
+Apply tool-workflow eligibility before writing: this package must enable actual software use,
+not merely a laboratory procedure or theoretical explanation. Supplement missing essential usage
+evidence under the research policy; do not silently replace the candidate with a non-tool guide.
+
+Verify the candidate's version choice against the minimum standard before inheriting it. For
+generic use, investigate a maintained compatible release when the candidate merely follows an old
+citation/manual. Keep legitimate reproduction/artifact constraints. Source-supported interface
+updates must be reported as environment findings when they change the prepared runtime;
+verify changed defaults, units and behavior rather than mixing
+versions or claiming numerical equivalence. Keep version-selection provenance in basis/notes;
+the Skill contains only the chosen interface, acquisition and operationally relevant boundaries.
+
 Write for an execution Agent that receives only the final package: it has neither this build
 conversation nor the source workspace. Make essential external tools/resources obtainable through
 explicit official repository/package/service/setup links and source-supported versions. Do not
@@ -40,16 +57,15 @@ line of ordinary syntax. This writing basis stays outside the Skill and is not p
 issues have id, description, blocking and resolution. Do not put execution tests or proof files in the package.
 
 Use helper finish with run, package=output_directory, token=delivery_token and metadata=metadata_path.
-Its durable receipt completes delivery; return only completed/summary. Source-backed scope changes
-may use candidate_update: changed task/scope/entrypoint/construction fields plus reason/evidence.
+Its durable receipt completes delivery; return only completed/summary. Keep the supplied candidate scope. Report source-backed scope or tool-version changes as blocking
+issues for environment/content replanning rather than silently overriding the prepared contract.
 additional_candidates use the discovery schema.
 
 
-Docker use belongs in one compact section: provide a pull command and a noninteractive command
-running caller code or a tool command, using {{image}}, and identify the shell. A shell/REPL may
-be optional but must not be the only execution path. Filenames and mount directories are adaptable
-examples. Explain once that mounted outputs persist locally, and link runtime.json for compatible
-local execution requirements. Do not duplicate Docker commands in later tool examples.
+Write the runtime section yourself using the supplied runtime_template; keep the common wording
+and structure. Fill real execution argv; filenames and mount directories are adaptable examples.
+The host finalizes only the image address and runtime.json, not this section. Do not repeat Docker
+wrappers in business examples or force the caller to save code as a particular filename.
 The host owns runtime.json. If its requirements are wrong, report the exact environment finding in
 issues rather than editing it or copying a conflicting prerequisite into the prose. Do not transfer
 verifier-only fixture paths, harness restrictions or build notes into end-user instructions.

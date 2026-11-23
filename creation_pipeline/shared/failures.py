@@ -14,7 +14,9 @@ class InfrastructureError(ValueError):
 
 def route(exc, phase):
     from .verification import TestPlanError, ReviewPlanError
-    from .environment import OperationError
+    from .environment import OperationError, EnvironmentPlanError
+    if isinstance(exc, EnvironmentPlanError):
+        return 'environment'
     if isinstance(exc, ReviewPlanError):
         return 'review'
     if isinstance(exc, TestPlanError):

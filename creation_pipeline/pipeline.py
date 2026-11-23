@@ -731,6 +731,8 @@ def build(config_path=None, state_root=None, **options):
     else:
         legacy = bool(options.get("plan_path"))
     if legacy:
+        if options.pop('image_repository', None):
+            raise ValueError('--image-repository is only supported by shared-environments resume')
         return build_legacy(config_path, state_root, **options)
     from creation_pipeline.shared.pipeline import build as shared_build
     return shared_build(config_path, state_root, **options)

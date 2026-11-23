@@ -11,6 +11,8 @@ def resolve(sources, reference):
         root = Path(entry.get("path", "."))
         original = root if root.is_file() else root / item["path"]
         aliases = {item["id"], f"{item['source']}/{item['path']}", item["path"], str(original), original.as_posix()}
+        for saved_path in entry.get("acquired_paths", []):
+            aliases.update((saved_path, Path(saved_path).as_posix()))
         if reference in aliases or reference == entry.get("url") or reference == entry.get("repo"):
             matches.append(item)
     # URL identifies a file only when unique, never an arbitrary file in a repo.

@@ -1,18 +1,24 @@
 # Documentation
 
-Current default workflow: [shared tool environment creation](pipeline/shared-creation.md),
-[Docker Skill requirements](skills/docker-minimum.md) and
-[packaging](skills/docker-packaging.md). Older guides below describe the explicit
-`legacy-script-images` workflow and its historical acceptance records.
+## Using the pipeline
 
-For a different computer, start with [new-machine setup](pipeline/new-machine-setup.md).
-See the [isolated startup evidence](integration/portable-startup-20261102.md) for verified scope.
+| Document | Content |
+| --- | --- |
+| [First run](../README.md) | Installation, accounts, minimal input and commands |
+| [Configuration](pipeline/configuration.md) | Resource groups, models, libraries and execution settings |
+| [Workflow](pipeline/shared-creation.md) | Stage responsibilities, Docker and delivery requirements |
+| [Resources](pipeline/resources.md) | Source acquisition, research and cross-group sharing |
+| [Readiness](pipeline/readiness.md) | Configuration, infrastructure and model permission checks |
+| [Outputs](pipeline/outputs.md) | Skill packages, runtime.json and internal records |
+| [Operations](pipeline/batch-operations.md) | Resume, installation, manual validation and cleanup |
+| [Examples](../examples/README.md) | Complete construction examples |
 
-Current entry: [small-batch operations](pipeline/batch-operations.md),
-[readiness review](integration/batch-readiness-20261102.md),
-[shared tools](integration/shared-tool-layer-current-design.md),
-[local management](pipeline/local-management-api.md), [reverse references](pipeline/reverse-references.md).
+## Development and interfaces
 
-Start with [usage](pipeline/usage.md) to run the pipeline, then [configuration](pipeline/configuration.md) for fields. See [resources](pipeline/resources.md) for original files, visual input and limitations. Read [design](pipeline/design.md) to understand stages, [code organization](pipeline/code-organization.md) to locate implementation responsibilities and [outputs](pipeline/outputs.md) to interpret results. [Status](pipeline/status.md) distinguishes implementation from verification.
+- [Code organization and state invariants](pipeline/code-organization.md)
+- [Model call accounting](pipeline/model-call-accounting.md)
+- [Developer verification](../validation/README.md)
+- [Runtime interfaces](runtime/README.md)
+- [Skill content](skills/docker-minimum.md), [packaging](skills/docker-packaging.md) and [runtime section template](skills/runtime-template.md)
 
-Skill content is governed by [minimum](skills/minimum.md) and [packaging](skills/packaging.md). Development planning and detailed trial history are maintained outside user documentation.
+The program reads `docs/skills/` specifications directly. Changes affect authoring, review and whether existing batches can resume.

@@ -106,6 +106,27 @@ class NativeSession:
         sync_sources(self.sources, self.work)
 
     def stage(self, instructions, context, schema=None):
+        from creation_pipeline.resources.supplements import SourceHandoffError
+        from creation_pipeline.models import iterations
+        last = None
+        for _ in iterations(self.limits["repair_rounds"]):
+            try:
+                return self._stage_once(instructions, context, schema)
+            except SourceHandoffError as exc:
+                if str(exc) == last:
+                    raise SourceHandoffError("Repeated unchanged resource handoff error: " + str(exc)) from exc
+                last = str(exc)
+                context = {**context, "resource_handoff_error": last,
+                           "repair_instruction": "Repair only the listed sidecars/content, then complete the stage using retained observations. inventory refreshes registration."}
+        raise SourceHandoffError("Resource handoff repair limit reached: " + str(last))
+
+    def _stage_once(self, instructions, context, schema=None):
+        from creation_pipeline.resources.supplements import SourceHandoffError
+        context = copy.deepcopy(context)
+        try:
+            self.refresh_sources()
+        except SourceHandoffError as exc:
+            context["resource_handoff_error"] = str(exc)
         if len(self.receipts) >= bound(self.limits["model_calls"]):
             raise BudgetError("Agent turn budget exhausted")
         remaining = bound(self.limits["total_seconds"]) - (time.monotonic() - self.started)
@@ -344,6 +365,8 @@ class NativeSession:
                 receipt.update(status="interrupted" if isinstance(exc, KeyboardInterrupt) else "failed", error=redact(exc))
                 if isinstance(exc, KeyboardInterrupt):
                     raise
+                if isinstance(exc, SourceHandoffError):
+                    raise
                 if isinstance(exc, AgentStalled):
                     # A silent turn is a transport fault; reporting it as a
                     # budget stop would hide it behind "incomplete".
@@ -407,9 +430,24 @@ class NativeSession:
                 write_json(folder / "image-audit.json", audit)
                 write_json(self.state_path, self.state)
                 write_json(self.work / "progress.json", {"phase": phase, "receipts": self.receipts})
+                if receipt.get('status') == 'completed':
+                    stderr.close()
+                    self.discard_success_debug(folder)
                 if cleanup_errors and not active_error:
                     raise ModelCallError('Agent cleanup incomplete; receipt retained')
 
+
+    def discard_success_debug(self, folder):
+        """Results/receipts support recovery; routine transcripts are optional diagnostics."""
+        if self.config.get('workflow') != 'shared-environments' or self.keep_debug:
+            return
+        for name in ('prompt.txt', 'schema.json', 'events.jsonl', 'stderr.log'):
+            try:
+                (Path(folder) / name).unlink(missing_ok=True)
+            except PermissionError:
+                # Optional transcript cleanup cannot revoke a completed turn.
+                # Windows scanners may briefly retain a closed file handle.
+                pass
 
     def _api_mode(self):
         """True when the native stages run as single-shot API calls instead of CLI turns."""
@@ -468,6 +506,7 @@ class NativeSession:
         self.state['completed'][key] = str(folder / 'result.json')
         write_json(self.state_path, self.state)
         write_json(self.work / 'progress.json', {'phase': phase, 'receipts': self.receipts})
+        self.discard_success_debug(folder)
         return answer
 
 

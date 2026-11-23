@@ -1,0 +1,71 @@
+{
+  "id": "pydoe",
+  "version": "v1",
+  "platform": "linux/amd64",
+  "base_image": "python@sha256:07d4824036af339fa1b6ef769cc99d9c10a141769538b52b3b597c84f7a7b535",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "sha256": "385cc77db617e32ba66bcff4ebaa22a4b77dd1fc7b04d7cc1fc345c80273f479",
+      "bytes": 17
+    },
+    {
+      "path": "Dockerfile",
+      "sha256": "469650ef6f7e98bab8b1cbbecb67480e18b8759f01f8bdaed0d511c0812058a5",
+      "bytes": 526
+    },
+    {
+      "path": "probe.py",
+      "sha256": "cd2eedfe592bfca6536fdb0e5290949d38128ad501807ef704957bf01767c62e",
+      "bytes": 885
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "788ab0a49fead2ae052e6e493ca3fa87dade4c7fbbfd31f8cee0113a122ff2ae",
+      "bytes": 209
+    }
+  ],
+  "image": "ghcr.io/jinselw/chem-tools:pydoe-v1",
+  "digest": "sha256:41b4e08077fe68dc80c21a60598ab86030b64110a12780c8152b7d17f253a28e",
+  "probe": [
+    "python",
+    "/opt/pydoe/probe.py"
+  ],
+  "tools": [
+    {
+      "name": "Python",
+      "version": "3.11.18",
+      "kind": "runtime"
+    },
+    {
+      "name": "pyDOE2",
+      "version": "1.3.0",
+      "kind": "python"
+    },
+    {
+      "name": "numpy",
+      "version": "2.4.6",
+      "kind": "python"
+    },
+    {
+      "name": "scipy",
+      "version": "1.17.1",
+      "kind": "python"
+    },
+    {
+      "name": "pip",
+      "version": "26.3",
+      "kind": "python"
+    },
+    {
+      "name": "setuptools",
+      "version": "84.2.1",
+      "kind": "python"
+    },
+    {
+      "name": "wheel",
+      "version": "0.48.0",
+      "kind": "python"
+    }
+  ]
+}

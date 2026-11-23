@@ -1,7 +1,6 @@
 """Portable configuration and zero-model client diagnosis, no live provider calls."""
 import importlib.util
 from pathlib import Path
-import shutil
 import subprocess
 import tempfile
 from types import SimpleNamespace
@@ -9,8 +8,8 @@ import unittest
 from unittest.mock import patch
 
 from creation_pipeline import onboarding,doctor
-from creation_pipeline.models import load_legacy_config as load_config
-from creation_pipeline.records import read_json,file_digest
+from creation_pipeline.models import load_config
+from creation_pipeline.records import read_json
 from creation_pipeline.paths import ROOT
 
 FLAGS='--json --output-schema --skip-git-repo-check --sandbox --enable --disable --config --model --ignore-user-config --ephemeral'
@@ -23,33 +22,30 @@ class OnboardingTests(unittest.TestCase):
         self.temp=tempfile.TemporaryDirectory(dir=parent);self.addCleanup(self.temp.cleanup)
         self.root=Path(self.temp.name)
 
-    def test_init_rebases_sources_and_sets_both_models_without_changing_template(self):
-        template=ROOT/'examples/descriptor-screening/input.json';before=file_digest(template)
+    def test_init_generates_shared_config_without_example_files(self):
         output=self.root/'nested/config.json';result=onboarding.initialize(output,'my-account-model')
         config=load_config(output)
+        self.assertEqual(config['workflow'],'shared-environments')
         self.assertEqual(config['model']['name'],'my-account-model')
-        self.assertEqual(config['runtime_defaults']['options']['model'],'my-account-model')
-        self.assertEqual(config['limits']['model_calls'],16);self.assertEqual(result['model_calls'],0)
-        self.assertFalse(Path(read_json(output)['sources'][0]['path']).is_absolute())
-        self.assertEqual(Path(config['sources'][0]['path']),ROOT/'validation/sibling-json/source')
-        self.assertEqual(file_digest(template),before)
+        self.assertEqual(Path(config['environments']['root']),ROOT/'tools')
+        self.assertIsNone(config['limits']['model_calls'])
+        self.assertEqual(result['model_calls'],0)
+        self.assertEqual(len(config['resource_groups'][0]['sources']),2)
+        self.assertTrue(all(s['url'].startswith('https://www.rdkit.org/') for s in config['resource_groups'][0]['sources']))
 
-    def test_example_is_identical_in_implementation_requirements_and_business_obligations(self):
-        old=read_json(ROOT/'validation/scoped-contracts/skill-a.json');new=read_json(ROOT/'examples/descriptor-screening/input.json')
-        for field in ('prompt','limits','execution'):
-            self.assertEqual(old[field],new[field])
-        for field in ('shared_tool','tool_compatibility','skill_contract'):
-            self.assertEqual(old['runtime_defaults'][field],new['runtime_defaults'][field])
-        self.assertNotIn('name',new['model']);self.assertNotIn('model',new['runtime_defaults']['options'])
+    def test_init_prompts_for_publisher_configuration_without_inheriting_account(self):
+        output=self.root/'config.json';result=onboarding.initialize(output,'model')
+        config=read_json(output)
+        self.assertEqual(config['environments']['repository'],'ghcr.io/your-account/chem-tools')
+        self.assertIn('environments.repository',result['next'])
 
-    def test_config_and_sources_relocate_together_with_no_old_checkout_dependency(self):
+    def test_config_uses_tools_in_the_selected_checkout(self):
         relocated=self.root/'other user checkout with spaces'
-        for name in ('examples/descriptor-screening','validation/sibling-json/source'):
-            shutil.copytree(ROOT/name,relocated/name)
         with patch.object(onboarding,'ROOT',relocated):
             output=relocated/'.pipeline/configs/user.json';onboarding.initialize(output,'my-model')
         config=load_config(output)
-        self.assertTrue(Path(config['sources'][0]['path']).is_relative_to(relocated))
+        self.assertEqual(Path(config['environments']['root']),relocated/'tools')
+        self.assertFalse(Path(read_json(output)['environments']['root']).is_absolute())
         self.assertNotIn(str(ROOT),output.read_text(encoding='utf-8'))
 
     def test_existing_configuration_is_never_overwritten(self):
@@ -138,6 +134,7 @@ class OnboardingTests(unittest.TestCase):
             result=module.bootstrap(target)
         create.assert_not_called();self.assertEqual(run.call_count,2)
         self.assertEqual(result['status'],'environment_prepared')
+        self.assertEqual(run.call_args.args[0][-1],str(ROOT/'requirements.txt'))
 
 
 if __name__=='__main__':unittest.main()

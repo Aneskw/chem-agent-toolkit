@@ -8,11 +8,11 @@ import zipfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from creation_pipeline.resources.acquisition import Acquisition
+from creation_pipeline.resources.acquisition import Acquisition, SourceContentError
 from creation_pipeline.resources.documents import read_text, table_rows
 from creation_pipeline.resources.intake import Sources
 from creation_pipeline.models import BlockedError, load_legacy_config as load_config
-from creation_pipeline.records import write_json
+from creation_pipeline.records import write_json, digest, file_digest
 
 
 class SourceTests(unittest.TestCase):
@@ -114,6 +114,43 @@ class SourceTests(unittest.TestCase):
         self.config["limits"]["source_bytes"] = 10
         with patch("creation_pipeline.resources.acquisition.urllib.request.urlopen", return_value=Response(b"x" * 11)), self.assertRaises(BlockedError):
             acquisition.download("https://example.org/oversized.xml")
+
+    def test_empty_download_is_not_a_successful_cached_source(self):
+        class Response(io.BytesIO):
+            url = "https://example.org/empty"
+            headers = {"Content-Type": "text/html"}
+        acquisition = Acquisition(self.config, self.root / "cache")
+        with patch("creation_pipeline.resources.acquisition.urllib.request.urlopen", return_value=Response(b"")):
+            with self.assertRaisesRegex(SourceContentError, "Empty download"):
+                acquisition.download(Response.url)
+        self.assertFalse((acquisition.cache / "download-index").exists())
+
+    def test_legacy_empty_cache_is_refetched_and_binary_pdf_is_reused(self):
+        class Response(io.BytesIO):
+            url = "https://example.org/manual"
+            headers = {"Content-Type": "application/octet-stream"}
+        acquisition = Acquisition(self.config, self.root / "cache")
+        empty = acquisition.cache / "old-empty.html"
+        empty.parent.mkdir(parents=True)
+        empty.write_bytes(b"")
+        write_json(acquisition.cache / "download-index" / (digest(Response.url.encode()) + ".json"),
+                   {"path": str(empty), "sha256": file_digest(empty), "origin": {}})
+        content = b"%PDF-1.7\nsource bytes"
+        with patch("creation_pipeline.resources.acquisition.urllib.request.urlopen", return_value=Response(content)) as fetch:
+            path, origin = acquisition.download(Response.url)
+            self.assertEqual((path, origin), acquisition.download(Response.url))
+        self.assertEqual(fetch.call_count, 1)
+        self.assertEqual(path.suffix, ".pdf")
+        self.assertEqual(path.read_bytes(), content)
+
+    def test_legitimate_empty_repository_files_are_retained(self):
+        source = self.root / "package"
+        source.mkdir()
+        (source / "__init__.py").write_bytes(b"")
+        self.config["sources"] = [{"id": "code", "path": str(source)}]
+        sources = Sources(self.config, self.root / "cache")
+        self.assertIn("__init__.py", sources.entries["code"]["files"])
+        sources.verify()
 
     def test_github_export_pins_commit_and_retains_binary_assets(self):
         stream = io.BytesIO()

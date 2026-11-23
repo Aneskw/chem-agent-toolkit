@@ -32,7 +32,9 @@ def session(tmp, backend_name='deepseek_api'):
     instance.config = {'model': {'backend': backend_name, 'api_model': 'deepseek-chat'}}
     instance.sources = SimpleNamespace(manifest=lambda: [], entries={}, evidence=[], limits={})
     instance.limits = {'model_calls': 12, 'total_seconds': 600, 'model_timeout': 30,
-                       'agent_progress_timeout': None, 'agent_events': 1000}
+                       'agent_progress_timeout': None, 'agent_events': 1000, 'repair_rounds': None}
+    instance.keep_debug = True
+    instance.refresh_sources = lambda: None  # This provider fixture has no resource workspace.
     instance.work = work
     instance.receipts = []
     instance.state = {'sessions': {}, 'completed': {}}

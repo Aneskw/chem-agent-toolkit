@@ -1,0 +1,123 @@
+{
+  "image": "ghcr.io/jinselw/chem-tools:edbo-v1",
+  "platform": "linux/amd64",
+  "environment": {
+    "tools": [
+      {
+        "name": "Python",
+        "version": "3.7.5",
+        "kind": "runtime"
+      },
+      {
+        "name": "edbo",
+        "version": "0.1.0",
+        "kind": "python"
+      },
+      {
+        "name": "torch",
+        "version": "1.3.1+cpu",
+        "kind": "python"
+      },
+      {
+        "name": "gpytorch",
+        "version": "1.0.0",
+        "kind": "python"
+      },
+      {
+        "name": "pyro-ppl",
+        "version": "1.1.0",
+        "kind": "python"
+      },
+      {
+        "name": "pandas",
+        "version": "1.0.1",
+        "kind": "python"
+      },
+      {
+        "name": "numpy",
+        "version": "1.18.1",
+        "kind": "python"
+      },
+      {
+        "name": "scipy",
+        "version": "1.4.1",
+        "kind": "python"
+      },
+      {
+        "name": "scikit-learn",
+        "version": "0.22.1",
+        "kind": "python"
+      },
+      {
+        "name": "rdkit",
+        "version": "2019.09.3",
+        "kind": "python"
+      },
+      {
+        "name": "mordred",
+        "version": "1.2.0",
+        "kind": "python"
+      },
+      {
+        "name": "pyclustering",
+        "version": "0.9.3.1",
+        "kind": "python"
+      },
+      {
+        "name": "matplotlib",
+        "version": "3.1.3",
+        "kind": "python"
+      },
+      {
+        "name": "seaborn",
+        "version": "0.10.0",
+        "kind": "python"
+      },
+      {
+        "name": "dill",
+        "version": "0.3.1.1",
+        "kind": "python"
+      },
+      {
+        "name": "xlrd",
+        "version": "1.2.0",
+        "kind": "python"
+      },
+      {
+        "name": "ipython",
+        "version": "7.12.0",
+        "kind": "python"
+      },
+      {
+        "name": "networkx",
+        "version": "2.4",
+        "kind": "python"
+      },
+      {
+        "name": "pip",
+        "version": "20.0.2",
+        "kind": "python"
+      },
+      {
+        "name": "setuptools",
+        "version": "45.2.0.post20200210",
+        "kind": "python"
+      },
+      {
+        "name": "wheel",
+        "version": "0.34.2",
+        "kind": "python"
+      },
+      {
+        "name": "libxrender1",
+        "version": "1:0.9.12-1",
+        "kind": "system"
+      },
+      {
+        "name": "libxext6",
+        "version": "2:1.3.4-1+b3",
+        "kind": "system"
+      }
+    ]
+  }
+}

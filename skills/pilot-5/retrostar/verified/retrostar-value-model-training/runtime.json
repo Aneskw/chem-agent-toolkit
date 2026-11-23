@@ -1,0 +1,68 @@
+{
+  "image": "ghcr.io/jinselw/chem-tools:edbo-v2",
+  "platform": "linux/amd64",
+  "environment": {
+    "tools": [
+      {
+        "name": "Python",
+        "version": "3.7.5",
+        "kind": "runtime"
+      },
+      {
+        "name": "torch",
+        "version": "1.3.1+cpu",
+        "kind": "python"
+      },
+      {
+        "name": "pandas",
+        "version": "1.0.1",
+        "kind": "python"
+      },
+      {
+        "name": "numpy",
+        "version": "1.18.1",
+        "kind": "python"
+      },
+      {
+        "name": "rdkit",
+        "version": "2019.09.3",
+        "kind": "python"
+      },
+      {
+        "name": "retro_star",
+        "version": "60e7a24213810706a7075d113704c9320158d726",
+        "kind": "python"
+      },
+      {
+        "name": "mlp_retrosyn",
+        "version": "60e7a24213810706a7075d113704c9320158d726",
+        "kind": "python"
+      },
+      {
+        "name": "rdchiral",
+        "version": "60e7a24213810706a7075d113704c9320158d726",
+        "kind": "python"
+      },
+      {
+        "name": "tqdm",
+        "version": "4.43.0",
+        "kind": "python"
+      },
+      {
+        "name": "graphviz",
+        "version": "0.20.1",
+        "kind": "python"
+      },
+      {
+        "name": "Graphviz",
+        "version": "2.42.4-3",
+        "kind": "executable"
+      },
+      {
+        "name": "networkx",
+        "version": "2.4",
+        "kind": "python"
+      }
+    ]
+  }
+}

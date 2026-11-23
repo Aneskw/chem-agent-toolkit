@@ -36,6 +36,19 @@ def eligible(state, build_id):
         record = read_json(record_path)
         if record['final_files'] != manifest(record_path.parent / 'package'):
             raise ValueError('Durable archived package differs; cleanup refused')
+    from creation_pipeline.resources.supplements import restore
+    from creation_pipeline.resources.intake import Sources
+    for group in saved['groups']:
+        workspace = run / 'groups' / group
+        sources = restore(workspace)
+        if any(e.get('supplemental') for e in sources.manifest()):
+            archive = state / 'records' / build_id / 'groups' / group
+            retained = read_json(archive / 'sources.json')
+            if {e['id'] for e in retained} != set(sources.entries):
+                raise ValueError('Source archive is incomplete; retain workspace')
+            evidence = Sources.__new__(Sources)
+            evidence.entries = {e['id']: e for e in retained}
+            evidence.verify()
     return run
 
 

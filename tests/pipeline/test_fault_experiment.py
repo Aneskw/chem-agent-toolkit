@@ -9,7 +9,7 @@ from creation_pipeline.records import read_json
 
 class FaultExperimentTests(unittest.TestCase):
     def test_library_interrupt_worker_does_not_require_fixture_record(self):
-        path=Path(__file__).resolve().parents[2]/'validation/deepseek-api/verify_tool_fault_isolation.py'
+        path=Path(__file__).resolve().parents[2]/'validation/integration/verify_tool_fault_isolation.py'
         spec=importlib.util.spec_from_file_location('fault_experiment',path)
         module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
         with tempfile.TemporaryDirectory() as temp:

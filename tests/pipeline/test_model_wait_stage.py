@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 from creation_pipeline.runtime import model_call
-from validation.planner_wait_stage_support import project, StderrProjection
+from validation.checks.planner_diagnostics import project, StderrProjection
 
 
 class WaitStageTests(unittest.TestCase):

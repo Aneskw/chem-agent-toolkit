@@ -1,44 +1,33 @@
-# 零模型就绪预检
+# Readiness checks
 
-2026-11-02 补强：配置校验/预检/执行复用同一 runtime-default 合并规则；已声明可执行构建
-及原生 DeepSeek 模式会检查当前 Python 能否定位 jsonschema，缺失报告 host_dependency_missing。
-不自动安装。草稿/发现中的未使用运行时依赖只作延期观察，不阻断合法离线路径。
+Use the configured Python from the repository root:
 
-`python -m creation_pipeline readiness CONFIG` 只读观察现有配置、来源、Docker 及显式指定的工具版本。
-普通 build 自动在 NativeSession 创建和推理前执行；本地明确缺口直接返回 phase=readiness、0 模型，
-不创建构建状态目录。远端/表格来源未获取时标记 deferred，正常资源获取后再次检查；续接计划和
-checkpoint 在恢复来源后、模型前检查。原 `build --preflight` 仍只校验配置，不悄悄改变旧接口。
+```bash
+python -m creation_pipeline build input.json --preflight
+python -m creation_pipeline readiness input.json --mode build
+```
 
-响应 version=1，status 为 ready/blocked/deferred；checks/gaps 含 object、path、expected、actual、
-code、status、reason。model_calls=build_calls=0，qualification=not_granted；ready 仅表示本次观察
-未发现已知阻止条件，不证明 provider 授权、模型后续生成内容、构建成功或业务资格。
+| Entry | Checks | Model calls |
+| --- | --- | --- |
+| build --preflight | Fields, resource groups, path syntax and configuration rules | No |
+| readiness --mode build | Known source conditions, CLI arguments, Linux Docker server and GHCR login | No |
+| readiness --mode discover | Source and CLI prerequisites for discovery | No |
+| readiness --offline | Configuration and local observations, with external prerequisites deferred | No |
+| Actual build | Prerequisites plus real model calls, workspace/helper writes, shared cache writes and CLI session resume | Yes |
 
-来源沿用 intake 的保留/凭据排除规则；逐文件读取与摘要、显式文件摘要和有限预算均检查。
-声明的 Python 入口、可静态定位的本地 import 与 JSON 文件通过与交付相同的静态检查器。
-交付后完整包和来源仍重新进入 describe，不用预检的局部观察代替最终实现闭包。
-来源路径与计划包路径不能唯一映射时具名 tool_support_unresolved；不猜测字节兼容。
-当前支持直接目录内对应路径；远端或来源表获取尚未完成时返回 source_mapping_pending。
+publish=false skips GHCR login checks. Authentication checks do not guarantee upload rights; the actual push must pass registry authorization. ready describes the prerequisites observed, not a qualified Skill or image.
 
-显式 tool_artifact 检查参考身份、记录自洽、已知声明/要求/来源以及当前 daemon/image 元数据。
-未显式指定的自动发现仍在当前 Skill 编写、审阅和来源核验之后精确解析，预检不会制造完整命中。
-Open Babel 完整 executable/插件/数据/rootfs 检查可能创建隔离容器，预检明确延后该项；后续默认
-available/verify_current 的完整核验不变。预检不 pull/build/create/run、修复系统或更改资格。
+Successful model permission checks can be reused for one hour. Configuration, check code, CLI or engine identity changes invalidate them, as does a model call failure.
 
-`readiness --offline` 不调用 Docker；`--mode discover`、`--mode draft` 或 draft_only 配置允许
-Docker 缺失并明确 deferred。普通 build 中显式 executable/shared_tool/plan 或 required 执行需求
-需要 Docker。无已声明运行需求的编写仍可继续，待真实需求明确后走原运行时门禁。
-这些离线路径不能安装一个尚未通过当前业务验收的可执行 Skill。
+## Common blockers
 
-错误码包括 configuration_invalid、source_unavailable/empty/unreadable/digest_mismatch、
-source_budget_exceeded、model_client_unavailable/model_configuration_invalid、docker_unavailable、
-tool_support_unresolved、tool_request_mismatch/tool_source_mismatch/tool_artifact_unavailable。
-source_acquisition_pending/source_mapping_pending、runtime_deferred、artifact_availability_deferred、
-external_identity_deferred 是待核验观察。错误保留具体路径、期望与实际值；证据沿用 redact/write_json。
+| Observation | Action |
+| --- | --- |
+| Missing or incompatible CLI | Install a compatible CLI and make it available on PATH |
+| Model unavailable | Check authentication and model.name |
+| Docker unreachable | Start the engine and select Linux containers |
+| GHCR login failure | Authenticate with your classic token and confirm write:packages rights |
+| Source unavailable | Correct the path/address or supply accessible material |
+| Uploaded image cannot be downloaded anonymously | Make the target Package Public, then resume |
 
-公开 CLI 证据：`E:/Users/27343/Docker/readiness-cli-20261102-01/results.json`，9 项，0 模型、
-0 构建。模拟 Docker 缺失只向子进程设置专用不存在的 DOCKER_HOST，现有 daemon/cache 不变；
-模型 executable guard 阻止意外调用。测试不依赖真实模型响应或旧资格。
-
-最终补强后在全新 `readiness-cli-20261102-02` 验证 11 项（仍 0 模型/构建），增加坏配置的
-普通 build 结构化错误，以及草稿模式不要求未调用运行时 provider 的本地设置有效；原生编写
-所选 provider 仍必检。原 01 结果保留。完整回归与当前 v3/v4 资格复核见本轮集成报告。
+See [operations](batch-operations.md) for resume commands.

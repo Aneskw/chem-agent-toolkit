@@ -1,0 +1,319 @@
+{
+  "id": "retroknn",
+  "version": "v2",
+  "platform": "linux/amd64",
+  "base_image": "ghcr.io/jinselw/chem-tools@sha256:e9898a1635c84259ba8d835739a2112214d3c67762ab1e1831f2636971cc24f1",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "sha256": "385cc77db617e32ba66bcff4ebaa22a4b77dd1fc7b04d7cc1fc345c80273f479",
+      "bytes": 17
+    },
+    {
+      "path": "Dockerfile",
+      "sha256": "2aa85f9f4b182d5cfc0fa3092217ceb9ccad7c8835b7094b8ef6360c2cddbc78",
+      "bytes": 244
+    },
+    {
+      "path": "fetch_source.py",
+      "sha256": "06085336c719ba16a080750fa93cb2211de1e1040270462885c42d46c6c7f977",
+      "bytes": 1635
+    },
+    {
+      "path": "probe.py",
+      "sha256": "63313a5d8b2141cb49d116a0588d5bcc9756279a5f133cc83f5587a91434c646",
+      "bytes": 1671
+    },
+    {
+      "path": "source-manifest.json",
+      "sha256": "2b5e7d325e5dd3070191613dff805860d095c71a2a6b9f56fffca7dced10f0e6",
+      "bytes": 1972
+    }
+  ],
+  "image": "ghcr.io/jinselw/chem-tools:retroknn-v2",
+  "digest": "sha256:8423cb33bf62faad4cfcb3791c5a569800beb389d151e986906e742503f0fa4d",
+  "probe": [
+    "python",
+    "/opt/retroknn/probe.py"
+  ],
+  "tools": [
+    {
+      "name": "Python",
+      "version": "3.11.18",
+      "kind": "runtime"
+    },
+    {
+      "name": "torch",
+      "version": "2.2.2+cpu",
+      "kind": "python"
+    },
+    {
+      "name": "dgl",
+      "version": "2.4.0",
+      "kind": "python"
+    },
+    {
+      "name": "syntheseus",
+      "version": "0.9.0",
+      "kind": "python"
+    },
+    {
+      "name": "syntheseus-local-retro",
+      "version": "0.5.0",
+      "kind": "python"
+    },
+    {
+      "name": "dgllife",
+      "version": "0.3.2",
+      "kind": "python"
+    },
+    {
+      "name": "rdkit",
+      "version": "2023.9.6",
+      "kind": "python"
+    },
+    {
+      "name": "numpy",
+      "version": "1.26.4",
+      "kind": "python"
+    },
+    {
+      "name": "pandas",
+      "version": "2.1.4",
+      "kind": "python"
+    },
+    {
+      "name": "setuptools",
+      "version": "80.10.2",
+      "kind": "python"
+    },
+    {
+      "name": "pip",
+      "version": "25.2",
+      "kind": "python"
+    },
+    {
+      "name": "wheel",
+      "version": "0.45.1",
+      "kind": "python"
+    },
+    {
+      "name": "filelock",
+      "version": "4.2.10",
+      "kind": "python"
+    },
+    {
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "kind": "python"
+    },
+    {
+      "name": "sympy",
+      "version": "1.14.0",
+      "kind": "python"
+    },
+    {
+      "name": "networkx",
+      "version": "3.6.1",
+      "kind": "python"
+    },
+    {
+      "name": "jinja2",
+      "version": "3.1.6",
+      "kind": "python"
+    },
+    {
+      "name": "fsspec",
+      "version": "2026.9.0",
+      "kind": "python"
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "kind": "python"
+    },
+    {
+      "name": "psutil",
+      "version": "7.2.2",
+      "kind": "python"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.14.3",
+      "kind": "python"
+    },
+    {
+      "name": "pyyaml",
+      "version": "6.0.3",
+      "kind": "python"
+    },
+    {
+      "name": "requests",
+      "version": "2.34.2",
+      "kind": "python"
+    },
+    {
+      "name": "scipy",
+      "version": "1.17.1",
+      "kind": "python"
+    },
+    {
+      "name": "tqdm",
+      "version": "4.70.1",
+      "kind": "python"
+    },
+    {
+      "name": "more-itertools",
+      "version": "11.2.1",
+      "kind": "python"
+    },
+    {
+      "name": "omegaconf",
+      "version": "2.4.0",
+      "kind": "python"
+    },
+    {
+      "name": "chardet",
+      "version": "7.7.0",
+      "kind": "python"
+    },
+    {
+      "name": "scikit-learn",
+      "version": "1.9.1",
+      "kind": "python"
+    },
+    {
+      "name": "hyperopt",
+      "version": "0.3.0",
+      "kind": "python"
+    },
+    {
+      "name": "joblib",
+      "version": "1.6.0",
+      "kind": "python"
+    },
+    {
+      "name": "pillow",
+      "version": "13.0.0",
+      "kind": "python"
+    },
+    {
+      "name": "python-dateutil",
+      "version": "4.0.0",
+      "kind": "python"
+    },
+    {
+      "name": "pytz",
+      "version": "2026.6",
+      "kind": "python"
+    },
+    {
+      "name": "tzdata",
+      "version": "2026.6",
+      "kind": "python"
+    },
+    {
+      "name": "mpmath",
+      "version": "1.3.0",
+      "kind": "python"
+    },
+    {
+      "name": "markupsafe",
+      "version": "3.0.4",
+      "kind": "python"
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "kind": "python"
+    },
+    {
+      "name": "pydantic-core",
+      "version": "2.50.4",
+      "kind": "python"
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.5",
+      "kind": "python"
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.5.2",
+      "kind": "python"
+    },
+    {
+      "name": "idna",
+      "version": "3.20",
+      "kind": "python"
+    },
+    {
+      "name": "urllib3",
+      "version": "2.8.0",
+      "kind": "python"
+    },
+    {
+      "name": "certifi",
+      "version": "2026.10.23",
+      "kind": "python"
+    },
+    {
+      "name": "narwhals",
+      "version": "2.28.0",
+      "kind": "python"
+    },
+    {
+      "name": "threadpoolctl",
+      "version": "3.8.0",
+      "kind": "python"
+    },
+    {
+      "name": "cloudpickle",
+      "version": "3.1.2",
+      "kind": "python"
+    },
+    {
+      "name": "faiss-cpu",
+      "version": "1.16.0",
+      "kind": "python"
+    },
+    {
+      "name": "torch-scatter",
+      "version": "2.1.2+pt22cpu",
+      "kind": "python"
+    },
+    {
+      "name": "LocalRetro",
+      "version": "eba83e72efabeb854fec86c865e8743c295a8a1e",
+      "kind": "python",
+      "probe": [
+        "python",
+        "/opt/localretro/probe.py",
+        "eba83e72efabeb854fec86c865e8743c295a8a1e"
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "name": "retroknn-uspto50k",
+      "url": "https://figshare.com/ndownloader/files/45662430",
+      "version": "45662430",
+      "included_in_image": false,
+      "usage": "Supply an extracted compatible bundle through model_dir: local_retro/ contains its unique .pth, unique .json and data/{atom_templates,bond_templates,template_infos}.csv; knn/ contains its unique adapter .pt and datastore/data.atom_idx, data.bond_idx and data.npz, including any external index payload files."
+    },
+    {
+      "name": "localretro-uspto50k",
+      "url": "https://figshare.com/ndownloader/files/42287319",
+      "version": "42287319",
+      "included_in_image": false,
+      "usage": "Supply an extracted compatible local model_dir containing exactly one .pth checkpoint, exactly one .json configuration, and data/atom_templates.csv, data/bond_templates.csv and data/template_infos.csv. Pass model_dir and device='cpu' to LocalRetroModel."
+    },
+    {
+      "name": "localretro-default-config",
+      "url": "https://raw.githubusercontent.com/kaist-amsg/LocalRetro/eba83e72efabeb854fec86c865e8743c295a8a1e/data/configs/default_config.json",
+      "version": "eba83e72efabeb854fec86c865e8743c295a8a1e",
+      "included_in_image": true,
+      "usage": "Downloaded with the pinned author source into /opt/localretro/src/data/configs/default_config.json; Train.py reads it by default."
+    }
+  ]
+}

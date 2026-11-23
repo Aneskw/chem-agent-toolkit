@@ -3,6 +3,7 @@ import copy
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from creation_pipeline.shared.contracts import runtime
 from creation_pipeline.shared.environment import compatible, OperationError
@@ -30,7 +31,7 @@ class RevisionTests(unittest.TestCase):
         record = {**env_plan(), 'id': 'env-python', 'version': 'one'}
         request = copy.deepcopy(record)
         request.update(selection='reuse', environment_id='env-python', environment_version='one')
-        request['conditions']['network_required'] = True
+        request['conditions']['accelerator'] = 'nvidia'
         self.assertFalse(compatible(record, request))
 
     def test_failure_owners_are_deterministic(self):
@@ -47,8 +48,9 @@ class RevisionTests(unittest.TestCase):
         source = Sources()
         entity = {'tool_requirements': [{'name': 'python', 'kind': 'runtime', 'version': '3.11'}],
                   'environment_gaps': [], 'resources': []}
-        with tempfile.TemporaryDirectory() as temp:
-            cache = Investigations(temp)
+        with tempfile.TemporaryDirectory() as temp, patch(
+                'creation_pipeline.shared.environment_state.STATE_ROOT', Path(temp) / '.pipeline/tool-libraries'):
+            cache = Investigations(Path(temp) / 'tools')
             cache.remember(env_plan(), source)
             self.assertEqual(cache.resolve(entity, source)['tools'], env_plan()['tools'])
             entity['environment_gaps'] = ['GPU requirement unknown']
@@ -57,13 +59,28 @@ class RevisionTests(unittest.TestCase):
             source.evidence = [{**source.evidence[0], 'sha256': 'changed'}]
             self.assertIsNone(cache.resolve(entity, source))
 
+    def test_json_records_support_long_internal_paths(self):
+        from creation_pipeline.records import write_json, read_json, long_path
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / ('part-' + 'x' * 70) / ('part-' + 'y' * 70) / ('part-' + 'z' * 70) / 'receipt.json'
+            try:
+                write_json(path, {'status': 'passed'})
+                self.assertEqual(read_json(path), {'status': 'passed'})
+            finally:
+                long_path(path).unlink(missing_ok=True)
+                for directory in list(path.parents)[:3]:
+                    if long_path(directory).exists():
+                        long_path(directory).rmdir()
+
     def test_repeated_archive_does_not_hash_its_own_record_path(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             source = root / 'candidate'
             source.mkdir()
-            (source / 'SKILL.md').write_text('Frozen content', encoding='utf-8')
-            result = {'name': 'a', 'group': 'g', 'status': 'verified', 'record': 'working/record.json'}
+            (source / 'package').mkdir()
+            (source / 'package/SKILL.md').write_text('Frozen content', encoding='utf-8')
+            from creation_pipeline.artifacts.package import manifest
+            result = {'name': 'a', 'group': 'g', 'status': 'verified', 'record': 'working/record.json', 'final_files': manifest(source / 'package')}
             archived = archive_candidate(root, 'batch', 'g', 'a', source, result)
             retried = archive_candidate(root, 'batch', 'g', 'a', source, {**archived, 'adoption_error': 'transient'})
             self.assertEqual(archived['record'], retried['record'])

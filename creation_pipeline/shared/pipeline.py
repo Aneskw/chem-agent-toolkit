@@ -22,9 +22,11 @@ from .investigation import Investigations
 from .failures import IntegrityError, route
 from .preflight import startup
 from .checks import static_checks
-from .environment import EnvironmentLibrary, OperationError, fingerprint, runtime
-from .verification import bind_items, validate_plan, execute
-from .resources import index
+from .environment import EnvironmentLibrary, OperationError, PublicationPending, fingerprint, runtime
+from .verification import bind_items, validate_plan, execute, validate_decisions, execution_key, requires_audit, TestPlanError
+from .resources import index, archive_sources
+from .assets import resolve_inputs, acquire_requests
+from .observations import compact, event
 from .delivery import finalize, adopt
 
 
@@ -48,7 +50,12 @@ def specifications():
              'creation_pipeline/generation/prompts/content-analyze.md',
              'creation_pipeline/shared/prompts.py',
              'creation_pipeline/shared/contracts.py', 'creation_pipeline/shared/schemas.py',
-             'creation_pipeline/shared/checks.py', 'creation_pipeline/shared/verification.py']
+             'creation_pipeline/shared/checks.py', 'creation_pipeline/shared/verification.py',
+             'creation_pipeline/shared/environment.py', 'creation_pipeline/shared/registry.py',
+             'creation_pipeline/shared/assets.py', 'creation_pipeline/shared/runtime_probe.py',
+             'creation_pipeline/shared/observations.py',
+             'creation_pipeline/shared/delivery.py', 'creation_pipeline/shared/library.py',
+             'docs/skills/runtime-template.md']
     return {p: file_digest(ROOT / p) for p in paths}
 
 
@@ -57,21 +64,53 @@ def archive_candidate(state_root, bid, gid, name, source, result):
     result = copy.deepcopy(result)
     for field in ('record', 'archive_error', 'adoption_error', 'adoption'):
         result.pop(field, None)
+    def local_artifacts(value):
+        if isinstance(value, list):
+            return [local_artifacts(v) for v in value]
+        if not isinstance(value, dict):
+            return value
+        value = {k: local_artifacts(v) for k, v in value.items()}
+        reference = value.get('artifact')
+        if isinstance(reference, str) and Path(reference).is_absolute():
+            try:
+                value['artifact'] = long_path(reference).resolve().relative_to(long_path(source).resolve()).as_posix()
+            except ValueError:
+                pass
+        return value
+    result = local_artifacts(result)
+    qualified = result['status'] in {'verified', 'pending-validation'}
+    if qualified:
+        # Resume uses the active checkpoint. Archive only qualification evidence;
+        # build materials and consumer facts already have authoritative locations.
+        for field in ('environment_plan', 'reviewed_main', 'last_authored_files', 'last_author_progress', 'feedback'):
+            result.pop(field, None)
     relative = 'records/' + bid + '/evidence/' + fingerprint(result)[:16]
     target = safe_relative(state_root, relative)
     result = copy.deepcopy(result)
     result['record'] = str(target / 'record.json')
+    if result['status'] in {'verified', 'pending-validation'} and manifest(Path(source) / 'package') != result['final_files']:
+        raise IntegrityError('Current package differs from final approved files; archive refused')
     if not target.exists():
         target.parent.mkdir(parents=True, exist_ok=True)
         stage = target.with_name(target.name + '.writing-' + uuid.uuid4().hex[:8])
+        def ignored(directory, names):
+            if not qualified or Path(directory).resolve() != Path(long_path(source)).resolve():
+                return []
+            return [n for n in names if n.startswith('context-') or n in
+                    {'checkpoint.json', 'record.json', 'environment-plan.json', 'execution-manifest.json'}]
         source_files = manifest(source)
-        shutil.copytree(long_path(source), long_path(stage))
-        if manifest(stage) != source_files or manifest(source) != source_files:
+        shutil.copytree(long_path(source), long_path(stage), ignore=ignored)
+        archived_files = manifest(stage)
+        excluded = set(ignored(long_path(source), [p.name for p in Path(source).iterdir()]))
+        expected = [f for f in source_files if f['path'].split('/')[0] not in excluded]
+        if archived_files != expected or manifest(source) != source_files:
             raise ValueError('Candidate archive copy differs from source')
         write_json(stage / 'record.json', result)
         stage.rename(target)
     elif read_json(target / 'record.json') != result:
         raise ValueError('Immutable candidate archive differs')
+    if result['status'] in {'verified', 'pending-validation'} and manifest(target / 'package') != result['final_files']:
+        raise IntegrityError('Archived package differs from final approved files')
     return result
 
 
@@ -96,13 +135,15 @@ def candidate(session, config, entity, directory, library, notify):
     session.limits['model_calls'] = None if cap == float('inf') else cap
     def save():
         write_json(checkpoint, state)
-        write_json(directory / 'record.json', state)
     def goto(stage):
+        if stage == 'author':
+            state['author_revision'] = state.get('author_revision', 0) + 1
         state['stage'] = stage
         save()
     try:
         while state['stage'] != 'done':
             phase = state['stage']
+            event(directory, stage=phase, status='started')
             notify(config['_group_id'] + '/' + entity['name'] + ': ' + phase)
             context = {'plan': entity, 'resource_index': session.workspace['resource_index'],
                        'recent_history': state['history'][-2:], 'history_file': str(checkpoint),
@@ -113,7 +154,7 @@ def candidate(session, config, entity, directory, library, notify):
                     result = None if state['feedback'] else investigations.resolve(entity, session.sources)
                     reused_preparation = result is not None
                     if result is None:
-                        catalog = [{k: r[k] for k in ('id', 'version', 'platform', 'tools', 'resources', 'conditions', 'image', 'path')}
+                        catalog = [{k: r[k] for k in ('id', 'version', 'platform', 'tools', 'resources', 'conditions', 'image', 'path', 'state', 'tag', 'content_id', 'anonymous_access') if k in r}
                                    for r in library.records() if r.get('contract_version') == CONTRACT_VERSION]
                         result = call(session, 'environment', prompts.ENVIRONMENT,
                                       {**context, 'catalog': catalog,
@@ -124,22 +165,42 @@ def candidate(session, config, entity, directory, library, notify):
                         state['resume_when'] = result['resume_when']
                         raise PausedCandidate(result['reason'])
                     validate_environment(result)
-                    known_evidence = {e['id'] for e in session.sources.evidence}
-                    if any(e not in known_evidence for e in result['evidence']):
-                        raise ValueError('Environment evidence must reference registered group-local IDs')
+                    from creation_pipeline.validation.basis import resolve
+                    try:
+                        result['evidence'] = list(dict.fromkeys(resolve(session.sources, ref)['id'] for ref in result['evidence']))
+                    except ValueError as exc:
+                        context['record_format_error'] = str(exc)
+                        # Retain the actual invalid response for a focused record-only repair.
+                        repaired = call(session, 'environment-record',
+                            'Correct only evidence references in previous_record using registered IDs. '
+                            'Use retained observations; do not repeat research or change build requirements.',
+                            {**context, 'previous_record': result}, schemas.ENVIRONMENT)
+                        if {k: v for k, v in repaired.items() if k not in {'evidence', 'contract_version'}} != {k: v for k, v in result.items() if k not in {'evidence', 'contract_version'}}:
+                            raise ValueError('Record-only repair changed environment requirements')
+                        repaired['contract_version'] = CONTRACT_VERSION
+                        repaired['evidence'] = [resolve(session.sources, ref)['id'] for ref in repaired['evidence']]
+                        result = repaired
                     investigations.remember(result, session.sources)
                     state['preparation_reused'] = reused_preparation
                     unchanged_contract = state.get('environment_plan') and runtime(state['environment_plan']) == runtime(result)
                     state['environment_plan'] = result
                     if not state.get('content_repair_pending'):
                         state['feedback'] = []
-                    write_json(directory / 'environment-plan.json', result)
                     goto('build' if unchanged_contract and not state.get('content_repair_pending') and state.get('reviewed_files') == manifest(package) else 'author')
                 elif phase == 'author':
                     config['_environment_plan'] = state['environment_plan']
+                    config['_author_revision'] = state.get('author_revision', 0)
                     write_json(package / 'runtime.json', runtime(state['environment_plan']))
                     state['artifact'] = author(session, config, entity, package,
-                                               state['feedback'], state.get('artifact'))
+                                               state['feedback'] + ([state['last_author_progress']] if state.get('last_author_progress') else []),
+                                               state.get('artifact'))
+                    authored = manifest(package)
+                    unchanged = state.get('last_authored_files') == authored
+                    state['last_author_progress'] = ({'observation': 'The previous repair returned identical package files',
+                                                      'action': 'Explain the unchanged result or make the source-backed requested correction'} if unchanged else None)
+                    if unchanged:
+                        state['history'].append({'stage': 'author', 'observation': 'No content change from previous author round', 'at': now()})
+                    state['last_authored_files'] = authored
                     if any(i.get('blocking') and not i.get('resolution') for i in state['artifact'].get('issues', [])):
                         raise ValueError('Author reported unresolved blocking issues')
                     # runtime is a host-owned factual projection, not an author declaration.
@@ -167,30 +228,19 @@ def candidate(session, config, entity, directory, library, notify):
                     state['feedback'] = []
                     state.pop('content_repair_pending', None)
                     state['execution_items'] = bind_items(package, result['execution_items'], session.work)
+                    validate_decisions(package, result['code_decisions'], state['execution_items'])
                     state['reviewed_files'] = manifest(package)
                     state['reviewed_main'] = (package / 'SKILL.md').read_text(encoding='utf-8')
-                    write_json(directory / 'execution-manifest.json', state['execution_items'])
                     goto('build')
                 elif phase == 'build':
                     if state.get('environment') and fingerprint(state['environment_plan']) == state.get('built_plan'):
-                        library.probe(state['environment'].get('image') or state['environment']['tag'], state['environment_plan'], directory)
+                        library.probe(state['environment'].get('content_id') or state['environment']['tag'], state['environment_plan'], directory)
                     else:
                         state['environment'] = library.ensure(state['environment_plan'], directory)
                         state['built_plan'] = fingerprint(state['environment_plan'])
                     env = state['environment']
-                    identity = {k: env[k] for k in ('id', 'version', 'platform')}
-                    active, cached = [], []
-                    for item in state['execution_items']:
-                        if not item['necessary']:
-                            continue
-                        key = fingerprint({'environment': identity, 'file': item['file'],
-                                           'code': item['sha256'], 'check': item['expected_check']})
-                        saved = state.get('execution_cache', {}).get(key)
-                        if saved:
-                            cached.append(saved)
-                        else:
-                            active.append({**item, 'cache_key': key})
-                    state['active_execution_items'], state['cached_observations'] = active, cached
+                    state['active_execution_items'] = [i for i in state['execution_items'] if i['necessary']]
+                    state['cached_observations'] = []
                     goto('prepare-tests')
                 elif phase == 'prepare-tests':
                     items = state['active_execution_items']
@@ -199,7 +249,16 @@ def candidate(session, config, entity, directory, library, notify):
                         goto('publish')
                         continue
                     result = call(session, 'execution', prompts.EXECUTION,
-                                  {**context, 'items': items, 'package': str(package), 'environment': state['environment_plan']}, schemas.EXECUTION)
+                                  {**context, 'items': items, 'package': str(package), 'environment': state['environment_plan'],
+                                   'asset_results': state.get('asset_results', [])}, schemas.EXECUTION)
+                    if result.get('asset_requests'):
+                        request_key = fingerprint(result['asset_requests'])
+                        if state.get('last_asset_request') == request_key:
+                            raise TestPlanError('Unchanged asset requests: use registered inputs, a new source, or a concrete deferral')
+                        state['last_asset_request'] = request_key
+                        state['asset_results'] = acquire_requests(session, result['asset_requests'])
+                        save()
+                        continue
                     if result['status'] == 'blocked':
                         state['feedback'] = [{'name': 'execution_preparation', 'findings': [result['reason']]}]
                         if result['blocked_owner'] == 'content':
@@ -208,8 +267,26 @@ def candidate(session, config, entity, directory, library, notify):
                         state['resume_when'] = result['resume_when']
                         raise PausedCandidate(result['reason'])
                     validate_plan(items, result)
+                    try:
+                        resolve_inputs(session.sources, result['cases'])
+                    except ValueError as exc:
+                        raise TestPlanError(str(exc)) from exc
+                    active, cached = [], []
+                    for item in items:
+                        case = next((c for c in result['cases'] if c['item_id'] == item['id']), None)
+                        key = execution_key(package, state['environment'], item, case)
+                        previous = state.get('execution_cache', {}).get(key)
+                        if previous:
+                            cached.append(previous)
+                        else:
+                            active.append({**item, 'cache_key': key})
+                    state['active_execution_items'], state['cached_observations'] = active, cached
+                    ids = {i['id'] for i in active}
+                    result['cases'] = [c for c in result['cases'] if c['item_id'] in ids]
+                    result['deferred'] = [c for c in result['deferred'] if c['item_id'] in ids]
                     state['execution_plan'] = result
-                    goto('audit-tests' if result['audit_risks'] or any(Path(f['path']).suffix.lower() in {'.py', '.sh', '.r', '.js', '.ps1'} for c in result['cases'] for f in c['files']) or result['deferred'] else 'execute')
+                    state.pop('audited_plan', None)
+                    goto('audit-tests' if requires_audit(active, result) else 'execute')
                 elif phase == 'audit-tests':
                     result = call(session, 'execution-audit', prompts.AUDIT,
                                   {**context, 'items': state['active_execution_items'], 'tests': state['execution_plan']},
@@ -218,14 +295,15 @@ def candidate(session, config, entity, directory, library, notify):
                         state['feedback'] = [result]
                         goto('prepare-tests')
                         continue
+                    state['audited_plan'] = fingerprint(state['execution_plan'])
                     goto('execute')
                 elif phase == 'execute':
                     if manifest(package) != state['reviewed_files']:
                         raise IntegrityError('Package changed after semantic approval')
                     env = state['environment']
-                    result = execute(package, env.get('image') or env['tag'], env['platform'],
+                    result = execute(package, env.get('content_id') or env['tag'], env['platform'],
                                      state['active_execution_items'], state['execution_plan'], directory,
-                                     library.timeout, library.run)
+                                     library.timeout, library.run, audited=state.get('audited_plan') == fingerprint(state['execution_plan']))
                     for observation in result['observations']:
                         if observation['status'] == 'passed':
                             item = next(i for i in state['active_execution_items'] if i['id'] == observation['item_id'])
@@ -240,7 +318,7 @@ def candidate(session, config, entity, directory, library, notify):
                         state['status'] = 'local-' + state['verification']['status']
                         state.pop('reason', None)
                         state.pop('resume_when', None)
-                        state['local_image'] = state['environment'].get('image') or state['environment']['tag']
+                        state['local_image'] = state['environment'].get('content_id') or state['environment']['tag']
                         state['delivery_note'] = 'Local validation only; image not published, package not qualified for export'
                         goto('done')
                         continue
@@ -271,15 +349,25 @@ def candidate(session, config, entity, directory, library, notify):
                     raise ValueError('Unknown candidate stage: ' + phase)
                 if phase not in {'author', 'finalize'} and manifest(package) != before:
                     raise IntegrityError('Non-writing stage changed the package: ' + phase)
+                event(directory, stage=phase, status='completed')
+            except PublicationPending as exc:
+                event(directory, stage=phase, status='paused', error='publication')
+                state['environment'] = exc.record
+                state['failure_owner'] = 'publication'
+                state['resume_when'] = 'Resolve the recorded upload/access/transport failure, then resume publication'
+                raise PausedCandidate(str(exc))
             except PausedCandidate:
+                event(directory, stage=phase, status='paused')
                 raise
             except ModelCallError:
+                event(directory, stage=phase, status='failed', error='model_transport')
                 state['failure_owner'] = 'model_transport'
                 if config.get('_preflight_receipt'):
                     Path(config['_preflight_receipt']).unlink(missing_ok=True)
                 raise
             except (ValueError, OSError, KeyError, TypeError) as exc:
-                failure = {'stage': phase, 'error': redact(exc), 'observation': getattr(exc, 'observation', None), 'at': now()}
+                failure = compact({'stage': phase, 'error': redact(exc), 'observation': getattr(exc, 'observation', None), 'at': now()}, directory)
+                event(directory, stage=phase, status='failed', error=type(exc).__name__)
                 state['history'].append(failure)
                 save()
                 target = route(exc, phase)
@@ -306,6 +394,7 @@ def candidate(session, config, entity, directory, library, notify):
                     decision['action'] = 'environment'
                 stage = {'environment': 'environment', 'content': 'author', 'test': 'prepare-tests'}.get(decision['action'], phase)
                 if stage == 'environment':
+                    investigations.invalidate(state['environment_plan'], failure['error'])
                     state.pop('environment', None)
                 goto(stage)
             limit = config['limits']['repair_rounds']
@@ -347,6 +436,14 @@ def build(config_path=None, state_root=None, *, resume_id=None, plan_only=False,
             write_json(work / 'workspace.json', {'build_id': bid, 'workspace': str(work.resolve())})
             batch = {'workflow': 'shared-environments', 'build_id': bid, 'config': config, 'groups': {},
                      'started_at': now(), 'specifications': specifications()}
+        if options.get('image_repository'):
+            if not resume_id:
+                raise ValueError('--image-repository is only a resume override')
+            from .config import repository_name
+            repository = repository_name(options['image_repository'])
+            batch.setdefault('publication_changes', []).append({'from': config['environments']['repository'], 'to': repository, 'at': now()})
+            config['environments'].update(repository=repository, image_prefix=repository)
+            write_json(checkpoint, batch)
         if options.get('rediscover'):
             raise ValueError('Rediscovery creates a new batch; existing candidate evidence is immutable')
         if options.get('plan_path'):
@@ -383,7 +480,8 @@ def build(config_path=None, state_root=None, *, resume_id=None, plan_only=False,
                     if 'discovery' not in gs:
                         plan = call(session, 'discovery', (PROMPTS / 'content-analyze.md').read_text(encoding='utf-8') +
                                     '\nIdentify tools/resources per candidate with source-supported names and unknowns; do not choose shared images.',
-                                    {'sources': sources.index(), 'source_errors': sources.errors, 'user_guidance': gc['prompt']}, schemas.CANDIDATES)
+                                    {'sources': sources.index(), 'source_errors': sources.errors, 'user_guidance': gc['prompt'],
+                                     'minimum': (ROOT / 'docs/skills/docker-minimum.md').read_text(encoding='utf-8')}, schemas.CANDIDATES)
                         if plan['outcome'] in {'blocked', 'incomplete'}:
                             raise PausedCandidate(plan['summary'])
                         if not plan['candidates'] and plan.get('saved_candidates'):
@@ -420,12 +518,18 @@ def build(config_path=None, state_root=None, *, resume_id=None, plan_only=False,
                             # Archive/export errors are separate from computation approval. Continue other candidates.
                             result.pop('archive_error', None)
                             result.pop('adoption_error', None)
+                            result.pop('publication_error', None)
+                            if result['status'] in {'verified', 'pending-validation'}:
+                                try:
+                                    result['environment'] = envlib.verify_public(result['environment'])
+                                except (ValueError, OSError) as exc:
+                                    result['publication_error'] = redact(exc)
                             try:
                                 result = archive_candidate(state, bid, gid, name, group_work / 'candidates' / name, result)
                             except (ValueError, OSError) as exc:
                                 result['archive_error'] = redact(exc)
                             gs['entities'][name] = result
-                            if not result.get('archive_error') and result['status'] in {'verified', 'pending-validation'} and not no_adopt and config['adoption']['enabled']:
+                            if not result.get('archive_error') and not result.get('publication_error') and result['status'] in {'verified', 'pending-validation'} and not no_adopt and config['adoption']['enabled']:
                                 try:
                                     result['adoption'] = adopt(group_work / 'candidates' / name / 'package', result, library_root or ROOT / 'skills')
                                 except (ValueError, OSError) as exc:
@@ -440,6 +544,12 @@ def build(config_path=None, state_root=None, *, resume_id=None, plan_only=False,
                         (work / 'preflight-success.json').unlink(missing_ok=True)
                     gs.update(status='blocked', reason=redact(exc))
                 finally:
+                    if registry.exists():
+                        try:
+                            archive_sources(group_work, state / 'records' / bid / 'groups' / gid)
+                            gs.pop('archive_error', None)
+                        except (ValueError, OSError, KeyError, TypeError) as exc:
+                            gs.update(status='blocked', archive_error=redact(exc))
                     write_json(checkpoint, batch)
         except (ValueError, OSError, KeyError, TypeError) as exc:
             batch.update(status='blocked', reason=redact(exc))
@@ -448,10 +558,10 @@ def build(config_path=None, state_root=None, *, resume_id=None, plan_only=False,
         entities = [e for g in batch['groups'].values() for e in g['entities'].values()]
         counts = dict(Counter(e['status'] for e in entities))
         local_complete = not config['environments'].get('publish', True) and entities and all(
-            e['status'] in {'local-verified', 'local-pending-validation'} and not e.get('archive_error') for e in entities) and all(
+            e['status'] in {'local-verified', 'local-pending-validation'} and not e.get('archive_error') and not e.get('publication_error') for e in entities) and all(
             g['status'] == 'completed' for g in batch['groups'].values())
         batch.setdefault('status', 'local_validated' if local_complete else 'planned' if plan_only else 'no_candidates' if not entities and all(g['status'] == 'completed' for g in batch['groups'].values())
-                         else 'ready' if entities and all(e['status'] in {'verified', 'pending-validation'} and not e.get('adoption_error') and not e.get('archive_error') for e in entities)
+                         else 'ready' if entities and all(e['status'] in {'verified', 'pending-validation'} and not e.get('adoption_error') and not e.get('archive_error') and not e.get('publication_error') for e in entities)
                          and all(g['status'] == 'completed' for g in batch['groups'].values()) else 'partial')
         batch.update(counts=counts, finished_at=now(), model_metrics=summarize_usage(receipts))
         write_json(checkpoint, batch)
@@ -464,4 +574,4 @@ def build(config_path=None, state_root=None, *, resume_id=None, plan_only=False,
         return {'workflow': 'shared-environments', 'build_id': bid, 'status': batch['status'],
                 'counts': counts, 'output': str(output), 'workspace': str(work),
                 'groups': {gid: {k: g.get(k) for k in ('status', 'reason', 'deferred')} for gid, g in batch['groups'].items()},
-                'entities': [{k: e.get(k) for k in ('name', 'group', 'status', 'reason', 'archive_error', 'adoption_error')} for e in entities]}
+                'entities': [{k: e.get(k) for k in ('name', 'group', 'status', 'reason', 'archive_error', 'adoption_error', 'publication_error')} for e in entities]}
